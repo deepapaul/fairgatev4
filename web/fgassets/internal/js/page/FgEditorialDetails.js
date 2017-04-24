@@ -127,9 +127,12 @@ var FgEditorialDetails = function () {
                 $('#comments-li-data_' + commentId).find('.timeline-body').addClass('has-error');
             }
             if (validationFlag == 0) {
+                FgXmlHttp.isDisabled = false;
                 bbcodeTohtml = bbcodeParser.bbcodeToHtml(comment);
                 dataArray = {'comment': bbcodeTohtml, 'commentId': commentId, 'articleId': articleId};
                 FgXmlHttp.post(commentSavePath, dataArray, false, saveCallBack);
+                $('.fg-dev-btnsave').off('click');
+                
             }
 
         });

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnSmsNumberVerification
  */
@@ -49,6 +47,7 @@ class FgCnSmsNumberVerification
      * Set phoneNumber
      *
      * @param string $phoneNumber
+     *
      * @return FgCnSmsNumberVerification
      */
     public function setPhoneNumber($phoneNumber)
@@ -72,6 +71,7 @@ class FgCnSmsNumberVerification
      * Set verficationCode
      *
      * @param string $verficationCode
+     *
      * @return FgCnSmsNumberVerification
      */
     public function setVerficationCode($verficationCode)
@@ -95,6 +95,7 @@ class FgCnSmsNumberVerification
      * Set contactId
      *
      * @param integer $contactId
+     *
      * @return FgCnSmsNumberVerification
      */
     public function setContactId($contactId)
@@ -118,6 +119,7 @@ class FgCnSmsNumberVerification
      * Set status
      *
      * @param boolean $status
+     *
      * @return FgCnSmsNumberVerification
      */
     public function setStatus($status)
@@ -137,3 +139,4 @@ class FgCnSmsNumberVerification
         return $this->status;
     }
 }
+

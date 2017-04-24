@@ -1,0 +1,302 @@
+extends _helpers/theme-02/layout.jade
+
+block vars
+  - var bodyClass = 'fg-web-theme-02 fg-header-sticky';  
+  - var bodyStyles = 'background:url("https://www.clipartsgram.com/image/1702162501-background-debut-webdesign-web-sujet-website.jpg") no-repeat; background-size:cover; ';  
+  - var headerClass = 'header-bg-full-width ';
+block title
+    title Article Title
+
+block page-level-library-css      
+      link(href='https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css', rel='stylesheet', media='screen')
+      link(href='https://cdn.datatables.net/responsive/2.1.0/css/responsive.dataTables.min.css', rel='stylesheet', media='screen')
+block page-level-header
+      link(href='../../css/fg-web-theme-02.css', rel='stylesheet', media='screen')
+      link(href='../theme-based-styles/theme-02-color-schemes.css', rel='stylesheet', media='screen')
+      link(href='../theme-based-styles/theme-02-config.css', rel='stylesheet', media='screen')
+block header
+    .row.fg-web-top-nav-wrapper
+        .container
+            .FR
+                ul.fg-web-top-nav-links.list-inline
+                    li
+                        a(href='#') FAQ
+                    li
+                        a(href='#') Contact
+                    li
+                        a(href='#') Map
+                .fg-web-top-nav-languages
+                    .fg-current-language 
+                        a(href="#" data-toggle='dropdown', role='navigation', aria-expanded='false') EN
+                    ul.dropdown-menu.pull-right.fg-web-language-list
+                        li.active 
+                          a(href="javascript:void(0)") EN
+                        li
+                          a(href="javascript:void(0)") RU
+                        li
+                          a(href="javascript:void(0)") DE
+                        li
+                          a(href="javascript:void(0)") CH
+
+    .row.fg-web-header-content
+        figure.fg-header-bg
+          img(src="http://www.romantic-escapes.co.uk/wp-content/uploads/2015/02/city-breaks-slider.jpg").fg-width-P
+        .fg-logo-wrapper.fg-logo-center
+            
+            a(href='#').fg-logo
+              img(src="http://www.fauchard.org/system/ckeditor_assets/pictures/101/content_pfa_portrait_logo-300print.jpg")
+        .container
+            .clearfix
+            .fg-navbar-container
+                .fg-web-nav-icon
+                    span
+
+                nav.navbar.navbar-default.fg-web-main-nav
+                    ul.nav.navbar-nav
+                        li.active                                    
+                            a(href='#') Home     
+                        li
+                            a(href='#') Club
+                        li
+                            a(href='#') Teams
+                        li
+                            a(href='#') News
+                        li.dropdown
+                            a(href='#')
+                                | Photos 
+                            span.fg-dropdown-toggle.material-icons(data-toggle='dropdown', role='navigation', aria-expanded='false') keyboard_arrow_right
+                            ul.dropdown-menu
+                                li
+                                    a(href='#') Second level menu
+                                li
+                                    a(href='#') Second level menu
+                                li.dropdown
+                                    a(href='#')
+                                        | Second level Dropdown Second level Dropdown 
+                                    span.material-icons.fg-dropdown-toggle(data-toggle='dropdown', role='navigation', aria-expanded='false') keyboard_arrow_right
+                                    ul.dropdown-menu.fg-web-open-right
+                                        li
+                                            a(href='#') Third level menu
+                                        li
+                                            a(href='#') Third level menu
+
+                                        li.dropdown
+                                            a(href='#')
+                                                | Third level Dropdown 
+                                            span.material-icons.fg-dropdown-toggle(data-toggle='dropdown', role='navigation', aria-expanded='false') keyboard_arrow_right
+                                            ul.dropdown-menu.fg-web-open-left
+                                                li
+                                                    a(href='#') Fourth level menu
+                                                li
+                                                    a(href='#') Fourth level menu
+                                                li
+                                                    a(href='#') Fourth level menu
+                                                li
+                                                    a(href='#') Fourth level menu
+                                        li
+                                            a(href='#') Third level menu
+                                li
+                                    a(href='#') Second level menu
+                                li
+                                    a(href='#') Second level menu
+                  
+                        li
+                            a(href='#') Contact
+                .fg-additional-nav
+                    .fg-web-top-nav-languages
+                        .fg-current-language 
+                            a(href="javascript:void(0)" data-toggle='dropdown', role='navigation', aria-expanded='false') EN
+                        ul.dropdown-menu.fg-web-language-list
+                            li.active 
+                              a(href="javascript:void(0)") EN
+                            li
+                              a(href="javascript:void(0)") RU
+                            li
+                              a(href="javascript:void(0)") DE
+                            li
+                              a(href="javascript:void(0)") CH
+                    .fg-web-top-nav-links.active
+                        a(href="javascript:void(0)" data-toggle='dropdown', role='navigation', aria-expanded='false') 
+                            i.material-icons more_vert
+                        ul.dropdown-menu
+                          li
+                              a(href='#') FAQ
+                          li
+                              a(href='#') Contact
+                          li
+                              a(href='#') Map
+                    
+block content
+
+        .fg-web-page-title-bar.row.has-close-btn.has-breadcrumbs
+            .container
+              .fg-web-titlebar-left-col.pull-left.has-breadcrumb
+                .fg-web-page-title-block.fg-breadcrumb-block
+                  ul.fg-breadcrumbs
+                    li#fg-cms-ws-bc-1
+                      a#fg-cms-ws-bc-anchor-1(href='javascript:void(0);') Gallery 01
+                    li#fg-cms-ws-bc-2
+                      a#fg-cms-ws-bc-anchor-2(href='javascript:void(0);') Club
+                .fg-titlebar-block.fg-web-page-title-block
+                  h1.fg-web-page-title Gallery
+
+              .fg-web-titlebar-right-col.pull-right
+                .fg-titlebar-block.fg-icon-bg.fg-page-prev.hidden-xs.fg-disabled-link
+                  a.fg-page-prev-link(href='javascript:void(0)')
+                    i.fg-icon
+                .fg-titlebar-block.fg-icon-bg.fg-page-close
+                  a.fg-page-close-link(href='/sebin/article')
+                    i.fg-icon
+                .fg-titlebar-block.fg-icon-bg.fg-page-next.hidden-xs.fg-disabled-link
+                  a.fg-page-next-link(href='javascript:void(0)')
+                    i.fg-icon
+              .fg-web-titlebar-right-col.pull-right.fg-web-title-filter-wrapper
+              .clearfix
+
+
+        
+        .container
+            .row.fg-web-page-container
+                .fg-gallery-special-page-wrapper.col-md-12
+                    h2.fg-page-subtitle ALBUMS
+                    .fg-gallery-album-wrapper.fg-clear
+                          .fg-gallery-album.col-md-2.col-sm-3.col-xs-4
+                              .fg-image.fg-gallery-effect-1    
+                                    img(src="../../../global/img/dummy-images/1.jpg")
+                              .fg-album-title Album 1
+
+                          .fg-gallery-album.col-md-2.col-sm-3.col-xs-4
+                              .fg-image.fg-gallery-effect-1      
+                                    img(src="../../../global/img/dummy-images/2.jpg")
+                              .fg-album-title Album 2
+                          .fg-gallery-album.col-md-2.col-sm-3.col-xs-4
+                              .fg-image.fg-gallery-effect-1   
+                                    img(src="../../../global/img/dummy-images/3.jpg")
+                              .fg-album-title Album 3
+                          .fg-gallery-album.col-md-2.col-sm-3.col-xs-4
+                              .fg-image.fg-gallery-effect-1     
+                                    img(src="../../../global/img/dummy-images/4.jpg")
+                              .fg-album-title Album 4
+                          .fg-gallery-album.col-md-2.col-sm-3.col-xs-4
+                              .fg-image.fg-gallery-effect-1      
+                                    img(src="../../../global/img/dummy-images/5.jpg")
+                              .fg-album-title Album 5
+                          .fg-gallery-album.col-md-2.col-sm-3.col-xs-4
+                              .fg-image.fg-gallery-effect-1    
+                                    img(src="../../../global/img/dummy-images/6.jpg")
+                              .fg-album-title Album 6
+                          .fg-gallery-album.col-md-2.col-sm-3.col-xs-4
+                              .fg-image.fg-gallery-effect-1    
+                                    img(src="../../../global/img/dummy-images/7.jpg")
+                              .fg-album-title Album 7
+                          .fg-gallery-album.col-md-2.col-sm-3.col-xs-4
+                              .fg-image.fg-gallery-effect-1    
+                                    img(src="../../../global/img/dummy-images/8.jpg")
+                              .fg-album-title Album 8
+                          .fg-gallery-album.col-md-2.col-sm-3.col-xs-4
+                              .fg-image.fg-gallery-effect-1    
+                                    img(src="../../../global/img/dummy-images/9.jpg")
+                              .fg-album-title Album 9
+                          .fg-gallery-album.col-md-2.col-sm-3.col-xs-4
+                              .fg-image.fg-gallery-effect-1    
+                                    img(src="../../../global/img/dummy-images/10.jpg")
+                              .fg-album-title Album 10
+                          .fg-gallery-album.col-md-2.col-sm-3.col-xs-4
+                              .fg-image.fg-gallery-effect-1    
+                                    img(src="../../../global/img/dummy-images/11.jpg")
+                              .fg-album-title Album 11
+
+                    .fg-page-nav-wrapper.fg-clear
+                          .col-sm-4
+                              .fg-nav.fg-page-prev
+                                  .fg-dis-IB.fg-icon-wrapper
+                                      i.fg-icon.material-icons keyboard_arrow_left
+                                  .fg-dis-IB.fg-text-wrapper
+                                      .fg-btn-title previous article
+                                      h5.fg-target-page-title Der ehemalige 
+                          .col-sm-4
+                              .fg-nav.fg-page-back
+                                  .fg-dis-IB.fg-icon-wrapper
+                                      i.fg-icon.material-icons keyboard_arrow_up
+                                  .fg-dis-IB.fg-text-wrapper
+                                      .fg-btn-title back to overview
+                                      h5.fg-target-page-title Tschechische 
+                          .col-sm-4
+                              .fg-nav.fg-page-next
+                                  .fg-dis-IB.fg-text-wrapper
+                                      .fg-btn-title next article
+                                      h5.fg-target-page-title  Nationalspieler
+                                  .fg-dis-IB.fg-icon-wrapper
+                                      i.fg-icon.material-icons keyboard_arrow_right
+                    h2.fg-page-subtitle Photos
+                    .fg-gallery-photos-wrapper.fg-clear.nvb
+
+                            #gallery.slider-wrapper(style='display:none;')
+                              a(href="http://unitegallery.net" target="_blank")
+                                  img(alt='Rocks on the water', src='http://unitegallery.net/thumbs-preview/image04.jpg', data-image='http://unitegallery.net/images-preview/image04.jpg', data-description='Those are rocks on the water')
+                              a(href="http://unitegallery.net")
+                                  img(alt='The Castle', title='The Castle', src='http://unitegallery.net/thumbs-preview/image01.jpg', data-image='http://unitegallery.net/images-preview/image01.jpg', data-description='This is a castle')
+                              img(alt='Another Castle', title='Another Castle', src='http://unitegallery.net/thumbs-preview/image02.jpg', data-image='http://unitegallery.net/images-preview/image02.jpg', data-description='This is another castle')
+                              img(alt='Trees by the lake', title='Trees by the lake', src='http://unitegallery.net/thumbs-preview/image03.jpg', data-image='http://unitegallery.net/images-preview/image03.jpg', data-description='Those are trees by the lake')
+                              img(alt='Old Castle', title='Old Castle', src='http://unitegallery.net/thumbs-preview/image05.jpg', data-image='http://unitegallery.net/images-preview/image05.jpg', data-description='Another old beautiful castle')
+                              a(href="http://unitegallery.net")
+                                  img(alt='Storm on the sea', src='http://unitegallery.net/thumbs-preview/image07.jpg', data-image='http://unitegallery.net/images-preview/image07.jpg', data-description='This is stormy see shore')
+                              img(alt='Rocks on the water', src='http://unitegallery.net/thumbs-preview/image04.jpg', data-image='http://unitegallery.net/images-preview/image04.jpg', data-description='Those are rocks on the water')
+                              img(alt='The Castle', title='The Castle', src='http://unitegallery.net/thumbs-preview/image01.jpg', data-image='http://unitegallery.net/images-preview/image01.jpg', data-description='This is a castle')
+                              img(alt='Another Castle', title='Another Castle', src='http://unitegallery.net/thumbs-preview/image02.jpg', data-image='http://unitegallery.net/images-preview/image02.jpg', data-description='This is another castle')
+                              img(alt='Trees by the lake', title='Trees by the lake', src='http://unitegallery.net/thumbs-preview/image03.jpg', data-image='http://unitegallery.net/images-preview/image03.jpg', data-description='Those are trees by the lake')
+                              img(alt='Old Castle', title='Old Castle', src='http://unitegallery.net/thumbs-preview/image05.jpg', data-image='http://unitegallery.net/images-preview/image05.jpg', data-description='Another old beautiful castle')
+                              img(alt='Storm on the sea', src='http://unitegallery.net/thumbs-preview/image07.jpg', data-image='http://unitegallery.net/images-preview/image07.jpg', data-description='This is stormy see shore')
+                            .fg-btn-load-more
+                                span.fg-dis-IB.fg-v-middle LOAD MORE
+                                i.fg-icon.material-icons.fg-v-middle keyboard_arrow_down
+                  .clearfix 
+
+block page-level-footer
+    script(src='https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js')
+    script(src='https://cdn.datatables.net/responsive/2.1.0/js/dataTables.responsive.min.js')
+    script(src='../../../global/js/unitegallery-master/package/unitegallery/themes/tiles/ug-theme-tiles.js')
+    script(src='.././../js/fg-website-02.js')
+    script.
+      jQuery(document).ready(function () {
+            $("select").selectpicker();
+            window.DT=  $('#example').DataTable({
+                  dom: "<'col-md-12't><'col-md-12'p>",
+                  "autoWidth": false,
+                  scrollX: true,
+                  language: {
+                      paginate: {
+                          "next": '<i class="fa fa-angle-right"></i>',
+                          "previous": '<i class="fa fa-angle-left"></i>'
+                      }
+                  },
+                  
+            });
+            $("#gallery").unitegallery({
+                  tiles_type:"justified",
+                  tile_as_link: true,
+                  //tile_link_newpage: true
+            });
+            $('.dataTable tbody').on( 'mouseover', 'tr', function () {
+                $(this).addClass('fg-hover');
+            } );
+
+            $('.dataTable tbody').on( 'mouseout', 'tr', function () {
+                $(this).removeClass('fg-hover');
+            } );
+            $(window).resize(function(){
+                DT.columns.adjust().draw();
+            });
+            /*------------------------------------------------
+            Navigation actions
+            -------------------------------------------------*/
+            $('.fg-web-nav-icon').on('click',function(){
+                var $this = $(this)
+                var $navIcon =  $this;
+                var $navContainer = $navIcon.siblings('.fg-web-main-nav');
+                $navIcon.toggleClass('active');
+                $navContainer.toggleClass('active');
+            });
+            fgwebsite = 'ss';
+            FgWebsiteThemeObj = new FgWebsiteTheme();
+      });

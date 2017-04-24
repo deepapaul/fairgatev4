@@ -131,7 +131,7 @@ class FgRmCategoryRoleFunctionRepository extends EntityRepository
                     . "(SELECT c.`id`,'$crfId','$clubId','$clubId','$currentDate' $contactsQry) ON DUPLICATE KEY UPDATE `contact_id`=VALUES(`contact_id`), `fg_rm_crf_id`=VALUES(`fg_rm_crf_id`)");
             //update contact last updated field
             $currentDate = date('Y-m-d H:i:s');
-            $this->_em->getConnection()->executeQuery("UPDATE fg_cm_contact SET last_updated='$currentDate' WHERE id IN ($roleContactIds)");
+             $this->_em->getRepository('CommonUtilityBundle:FgCmContact')->updateLastUpdated($currentRoleContacts, 'id');
         }
         if ($logContactIds != '') {
             $contactsQry = "FROM `fg_cm_contact` c WHERE c.`id` IN ($logContactIds)";
@@ -175,8 +175,7 @@ class FgRmCategoryRoleFunctionRepository extends EntityRepository
             // Remove Contacts from Filter Role.
             $conn->executeQuery("DELETE FROM `fg_rm_role_contact` WHERE `contact_id` IN ($roleContactIds) AND `fg_rm_crf_id` = $crfId");
             //update contact last updated field
-            $currentDate = date('Y-m-d H:i:s');
-            $this->_em->getConnection()->executeQuery("UPDATE fg_cm_contact SET last_updated='$currentDate' WHERE id IN ($roleContactIds)");
+            $this->_em->getRepository('CommonUtilityBundle:FgCmContact')->updateLastUpdated($removeRoleContacts, 'id');
         }
         if ($logContactIds != '') {
             $contactsQry = "FROM `fg_cm_contact` c WHERE c.`id` IN ($logContactIds)";

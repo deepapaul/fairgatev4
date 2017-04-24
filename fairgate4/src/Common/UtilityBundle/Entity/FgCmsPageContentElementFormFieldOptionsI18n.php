@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPageContentElementFormFieldOptionsI18n
  */
@@ -29,19 +27,20 @@ class FgCmsPageContentElementFormFieldOptionsI18n
      * Set lang
      *
      * @param string $lang
+     *
      * @return FgCmsPageContentElementFormFieldOptionsI18n
      */
     public function setLang($lang)
     {
         $this->lang = $lang;
-    
+
         return $this;
     }
 
     /**
      * Get lang
      *
-     * @return string 
+     * @return string
      */
     public function getLang()
     {
@@ -49,48 +48,51 @@ class FgCmsPageContentElementFormFieldOptionsI18n
     }
 
     /**
-     * Set optionNameLang
+     * Set selectionValueNameLang
      *
      * @param string $selectionValueNameLang
+     *
      * @return FgCmsPageContentElementFormFieldOptionsI18n
      */
-    public function setOptionNameLang($selectionValueNameLang)
+    public function setSelectionValueNameLang($selectionValueNameLang)
     {
         $this->selectionValueNameLang = $selectionValueNameLang;
-    
+
         return $this;
     }
 
     /**
-     * Get optionNameLang
+     * Get selectionValueNameLang
      *
-     * @return string 
+     * @return string
      */
-    public function getOptionNameLang()
+    public function getSelectionValueNameLang()
     {
-        return $this->optionNameLang;
+        return $this->selectionValueNameLang;
     }
 
     /**
      * Set id
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPageContentElementFormFieldOptions $id
+     *
      * @return FgCmsPageContentElementFormFieldOptionsI18n
      */
     public function setId(\Common\UtilityBundle\Entity\FgCmsPageContentElementFormFieldOptions $id = null)
     {
         $this->id = $id;
-    
+
         return $this;
     }
 
     /**
      * Get id
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPageContentElementFormFieldOptions 
+     * @return \Common\UtilityBundle\Entity\FgCmsPageContentElementFormFieldOptions
      */
     public function getId()
     {
         return $this->id;
     }
 }
+

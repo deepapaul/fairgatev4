@@ -46,7 +46,7 @@
                 {% else %}
                     <td>-</td>
                 {% endif %}
-                <td>{%if (logEntry.activeContact != null)%}<a href="{{ path('render_contact_overview', {'offset' : 0, 'contact' : logEntry.activeContact  }) }}" target="_blank" data-cont-id="{{ logEntry.activeContact }}">{{ logEntry.editedBy }}</a> {% else %}{{ logEntry.editedBy }} {% endif %}</td>
+                <td>{{ logEntry.editedBy }}</td>
             </tr>
         {% endfor %}
     </tbody>

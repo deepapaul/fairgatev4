@@ -5,7 +5,8 @@ namespace Clubadmin\ClubBundle\Controller;
 use Common\UtilityBundle\Controller\FgController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Common\UtilityBundle\Repository\Pdo\ClubPdo;
+use Admin\UtilityBundle\Repository\Pdo\ClubPdo;
+use Common\UtilityBundle\Util\FgAdminQueryhandler;
 
 /**
  * Category controller
@@ -60,11 +61,12 @@ class CategoryController extends FgController
     {
         if ($request->getMethod() == 'POST') {
             $catArr = json_decode($request->request->get('catArr'), true);
-            $catType = $request->request->get('catType', 'role');
             if (count($catArr) > 0) {
-                $tableName = 'fg_club_classification';
                 $successMsg = 'CLASSIFICATION_SORTING_SAVED';
-                $this->generatequeryAction($tableName, $catArr, $this->clubId);
+                
+                $genericQueryhandler = new FgAdminQueryhandler($this->container);
+                $genericQueryhandler->generatequeryAction('fg_club_classification', $catArr);
+        
             }
 
             return new JsonResponse(array('status' => 'SUCCESS', 'flash' => $this->get('translator')->trans($successMsg)));
@@ -98,7 +100,7 @@ class CategoryController extends FgController
         $prevLink = '';
         $nextLink = '';
 
-        $catResult = $this->em->getRepository('CommonUtilityBundle:FgClubClassification')->getClubClassificationIds($this->clubId);
+        $catResult = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubClassification')->getClubClassificationIds($this->clubId);
         $catIds = explode(',', $catResult[0]['ids']);
         if (in_array($catId, $catIds)) {
             $currentCatId = current($catIds);
@@ -146,7 +148,7 @@ class CategoryController extends FgController
             $fnAssign = $request->request->get('function_assign', 'none');
             $catType = $request->request->get('type', 'role');
             if (count($catArr) > 0) {
-                $this->em->getRepository('CommonUtilityBundle:FgClubClassification')->saveClassificationSettings($catArr, $fnAssign, $this->get('club')->get('club_default_lang'), $this->clubLanguages, $this->clubId, $this->contactId, $catType, $cacheDomainName, $this->clubTeamId , $this->container);
+                $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubClassification')->saveClassificationSettings($catArr, $fnAssign, $this->get('club')->get('club_default_lang'), $this->clubLanguages, $this->clubId, $this->contactId, $catType, $cacheDomainName, $this->clubTeamId , $this->container);
             }
             $successMessage = 'CLASSIFICATION_SETTINGS_SAVED';
 
@@ -163,7 +165,7 @@ class CategoryController extends FgController
     public function getClassesAction(Request $request)
     {
         $catId = $request->get('cat_id', '0');
-        $categorySettings = $this->em->getRepository('CommonUtilityBundle:FgClubClassification')->getClassificationClasses($this->clubId, $catId, $this->contactId, false);
+        $categorySettings = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubClassification')->getClassificationClasses($this->clubId, $catId, $this->contactId, false);
   
         return new JsonResponse($categorySettings);
     }
@@ -176,14 +178,11 @@ class CategoryController extends FgController
      */
     public function getClassLogsAction(Request $request)
     {
-        $catId = $request->get('cat_id', '0');
-        $type = $request->get('type', '');
-        $logType = '';
         $classId = $request->get('classId', '0'); //role id
         $hierarchyClubIds = array();
         $hierarchyClubIdArr = array();
         if (!in_array($this->clubType, array('federation_club', 'sub_federation_club'))) {
-            $clubPdo = new \Common\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
+            $clubPdo = new \Admin\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
             $resultClubs = $clubPdo->getHierarchyClubs();
             foreach ($resultClubs as $resultClub) {
                 $hierarchyClubIds[] = $resultClub['id'];

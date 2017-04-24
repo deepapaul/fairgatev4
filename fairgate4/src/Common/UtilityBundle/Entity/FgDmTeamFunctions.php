@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgDmTeamFunctions
  */
@@ -28,7 +26,7 @@ class FgDmTeamFunctions
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +37,20 @@ class FgDmTeamFunctions
      * Set document
      *
      * @param \Common\UtilityBundle\Entity\FgDmDocuments $document
+     *
      * @return FgDmTeamFunctions
      */
     public function setDocument(\Common\UtilityBundle\Entity\FgDmDocuments $document = null)
     {
         $this->document = $document;
-    
+
         return $this;
     }
 
     /**
      * Get document
      *
-     * @return \Common\UtilityBundle\Entity\FgDmDocuments 
+     * @return \Common\UtilityBundle\Entity\FgDmDocuments
      */
     public function getDocument()
     {
@@ -62,22 +61,24 @@ class FgDmTeamFunctions
      * Set function
      *
      * @param \Common\UtilityBundle\Entity\FgRmFunction $function
+     *
      * @return FgDmTeamFunctions
      */
     public function setFunction(\Common\UtilityBundle\Entity\FgRmFunction $function = null)
     {
         $this->function = $function;
-    
+
         return $this;
     }
 
     /**
      * Get function
      *
-     * @return \Common\UtilityBundle\Entity\FgRmFunction 
+     * @return \Common\UtilityBundle\Entity\FgRmFunction
      */
     public function getFunction()
     {
         return $this->function;
     }
 }
+

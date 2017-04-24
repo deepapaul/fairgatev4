@@ -194,8 +194,8 @@ class FgWebsiteTheme {
                      var htmlFinal = FGTemplate.bind('template_lang_navigation', {langNav:additionalmenu.langNav,deflang:additionalmenu.defLang} );
                      $('.fg-web-top-nav-languages').append(htmlFinal);
                     }
-                    if((additionalmenu.additionalNav.length == 0) && (typeof additionalmenu.langNav === "undefined")){
-                        $('.fg-web-top-nav-icon').addClass('fg-hide'); 
+                    if((additionalmenu.additionalNav.length == 0)){
+                        $('.fg-icon-additional-nav').addClass('fg-hide'); 
                     }
                }
                 

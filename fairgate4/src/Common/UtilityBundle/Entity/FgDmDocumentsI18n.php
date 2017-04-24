@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgDmDocumentsI18n
  */
@@ -39,19 +37,20 @@ class FgDmDocumentsI18n
      * Set lang
      *
      * @param string $lang
+     *
      * @return FgDmDocumentsI18n
      */
     public function setLang($lang)
     {
         $this->lang = $lang;
-    
+
         return $this;
     }
 
     /**
      * Get lang
      *
-     * @return string 
+     * @return string
      */
     public function getLang()
     {
@@ -62,19 +61,20 @@ class FgDmDocumentsI18n
      * Set nameLang
      *
      * @param string $nameLang
+     *
      * @return FgDmDocumentsI18n
      */
     public function setNameLang($nameLang)
     {
         $this->nameLang = $nameLang;
-    
+
         return $this;
     }
 
     /**
      * Get nameLang
      *
-     * @return string 
+     * @return string
      */
     public function getNameLang()
     {
@@ -85,19 +85,20 @@ class FgDmDocumentsI18n
      * Set descriptionLang
      *
      * @param string $descriptionLang
+     *
      * @return FgDmDocumentsI18n
      */
     public function setDescriptionLang($descriptionLang)
     {
         $this->descriptionLang = $descriptionLang;
-    
+
         return $this;
     }
 
     /**
      * Get descriptionLang
      *
-     * @return string 
+     * @return string
      */
     public function getDescriptionLang()
     {
@@ -108,19 +109,20 @@ class FgDmDocumentsI18n
      * Set authorLang
      *
      * @param string $authorLang
+     *
      * @return FgDmDocumentsI18n
      */
     public function setAuthorLang($authorLang)
     {
         $this->authorLang = $authorLang;
-    
+
         return $this;
     }
 
     /**
      * Get authorLang
      *
-     * @return string 
+     * @return string
      */
     public function getAuthorLang()
     {
@@ -131,22 +133,24 @@ class FgDmDocumentsI18n
      * Set id
      *
      * @param \Common\UtilityBundle\Entity\FgDmDocuments $id
+     *
      * @return FgDmDocumentsI18n
      */
     public function setId(\Common\UtilityBundle\Entity\FgDmDocuments $id = null)
     {
         $this->id = $id;
-    
+
         return $this;
     }
 
     /**
      * Get id
      *
-     * @return \Common\UtilityBundle\Entity\FgDmDocuments 
+     * @return \Common\UtilityBundle\Entity\FgDmDocuments
      */
     public function getId()
     {
         return $this->id;
     }
 }
+

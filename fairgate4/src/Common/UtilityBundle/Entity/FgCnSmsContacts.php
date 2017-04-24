@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnSmsContacts
  */
@@ -59,6 +57,7 @@ class FgCnSmsContacts
      * Set smsId
      *
      * @param integer $smsId
+     *
      * @return FgCnSmsContacts
      */
     public function setSmsId($smsId)
@@ -82,6 +81,7 @@ class FgCnSmsContacts
      * Set filterId
      *
      * @param integer $filterId
+     *
      * @return FgCnSmsContacts
      */
     public function setFilterId($filterId)
@@ -105,6 +105,7 @@ class FgCnSmsContacts
      * Set categoryId
      *
      * @param integer $categoryId
+     *
      * @return FgCnSmsContacts
      */
     public function setCategoryId($categoryId)
@@ -128,6 +129,7 @@ class FgCnSmsContacts
      * Set roleId
      *
      * @param integer $roleId
+     *
      * @return FgCnSmsContacts
      */
     public function setRoleId($roleId)
@@ -151,6 +153,7 @@ class FgCnSmsContacts
      * Set functionId
      *
      * @param integer $functionId
+     *
      * @return FgCnSmsContacts
      */
     public function setFunctionId($functionId)
@@ -174,6 +177,7 @@ class FgCnSmsContacts
      * Set selectionType
      *
      * @param string $selectionType
+     *
      * @return FgCnSmsContacts
      */
     public function setSelectionType($selectionType)
@@ -193,3 +197,4 @@ class FgCnSmsContacts
         return $this->selectionType;
     }
 }
+

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmChangeLog
  */
@@ -55,6 +53,16 @@ class FgCmChangeLog
     private $isHistorical;
 
     /**
+     * @var integer
+     */
+    private $attributeId;
+
+    /**
+     * @var \DateTime
+     */
+    private $confirmedDate;
+
+    /**
      * @var \Common\UtilityBundle\Entity\FgCmContact
      */
     private $contact;
@@ -68,6 +76,16 @@ class FgCmChangeLog
      * @var \Common\UtilityBundle\Entity\FgCmContact
      */
     private $confirmedBy;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgClub
+     */
+    private $club;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgCnNewsletter
+     */
+    private $newsletter;
 
 
     /**
@@ -84,6 +102,7 @@ class FgCmChangeLog
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return FgCmChangeLog
      */
     public function setDate($date)
@@ -107,6 +126,7 @@ class FgCmChangeLog
      * Set kind
      *
      * @param string $kind
+     *
      * @return FgCmChangeLog
      */
     public function setKind($kind)
@@ -130,6 +150,7 @@ class FgCmChangeLog
      * Set field
      *
      * @param string $field
+     *
      * @return FgCmChangeLog
      */
     public function setField($field)
@@ -153,6 +174,7 @@ class FgCmChangeLog
      * Set valueBefore
      *
      * @param string $valueBefore
+     *
      * @return FgCmChangeLog
      */
     public function setValueBefore($valueBefore)
@@ -176,6 +198,7 @@ class FgCmChangeLog
      * Set valueAfter
      *
      * @param string $valueAfter
+     *
      * @return FgCmChangeLog
      */
     public function setValueAfter($valueAfter)
@@ -199,6 +222,7 @@ class FgCmChangeLog
      * Set isConfirmed
      *
      * @param boolean $isConfirmed
+     *
      * @return FgCmChangeLog
      */
     public function setIsConfirmed($isConfirmed)
@@ -222,6 +246,7 @@ class FgCmChangeLog
      * Set historicalId
      *
      * @param integer $historicalId
+     *
      * @return FgCmChangeLog
      */
     public function setHistoricalId($historicalId)
@@ -245,6 +270,7 @@ class FgCmChangeLog
      * Set isHistorical
      *
      * @param boolean $isHistorical
+     *
      * @return FgCmChangeLog
      */
     public function setIsHistorical($isHistorical)
@@ -265,9 +291,58 @@ class FgCmChangeLog
     }
 
     /**
+     * Set attributeId
+     *
+     * @param integer $attributeId
+     *
+     * @return FgCmChangeLog
+     */
+    public function setAttributeId($attributeId)
+    {
+        $this->attributeId = $attributeId;
+
+        return $this;
+    }
+
+    /**
+     * Get attributeId
+     *
+     * @return integer
+     */
+    public function getAttributeId()
+    {
+        return $this->attributeId;
+    }
+
+    /**
+     * Set confirmedDate
+     *
+     * @param \DateTime $confirmedDate
+     *
+     * @return FgCmChangeLog
+     */
+    public function setConfirmedDate($confirmedDate)
+    {
+        $this->confirmedDate = $confirmedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get confirmedDate
+     *
+     * @return \DateTime
+     */
+    public function getConfirmedDate()
+    {
+        return $this->confirmedDate;
+    }
+
+    /**
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgCmChangeLog
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
@@ -291,6 +366,7 @@ class FgCmChangeLog
      * Set changedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $changedBy
+     *
      * @return FgCmChangeLog
      */
     public function setChangedBy(\Common\UtilityBundle\Entity\FgCmContact $changedBy = null)
@@ -314,6 +390,7 @@ class FgCmChangeLog
      * Set confirmedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $confirmedBy
+     *
      * @return FgCmChangeLog
      */
     public function setConfirmedBy(\Common\UtilityBundle\Entity\FgCmContact $confirmedBy = null)
@@ -332,117 +409,53 @@ class FgCmChangeLog
     {
         return $this->confirmedBy;
     }
-    /**
-     * @var integer
-     */
-    private $attributeId;
-
-    /**
-     * @var \Common\UtilityBundle\Entity\FgClub
-     */
-    private $club;
-
-
-    /**
-     * Set attributeId
-     *
-     * @param integer $attributeId
-     * @return FgCmChangeLog
-     */
-    public function setAttributeId($attributeId)
-    {
-        $this->attributeId = $attributeId;
-    
-        return $this;
-    }
-
-    /**
-     * Get attributeId
-     *
-     * @return integer 
-     */
-    public function getAttributeId()
-    {
-        return $this->attributeId;
-    }
 
     /**
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmChangeLog
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
         return $this->club;
     }
-    
-    /**
-     * @var \Common\UtilityBundle\Entity\FgCnNewsletter
-     */
-    private $newsletter;
-
 
     /**
      * Set newsletter
      *
      * @param \Common\UtilityBundle\Entity\FgCnNewsletter $newsletter
+     *
      * @return FgCmChangeLog
      */
     public function setNewsletter(\Common\UtilityBundle\Entity\FgCnNewsletter $newsletter = null)
     {
         $this->newsletter = $newsletter;
-    
+
         return $this;
     }
 
     /**
      * Get newsletter
      *
-     * @return \Common\UtilityBundle\Entity\FgCnNewsletter 
+     * @return \Common\UtilityBundle\Entity\FgCnNewsletter
      */
     public function getNewsletter()
     {
         return $this->newsletter;
     }
-    /**
-     * @var \DateTime
-     */
-    private $confirmedDate;
-
-
-    /**
-     * Set confirmedDate
-     *
-     * @param \DateTime $confirmedDate
-     * @return FgCmChangeLog
-     */
-    public function setConfirmedDate($confirmedDate)
-    {
-        $this->confirmedDate = $confirmedDate;
-    
-        return $this;
-    }
-
-    /**
-     * Get confirmedDate
-     *
-     * @return \DateTime 
-     */
-    public function getConfirmedDate()
-    {
-        return $this->confirmedDate;
-    }
 }
+

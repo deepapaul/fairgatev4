@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgFileManagerViruscheckLog
  */
@@ -68,7 +66,7 @@ class FgFileManagerViruscheckLog
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -79,19 +77,20 @@ class FgFileManagerViruscheckLog
      * Set fileName
      *
      * @param string $fileName
+     *
      * @return FgFileManagerViruscheckLog
      */
     public function setFileName($fileName)
     {
         $this->fileName = $fileName;
-    
+
         return $this;
     }
 
     /**
      * Get fileName
      *
-     * @return string 
+     * @return string
      */
     public function getFileName()
     {
@@ -102,19 +101,20 @@ class FgFileManagerViruscheckLog
      * Set fileDetails
      *
      * @param string $fileDetails
+     *
      * @return FgFileManagerViruscheckLog
      */
     public function setFileDetails($fileDetails)
     {
         $this->fileDetails = $fileDetails;
-    
+
         return $this;
     }
 
     /**
      * Get fileDetails
      *
-     * @return string 
+     * @return string
      */
     public function getFileDetails()
     {
@@ -125,19 +125,20 @@ class FgFileManagerViruscheckLog
      * Set requestSenton
      *
      * @param \DateTime $requestSenton
+     *
      * @return FgFileManagerViruscheckLog
      */
     public function setRequestSenton($requestSenton)
     {
         $this->requestSenton = $requestSenton;
-    
+
         return $this;
     }
 
     /**
      * Get requestSenton
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getRequestSenton()
     {
@@ -148,19 +149,20 @@ class FgFileManagerViruscheckLog
      * Set responseStatus
      *
      * @param string $responseStatus
+     *
      * @return FgFileManagerViruscheckLog
      */
     public function setResponseStatus($responseStatus)
     {
         $this->responseStatus = $responseStatus;
-    
+
         return $this;
     }
 
     /**
      * Get responseStatus
      *
-     * @return string 
+     * @return string
      */
     public function getResponseStatus()
     {
@@ -171,19 +173,20 @@ class FgFileManagerViruscheckLog
      * Set responseReceivedon
      *
      * @param \DateTime $responseReceivedon
+     *
      * @return FgFileManagerViruscheckLog
      */
     public function setResponseReceivedon($responseReceivedon)
     {
         $this->responseReceivedon = $responseReceivedon;
-    
+
         return $this;
     }
 
     /**
      * Get responseReceivedon
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getResponseReceivedon()
     {
@@ -194,19 +197,20 @@ class FgFileManagerViruscheckLog
      * Set responseDetail
      *
      * @param string $responseDetail
+     *
      * @return FgFileManagerViruscheckLog
      */
     public function setResponseDetail($responseDetail)
     {
         $this->responseDetail = $responseDetail;
-    
+
         return $this;
     }
 
     /**
      * Get responseDetail
      *
-     * @return string 
+     * @return string
      */
     public function getResponseDetail()
     {
@@ -217,19 +221,20 @@ class FgFileManagerViruscheckLog
      * Set avastscanOption
      *
      * @param string $avastscanOption
+     *
      * @return FgFileManagerViruscheckLog
      */
     public function setAvastscanOption($avastscanOption)
     {
         $this->avastscanOption = $avastscanOption;
-    
+
         return $this;
     }
 
     /**
      * Get avastscanOption
      *
-     * @return string 
+     * @return string
      */
     public function getAvastscanOption()
     {
@@ -240,19 +245,20 @@ class FgFileManagerViruscheckLog
      * Set logDate
      *
      * @param \DateTime $logDate
+     *
      * @return FgFileManagerViruscheckLog
      */
     public function setLogDate($logDate)
     {
         $this->logDate = $logDate;
-    
+
         return $this;
     }
 
     /**
      * Get logDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLogDate()
     {
@@ -263,19 +269,20 @@ class FgFileManagerViruscheckLog
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgFileManagerViruscheckLog
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -286,22 +293,24 @@ class FgFileManagerViruscheckLog
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgFileManagerViruscheckLog
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
     {
         $this->contact = $contact;
-    
+
         return $this;
     }
 
     /**
      * Get contact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getContact()
     {
         return $this->contact;
     }
 }
+

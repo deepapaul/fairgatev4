@@ -305,7 +305,7 @@ class FgTextElement {
                 }
                 
                 CKEDITOR.config.bodyClass = 'fg-web-theme-0'+publicConfig.theme+' fg-body-ckeditor' ;
-                CKEDITOR.config.contentsCss = ['/fgassets/website/css/fg-web-theme-0' + publicConfig.theme,'/fgassets/website/css/fg-web-style.css','/'+colorCssPath+'/'+publicConfig.theme+'/'+publicConfig.cssColorScheme,'/'+themecssPath+'/'+publicConfig.theme+'/'+publicConfig.cssFile];
+                CKEDITOR.config.contentsCss = ['/fgassets/website/css/fg-web-theme-0' + publicConfig.theme +'.css','/fgassets/website/css/fg-web-style.css','/'+colorCssPath+'/'+publicConfig.theme+'/'+publicConfig.cssColorScheme,'/'+themecssPath+'/'+publicConfig.theme+'/'+publicConfig.cssFile];
                 CKEDITOR.config.dialog_noConfirmCancel = true;
                 CKEDITOR.config.extraPlugins = 'confighelper';
                 CKEDITOR.config.allowedContent = {

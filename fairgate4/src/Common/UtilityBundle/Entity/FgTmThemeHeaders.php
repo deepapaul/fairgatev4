@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgTmThemeHeaders
  */
@@ -33,7 +31,7 @@ class FgTmThemeHeaders
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -44,19 +42,20 @@ class FgTmThemeHeaders
      * Set headerLabel
      *
      * @param string $headerLabel
+     *
      * @return FgTmThemeHeaders
      */
     public function setHeaderLabel($headerLabel)
     {
         $this->headerLabel = $headerLabel;
-    
+
         return $this;
     }
 
     /**
      * Get headerLabel
      *
-     * @return string 
+     * @return string
      */
     public function getHeaderLabel()
     {
@@ -67,19 +66,20 @@ class FgTmThemeHeaders
      * Set fileName
      *
      * @param string $fileName
+     *
      * @return FgTmThemeHeaders
      */
     public function setFileName($fileName)
     {
         $this->fileName = $fileName;
-    
+
         return $this;
     }
 
     /**
      * Get fileName
      *
-     * @return string 
+     * @return string
      */
     public function getFileName()
     {
@@ -90,22 +90,24 @@ class FgTmThemeHeaders
      * Set configuration
      *
      * @param \Common\UtilityBundle\Entity\FgTmThemeConfiguration $configuration
+     *
      * @return FgTmThemeHeaders
      */
     public function setConfiguration(\Common\UtilityBundle\Entity\FgTmThemeConfiguration $configuration = null)
     {
         $this->configuration = $configuration;
-    
+
         return $this;
     }
 
     /**
      * Get configuration
      *
-     * @return \Common\UtilityBundle\Entity\FgTmThemeConfiguration 
+     * @return \Common\UtilityBundle\Entity\FgTmThemeConfiguration
      */
     public function getConfiguration()
     {
         return $this->configuration;
     }
 }
+

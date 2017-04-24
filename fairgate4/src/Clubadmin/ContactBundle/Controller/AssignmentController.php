@@ -1,5 +1,4 @@
 <?php
-
 /**
  * AssignmentController
  *
@@ -24,6 +23,7 @@ use Clubadmin\ContactBundle\Util\ContactDetailsSave;
 use Common\UtilityBundle\Util\FgFedMemberships;
 use Symfony\Component\HttpFoundation\Request;
 use Common\UtilityBundle\Repository\Pdo\membershipPdo;
+use Common\UtilityBundle\Util\FgPermissions;
 
 /**
  * This controller was created for handling Assignment functionalities
@@ -485,8 +485,7 @@ class AssignmentController extends FgController
      */
     public function sidebarMissingAssignmentsAction()
     {
-        $isFedRole = true;
-        $allMissingAssignRoles = $this->em->getRepository('CommonUtilityBundle:FgRmCategory')->getMissingassignmentsDetails($this->clubId, $this->clubType, $this->contactId, $isFedRole, $this->federationId, $this->subFederationId, $this->clubDefaultLang);
+        $allMissingAssignRoles = $this->em->getRepository('CommonUtilityBundle:FgRmCategory')->getMissingAssignmentsDetails($this->clubId, $this->clubType, $this->federationId, $this->subFederationId);
 
         return new JsonResponse($allMissingAssignRoles);
     }
@@ -651,23 +650,29 @@ class AssignmentController extends FgController
     public function dragDropMembershipAssignmentsAction(Request $request)
     {
 
-        $terminologyService = $this->get('fairgate_terminology_service');
-        $actionType = $request->get('actionType') ? $request->get('actionType') : 'assign_membership';
-        $selActionType = $request->get('selActionType') ? $request->get('selActionType') : '';
-        $assignmentData = $request->get('assignmentData');
-        $dragCat = isset($assignmentData['dragMenuId']) ? $assignmentData['dragMenuId'] : '';
-        $dragCatType = isset($assignmentData['dragCatType']) ? $assignmentData['dragCatType'] : 'membership';
-        $dropCat = isset($assignmentData['dropMenuId']) ? $assignmentData['dropMenuId'] : '';
-        $dropCatType = isset($assignmentData['dropCatType']) ? $assignmentData['dropCatType'] : 'membership';
-        $clubService = $this->container->get('club');
-        $fedMembershipMandatory = $clubService->get('fedMembershipMandatory');
-        $fedmemTrans = $terminologyService->getTerminology('Fed membership', $this->container->getParameter('singular'));
-        $return = array('actionType' => $actionType, 'dropCat' => $dropCat, 'dragCat' => $dragCat,
-            'dragCatType' => $dragCatType,
-            'dropCatType' => $dropCatType, 'clubId' => $this->clubId, 'clubTeamId' => $this->clubTeamId, 'fedmemTrans' => $fedmemTrans,
-            'selActionType' => $selActionType, 'type' => $this->clubType, 'clubMembershipAvailable' => $this->get('club')->get('clubMembershipAvailable'), 'fedMembershipMandatory' => $fedMembershipMandatory);
+        /* ----- Contact count checking ---------------    */
+        $permissionObj = new FgPermissions($this->container);
+        if (!$permissionObj->checkContactCount()) {
+            return $this->render('CommonUtilityBundle:Permissionpopup:contactcreationwarningpopup.html.twig');
+        } else {
+            $terminologyService = $this->get('fairgate_terminology_service');
+            $actionType = $request->get('actionType') ? $request->get('actionType') : 'assign_membership';
+            $selActionType = $request->get('selActionType') ? $request->get('selActionType') : '';
+            $assignmentData = $request->get('assignmentData');
+            $dragCat = isset($assignmentData['dragMenuId']) ? $assignmentData['dragMenuId'] : '';
+            $dragCatType = isset($assignmentData['dragCatType']) ? $assignmentData['dragCatType'] : 'membership';
+            $dropCat = isset($assignmentData['dropMenuId']) ? $assignmentData['dropMenuId'] : '';
+            $dropCatType = isset($assignmentData['dropCatType']) ? $assignmentData['dropCatType'] : 'membership';
+            $clubService = $this->container->get('club');
+            $fedMembershipMandatory = $clubService->get('fedMembershipMandatory');
+            $fedmemTrans = $terminologyService->getTerminology('Fed membership', $this->container->getParameter('singular'));
+            $return = array('actionType' => $actionType, 'dropCat' => $dropCat, 'dragCat' => $dragCat,
+                'dragCatType' => $dragCatType,
+                'dropCatType' => $dropCatType, 'clubId' => $this->clubId, 'clubTeamId' => $this->clubTeamId, 'fedmemTrans' => $fedmemTrans,
+                'selActionType' => $selActionType, 'type' => $this->clubType, 'clubMembershipAvailable' => $this->get('club')->get('clubMembershipAvailable'), 'fedMembershipMandatory' => $fedMembershipMandatory);
 
-        return $this->render('ClubadminContactBundle:Assignment:assigncontacttomembership.html.twig', $return);
+            return $this->render('ClubadminContactBundle:Assignment:assigncontacttomembership.html.twig', $return);
+        }
     }
 
     /**
@@ -1081,7 +1086,8 @@ class AssignmentController extends FgController
 
         return $this->render('ClubadminContactBundle:Assignment:quitMembershipPopup.html.twig', $return);
     }
-     /**
+
+    /**
      * Quit membership - club
      * @return type
      */
@@ -1094,6 +1100,7 @@ class AssignmentController extends FgController
 
         return $this->render('ClubadminContactBundle:Assignment:quitfedMembershipPopup.html.twig', $return);
     }
+
     /**
      * save quit membership - club
      * @return \Symfony\Component\HttpFoundation\JsonResponse
@@ -1126,12 +1133,13 @@ class AssignmentController extends FgController
         return new JsonResponse(array('status' => 'SUCCESS', 'noparentload' => true, 'flash' => $this->get('translator')->trans($flashMsg, array('%selcount%' => $selCount, '%totalcount%' => $totalCount)),
             'membrshipArray' => $membershipArray, 'selcount' => $selCount));
     }
-    
+
     /**
      * save quit Fed membership - club
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function saveQuitFedMembershipAction(Request $request) {
+    public function saveQuitFedMembershipAction(Request $request)
+    {
         $contactIds = $request->get('contact_id', '');
         $contacts = explode(',', $contactIds);
         $exludeContacts = $request->get('excluded_id', '');

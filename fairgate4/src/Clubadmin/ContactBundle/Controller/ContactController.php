@@ -119,8 +119,8 @@ class ContactController extends FgController
             }
         }
         $isReadOnlyContact = $this->isReadOnlyContact();
-
-        return $this->render('ClubadminContactBundle:ContactList:contactlist.html.twig', array('addExistingFedMemberClub' => $club->get('addExistingFedMemberClub'), 'clubMembershipAvailable' => $club->get('clubMembershipAvailable'), 'breadCrumb' => $breadCrumb, 'isReadOnlyContact' => $isReadOnlyContact, 'clubId' => $this->clubId, 'contactId' => $this->contactId, 'allTableSettings' => $allTableSettings, 'defaultSettings' => $defaultSettings, 'teamId' => $teamId, 'workgroupId' => $workgroupId, 'editUrl' => $editUrl, 'corrAddrFieldIds' => $corrAddrFieldIds, 'invAddrFieldIds' => $invAddrFieldIds, 'reqExecBoardFunError' => $reqExecBoardFunError, 'contacttype' => $type, 'urlIdentifier' => $this->clubUrlIdentifier, 'clubType' => $this->clubType, 'fedClubId' => $federationClubId,'isSuperAdmin'=>$isSuperAdmin));
+        $systemEnvironment = $this->container->getParameter('kernel.environment');
+        return $this->render('ClubadminContactBundle:ContactList:contactlist.html.twig', array('systemEnvironment' =>$systemEnvironment, 'addExistingFedMemberClub' => $club->get('addExistingFedMemberClub'), 'clubMembershipAvailable' => $club->get('clubMembershipAvailable'), 'breadCrumb' => $breadCrumb, 'isReadOnlyContact' => $isReadOnlyContact, 'clubId' => $this->clubId, 'contactId' => $this->contactId, 'allTableSettings' => $allTableSettings, 'defaultSettings' => $defaultSettings, 'teamId' => $teamId, 'workgroupId' => $workgroupId, 'editUrl' => $editUrl, 'corrAddrFieldIds' => $corrAddrFieldIds, 'invAddrFieldIds' => $invAddrFieldIds, 'reqExecBoardFunError' => $reqExecBoardFunError, 'contacttype' => $type, 'urlIdentifier' => $this->clubUrlIdentifier, 'clubType' => $this->clubType, 'fedClubId' => $federationClubId,'isSuperAdmin'=>$isSuperAdmin));
     }
 
     /**
@@ -162,8 +162,8 @@ class ContactController extends FgController
         $reqExecBoardFunError = false;
 
         /* Required assignment error of Club Executive Board Members - ends */
-
-        return $this->render('ClubadminContactBundle:ContactList:contactlist.html.twig', array('addExistingFedMemberClub' => $club->get('addExistingFedMemberClub'), 'clubMembershipAvailable' => $club->get('clubMembershipAvailable'), 'breadCrumb' => $breadCrumb, 'isReadOnlyContact' => $isReadOnlyContact, 'clubId' => $this->clubId, 'contactId' => $this->contactId, 'allTableSettings' => $allTableSettings, 'defaultSettings' => $defaultSettings, 'teamId' => $teamId, 'workgroupId' => $workgroupId, 'editUrl' => $editUrl, 'corrAddrFieldIds' => $corrAddrFieldIds, 'invAddrFieldIds' => $invAddrFieldIds, 'reqExecBoardFunError' => $reqExecBoardFunError, 'contacttype' => $type, 'urlIdentifier' => $this->clubUrlIdentifier, 'clubType' => $this->clubType, 'fedClubId' => $federationClubId));
+        $systemEnvironment = $this->container->getParameter('kernel.environment');
+        return $this->render('ClubadminContactBundle:ContactList:contactlist.html.twig', array('systemEnvironment' =>$systemEnvironment,'addExistingFedMemberClub' => $club->get('addExistingFedMemberClub'), 'clubMembershipAvailable' => $club->get('clubMembershipAvailable'), 'breadCrumb' => $breadCrumb, 'isReadOnlyContact' => $isReadOnlyContact, 'clubId' => $this->clubId, 'contactId' => $this->contactId, 'allTableSettings' => $allTableSettings, 'defaultSettings' => $defaultSettings, 'teamId' => $teamId, 'workgroupId' => $workgroupId, 'editUrl' => $editUrl, 'corrAddrFieldIds' => $corrAddrFieldIds, 'invAddrFieldIds' => $invAddrFieldIds, 'reqExecBoardFunError' => $reqExecBoardFunError, 'contacttype' => $type, 'urlIdentifier' => $this->clubUrlIdentifier, 'clubType' => $this->clubType, 'fedClubId' => $federationClubId));
     }
 
     /**
@@ -209,7 +209,8 @@ class ContactController extends FgController
         $reqExecBoardFunError = false;
 
         /* Required assignment error of Club Executive Board Members - ends */
-        return $this->render('ClubadminContactBundle:ContactList:contactlist.html.twig', array('addExistingFedMemberClub' => $club->get('addExistingFedMemberClub'), 'clubMembershipAvailable' => $club->get('clubMembershipAvailable'), 'breadCrumb' => $breadCrumb, 'isReadOnlyContact' => $isReadOnlyContact, 'clubId' => $this->clubId, 'contactId' => $this->contactId, 'allTableSettings' => $allTableSettings, 'defaultSettings' => $defaultSettings, 'teamId' => $teamId, 'workgroupId' => $workgroupId, 'editUrl' => $editUrl, 'corrAddrFieldIds' => $corrAddrFieldIds, 'invAddrFieldIds' => $invAddrFieldIds, 'reqExecBoardFunError' => $reqExecBoardFunError, 'contacttype' => $type, 'urlIdentifier' => $this->clubUrlIdentifier, 'clubType' => $this->clubType, 'fedClubId' => $federationClubId));
+        $systemEnvironment = $this->container->getParameter('kernel.environment');
+        return $this->render('ClubadminContactBundle:ContactList:contactlist.html.twig', array('systemEnvironment' =>$systemEnvironment,'addExistingFedMemberClub' => $club->get('addExistingFedMemberClub'), 'clubMembershipAvailable' => $club->get('clubMembershipAvailable'), 'breadCrumb' => $breadCrumb, 'isReadOnlyContact' => $isReadOnlyContact, 'clubId' => $this->clubId, 'contactId' => $this->contactId, 'allTableSettings' => $allTableSettings, 'defaultSettings' => $defaultSettings, 'teamId' => $teamId, 'workgroupId' => $workgroupId, 'editUrl' => $editUrl, 'corrAddrFieldIds' => $corrAddrFieldIds, 'invAddrFieldIds' => $invAddrFieldIds, 'reqExecBoardFunError' => $reqExecBoardFunError, 'contacttype' => $type, 'urlIdentifier' => $this->clubUrlIdentifier, 'clubType' => $this->clubType, 'fedClubId' => $federationClubId));
     }
 
     /**

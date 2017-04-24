@@ -24,7 +24,7 @@ class FgRmRoleContactRepository extends EntityRepository
     private $asgmntLogValues = array();
     private $roleLogFields = "(`club_id`,`role_id`,`date`,`kind`,`field`,`value_before`,`value_after`,`changed_by`)";
     private $roleLogValues = array();
-    private $clubLogFields = "(`club_id`,`date`,`kind`,`field`,`value_before`,`value_after`,`changed_by`,`rolelog_id`)";
+    private $clubLogFields = "(`club_id`,`date`,`kind`,`field`,`value_before`,`value_after`,`changed_by`)";
     private $clubLogValues = array();
     private $functionLogFields = "(`club_id`,`role_id`,`function_id`,`date`,`kind`,`field`,`value_before`,`value_after`,`changed_by`)";
     private $functionLogValues = array();
@@ -724,7 +724,7 @@ class FgRmRoleContactRepository extends EntityRepository
         }
         if (count($this->clubLogValues)) {
             foreach($this->clubLogValues as $insertValClub) {
-                $valueStringClub[] = array('club_id' => $insertValClub[0], 'kind' => $insertValClub[2], 'field' => $insertValClub[3], 'value_before' => $insertValClub[4], 'value_after' => $insertValClub[5], 'rolelog_id' => $insertValClub[7]);
+                $valueStringClub[] = array('club_id' => $insertValClub[0], 'kind' => $insertValClub[2], 'field' => $insertValClub[3], 'value_before' => $insertValClub[4], 'value_after' => $insertValClub[5]);
             }
             $this->insertLogEntries('assignment_club', 'fg_club_log', $valueStringClub, $container);
         }
@@ -1232,8 +1232,8 @@ class FgRmRoleContactRepository extends EntityRepository
 
         // Insert Club Log if Club Executive Board Assignment.
         if ($roleId == $clubExecBoardId) {
-            $this->clubLogQry .= "INSERT INTO `fg_club_log` (`club_id`,`date`,`kind`,`field`,`value_before`,`value_after`,`changed_by`,`rolelog_id`) "
-                    . "(SELECT '$clubId','$currentDate','executive board',$functionName,'-',contactName(rl.`import_contact`),'$currentContactId',rl.`id` FROM `fg_rm_role_log` rl WHERE rl.import_table='$importTable' AND rl.role_id='$logRoleId' AND rl.date='$currentDate');";
+//            $this->clubLogQry .= "INSERT INTO `fg_club_log` (`club_id`,`date`,`kind`,`field`,`value_before`,`value_after`,`changed_by`,`rolelog_id`) "
+//                    . "(SELECT '$clubId','$currentDate','executive board',$functionName,'-',contactName(rl.`import_contact`),'$currentContactId',rl.`id` FROM `fg_rm_role_log` rl WHERE rl.import_table='$importTable' AND rl.role_id='$logRoleId' AND rl.date='$currentDate');";
             $execBrdTerminology = ucfirst($terminologyService->getTerminology('Executive Board', $container->getParameter('singular'), $clubId));
             $roleName = "'$execBrdTerminology'";
         }

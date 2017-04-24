@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnSmsRecipients
  */
@@ -74,6 +72,7 @@ class FgCnSmsRecipients
      * Set contactId
      *
      * @param integer $contactId
+     *
      * @return FgCnSmsRecipients
      */
     public function setContactId($contactId)
@@ -97,6 +96,7 @@ class FgCnSmsRecipients
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return FgCnSmsRecipients
      */
     public function setCreatedAt($createdAt)
@@ -120,6 +120,7 @@ class FgCnSmsRecipients
      * Set smsId
      *
      * @param integer $smsId
+     *
      * @return FgCnSmsRecipients
      */
     public function setSmsId($smsId)
@@ -143,6 +144,7 @@ class FgCnSmsRecipients
      * Set status
      *
      * @param string $status
+     *
      * @return FgCnSmsRecipients
      */
     public function setStatus($status)
@@ -166,6 +168,7 @@ class FgCnSmsRecipients
      * Set statusMessage
      *
      * @param string $statusMessage
+     *
      * @return FgCnSmsRecipients
      */
     public function setStatusMessage($statusMessage)
@@ -189,6 +192,7 @@ class FgCnSmsRecipients
      * Set actualSmsContent
      *
      * @param string $actualSmsContent
+     *
      * @return FgCnSmsRecipients
      */
     public function setActualSmsContent($actualSmsContent)
@@ -212,6 +216,7 @@ class FgCnSmsRecipients
      * Set jobId
      *
      * @param string $jobId
+     *
      * @return FgCnSmsRecipients
      */
     public function setJobId($jobId)
@@ -235,6 +240,7 @@ class FgCnSmsRecipients
      * Set phoneNumber
      *
      * @param string $phoneNumber
+     *
      * @return FgCnSmsRecipients
      */
     public function setPhoneNumber($phoneNumber)
@@ -258,6 +264,7 @@ class FgCnSmsRecipients
      * Set fieldName
      *
      * @param string $fieldName
+     *
      * @return FgCnSmsRecipients
      */
     public function setFieldName($fieldName)
@@ -277,3 +284,4 @@ class FgCnSmsRecipients
         return $this->fieldName;
     }
 }
+

@@ -139,7 +139,7 @@ class ConnectionController extends ParentController
         } else {
             $return['householdContacts'] = $this->em->getRepository('CommonUtilityBundle:FgCmLinkedcontact')->getLinkedContacts($this->clubId, $contact, true, $this->clubType, $this->clubDefaultSystemLang);
             $return['relation'] = $this->em->getRepository('CommonUtilityBundle:FgCmRelation')->getRelations($this->clubId, 'both', $this->clubDefaultSystemLang);
-            $return['companyContacts'] = $this->em->getRepository('CommonUtilityBundle:FgCmLinkedcontact')->getLinkedDefaultContacts($contact, $this->clubType, $this->clubId);
+            $return['companyContacts'] = $this->em->getRepository('CommonUtilityBundle:FgCmLinkedcontact')->getLinkedDefaultContacts($contact, $this->clubId);
             $connectionCount = $connectionCount + count($return['householdContacts']) + count($return['companyContacts']);
         }
         $return['otherContacts'] = $this->em->getRepository('CommonUtilityBundle:FgCmLinkedcontact')->getLinkedContacts($this->clubId, $contact, false, $this->clubType, $this->clubDefaultSystemLang);

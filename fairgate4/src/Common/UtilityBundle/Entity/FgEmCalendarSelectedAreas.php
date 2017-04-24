@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgEmCalendarSelectedAreas
  */
@@ -20,9 +18,9 @@ class FgEmCalendarSelectedAreas
     private $isClub;
 
     /**
-     * @var \Common\UtilityBundle\Entity\FgEmCalendar
+     * @var \Common\UtilityBundle\Entity\FgEmCalendarDetails
      */
-    private $calendar;
+    private $calendarDetails;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgRmRole
@@ -33,7 +31,7 @@ class FgEmCalendarSelectedAreas
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -44,19 +42,20 @@ class FgEmCalendarSelectedAreas
      * Set isClub
      *
      * @param boolean $isClub
+     *
      * @return FgEmCalendarSelectedAreas
      */
     public function setIsClub($isClub)
     {
         $this->isClub = $isClub;
-    
+
         return $this;
     }
 
     /**
      * Get isClub
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsClub()
     {
@@ -64,76 +63,51 @@ class FgEmCalendarSelectedAreas
     }
 
     /**
-     * Set calendar
-     *
-     * @param \Common\UtilityBundle\Entity\FgEmCalendar $calendar
-     * @return FgEmCalendarSelectedAreas
-     */
-    public function setCalendar(\Common\UtilityBundle\Entity\FgEmCalendar $calendar = null)
-    {
-        $this->calendar = $calendar;
-    
-        return $this;
-    }
-
-    /**
-     * Get calendar
-     *
-     * @return \Common\UtilityBundle\Entity\FgEmCalendar 
-     */
-    public function getCalendar()
-    {
-        return $this->calendar;
-    }
-
-    /**
-     * Set role
-     *
-     * @param \Common\UtilityBundle\Entity\FgRmRole $role
-     * @return FgEmCalendarSelectedAreas
-     */
-    public function setRole(\Common\UtilityBundle\Entity\FgRmRole $role = null)
-    {
-        $this->role = $role;
-    
-        return $this;
-    }
-
-    /**
-     * Get role
-     *
-     * @return \Common\UtilityBundle\Entity\FgRmRole 
-     */
-    public function getRole()
-    {
-        return $this->role;
-    }
-    /**
-     * @var \Common\UtilityBundle\Entity\FgEmCalendarDetails
-     */
-    private $calendarDetails;
-
-
-    /**
      * Set calendarDetails
      *
      * @param \Common\UtilityBundle\Entity\FgEmCalendarDetails $calendarDetails
+     *
      * @return FgEmCalendarSelectedAreas
      */
     public function setCalendarDetails(\Common\UtilityBundle\Entity\FgEmCalendarDetails $calendarDetails = null)
     {
         $this->calendarDetails = $calendarDetails;
-    
+
         return $this;
     }
 
     /**
      * Get calendarDetails
      *
-     * @return \Common\UtilityBundle\Entity\FgEmCalendarDetails 
+     * @return \Common\UtilityBundle\Entity\FgEmCalendarDetails
      */
     public function getCalendarDetails()
     {
         return $this->calendarDetails;
     }
+
+    /**
+     * Set role
+     *
+     * @param \Common\UtilityBundle\Entity\FgRmRole $role
+     *
+     * @return FgEmCalendarSelectedAreas
+     */
+    public function setRole(\Common\UtilityBundle\Entity\FgRmRole $role = null)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * Get role
+     *
+     * @return \Common\UtilityBundle\Entity\FgRmRole
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
 }
+

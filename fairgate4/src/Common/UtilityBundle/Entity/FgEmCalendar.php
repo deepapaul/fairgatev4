@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgEmCalendar
  */
@@ -28,6 +26,11 @@ class FgEmCalendar
      * @var boolean
      */
     private $isAllday;
+
+    /**
+     * @var boolean
+     */
+    private $isRepeat;
 
     /**
      * @var \DateTime
@@ -68,7 +71,7 @@ class FgEmCalendar
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -79,19 +82,20 @@ class FgEmCalendar
      * Set scope
      *
      * @param string $scope
+     *
      * @return FgEmCalendar
      */
     public function setScope($scope)
     {
         $this->scope = $scope;
-    
+
         return $this;
     }
 
     /**
      * Get scope
      *
-     * @return string 
+     * @return string
      */
     public function getScope()
     {
@@ -102,19 +106,20 @@ class FgEmCalendar
      * Set shareWithLower
      *
      * @param boolean $shareWithLower
+     *
      * @return FgEmCalendar
      */
     public function setShareWithLower($shareWithLower)
     {
         $this->shareWithLower = $shareWithLower;
-    
+
         return $this;
     }
 
     /**
      * Get shareWithLower
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getShareWithLower()
     {
@@ -125,19 +130,20 @@ class FgEmCalendar
      * Set isAllday
      *
      * @param boolean $isAllday
+     *
      * @return FgEmCalendar
      */
     public function setIsAllday($isAllday)
     {
         $this->isAllday = $isAllday;
-    
+
         return $this;
     }
 
     /**
      * Get isAllday
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsAllday()
     {
@@ -145,22 +151,47 @@ class FgEmCalendar
     }
 
     /**
+     * Set isRepeat
+     *
+     * @param boolean $isRepeat
+     *
+     * @return FgEmCalendar
+     */
+    public function setIsRepeat($isRepeat)
+    {
+        $this->isRepeat = $isRepeat;
+
+        return $this;
+    }
+
+    /**
+     * Get isRepeat
+     *
+     * @return boolean
+     */
+    public function getIsRepeat()
+    {
+        return $this->isRepeat;
+    }
+
+    /**
      * Set repeatUntillDate
      *
      * @param \DateTime $repeatUntillDate
+     *
      * @return FgEmCalendar
      */
     public function setRepeatUntillDate($repeatUntillDate)
     {
         $this->repeatUntillDate = $repeatUntillDate;
-    
+
         return $this;
     }
 
     /**
      * Get repeatUntillDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getRepeatUntillDate()
     {
@@ -171,19 +202,20 @@ class FgEmCalendar
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return FgEmCalendar
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -194,19 +226,20 @@ class FgEmCalendar
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
+     *
      * @return FgEmCalendar
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
-    
+
         return $this;
     }
 
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -217,19 +250,20 @@ class FgEmCalendar
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgEmCalendar
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -240,19 +274,20 @@ class FgEmCalendar
      * Set createdBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $createdBy
+     *
      * @return FgEmCalendar
      */
     public function setCreatedBy(\Common\UtilityBundle\Entity\FgCmContact $createdBy = null)
     {
         $this->createdBy = $createdBy;
-    
+
         return $this;
     }
 
     /**
      * Get createdBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getCreatedBy()
     {
@@ -263,19 +298,20 @@ class FgEmCalendar
      * Set updatedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $updatedBy
+     *
      * @return FgEmCalendar
      */
     public function setUpdatedBy(\Common\UtilityBundle\Entity\FgCmContact $updatedBy = null)
     {
         $this->updatedBy = $updatedBy;
-    
+
         return $this;
     }
 
     /**
      * Get updatedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getUpdatedBy()
     {
@@ -286,50 +322,24 @@ class FgEmCalendar
      * Set calendarRules
      *
      * @param \Common\UtilityBundle\Entity\FgEmCalendarRules $calendarRules
+     *
      * @return FgEmCalendar
      */
     public function setCalendarRules(\Common\UtilityBundle\Entity\FgEmCalendarRules $calendarRules = null)
     {
         $this->calendarRules = $calendarRules;
-    
+
         return $this;
     }
 
     /**
      * Get calendarRules
      *
-     * @return \Common\UtilityBundle\Entity\FgEmCalendarRules 
+     * @return \Common\UtilityBundle\Entity\FgEmCalendarRules
      */
     public function getCalendarRules()
     {
         return $this->calendarRules;
     }
-    /**
-     * @var boolean
-     */
-    private $isRepeat;
-
-
-    /**
-     * Set isRepeat
-     *
-     * @param boolean $isRepeat
-     * @return FgEmCalendar
-     */
-    public function setIsRepeat($isRepeat)
-    {
-        $this->isRepeat = $isRepeat;
-    
-        return $this;
-    }
-
-    /**
-     * Get isRepeat
-     *
-     * @return boolean 
-     */
-    public function getIsRepeat()
-    {
-        return $this->isRepeat;
-    }
 }
+

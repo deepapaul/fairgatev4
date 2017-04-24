@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgRmRole
  */
@@ -23,8 +21,6 @@ class FgRmRole
      * @var boolean
      */
     private $isActive;
-
-
 
     /**
      * @var boolean
@@ -57,9 +53,19 @@ class FgRmRole
     private $filterUpdated;
 
     /**
-     * @var \Common\UtilityBundle\Entity\FgFilter
+     * @var boolean
      */
-    private $filter;
+    private $isDeactivatedForum;
+
+    /**
+     * @var string
+     */
+    private $calendarColorCode;
+
+    /**
+     * @var boolean
+     */
+    private $visibleForAll;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgClub
@@ -72,13 +78,16 @@ class FgRmRole
     private $teamCategory;
 
     /**
+     * @var \Common\UtilityBundle\Entity\FgFilter
+     */
+    private $filter;
+
+    /**
      * @var \Common\UtilityBundle\Entity\FgRmCategory
      */
     private $category;
-     /**
-     * @var boolean
-     */
-    private $visibleForAll;
+
+
     /**
      * Get id
      *
@@ -87,9 +96,7 @@ class FgRmRole
     public function getId()
     {
         return $this->id;
-
     }
-
 
     /**
      * Set title
@@ -103,9 +110,7 @@ class FgRmRole
         $this->title = $title;
 
         return $this;
-
     }
-
 
     /**
      * Get title
@@ -115,9 +120,7 @@ class FgRmRole
     public function getTitle()
     {
         return $this->title;
-
     }
-
 
     /**
      * Set isActive
@@ -131,9 +134,7 @@ class FgRmRole
         $this->isActive = $isActive;
 
         return $this;
-
     }
-
 
     /**
      * Get isActive
@@ -143,9 +144,7 @@ class FgRmRole
     public function getIsActive()
     {
         return $this->isActive;
-
     }
-
 
     /**
      * Set isExecutiveBoard
@@ -159,9 +158,7 @@ class FgRmRole
         $this->isExecutiveBoard = $isExecutiveBoard;
 
         return $this;
-
     }
-
 
     /**
      * Get isExecutiveBoard
@@ -171,9 +168,7 @@ class FgRmRole
     public function getIsExecutiveBoard()
     {
         return $this->isExecutiveBoard;
-
     }
-
 
     /**
      * Set sortOrder
@@ -187,9 +182,7 @@ class FgRmRole
         $this->sortOrder = $sortOrder;
 
         return $this;
-
     }
-
 
     /**
      * Get sortOrder
@@ -199,9 +192,7 @@ class FgRmRole
     public function getSortOrder()
     {
         return $this->sortOrder;
-
     }
-
 
     /**
      * Set description
@@ -215,9 +206,7 @@ class FgRmRole
         $this->description = $description;
 
         return $this;
-
     }
-
 
     /**
      * Get description
@@ -227,9 +216,7 @@ class FgRmRole
     public function getDescription()
     {
         return $this->description;
-
     }
-
 
     /**
      * Set image
@@ -243,9 +230,7 @@ class FgRmRole
         $this->image = $image;
 
         return $this;
-
     }
-
 
     /**
      * Get image
@@ -255,9 +240,7 @@ class FgRmRole
     public function getImage()
     {
         return $this->image;
-
     }
-
 
     /**
      * Set type
@@ -271,9 +254,7 @@ class FgRmRole
         $this->type = $type;
 
         return $this;
-
     }
-
 
     /**
      * Get type
@@ -283,9 +264,7 @@ class FgRmRole
     public function getType()
     {
         return $this->type;
-
     }
-
 
     /**
      * Set filterUpdated
@@ -296,12 +275,10 @@ class FgRmRole
      */
     public function setFilterUpdated($filterUpdated)
     {
-         $this->filterUpdated = $filterUpdated;
+        $this->filterUpdated = $filterUpdated;
 
         return $this;
-
     }
-
 
     /**
      * Get filterUpdated
@@ -311,37 +288,79 @@ class FgRmRole
     public function getFilterUpdated()
     {
         return $this->filterUpdated;
-
     }
 
-
     /**
-     * Set filter
+     * Set isDeactivatedForum
      *
-     * @param \Common\UtilityBundle\Entity\FgFilter $filter
+     * @param boolean $isDeactivatedForum
      *
      * @return FgRmRole
      */
-    public function setFilter(\Common\UtilityBundle\Entity\FgFilter $filter = null)
+    public function setIsDeactivatedForum($isDeactivatedForum)
     {
-        $this->filter = $filter;
+        $this->isDeactivatedForum = $isDeactivatedForum;
 
         return $this;
-
     }
-
 
     /**
-     * Get filter
+     * Get isDeactivatedForum
      *
-     * @return \Common\UtilityBundle\Entity\FgFilter
+     * @return boolean
      */
-    public function getFilter()
+    public function getIsDeactivatedForum()
     {
-        return $this->filter;
-
+        return $this->isDeactivatedForum;
     }
 
+    /**
+     * Set calendarColorCode
+     *
+     * @param string $calendarColorCode
+     *
+     * @return FgRmRole
+     */
+    public function setCalendarColorCode($calendarColorCode)
+    {
+        $this->calendarColorCode = $calendarColorCode;
+
+        return $this;
+    }
+
+    /**
+     * Get calendarColorCode
+     *
+     * @return string
+     */
+    public function getCalendarColorCode()
+    {
+        return $this->calendarColorCode;
+    }
+
+    /**
+     * Set visibleForAll
+     *
+     * @param boolean $visibleForAll
+     *
+     * @return FgRmRole
+     */
+    public function setVisibleForAll($visibleForAll)
+    {
+        $this->visibleForAll = $visibleForAll;
+
+        return $this;
+    }
+
+    /**
+     * Get visibleForAll
+     *
+     * @return boolean
+     */
+    public function getVisibleForAll()
+    {
+        return $this->visibleForAll;
+    }
 
     /**
      * Set club
@@ -355,9 +374,7 @@ class FgRmRole
         $this->club = $club;
 
         return $this;
-
     }
-
 
     /**
      * Get club
@@ -367,9 +384,7 @@ class FgRmRole
     public function getClub()
     {
         return $this->club;
-
     }
-
 
     /**
      * Set teamCategory
@@ -383,9 +398,7 @@ class FgRmRole
         $this->teamCategory = $teamCategory;
 
         return $this;
-
     }
-
 
     /**
      * Get teamCategory
@@ -395,9 +408,31 @@ class FgRmRole
     public function getTeamCategory()
     {
         return $this->teamCategory;
-
     }
 
+    /**
+     * Set filter
+     *
+     * @param \Common\UtilityBundle\Entity\FgFilter $filter
+     *
+     * @return FgRmRole
+     */
+    public function setFilter(\Common\UtilityBundle\Entity\FgFilter $filter = null)
+    {
+        $this->filter = $filter;
+
+        return $this;
+    }
+
+    /**
+     * Get filter
+     *
+     * @return \Common\UtilityBundle\Entity\FgFilter
+     */
+    public function getFilter()
+    {
+        return $this->filter;
+    }
 
     /**
      * Set category
@@ -411,9 +446,7 @@ class FgRmRole
         $this->category = $category;
 
         return $this;
-
     }
-
 
     /**
      * Get category
@@ -423,125 +456,6 @@ class FgRmRole
     public function getCategory()
     {
         return $this->category;
-
-    }
-
-    /**
-     * @var string
-     */
-    private $filterData;
-
-
-    /**
-     * Set filterData
-     *
-     * @param string $filterData
-     *
-     * @return FgRmRole
-     */
-    public function setFilterData($filterData)
-    {
-        $this->filterData = $filterData;
-
-        return $this;
-
-    }
-
-
-    /**
-     * Get filterData
-     *
-     * @return string
-     */
-    public function getFilterData()
-    {
-        return $this->filterData;
-
-    }
-
-
-    /**
-     * @var boolean
-     */
-    private $isDeactivatedForum;
-
-
-    /**
-     * Set isDeactivatedForum
-     *
-     * @param boolean $isDeactivatedForum
-     * @return FgRmRole
-     */
-    public function setIsDeactivatedForum($isDeactivatedForum)
-    {
-        $this->isDeactivatedForum = $isDeactivatedForum;
-    
-        return $this;
-    }
-
-    /**
-     * Get isDeactivatedForum
-     *
-     * @return boolean 
-     */
-    public function getIsDeactivatedForum()
-    {
-        return $this->isDeactivatedForum;
-    }
-
-    /**
-     * @var string
-     */
-    private $calendarColorCode;
-
-
-    /**
-     * Set calendarColorCode
-     *
-     * @param string $calendarColorCode
-     * @return FgRmRole
-     */
-    public function setCalendarColorCode($calendarColorCode)
-    {
-        $this->calendarColorCode = $calendarColorCode;
-    
-        return $this;
-    }
-
-    /**
-     * Get calendarColorCode
-     *
-     * @return string 
-     */
-    public function getCalendarColorCode()
-    {
-        return $this->calendarColorCode;
-    }
-    
-    /**
-     * Set isActive
-     *
-     * @param boolean $visibleForAll
-     *
-     * @return FgRmRole
-     */
-    public function setVisibleForAll($visibleForAll)
-    {
-        $this->visibleForAll = $visibleForAll;
-
-        return $this;
-
-    }
-
-
-    /**
-     * Get isActive
-     *
-     * @return boolean
-     */
-    public function getVisibleForAll()
-    {
-        return $this->visibleForAll;
-
     }
 }
+

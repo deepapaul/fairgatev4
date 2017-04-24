@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgTeamCategoryI18n
  */
@@ -42,9 +40,7 @@ class FgTeamCategoryI18n
         $this->lang = $lang;
 
         return $this;
-
     }
-
 
     /**
      * Get lang
@@ -54,9 +50,7 @@ class FgTeamCategoryI18n
     public function getLang()
     {
         return $this->lang;
-
     }
-
 
     /**
      * Set titleLang
@@ -70,9 +64,7 @@ class FgTeamCategoryI18n
         $this->titleLang = $titleLang;
 
         return $this;
-
     }
-
 
     /**
      * Get titleLang
@@ -82,9 +74,7 @@ class FgTeamCategoryI18n
     public function getTitleLang()
     {
         return $this->titleLang;
-
     }
-
 
     /**
      * Set isActive
@@ -98,9 +88,7 @@ class FgTeamCategoryI18n
         $this->isActive = $isActive;
 
         return $this;
-
     }
-
 
     /**
      * Get isActive
@@ -110,9 +98,7 @@ class FgTeamCategoryI18n
     public function getIsActive()
     {
         return $this->isActive;
-
     }
-
 
     /**
      * Set id
@@ -126,9 +112,7 @@ class FgTeamCategoryI18n
         $this->id = $id;
 
         return $this;
-
     }
-
 
     /**
      * Get id
@@ -138,8 +122,6 @@ class FgTeamCategoryI18n
     public function getId()
     {
         return $this->id;
-
     }
-
-
 }
+

@@ -75,6 +75,11 @@ class FgApiAccesslogRepository extends EntityRepository
             $qb->andWhere('A.api =:apiType')
                ->setParameter('apiType', $filterArray['apiType']);
         }
+        
+        if(isset($filterArray['resCode'])){
+            $qb->andWhere('A.responseCode =:resCode')
+               ->setParameter('resCode', $filterArray['resCode']);
+        }
 
         if(isset($filterArray['orderColumn'])){
             if($filterArray['orderColumn'] == 'title'){
@@ -114,6 +119,10 @@ class FgApiAccesslogRepository extends EntityRepository
         if(isset($filterArray['endDate'])){
             $qb->andWhere('A.date <=:endDate')
                ->setParameter('endDate', new \DateTime($filterArray['endDate']));
+        }
+        if(isset($filterArray['resCode'])){
+            $qb->andWhere('A.responseCode =:resCode')
+               ->setParameter('resCode', $filterArray['resCode']);
         }
         
         $result = $qb->getQuery()->getSingleResult();

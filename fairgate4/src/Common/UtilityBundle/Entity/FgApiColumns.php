@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgApiColumns
  */
@@ -28,7 +26,7 @@ class FgApiColumns
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +37,20 @@ class FgApiColumns
      * Set fieldName
      *
      * @param string $fieldName
+     *
      * @return FgApiColumns
      */
     public function setFieldName($fieldName)
     {
         $this->fieldName = $fieldName;
-    
+
         return $this;
     }
 
     /**
      * Get fieldName
      *
-     * @return string 
+     * @return string
      */
     public function getFieldName()
     {
@@ -62,22 +61,24 @@ class FgApiColumns
      * Set apiType
      *
      * @param \Common\UtilityBundle\Entity\FgApis $apiType
+     *
      * @return FgApiColumns
      */
     public function setApiType(\Common\UtilityBundle\Entity\FgApis $apiType = null)
     {
         $this->apiType = $apiType;
-    
+
         return $this;
     }
 
     /**
      * Get apiType
      *
-     * @return \Common\UtilityBundle\Entity\FgApis 
+     * @return \Common\UtilityBundle\Entity\FgApis
      */
     public function getApiType()
     {
         return $this->apiType;
     }
 }
+

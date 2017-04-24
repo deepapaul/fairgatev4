@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgSmServices
  */
@@ -35,6 +33,21 @@ class FgSmServices
     private $serviceType;
 
     /**
+     * @var string
+     */
+    private $paymentPlan;
+
+    /**
+     * @var integer
+     */
+    private $repetitionMonths;
+
+    /**
+     * @var integer
+     */
+    private $sortOrder;
+
+    /**
      * @var \Common\UtilityBundle\Entity\FgClub
      */
     private $club;
@@ -43,6 +56,7 @@ class FgSmServices
      * @var \Common\UtilityBundle\Entity\FgSmCategory
      */
     private $category;
+
 
     /**
      * Get id
@@ -58,6 +72,7 @@ class FgSmServices
      * Set title
      *
      * @param string $title
+     *
      * @return FgSmServices
      */
     public function setTitle($title)
@@ -81,6 +96,7 @@ class FgSmServices
      * Set description
      *
      * @param string $description
+     *
      * @return FgSmServices
      */
     public function setDescription($description)
@@ -104,6 +120,7 @@ class FgSmServices
      * Set price
      *
      * @param string $price
+     *
      * @return FgSmServices
      */
     public function setPrice($price)
@@ -127,6 +144,7 @@ class FgSmServices
      * Set serviceType
      *
      * @param string $serviceType
+     *
      * @return FgSmServices
      */
     public function setServiceType($serviceType)
@@ -147,71 +165,10 @@ class FgSmServices
     }
 
     /**
-     * Set club
-     *
-     * @param \Common\UtilityBundle\Entity\FgClub $club
-     * @return FgSmServices
-     */
-    public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
-    {
-        $this->club = $club;
-
-        return $this;
-    }
-
-    /**
-     * Get club
-     *
-     * @return \Common\UtilityBundle\Entity\FgClub
-     */
-    public function getClub()
-    {
-        return $this->club;
-    }
-
-    /**
-     * Set category
-     *
-     * @param \Common\UtilityBundle\Entity\FgSmCategory $category
-     * @return FgSmServices
-     */
-    public function setCategory(\Common\UtilityBundle\Entity\FgSmCategory $category = null)
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * Get category
-     *
-     * @return \Common\UtilityBundle\Entity\FgSmCategory
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
-     * @var string
-     */
-    private $paymentPlan;
-
-    /**
-     * @var integer
-     */
-    private $repetitionMonths;
-
-    /**
-     * @var integer
-     */
-    private $sortOrder;
-
-
-    /**
      * Set paymentPlan
      *
      * @param string $paymentPlan
+     *
      * @return FgSmServices
      */
     public function setPaymentPlan($paymentPlan)
@@ -235,6 +192,7 @@ class FgSmServices
      * Set repetitionMonths
      *
      * @param integer $repetitionMonths
+     *
      * @return FgSmServices
      */
     public function setRepetitionMonths($repetitionMonths)
@@ -258,6 +216,7 @@ class FgSmServices
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgSmServices
      */
     public function setSortOrder($sortOrder)
@@ -276,4 +235,53 @@ class FgSmServices
     {
         return $this->sortOrder;
     }
+
+    /**
+     * Set club
+     *
+     * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
+     * @return FgSmServices
+     */
+    public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
+    {
+        $this->club = $club;
+
+        return $this;
+    }
+
+    /**
+     * Get club
+     *
+     * @return \Common\UtilityBundle\Entity\FgClub
+     */
+    public function getClub()
+    {
+        return $this->club;
+    }
+
+    /**
+     * Set category
+     *
+     * @param \Common\UtilityBundle\Entity\FgSmCategory $category
+     *
+     * @return FgSmServices
+     */
+    public function setCategory(\Common\UtilityBundle\Entity\FgSmCategory $category = null)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return \Common\UtilityBundle\Entity\FgSmCategory
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
 }
+

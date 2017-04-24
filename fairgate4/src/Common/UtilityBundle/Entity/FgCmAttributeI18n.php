@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmAttributeI18n
  */
@@ -39,6 +37,7 @@ class FgCmAttributeI18n
      * Set lang
      *
      * @param string $lang
+     *
      * @return FgCmAttributeI18n
      */
     public function setLang($lang)
@@ -62,6 +61,7 @@ class FgCmAttributeI18n
      * Set fieldnameLang
      *
      * @param string $fieldnameLang
+     *
      * @return FgCmAttributeI18n
      */
     public function setFieldnameLang($fieldnameLang)
@@ -85,6 +85,7 @@ class FgCmAttributeI18n
      * Set fieldnameShortLang
      *
      * @param string $fieldnameShortLang
+     *
      * @return FgCmAttributeI18n
      */
     public function setFieldnameShortLang($fieldnameShortLang)
@@ -108,6 +109,7 @@ class FgCmAttributeI18n
      * Set isActive
      *
      * @param boolean $isActive
+     *
      * @return FgCmAttributeI18n
      */
     public function setIsActive($isActive)
@@ -131,6 +133,7 @@ class FgCmAttributeI18n
      * Set id
      *
      * @param \Common\UtilityBundle\Entity\FgCmAttribute $id
+     *
      * @return FgCmAttributeI18n
      */
     public function setId(\Common\UtilityBundle\Entity\FgCmAttribute $id = null)
@@ -150,3 +153,4 @@ class FgCmAttributeI18n
         return $this->id;
     }
 }
+

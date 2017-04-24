@@ -156,9 +156,9 @@ class FgRoutingListener
         $requestUri = $request->getRequestUri();
         $env = $this->container->getParameter("kernel.environment");
 
-        $clubDetails = $this->setDomainDetails($request, $env);
-        $splitRequestUri = explode('/', $requestUri);
-        if (strpos($requestUri, '/api/') > -1) {
+        $clubDetails = $this->setDomainDetails($request, $env);       
+        $splitRequestUri = explode('/', $requestUri);              
+        if (strpos($requestUri, '/api/') > -1 || strpos($requestUri, '/register') === 0) {
             return true;
         }
         if ($splitRequestUri[1] == 'uploads') {
@@ -201,11 +201,11 @@ class FgRoutingListener
         FgUtility::$ROOT_PATH = $this->container->getParameter('kernel.root_dir');
         //To check uploaded path
         if ($splitRequestUri[1] != 'uploads') {
-            $this->setClubDetails($event);
+            $this->setClubDetails($event);            
         }
         $this->parameters['publicConfig'] = array();
         /* FAIR-2313 Frontend view layout */
-        if ($applicationArea != 'internal' && $applicationArea != 'help' && $applicationArea != 'files' && $applicationArea != 'backend') {
+        if ($applicationArea != 'internal' && $applicationArea != 'help' && $applicationArea != 'files' && $applicationArea != 'backend' && (current(explode('/', $this->parameters['applicationArea'])) != 'confirmClub')) {
             $conn = $this->container->get('database_connection');
             $cachingEnabled = $this->container->getParameter('caching_enabled');
             if ($this->session->get('themePreviewFlag') && strpos($requestUri, '/themepreview') > 0) {
@@ -232,17 +232,30 @@ class FgRoutingListener
     public function setClubDetails($event)
     {
         $entityManager = $this->container->get('doctrine')->getManager();
+        $adminEntityManager = $this->container->get('fg.admin.connection')->getAdminManager();
+        
         $context = $this->container->get('router')->getContext();
         $domainCacheKey = $this->container->getParameter('database_name');
         $cacheLifeTime = $this->container->getParameter('cache_lifetime');
         $cachingEnabled = $this->container->getParameter('caching_enabled');
         /* Check the club exists */
-        $clubDetails = $entityManager->getRepository('CommonUtilityBundle:FgClub')->getClubDetails($domainCacheKey, $cacheLifeTime, $cachingEnabled, $this->clubUrlIdentifier, $this->clubId);
-        //echo '<pre>';print_r($clubDetails);exit;
-        if ($clubDetails['clubType'] == 'federation' || $clubDetails['clubType'] == 'sub_federation') {
-            $this->parameters['federation_icon'][$clubDetails['id']] = ($clubDetails['federationIcon']) ? '/uploads/' . $clubDetails['id'] . '/admin/federation_icon/' . $clubDetails['federationIcon'] : '/fgassets/global/img/fedicon.png';
-        }
+        
+        $clubDetails = $adminEntityManager->getRepository('AdminUtilityBundle:FgClub')->getClubDetails($domainCacheKey, $cacheLifeTime, $cachingEnabled, $this->clubUrlIdentifier, $this->clubId);
+
         if ($clubDetails) {
+            
+            /******* Set the club settings data to the club array *******/
+            $clubSettingDetails = $entityManager->getRepository('CommonUtilityBundle:FgClubSettings')->getClubSettings($domainCacheKey, $cacheLifeTime, $cachingEnabled, $clubDetails['urlIdentifier'], $clubDetails['id']);
+            $clubDetails = array_merge($clubDetails, $clubSettingDetails);
+            /***********************************************************/
+            
+            
+            /******* Set the club logo data to the parameter array *******/
+            if ($clubDetails['clubType'] == 'federation' || $clubDetails['clubType'] == 'sub_federation') {
+                 $this->parameters['federation_icon'][$clubDetails['id']] = ($clubDetails['federationIcon']) ? '/uploads/' . $clubDetails['id'] . '/admin/federation_icon/' . $clubDetails['federationIcon'] : '/fgassets/global/img/fedicon.png';
+            }
+            /***********************************************************/
+
             $parentClubId = $clubDetails['parentClubId'];
             $this->setClubParameters($clubDetails);
             if ($parentClubId > 1) { //Not a federation club.
@@ -289,7 +302,7 @@ class FgRoutingListener
             $this->setModuleDetails();
         } else {
             /* When wrong clubname in the url */
-            throw new NotFoundHttpException(sprintf('Club does not existtt', $token));
+            throw new NotFoundHttpException(sprintf('Club does not exist', $token));
         }
         /* Master table of current club */
         $this->parameters['clubTable'] = $this->getClubMasterTable();
@@ -302,10 +315,10 @@ class FgRoutingListener
         }
         if ($this->websiteFrontend || $this->parameters['applicationArea'] === 'website') {
             /* Get the website full navigation details */
-            $this->getWebsiteNavigationHeirarchy();
-            if (!in_array('frontend2', $this->parameters['bookedModulesDet']) && in_array('frontend1', $this->parameters['bookedModulesDet']) && $this->parameters['applicationArea'] != 'externalApplication' && current(explode('/', $this->parameters['applicationArea'])) != 'register' && current(explode('/', $this->parameters['applicationArea'])) != 'contactapplicationreg') {
+            $this->getWebsiteNavigationHeirarchy();            
+            if (!in_array('frontend2', $this->parameters['bookedModulesDet']) && in_array('frontend1', $this->parameters['bookedModulesDet']) && $this->parameters['applicationArea'] != 'externalApplication' && current(explode('/', $this->parameters['applicationArea'])) != 'register' && current(explode('/', $this->parameters['applicationArea'])) != 'contactapplicationreg') {                
                 $event->setResponse(new RedirectResponse($this->container->get('router')->generate('internal_dashboard')));
-            } elseif (!in_array('frontend1', $this->parameters['bookedModulesDet']) && $this->parameters['applicationArea'] != 'externalApplication' && current(explode('/', $this->parameters['applicationArea'])) != 'register' && current(explode('/', $this->parameters['applicationArea'])) != 'contactapplicationreg') {
+            } elseif (!in_array('frontend1', $this->parameters['bookedModulesDet']) && $this->parameters['applicationArea'] != 'externalApplication' && current(explode('/', $this->parameters['applicationArea'])) != 'register' && current(explode('/', $this->parameters['applicationArea'])) != 'contactapplicationreg' && current(explode('/', $this->parameters['applicationArea'])) != 'confirmClub') {                
                 //a club which has no frontend (1 & 2) booking, should redirect to backend dashboard (except for pages externalApplication and contact register forms)
                 $event->setResponse(new RedirectResponse($this->container->get('router')->generate('dashboard', array('url_identifier' => $this->parameters['url_identifier']))));
             }
@@ -948,7 +961,7 @@ class FgRoutingListener
     private function setSeoSettings()
     {
         $em = $this->container->get('doctrine')->getManager();
-        $webSiteDetails = $em->getRepository('CommonUtilityBundle:FgWebSettings')->getWebSettings($this->clubId, $this->parameters['clubCacheKey'], $this->parameters['cache_lifetime'], $this->container->getParameter('caching_enabled'));
+        $webSiteDetails = $em->getRepository('CommonUtilityBundle:FgWebSettings')->getWebSettings($this->clubId, $this->parameters['clubCacheKey'], $this->parameters['cacheLifeTime'], $this->container->getParameter('caching_enabled'));
         $faviconsFolder = FgUtility::getUploadFilePath($this->clubId, 'cms_favicons');
         $appleTouchFolder = FgUtility::getUploadFilePath($this->clubId, 'apple_touch_icon');
         $fallbackFolder = FgUtility::getUploadFilePath($this->clubId, 'cms_websettings');
@@ -1065,6 +1078,8 @@ class FgRoutingListener
             }
             $this->websiteFrontend = true;
             $isCmsFrontend = 1;
+        }else{
+            $isCmsFrontend = 0;
         }
 
         return array('applicationArea' => $applicationArea, 'isCmsFrontend' => $isCmsFrontend);

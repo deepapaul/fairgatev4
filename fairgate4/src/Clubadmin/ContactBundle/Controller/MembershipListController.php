@@ -376,7 +376,7 @@ class MembershipListController extends FgController
         $hierarchyClubIds = array();
         $hierarchyClubIdArr = array();
         if (!in_array($this->clubType, array('federation_club', 'sub_federation_club'))) {
-            $clubPdo = new \Common\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
+            $clubPdo = new \Admin\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
             $resultClubs = $clubPdo->getHierarchyClubs();            
             foreach ($resultClubs as $resultClub) {
                 $hierarchyClubIds[] = $resultClub['id'];

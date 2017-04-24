@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnSms
  */
@@ -154,6 +152,7 @@ class FgCnSms
      * Set content
      *
      * @param string $content
+     *
      * @return FgCnSms
      */
     public function setContent($content)
@@ -177,6 +176,7 @@ class FgCnSms
      * Set sendingArea
      *
      * @param string $sendingArea
+     *
      * @return FgCnSms
      */
     public function setSendingArea($sendingArea)
@@ -200,6 +200,7 @@ class FgCnSms
      * Set sender
      *
      * @param string $sender
+     *
      * @return FgCnSms
      */
     public function setSender($sender)
@@ -223,6 +224,7 @@ class FgCnSms
      * Set state
      *
      * @param string $state
+     *
      * @return FgCnSms
      */
     public function setState($state)
@@ -246,6 +248,7 @@ class FgCnSms
      * Set sendMode
      *
      * @param string $sendMode
+     *
      * @return FgCnSms
      */
     public function setSendMode($sendMode)
@@ -269,6 +272,7 @@ class FgCnSms
      * Set sendDate
      *
      * @param \DateTime $sendDate
+     *
      * @return FgCnSms
      */
     public function setSendDate($sendDate)
@@ -292,6 +296,7 @@ class FgCnSms
      * Set contactSelection
      *
      * @param string $contactSelection
+     *
      * @return FgCnSms
      */
     public function setContactSelection($contactSelection)
@@ -315,6 +320,7 @@ class FgCnSms
      * Set isMember
      *
      * @param boolean $isMember
+     *
      * @return FgCnSms
      */
     public function setIsMember($isMember)
@@ -338,6 +344,7 @@ class FgCnSms
      * Set isSponsor
      *
      * @param boolean $isSponsor
+     *
      * @return FgCnSms
      */
     public function setIsSponsor($isSponsor)
@@ -361,6 +368,7 @@ class FgCnSms
      * Set isCompany
      *
      * @param boolean $isCompany
+     *
      * @return FgCnSms
      */
     public function setIsCompany($isCompany)
@@ -384,6 +392,7 @@ class FgCnSms
      * Set sponsorType
      *
      * @param string $sponsorType
+     *
      * @return FgCnSms
      */
     public function setSponsorType($sponsorType)
@@ -407,6 +416,7 @@ class FgCnSms
      * Set formerSponsorMonth
      *
      * @param integer $formerSponsorMonth
+     *
      * @return FgCnSms
      */
     public function setFormerSponsorMonth($formerSponsorMonth)
@@ -430,6 +440,7 @@ class FgCnSms
      * Set phoneSelection
      *
      * @param string $phoneSelection
+     *
      * @return FgCnSms
      */
     public function setPhoneSelection($phoneSelection)
@@ -453,6 +464,7 @@ class FgCnSms
      * Set lastUpdated
      *
      * @param \DateTime $lastUpdated
+     *
      * @return FgCnSms
      */
     public function setLastUpdated($lastUpdated)
@@ -476,6 +488,7 @@ class FgCnSms
      * Set updatedBy
      *
      * @param integer $updatedBy
+     *
      * @return FgCnSms
      */
     public function setUpdatedBy($updatedBy)
@@ -499,6 +512,7 @@ class FgCnSms
      * Set step
      *
      * @param boolean $step
+     *
      * @return FgCnSms
      */
     public function setStep($step)
@@ -522,6 +536,7 @@ class FgCnSms
      * Set languageSelection
      *
      * @param string $languageSelection
+     *
      * @return FgCnSms
      */
     public function setLanguageSelection($languageSelection)
@@ -545,6 +560,7 @@ class FgCnSms
      * Set lastSpoolContactId
      *
      * @param integer $lastSpoolContactId
+     *
      * @return FgCnSms
      */
     public function setLastSpoolContactId($lastSpoolContactId)
@@ -568,6 +584,7 @@ class FgCnSms
      * Set recepientCount
      *
      * @param integer $recepientCount
+     *
      * @return FgCnSms
      */
     public function setRecepientCount($recepientCount)
@@ -591,6 +608,7 @@ class FgCnSms
      * Set contactId
      *
      * @param integer $contactId
+     *
      * @return FgCnSms
      */
     public function setContactId($contactId)
@@ -614,6 +632,7 @@ class FgCnSms
      * Set clubId
      *
      * @param integer $clubId
+     *
      * @return FgCnSms
      */
     public function setClubId($clubId)
@@ -637,6 +656,7 @@ class FgCnSms
      * Set teamId
      *
      * @param integer $teamId
+     *
      * @return FgCnSms
      */
     public function setTeamId($teamId)
@@ -660,6 +680,7 @@ class FgCnSms
      * Set isDeleted
      *
      * @param boolean $isDeleted
+     *
      * @return FgCnSms
      */
     public function setIsDeleted($isDeleted)
@@ -683,6 +704,7 @@ class FgCnSms
      * Set isVerification
      *
      * @param boolean $isVerification
+     *
      * @return FgCnSms
      */
     public function setIsVerification($isVerification)
@@ -706,6 +728,7 @@ class FgCnSms
      * Set oppositeSelection
      *
      * @param boolean $oppositeSelection
+     *
      * @return FgCnSms
      */
     public function setOppositeSelection($oppositeSelection)
@@ -725,3 +748,4 @@ class FgCnSms
         return $this->oppositeSelection;
     }
 }
+

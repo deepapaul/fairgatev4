@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmAttribute
  */
@@ -108,7 +106,7 @@ class FgCmAttribute
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -119,19 +117,20 @@ class FgCmAttribute
      * Set fieldname
      *
      * @param string $fieldname
+     *
      * @return FgCmAttribute
      */
     public function setFieldname($fieldname)
     {
         $this->fieldname = $fieldname;
-    
+
         return $this;
     }
 
     /**
      * Get fieldname
      *
-     * @return string 
+     * @return string
      */
     public function getFieldname()
     {
@@ -142,19 +141,20 @@ class FgCmAttribute
      * Set fieldnameShort
      *
      * @param string $fieldnameShort
+     *
      * @return FgCmAttribute
      */
     public function setFieldnameShort($fieldnameShort)
     {
         $this->fieldnameShort = $fieldnameShort;
-    
+
         return $this;
     }
 
     /**
      * Get fieldnameShort
      *
-     * @return string 
+     * @return string
      */
     public function getFieldnameShort()
     {
@@ -165,19 +165,20 @@ class FgCmAttribute
      * Set inputType
      *
      * @param string $inputType
+     *
      * @return FgCmAttribute
      */
     public function setInputType($inputType)
     {
         $this->inputType = $inputType;
-    
+
         return $this;
     }
 
     /**
      * Get inputType
      *
-     * @return string 
+     * @return string
      */
     public function getInputType()
     {
@@ -188,19 +189,20 @@ class FgCmAttribute
      * Set fieldtype
      *
      * @param string $fieldtype
+     *
      * @return FgCmAttribute
      */
     public function setFieldtype($fieldtype)
     {
         $this->fieldtype = $fieldtype;
-    
+
         return $this;
     }
 
     /**
      * Get fieldtype
      *
-     * @return string 
+     * @return string
      */
     public function getFieldtype()
     {
@@ -211,19 +213,20 @@ class FgCmAttribute
      * Set isSystemField
      *
      * @param boolean $isSystemField
+     *
      * @return FgCmAttribute
      */
     public function setIsSystemField($isSystemField)
     {
         $this->isSystemField = $isSystemField;
-    
+
         return $this;
     }
 
     /**
      * Get isSystemField
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsSystemField()
     {
@@ -234,19 +237,20 @@ class FgCmAttribute
      * Set isCrucialSystemField
      *
      * @param boolean $isCrucialSystemField
+     *
      * @return FgCmAttribute
      */
     public function setIsCrucialSystemField($isCrucialSystemField)
     {
         $this->isCrucialSystemField = $isCrucialSystemField;
-    
+
         return $this;
     }
 
     /**
      * Get isCrucialSystemField
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsCrucialSystemField()
     {
@@ -257,19 +261,20 @@ class FgCmAttribute
      * Set isFairgateField
      *
      * @param boolean $isFairgateField
+     *
      * @return FgCmAttribute
      */
     public function setIsFairgateField($isFairgateField)
     {
         $this->isFairgateField = $isFairgateField;
-    
+
         return $this;
     }
 
     /**
      * Get isFairgateField
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsFairgateField()
     {
@@ -280,19 +285,20 @@ class FgCmAttribute
      * Set isCompany
      *
      * @param boolean $isCompany
+     *
      * @return FgCmAttribute
      */
     public function setIsCompany($isCompany)
     {
         $this->isCompany = $isCompany;
-    
+
         return $this;
     }
 
     /**
      * Get isCompany
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsCompany()
     {
@@ -303,19 +309,20 @@ class FgCmAttribute
      * Set isPersonal
      *
      * @param boolean $isPersonal
+     *
      * @return FgCmAttribute
      */
     public function setIsPersonal($isPersonal)
     {
         $this->isPersonal = $isPersonal;
-    
+
         return $this;
     }
 
     /**
      * Get isPersonal
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsPersonal()
     {
@@ -326,19 +333,20 @@ class FgCmAttribute
      * Set predefinedValue
      *
      * @param string $predefinedValue
+     *
      * @return FgCmAttribute
      */
     public function setPredefinedValue($predefinedValue)
     {
         $this->predefinedValue = $predefinedValue;
-    
+
         return $this;
     }
 
     /**
      * Get predefinedValue
      *
-     * @return string 
+     * @return string
      */
     public function getPredefinedValue()
     {
@@ -349,19 +357,20 @@ class FgCmAttribute
      * Set isSingleEdit
      *
      * @param boolean $isSingleEdit
+     *
      * @return FgCmAttribute
      */
     public function setIsSingleEdit($isSingleEdit)
     {
         $this->isSingleEdit = $isSingleEdit;
-    
+
         return $this;
     }
 
     /**
      * Get isSingleEdit
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsSingleEdit()
     {
@@ -372,19 +381,20 @@ class FgCmAttribute
      * Set addresType
      *
      * @param string $addresType
+     *
      * @return FgCmAttribute
      */
     public function setAddresType($addresType)
     {
         $this->addresType = $addresType;
-    
+
         return $this;
     }
 
     /**
      * Get addresType
      *
-     * @return string 
+     * @return string
      */
     public function getAddresType()
     {
@@ -395,19 +405,20 @@ class FgCmAttribute
      * Set fedProfileStatus
      *
      * @param boolean $fedProfileStatus
+     *
      * @return FgCmAttribute
      */
     public function setFedProfileStatus($fedProfileStatus)
     {
         $this->fedProfileStatus = $fedProfileStatus;
-    
+
         return $this;
     }
 
     /**
      * Get fedProfileStatus
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getFedProfileStatus()
     {
@@ -418,19 +429,20 @@ class FgCmAttribute
      * Set availabilitySubFed
      *
      * @param string $availabilitySubFed
+     *
      * @return FgCmAttribute
      */
     public function setAvailabilitySubFed($availabilitySubFed)
     {
         $this->availabilitySubFed = $availabilitySubFed;
-    
+
         return $this;
     }
 
     /**
      * Get availabilitySubFed
      *
-     * @return string 
+     * @return string
      */
     public function getAvailabilitySubFed()
     {
@@ -441,19 +453,20 @@ class FgCmAttribute
      * Set availabilityClub
      *
      * @param string $availabilityClub
+     *
      * @return FgCmAttribute
      */
     public function setAvailabilityClub($availabilityClub)
     {
         $this->availabilityClub = $availabilityClub;
-    
+
         return $this;
     }
 
     /**
      * Get availabilityClub
      *
-     * @return string 
+     * @return string
      */
     public function getAvailabilityClub()
     {
@@ -464,19 +477,20 @@ class FgCmAttribute
      * Set attributeset
      *
      * @param \Common\UtilityBundle\Entity\FgCmAttributeset $attributeset
+     *
      * @return FgCmAttribute
      */
     public function setAttributeset(\Common\UtilityBundle\Entity\FgCmAttributeset $attributeset = null)
     {
         $this->attributeset = $attributeset;
-    
+
         return $this;
     }
 
     /**
      * Get attributeset
      *
-     * @return \Common\UtilityBundle\Entity\FgCmAttributeset 
+     * @return \Common\UtilityBundle\Entity\FgCmAttributeset
      */
     public function getAttributeset()
     {
@@ -487,19 +501,20 @@ class FgCmAttribute
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmAttribute
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -510,22 +525,24 @@ class FgCmAttribute
      * Set address
      *
      * @param \Common\UtilityBundle\Entity\FgCmAttribute $address
+     *
      * @return FgCmAttribute
      */
     public function setAddress(\Common\UtilityBundle\Entity\FgCmAttribute $address = null)
     {
         $this->address = $address;
-    
+
         return $this;
     }
 
     /**
      * Get address
      *
-     * @return \Common\UtilityBundle\Entity\FgCmAttribute 
+     * @return \Common\UtilityBundle\Entity\FgCmAttribute
      */
     public function getAddress()
     {
         return $this->address;
     }
 }
+

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgFirstContactType
  */
@@ -34,6 +32,7 @@ class FgFirstContactType
      * Set title
      *
      * @param string $title
+     *
      * @return FgFirstContactType
      */
     public function setTitle($title)
@@ -53,3 +52,4 @@ class FgFirstContactType
         return $this->title;
     }
 }
+

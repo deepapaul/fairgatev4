@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnNewsletterContent
  */
@@ -18,6 +16,11 @@ class FgCnNewsletterContent
      * @var string
      */
     private $contentType;
+
+    /**
+     * @var string
+     */
+    private $articleLang;
 
     /**
      * @var string
@@ -58,12 +61,7 @@ class FgCnNewsletterContent
      * @var string
      */
     private $contentTitle;
-    
-    /**
-     * @var string
-     */
-    private $articleLang; 
-    
+
     /**
      * @var boolean
      */
@@ -93,7 +91,7 @@ class FgCnNewsletterContent
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -104,19 +102,20 @@ class FgCnNewsletterContent
      * Set contentType
      *
      * @param string $contentType
+     *
      * @return FgCnNewsletterContent
      */
     public function setContentType($contentType)
     {
         $this->contentType = $contentType;
-    
+
         return $this;
     }
 
     /**
      * Get contentType
      *
-     * @return string 
+     * @return string
      */
     public function getContentType()
     {
@@ -124,22 +123,47 @@ class FgCnNewsletterContent
     }
 
     /**
+     * Set articleLang
+     *
+     * @param string $articleLang
+     *
+     * @return FgCnNewsletterContent
+     */
+    public function setArticleLang($articleLang)
+    {
+        $this->articleLang = $articleLang;
+
+        return $this;
+    }
+
+    /**
+     * Get articleLang
+     *
+     * @return string
+     */
+    public function getArticleLang()
+    {
+        return $this->articleLang;
+    }
+
+    /**
      * Set imagePath
      *
      * @param string $imagePath
+     *
      * @return FgCnNewsletterContent
      */
     public function setImagePath($imagePath)
     {
         $this->imagePath = $imagePath;
-    
+
         return $this;
     }
 
     /**
      * Get imagePath
      *
-     * @return string 
+     * @return string
      */
     public function getImagePath()
     {
@@ -150,19 +174,20 @@ class FgCnNewsletterContent
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgCnNewsletterContent
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -173,19 +198,20 @@ class FgCnNewsletterContent
      * Set isActive
      *
      * @param boolean $isActive
+     *
      * @return FgCnNewsletterContent
      */
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
-    
+
         return $this;
     }
 
     /**
      * Get isActive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsActive()
     {
@@ -196,19 +222,20 @@ class FgCnNewsletterContent
      * Set introClosingWords
      *
      * @param string $introClosingWords
+     *
      * @return FgCnNewsletterContent
      */
     public function setIntroClosingWords($introClosingWords)
     {
         $this->introClosingWords = $introClosingWords;
-    
+
         return $this;
     }
 
     /**
      * Get introClosingWords
      *
-     * @return string 
+     * @return string
      */
     public function getIntroClosingWords()
     {
@@ -219,19 +246,20 @@ class FgCnNewsletterContent
      * Set picturePosition
      *
      * @param string $picturePosition
+     *
      * @return FgCnNewsletterContent
      */
     public function setPicturePosition($picturePosition)
     {
         $this->picturePosition = $picturePosition;
-    
+
         return $this;
     }
 
     /**
      * Get picturePosition
      *
-     * @return string 
+     * @return string
      */
     public function getPicturePosition()
     {
@@ -242,19 +270,20 @@ class FgCnNewsletterContent
      * Set imageLink
      *
      * @param string $imageLink
+     *
      * @return FgCnNewsletterContent
      */
     public function setImageLink($imageLink)
     {
         $this->imageLink = $imageLink;
-    
+
         return $this;
     }
 
     /**
      * Get imageLink
      *
-     * @return string 
+     * @return string
      */
     public function getImageLink()
     {
@@ -265,19 +294,20 @@ class FgCnNewsletterContent
      * Set sponsorAdWidth
      *
      * @param string $sponsorAdWidth
+     *
      * @return FgCnNewsletterContent
      */
     public function setSponsorAdWidth($sponsorAdWidth)
     {
         $this->sponsorAdWidth = $sponsorAdWidth;
-    
+
         return $this;
     }
 
     /**
      * Get sponsorAdWidth
      *
-     * @return string 
+     * @return string
      */
     public function getSponsorAdWidth()
     {
@@ -288,19 +318,20 @@ class FgCnNewsletterContent
      * Set contentTitle
      *
      * @param string $contentTitle
+     *
      * @return FgCnNewsletterContent
      */
     public function setContentTitle($contentTitle)
     {
         $this->contentTitle = $contentTitle;
-    
+
         return $this;
     }
 
     /**
      * Get contentTitle
      *
-     * @return string 
+     * @return string
      */
     public function getContentTitle()
     {
@@ -311,19 +342,20 @@ class FgCnNewsletterContent
      * Set includeAttachments
      *
      * @param boolean $includeAttachments
+     *
      * @return FgCnNewsletterContent
      */
     public function setIncludeAttachments($includeAttachments)
     {
         $this->includeAttachments = $includeAttachments;
-    
+
         return $this;
     }
 
     /**
      * Get includeAttachments
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIncludeAttachments()
     {
@@ -334,19 +366,20 @@ class FgCnNewsletterContent
      * Set article
      *
      * @param \Common\UtilityBundle\Entity\FgCmsArticle $article
+     *
      * @return FgCnNewsletterContent
      */
     public function setArticle(\Common\UtilityBundle\Entity\FgCmsArticle $article = null)
     {
         $this->article = $article;
-    
+
         return $this;
     }
 
     /**
      * Get article
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsArticle 
+     * @return \Common\UtilityBundle\Entity\FgCmsArticle
      */
     public function getArticle()
     {
@@ -357,19 +390,20 @@ class FgCnNewsletterContent
      * Set newsletter
      *
      * @param \Common\UtilityBundle\Entity\FgCnNewsletter $newsletter
+     *
      * @return FgCnNewsletterContent
      */
     public function setNewsletter(\Common\UtilityBundle\Entity\FgCnNewsletter $newsletter = null)
     {
         $this->newsletter = $newsletter;
-    
+
         return $this;
     }
 
     /**
      * Get newsletter
      *
-     * @return \Common\UtilityBundle\Entity\FgCnNewsletter 
+     * @return \Common\UtilityBundle\Entity\FgCnNewsletter
      */
     public function getNewsletter()
     {
@@ -380,19 +414,20 @@ class FgCnNewsletterContent
      * Set items
      *
      * @param \Common\UtilityBundle\Entity\FgGmItems $items
+     *
      * @return FgCnNewsletterContent
      */
     public function setItems(\Common\UtilityBundle\Entity\FgGmItems $items = null)
     {
         $this->items = $items;
-    
+
         return $this;
     }
 
     /**
      * Get items
      *
-     * @return \Common\UtilityBundle\Entity\FgGmItems 
+     * @return \Common\UtilityBundle\Entity\FgGmItems
      */
     public function getItems()
     {
@@ -403,45 +438,24 @@ class FgCnNewsletterContent
      * Set sponsorAdArea
      *
      * @param \Common\UtilityBundle\Entity\FgSmAdArea $sponsorAdArea
+     *
      * @return FgCnNewsletterContent
      */
     public function setSponsorAdArea(\Common\UtilityBundle\Entity\FgSmAdArea $sponsorAdArea = null)
     {
         $this->sponsorAdArea = $sponsorAdArea;
-    
+
         return $this;
     }
 
     /**
      * Get sponsorAdArea
      *
-     * @return \Common\UtilityBundle\Entity\FgSmAdArea 
+     * @return \Common\UtilityBundle\Entity\FgSmAdArea
      */
     public function getSponsorAdArea()
     {
         return $this->sponsorAdArea;
     }
-    
-    /**
-     * Set articleLang
-     *
-     * @param string $articleLang
-     * @return FgCnNewsletterContent
-     */
-    public function setArticleLang($articleLang)
-    {
-        $this->articleLang = $articleLang;
-    
-        return $this;
-    }
-
-    /**
-     * Get articleLang
-     *
-     * @return string 
-     */
-    public function getArticleLang()
-    {
-        return $this->articleLang;
-    }
 }
+

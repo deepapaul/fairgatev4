@@ -689,6 +689,7 @@ $(document).ready(function () {
             $('#pagename-formgroup-error').addClass('hide');
             var data = $('#cms_create_page_form').serializeArray();
             FgXmlHttp.post(createPagePath, data, false, FgCmsPage.createPageCallback);
+            $(document).off('click', '#createPageBtn');
         }
 
     });

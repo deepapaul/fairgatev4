@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsContactTable
  */
@@ -80,7 +78,7 @@ class FgCmsContactTable
     private $displayType;
 
     /**
-     * @var boolean
+     * @var integer
      */
     private $portraitPerRow;
 
@@ -118,7 +116,7 @@ class FgCmsContactTable
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -129,19 +127,20 @@ class FgCmsContactTable
      * Set includeContacts
      *
      * @param string $includeContacts
+     *
      * @return FgCmsContactTable
      */
     public function setIncludeContacts($includeContacts)
     {
         $this->includeContacts = $includeContacts;
-    
+
         return $this;
     }
 
     /**
      * Get includeContacts
      *
-     * @return string 
+     * @return string
      */
     public function getIncludeContacts()
     {
@@ -152,19 +151,20 @@ class FgCmsContactTable
      * Set excludeContacts
      *
      * @param string $excludeContacts
+     *
      * @return FgCmsContactTable
      */
     public function setExcludeContacts($excludeContacts)
     {
         $this->excludeContacts = $excludeContacts;
-    
+
         return $this;
     }
 
     /**
      * Get excludeContacts
      *
-     * @return string 
+     * @return string
      */
     public function getExcludeContacts()
     {
@@ -175,19 +175,20 @@ class FgCmsContactTable
      * Set columnData
      *
      * @param string $columnData
+     *
      * @return FgCmsContactTable
      */
     public function setColumnData($columnData)
     {
         $this->columnData = $columnData;
-    
+
         return $this;
     }
 
     /**
      * Get columnData
      *
-     * @return string 
+     * @return string
      */
     public function getColumnData()
     {
@@ -198,19 +199,20 @@ class FgCmsContactTable
      * Set rowPerpage
      *
      * @param integer $rowPerpage
+     *
      * @return FgCmsContactTable
      */
     public function setRowPerpage($rowPerpage)
     {
         $this->rowPerpage = $rowPerpage;
-    
+
         return $this;
     }
 
     /**
      * Get rowPerpage
      *
-     * @return integer 
+     * @return integer
      */
     public function getRowPerpage()
     {
@@ -221,19 +223,20 @@ class FgCmsContactTable
      * Set overflowBehavior
      *
      * @param string $overflowBehavior
+     *
      * @return FgCmsContactTable
      */
     public function setOverflowBehavior($overflowBehavior)
     {
         $this->overflowBehavior = $overflowBehavior;
-    
+
         return $this;
     }
 
     /**
      * Get overflowBehavior
      *
-     * @return string 
+     * @return string
      */
     public function getOverflowBehavior()
     {
@@ -244,19 +247,20 @@ class FgCmsContactTable
      * Set rowHighlighting
      *
      * @param boolean $rowHighlighting
+     *
      * @return FgCmsContactTable
      */
     public function setRowHighlighting($rowHighlighting)
     {
         $this->rowHighlighting = $rowHighlighting;
-    
+
         return $this;
     }
 
     /**
      * Get rowHighlighting
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getRowHighlighting()
     {
@@ -264,45 +268,23 @@ class FgCmsContactTable
     }
 
     /**
-     * Set tableExport
-     *
-     * @param string $tableExport
-     * @return FgCmsContactTable
-     */
-    public function setTableExport($tableExport)
-    {
-        $this->tableExport = $tableExport;
-    
-        return $this;
-    }
-
-    /**
-     * Get tableExport
-     *
-     * @return string 
-     */
-    public function getTableExport()
-    {
-        return $this->tableExport;
-    }
-
-    /**
      * Set tableSearch
      *
      * @param boolean $tableSearch
+     *
      * @return FgCmsContactTable
      */
     public function setTableSearch($tableSearch)
     {
         $this->tableSearch = $tableSearch;
-    
+
         return $this;
     }
 
     /**
      * Get tableSearch
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getTableSearch()
     {
@@ -310,22 +292,47 @@ class FgCmsContactTable
     }
 
     /**
+     * Set tableExport
+     *
+     * @param string $tableExport
+     *
+     * @return FgCmsContactTable
+     */
+    public function setTableExport($tableExport)
+    {
+        $this->tableExport = $tableExport;
+
+        return $this;
+    }
+
+    /**
+     * Get tableExport
+     *
+     * @return string
+     */
+    public function getTableExport()
+    {
+        return $this->tableExport;
+    }
+
+    /**
      * Set stage
      *
      * @param string $stage
+     *
      * @return FgCmsContactTable
      */
     public function setStage($stage)
     {
         $this->stage = $stage;
-    
+
         return $this;
     }
 
     /**
      * Get stage
      *
-     * @return string 
+     * @return string
      */
     public function getStage()
     {
@@ -336,19 +343,20 @@ class FgCmsContactTable
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return FgCmsContactTable
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -359,19 +367,20 @@ class FgCmsContactTable
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
+     *
      * @return FgCmsContactTable
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
-    
+
         return $this;
     }
 
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -382,19 +391,20 @@ class FgCmsContactTable
      * Set isDeleted
      *
      * @param boolean $isDeleted
+     *
      * @return FgCmsContactTable
      */
     public function setIsDeleted($isDeleted)
     {
         $this->isDeleted = $isDeleted;
-    
+
         return $this;
     }
 
     /**
      * Get isDeleted
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsDeleted()
     {
@@ -405,19 +415,20 @@ class FgCmsContactTable
      * Set displayType
      *
      * @param string $displayType
+     *
      * @return FgCmsContactTable
      */
     public function setDisplayType($displayType)
     {
         $this->displayType = $displayType;
-    
+
         return $this;
     }
 
     /**
      * Get displayType
      *
-     * @return string 
+     * @return string
      */
     public function getDisplayType()
     {
@@ -427,20 +438,21 @@ class FgCmsContactTable
     /**
      * Set portraitPerRow
      *
-     * @param boolean $portraitPerRow
+     * @param integer $portraitPerRow
+     *
      * @return FgCmsContactTable
      */
     public function setPortraitPerRow($portraitPerRow)
     {
         $this->portraitPerRow = $portraitPerRow;
-    
+
         return $this;
     }
 
     /**
      * Get portraitPerRow
      *
-     * @return boolean 
+     * @return integer
      */
     public function getPortraitPerRow()
     {
@@ -451,19 +463,20 @@ class FgCmsContactTable
      * Set initialSortingDetails
      *
      * @param string $initialSortingDetails
+     *
      * @return FgCmsContactTable
      */
     public function setInitialSortingDetails($initialSortingDetails)
     {
         $this->initialSortingDetails = $initialSortingDetails;
-    
+
         return $this;
     }
 
     /**
      * Get initialSortingDetails
      *
-     * @return string 
+     * @return string
      */
     public function getInitialSortingDetails()
     {
@@ -474,19 +487,20 @@ class FgCmsContactTable
      * Set initialSortOrder
      *
      * @param string $initialSortOrder
+     *
      * @return FgCmsContactTable
      */
     public function setInitialSortOrder($initialSortOrder)
     {
         $this->initialSortOrder = $initialSortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get initialSortOrder
      *
-     * @return string 
+     * @return string
      */
     public function getInitialSortOrder()
     {
@@ -497,19 +511,20 @@ class FgCmsContactTable
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmsContactTable
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -520,19 +535,20 @@ class FgCmsContactTable
      * Set filter
      *
      * @param \Common\UtilityBundle\Entity\FgFilter $filter
+     *
      * @return FgCmsContactTable
      */
     public function setFilter(\Common\UtilityBundle\Entity\FgFilter $filter = null)
     {
         $this->filter = $filter;
-    
+
         return $this;
     }
 
     /**
      * Get filter
      *
-     * @return \Common\UtilityBundle\Entity\FgFilter 
+     * @return \Common\UtilityBundle\Entity\FgFilter
      */
     public function getFilter()
     {
@@ -543,19 +559,20 @@ class FgCmsContactTable
      * Set createdBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $createdBy
+     *
      * @return FgCmsContactTable
      */
     public function setCreatedBy(\Common\UtilityBundle\Entity\FgCmContact $createdBy = null)
     {
         $this->createdBy = $createdBy;
-    
+
         return $this;
     }
 
     /**
      * Get createdBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getCreatedBy()
     {
@@ -566,22 +583,24 @@ class FgCmsContactTable
      * Set updatedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $updatedBy
+     *
      * @return FgCmsContactTable
      */
     public function setUpdatedBy(\Common\UtilityBundle\Entity\FgCmContact $updatedBy = null)
     {
         $this->updatedBy = $updatedBy;
-    
+
         return $this;
     }
 
     /**
      * Get updatedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getUpdatedBy()
     {
         return $this->updatedBy;
     }
 }
+

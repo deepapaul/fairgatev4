@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPageContentTextElementHistory
  */
@@ -38,7 +36,7 @@ class FgCmsPageContentTextElementHistory
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -49,19 +47,20 @@ class FgCmsPageContentTextElementHistory
      * Set text
      *
      * @param string $text
+     *
      * @return FgCmsPageContentTextElementHistory
      */
     public function setText($text)
     {
         $this->text = $text;
-    
+
         return $this;
     }
 
     /**
      * Get text
      *
-     * @return string 
+     * @return string
      */
     public function getText()
     {
@@ -72,19 +71,20 @@ class FgCmsPageContentTextElementHistory
      * Set lastEditedDate
      *
      * @param \DateTime $lastEditedDate
+     *
      * @return FgCmsPageContentTextElementHistory
      */
     public function setLastEditedDate($lastEditedDate)
     {
         $this->lastEditedDate = $lastEditedDate;
-    
+
         return $this;
     }
 
     /**
      * Get lastEditedDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLastEditedDate()
     {
@@ -95,19 +95,20 @@ class FgCmsPageContentTextElementHistory
      * Set textElement
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPageContentTextElement $textElement
+     *
      * @return FgCmsPageContentTextElementHistory
      */
     public function setTextElement(\Common\UtilityBundle\Entity\FgCmsPageContentTextElement $textElement = null)
     {
         $this->textElement = $textElement;
-    
+
         return $this;
     }
 
     /**
      * Get textElement
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPageContentTextElement 
+     * @return \Common\UtilityBundle\Entity\FgCmsPageContentTextElement
      */
     public function getTextElement()
     {
@@ -118,22 +119,24 @@ class FgCmsPageContentTextElementHistory
      * Set lastEditedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $lastEditedBy
+     *
      * @return FgCmsPageContentTextElementHistory
      */
     public function setLastEditedBy(\Common\UtilityBundle\Entity\FgCmContact $lastEditedBy = null)
     {
         $this->lastEditedBy = $lastEditedBy;
-    
+
         return $this;
     }
 
     /**
      * Get lastEditedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getLastEditedBy()
     {
         return $this->lastEditedBy;
     }
 }
+

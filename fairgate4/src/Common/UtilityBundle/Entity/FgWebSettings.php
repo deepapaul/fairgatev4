@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgWebSettings
  */
@@ -63,7 +61,7 @@ class FgWebSettings
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -74,19 +72,20 @@ class FgWebSettings
      * Set defaultLogo
      *
      * @param string $defaultLogo
+     *
      * @return FgWebSettings
      */
     public function setDefaultLogo($defaultLogo)
     {
         $this->defaultLogo = $defaultLogo;
-    
+
         return $this;
     }
 
     /**
      * Get defaultLogo
      *
-     * @return string 
+     * @return string
      */
     public function getDefaultLogo()
     {
@@ -97,19 +96,20 @@ class FgWebSettings
      * Set favicon
      *
      * @param string $favicon
+     *
      * @return FgWebSettings
      */
     public function setFavicon($favicon)
     {
         $this->favicon = $favicon;
-    
+
         return $this;
     }
 
     /**
      * Get favicon
      *
-     * @return string 
+     * @return string
      */
     public function getFavicon()
     {
@@ -120,19 +120,20 @@ class FgWebSettings
      * Set fallbackImage
      *
      * @param string $fallbackImage
+     *
      * @return FgWebSettings
      */
     public function setFallbackImage($fallbackImage)
     {
         $this->fallbackImage = $fallbackImage;
-    
+
         return $this;
     }
 
     /**
      * Get fallbackImage
      *
-     * @return string 
+     * @return string
      */
     public function getFallbackImage()
     {
@@ -143,19 +144,20 @@ class FgWebSettings
      * Set siteDescription
      *
      * @param string $siteDescription
+     *
      * @return FgWebSettings
      */
     public function setSiteDescription($siteDescription)
     {
         $this->siteDescription = $siteDescription;
-    
+
         return $this;
     }
 
     /**
      * Get siteDescription
      *
-     * @return string 
+     * @return string
      */
     public function getSiteDescription()
     {
@@ -166,19 +168,20 @@ class FgWebSettings
      * Set domainVerificationFilename
      *
      * @param string $domainVerificationFilename
+     *
      * @return FgWebSettings
      */
     public function setDomainVerificationFilename($domainVerificationFilename)
     {
         $this->domainVerificationFilename = $domainVerificationFilename;
-    
+
         return $this;
     }
 
     /**
      * Get domainVerificationFilename
      *
-     * @return string 
+     * @return string
      */
     public function getDomainVerificationFilename()
     {
@@ -189,19 +192,20 @@ class FgWebSettings
      * Set googleAnalyticsTrackid
      *
      * @param string $googleAnalyticsTrackid
+     *
      * @return FgWebSettings
      */
     public function setGoogleAnalyticsTrackid($googleAnalyticsTrackid)
     {
         $this->googleAnalyticsTrackid = $googleAnalyticsTrackid;
-    
+
         return $this;
     }
 
     /**
      * Get googleAnalyticsTrackid
      *
-     * @return string 
+     * @return string
      */
     public function getGoogleAnalyticsTrackid()
     {
@@ -212,19 +216,20 @@ class FgWebSettings
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return FgWebSettings
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -235,19 +240,20 @@ class FgWebSettings
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
+     *
      * @return FgWebSettings
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
-    
+
         return $this;
     }
 
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -258,22 +264,24 @@ class FgWebSettings
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgWebSettings
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
         return $this->club;
     }
 }
+

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmContactPrivacy
  */
@@ -44,6 +42,7 @@ class FgCmContactPrivacy
      * Set privacy
      *
      * @param string $privacy
+     *
      * @return FgCmContactPrivacy
      */
     public function setPrivacy($privacy)
@@ -67,6 +66,7 @@ class FgCmContactPrivacy
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgCmContactPrivacy
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
@@ -90,6 +90,7 @@ class FgCmContactPrivacy
      * Set attribute
      *
      * @param \Common\UtilityBundle\Entity\FgCmAttribute $attribute
+     *
      * @return FgCmContactPrivacy
      */
     public function setAttribute(\Common\UtilityBundle\Entity\FgCmAttribute $attribute = null)
@@ -109,3 +110,4 @@ class FgCmContactPrivacy
         return $this->attribute;
     }
 }
+

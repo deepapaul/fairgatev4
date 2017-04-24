@@ -88,7 +88,7 @@ class ClubController extends FgController
             'breadcrumb_data' => array('Active Clubs' => '#')
         );
         $settingsType = 'DATA';
-        $allTableSettings = $this->em->getRepository('CommonUtilityBundle:FgClubTableSettings')->getAllClubTableSettings($this->clubId, $this->contactId, $settingsType);
+        $allTableSettings = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubTableSettings')->getAllClubTableSettings($this->clubId, $this->contactId, $settingsType);
         $defaultSettings = $this->container->getParameter('default_club_table_settings');
 
         return $this->render('ClubadminClubBundle:ClubList:clublist.html.twig', array('breadCrumb' => $breadCrumb, 'clubId' => $this->clubId, 'contactId' => $this->contactId, 'allTableSettings' => $allTableSettings, 'defaultSettings' => $defaultSettings));
@@ -103,7 +103,6 @@ class ClubController extends FgController
      */
     public function savedClubfilterAction()
     {
-
         $breadCrumb = array(
             'breadcrumb_data' => array(
                 'Active Contacts' => '#',
@@ -111,7 +110,7 @@ class ClubController extends FgController
             ),
             'back' => $this->generateUrl('club_homepage')
         );
-        $allSavedFilter = $this->em->getRepository('CommonUtilityBundle:FgClubFilter')->getSavedClubSidebarFilter($this->contactId, $this->clubId);
+        $allSavedFilter = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubFilter')->getSavedClubSidebarFilter($this->contactId, $this->clubId);
 
         return $this->render('ClubadminClubBundle:ClubList:savedClubfilter.html.twig', array('breadCrumb' => $breadCrumb, 'allSavedFilter' => $allSavedFilter, 'clubId' => $this->clubId, 'contactId' => $this->contactId));
     }
@@ -129,7 +128,7 @@ class ClubController extends FgController
         try {
             //call a service for collect all relevant data related to the club
             $club = $this->get('club');
-            $singleSavedFilter = $this->em->getRepository('CommonUtilityBundle:FgClubFilter')->getSingleSavedClubSidebarFilter($id, $this->contactId, $this->clubId);
+            $singleSavedFilter = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubFilter')->getSingleSavedClubSidebarFilter($id, $this->contactId, $this->clubId);
             $filterdata = $singleSavedFilter[0]['filterData'];
             $clublistClass = new Clublist($this->container, $club);
             $clublistClass->setCount();
@@ -142,11 +141,10 @@ class ClubController extends FgController
             $clublistClass->addCondition($sWhere);
             //call query for collect the data
             $countQuery = $clublistClass->getResult();
-            $totalcontactlist = $this->em->getRepository('CommonUtilityBundle:FgCmMembership')->getContactList($countQuery);
+            $totalcontactlist = $this->adminEntityManager->getConnection()->executeQuery($countQuery)->fetchAll();
             return new Response($totalcontactlist[0]['count']);
         } catch (\Doctrine\DBAL\DBALException $e) {
-            $singleSavedFilter = $this->em->getRepository('CommonUtilityBundle:FgClubFilter')->updateClubBorkenFilter($id, '1');
-
+            $singleSavedFilter = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubFilter')->updateClubBorkenFilter($id, '1');
             return new Response('-1');
         }
     }
@@ -163,21 +161,24 @@ class ClubController extends FgController
         $tableArray = array();
         $title = FgUtility::getSecuredDataString(trim($title1), $this->conn);
         $title = '"' . $title . '"';
+        
+        $adminConnection = $this->container->get('fg.admin.connection')->getAdminConnection();
+        
         if ($elementType == 'classification') {
             $tableName = 'fg_club_classification';
             $whereCond = "  federation_id = '{$this->clubId}'";
-            $sortValue = $this->getMaxSortOrderTable($tableName, '', $this->clubId, $whereCond);
+            $sortValue = $this->getMaxSortOrderTable($tableName, '', $this->clubId, $whereCond, $adminConnection);
             $tableArray[$tableName]['fields'] = array('federation_id', 'title', 'sort_order');
             $tableArray[$tableName]['values'] = array($this->clubId, $title, $sortValue);
-            $this->insertIntoTableSidebar($tableArray);
+            $this->insertIntoTableSidebar($tableArray,$adminConnection);
             $where = "federation_id = $this->clubId";
-            $lastInsertedId = $this->getLastInsertedId($tableName, '', $where);
+            $lastInsertedId = $this->getLastInsertedId($tableName, '', $where, $adminConnection);
             $i18TableName = 'fg_club_classification_i18n';
             $i18tableArray = array();
             $i18tableArray[$i18TableName]['fields'] = array('lang', 'title_lang', 'is_active', 'id');
             $i18tableArray[$i18TableName]['values'] = array($title, 1, $lastInsertedId);
             $i18tableArray[$i18TableName]['languages'] = $this->clubLanguages;
-            $this->insertIntoTableSidebar($i18tableArray);
+            $this->insertIntoTableSidebar($i18tableArray,$adminConnection);
             $input[] = array('id' => "$lastInsertedId", 'title' => $title1, 'type' => 'select');
             return new JsonResponse(array('items' => $input));
         } elseif ($elementType == 'class') {
@@ -185,19 +186,19 @@ class ClubController extends FgController
             $categoryId = $request->get('category_id');
             $whereCond = " classification_id = $categoryId";
             $tableArray[$tableName]['fields'] = array('	classification_id', 'federation_id', 'title', 'sort_order');
-            $sortValue = $this->getMaxSortOrderTable($tableName, '', $this->clubId, $whereCond);
+            $sortValue = $this->getMaxSortOrderTable($tableName, '', $this->clubId, $whereCond, $adminConnection);
             $tableArray[$tableName]['values'] = array($categoryId, $this->clubId, $title, $sortValue);
             $where = "federation_id = $this->clubId AND classification_id = $categoryId";
-            $this->insertIntoTableSidebar($tableArray);
-            $lastInsertedId = $this->getLastInsertedId($tableName, '', $where);
+            $this->insertIntoTableSidebar($tableArray, $adminConnection);
+            $lastInsertedId = $this->getLastInsertedId($tableName, '', $where, $adminConnection);
             $i18TableName = 'fg_club_class_i18n';
             $i18tableArray[$i18TableName]['fields'] = array('lang', 'title_lang', 'is_active', 'id');
             $i18tableArray[$i18TableName]['values'] = array($title, 1, $lastInsertedId);
             $i18tableArray[$i18TableName]['languages'] = $this->clubLanguages;
-            $this->insertIntoTableSidebar($i18tableArray);
+            $this->insertIntoTableSidebar($i18tableArray,$adminConnection);
             //INSERT LOG ENTRY IF IT IS A ROLE CREATION
             $valueLogArr['title'] = FgUtility::getSecuredDataString(trim($request->get('value')), $this->conn);
-            $this->em->getRepository('CommonUtilityBundle:FgClubClassification')->insertLogEntries($tableName, $lastInsertedId, $valueLogArr, true, $this->clubDefaultLang, $this->clubId, true, $this->contactId,'',$this->container);
+            $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubClassification')->insertLogEntries($tableName, $lastInsertedId, $valueLogArr, true, $this->clubDefaultLang, $this->clubId, true, $this->contactId,'',$this->container);
             $filterData = array();
             $filterData['id'] = 'class';
             $filterData['title'] = $this->get('translator')->trans('CLASSES');

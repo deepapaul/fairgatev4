@@ -27,7 +27,7 @@ class FileManagerController extends Controller
      * @param type $type type of view(image/document)
      * @return type
      */
-    public function fileManagerViewAction($type, $module)
+    public function fileManagerViewAction(Request $request, $type, $module)
     {
         $breadCrumb = array('breadcrumb_data' => array());
         $clubId = $this->container->get('club')->get('id');
@@ -51,8 +51,9 @@ class FileManagerController extends Controller
             $adminFlag = 1;
         }
         $forbiddenFiletypes = $this->container->getParameter('forbiddenFiletypes');
+        $openTab = $request->get('openTab'); //ckeditor or null        
 
-        return $this->render('CommonFilemanagerBundle:FileManager:fileManagerView.html.twig', array('breadCrumb' => $breadCrumb, 'clubId' => $clubId, 'viewtype' => $type, 'baseUrl' => $baseUrl, 'adminFlag' => $adminFlag, 'contactId' => $contactId, 'module' => $moduleName, 'forbiddenFiletypes' => implode(',', $forbiddenFiletypes)));
+        return $this->render('CommonFilemanagerBundle:FileManager:fileManagerView.html.twig', array('breadCrumb' => $breadCrumb, 'clubId' => $clubId, 'viewtype' => $type, 'baseUrl' => $baseUrl, 'adminFlag' => $adminFlag, 'contactId' => $contactId, 'module' => $moduleName, 'forbiddenFiletypes' => implode(',', $forbiddenFiletypes), 'openTab' => $openTab ));
     }
 
     /**

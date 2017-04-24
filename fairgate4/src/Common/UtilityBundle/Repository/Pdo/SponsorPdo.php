@@ -281,7 +281,7 @@ class SponsorPdo {
                 break;
             case 'sub_federation':
                 $from = "master_federation_{$clubId} AS mc INNER JOIN fg_cm_contact on mc.contact_id = fg_cm_contact.subfed_contact_id";
-                $where = "WHERE {$permenantDelete} AND {$archiveCondition} AND fg_cm_contact.club_id = '{$clubId}' AND (fg_cm_contact.main_club_id = '{$clubId}' OR fg_cm_contact.fed_membership_cat_id IS NOT NULL )) AND fg_cm_contact.is_fed_membership_confirmed='0'  AND fg_cm_contact.is_draft=0";
+                $where = "WHERE {$permenantDelete} AND {$archiveCondition} AND fg_cm_contact.club_id = '{$clubId}' AND (fg_cm_contact.main_club_id = '{$clubId}' OR fg_cm_contact.fed_membership_cat_id IS NOT NULL ) AND fg_cm_contact.is_fed_membership_confirmed='0'  AND fg_cm_contact.is_draft=0";
                 break;
             default:
                 $where = "WHERE {$permenantDelete} AND {$archiveCondition} AND fg_cm_contact.club_id={$clubId}";

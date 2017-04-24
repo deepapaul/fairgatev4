@@ -41,7 +41,7 @@ class ColumnsettingsController extends ParentController
     {
         $breadCrumb = array('back' => $this->generateUrl('club_homepage'));
         $clubData = array('clubId' => $this->clubId, 'contactId' => $this->contactId);
-        $allTableSettings = $this->em->getRepository('CommonUtilityBundle:FgClubTableSettings')->getAllClubTableSettings($this->clubId, $this->contactId);
+        $allTableSettings = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubTableSettings')->getAllClubTableSettings($this->clubId, $this->contactId);
         $defaultSettings = $this->container->getParameter('default_club_table_settings');
         $selectedSettingId = $request->get('settings_id');
         $selectedSettings = '';
@@ -78,22 +78,22 @@ class ColumnsettingsController extends ParentController
                 //insert new entry
                 if ($tablesettingsData['save_type'] == 'SAVE') {
                     //save table settings
-                    $clubobj = $this->em->getRepository('CommonUtilityBundle:FgClub')->find($this->clubId);
-                    $contactobj = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->find($this->contactId);
+                    $clubobj = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClub')->find($this->clubId);
+                    $contactobj = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgCmContact')->find($this->contactId);
                     if ($clubobj == "" || $contactobj == "") {
                         return new JsonResponse(array('status' => 'ERROR',
                             'flash' => $this->get('translator')->trans('CLUB_COLUMNSETTING_SAVE_ERROR')));
                     }
-                    $this->em->getRepository('CommonUtilityBundle:FgClubTableSettings')->addNewTableSettings($title, $attributes, $contactobj, 0, $clubobj);
+                    $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubTableSettings')->addNewTableSettings($title, $attributes, $contactobj, 0, $clubobj);
                 }
             } else {
                 //update existing table setting column based on its id
-                $tableObj = $this->em->getRepository('CommonUtilityBundle:FgClubTableSettings')->find($id);
+                $tableObj = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubTableSettings')->find($id);
                 if ($tableObj == "") {
                     return new JsonResponse(array('status' => 'ERROR',
                         'flash' => $this->get('translator')->trans('CLUB_COLUMNSETTING_SAVE_ERROR')));
                 }
-                $this->em->getRepository('CommonUtilityBundle:FgClubTableSettings')->updateTableSettings($tableObj, $attributes);
+                $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubTableSettings')->updateTableSettings($tableObj, $attributes);
             }
 
             if ($tablesettingsData['save_type'] == 'APPLY') {
@@ -123,11 +123,11 @@ class ColumnsettingsController extends ParentController
         if ($request->getMethod() == 'POST') {
             //get the columnsettings id that needs to be deleted
             $settingsId = $request->request->get('settings_id');
-            $tableObj = $this->em->getRepository('CommonUtilityBundle:FgClubTableSettings')->find($settingsId);
+            $tableObj = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubTableSettings')->find($settingsId);
             if ($tableObj == "") {
                 return new JsonResponse(array('status' => 'ERROR', 'flash' => $this->get('translator')->trans('CLUB_COLUMNSETTING_SAVE_ERROR')));
             }
-            $this->em->getRepository('CommonUtilityBundle:FgClubTableSettings')->deleteTableSettings($tableObj);
+            $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubTableSettings')->deleteTableSettings($tableObj);
 
             return new JsonResponse(array('status' => 'SUCCESS', 'redirect' => $this->generateUrl('clubcolumnsettings', array('settings_id' => '0')), 'flash' => $this->get('translator')->trans('COLUMN_SETTINGS_DELETED')));
         }

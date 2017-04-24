@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnSmsPackages
  */
@@ -49,6 +47,7 @@ class FgCnSmsPackages
      * Set title
      *
      * @param string $title
+     *
      * @return FgCnSmsPackages
      */
     public function setTitle($title)
@@ -72,6 +71,7 @@ class FgCnSmsPackages
      * Set credits
      *
      * @param integer $credits
+     *
      * @return FgCnSmsPackages
      */
     public function setCredits($credits)
@@ -95,6 +95,7 @@ class FgCnSmsPackages
      * Set price
      *
      * @param string $price
+     *
      * @return FgCnSmsPackages
      */
     public function setPrice($price)
@@ -118,6 +119,7 @@ class FgCnSmsPackages
      * Set visibility
      *
      * @param boolean $visibility
+     *
      * @return FgCnSmsPackages
      */
     public function setVisibility($visibility)
@@ -137,3 +139,4 @@ class FgCnSmsPackages
         return $this->visibility;
     }
 }
+

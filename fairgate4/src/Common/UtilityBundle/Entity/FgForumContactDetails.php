@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgForumContactDetails
  */
@@ -43,7 +41,7 @@ class FgForumContactDetails
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -54,19 +52,20 @@ class FgForumContactDetails
      * Set readAt
      *
      * @param \DateTime $readAt
+     *
      * @return FgForumContactDetails
      */
     public function setReadAt($readAt)
     {
         $this->readAt = $readAt;
-    
+
         return $this;
     }
 
     /**
      * Get readAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getReadAt()
     {
@@ -77,19 +76,20 @@ class FgForumContactDetails
      * Set isNotificationEnabled
      *
      * @param boolean $isNotificationEnabled
+     *
      * @return FgForumContactDetails
      */
     public function setIsNotificationEnabled($isNotificationEnabled)
     {
         $this->isNotificationEnabled = $isNotificationEnabled;
-    
+
         return $this;
     }
 
     /**
      * Get isNotificationEnabled
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsNotificationEnabled()
     {
@@ -100,19 +100,20 @@ class FgForumContactDetails
      * Set lastNotificationSend
      *
      * @param \DateTime $lastNotificationSend
+     *
      * @return FgForumContactDetails
      */
     public function setLastNotificationSend($lastNotificationSend)
     {
         $this->lastNotificationSend = $lastNotificationSend;
-    
+
         return $this;
     }
 
     /**
      * Get lastNotificationSend
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLastNotificationSend()
     {
@@ -123,19 +124,20 @@ class FgForumContactDetails
      * Set forumTopic
      *
      * @param \Common\UtilityBundle\Entity\FgForumTopic $forumTopic
+     *
      * @return FgForumContactDetails
      */
     public function setForumTopic(\Common\UtilityBundle\Entity\FgForumTopic $forumTopic = null)
     {
         $this->forumTopic = $forumTopic;
-    
+
         return $this;
     }
 
     /**
      * Get forumTopic
      *
-     * @return \Common\UtilityBundle\Entity\FgForumTopic 
+     * @return \Common\UtilityBundle\Entity\FgForumTopic
      */
     public function getForumTopic()
     {
@@ -146,22 +148,24 @@ class FgForumContactDetails
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgForumContactDetails
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
     {
         $this->contact = $contact;
-    
+
         return $this;
     }
 
     /**
      * Get contact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getContact()
     {
         return $this->contact;
     }
 }
+

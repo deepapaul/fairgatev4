@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPageContentElementMembershipSelections
  */
@@ -28,7 +26,7 @@ class FgCmsPageContentElementMembershipSelections
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +37,20 @@ class FgCmsPageContentElementMembershipSelections
      * Set field
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPageContentElementFormFields $field
+     *
      * @return FgCmsPageContentElementMembershipSelections
      */
     public function setField(\Common\UtilityBundle\Entity\FgCmsPageContentElementFormFields $field = null)
     {
         $this->field = $field;
-    
+
         return $this;
     }
 
     /**
      * Get field
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPageContentElementFormFields 
+     * @return \Common\UtilityBundle\Entity\FgCmsPageContentElementFormFields
      */
     public function getField()
     {
@@ -62,22 +61,24 @@ class FgCmsPageContentElementMembershipSelections
      * Set membership
      *
      * @param \Common\UtilityBundle\Entity\FgCmMembership $membership
+     *
      * @return FgCmsPageContentElementMembershipSelections
      */
     public function setMembership(\Common\UtilityBundle\Entity\FgCmMembership $membership = null)
     {
         $this->membership = $membership;
-    
+
         return $this;
     }
 
     /**
      * Get membership
      *
-     * @return \Common\UtilityBundle\Entity\FgCmMembership 
+     * @return \Common\UtilityBundle\Entity\FgCmMembership
      */
     public function getMembership()
     {
         return $this->membership;
     }
 }
+

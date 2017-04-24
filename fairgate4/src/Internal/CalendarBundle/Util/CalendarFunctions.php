@@ -278,6 +278,7 @@ class CalendarFunctions
      */
     public function formatUserRightsArray($formatArray, $userRightsArray)
     {
+        $groupId = $this->container->getParameter('club_calendar_admin');
         $formatArray['new']['group'][$groupId]['contact'] = array();
         foreach ($userRightsArray['calendar'] as $admin => $random) {
             foreach ($random as $key => $val) {

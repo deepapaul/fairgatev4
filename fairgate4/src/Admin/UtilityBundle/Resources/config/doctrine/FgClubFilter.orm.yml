@@ -1,0 +1,89 @@
+Admin\UtilityBundle\Entity\FgClubFilter:
+    repositoryClass: Admin\UtilityBundle\Repository\FgClubFilterRepository
+    type: entity
+    table: fg_club_filter
+    indexes:
+        fk_fg_fiter_fg_contact1:
+            columns:
+                - contact_id
+        club_id:
+            columns:
+                - club_id
+        fg_filter_ibfk_30_idx:
+            columns:
+                - table_attributes
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        tableRows:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: table_rows
+        updatedAt:
+            type: datetime
+            nullable: false
+            column: updated_at
+        filterData:
+            type: text
+            nullable: false
+            length: 16777215
+            options:
+                fixed: false
+            column: filter_data
+        isBroken:
+            type: boolean
+            nullable: false
+            column: is_broken
+        sortOrder:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            column: sort_order
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        tableAttributes:
+            targetEntity: FgClubTableSettings
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                table_attributes:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

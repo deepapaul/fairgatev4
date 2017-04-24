@@ -181,24 +181,8 @@ class OverviewController extends Controller
         $club = $this->get('club');
         $clubId = $club->get('id');
         $categoryId = ($roleType == "team") ? $club->get('club_team_id') : (($roleType == "workgroup") ? $club->get('club_workgroup_id') : "sss");
-        $container = $this->container;
-        $contactlistClass = new Contactlist($container, '', $club);
-        $userRights = $club->get('allowedRights');
-        $contactRights = ($userRights['contact']) ? 1 : 0;
-        $contactPdo = new ContactPdo($container);
-        $nextBirthDays = $contactPdo->getNextBirthDaysFromContactList($contactlistClass, $container, $roleType, $roleId, $categoryId, $clubId);
-        for ($i = 0; $i < count($nextBirthDays); $i++) {
-            if ($nextBirthDays[$i]['nextBirthDay'] === date('d.m.Y')) {
-                $nextBirthDays[$i]['nextBirthDay'] = $this->get('translator')->trans('DASHBOARD_TODAY');
-            } else {
-                $nextBirthDays[$i]['nextBirthDay'] = $container->get('club')->formatDate($nextBirthDays[$i]['nextBirthDay'], 'date', 'd.m.Y');
-            }
-            $nextBirthDays[$i]['contactRights'] = $contactRights;
-            $contactsIdsArray = explode(",", $nextBirthDays[$i]['contacts']);
-            $contactsArray = $this->getArrayOfContactDetails($contactsIdsArray);
-            $nextBirthDays[$i]['contacts'] = $contactsArray;
-            $nextBirthDays[$i]['contactsNumber'] = count($contactsArray);
-        }
+        $contactPdo = new ContactPdo($this->container);
+        $nextBirthDays = $contactPdo->getNextBirthDaysFromContactList($this->container, $roleType, $roleId, $categoryId, $clubId);
         $textShowAll = $this->get('translator')->trans('DASHBOARD_SHOW_ALL');
         $textShowLess = $this->get('translator')->trans('DASHBOARD_SHOW_LESS');
         $return = array("birthdayDetails" => $nextBirthDays, "textShowAll" => $textShowAll, "textShowLess" => $textShowLess, "roleType" => $roleType, "roleId" => $roleId);
@@ -206,27 +190,6 @@ class OverviewController extends Controller
         return new JsonResponse($return);
     }
 
-    /**
-     * Function to return array of name, contact-overview url, age of each contacts
-     *
-     * @param array $contactsIdsArray array of string for each contact
-     *
-     * @return array
-     */
-    private function getArrayOfContactDetails($contactsIdsArray)
-    {
-        $contactsArray = array();
-        $c = 0;
-        foreach ($contactsIdsArray as $contact) {
-            $c++;
-            $classname = ($c <= 5) ? "" : "fg-bithday-contact hide";
-            $contactDetails = explode("~", $contact);
-            $path = $this->generateUrl('internal_community_profile', array('contactId' => $contactDetails[2]));
-            array_push($contactsArray, array("name" => $contactDetails[0], "path" => $path, "age" => $contactDetails[1], 'classname' => $classname, 'isStealthMode' => $contactDetails[3]));
-        }
-
-        return $contactsArray;
-    }
 
     /**
      * Function to display the messages section in personal overview

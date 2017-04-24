@@ -18,7 +18,7 @@ use Clubadmin\Classes\Clublist;
 use Clubadmin\Classes\Clubfilter;
 use Clubadmin\ClubBundle\Util\NextpreviousClub;
 use Symfony\Component\HttpFoundation\Request;
-use Common\UtilityBundle\Repository\Pdo\ClubPdo;
+use Admin\UtilityBundle\Repository\Pdo\ClubPdo;
 
 class AssignmentController extends FgController
 {
@@ -64,8 +64,8 @@ class AssignmentController extends FgController
         $nextprevious = new NextpreviousClub($this->container);
         $nextPreviousResultset = $nextprevious->nextPreviousClubData($this->contactId, $clubid, $offset, 'club_assignments', 'offset', 'clubid', $flag = 0);
         $breadcrumb = array('back' => '#');
-        $clubname = $this->em->getRepository('CommonUtilityBundle:FgClub')->getClubname($clubid, $club->get('default_lang'));
-        $assignmentCount = $this->em->getRepository('CommonUtilityBundle:FgClubClassAssignment')->assignmentCount($this->clubType, $this->conn, $clubid);
+        $clubname = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClub')->getClubname($clubid, $club->get('default_lang'));
+        $assignmentCount = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubClassAssignment')->assignmentCount($this->clubType, $this->conn, $clubid);
         $documentsCount = $this->em->getRepository('CommonUtilityBundle:FgDmDocuments')->getCountOfAssignedClubDocuments('CLUB', $this->clubId, $clubid, $this->container);
         $notesCount = $this->em->getRepository('CommonUtilityBundle:FgClubNotes')->getNotesCount($clubid, $this->clubId);
         if (in_array('document', $club->get('bookedModulesDet'))) {
@@ -143,7 +143,7 @@ class AssignmentController extends FgController
         if ($request->getMethod() == 'POST') {
             $classificationArr = json_decode($request->request->get('classificationArr'), true);
             if (count($classificationArr) > 0) {
-                $resultArray = $this->em->getRepository('CommonUtilityBundle:FgClubClassAssignment')->updateClubAssignments($classificationArr, $clubid, $this->get('club'), $this->contactId, $this->clubId,$clubObj);
+                $resultArray = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubClassAssignment')->updateClubAssignments($classificationArr, $clubid, $this->get('club'), $this->contactId, $this->clubId,$clubObj);
                 $errorArray = $resultArray['errorArray'];
                 $from = $request->get('from');
             }
@@ -200,7 +200,7 @@ class AssignmentController extends FgController
             $reqArray['dragClfnName'] = '';
             $isAllowedAsgmnt = '';
             if ($this->clubType == 'sub_federation') {
-                $clfnObj = $this->em->getRepository('CommonUtilityBundle:FgClubClassification')->find($dragClassification);
+                $clfnObj = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubClassification')->find($dragClassification);
                 $clfnTitle = $clfnObj->getTitle();
                 $reqArray['dragClfnName'] = $clfnTitle;
                 $isAllowedAsgmnt = $clfnObj->getSublevelAssign();
@@ -222,7 +222,7 @@ class AssignmentController extends FgController
         $clfnId = $request->get('clfnId');
         $classId = $request->get('classId');
 
-        $assignments = $this->em->getRepository('CommonUtilityBundle:FgClubClassAssignment')->getClubAssignmentsOfClfn($clubIds, $clfnId, $classId);
+        $assignments = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubClassAssignment')->getClubAssignmentsOfClfn($clubIds, $clfnId, $classId);
 
         return new JsonResponse($assignments);
     }

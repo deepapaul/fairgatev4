@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmClubAssignmentConfirmationLog
  */
@@ -63,7 +61,7 @@ class FgCmClubAssignmentConfirmationLog
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -74,19 +72,20 @@ class FgCmClubAssignmentConfirmationLog
      * Set existingClubIds
      *
      * @param string $existingClubIds
+     *
      * @return FgCmClubAssignmentConfirmationLog
      */
     public function setExistingClubIds($existingClubIds)
     {
         $this->existingClubIds = $existingClubIds;
-    
+
         return $this;
     }
 
     /**
      * Get existingClubIds
      *
-     * @return string 
+     * @return string
      */
     public function getExistingClubIds()
     {
@@ -97,19 +96,20 @@ class FgCmClubAssignmentConfirmationLog
      * Set modifiedDate
      *
      * @param \DateTime $modifiedDate
+     *
      * @return FgCmClubAssignmentConfirmationLog
      */
     public function setModifiedDate($modifiedDate)
     {
         $this->modifiedDate = $modifiedDate;
-    
+
         return $this;
     }
 
     /**
      * Get modifiedDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getModifiedDate()
     {
@@ -120,19 +120,20 @@ class FgCmClubAssignmentConfirmationLog
      * Set decidedDate
      *
      * @param \DateTime $decidedDate
+     *
      * @return FgCmClubAssignmentConfirmationLog
      */
     public function setDecidedDate($decidedDate)
     {
         $this->decidedDate = $decidedDate;
-    
+
         return $this;
     }
 
     /**
      * Get decidedDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDecidedDate()
     {
@@ -143,19 +144,20 @@ class FgCmClubAssignmentConfirmationLog
      * Set status
      *
      * @param string $status
+     *
      * @return FgCmClubAssignmentConfirmationLog
      */
     public function setStatus($status)
     {
         $this->status = $status;
-    
+
         return $this;
     }
 
     /**
      * Get status
      *
-     * @return string 
+     * @return string
      */
     public function getStatus()
     {
@@ -166,19 +168,20 @@ class FgCmClubAssignmentConfirmationLog
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmClubAssignmentConfirmationLog
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -189,19 +192,20 @@ class FgCmClubAssignmentConfirmationLog
      * Set federationClub
      *
      * @param \Common\UtilityBundle\Entity\FgClub $federationClub
+     *
      * @return FgCmClubAssignmentConfirmationLog
      */
     public function setFederationClub(\Common\UtilityBundle\Entity\FgClub $federationClub = null)
     {
         $this->federationClub = $federationClub;
-    
+
         return $this;
     }
 
     /**
      * Get federationClub
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getFederationClub()
     {
@@ -212,19 +216,20 @@ class FgCmClubAssignmentConfirmationLog
      * Set fedContact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $fedContact
+     *
      * @return FgCmClubAssignmentConfirmationLog
      */
     public function setFedContact(\Common\UtilityBundle\Entity\FgCmContact $fedContact = null)
     {
         $this->fedContact = $fedContact;
-    
+
         return $this;
     }
 
     /**
      * Get fedContact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getFedContact()
     {
@@ -235,19 +240,20 @@ class FgCmClubAssignmentConfirmationLog
      * Set modifiedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $modifiedBy
+     *
      * @return FgCmClubAssignmentConfirmationLog
      */
     public function setModifiedBy(\Common\UtilityBundle\Entity\FgCmContact $modifiedBy = null)
     {
         $this->modifiedBy = $modifiedBy;
-    
+
         return $this;
     }
 
     /**
      * Get modifiedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getModifiedBy()
     {
@@ -258,22 +264,24 @@ class FgCmClubAssignmentConfirmationLog
      * Set decidedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $decidedBy
+     *
      * @return FgCmClubAssignmentConfirmationLog
      */
     public function setDecidedBy(\Common\UtilityBundle\Entity\FgCmContact $decidedBy = null)
     {
         $this->decidedBy = $decidedBy;
-    
+
         return $this;
     }
 
     /**
      * Get decidedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getDecidedBy()
     {
         return $this->decidedBy;
     }
 }
+

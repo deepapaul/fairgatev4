@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgDnClubDomains
  */
@@ -53,7 +51,7 @@ class FgDnClubDomains
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -64,19 +62,20 @@ class FgDnClubDomains
      * Set domain
      *
      * @param string $domain
+     *
      * @return FgDnClubDomains
      */
     public function setDomain($domain)
     {
         $this->domain = $domain;
-    
+
         return $this;
     }
 
     /**
      * Get domain
      *
-     * @return string 
+     * @return string
      */
     public function getDomain()
     {
@@ -87,19 +86,20 @@ class FgDnClubDomains
      * Set isDefault
      *
      * @param boolean $isDefault
+     *
      * @return FgDnClubDomains
      */
     public function setIsDefault($isDefault)
     {
         $this->isDefault = $isDefault;
-    
+
         return $this;
     }
 
     /**
      * Get isDefault
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsDefault()
     {
@@ -110,19 +110,20 @@ class FgDnClubDomains
      * Set domainType
      *
      * @param string $domainType
+     *
      * @return FgDnClubDomains
      */
     public function setDomainType($domainType)
     {
         $this->domainType = $domainType;
-    
+
         return $this;
     }
 
     /**
      * Get domainType
      *
-     * @return string 
+     * @return string
      */
     public function getDomainType()
     {
@@ -133,19 +134,20 @@ class FgDnClubDomains
      * Set mailRequestStatus
      *
      * @param string $mailRequestStatus
+     *
      * @return FgDnClubDomains
      */
     public function setMailRequestStatus($mailRequestStatus)
     {
         $this->mailRequestStatus = $mailRequestStatus;
-    
+
         return $this;
     }
 
     /**
      * Get mailRequestStatus
      *
-     * @return string 
+     * @return string
      */
     public function getMailRequestStatus()
     {
@@ -156,19 +158,20 @@ class FgDnClubDomains
      * Set isSecure
      *
      * @param boolean $isSecure
+     *
      * @return FgDnClubDomains
      */
     public function setIsSecure($isSecure)
     {
         $this->isSecure = $isSecure;
-    
+
         return $this;
     }
 
     /**
      * Get isSecure
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsSecure()
     {
@@ -179,19 +182,20 @@ class FgDnClubDomains
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgDnClubDomains
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -202,22 +206,24 @@ class FgDnClubDomains
      * Set mailRequester
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $mailRequester
+     *
      * @return FgDnClubDomains
      */
     public function setMailRequester(\Common\UtilityBundle\Entity\FgCmContact $mailRequester = null)
     {
         $this->mailRequester = $mailRequester;
-    
+
         return $this;
     }
 
     /**
      * Get mailRequester
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getMailRequester()
     {
         return $this->mailRequester;
     }
 }
+

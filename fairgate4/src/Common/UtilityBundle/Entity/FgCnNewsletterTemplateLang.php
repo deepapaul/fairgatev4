@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnNewsletterTemplateLang
  */
@@ -28,7 +26,7 @@ class FgCnNewsletterTemplateLang
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +37,20 @@ class FgCnNewsletterTemplateLang
      * Set languageCode
      *
      * @param string $languageCode
+     *
      * @return FgCnNewsletterTemplateLang
      */
     public function setLanguageCode($languageCode)
     {
         $this->languageCode = $languageCode;
-    
+
         return $this;
     }
 
     /**
      * Get languageCode
      *
-     * @return string 
+     * @return string
      */
     public function getLanguageCode()
     {
@@ -62,22 +61,24 @@ class FgCnNewsletterTemplateLang
      * Set template
      *
      * @param \Common\UtilityBundle\Entity\FgCnNewsletterTemplate $template
+     *
      * @return FgCnNewsletterTemplateLang
      */
     public function setTemplate(\Common\UtilityBundle\Entity\FgCnNewsletterTemplate $template = null)
     {
         $this->template = $template;
-    
+
         return $this;
     }
 
     /**
      * Get template
      *
-     * @return \Common\UtilityBundle\Entity\FgCnNewsletterTemplate 
+     * @return \Common\UtilityBundle\Entity\FgCnNewsletterTemplate
      */
     public function getTemplate()
     {
         return $this->template;
     }
 }
+

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgSmServicesI18n
  */
@@ -39,19 +37,20 @@ class FgSmServicesI18n
      * Set lang
      *
      * @param string $lang
+     *
      * @return FgSmServicesI18n
      */
     public function setLang($lang)
     {
         $this->lang = $lang;
-    
+
         return $this;
     }
 
     /**
      * Get lang
      *
-     * @return string 
+     * @return string
      */
     public function getLang()
     {
@@ -62,19 +61,20 @@ class FgSmServicesI18n
      * Set titleLang
      *
      * @param string $titleLang
+     *
      * @return FgSmServicesI18n
      */
     public function setTitleLang($titleLang)
     {
         $this->titleLang = $titleLang;
-    
+
         return $this;
     }
 
     /**
      * Get titleLang
      *
-     * @return string 
+     * @return string
      */
     public function getTitleLang()
     {
@@ -85,19 +85,20 @@ class FgSmServicesI18n
      * Set descriptionLang
      *
      * @param string $descriptionLang
+     *
      * @return FgSmServicesI18n
      */
     public function setDescriptionLang($descriptionLang)
     {
         $this->descriptionLang = $descriptionLang;
-    
+
         return $this;
     }
 
     /**
      * Get descriptionLang
      *
-     * @return string 
+     * @return string
      */
     public function getDescriptionLang()
     {
@@ -108,19 +109,20 @@ class FgSmServicesI18n
      * Set isActive
      *
      * @param boolean $isActive
+     *
      * @return FgSmServicesI18n
      */
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
-    
+
         return $this;
     }
 
     /**
      * Get isActive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsActive()
     {
@@ -131,22 +133,24 @@ class FgSmServicesI18n
      * Set id
      *
      * @param \Common\UtilityBundle\Entity\FgSmServices $id
+     *
      * @return FgSmServicesI18n
      */
     public function setId(\Common\UtilityBundle\Entity\FgSmServices $id = null)
     {
         $this->id = $id;
-    
+
         return $this;
     }
 
     /**
      * Get id
      *
-     * @return \Common\UtilityBundle\Entity\FgSmServices 
+     * @return \Common\UtilityBundle\Entity\FgSmServices
      */
     public function getId()
     {
         return $this->id;
     }
 }
+

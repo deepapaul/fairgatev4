@@ -1,0 +1,216 @@
+{% if(articleData|length > 0) %}
+    {% set smallScreen = (structureData.articlePerRow == 6) ? 'col-sm-4' : (structureData.articlePerRow == 4 or structureData.articlePerRow == 5) ? 'col-sm-6' :'' %}
+    {% set colWidth = 'fg-col-'~structureData.quotient %}  
+    {% if structureData.articleDisplayType == 'listing' %} 
+        {% for key, data in articleData %}
+            {% set fgClubTag = '' %}
+            {% set areaArray = [] %}
+            {% set categoryArray = [] %}
+          <div class="fg-article {{colWidth}} {{smallScreen}}">    
+            <section class="fg-article-wrapper fg-article-left-img fg-article-link" data-url="{{data.detailsUrl}}">
+                {% if(data.FIRST_IMAGE == '' or displayWidth != 'width_580') %}
+                    <header>
+                        <h4>{{data.title}}</h4>
+                    </header>
+                {% endif %}
+                <div class="col-md-12 fg-pad-0 fg-content">
+                    {% set teaser = (data.teaser == '')?(data.text|raw):(data.teaser|raw) %}
+
+                    {% if(data.isAllArea == 1 or data.sharedClub == 1 or data.areaCount != 1) %}
+                        {% if (data.isClub == 1 and data.isCurrentClub) %}
+                            {% set fgClubTag = fgtwig.getTerminolgyName('Club',singular,'UCF') %}
+                        {% endif %}
+                        {% if(data.AREAS != '' and data.AREAS != null)  %}
+                            {% set areaArray = data.AREAS|split("*##*")  %}   
+                        {% endif %}
+                    {% endif %}
+
+                    {% if(data.isAllCategory == 1 or data.categoryCount != 1 or data.sharedClub == 1) %}
+                        {% if(data.CATEGORIES != '' and data.CATEGORIES != null) %}
+                            {% set categoryArray = data.CATEGORIES|split("*##*")  %}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if(data.FIRST_IMAGE) %}
+                        <figure class="col-sm-4">
+                            <img src="/uploads/{{data.club_id}}/gallery/{{displayWidth}}/{{data.FIRST_IMAGE}}" alt =""/>
+                        </figure>   
+
+                        <div class="col-sm-8 fg-right-col col-xs-12">
+                            {% if(displayWidth == 'width_580') %}
+                                <header>
+                                    <h4>{{data.title}}</h4>
+                                </header>
+                            {% endif %}
+                            {{teaser|raw}}
+                            <a href="{{data.detailsUrl}}" class="fg-read-more"><i class="fa fa-arrow-circle-right"></i>{{'CMS_ADD_ARTICLE_READ_MORE'|trans}}</a>
+                            {% if (structureData.articleShowDate == 1) or (structureData.articleShowArea == 1) or (structureData.articleShowCategory == 1) %} 
+                            <footer>
+                                {% if(structureData.articleShowDate == 1) %}
+                                    <div class="fg-post-date pull-left">
+                                        {{fgclub.formatDate(data.PUBLICATION_DATE,'date')}}
+                                    </div>
+                                {% endif %}
+                                <div class="pull-right fg-block fg-cat-tags">
+                                    {% if(structureData.articleShowArea == 1) %}     
+                                        {% if(data.areaTooltip != '')  %}
+                                            <span class="fg-club-tag">{{ data.areaTooltip }}</span>
+                                        {% endif %}
+                                        {% if fgClubTag is defined and fgClubTag != ''%}
+                                            <span class="fg-club-tag">{{ fgClubTag }}</span>
+                                        {% endif %}
+                                        {% for index, area in areaArray  %}
+                                            <span class="fg-club-tag">{{ area }}</span>
+                                        {% endfor %}
+                                    {% endif %}   
+                                    {% if(structureData.articleShowCategory == 1) %}
+                                        {% if(data.catTooltip != '')  %}
+                                            <span class="fg-cat-tag">{{ data.catTooltip }}</span>
+                                        {% endif %}
+                                        {% for index,category in categoryArray %}
+                                            <span class="fg-cat-tag">{{ category }}</span>
+                                        {% endfor %}
+                                    {% endif %}    
+                                </div>
+                            </footer>
+                            {% endif %} 
+                        </div>
+                    {% else %}
+                        <div class="">
+                            {{teaser|raw}}
+                            <a href="{{data.detailsUrl}}" class="fg-read-more"><i class="fa fa-arrow-circle-right"></i>{{'CMS_ADD_ARTICLE_READ_MORE'|trans}}</a>
+                        {% if (structureData.articleShowDate == 1) or (structureData.articleShowArea == 1) or (structureData.articleShowCategory == 1) %} 
+                            <footer>
+                                {% if(structureData.articleShowDate == 1) %}
+                                    <div class="fg-post-date  pull-left">{{fgclub.formatDate(data.PUBLICATION_DATE,'date')}}</div>
+                                {% endif %}  
+                                <div class="pull-right fg-block fg-cat-tags">
+                                    {% if(structureData.articleShowArea == 1) %}  
+                                        {% if(data.areaTooltip != '')  %}
+                                            <span class="fg-club-tag">{{ data.areaTooltip }}</span>
+                                        {% endif %}
+                                        {% if fgClubTag is defined and fgClubTag != ''%}<span class="fg-club-tag">{{ fgClubTag }}</span>{% endif %}
+                                        {% for index, area in areaArray  %}
+                                            <span class="fg-club-tag">{{ area }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% if(structureData.articleShowCategory == 1) %}   
+                                        {% if(data.catTooltip != '')  %}
+                                            <span class="fg-cat-tag">{{ data.catTooltip }}</span>
+                                        {% endif %}
+                                        {% for index,category in categoryArray %}
+                                            <span class="fg-cat-tag">{{ category }}</span>
+                                        {% endfor %}
+                                    {% endif %} 
+                                </div>
+                            </footer>
+                         {% endif %}
+                        </div>
+                    {% endif %}
+
+                </div>
+                <div class="clearfix"></div>
+            </section>
+        </div>        
+            {% if( ((key+1)%structureData.articlePerRow == 0))  %} 
+                <div class="fg-article-empty-col visible-md visible-lg fg-col-{{structureData.remainder}}"></div> 
+            {% endif %} 
+        {% endfor %}
+    {% else %}
+        {#  slider #}
+     {% set sliderNavClass = (structureData.articleSliderNavigation == 'right') ? 'fg-slider-right-tab' : (structureData.articleSliderNavigation == 'bottom') ? 'fg-slider-btm-tab' : 'fg-slider-no-tab' %}
+        <div class="fg-article-wrapper">
+            <div class="fg-article-slider {{sliderNavClass}} col-md-12">
+                <div data-ride="carousel" class="myCarousel carousel slide" id="carousel-{{elementId}}">
+                    <div class="fg-carousel-inner">
+
+                        <div class="carousel-inner">  
+                            {% for key, data in articleData %} 
+                                {% set fgClubTag = '' %}
+                                {% set areaArray = [] %}
+                                {% set categoryArray = [] %}
+                                {% set teaser = (data.teaser == '')?data.text:data.teaser %}
+                                {% if(data.isAllArea == 1 or data.sharedClub == 1 or data.areaCount != 1) %}
+                                    {% if (data.isClub == 1 and data.isCurrentClub) %}
+                                        {% set fgClubTag = fgtwig.getTerminolgyName('Club',singular,'UCF') %}
+                                    {% endif %}
+                                    {% if(data.AREAS != '' and data.AREAS != null)  %}
+                                        {% set areaArray = data.AREAS|split("*##*")  %}   
+                                    {% endif %}
+                                {% endif %}
+
+                                {% if(data.isAllCategory == 1 or data.categoryCount != 1 or data.sharedClub == 1) %}
+                                    {% if(data.CATEGORIES != '' and data.CATEGORIES != null) %}
+                                        {% set categoryArray = data.CATEGORIES|split("*##*")  %}
+                                    {% endif %}
+                                {% endif %}
+                                <a href="{{data.detailsUrl}}" class="item" style="background-image:url('/uploads/{{data.club_id}}/gallery/{{displayWidth}}/{{data.FIRST_IMAGE}}');">
+                                    <div class="fg-cat-wrapper">
+                                        {% if(structureData.articleShowArea == 1) %}
+                                            <div class="fg-areas">
+                                                {% if fgClubTag is defined and fgClubTag != ''%}<span class="fg-club-tag">{{ fgClubTag }}</span>{% endif %}
+                                                {% for index, area in areaArray  %}
+                                                    <span class="fg-area">{{ area }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                        {% if(structureData.articleShowCategory == 1) %}
+                                            <div class="fg-cats">
+                                                {% for index,category in categoryArray %}
+                                                    <span class="fg-cat">{{ category }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+
+                                    </div>
+                                    <img src="/uploads/{{data.club_id}}/gallery/{{displayWidth}}/{{data.FIRST_IMAGE}}">
+                                    <div class="carousel-caption">
+                                        <h4>{{data.title}}</h4>
+                                        <p>
+                                            {% if(structureData.articleShowDate == 1) %}
+                                                {{fgclub.formatDate(data.PUBLICATION_DATE,'date')}} {{':'}}
+                                            {% endif %}
+                                            {{teaser|raw}}
+                                        <span class="fg-read-more"><i class="fa fa-arrow-circle-right"></i>{{'CMS_ADD_ARTICLE_READ_MORE'|trans}}</span>
+                                        </p>
+                                    </div>
+                                </a>       
+                            {% endfor %}
+                        </div>
+                        <div class="fg-carousel-nav">
+                            <a href="#carousel-{{elementId}}" role="button" data-slide="prev" class="carousel-control-prev fg-prev">
+                                <span aria-hidden="true" class="carousel-control-prev-icon"><i class="fa fa-angle-left"></i>
+                                </span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a href="#carousel-{{elementId}}" role="button" data-slide="next" class="carousel-control-next fg-next">
+                                <span aria-hidden="true" class="carousel-control-next-icon"><i class="fa fa-angle-right"></i></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+                    {% if(structureData.articleSliderNavigation != 'none')%}
+                        <ul class="nav nav-pills nav-justified fg-article-slider-nav fg-nav-img">
+                            {% for key1, articles in articleData %} 
+                                <li data-target="#carousel-{{elementId}}" data-slide-to="{{key1}}">
+                                    <a href="javascript:;">
+                                        {% if (structureData.articleShowThumbImg == 1) %}
+                                            <figure style="background-image:url('/uploads/{{articles.club_id}}/gallery/{{displayWidth}}/{{articles.FIRST_IMAGE}}');" class="fg-thumb">
+                                                <img src="/uploads/{{articles.club_id}}/gallery/{{displayWidth}}/{{articles.FIRST_IMAGE}}" alt =""/>
+                                            </figure>
+                                        {% endif %}
+                                        <span>{{articles.title}}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>  
+    {% endif %}    
+{% else %}
+    <div class="fg-cms-empty-box-wrapper">
+        <p class="text-center">{{'CMS_NO_ARTICLE_MESSAGE'|trans}}</p>
+    </div>        
+{% endif %}

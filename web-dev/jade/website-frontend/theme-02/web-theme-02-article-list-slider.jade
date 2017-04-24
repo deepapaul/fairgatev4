@@ -1,0 +1,362 @@
+extends ../_helpers/theme-02/layout.jade
+
+block vars
+  - var bodyClass = 'fg-web-theme-02 fg-header-sticky';  
+  - var bodyStyles = 'background:url("https://www.clipartsgram.com/image/1702162501-background-debut-webdesign-web-sujet-website.jpg") no-repeat; background-size:cover; ';  
+  - var headerClass = 'header-bg-full-width ';
+block title
+    title Article Title
+
+block page-level-library-css      
+      link(href='https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css', rel='stylesheet', media='screen')
+      link(href='https://cdn.datatables.net/responsive/2.1.0/css/responsive.dataTables.min.css', rel='stylesheet', media='screen')
+block page-level-header
+      link(href='../../css/fg-web-theme-02.css', rel='stylesheet', media='screen')
+      link(href='../theme-based-styles/theme-02-color-schemes.css', rel='stylesheet', media='screen')
+      link(href='../theme-based-styles/theme-02-config.css', rel='stylesheet', media='screen')
+block header
+    .row.fg-web-top-nav-wrapper
+        .container
+            .FR
+                ul.fg-web-top-nav-links.list-inline
+                    li
+                        a(href='#') FAQ
+                    li
+                        a(href='#') Contact
+                    li
+                        a(href='#') Map
+                .fg-web-top-nav-languages
+                    .fg-current-language 
+                        a(href="#" data-toggle='dropdown', role='navigation', aria-expanded='false') EN
+                    ul.dropdown-menu.pull-right.fg-web-language-list
+                        li.active 
+                          a(href="javascript:void(0)") EN
+                        li
+                          a(href="javascript:void(0)") RU
+                        li
+                          a(href="javascript:void(0)") DE
+                        li
+                          a(href="javascript:void(0)") CH
+
+    .row.fg-web-header-content
+        figure.fg-header-bg
+          img(src="http://www.romantic-escapes.co.uk/wp-content/uploads/2015/02/city-breaks-slider.jpg").fg-width-P
+        .fg-logo-wrapper.fg-logo-center
+            
+            a(href='#').fg-logo
+              img(src="http://www.fauchard.org/system/ckeditor_assets/pictures/101/content_pfa_portrait_logo-300print.jpg")
+        .container
+            .clearfix
+            .fg-navbar-container
+                .fg-web-nav-icon
+                    span
+
+                nav.navbar.navbar-default.fg-web-main-nav
+                    ul.nav.navbar-nav
+                        li.active                                    
+                            a(href='#') Home     
+                        li
+                            a(href='#') Club
+                        li
+                            a(href='#') Teams
+                        li
+                            a(href='#') News
+                        li.dropdown
+                            a(href='#')
+                                | Photos 
+                            span.fg-dropdown-toggle.material-icons(data-toggle='dropdown', role='navigation', aria-expanded='false') keyboard_arrow_right
+                            ul.dropdown-menu
+                                li
+                                    a(href='#') Second level menu
+                                li
+                                    a(href='#') Second level menu
+                                li.dropdown
+                                    a(href='#')
+                                        | Second level Dropdown Second level Dropdown 
+                                    span.material-icons.fg-dropdown-toggle(data-toggle='dropdown', role='navigation', aria-expanded='false') keyboard_arrow_right
+                                    ul.dropdown-menu.fg-web-open-right
+                                        li
+                                            a(href='#') Third level menu
+                                        li
+                                            a(href='#') Third level menu
+
+                                        li.dropdown
+                                            a(href='#')
+                                                | Third level Dropdown 
+                                            span.material-icons.fg-dropdown-toggle(data-toggle='dropdown', role='navigation', aria-expanded='false') keyboard_arrow_right
+                                            ul.dropdown-menu.fg-web-open-left
+                                                li
+                                                    a(href='#') Fourth level menu
+                                                li
+                                                    a(href='#') Fourth level menu
+                                                li
+                                                    a(href='#') Fourth level menu
+                                                li
+                                                    a(href='#') Fourth level menu
+                                        li
+                                            a(href='#') Third level menu
+                                li
+                                    a(href='#') Second level menu
+                                li
+                                    a(href='#') Second level menu
+                  
+                        li
+                            a(href='#') Contact
+                .fg-additional-nav
+                    .fg-web-top-nav-languages
+                        .fg-current-language 
+                            a(href="javascript:void(0)" data-toggle='dropdown', role='navigation', aria-expanded='false') EN
+                        ul.dropdown-menu.fg-web-language-list
+                            li.active 
+                              a(href="javascript:void(0)") EN
+                            li
+                              a(href="javascript:void(0)") RU
+                            li
+                              a(href="javascript:void(0)") DE
+                            li
+                              a(href="javascript:void(0)") CH
+                    .fg-web-top-nav-links.active
+                        a(href="javascript:void(0)" data-toggle='dropdown', role='navigation', aria-expanded='false') 
+                            i.material-icons more_vert
+                        ul.dropdown-menu
+                          li
+                              a(href='#') FAQ
+                          li
+                              a(href='#') Contact
+                          li
+                              a(href='#') Map
+                    
+block content
+
+        .fg-web-page-title-bar.row.has-close-btn.has-breadcrumbs
+            .container
+              .fg-web-titlebar-left-col.pull-left.has-breadcrumb
+                .fg-web-page-title-block.fg-breadcrumb-block
+                  ul.fg-breadcrumbs
+                    li#fg-cms-ws-bc-1
+                      a#fg-cms-ws-bc-anchor-1(href='javascript:void(0);') Gallery 01
+                    li#fg-cms-ws-bc-2
+                      a#fg-cms-ws-bc-anchor-2(href='javascript:void(0);') Club
+                .fg-titlebar-block.fg-web-page-title-block
+                  h1.fg-web-page-title Gallery
+
+              .fg-web-titlebar-right-col.pull-right
+                .fg-titlebar-block.fg-icon-bg.fg-page-prev.hidden-xs.fg-disabled-link
+                  a.fg-page-prev-link(href='javascript:void(0)')
+                    i.fg-icon
+                .fg-titlebar-block.fg-icon-bg.fg-page-close
+                  a.fg-page-close-link(href='/sebin/article')
+                    i.fg-icon
+                .fg-titlebar-block.fg-icon-bg.fg-page-next.hidden-xs.fg-disabled-link
+                  a.fg-page-next-link(href='javascript:void(0)')
+                    i.fg-icon
+              .fg-web-titlebar-right-col.pull-right.fg-web-title-filter-wrapper
+              .clearfix
+
+
+
+        
+        .container
+            .row.fg-web-page-container
+              mixin articleWidget
+                block
+                .fg-article-widget.fg-widget-block()
+                    .fg-article-wrapper
+                      .fg-article-slider
+                        .myCarousel.carousel.slide(data-ride="carousel")
+                          .fg-carousel-inner
+                            .fg-cat-wrapper
+                                .fg-cats
+                                    span.fg-cat Clubs 1
+                                    span.fg-cat Clubs 2
+                                    span.fg-cat Clubs 3
+                                .fg-areas
+                                    span.fg-area Match Report
+                            .carousel-inner
+                              a(href="#").item.active
+                                img(src="https://placeimg.com/1170/480/arch")
+                                .carousel-caption
+                                  h4 Lorem ipsum dolor sit amet consetetur sadipscing
+                                  p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries
+                              a(href="#").item
+                                img(src="https://placeimg.com/1170/180/nature")
+                                .carousel-caption
+                                  h4 Lorem ipsum dolor sit amet consetetur sadipscing
+                                  p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries
+                              a(href="#").item
+                                img(src="https://placeimg.com/1170/480/tech")
+                                .carousel-caption
+                                  h4  Lorem ipsum dolor sit amet consetetur sadipscing
+                                  p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries
+                              a(href="#").item
+                                img(src="https://placeimg.com/1170/680/animals")
+                                .carousel-caption
+                                  h4  Lorem ipsum dolor sit amet consetetur sadipscing
+                                  p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries
+                            .fg-carousel-nav
+                              a.carousel-control-prev.fg-prev(href='.myCarousel', role='button', data-slide='prev')
+                                span.carousel-control-prev-icon(aria-hidden='true')
+                                  i.fa.fa-angle-left
+                                span.sr-only Previous
+                              a.carousel-control-next.fg-next(href='.myCarousel', role='button', data-slide='next')
+                                span.carousel-control-next-icon(aria-hidden='true')
+                                  i.fa.fa-angle-right
+                                span.sr-only Next
+
+                          ul.nav.nav-pills.nav-justified.fg-article-slider-nav
+                            li.active(data-target='.myCarousel', data-slide-to='0')
+                              a(href='javascript:;')
+                                | About  Lorem ipsum dolor sit
+                            li(data-target='.myCarousel', data-slide-to='1')
+                              a(href='javascript:;')
+                                | Projects Lorem ipsum dolor sit
+                            li(data-target='.myCarousel', data-slide-to='2')
+                              a(href='javascript:;')
+                                | Portfolio Lorem ipsum dolor sit
+                            li(data-target='.myCarousel', data-slide-to='3')
+                              a(href='javascript:;')
+                                | Services Lorem ipsum dolor sit
+
+              mixin articleWidget2
+                block
+                .fg-article-widget.fg-widget-block()
+                    .fg-article-wrapper
+                      .fg-article-slider.fg-slider-btm-tab
+                        .myCarousel.carousel.slide(data-ride="carousel")
+                          .fg-carousel-inner
+                            .fg-cat-wrapper
+                                .fg-cats
+                                    span.fg-cat Clubs 1
+                                    span.fg-cat Clubs 2
+                                    span.fg-cat Clubs 3
+                                .fg-areas
+                                    span.fg-area Match Report
+                            .carousel-inner
+                              a(href="#").item.active
+                                img(src="https://placeimg.com/1170/480/arch")
+                                .carousel-caption
+                                  h4 Lorem ipsum dolor sit amet consetetur sadipscing
+                                  p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries
+                              a(href="#").item
+                                img(src="https://placeimg.com/1170/480/nature")
+                                .carousel-caption
+                                  h4 Lorem ipsum dolor sit amet consetetur sadipscing
+                                  p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries
+                              a(href="#").item
+                                img(src="https://placeimg.com/1170/480/tech")
+                                .carousel-caption
+                                  h4  Lorem ipsum dolor sit amet consetetur sadipscing
+                                  p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries
+                              a(href="#").item
+                                img(src="https://placeimg.com/1170/480/animals")
+                                .carousel-caption
+                                  h4  Lorem ipsum dolor sit amet consetetur sadipscing
+                                  p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries
+                            .fg-carousel-nav
+                              a.carousel-control-prev.fg-prev(href='.myCarousel', role='button', data-slide='prev')
+                                span.carousel-control-prev-icon(aria-hidden='true')
+                                  i.fa.fa-angle-left
+                                span.sr-only Previous
+                              a.carousel-control-next.fg-next(href='.myCarousel', role='button', data-slide='next')
+                                span.carousel-control-next-icon(aria-hidden='true')
+                                  i.fa.fa-angle-right
+                                span.sr-only Next
+
+                          ul.nav.nav-pills.nav-justified.fg-article-slider-nav.fg-nav-img
+                            li.active(data-target='.myCarousel', data-slide-to='0')
+                              a(href='javascript:;')
+                                figure.fg-thumb(style="background:url('https://placeimg.com/80/80/nature');")
+                                  img(src="https://placeimg.com/80/80/nature") 
+                                span About  Lorem ipsum dolor sit
+                            li(data-target='.myCarousel', data-slide-to='1')
+                              a(href='javascript:;')
+                                figure.fg-thumb(style="background:url('https://placeimg.com/80/80/people');")
+                                  img(src="https://placeimg.com/80/80/people") 
+                                span Projects Lorem ipsum dolor sit
+                            li(data-target='.myCarousel', data-slide-to='2')
+                              a(href='javascript:;')
+                                figure.fg-thumb(style="background:url('https://placeimg.com/80/80/tech');")
+                                  img(src="https://placeimg.com/80/80/tech") 
+                                span Portfolio Lorem ipsum dolor sit
+                            li(data-target='.myCarousel', data-slide-to='3')
+                              a(href='javascript:;')
+                                figure.fg-thumb(style="background:url('https://placeimg.com/80/80/animals');")
+                                  img(src="https://placeimg.com/80/80/animals") 
+                                span Services Lorem ipsum dolor sit
+                        
+              .col-sm-12.fg-web-page-content-wrapper
+                  .row
+                      .col-sm-12.fg-grid-col-6
+                        +articleWidget
+                        p &nbsp;
+                        +articleWidget2
+                        p &nbsp;
+                        p &nbsp;
+                      .col-sm-10.fg-grid-col-5
+                        +articleWidget
+                        p &nbsp;
+                        +articleWidget2
+
+                      .col-sm-8.fg-grid-col-4
+                        +articleWidget
+                        p &nbsp;
+                        +articleWidget2
+                        p &nbsp;
+                        p &nbsp;
+                      .col-sm-6.fg-grid-col-3
+                        +articleWidget
+                        p &nbsp;
+                        +articleWidget2
+                        p &nbsp;
+                        p &nbsp;
+                      .col-sm-4.fg-grid-col-2
+                        +articleWidget
+                        p &nbsp;
+                        +articleWidget2
+                        p &nbsp;
+                        p &nbsp;
+                      .col-sm-2.fg-grid-col-1
+                        +articleWidget
+                        p &nbsp;
+                        +articleWidget2
+               
+block page-level-footer
+    //script(src='.././../js/fg-website-02.js')
+    script.
+      jQuery(document).ready(function () {
+            $("select").selectpicker();
+            /*------------------------------------------------
+            Navigation actions
+            -------------------------------------------------*/
+            $('.fg-web-nav-icon').on('click',function(){
+                var $this = $(this)
+                var $navIcon =  $this;
+                var $navContainer = $navIcon.siblings('.fg-web-main-nav');
+                $navIcon.toggleClass('active');
+                $navContainer.toggleClass('active');
+            });
+            $('.myCarousel').carousel({
+              interval:   4000
+            });
+
+            var clickEvent = false;
+            $('.myCarousel').on('click', '.nav a', function() {
+              clickEvent = true;
+              $('.nav li').removeClass('active');
+              $(this).parent().addClass('active');    
+            }).on('slid.bs.carousel', function(e) {
+              if(!clickEvent) {
+                var count = $('.nav').children().length -1;
+                var current = $('.nav li.active');
+                current.removeClass('active').next().addClass('active');
+                var id = parseInt(current.data('slide-to'));
+                if(count == id) {
+                  $('.nav li').first().addClass('active');  
+                }
+              }
+              clickEvent = false;
+            });
+      });
+      $(window).load(function(){
+        
+      })

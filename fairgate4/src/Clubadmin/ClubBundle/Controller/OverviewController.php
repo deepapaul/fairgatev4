@@ -8,7 +8,7 @@ use Clubadmin\Classes\Clubtablesetting;
 use Symfony\Component\Intl\Intl;
 use Clubadmin\ClubBundle\Util\NextpreviousClub;
 use Common\UtilityBundle\Util\FgUtility;
-use Common\UtilityBundle\Repository\Pdo\ClubPdo;
+use Admin\UtilityBundle\Repository\Pdo\ClubPdo;
 
 
 /**
@@ -48,7 +48,7 @@ class OverviewController extends FgController
     {
         $club = $this->get('club');
         //check if clubId has access
-        $clubPdo = new \Common\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
+        $clubPdo = new \Admin\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
         $sublevelclubs = $clubPdo->getAllSubLevelData($this->clubId);
         $sublevelclub = array();
         $contCountDetails = array();
@@ -63,21 +63,22 @@ class OverviewController extends FgController
         $permissionObj = $this->fgpermission;
         $accessCheck = (!in_array($clubId, $sublevelclub)) ? 0 : 1;
         $permissionObj->checkClubAccess($accessCheck,"backend_club");
-        
+
         //end check if clubid has access
-        $assignmentCount = $this->em->getRepository('CommonUtilityBundle:FgClubClassAssignment')->assignmentCount($this->clubType, $this->conn, $clubId);
+        $assignmentCount = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubClassAssignment')->assignmentCount($this->clubType, $this->conn, $clubId);
         
         $breadCrumb = array('back' => '#');
         //$limit=3 as per requirement
         $getAllNotes = json_encode($this->em->getRepository('CommonUtilityBundle:FgClubNotes')->getNotesDetails(0, $limit=3, $clubId, $this->clubId));
-       $clubName = $this->em->getRepository('CommonUtilityBundle:FgClub')->getClubname($clubId, $club->get('default_lang'));
+       $clubName = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClub')->getClubname($clubId, $club->get('default_lang'));
         $CfCiCoFields = $this->overviewField($clubId);
-        $activeContact = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->activeContactsCount($clubId,$sublevelclub['is_sub_federation']) ;
+        //$activeContact = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->activeContactsCount($clubId,$sublevelclub['is_sub_federation']) ;
+        $activeContact = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClub')->find($clubId);
         //$groupId=2 clubadministrator
         $clubAdministratorsCount = $this->em->getRepository('CommonUtilityBundle:sfGuardGroup')->clubAdministratorsCount($clubId,$groupId=2);
         $clubArray = array('clubId' => $this->clubId,'federationId' => $this->federationId,'clubType' => $this->clubType,'defaultClubLang'=>$this->clubDefaultLang);
         $clubObj = new ClubPdo($this->container);
-	$assignment = json_encode($clubObj->getAllAssignedAssignments($clubArray, $this->conn, $clubId,$sortOrder='CL'));        
+	    $assignment = json_encode($clubObj->getAllAssignedAssignments($clubArray, $this->conn, $clubId,$sortOrder='CL'));        
         
         $nextprevious = new NextpreviousClub($this->container);
         $nextPreviousResultset = $nextprevious->nextPreviousClubData($this->contactId,$clubId, $offset, 'club_overview', 'offset', 'clubId', $flag = 0);
@@ -112,7 +113,7 @@ class OverviewController extends FgController
         
         return $this->render('ClubadminClubBundle:Overview:clubOverview.html.twig', array('breadCrumb' => $breadCrumb,'clubId' =>$clubId,'clubName' => $clubName[0]['title'],'offset' => $offset,'getAllNotes'=>$getAllNotes,'overviewContent' => $CfCiCoFields,
                                                                                           'terminologyTerms' => $terminologyTerms,'clubAdmin'=>$clubAdministratorsCount[0]['count'],'nextPreviousResultset'=>$nextPreviousResultset,
-                                                                                          'assignment' => $assignment,'clubType' => $this->clubType,'overviewClubType' => $sublevelclub['is_sub_federation'], 'activeContact' => $activeContact[0]['count'],'documentsCount' => $documentsCount ,'clubExecBoardData' => json_encode($clubExecBoardData),'asgmntsCount'=>$assignmentCount,'notesCount'=>$notesCount, 'tabs'=> $tabsData));
+                                                                                          'assignment' => $assignment,'clubType' => $this->clubType,'overviewClubType' => $sublevelclub['is_sub_federation'], 'activeContact' => $activeContact->getActiveContactCount(),'documentsCount' => $documentsCount ,'clubExecBoardData' => json_encode($clubExecBoardData),'asgmntsCount'=>$assignmentCount,'notesCount'=>$notesCount, 'tabs'=> $tabsData));
     }
 
     /**
@@ -138,7 +139,7 @@ class OverviewController extends FgController
         $clublistClass->addCondition($sWhere);
         $clublistClass->setColumns($aColumns);
         $listquery = $clublistClass->getResult(); 
-        $clublistDatas = $this->em->getRepository('CommonUtilityBundle:FgCmMembership')->getContactList($listquery);
+        $clublistDatas = $this->container->get('fg.admin.connection')->executeQuery($listquery);
         $countryList = Intl::getRegionBundle()->getCountryNames();
         $languages = Intl::getLanguageBundle()->getLanguageNames();
         $clublistDatas[0]['CF_C_country'] = ($clublistDatas[0]['CF_C_country'] != '') ? $countryList[$clublistDatas[0]['CF_C_country']]:'';
@@ -149,6 +150,9 @@ class OverviewController extends FgController
         $checkClubHasDomain = $this->em->getRepository('CommonUtilityBundle:FgDnClubDomains')->checkClubHasDomain($clubId);
         $clublistDatas[0]['CF_domain_name'] = ($checkClubHasDomain) ? $checkClubHasDomain['domain'] : 0;
         $clublistDatas[0]['CF_base_url'] = $this->container->getParameter('base_url');
+        $clubPdo = new \Common\UtilityBundle\Repository\Pdo\ClubPdo($this->container);  
+        // Own fed membership count of a club
+        $clublistDatas[0]['SIOWN_FED_MEMBERS'] = $clubPdo->getOwnFedMemberCount($club->get('id'));        
         $clublistDatas = json_encode($clublistDatas);
         return $clublistDatas;
 

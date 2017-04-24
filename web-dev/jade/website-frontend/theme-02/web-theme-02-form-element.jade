@@ -1,0 +1,505 @@
+extends _helpers/theme-02/layout.jade
+
+block vars
+  - var bodyClass = 'fg-web-theme-02 fg-header-sticky';  
+  - var bodyStyles = 'background:url("https://www.clipartsgram.com/image/1702162501-background-debut-webdesign-web-sujet-website.jpg") no-repeat; background-size:cover; ';  
+  - var headerClass = 'header-bg-full-width ';
+block title
+    title Article Title
+
+block page-level-library-css      
+      link(href='https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css', rel='stylesheet', media='screen')
+      link(href='https://cdn.datatables.net/responsive/2.1.0/css/responsive.dataTables.min.css', rel='stylesheet', media='screen')
+block page-level-header
+      link(href='../../css/fg-web-theme-02.css', rel='stylesheet', media='screen')
+      link(href='../theme-based-styles/theme-02-color-schemes.css', rel='stylesheet', media='screen')
+      link(href='../theme-based-styles/theme-02-config.css', rel='stylesheet', media='screen')
+block header
+    .row.fg-web-top-nav-wrapper
+        .container
+            .FR
+                ul.fg-web-top-nav-links.list-inline
+                    li
+                        a(href='#') FAQ
+                    li
+                        a(href='#') Contact
+                    li
+                        a(href='#') Map
+                .fg-web-top-nav-languages
+                    .fg-current-language 
+                        a(href="#" data-toggle='dropdown', role='navigation', aria-expanded='false') EN
+                    ul.dropdown-menu.pull-right.fg-web-language-list
+                        li.active 
+                          a(href="javascript:void(0)") EN
+                        li
+                          a(href="javascript:void(0)") RU
+                        li
+                          a(href="javascript:void(0)") DE
+                        li
+                          a(href="javascript:void(0)") CH
+
+    .row.fg-web-header-content
+        figure.fg-header-bg
+          img(src="http://www.romantic-escapes.co.uk/wp-content/uploads/2015/02/city-breaks-slider.jpg").fg-width-P
+        .fg-logo-wrapper.fg-logo-center
+            
+            a(href='#').fg-logo
+              img(src="http://www.fauchard.org/system/ckeditor_assets/pictures/101/content_pfa_portrait_logo-300print.jpg")
+        .container
+            .clearfix
+            .fg-navbar-container
+                .fg-web-nav-icon
+                    span
+
+                nav.navbar.navbar-default.fg-web-main-nav
+                    ul.nav.navbar-nav
+                        li.active                                    
+                            a(href='#') Home     
+                        li
+                            a(href='#') Club
+                        li
+                            a(href='#') Teams
+                        li
+                            a(href='#') News
+                        li.dropdown
+                            a(href='#')
+                                | Photos 
+                            span.fg-dropdown-toggle.material-icons(data-toggle='dropdown', role='navigation', aria-expanded='false') keyboard_arrow_right
+                            ul.dropdown-menu
+                                li
+                                    a(href='#') Second level menu
+                                li
+                                    a(href='#') Second level menu
+                                li.dropdown
+                                    a(href='#')
+                                        | Second level Dropdown Second level Dropdown 
+                                    span.material-icons.fg-dropdown-toggle(data-toggle='dropdown', role='navigation', aria-expanded='false') keyboard_arrow_right
+                                    ul.dropdown-menu.fg-web-open-right
+                                        li
+                                            a(href='#') Third level menu
+                                        li
+                                            a(href='#') Third level menu
+
+                                        li.dropdown
+                                            a(href='#')
+                                                | Third level Dropdown 
+                                            span.material-icons.fg-dropdown-toggle(data-toggle='dropdown', role='navigation', aria-expanded='false') keyboard_arrow_right
+                                            ul.dropdown-menu.fg-web-open-left
+                                                li
+                                                    a(href='#') Fourth level menu
+                                                li
+                                                    a(href='#') Fourth level menu
+                                                li
+                                                    a(href='#') Fourth level menu
+                                                li
+                                                    a(href='#') Fourth level menu
+                                        li
+                                            a(href='#') Third level menu
+                                li
+                                    a(href='#') Second level menu
+                                li
+                                    a(href='#') Second level menu
+                  
+                        li
+                            a(href='#') Contact
+                .fg-additional-nav
+                    .fg-web-top-nav-languages
+                        .fg-current-language 
+                            a(href="javascript:void(0)" data-toggle='dropdown', role='navigation', aria-expanded='false') EN
+                        ul.dropdown-menu.fg-web-language-list
+                            li.active 
+                              a(href="javascript:void(0)") EN
+                            li
+                              a(href="javascript:void(0)") RU
+                            li
+                              a(href="javascript:void(0)") DE
+                            li
+                              a(href="javascript:void(0)") CH
+                    .fg-web-top-nav-links.active
+                        a(href="javascript:void(0)" data-toggle='dropdown', role='navigation', aria-expanded='false') 
+                            i.material-icons more_vert
+                        ul.dropdown-menu
+                          li
+                              a(href='#') FAQ
+                          li
+                              a(href='#') Contact
+                          li
+                              a(href='#') Map
+                    
+block content
+
+        .fg-web-page-title-bar.row.has-close-btn.has-breadcrumbs
+            .container
+              .fg-web-titlebar-left-col.pull-left.has-breadcrumb
+                .fg-web-page-title-block.fg-breadcrumb-block
+                  ul.fg-breadcrumbs
+                    li#fg-cms-ws-bc-1
+                      a#fg-cms-ws-bc-anchor-1(href='javascript:void(0);') Gallery 01
+                    li#fg-cms-ws-bc-2
+                      a#fg-cms-ws-bc-anchor-2(href='javascript:void(0);') Club
+                .fg-titlebar-block.fg-web-page-title-block
+                  h1.fg-web-page-title Gallery
+
+              .fg-web-titlebar-right-col.pull-right
+                .fg-titlebar-block.fg-icon-bg.fg-page-prev.hidden-xs.fg-disabled-link
+                  a.fg-page-prev-link(href='javascript:void(0)')
+                    i.fg-icon
+                .fg-titlebar-block.fg-icon-bg.fg-page-close
+                  a.fg-page-close-link(href='/sebin/article')
+                    i.fg-icon
+                .fg-titlebar-block.fg-icon-bg.fg-page-next.hidden-xs.fg-disabled-link
+                  a.fg-page-next-link(href='javascript:void(0)')
+                    i.fg-icon
+              .fg-web-titlebar-right-col.pull-right.fg-web-title-filter-wrapper
+              .clearfix
+
+
+        
+        .container
+            .row.fg-web-page-container
+              .col-sm-12.fg-web-page-content-wrapper
+                  .row
+                      .col-sm-12.fg-grid-col-6
+                          .fg-form-widget.fg-widget-block
+                              form.form-horizontal
+                                  fieldset
+                                      legend Form Name
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Mandatory field 
+                                          .col-md-8
+                                              input#textinput.form-control.input-md(name='textinput', type='text', placeholder='', required='') 
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Field with tooltip
+                                          .col-md-8
+                                              input#textinput.form-control.input-md(name='textinput', type='text', placeholder='')
+     
+                                      .form-group
+                                          label.col-md-4.control-label(for='checkboxes') Checkbox group
+                                          .col-md-8
+                                              .checkbox-block
+                                                  label(for='checkboxes-0')
+                                                      input#checkboxes-0(type='checkbox', name='checkboxes', value='1')
+                                                      |       Option one
+                                              .checkbox-block
+                                                  label(for='checkboxes-1')
+                                                      input#checkboxes-1(type='checkbox', name='checkboxes', value='2')
+                                                      |       Option two
+       
+                                      .form-group
+                                          label.col-md-4.control-label(for='radios') Multiple Radios
+                                          .col-md-8
+                                              .radio-block
+                                                  label(for='radios-0')
+                                                      input#radios-0(type='radio', name='radios1', value='1', checked='checked')
+                                                      |       Option one
+                                              .radio-block
+                                                  label(for='radios-1')
+                                                      input#radios-1(type='radio', name='radios1', value='2')
+                                                      |       Option two
+        
+                                      .form-group
+                                          label.col-md-4.control-label(for='radios') Inline Radios
+                                          .col-md-8
+                                                label.radio-inline(for='radios-4')
+                                                    input#radios-4(type='radio', name='radios2', value='1', checked='checked')
+                                                    |       1
+                                                label.radio-inline(for='radios-5')
+                                                    input#radios-5(type='radio', name='radios2', value='2')
+                                                    |       2
+                                                label.radio-inline(for='radios-2')
+                                                    input#radios-2(type='radio', name='radios2', value='3')
+                                                    |       3
+                                                label.radio-inline(for='radios-3')
+                                                    input#radios-3(type='radio', name='radios2', value='4')
+                                                    |       4
+     
+                                  
+                                 
+
+                                  fieldset.fg-noseprator
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Field with placeholder
+                                          .col-md-8
+                                              input#textinput.form-control.input-md(name='textinput', type='text', placeholder='placeholder')
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Pre-filled field
+                                          .col-md-8
+                                              input#textinput.form-control.input-md(name='textinput', type='text', placeholder='')
+                                      .form-group
+                                          label.col-md-4.control-label(for='textarea') Multi-line field
+                                          .col-md-8
+                                              textarea#textarea.form-control(name='textarea') value
+                                      .form-group
+                                          label.col-md-4.control-label(for='selectbasic') Dropdown
+                                          .col-md-8
+                                              select#selectbasic.form-control(name='selectbasic')
+                                                  option(value='1') Option one
+                                                  option(value='2') Option two
+                                  fieldset
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Date field with picker
+                                          .col-md-8
+                                              .input-group.date(data-provide='datepicker')
+                                                  input.form-control(type='text')
+                                                  .input-group-addon
+                                                     span.fa.fa-calendar
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Time field with picker
+                                          .col-md-8
+                                              .input-group.bootstrap-timepicker.timepicker(data-provide='timepicker', data-minute-step='1',  type='text')
+                                                  input#timepicker.form-control
+                                                  .input-group-addon
+                                                     span.fa.fa-clock-o
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Number field
+                                          .col-md-8
+                                              .fg-input-plus-minus
+                                                  button.left.minus.form-control.FL.selectButton.btn-number(data-field='columnCount', data-type='minus') -
+                                                  input#columnCount.form-control.FL.number.input-number(type='number', disabled='')
+                                                  button.right.plus.form-control.FL.selectButton.btn-number(data-field='columnCount', data-type='plus') +
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') File field
+                                          .col-md-8
+                                              .fg-web-fileupload-wrapper
+                                                  input.filestyle(type="file", data-buttonText="Select file", data-buttonName="fg-upload-btn", data-iconName="fa fa-file")
+                                      .form-group
+                                          .col-md-8.col-md-offset-4
+                                              input(type="submit").btn.btn-default
+
+                      .col-sm-10.fg-grid-col-5
+                          .fg-form-widget.fg-widget-block.fg-dev-element-box.elementBox(element-id='3646')
+                              #elementbox-3646
+                                form#1474876931310.form-horizontal(onsubmit='return false;', data-url='/club111/forminquiry/save')
+                                  .alert.alert-success.hide
+                                    a.close.closeIt(title='close', href='#') ×
+                                    span The displayed message after the form is sent can be defined here.
+                                  .alert.alert-danger.hide
+                                    a.close.closeIt(title='close', href='#') ×
+                                    span You have some form errors. Please check below.
+                                  fieldset
+                                    .form-group
+                                      label.col-sm-4.control-label(for='textinput176')
+                                        span(data-content='') First Name
+                                      .col-sm-8
+                                        input#textinput176.form-control.input-md(data-key='3646.176', name='textinput', type='text', placeholder='', value='')
+                                    .form-group
+                                      label.col-sm-4.control-label(for='textarea177')
+                                        span.fg-custom-popovers.fg-dotted-br(data-content='Address tp') Address
+                                      .col-sm-8
+                                        textarea#textarea177.form-control(data-key='3646.177', placeholder='Address', name='textarea') TVC
+                                    .form-group
+                                      label.col-sm-4.control-label(for='textinput178')
+                                        span(data-content='') Email
+                                      .col-sm-8
+                                        input#textinput178.form-control.input-md(data-key='3646.178', name='textemail', type='email', placeholder='')
+                                    .form-group
+                                      label.col-sm-4.control-label(for='textinput179')
+                                        span(data-content='') Roll num
+                                      .col-sm-8
+                                        .fg-input-plus-minus
+                                          button.left.minus.form-control.FL.selectButton.btn-number(data-field='columnCount179', data-type='minus', onclick='return false;') -
+                                          input#columnCount179.form-control.FL.number.input-number(data-key='3646.179', type='text', min='10.00', max='1000.00', stepto='1.00', data-rule-min='10.00', data-rule-max='1000.00', data-rule-number='true', data-msg-min='Please enter a value greater than or equal to 10.00.', data-msg-max='Please enter a value less than or equal to 1000.00.')
+                                          button.right.plus.form-control.FL.selectButton.btn-number(data-field='columnCount179', data-type='plus', onclick='return false;') +
+                                    .form-group.required
+                                      label.col-sm-4.control-label(for='textinput180')
+                                        span(data-content='') website
+                                      .col-sm-8
+                                        input#textinput180.form-control.input-md(name='textinput', data-key='3646.180', type='url', required='', placeholder='', value='')
+                                    .form-group
+                                      label.col-sm-4.control-label(for='textinput')
+                                        span(data-content='') Dob
+                                      .col-sm-8
+                                        .input-group.date.fg-datepicker1(data-startdate='16.09.2016', data-enddate='19.10.2016')
+                                          input#181.form-control(type='text', data-key='3646.181', name='181')
+                                          .input-group-addon
+                                            i.fa.fa-calendar
+                                    .form-group
+                                      label.col-sm-4.control-label(for='textinput182')
+                                        span(data-content='') Time
+                                      .col-sm-8
+                                        #timepickerWrap182.input-group.bootstrap-timepicker.timepicker(data-timepick='', type='text')
+                                          input#timepicker182.form-control(data-key='3646.182', data-field='time', name='timepicker')
+                                          .fg-timepicker.fg-timepicker-frmt-1
+                                          .input-group-addon
+                                            i.fa.fa-clock-o
+                                    .form-group.required
+                                      label.col-sm-4.control-label.fg-pad-top-0(for='checkboxes')
+                                        span(data-content='') Qualification
+                                      #check-wrap-183.col-sm-8.fg-checkbox-wrapper
+                                        label.checkbox-inline(for='checkboxes-183-949')
+                                          #uniform-checkboxes-183-949.checker
+                                            span
+                                              input#checkboxes-183-949(data-error-container='#check-wrap-183', data-key='3646.183.949', type='checkbox', required='', name='checkboxes', value='949')
+                                          | MTech
+                                        label.checkbox-inline(for='checkboxes-183-950')
+                                          #uniform-checkboxes-183-950.checker
+                                            span
+                                              input#checkboxes-183-950(data-error-container='#check-wrap-183', data-key='3646.183.950', type='checkbox', required='', name='checkboxes', value='950')
+                                          | BTech
+                                        label.checkbox-inline(for='checkboxes-183-951')
+                                          #uniform-checkboxes-183-951.checker
+                                            span
+                                              input#checkboxes-183-951(data-error-container='#check-wrap-183', data-key='3646.183.951', type='checkbox', required='', name='checkboxes', value='951')
+                                          | BSc
+                                    .form-group
+                                      label.col-sm-4.control-label(for='selectbasic184')
+                                        span(data-content='') Gender
+                                      .col-sm-8
+                                        select#selectbasic184.form-control.bs-select(data-none-selected='- Select -', data-key='3646.184', name='selectbasic', style='display: none;')
+                                          option(value='') - Select -
+                                          option(value='1052') Male
+                                          option(value='1053') Female
+                                          option(value='1054') Lesbian
+                                        .btn-group.bootstrap-select.form-control.bs-select
+                                          button.btn.dropdown-toggle.selectpicker.btn-default(type='button', data-toggle='dropdown', data-id='selectbasic184', title='- Select -')
+                                            span.filter-option.pull-left - Select -
+                                            span.caret
+                                          .dropdown-menu.open
+                                            ul.dropdown-menu.inner.selectpicker(role='menu')
+                                              li.selected(rel='0')
+                                                a(tabindex='0', style='')
+                                                  span.text - Select -
+                                                  i.glyphicon.fa.fa-check.icon-ok.check-mark
+                                              li(rel='1')
+                                                a(tabindex='0', style='')
+                                                  span.text Male
+                                                  i.glyphicon.fa.fa-check.icon-ok.check-mark
+                                              li(rel='2')
+                                                a(tabindex='0', style='')
+                                                  span.text Female
+                                                  i.glyphicon.fa.fa-check.icon-ok.check-mark
+                                              li(rel='3')
+                                                a(tabindex='0', style='')
+                                                  span.text Lesbian
+                                                  i.glyphicon.fa.fa-check.icon-ok.check-mark
+                                    .form-group
+                                      label.col-sm-4.control-label.fg-pad-top-0(for='radios619')
+                                        span(data-content='') Gridding 
+                                      #check-wrap-619.col-sm-8.fg-radio-wrapper
+                                        .radio-block
+                                          label(for='radios-619-11163')
+                                            #uniform-radios-619-11163.radio
+                                              span
+                                                input#radios-619-11163(data-error-container='#check-wrap-619', data-key='3646.619', type='radio', name='radios619', value='11163')
+                                            | Radio 1
+                                        .radio-block
+                                          label(for='radios-619-11164')
+                                            #uniform-radios-619-11164.radio
+                                              span
+                                                input#radios-619-11164(data-error-container='#check-wrap-619', data-key='3646.619', type='radio', name='radios619', value='11164')
+                                            | Radio 2
+                                        .radio-block
+                                          label(for='radios-619-11165')
+                                            #uniform-radios-619-11165.radio
+                                              span
+                                                input#radios-619-11165(data-error-container='#check-wrap-619', data-key='3646.619', type='radio', name='radios619', value='11165')
+                                            | Radio 3
+                                    .form-group
+                                      label.col-sm-4.control-label.fg-pad-top-0(for='radios185')
+                                        span(data-content='') Send Notification
+                                      #check-wrap-185.col-sm-8.fg-radio-wrapper
+                                        label.radio-inline(for='radios-185-1255')
+                                          #uniform-radios-185-1255.radio
+                                            span
+                                              input#radios-185-1255(data-error-container='#check-wrap-185', data-key='3646.185', type='radio', name='radios185', value='1255')
+                                          | Yesasda sdadda
+                                        label.radio-inline(for='radios-185-1256')
+                                          #uniform-radios-185-1256.radio
+                                            span
+                                              input#radios-185-1256(data-error-container='#check-wrap-185', data-key='3646.185', type='radio', name='radios185', value='1256')
+                                          | No asdadsad
+                                    .form-group
+                                      label.col-sm-4.control-label(for='textinput186')
+                                        span(data-content='                    \
+                                        ') Profile logo
+                                      .col-sm-8
+                                        .fg-web-fileupload-wrapper(data-file-wrap='')
+                                          input#formfile186.hide(type='text', name='uploadFile', data-file='', data-key='3646.186')
+                                          input#forminput186.filestyle(type='file', data-exceedmsg='Size Exceeds', data-fieldid='186', name='file-uploader', data-url='/club111/fileUploadCheck/form', style='position: absolute; clip: rect(0px, 0px, 0px, 0px);', data-buttontext='Select file')
+                                          .bootstrap-filestyle.input-group
+                                            input.form-control(type='text', data-file-name='', disabled='', placeholder='')
+                                            span.group-span-filestyle.input-group-btn(tabindex='0')
+                                              label.btn.fg-upload-btn(for='forminput186')
+                                                span.icon-span-filestyle.fa.fa-file
+                                                span.buttonText Select file
+                                    .form-group
+                                      label.col-sm-4.control-label.fg-pad-top-0(for='checkboxes')
+                                        span.fg-custom-popovers.fg-dotted-br(data-content='tool') Job option
+                                      #check-wrap-620.col-sm-8.fg-checkbox-wrapper
+                                        .checkbox-block
+                                          label(for='checkboxes-620-1166')
+                                            #uniform-checkboxes-620-1166.checker
+                                              span
+                                                input#checkboxes-620-1166(data-error-container='#check-wrap-620', data-key='3646.620.1166', type='checkbox', name='checkboxes', value='1166')
+                                            | Full-time
+                                        .checkbox-block
+                                          label(for='checkboxes-620-2167')
+                                            #uniform-checkboxes-620-2167.checker
+                                              span
+                                                input#checkboxes-620-2167(data-error-container='#check-wrap-620', data-key='3646.620.2167', type='checkbox', name='checkboxes', value='2167')
+                                            | Part-time
+                                        .checkbox-block
+                                          label(for='checkboxes-620-3168')
+                                            #uniform-checkboxes-620-3168.checker
+                                              span
+                                                input#checkboxes-620-3168(data-error-container='#check-wrap-620', data-key='3646.620.3168', type='checkbox', name='checkboxes', value='3168')
+                                            | Permanent
+                                    .form-group
+                                      label.col-sm-4.control-label(for='textinput750')
+                                        span(data-content='') num de1
+                                      .col-sm-8
+                                        .fg-input-plus-minus
+                                          button.left.minus.form-control.FL.selectButton.btn-number(data-field='columnCount750', data-type='minus', onclick='return false;') -
+                                          input#columnCount750.form-control.FL.number.input-number(data-key='3646.750', type='text', min='0.00', max='', stepto='1.00', data-rule-min='0.00', data-rule-max='', data-rule-number='true', data-msg-min='Please enter a value greater than or equal to 0.00.', data-msg-max='Please enter a value less than or equal to 0,00.')
+                                          button.right.plus.form-control.FL.selectButton.btn-number(data-field='columnCount750', data-type='plus', onclick='return false;') +
+                                    .form-group
+                                      .col-sm-8.col-md-offset-4
+                                        input.btn.btn-default.fg-form-element-submit(type='submit', value='Save me')
+
+                      .col-sm-8.fg-grid-col-4
+                      .col-sm-6.fg-grid-col-3
+                      .col-sm-4.fg-grid-col-2
+                      .col-sm-2.fg-grid-col-1
+               
+block page-level-footer
+    script(src='https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js')
+    script(src='https://cdn.datatables.net/responsive/2.1.0/js/dataTables.responsive.min.js')
+    script(src='.././../js/fg-website-02.js')
+    script.
+      jQuery(document).ready(function () {
+            $("select").selectpicker();
+            window.DT=  $('#example').DataTable({
+                  dom: "<'col-md-12't><'col-md-12'p>",
+                  "autoWidth": false,
+                  scrollX: true,
+                  language: {
+                      paginate: {
+                          "next": '<i class="fa fa-angle-right"></i>',
+                          "previous": '<i class="fa fa-angle-left"></i>'
+                      }
+                  },
+                  
+            });
+            $('.dataTable tbody').on( 'mouseover', 'tr', function () {
+                $(this).addClass('fg-hover');
+            } );
+
+            $('.dataTable tbody').on( 'mouseout', 'tr', function () {
+                $(this).removeClass('fg-hover');
+            } );
+            $(window).resize(function(){
+                DT.columns.adjust().draw();
+            });
+            /*------------------------------------------------
+            Navigation actions
+            -------------------------------------------------*/
+            $('.fg-web-nav-icon').on('click',function(){
+                var $this = $(this)
+                var $navIcon =  $this;
+                var $navContainer = $navIcon.siblings('.fg-web-main-nav');
+                $navIcon.toggleClass('active');
+                $navContainer.toggleClass('active');
+            });
+            fgwebsite = 'ss';
+            FgWebsiteThemeObj = new FgWebsiteTheme();
+      });

@@ -354,7 +354,7 @@ class FgCmsPageContentElementRepository extends EntityRepository
      *
      * @return int $elementId element id
      */
-    public function saveArticleElement($data, $clubId)
+    public function saveArticleElement($data, $clubId, $displayDetails)
     {
         $clubObj = $this->_em->getReference('CommonUtilityBundle:FgClub', $clubId);
         $boxObj = $this->_em->getReference('CommonUtilityBundle:FgCmsPageContainerBox', $data['boxId']);
@@ -408,6 +408,44 @@ class FgCmsPageContentElementRepository extends EntityRepository
 
         if (isset($data['isAllArea'])) {
             $elementObj->setIsAllArea($data['isAllArea']);
+        }
+        if (isset($displayDetails) || !empty($displayDetails)) {
+            
+            $displayDetails['article_display'] = ($displayDetails['article_display']) ? $displayDetails['article_display'] : $elementObj->getArticleDisplayType();
+            if ($displayDetails['article_display'] == 'listing') {
+                $elementObj->setArticleDisplayType($displayDetails['article_display']);
+                if (isset($displayDetails['articlePerRow'])) {
+                    $elementObj->setArticlePerRow($displayDetails['articlePerRow']);
+                }
+                if (isset($displayDetails['maxRows'])) {
+                    $elementObj->setArticleRowsCount($displayDetails['maxRows']);
+                }
+                $elementObj->setArticleCount(5);
+                $elementObj->setArticleSliderNavigation('none');
+                $elementObj->setArticleShowThumbImg(0);
+            } else {
+                $elementObj->setArticleDisplayType($displayDetails['article_display']);
+                if (isset($displayDetails['maxArticles'])) {
+                    $elementObj->setArticleCount($displayDetails['maxArticles']);
+                }
+                if (isset($displayDetails['slider_nav'])) {
+                    $elementObj->setArticleSliderNavigation($displayDetails['slider_nav']);
+                }
+                if (isset($displayDetails['slider_thumbnail'])) {
+                    $elementObj->setArticleShowThumbImg($displayDetails['slider_thumbnail']);
+                }
+                $elementObj->setArticlePerRow(1);
+                $elementObj->setArticleRowsCount(4);
+            }
+            if (isset($displayDetails['showDate'])) {
+                    $elementObj->setArticleShowDate($displayDetails['showDate']);
+            }
+            if (isset($displayDetails['showAreas'])) {
+                    $elementObj->setArticleShowArea($displayDetails['showAreas']);
+            }
+            if (isset($displayDetails['showCategory'])) {
+                    $elementObj->setArticleShowCategory($displayDetails['showCategory']);
+            }
         }
 
         $this->_em->persist($elementObj);
@@ -817,6 +855,42 @@ class FgCmsPageContentElementRepository extends EntityRepository
         }
 
         return array_merge($categoryArray, $areaArray, $finalResult);
+    }
+    /**
+     * Function to get aricle element edit display details
+     *
+     * @param int    $elementId   element id
+     *
+     * @return array $returnArray return result
+     */
+    public function getArticleEditData($elementId)
+    {
+        $element = $this->createQueryBuilder('p')
+            ->select("p.articleDisplayType, p.articleCount, p.articlePerRow, p.articleSliderNavigation, p.articleShowThumbImg, p.articleRowsCount, p.articleShowDate, p.articleShowArea, p.articleShowCategory")
+            ->where('p.id=:elementId AND p.isDeleted=0')
+            ->setParameters(array('elementId' => $elementId));
+
+        $dataResult = $element->getQuery()->getArrayResult();
+        $finalResult = $dataResult[0];
+        
+        return $finalResult;
+        
+    }
+    /**
+     * This function is used to update the articles per row on page container resize
+     * 
+     * @param int $elementId      The element id
+     * @param int $articlesPerRow The article per row
+     */
+    public function updateArticlesPerRow($elementId, $articlesPerRow)
+    {
+        $tableObj = $this->_em->getReference('CommonUtilityBundle:FgCmsPageContentElement', $elementId);
+        if (!empty($tableObj)) {
+            if (is_int($articlesPerRow)) {
+                $tableObj->setArticlePerRow($articlesPerRow);
+            }
+            $this->_em->flush();
+        }
     }
 
     /**

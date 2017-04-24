@@ -1,15 +1,23 @@
 # This file is auto-generated during the composer install
 parameters:
-    database_driver: pdo_mysql
+    database_driver: 
     database_host: 
     database_port: 
     database_name: 
     database_user: 
     database_password: 
+    
+    admin_database_driver: 
+    admin_database_host: 
+    admin_database_port: 
+    admin_database_name: 
+    admin_database_user: 
+    admin_database_password: 
+    
     mailer_transport: mail
     mailer_encryption: ssl
     locale: de
-    
+
     ### Secret key ###
     secret: 
     
@@ -28,7 +36,7 @@ parameters:
     
     ### Symfony classes overriden ###    
     security.exception_listener.class: Common\UtilityBundle\Listener\SecurityExceptionListener
-    doctrine_cache.apc.class: Common\UtilityBundle\Cache\FgApcuCache
+    doctrine_cache.apcu.class: Common\UtilityBundle\Cache\FgApcuCache
     
     ### Other variables ###
     fg_backend_login_path: fos_user_security_login
@@ -38,4 +46,4 @@ parameters:
     internal_user_logout_path: internal_user_security_logout
     security.userprovider.class: Internal\UserBundle\Security\UserProvider
     fg.avatar.class: Common\UtilityBundle\Util\FgAvatar
-    
+    fg.admin.connection.class: Common\UtilityBundle\Util\FgAdminConnection

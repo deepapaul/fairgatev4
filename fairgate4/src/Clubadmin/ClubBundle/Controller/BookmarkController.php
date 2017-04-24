@@ -6,7 +6,7 @@ use Common\UtilityBundle\Controller\FgController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Clubadmin\Classes\Clublist;
 use Symfony\Component\HttpFoundation\Request;
-use Common\UtilityBundle\Repository\Pdo\ClubPdo;
+use Admin\UtilityBundle\Repository\Pdo\ClubPdo;
 
 /**
  * BookmarkController
@@ -77,7 +77,8 @@ class BookmarkController extends FgController
         if ($request->getMethod() == 'POST') {
             $bookmarkArr = json_decode($request->request->get('bookmarkArr'), true);
             if (count($bookmarkArr) > 0) {
-                $this->em->getRepository('CommonUtilityBundle:FgCmBookmarks')->updatebookmark($bookmarkArr, 'fg_club_bookmarks');
+                $adminConnection = $this->container->get('fg.admin.connection')->getAdminConnection();
+                $this->em->getRepository('CommonUtilityBundle:FgCmBookmarks')->updatebookmark($bookmarkArr, 'fg_club_bookmarks', $adminConnection);
 
                 return new JsonResponse(array('status' => 'SUCCESS', 'flash' => $this->get('translator')->trans('BOOKMARK_UPDATE')));
             }
@@ -100,7 +101,8 @@ class BookmarkController extends FgController
         $type = $request->get('type');
         $selectedId = $request->get('selectedId', false);
         if ($selectedId && $type) {
-            $this->em->getRepository('CommonUtilityBundle:FgClubBookmarks')->handleBookmark($type, array($selectedId), $this->clubId, $this->contactId);
+            $adminEm = $this->container->get("fg.admin.connection")->getAdminEntityManager();
+            $adminEm->getRepository('AdminUtilityBundle:FgClubBookmarks')->handleBookmark($type, array($selectedId), $this->clubId, $this->contactId);
 
             return new JsonResponse(array('status' => 'SUCCESS', 'flash' => $this->get('translator')->trans('BOOKMARK_UPDATE')));
         } else {

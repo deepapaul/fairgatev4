@@ -214,10 +214,11 @@ class FgPageElement
      * @param int    $offset   Offset
      * @param int    $index   Pagination count
      * @param string $type   Element Type (element/page)
-     *
+     * @param array  $getArticleDisplayData   Article Element display details
+     * 
      * @return array $articles article data
      */
-    public function getCmsPageArticleElementData($id, $isPublic, $filterArray, $pageNo = 0, $offset = '', $index = 10, $type = 'element')
+    public function getCmsPageArticleElementData($id, $isPublic, $filterArray, $pageNo = 0, $offset = '', $index = 10, $type = 'element',$getArticleDisplayData = '')
     {
         $tableColumns = $this->getTableColumns();
         $articleListObj = new ArticlesList($this->container, 'article', $isPublic);
@@ -242,6 +243,11 @@ class FgPageElement
         $articleListObj->setGroupBy();
         $articleListObj->addOrderBy();
         $articleListObj->addHaving(array("STATUS = 'published'"));
+        if($getArticleDisplayData){
+            if($getArticleDisplayData['articleDisplayType'] == 'slider'){
+                $articleListObj->addHaving(array('FIRST_IMAGE != "" OR FIRST_IMAGE != NULL'));
+            }
+        }
 
         return $articleListObj->getArticleData();
     }

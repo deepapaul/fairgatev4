@@ -11,6 +11,7 @@ use Website\CMSBundle\Util\FgPageContainerDetails;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Website\CMSBundle\Util\FgPageContent;
 use Website\CMSBundle\Util\FgCmsPortraitContainer;
+use Website\CMSBundle\Util\FgCmsArticleContainer;
 
 /**
  * PageContentController
@@ -118,12 +119,14 @@ class PageContentController extends Controller
                 $pageContainerObj->decreaseColumnCountSidebar($containerId, $columnValue);
             }
             $returnDetails['flash'] = $this->get('translator')->trans('CMS_INCLUDE_SIDEBAR_SUCCESS');
+            //To handle article element column width adjustment on sidebar include
+            $fgCmsArticleContainer = new FgCmsArticleContainer($this->container);
+            $fgCmsArticleContainer->adjustArticleElementOnSidebarIncludeExclude(array_keys($pageContentDetails['page']['container']));
         }
         
-        //To handle portrait element column width adjustment on sidebar include and exclude
+        //To handle portrait and article element column width adjustment on sidebar include and exclude
          $fgcmsPortraitObj =  new FgCmsPortraitContainer($this->container);
          $fgcmsPortraitObj->adjustPortraitElementOnSidebarIncludeExclude(array_keys($pageContentDetails['page']['container']));
-        
         //retrive content details of a page
         $pageContentObj->saveJsonContent($pageId);
 

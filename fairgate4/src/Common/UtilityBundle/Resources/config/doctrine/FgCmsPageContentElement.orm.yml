@@ -2,22 +2,49 @@ Common\UtilityBundle\Entity\FgCmsPageContentElement:
     type: entity
     repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPageContentElementRepository    
     table: fg_cms_page_content_element
-    fields:
+    indexes:
+        page_content_type_id:
+            columns:
+                - page_content_type_id
+        box_id:
+            columns:
+                - box_id
+        club_id:
+            columns:
+                - club_id
+        area_club:
+            columns:
+                - area_club
+        form_id:
+            columns:
+                - form_id
+        sponsor_ad_area_id:
+            columns:
+                - sponsor_ad_area_id
+        table_id:
+            columns:
+                - table_id
+    id:
         id:
-            id: true
             type: integer
-            unsigned: false
             nullable: false
+            options:
+                unsigned: false
+            id: true
             generator:
                 strategy: IDENTITY
+    fields:
         sortOrder:
             type: integer
-            unsigned: false
             nullable: false
+            options:
+                unsigned: false
             column: sort_order
         isDeleted:
             type: boolean
             nullable: false
+            options:
+                default: '0'
             column: is_deleted
         deletedAt:
             type: datetime
@@ -25,82 +52,100 @@ Common\UtilityBundle\Entity\FgCmsPageContentElement:
             column: deleted_at
         title:
             type: string
-            length: 255
-            fixed: false
             nullable: true
+            length: 255
+            options:
+                fixed: false
         headerElementSize:
             type: string
-            length: null
-            fixed: false
             nullable: true
+            length: null
+            options:
+                fixed: false
             column: header_element_size
         imageElementDisplayType:
             type: string
-            length: null
-            fixed: false
             nullable: true
+            length: null
+            options:
+                fixed: false
             column: image_element_display_type
         imageElementSliderTime:
             type: integer
-            unsigned: false
             nullable: true
+            options:
+                unsigned: false
             column: image_element_slider_time
         imageElementClickType:
             type: string
-            length: null
-            fixed: false
             nullable: true
+            length: null
+            options:
+                fixed: false
             column: image_element_click_type
         imageElementLinkOpentype:
             type: string
-            length: null
-            fixed: false
             nullable: true
+            length: null
+            options:
+                fixed: false
             column: image_element_link_opentype
         mapElementLatitude:
             type: float
             nullable: true
+            precision: 10
+            scale: 0
             column: map_element_latitude
         mapElementLongitude:
             type: float
             nullable: true
+            precision: 10
+            scale: 0
             column: map_element_longitude
         mapElementShowMarker:
             type: boolean
             nullable: true
+            options:
+                default: '1'
             column: map_element_show_marker
         mapElementHeight:
             type: integer
-            unsigned: false
             nullable: true
+            options:
+                unsigned: false
             column: map_element_height
         mapElementDisplayStyle:
             type: string
-            length: null
-            fixed: false
             nullable: true
+            length: null
+            options:
+                fixed: false
             column: map_element_display_style
         mapElementZoomValue:
             type: integer
-            unsigned: false
             nullable: true
+            options:
+                unsigned: false
             column: map_element_zoom_value
         iframeElementCode:
             type: string
-            length: 255
-            fixed: false
             nullable: true
+            length: 255
+            options:
+                fixed: false
             column: iframe_element_code
         iframeElementUrl:
             type: string
-            length: 255
-            fixed: false
             nullable: true
+            length: 255
+            options:
+                fixed: false
             column: iframe_element_url
         iframeElementHeight:
             type: integer
-            unsigned: false
             nullable: true
+            options:
+                unsigned: false
             column: iframe_element_height
         isAllCategory:
             type: boolean
@@ -112,42 +157,113 @@ Common\UtilityBundle\Entity\FgCmsPageContentElement:
             column: is_all_area
         sharedClub:
             type: string
-            length: 50
-            fixed: false
             nullable: true
+            length: 50
+            options:
+                fixed: false
             column: shared_club
         sponsorAdDisplayType:
             type: string
-            length: null
-            fixed: false
             nullable: true
+            length: null
+            options:
+                fixed: false
             column: sponsor_ad_display_type
         sponsorAdDisplayTime:
             type: integer
-            unsigned: false
             nullable: true
+            options:
+                unsigned: false
             column: sponsor_ad_display_time
         sponsorAdMaxWidth:
             type: string
-            length: null
-            fixed: false
             nullable: true
+            length: null
+            options:
+                fixed: false
             column: sponsor_ad_max_width
         twitterDefaultAccount:
             type: string
-            length: 255
-            fixed: false
             nullable: true
+            length: 255
+            options:
+                fixed: false
             column: twitter_default_account
         twitterContentHeight:
             type: integer
-            unsigned: false
             nullable: true
+            options:
+                unsigned: false
             column: twitter_content_height
+        articleDisplayType:
+            type: string
+            nullable: false
+            length: null
+            options:
+                fixed: false
+                default: listing
+            column: article_display_type
+        articlePerRow:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Number of articles per row for article_display_type ''listing'''
+                default: '1'
+            column: article_per_row
+        articleCount:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Number of articles for article_display_type ''slider'''
+                default: '5'
+            column: article_count
+        articleSliderNavigation:
+            type: string
+            nullable: false
+            length: null
+            options:
+                fixed: false
+                default: none
+            column: article_slider_navigation
+        articleShowThumbImg:
+            type: boolean
+            nullable: false
+            options:
+                default: '0'
+            column: article_show_thumb_img
+        articleShowDate:
+            type: boolean
+            nullable: false
+            options:
+                default: '0'
+            column: article_show_date
+        articleShowCategory:
+            type: boolean
+            nullable: false
+            options:
+                default: '0'
+            column: article_show_category
+        articleShowArea:
+            type: boolean
+            nullable: false
+            options:
+                default: '0'
+            column: article_show_area
+        articleRowsCount:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+                comment: 'Number of rows for article_display_type ''listing'''
+                default: '1'
+            column: article_rows_count
     manyToOne:
         pageContentType:
             targetEntity: FgCmsPageContentType
             cascade: {  }
+            fetch: LAZY
             mappedBy: null
             inversedBy: null
             joinColumns:
@@ -157,6 +273,7 @@ Common\UtilityBundle\Entity\FgCmsPageContentElement:
         box:
             targetEntity: FgCmsPageContainerBox
             cascade: {  }
+            fetch: LAZY
             mappedBy: null
             inversedBy: null
             joinColumns:
@@ -166,6 +283,7 @@ Common\UtilityBundle\Entity\FgCmsPageContentElement:
         club:
             targetEntity: FgClub
             cascade: {  }
+            fetch: LAZY
             mappedBy: null
             inversedBy: null
             joinColumns:
@@ -175,6 +293,7 @@ Common\UtilityBundle\Entity\FgCmsPageContentElement:
         areaClub:
             targetEntity: FgClub
             cascade: {  }
+            fetch: LAZY
             mappedBy: null
             inversedBy: null
             joinColumns:
@@ -184,6 +303,7 @@ Common\UtilityBundle\Entity\FgCmsPageContentElement:
         sponsorAdArea:
             targetEntity: FgSmAdArea
             cascade: {  }
+            fetch: LAZY
             mappedBy: null
             inversedBy: null
             joinColumns:
@@ -193,6 +313,7 @@ Common\UtilityBundle\Entity\FgCmsPageContentElement:
         form:
             targetEntity: FgCmsForms
             cascade: {  }
+            fetch: LAZY
             mappedBy: null
             inversedBy: null
             joinColumns:
@@ -202,6 +323,7 @@ Common\UtilityBundle\Entity\FgCmsPageContentElement:
         table:
             targetEntity: FgCmsContactTable
             cascade: {  }
+            fetch: LAZY
             mappedBy: null
             inversedBy: null
             joinColumns:

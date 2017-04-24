@@ -1,0 +1,91 @@
+Admin\UtilityBundle\Entity\FgClubClassLog:
+    type: entity
+    table: fg_club_class_log
+    indexes:
+        fk_fg_club_class_log_fg_club_class1:
+            columns:
+                - class_id
+        fk_fg_club_class_log_fg_cm_contact1:
+            columns:
+                - changed_by_contact
+        fk_fg_club_class_log_fg_club1_idx:
+            columns:
+                - club_id
+        fk_fg_club_class_log_fg_club2_idx:
+            columns:
+                - changed_by_club
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        clubId:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            column: club_id
+        classId:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            column: class_id
+        date:
+            type: datetime
+            nullable: true
+        kind:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        field:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        valueBefore:
+            type: text
+            nullable: true
+            length: 16777215
+            options:
+                fixed: false
+            column: value_before
+        valueAfter:
+            type: text
+            nullable: true
+            length: 16777215
+            options:
+                fixed: false
+            column: value_after
+        changedByContact:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: changed_by_contact
+        changedByContactName:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: changed_by_contact_name
+        changedByClub:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: changed_by_club
+        isHistorical:
+            type: boolean
+            nullable: true
+            column: is_historical
+    lifecycleCallbacks: {  }

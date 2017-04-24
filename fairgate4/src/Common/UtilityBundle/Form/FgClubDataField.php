@@ -112,7 +112,11 @@ class FgClubDataField extends AbstractType
             }
              $fieldAttr['data'] = $this->editData[$field];
 
-             
+
+            if ($field == 'sp_country') {
+                $fieldAttr['attr']['disabled'] = 'disabled';
+            }
+
             if($field == 'title' || $field == 'signature' || $field == 'logo'){
                 foreach($this->clubObj->get('club_languages') as $language){
                     if($this->clubObj->get('club_default_lang') != $language){
@@ -139,8 +143,8 @@ class FgClubDataField extends AbstractType
             } else {
                 $builder->add($field, $fieldType, $fieldAttr);
             }
-            
-        }
+           
+        } 
     }
 
     /**
@@ -181,7 +185,7 @@ class FgClubDataField extends AbstractType
                     'sp_zipcode' => array('label' => 'CL_ZIPCODE', 'required' => true, 'constraints' => array(new NotBlank(array('message' => $requiredMessage)), new Range(array('min' => 0, 'invalidMessage' => $invalidNumberMessage)))),
                     'sp_city' => array('label' => 'CL_LOCATION', 'required' => true, 'constraints' => array(new NotBlank(array('message' => $requiredMessage)))),
                     'sp_state' => array('label' => 'CL_STATE'),
-                    'sp_country' => array('label' => 'CL_COUNTRY', 'type' => 'choice', 'choices' => $country, 'required' => true, 'constraints' => array(new NotBlank(array('message' => $requiredMessage)))));
+                    'sp_country' => array('label' => 'CL_COUNTRY', 'type' => 'choice', 'choices' => $country ));
                 break;
             case '2':
                 $required = true;

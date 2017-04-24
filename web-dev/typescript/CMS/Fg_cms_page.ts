@@ -227,7 +227,13 @@ class Fgcmspage {
         if (params.type == 'text') {
             _this.textElementOptions(params.id);
         }
-
+        if (params.type == 'articles') {
+          if($('#elementbox-' + params.id).children().hasClass('sliderView')){
+            $( '#elementbox-' +params.id ).find(" a:first" ).addClass( "active" );
+            $( '#elementbox-' +params.id).find(" ul li:first" ).addClass( "active" );
+            _this.articleElementCarouselSettings(params.id);
+          }
+        }
         if (params.type == 'newsletter-subscription') {
             $("#" + elementId + " .bs-select").selectpicker();
             this.initCaptcha(elementId);
@@ -1018,6 +1024,7 @@ class Fgcmspage {
                         });
                     }
                     else {
+                        $("#colSize").val(colSize);
                         $("#elementcreationForm").attr("action", addElementPagePath);
                         $("#elementcreationForm").submit();
                     }
@@ -1368,6 +1375,25 @@ class Fgcmspage {
         $("#slider_" + elementId).FgFader({
             duration: sliderTime * 1000, //slider interval
         });
+    }
+     /**
+     * article element carousel settings and options
+     */
+    public articleElementCarouselSettings(elemId) {
+        console.log($("#carousel-" + elemId).length);
+        $("#carousel-" + elemId).carousel({
+              interval:   4000
+            });
+         var clickEvent = false;
+            $("#carousel-" + elemId).on('click', '.nav a', function() {
+              clickEvent = true;
+              $('.nav li').removeClass('active');
+              $(this).parent().addClass('active');    
+            }).on('slid.bs.carousel', function(e) {
+                $("#carousel-" + elemId+' .nav li.active').removeClass('active');
+                $("#carousel-" + elemId+' .nav li:eq('+$(e.relatedTarget).index()+')').addClass('active');
+            });    
+            
     }
     public unitgalleryCall(identifier: string, slideroptions: any) {
         $(identifier).unitegallery(slideroptions);

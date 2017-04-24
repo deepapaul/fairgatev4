@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPageContentTextElementHistoryI18n
  */
@@ -29,19 +27,20 @@ class FgCmsPageContentTextElementHistoryI18n
      * Set lang
      *
      * @param string $lang
+     *
      * @return FgCmsPageContentTextElementHistoryI18n
      */
     public function setLang($lang)
     {
         $this->lang = $lang;
-    
+
         return $this;
     }
 
     /**
      * Get lang
      *
-     * @return string 
+     * @return string
      */
     public function getLang()
     {
@@ -52,19 +51,20 @@ class FgCmsPageContentTextElementHistoryI18n
      * Set textLang
      *
      * @param string $textLang
+     *
      * @return FgCmsPageContentTextElementHistoryI18n
      */
     public function setTextLang($textLang)
     {
         $this->textLang = $textLang;
-    
+
         return $this;
     }
 
     /**
      * Get textLang
      *
-     * @return string 
+     * @return string
      */
     public function getTextLang()
     {
@@ -75,22 +75,24 @@ class FgCmsPageContentTextElementHistoryI18n
      * Set id
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPageContentTextElementHistory $id
+     *
      * @return FgCmsPageContentTextElementHistoryI18n
      */
     public function setId(\Common\UtilityBundle\Entity\FgCmsPageContentTextElementHistory $id = null)
     {
         $this->id = $id;
-    
+
         return $this;
     }
 
     /**
      * Get id
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPageContentTextElementHistory 
+     * @return \Common\UtilityBundle\Entity\FgCmsPageContentTextElementHistory
      */
     public function getId()
     {
         return $this->id;
     }
 }
+

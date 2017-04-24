@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmRelationSecondLevel
  */
@@ -49,6 +47,7 @@ class FgCmRelationSecondLevel
      * Set isSystem
      *
      * @param boolean $isSystem
+     *
      * @return FgCmRelationSecondLevel
      */
     public function setIsSystem($isSystem)
@@ -72,6 +71,7 @@ class FgCmRelationSecondLevel
      * Set relation
      *
      * @param \Common\UtilityBundle\Entity\FgCmRelation $relation
+     *
      * @return FgCmRelationSecondLevel
      */
     public function setRelation(\Common\UtilityBundle\Entity\FgCmRelation $relation = null)
@@ -95,6 +95,7 @@ class FgCmRelationSecondLevel
      * Set firstLevelRelation
      *
      * @param \Common\UtilityBundle\Entity\FgCmRelation $firstLevelRelation
+     *
      * @return FgCmRelationSecondLevel
      */
     public function setFirstLevelRelation(\Common\UtilityBundle\Entity\FgCmRelation $firstLevelRelation = null)
@@ -118,6 +119,7 @@ class FgCmRelationSecondLevel
      * Set secondLevelRelation
      *
      * @param \Common\UtilityBundle\Entity\FgCmRelation $secondLevelRelation
+     *
      * @return FgCmRelationSecondLevel
      */
     public function setSecondLevelRelation(\Common\UtilityBundle\Entity\FgCmRelation $secondLevelRelation = null)
@@ -137,3 +139,4 @@ class FgCmRelationSecondLevel
         return $this->secondLevelRelation;
     }
 }
+

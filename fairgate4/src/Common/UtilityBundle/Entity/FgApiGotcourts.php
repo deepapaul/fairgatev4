@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgApiGotcourts
  */
@@ -83,7 +81,7 @@ class FgApiGotcourts
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -94,19 +92,20 @@ class FgApiGotcourts
      * Set apitoken
      *
      * @param string $apitoken
+     *
      * @return FgApiGotcourts
      */
     public function setApitoken($apitoken)
     {
         $this->apitoken = $apitoken;
-    
+
         return $this;
     }
 
     /**
      * Get apitoken
      *
-     * @return string 
+     * @return string
      */
     public function getApitoken()
     {
@@ -117,19 +116,20 @@ class FgApiGotcourts
      * Set status
      *
      * @param string $status
+     *
      * @return FgApiGotcourts
      */
     public function setStatus($status)
     {
         $this->status = $status;
-    
+
         return $this;
     }
 
     /**
      * Get status
      *
-     * @return string 
+     * @return string
      */
     public function getStatus()
     {
@@ -140,19 +140,20 @@ class FgApiGotcourts
      * Set isActive
      *
      * @param integer $isActive
+     *
      * @return FgApiGotcourts
      */
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
-    
+
         return $this;
     }
 
     /**
      * Get isActive
      *
-     * @return integer 
+     * @return integer
      */
     public function getIsActive()
     {
@@ -163,19 +164,20 @@ class FgApiGotcourts
      * Set bookedOn
      *
      * @param \DateTime $bookedOn
+     *
      * @return FgApiGotcourts
      */
     public function setBookedOn($bookedOn)
     {
         $this->bookedOn = $bookedOn;
-    
+
         return $this;
     }
 
     /**
      * Get bookedOn
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getBookedOn()
     {
@@ -186,19 +188,20 @@ class FgApiGotcourts
      * Set generatedOn
      *
      * @param \DateTime $generatedOn
+     *
      * @return FgApiGotcourts
      */
     public function setGeneratedOn($generatedOn)
     {
         $this->generatedOn = $generatedOn;
-    
+
         return $this;
     }
 
     /**
      * Get generatedOn
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getGeneratedOn()
     {
@@ -209,19 +212,20 @@ class FgApiGotcourts
      * Set registeredOn
      *
      * @param \DateTime $registeredOn
+     *
      * @return FgApiGotcourts
      */
     public function setRegisteredOn($registeredOn)
     {
         $this->registeredOn = $registeredOn;
-    
+
         return $this;
     }
 
     /**
      * Get registeredOn
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getRegisteredOn()
     {
@@ -232,19 +236,20 @@ class FgApiGotcourts
      * Set regeneratedOn
      *
      * @param \DateTime $regeneratedOn
+     *
      * @return FgApiGotcourts
      */
     public function setRegeneratedOn($regeneratedOn)
     {
         $this->regeneratedOn = $regeneratedOn;
-    
+
         return $this;
     }
 
     /**
      * Get regeneratedOn
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getRegeneratedOn()
     {
@@ -255,19 +260,20 @@ class FgApiGotcourts
      * Set cancelledOn
      *
      * @param \DateTime $cancelledOn
+     *
      * @return FgApiGotcourts
      */
     public function setCancelledOn($cancelledOn)
     {
         $this->cancelledOn = $cancelledOn;
-    
+
         return $this;
     }
 
     /**
      * Get cancelledOn
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCancelledOn()
     {
@@ -278,19 +284,20 @@ class FgApiGotcourts
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgApiGotcourts
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -301,19 +308,20 @@ class FgApiGotcourts
      * Set bookedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $bookedBy
+     *
      * @return FgApiGotcourts
      */
     public function setBookedBy(\Common\UtilityBundle\Entity\FgCmContact $bookedBy = null)
     {
         $this->bookedBy = $bookedBy;
-    
+
         return $this;
     }
 
     /**
      * Get bookedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getBookedBy()
     {
@@ -324,19 +332,20 @@ class FgApiGotcourts
      * Set generatedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $generatedBy
+     *
      * @return FgApiGotcourts
      */
     public function setGeneratedBy(\Common\UtilityBundle\Entity\FgCmContact $generatedBy = null)
     {
         $this->generatedBy = $generatedBy;
-    
+
         return $this;
     }
 
     /**
      * Get generatedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getGeneratedBy()
     {
@@ -347,19 +356,20 @@ class FgApiGotcourts
      * Set regeneratedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $regeneratedBy
+     *
      * @return FgApiGotcourts
      */
     public function setRegeneratedBy(\Common\UtilityBundle\Entity\FgCmContact $regeneratedBy = null)
     {
         $this->regeneratedBy = $regeneratedBy;
-    
+
         return $this;
     }
 
     /**
      * Get regeneratedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getRegeneratedBy()
     {
@@ -370,22 +380,24 @@ class FgApiGotcourts
      * Set cancelledBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $cancelledBy
+     *
      * @return FgApiGotcourts
      */
     public function setCancelledBy(\Common\UtilityBundle\Entity\FgCmContact $cancelledBy = null)
     {
         $this->cancelledBy = $cancelledBy;
-    
+
         return $this;
     }
 
     /**
      * Get cancelledBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getCancelledBy()
     {
         return $this->cancelledBy;
     }
 }
+

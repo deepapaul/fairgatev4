@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Common\UtilityBundle\Util\TransparentPixelResponseClass;
 use Clubadmin\Util\Contactlist;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Common\UtilityBundle\Util\FgClubSyncDataToAdmin;
 
 class MailTrackingController extends Controller
 {
@@ -170,6 +171,9 @@ class MailTrackingController extends Controller
             $em->getRepository('CommonUtilityBundle:FgCnSubscriber')->deleteSubscribers(array($contact), $clubId);
         }
 
+        $subscriberSyncObject = new FgClubSyncDataToAdmin($this->container);
+		$subscriberSyncObject->updateSubscriberCount($clubId);
+        
         return new JsonResponse(array('success' => 'success',));
     }
 }

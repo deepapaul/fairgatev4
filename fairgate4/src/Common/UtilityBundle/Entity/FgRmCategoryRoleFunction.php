@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgRmCategoryRoleFunction
  */
@@ -13,6 +11,16 @@ class FgRmCategoryRoleFunction
      * @var integer
      */
     private $id;
+
+    /**
+     * @var integer
+     */
+    private $fnCount;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgClub
+     */
+    private $club;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgRmRole
@@ -38,7 +46,54 @@ class FgRmCategoryRoleFunction
     public function getId()
     {
         return $this->id;
+    }
 
+    /**
+     * Set fnCount
+     *
+     * @param integer $fnCount
+     *
+     * @return FgRmCategoryRoleFunction
+     */
+    public function setFnCount($fnCount)
+    {
+        $this->fnCount = $fnCount;
+
+        return $this;
+    }
+
+    /**
+     * Get fnCount
+     *
+     * @return integer
+     */
+    public function getFnCount()
+    {
+        return $this->fnCount;
+    }
+
+    /**
+     * Set club
+     *
+     * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
+     * @return FgRmCategoryRoleFunction
+     */
+    public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
+    {
+        $this->club = $club;
+
+        return $this;
+    }
+
+    /**
+     * Get club
+     *
+     * @return \Common\UtilityBundle\Entity\FgClub
+     */
+    public function getClub()
+    {
+        return $this->club;
     }
 
     /**
@@ -53,9 +108,7 @@ class FgRmCategoryRoleFunction
         $this->role = $role;
 
         return $this;
-
     }
-
 
     /**
      * Get role
@@ -65,9 +118,7 @@ class FgRmCategoryRoleFunction
     public function getRole()
     {
         return $this->role;
-
     }
-
 
     /**
      * Set function
@@ -81,9 +132,7 @@ class FgRmCategoryRoleFunction
         $this->function = $function;
 
         return $this;
-
     }
-
 
     /**
      * Get function
@@ -93,9 +142,7 @@ class FgRmCategoryRoleFunction
     public function getFunction()
     {
         return $this->function;
-
     }
-
 
     /**
      * Set category
@@ -109,9 +156,7 @@ class FgRmCategoryRoleFunction
         $this->category = $category;
 
         return $this;
-
     }
-
 
     /**
      * Get category
@@ -121,74 +166,6 @@ class FgRmCategoryRoleFunction
     public function getCategory()
     {
         return $this->category;
-
     }
-
-    /**
-     * @var integer
-     */
-    private $fnCount;
-
-    /**
-     * @var \Common\UtilityBundle\Entity\FgClub
-     */
-    private $club;
-
-
-    /**
-     * Set fnCount
-     *
-     * @param integer $fnCount
-     *
-     * @return FgRmCategoryRoleFunction
-     */
-    public function setFnCount($fnCount)
-    {
-        $this->fnCount = $fnCount;
-
-        return $this;
-
-    }
-
-
-    /**
-     * Get fnCount
-     *
-     * @return integer
-     */
-    public function getFnCount()
-    {
-        return $this->fnCount;
-
-    }
-
-
-    /**
-     * Set club
-     *
-     * @param \Common\UtilityBundle\Entity\FgClub $club
-     *
-     * @return FgRmCategoryRoleFunction
-     */
-    public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
-    {
-        $this->club = $club;
-
-        return $this;
-
-    }
-
-
-    /**
-     * Get club
-     *
-     * @return \Common\UtilityBundle\Entity\FgClub
-     */
-    public function getClub()
-    {
-        return $this->club;
-
-    }
-
-
 }
+

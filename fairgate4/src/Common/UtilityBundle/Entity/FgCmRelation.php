@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmRelation
  */
@@ -54,6 +52,7 @@ class FgCmRelation
      * Set name
      *
      * @param string $name
+     *
      * @return FgCmRelation
      */
     public function setName($name)
@@ -77,6 +76,7 @@ class FgCmRelation
      * Set isHousehold
      *
      * @param boolean $isHousehold
+     *
      * @return FgCmRelation
      */
     public function setIsHousehold($isHousehold)
@@ -100,6 +100,7 @@ class FgCmRelation
      * Set isOtherPersonal
      *
      * @param boolean $isOtherPersonal
+     *
      * @return FgCmRelation
      */
     public function setIsOtherPersonal($isOtherPersonal)
@@ -123,6 +124,7 @@ class FgCmRelation
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgCmRelation
      */
     public function setSortOrder($sortOrder)
@@ -146,6 +148,7 @@ class FgCmRelation
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmRelation
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
@@ -165,3 +168,4 @@ class FgCmRelation
         return $this->club;
     }
 }
+

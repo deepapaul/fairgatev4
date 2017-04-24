@@ -63,7 +63,7 @@ class SettingsController extends FgController
         $club = $this->container->get('club');
         $responseArray = array();
         $responseArray['tabs'] = $this->getTabs("misc");
-        $responseArray['clubDefaultSubscription'] = $this->em->getRepository('CommonUtilityBundle:FgClub')->getDefaultSubscription($this->clubId);
+        $responseArray['clubDefaultSubscription'] = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClub')->getDefaultSubscription($this->clubId);
         $responseArray['details'] = $this->em->getRepository('CommonUtilityBundle:FgClubSettings')->getClubSettingsDetail($this->clubId, $club->get('default_lang'));
         $responseArray['currencies'] = Intl::getCurrencyBundle()->getCurrencyNames();
         $responseArray['settings'] = true;
@@ -140,10 +140,17 @@ class SettingsController extends FgController
             $settingsId = $request->request->get('settingsId');
             $club = $this->get('club');
             $domainCacheKey = $club->get('clubCacheKey');
-            $this->em->getRepository('CommonUtilityBundle:FgClubSettings')->clubCurrencySave($this->clubId, $currency, $settingsId, $domainCacheKey);
+            /********************************************************************
+            * FAIRDEV-336- Restrict club's changing of currency in club settings. 
+            ********************************************************************/           
+            $clubSettingsObj = $this->em->getRepository('CommonUtilityBundle:FgClubSettings')->find($settingsId);
+            if(!$clubSettingsObj || $clubSettingsObj->getCurrency() == ''){
+                $this->em->getRepository('CommonUtilityBundle:FgClubSettings')->clubCurrencySave($this->clubId, $currency, $settingsId, $domainCacheKey);
+            }
+            
             $defaultSubArr = array('fg-dev-default-subscription' => $request->request->get('fg-dev-default-subscription', 0));
             $this->em->getRepository('CommonUtilityBundle:FgClub')->saveDefaultSubscription($this->clubId, $defaultSubArr);
-            $clubPdo = new \Common\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
+            $clubPdo = new \Admin\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
             $clubPdo->saveSettingsUpdatedDate($this->clubId);
 
             return new JsonResponse(array('status' => 'SUCCESS', 'noreload' => true, 'flash' => $this->get('translator')->trans('SETTINGS_MISC_UPDATED')));
@@ -220,7 +227,7 @@ class SettingsController extends FgController
     public function languagesaveAction(Request $request)
     {
         $saveData = $this->checkLangUnique(json_decode($request->request->get('saveData'), true));
-        $clubPdo = new \Common\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
+        $clubPdo = new \Admin\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
         $clubPdo->saveSettingsUpdatedDate($this->clubId);
         $this->em->getRepository('CommonUtilityBundle:FgClubLanguage')->updateLanguages($saveData['langs'], $this->container);
         if (!$this->get('contact')->get('isSuperAdmin') && !empty($saveData['personalLanguage'])) {
@@ -411,7 +418,7 @@ class SettingsController extends FgController
             }
             $this->em->flush();
 
-            $clubPdo = new \Common\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
+            $clubPdo = new \Admin\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
             $clubPdo->saveSettingsUpdatedDate($this->clubId);
 
             return new JsonResponse(array('status' => 'SUCCESS', 'flash' => $this->get('translator')->trans('SALUTATION_UPDATE_SUCCESS')));

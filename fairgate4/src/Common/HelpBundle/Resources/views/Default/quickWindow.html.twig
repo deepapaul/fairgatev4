@@ -10,7 +10,7 @@
 
                 {% include 'CommonHelpBundle:Default:quickWindowTabs.html.twig' %}
                 
-                <div class="portlet box fg-portlet-ash">
+                <div class="portlet box fg-portlet-ash fg-dev-help-footer">
                                                         <div class="portlet-title ">
                                                           <div class="caption">
                                                             {{ 'HELP_LISTGROUP_TITLE'|trans }}
@@ -86,7 +86,7 @@
             </div>
             <div class="modal-footer" >
                 {% if quickwindowVisibilty == 'checked' and contactId != 1%}
-                    <label for="checkboxes-visibilty" class="fg-dont-show-again">
+                    <label for="checkboxes-visibilty" class="fg-dont-show-again {% if(isRegistrationPeriod == 1) %} hide {% endif %} ">
                         <input type="checkbox" name="checkboxes-dontshow" id="checkboxes-dontshow" class ="fg-quickwindow-check" value="0"  data-toggle="tooltip">
                         {{'DONT_SHOW_MESSAGE_TEXT'|trans}}
                     </label>
@@ -99,5 +99,23 @@
 {% block javascripts %}
 <script type="text/javascript">
 FgTooltip.init()
+var isRegistrationPeriod = '{{ isRegistrationPeriod }}';
+if(isRegistrationPeriod == '1') {
+    $(document).on('click', '.fg-dev-help-tabs', function() {
+        if( $(this).attr('name') == 'welcome') {
+            $('.fg-dev-help-footer').addClass('hide');
+        } else {
+            $('.fg-dev-help-footer').removeClass('hide');
+        }
+    });
+    
+    $(document).ready(function()
+    {
+        if($('.fg-dev-help-tabs active').attr('name') == 'welcome') {
+            $('.fg-dev-help-footer').addClass('hide');
+        }
+    });
+}
+
 </script>
 {% endblock %}

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnNewsletterArticle
  */
@@ -49,6 +47,7 @@ class FgCnNewsletterArticle
      * Set title
      *
      * @param string $title
+     *
      * @return FgCnNewsletterArticle
      */
     public function setTitle($title)
@@ -72,6 +71,7 @@ class FgCnNewsletterArticle
      * Set teaserText
      *
      * @param string $teaserText
+     *
      * @return FgCnNewsletterArticle
      */
     public function setTeaserText($teaserText)
@@ -95,6 +95,7 @@ class FgCnNewsletterArticle
      * Set content
      *
      * @param string $content
+     *
      * @return FgCnNewsletterArticle
      */
     public function setContent($content)
@@ -118,6 +119,7 @@ class FgCnNewsletterArticle
      * Set content2
      *
      * @param \Common\UtilityBundle\Entity\FgCnNewsletterContent $content2
+     *
      * @return FgCnNewsletterArticle
      */
     public function setContent2(\Common\UtilityBundle\Entity\FgCnNewsletterContent $content2 = null)
@@ -137,3 +139,4 @@ class FgCnNewsletterArticle
         return $this->content2;
     }
 }
+

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgTableSettings
  */
@@ -48,7 +46,7 @@ class FgTableSettings
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -59,19 +57,20 @@ class FgTableSettings
      * Set title
      *
      * @param string $title
+     *
      * @return FgTableSettings
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -82,19 +81,20 @@ class FgTableSettings
      * Set attributes
      *
      * @param string $attributes
+     *
      * @return FgTableSettings
      */
     public function setAttributes($attributes)
     {
         $this->attributes = $attributes;
-    
+
         return $this;
     }
 
     /**
      * Get attributes
      *
-     * @return string 
+     * @return string
      */
     public function getAttributes()
     {
@@ -105,19 +105,20 @@ class FgTableSettings
      * Set isTemp
      *
      * @param boolean $isTemp
+     *
      * @return FgTableSettings
      */
     public function setIsTemp($isTemp)
     {
         $this->isTemp = $isTemp;
-    
+
         return $this;
     }
 
     /**
      * Get isTemp
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsTemp()
     {
@@ -128,19 +129,20 @@ class FgTableSettings
      * Set type
      *
      * @param string $type
+     *
      * @return FgTableSettings
      */
     public function setType($type)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -151,19 +153,20 @@ class FgTableSettings
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgTableSettings
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
     {
         $this->contact = $contact;
-    
+
         return $this;
     }
 
     /**
      * Get contact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getContact()
     {
@@ -174,22 +177,24 @@ class FgTableSettings
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgTableSettings
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
         return $this->club;
     }
 }
+

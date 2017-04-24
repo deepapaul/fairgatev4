@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgMessageReceivers
  */
@@ -15,9 +13,9 @@ class FgMessageReceivers
     private $id;
 
     /**
-     * @var boolean
+     * @var integer
      */
-    private $isRead;
+    private $unreadCount;
 
     /**
      * @var \DateTime
@@ -30,6 +28,11 @@ class FgMessageReceivers
     private $isDeleted;
 
     /**
+     * @var boolean
+     */
+    private $isNotificationEnabled;
+
+    /**
      * @var \Common\UtilityBundle\Entity\FgCmContact
      */
     private $contact;
@@ -38,21 +41,6 @@ class FgMessageReceivers
      * @var \Common\UtilityBundle\Entity\FgMessage
      */
     private $message;
-
-    /**
-     * @var \Common\UtilityBundle\Entity\FgRmRole
-     */
-    private $team;
-
-    /**
-     * @var \Common\UtilityBundle\Entity\FgRmFunction
-     */
-    private $function;
-
-    /**
-     * @var \Common\UtilityBundle\Entity\FgClub
-     */
-    private $club;
 
 
     /**
@@ -66,32 +54,34 @@ class FgMessageReceivers
     }
 
     /**
-     * Set isRead
+     * Set unreadCount
      *
-     * @param boolean $isRead
+     * @param integer $unreadCount
+     *
      * @return FgMessageReceivers
      */
-    public function setIsRead($isRead)
+    public function setUnreadCount($unreadCount)
     {
-        $this->isRead = $isRead;
+        $this->unreadCount = $unreadCount;
 
         return $this;
     }
 
     /**
-     * Get isRead
+     * Get unreadCount
      *
-     * @return boolean
+     * @return integer
      */
-    public function getIsRead()
+    public function getUnreadCount()
     {
-        return $this->isRead;
+        return $this->unreadCount;
     }
 
     /**
      * Set readAt
      *
      * @param \DateTime $readAt
+     *
      * @return FgMessageReceivers
      */
     public function setReadAt($readAt)
@@ -115,6 +105,7 @@ class FgMessageReceivers
      * Set isDeleted
      *
      * @param boolean $isDeleted
+     *
      * @return FgMessageReceivers
      */
     public function setIsDeleted($isDeleted)
@@ -135,9 +126,34 @@ class FgMessageReceivers
     }
 
     /**
+     * Set isNotificationEnabled
+     *
+     * @param boolean $isNotificationEnabled
+     *
+     * @return FgMessageReceivers
+     */
+    public function setIsNotificationEnabled($isNotificationEnabled)
+    {
+        $this->isNotificationEnabled = $isNotificationEnabled;
+
+        return $this;
+    }
+
+    /**
+     * Get isNotificationEnabled
+     *
+     * @return boolean
+     */
+    public function getIsNotificationEnabled()
+    {
+        return $this->isNotificationEnabled;
+    }
+
+    /**
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgMessageReceivers
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
@@ -161,6 +177,7 @@ class FgMessageReceivers
      * Set message
      *
      * @param \Common\UtilityBundle\Entity\FgMessage $message
+     *
      * @return FgMessageReceivers
      */
     public function setMessage(\Common\UtilityBundle\Entity\FgMessage $message = null)
@@ -179,129 +196,5 @@ class FgMessageReceivers
     {
         return $this->message;
     }
-
-    /**
-     * Set team
-     *
-     * @param \Common\UtilityBundle\Entity\FgRmRole $team
-     * @return FgMessageReceivers
-     */
-    public function setTeam(\Common\UtilityBundle\Entity\FgRmRole $team = null)
-    {
-        $this->team = $team;
-
-        return $this;
-    }
-
-    /**
-     * Get team
-     *
-     * @return \Common\UtilityBundle\Entity\FgRmRole
-     */
-    public function getTeam()
-    {
-        return $this->team;
-    }
-
-    /**
-     * Set function
-     *
-     * @param \Common\UtilityBundle\Entity\FgRmFunction $function
-     * @return FgMessageReceivers
-     */
-    public function setFunction(\Common\UtilityBundle\Entity\FgRmFunction $function = null)
-    {
-        $this->function = $function;
-
-        return $this;
-    }
-
-    /**
-     * Get function
-     *
-     * @return \Common\UtilityBundle\Entity\FgRmFunction
-     */
-    public function getFunction()
-    {
-        return $this->function;
-    }
-
-    /**
-     * Set club
-     *
-     * @param \Common\UtilityBundle\Entity\FgClub $club
-     * @return FgMessageReceivers
-     */
-    public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
-    {
-        $this->club = $club;
-
-        return $this;
-    }
-
-    /**
-     * Get club
-     *
-     * @return \Common\UtilityBundle\Entity\FgClub
-     */
-    public function getClub()
-    {
-        return $this->club;
-    }
-    /**
-     * @var integer
-     */
-    private $unreadCount;
-
-    /**
-     * @var boolean
-     */
-    private $isNotificationEnabled;
-
-
-    /**
-     * Set unreadCount
-     *
-     * @param integer $unreadCount
-     * @return FgMessageReceivers
-     */
-    public function setUnreadCount($unreadCount)
-    {
-        $this->unreadCount = $unreadCount;
-    
-        return $this;
-    }
-
-    /**
-     * Get unreadCount
-     *
-     * @return integer 
-     */
-    public function getUnreadCount()
-    {
-        return $this->unreadCount;
-    }
-
-    /**
-     * Set isNotificationEnabled
-     *
-     * @param boolean $isNotificationEnabled
-     * @return FgMessageReceivers
-     */
-    public function setIsNotificationEnabled($isNotificationEnabled)
-    {
-        $this->isNotificationEnabled = $isNotificationEnabled;
-    
-        return $this;
-    }
-
-    /**
-     * Get isNotificationEnabled
-     *
-     * @return boolean 
-     */
-    public function getIsNotificationEnabled()
-    {
-        return $this->isNotificationEnabled;
-    }
 }
+

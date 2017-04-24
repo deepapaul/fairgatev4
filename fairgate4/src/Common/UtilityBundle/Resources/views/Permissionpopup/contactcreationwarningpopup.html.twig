@@ -1,0 +1,25 @@
+{% spaceless %}
+<div class="modal-header fg-modal-header">    
+    <button type="button" class="close fg_dev_redirect"  redirect_path="{% if redirectPath is defined %} {{redirectPath}} {% endif %}" data-dismiss="modal" aria-hidden="true"></button>
+<h4 class="modal-title">{%trans%}WARNING_POPUP_TITLE{%endtrans%}</h4>
+
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+           
+                    <div class="form-body">
+                        
+                        <p class="row">{%trans%}WARNING_POPUP_MESSAGE{%endtrans%} {% if link is defined %} {% else %}&nbsp;<a href="#"> {%trans%}WARNING_POPUP_LINK{%endtrans%} </a>{% endif %}</p>
+                    </div>
+
+                
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer form-actions fg-modal-footer"> 
+    <button type="button" class="btn green fg_dev_redirect" id="fg_dev_warning_box_redirect" redirect_path="{% if redirectPath is defined %} {{redirectPath}} {% endif %}" onClick="closeWarningPopup(this.id)">{%trans%}WARNING_POPUP_OK{%endtrans%}</button>
+</div>
+{% endspaceless %}

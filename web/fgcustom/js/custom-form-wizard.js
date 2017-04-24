@@ -1,10 +1,10 @@
 var csvData = [];
-var FormWizard = function() {
+var FormWizard = function () {
 
 
     return {
         //main function to initiate the module
-        init: function() {
+        init: function () {
             if (!jQuery().bootstrapWizard) {
                 return;
             }
@@ -15,8 +15,8 @@ var FormWizard = function() {
                 return "<img class='flag' src='../../assets/global/img/flags/" + state.id.toLowerCase() + ".png'/>&nbsp;&nbsp;" + state.text;
             }
 
-            var displayConfirm = function() {
-                $('#tab4 .form-control-static').each(function() {
+            var displayConfirm = function () {
+                $('#tab4 .form-control-static').each(function () {
                     var form = 'form-tab4';
                     var input = $('[name="' + $(this).attr("data-display") + '"]', form);
                     if (input.is(":radio")) {
@@ -30,7 +30,7 @@ var FormWizard = function() {
                         $(this).html(input.attr("data-title"));
                     } else if ($(this).attr("data-display") == 'payment') {
                         var payment = [];
-                        $('[name="payment[]"]').each(function() {
+                        $('[name="payment[]"]').each(function () {
                             payment.push($(this).attr('data-title'));
                         });
                         $(this).html(payment.join("<br>"));
@@ -38,7 +38,7 @@ var FormWizard = function() {
                 });
             }
 
-            var handleTitle = function(tab, navigation, index) {
+            var handleTitle = function (tab, navigation, index) {
                 var total = navigation.find('li').length;
                 var current = index + 1;
                 // set wizard title
@@ -54,7 +54,7 @@ var FormWizard = function() {
                     $('#form_wizard_1').find('.button-previous').hide();
                     $('div[data-sample]').show();
                     $('div[data-sample-assignment]').hide();
-                } else if(current == 5) {
+                } else if (current == 5) {
                     $('div[data-sample-assignment]').show();
                 } else {
                     $('#form_wizard_1').find('.button-previous').show();
@@ -77,21 +77,20 @@ var FormWizard = function() {
             $('#form_wizard_1').bootstrapWizard({
                 'nextSelector': '',
                 'previousSelector': '.button-previous',
-                onTabClick: function(tab, navigation, index, clickedIndex) {
+                onTabClick: function (tab, navigation, index, clickedIndex) {
                     if (index > clickedIndex) {
                         handleTitle(tab, navigation, clickedIndex);
-                    }
-                    else {
+                    } else {
                         return false;
                     }
                 },
-                onNext: function(tab, navigation, index) {
+                onNext: function (tab, navigation, index) {
                     handleTitle(tab, navigation, index);
                 },
-                onPrevious: function(tab, navigation, index) {
+                onPrevious: function (tab, navigation, index) {
                     handleTitle(tab, navigation, index);
                 },
-                onTabShow: function(tab, navigation, index) {
+                onTabShow: function (tab, navigation, index) {
                     var total = navigation.find('li').length;
                     var current = index + 1;
                     var $percent = (current / total) * 100;
@@ -102,18 +101,17 @@ var FormWizard = function() {
             });
 
             $('#form_wizard_1').find('.button-previous').hide();
-            $('#form_wizard_1 .button-submit').click(function() {
+            $('#form_wizard_1 .button-submit').click(function () {
                 var index = $('#form_wizard_1').bootstrapWizard('currentIndex');
                 var form = 'body #form-tab' + (index + 1);
                 var paramobj = {'url': $(form).attr('data-url'), 'extradata': {'update': update}, 'form': $(form)};
-                if(update || $(form).hasClass('fg-form4-submit')) {
-                   FgXmlHttp.formPost(paramobj);
-                }
-                else {
-                    var errorFlag=ImportAssignment.validateAssignments(paramobj);
+                if (update || $(form).hasClass('fg-form4-submit')) {
+                    FgXmlHttp.formPost(paramobj);
+                } else {
+                    var errorFlag = ImportAssignment.validateAssignments(paramobj);
                 }
             }).hide();
-            $('#form_wizard_1 .button-next').click(function() {
+            $('#form_wizard_1 .button-next').click(function () {
                 var index = $('#form_wizard_1').bootstrapWizard('currentIndex');
                 var form = 'body #form-tab' + (index + 1);
                 var replaceDiv = 'body #tab' + (index + 2);
@@ -121,8 +119,7 @@ var FormWizard = function() {
                 if (index == 0) {
                     $('p[data-required]').closest('.form-group').removeClass('has-error');
                     $('p[data-required]').addClass('display-none');
-                }
-                else if (index == 1) {
+                } else if (index == 1) {
                     $('#tab2 td.has-error').removeClass('has-error');
                     var mandatory = $('#assign-data-fields-selection').attr('data-mandatory');
                     var mandatoryArray = mandatory.split(":");
@@ -130,86 +127,84 @@ var FormWizard = function() {
                     var manCount = 0;
                     var mapFields = ':';
                     var duplicateMapping = false;
-                    var manFiledError=dataAssignments.handleMandetory();
-                    var isUnmapedFields=false;
-                    var unmapedFieldsList='';
-                    var joinedError=true;
-                    var spliter= mandatoryErrorField='';
+                    var manFiledError = dataAssignments.handleMandetory();
+                    var isUnmapedFields = false;
+                    var unmapedFieldsList = '';
+                    var joinedError = true;
+                    var spliter = mandatoryErrorField = '';
                     var isLeavingDateMapped = false;
                     var isJoiningDateMapped = false;
-                    var isMemberCategoryMapped = false;   
-                    var memtype =$('#hidmemtype').val(); 
-                    var clubtype = $('#hidclubtype').val(); 
+                    var isMemberCategoryMapped = false;
+                    var memtype = $('#hidmemtype').val();
+                    var clubtype = $('#hidclubtype').val();
                     var fedmand = $('#hidfedavail').val();
-                    $('#tab2 select').each(function() {
+                    $('#tab2 select').each(function () {
                         if ($(this).closest('tr').find('input[data-inactiveblock=changecolor]').is(':unchecked')) {
-                           
-                            if(memtype==$(this).val()){
+
+                            if (memtype == $(this).val()) {
                                 isMemberCategoryMapped = true;
                             }
-                            if($(this).val()==='leaving_date'){
+                            if ($(this).val() === 'leaving_date') {
                                 isLeavingDateMapped = true;
                             }
-                            if($(this).val()==='joining_date'){
+                            if ($(this).val() === 'joining_date') {
                                 isJoiningDateMapped = true;
                             }
                             if ((mapFields.indexOf(':' + $(this).val() + ':') > -1) && ($(this).val() !== '')) {
                                 duplicateMapping = true;
-                                var selectVal=$(this).val();
-                                $('#tab2 select').each(function() {
-                                    if($(this).val()===selectVal){
+                                var selectVal = $(this).val();
+                                $('#tab2 select').each(function () {
+                                    if ($(this).val() === selectVal) {
                                         $(this).closest('td').addClass('has-error');
                                     }
                                 });
-                            }
-                            else if($(this).val() === '') {
-                                isUnmapedFields=true;
-                                unmapedFieldsList += (unmapedFieldsList==='') ? $(this).closest('tr').find('td:first').text().trim(): ', '+$(this).closest('tr').find('td:first').text().trim();
+                            } else if ($(this).val() === '') {
+                                isUnmapedFields = true;
+                                unmapedFieldsList += (unmapedFieldsList === '') ? $(this).closest('tr').find('td:first').text().trim() : ', ' + $(this).closest('tr').find('td:first').text().trim();
                             }
                             mapFields += $(this).val() + ':';
                             if (mandatory.indexOf(':' + $(this).val() + ':') > -1) {
                                 manCount++;
-                                manFiledError[$(this).val()]='';
+                                manFiledError[$(this).val()] = '';
                             }
                         }
                     });
                     /* Joining date is manadatory only if membership category and leaving are mapped */
-                   
-                    if(isMemberCategoryMapped && isLeavingDateMapped){
+
+                    if (isMemberCategoryMapped && isLeavingDateMapped) {
                         mandatoryArray.push('joining_date');
-                         $('#tab2 select').each(function() {
-                            if($(this).val()==='joining_date' && $(this).closest('tr').find('input[data-inactiveblock=changecolor]').is(':unchecked')){
+                        $('#tab2 select').each(function () {
+                            if ($(this).val() === 'joining_date' && $(this).closest('tr').find('input[data-inactiveblock=changecolor]').is(':unchecked')) {
                                 manCount++;
-                                joinedError=false;
+                                joinedError = false;
                             }
                         });
-                        manFiledError['joinedError']= (joinedError) ? $('#tab2 select:first').find('option[value=joining_date]').text().trim():'';   
+                        manFiledError['joinedError'] = (joinedError) ? $('#tab2 select:first').find('option[value=joining_date]').text().trim() : '';
                     }
-                    var skipLeaving=false;
-                    if(clubtype=='federation'&&fedmand==1&&isLeavingDateMapped){
-                        skipLeaving =true;       
-                     }
-                    if ((manCount < mandatoryArray.length) || (duplicateMapping === true) || (isUnmapedFields===true) || (skipLeaving===true)) {
-                        $('#tab' + (index + 1) + ' .alert-danger').show();                        
+                    var skipLeaving = false;
+                    if (clubtype == 'federation' && fedmand == 1 && isLeavingDateMapped) {
+                        skipLeaving = true;
+                    }
+                    if ((manCount < mandatoryArray.length) || (duplicateMapping === true) || (isUnmapedFields === true) || (skipLeaving === true)) {
+                        $('#tab' + (index + 1) + ' .alert-danger').show();
                         for (var i in manFiledError) {
-                           if(manFiledError[i] != ''){
-                            mandatoryErrorField += spliter+manFiledError[i].trim();
-                            spliter=", ";
-                           }
+                            if (manFiledError[i] != '') {
+                                mandatoryErrorField += spliter + manFiledError[i].trim();
+                                spliter = ", ";
+                            }
                         }
-                        var  errorMessage='';
-                        errorMessage = duplicateMapping ? errorMessage+mappingError+'<br>' : errorMessage;
-                        errorMessage  = (manCount < mandatoryArray.length) ? errorMessage+mandatoryError+': '+mandatoryErrorField+'.'+'<br>':errorMessage;
-                        errorMessage = (isUnmapedFields===true) ? errorMessage+columnSkippError+unmapedFieldsList+'<br>' : errorMessage;
-                       if(skipLeaving===true){
-                           errorMessage = errorMessage +' '+ "skip Leaving Date";      
-                       }
-                        
+                        var errorMessage = '';
+                        errorMessage = duplicateMapping ? errorMessage + mappingError + '<br>' : errorMessage;
+                        errorMessage = (manCount < mandatoryArray.length) ? errorMessage + mandatoryError + ': ' + mandatoryErrorField + '.' + '<br>' : errorMessage;
+                        errorMessage = (isUnmapedFields === true) ? errorMessage + columnSkippError + unmapedFieldsList + '<br>' : errorMessage;
+                        if (skipLeaving === true) {
+                            errorMessage = errorMessage + ' ' + "skip Leaving Date";
+                        }
+
                         $('#tab' + (index + 1) + ' .alert-danger span[data-error]').html(errorMessage);
                         Metronic.scrollTo($('#tab' + (index + 1) + ' .alert-danger'), -200);
                         return false;
-                    }
-                    else {
+                    } else {
                         $('#tab' + (index + 1) + ' .l').hide();
                     }
                 } else if (index == 2) {
@@ -223,26 +218,43 @@ var FormWizard = function() {
                 FgXmlHttp.formPost(paramobj);
 
             });
-            function callbackfn(responce) {               
+            function callbackfn(responce) {
                 $('#tab' + (responce.index + 1) + ' .alert-danger').hide();
-                if (responce.responseText.status) {                   
+                if (responce.responseText.status) {
                     if (responce.responseText.status == 'ERROR' && responce.index == 0) {
-                        $('p[data-required]').closest('.form-group').addClass('has-error');
-                        $('p[data-required]').removeClass('display-none');
-                        $('#tab' + (responce.index + 1) + ' .alert-danger span[data-error]').html(responce.responseText.message);
-                        $('#tab' + (responce.index + 1) + ' .alert-danger').show();
-                        Metronic.scrollTo($('#tab' + (responce.index + 1) + ' .alert-danger'), -200);
+                        /* HANDLE COUNT CHECKING AREA */
+                        if (typeof responce.responseText.htmlContent !== 'undefined') {
+                            $('.modal-content').html('');
+                            $('#merge-popup').removeClass('fg-membership-merge-modal fg-popup-wrap');
+                            $('.modal-content').html(responce.responseText.htmlContent);
+                            $('#merge-popup').modal('show');
+                            $('body').on('click', '.fg_dev_redirect', function () {
+                                if ($(this).attr('redirect_path') != '') {
+                                    window.location = $(this).attr('redirect_path');
+                                }
+
+                            });
+                        } else {
+                            $('p[data-required]').closest('.form-group').addClass('has-error');
+                            $('p[data-required]').removeClass('display-none');
+                            $('#tab' + (responce.index + 1) + ' .alert-danger span[data-error]').html(responce.responseText.message);
+                            $('#tab' + (responce.index + 1) + ' .alert-danger').show();
+                            Metronic.scrollTo($('#tab' + (responce.index + 1) + ' .alert-danger'), -200);
+                        }
+
+
                     }
-                }
-                else {                    
+                } else {
                     var index = $('#form_wizard_1').bootstrapWizard('currentIndex');
                     if (index == 0) {
                         var csvRows = $('#tab' + (index + 2)).find('#assign-data-fields-selection').attr('data-rows');
+                        console.log('123');
                         csvData = JSON.parse(csvRows);
+                        console.log('456');
                         initialLimit = (50 > csvData[0].length) ? csvData[0].length : 50;
                         limit = initialLimit;
-                        if (typeof csvData[1] === 'undefined') { 
-                         
+                        if (typeof csvData[1] === 'undefined') {
+
                             var errorMessage = 'Invalid CSV File';
                             $('#tab' + (index + 1) + ' .alert-danger').html(errorMessage);
                             $('#tab' + (index + 1) + ' .alert-danger').show();
@@ -253,17 +265,16 @@ var FormWizard = function() {
                         $('#tab2 table tbody').html(result_data);
                         if (csvData[0].length <= 50) {
                             $('div[data-addMore] a').hide();
-                        }
-                        else if(csvData[0].length < 60){
-                            $('div[data-addMore] a .fg-add-text .fg-more-count').html(csvData[0].length-50);
+                        } else if (csvData[0].length < 60) {
+                            $('div[data-addMore] a .fg-add-text .fg-more-count').html(csvData[0].length - 50);
                         }
                         $('.bs-select').selectpicker();
                         FgFormTools.handleUniform();
                         dataAssignments.handleIconsInSelect();
-                    }else if (index == 2){
+                    } else if (index == 2) {
                         FgFormTools.handleUniform();
                     }
-                    
+
                     if (responce.showNext) {
                         $('#form_wizard_1').bootstrapWizard('next');
                     }

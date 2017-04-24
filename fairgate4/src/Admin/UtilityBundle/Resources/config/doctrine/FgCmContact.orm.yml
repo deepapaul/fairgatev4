@@ -1,0 +1,62 @@
+Admin\UtilityBundle\Entity\FgCmContact:
+    repositoryClass: Admin\UtilityBundle\Repository\FgCmContactRepository
+    type: entity
+    table: fg_cm_contact
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        isActive:
+            type: boolean
+            nullable: false
+            column: is_active
+        firstname:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        lastname:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        email:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        mobileNumber:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: mobile_number
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        mainClub:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                main_club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

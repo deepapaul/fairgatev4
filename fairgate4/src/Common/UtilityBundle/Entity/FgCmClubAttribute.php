@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmClubAttribute
  */
@@ -98,7 +96,7 @@ class FgCmClubAttribute
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -109,19 +107,20 @@ class FgCmClubAttribute
      * Set isSetPrivacyItself
      *
      * @param boolean $isSetPrivacyItself
+     *
      * @return FgCmClubAttribute
      */
     public function setIsSetPrivacyItself($isSetPrivacyItself)
     {
         $this->isSetPrivacyItself = $isSetPrivacyItself;
-    
+
         return $this;
     }
 
     /**
      * Get isSetPrivacyItself
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsSetPrivacyItself()
     {
@@ -132,19 +131,20 @@ class FgCmClubAttribute
      * Set privacyContact
      *
      * @param string $privacyContact
+     *
      * @return FgCmClubAttribute
      */
     public function setPrivacyContact($privacyContact)
     {
         $this->privacyContact = $privacyContact;
-    
+
         return $this;
     }
 
     /**
      * Get privacyContact
      *
-     * @return string 
+     * @return string
      */
     public function getPrivacyContact()
     {
@@ -155,19 +155,20 @@ class FgCmClubAttribute
      * Set isConfirmContact
      *
      * @param boolean $isConfirmContact
+     *
      * @return FgCmClubAttribute
      */
     public function setIsConfirmContact($isConfirmContact)
     {
         $this->isConfirmContact = $isConfirmContact;
-    
+
         return $this;
     }
 
     /**
      * Get isConfirmContact
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsConfirmContact()
     {
@@ -178,19 +179,20 @@ class FgCmClubAttribute
      * Set isMandatory
      *
      * @param boolean $isMandatory
+     *
      * @return FgCmClubAttribute
      */
     public function setIsMandatory($isMandatory)
     {
         $this->isMandatory = $isMandatory;
-    
+
         return $this;
     }
 
     /**
      * Get isMandatory
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsMandatory()
     {
@@ -201,19 +203,20 @@ class FgCmClubAttribute
      * Set isEdited
      *
      * @param boolean $isEdited
+     *
      * @return FgCmClubAttribute
      */
     public function setIsEdited($isEdited)
     {
         $this->isEdited = $isEdited;
-    
+
         return $this;
     }
 
     /**
      * Get isEdited
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsEdited()
     {
@@ -224,19 +227,20 @@ class FgCmClubAttribute
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgCmClubAttribute
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -247,19 +251,20 @@ class FgCmClubAttribute
      * Set isRequiredType
      *
      * @param string $isRequiredType
+     *
      * @return FgCmClubAttribute
      */
     public function setIsRequiredType($isRequiredType)
     {
         $this->isRequiredType = $isRequiredType;
-    
+
         return $this;
     }
 
     /**
      * Get isRequiredType
      *
-     * @return string 
+     * @return string
      */
     public function getIsRequiredType()
     {
@@ -270,19 +275,20 @@ class FgCmClubAttribute
      * Set profileStatus
      *
      * @param boolean $profileStatus
+     *
      * @return FgCmClubAttribute
      */
     public function setProfileStatus($profileStatus)
     {
         $this->profileStatus = $profileStatus;
-    
+
         return $this;
     }
 
     /**
      * Get profileStatus
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getProfileStatus()
     {
@@ -293,19 +299,20 @@ class FgCmClubAttribute
      * Set isConfirmTeamadmin
      *
      * @param boolean $isConfirmTeamadmin
+     *
      * @return FgCmClubAttribute
      */
     public function setIsConfirmTeamadmin($isConfirmTeamadmin)
     {
         $this->isConfirmTeamadmin = $isConfirmTeamadmin;
-    
+
         return $this;
     }
 
     /**
      * Get isConfirmTeamadmin
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsConfirmTeamadmin()
     {
@@ -316,19 +323,20 @@ class FgCmClubAttribute
      * Set isRequiredFedmemberSubfed
      *
      * @param boolean $isRequiredFedmemberSubfed
+     *
      * @return FgCmClubAttribute
      */
     public function setIsRequiredFedmemberSubfed($isRequiredFedmemberSubfed)
     {
         $this->isRequiredFedmemberSubfed = $isRequiredFedmemberSubfed;
-    
+
         return $this;
     }
 
     /**
      * Get isRequiredFedmemberSubfed
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsRequiredFedmemberSubfed()
     {
@@ -339,19 +347,20 @@ class FgCmClubAttribute
      * Set isRequiredFedmemberClub
      *
      * @param boolean $isRequiredFedmemberClub
+     *
      * @return FgCmClubAttribute
      */
     public function setIsRequiredFedmemberClub($isRequiredFedmemberClub)
     {
         $this->isRequiredFedmemberClub = $isRequiredFedmemberClub;
-    
+
         return $this;
     }
 
     /**
      * Get isRequiredFedmemberClub
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsRequiredFedmemberClub()
     {
@@ -362,19 +371,20 @@ class FgCmClubAttribute
      * Set availabilityContact
      *
      * @param string $availabilityContact
+     *
      * @return FgCmClubAttribute
      */
     public function setAvailabilityContact($availabilityContact)
     {
         $this->availabilityContact = $availabilityContact;
-    
+
         return $this;
     }
 
     /**
      * Get availabilityContact
      *
-     * @return string 
+     * @return string
      */
     public function getAvailabilityContact()
     {
@@ -385,19 +395,20 @@ class FgCmClubAttribute
      * Set availabilityGroupadmin
      *
      * @param string $availabilityGroupadmin
+     *
      * @return FgCmClubAttribute
      */
     public function setAvailabilityGroupadmin($availabilityGroupadmin)
     {
         $this->availabilityGroupadmin = $availabilityGroupadmin;
-    
+
         return $this;
     }
 
     /**
      * Get availabilityGroupadmin
      *
-     * @return string 
+     * @return string
      */
     public function getAvailabilityGroupadmin()
     {
@@ -408,19 +419,20 @@ class FgCmClubAttribute
      * Set isActive
      *
      * @param boolean $isActive
+     *
      * @return FgCmClubAttribute
      */
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
-    
+
         return $this;
     }
 
     /**
      * Get isActive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsActive()
     {
@@ -431,19 +443,20 @@ class FgCmClubAttribute
      * Set attribute
      *
      * @param \Common\UtilityBundle\Entity\FgCmAttribute $attribute
+     *
      * @return FgCmClubAttribute
      */
     public function setAttribute(\Common\UtilityBundle\Entity\FgCmAttribute $attribute = null)
     {
         $this->attribute = $attribute;
-    
+
         return $this;
     }
 
     /**
      * Get attribute
      *
-     * @return \Common\UtilityBundle\Entity\FgCmAttribute 
+     * @return \Common\UtilityBundle\Entity\FgCmAttribute
      */
     public function getAttribute()
     {
@@ -454,22 +467,24 @@ class FgCmClubAttribute
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmClubAttribute
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
         return $this->club;
     }
 }
+

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnNewsletterExcludeContacts
  */
@@ -18,6 +16,11 @@ class FgCnNewsletterExcludeContacts
      * @var string
      */
     private $email;
+
+    /**
+     * @var string
+     */
+    private $salutation;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgCnNewsletter
@@ -39,6 +42,7 @@ class FgCnNewsletterExcludeContacts
      * Set email
      *
      * @param string $email
+     *
      * @return FgCnNewsletterExcludeContacts
      */
     public function setEmail($email)
@@ -59,9 +63,34 @@ class FgCnNewsletterExcludeContacts
     }
 
     /**
+     * Set salutation
+     *
+     * @param string $salutation
+     *
+     * @return FgCnNewsletterExcludeContacts
+     */
+    public function setSalutation($salutation)
+    {
+        $this->salutation = $salutation;
+
+        return $this;
+    }
+
+    /**
+     * Get salutation
+     *
+     * @return string
+     */
+    public function getSalutation()
+    {
+        return $this->salutation;
+    }
+
+    /**
      * Set newsletter
      *
      * @param \Common\UtilityBundle\Entity\FgCnNewsletter $newsletter
+     *
      * @return FgCnNewsletterExcludeContacts
      */
     public function setNewsletter(\Common\UtilityBundle\Entity\FgCnNewsletter $newsletter = null)
@@ -80,32 +109,5 @@ class FgCnNewsletterExcludeContacts
     {
         return $this->newsletter;
     }
-    /**
-     * @var string
-     */
-    private $salutation;
-
-
-    /**
-     * Set salutation
-     *
-     * @param string $salutation
-     * @return FgCnNewsletterExcludeContacts
-     */
-    public function setSalutation($salutation)
-    {
-        $this->salutation = $salutation;
-    
-        return $this;
-    }
-
-    /**
-     * Get salutation
-     *
-     * @return string 
-     */
-    public function getSalutation()
-    {
-        return $this->salutation;
-    }
 }
+

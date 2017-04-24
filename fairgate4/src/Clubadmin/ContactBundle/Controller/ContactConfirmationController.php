@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Contact Confirmation Controller
  *
@@ -24,6 +23,10 @@ use Common\UtilityBundle\Repository\Pdo\ContactPdo;
 use Common\UtilityBundle\Util\FgSettings;
 use Clubadmin\ContactBundle\Util\FgContactForm;
 use Common\UtilityBundle\Repository\Pdo\membershipPdo;
+use Admin\UtilityBundle\Classes\SyncFgadmin;
+use Common\UtilityBundle\Util\FgContactSyncDataToAdmin;
+use Common\UtilityBundle\Util\FgClubSyncDataToAdmin;
+use Common\UtilityBundle\Util\FgPermissions;
 
 /**
  * Contact Confirmation Controller
@@ -101,30 +104,39 @@ class ContactConfirmationController extends ParentController
         $return['selActionType'] = $selActionType;
         $return['action'] = $action;
         $return['clubType'] = $this->clubType;
+        $selectedCount = $request->get('count') ? $request->get('count') : 1;  
 
         if ($action == 'confirm') {
-            $return['fedMembershipMandatory'] = $this->get('club')->get('fedMembershipMandatory');
-            $memberships = array();
-            if ($return['fedMembershipMandatory']) {
-                $return['header'] = ($selActionType == 'all') ? 'CONFIRMATION_CONFIRM_CREATION_HEADER_ALL' : 'CONFIRMATION_CONFIRM_CREATION_HEADER_SELECTED';
-                $return['label'] = ($selActionType == 'all') ? 'CONFIRMATION_CONFIRM_CREATION_LABEL_ALL' : 'CONFIRMATION_CONFIRM_CREATION_LABEL_SELECTED';
 
-                $memberships['fed'][0] = $this->get('translator')->trans('SELECT_DROPDOWN');
-                $objMembershipPdo = new membershipPdo($this->container);
-                $membersipFields = $objMembershipPdo->getMemberships($this->clubType, $this->clubId, $this->subFederationId, $this->federationId);
-                $clubDefaultLang = $this->get('club')->get('default_lang');
-                foreach ($membersipFields as $key => $memberCat) {
-                    $title = $memberCat['allLanguages'][$clubDefaultLang]['titleLang'] != '' ? $memberCat['allLanguages'][$clubDefaultLang]['titleLang'] : $memberCat['membershipName'];
-                    if (($memberCat['clubId'] == $this->federationId)) {
-                        $memberships['fed'][$key] = $title;
-                    }
-                }
+            /* ----- Contact count checking ---------------    */
+            $permissionObj = new FgPermissions($this->container);
+            if (!$permissionObj->checkContactCount($selectedCount)) {
+                $result['redirectPath'] = $this->generateUrl('contact_index');
+                return $this->render('CommonUtilityBundle:Permissionpopup:contactcreationwarningpopup.html.twig', $result);
             } else {
-                $return['header'] = ($selActionType == 'all') ? 'CONFIRM_CREATION_HEADER_ALL' : 'CONFIRM_CREATION_HEADER_SELECTED';
-                $return['label'] = ($selActionType == 'all') ? 'CONFIRM_CREATION_LABEL_ALL' : 'CONFIRM_CREATION_LABEL_SELECTED';
-            }
+                $return['fedMembershipMandatory'] = $this->get('club')->get('fedMembershipMandatory');
+                $memberships = array();
+                if ($return['fedMembershipMandatory']) {
+                    $return['header'] = ($selActionType == 'all') ? 'CONFIRMATION_CONFIRM_CREATION_HEADER_ALL' : 'CONFIRMATION_CONFIRM_CREATION_HEADER_SELECTED';
+                    $return['label'] = ($selActionType == 'all') ? 'CONFIRMATION_CONFIRM_CREATION_LABEL_ALL' : 'CONFIRMATION_CONFIRM_CREATION_LABEL_SELECTED';
 
-            $return['memberships'] = $memberships;
+                    $memberships['fed'][0] = $this->get('translator')->trans('SELECT_DROPDOWN');
+                    $objMembershipPdo = new membershipPdo($this->container);
+                    $membersipFields = $objMembershipPdo->getMemberships($this->clubType, $this->clubId, $this->subFederationId, $this->federationId);
+                    $clubDefaultLang = $this->get('club')->get('default_lang');
+                    foreach ($membersipFields as $key => $memberCat) {
+                        $title = $memberCat['allLanguages'][$clubDefaultLang]['titleLang'] != '' ? $memberCat['allLanguages'][$clubDefaultLang]['titleLang'] : $memberCat['membershipName'];
+                        if (($memberCat['clubId'] == $this->federationId)) {
+                            $memberships['fed'][$key] = $title;
+                        }
+                    }
+                } else {
+                    $return['header'] = ($selActionType == 'all') ? 'CONFIRM_CREATION_HEADER_ALL' : 'CONFIRM_CREATION_HEADER_SELECTED';
+                    $return['label'] = ($selActionType == 'all') ? 'CONFIRM_CREATION_LABEL_ALL' : 'CONFIRM_CREATION_LABEL_SELECTED';
+                }
+
+                $return['memberships'] = $memberships;
+            }
         } else {
             $return['header'] = ($selActionType == 'all') ? 'DISCARD_ALL_CREATIONS' : 'DISCARD_SELECTED_CREATIONS';
             $return['label'] = ($selActionType == 'all') ? 'DISCARD_ALL_CREATIONS_TEXT' : 'DISCARD_SELECTED_CREATIONS_TEXT';
@@ -177,7 +189,7 @@ class ContactConfirmationController extends ParentController
             $emails = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->getEmailField(implode(',', $contactIdArr), $primaryEmail);
             $contactDetailsCpy = $contactDetails;
             // Checking the count of reactivate contact and the contact has the federation membership
-            
+
             foreach ($contactDetails as $contactId => $details) {
                 $contactObj = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->find($contactId);
                 $contactData = $pdo->getContactDetailsForMembershipDetails('draft', $contactId);
@@ -230,7 +242,7 @@ class ContactConfirmationController extends ParentController
                     }
                 } else {
                     //if email validation fails
-                    if (count($result)>0) {
+                    if (count($result) > 0) {
                         unset($contactDetails[$contactId]);
                         if (count($selectedIds) == 1) {
                             $failedEmail = array('status' => 'EMAILFAILED', 'noparentload' => true, 'page' => $page);
@@ -271,12 +283,23 @@ class ContactConfirmationController extends ParentController
                 $this->sendSwiftMail($mailAction, $selectedIds);
             }
         }
+        /** Sync Fed member count to the AdminDB * */
+        $fgAdmin = new SyncFgadmin($this->container);
+        $fgAdmin->syncFedMemberCount();
+        /*         * ******************************************** */
+
+
+        /** Sync count to the AdminDB * */
+        $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
+        $clubSyncObject->updateSubscriberCount($this->clubId)
+            ->updateActiveContactCount($this->clubId);
+        /*         * ************************************** */
 
         $flashMsg = ($action == 'confirm') ? '%selcount%_OUT_OF_%totalcount%_' . strtoupper($page) . '_CONFIRMED_SUCCESSFULLY' : '%selcount%_OUT_OF_%totalcount%_' . strtoupper($page) . '_DISCARDED_SUCCESSFULLY';
 
         return new JsonResponse(array('status' => 'SUCCESS', 'flash' => $this->container->get('translator')->trans($flashMsg, array('%selcount%' => $successCount, '%totalcount%' => $totCount)), 'noparentload' => false, 'count' => $successCount));
     }
-    
+
     /**
      * Function to convert array format
      *
@@ -489,13 +512,13 @@ class ContactConfirmationController extends ParentController
         $id = $request->get('id');
         $appObj = $em->getRepository('CommonUtilityBundle:FgCmsContactFormApplications')->find($id);
         $jsonData = json_decode($appObj->getFormData(), true);
-        
+
         $createdAt = date_format($appObj->getCreatedAt(), 'Y-m-d H:i:s');
         $clubService = $this->container->get('club');
         $clubId = $clubService->get('id');
         $contactLang = $this->getContactLang($clubService);
 
-        $fields = $em->getRepository('CommonUtilityBundle:FgCmsPageContentElementFormFields')->getAllFormFields($clubId, $contactLang, $appObj->getForm()->getId());        
+        $fields = $em->getRepository('CommonUtilityBundle:FgCmsPageContentElementFormFields')->getAllFormFields($clubId, $contactLang, $appObj->getForm()->getId());
         $objMembershipPdo = new membershipPdo($this->container);
         $membershipFields = $objMembershipPdo->getMemberships($this->clubType, $this->clubId, $this->subFederationId, $this->federationId);
         foreach ($membershipFields as $key => $memberCat) {
@@ -507,16 +530,16 @@ class ContactConfirmationController extends ParentController
         }
 
         unset($jsonData['form']['files']);
-        $formFields = $this->formatArray($fields, $jsonData['form'], false, $memberships);       
-        $contactFields = $this->formatArray($fields, $jsonData['contact'], false, $memberships);        
-        $membership = $this->formatArray($fields, $jsonData['club-membership'], false, $memberships);    
+        $formFields = $this->formatArray($fields, $jsonData['form'], false, $memberships);
+        $contactFields = $this->formatArray($fields, $jsonData['contact'], false, $memberships);
+        $membership = $this->formatArray($fields, $jsonData['club-membership'], false, $memberships);
         //instead of merging arrays, union those arrays, so that we can preserve the keys. keys are sortOrder. So we can diplay the fields in sort order
         // consider the case the sortorder of field will nor repeat
         $data = ($contactFields + $membership + $formFields);
         ksort($data);
         $status = $appObj->getStatus();
 
-        return $this->render('ClubadminContactBundle:ContactConfirmation:contactFormApplicationPopUp.html.twig', array('data' => $data, 'createdAt' => $createdAt, 'status' =>$status)
+        return $this->render('ClubadminContactBundle:ContactConfirmation:contactFormApplicationPopUp.html.twig', array('data' => $data, 'createdAt' => $createdAt, 'status' => $status)
         );
     }
 
@@ -591,7 +614,7 @@ class ContactConfirmationController extends ParentController
 
                         $jsonData = $memberships[$jsonData];
                     }
-                    $fieldValue = $jsonData;                    
+                    $fieldValue = $jsonData;
                     break;
             }
 
@@ -603,7 +626,7 @@ class ContactConfirmationController extends ParentController
                     'fieldValueForPopup' => str_replace('<script', '<scri&nbsp;pt', nl2br(strip_tags($fieldValue))),
                     'fieldType' => $fields[$key]['fieldType'],
                     'sortOrder' => $sortOrder
-                        );                
+                );
                 if ($fields[$key]['fieldType'] == 'fileupload' || $fields[$key]['fieldType'] == 'imageupload') {
                     $createdClubId = 0;
                     if ($fields[$key]['formFieldType'] == 'contact') {

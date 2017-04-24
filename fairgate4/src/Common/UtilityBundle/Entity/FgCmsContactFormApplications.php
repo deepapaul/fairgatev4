@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsContactFormApplications
  */
@@ -58,7 +56,7 @@ class FgCmsContactFormApplications
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -69,19 +67,20 @@ class FgCmsContactFormApplications
      * Set contactName
      *
      * @param string $contactName
+     *
      * @return FgCmsContactFormApplications
      */
     public function setContactName($contactName)
     {
         $this->contactName = $contactName;
-    
+
         return $this;
     }
 
     /**
      * Get contactName
      *
-     * @return string 
+     * @return string
      */
     public function getContactName()
     {
@@ -92,19 +91,20 @@ class FgCmsContactFormApplications
      * Set formData
      *
      * @param string $formData
+     *
      * @return FgCmsContactFormApplications
      */
     public function setFormData($formData)
     {
         $this->formData = $formData;
-    
+
         return $this;
     }
 
     /**
      * Get formData
      *
-     * @return string 
+     * @return string
      */
     public function getFormData()
     {
@@ -115,19 +115,20 @@ class FgCmsContactFormApplications
      * Set status
      *
      * @param string $status
+     *
      * @return FgCmsContactFormApplications
      */
     public function setStatus($status)
     {
         $this->status = $status;
-    
+
         return $this;
     }
 
     /**
      * Get status
      *
-     * @return string 
+     * @return string
      */
     public function getStatus()
     {
@@ -138,19 +139,20 @@ class FgCmsContactFormApplications
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return FgCmsContactFormApplications
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -161,19 +163,20 @@ class FgCmsContactFormApplications
      * Set decisionDate
      *
      * @param \DateTime $decisionDate
+     *
      * @return FgCmsContactFormApplications
      */
     public function setDecisionDate($decisionDate)
     {
         $this->decisionDate = $decisionDate;
-    
+
         return $this;
     }
 
     /**
      * Get decisionDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDecisionDate()
     {
@@ -184,19 +187,20 @@ class FgCmsContactFormApplications
      * Set form
      *
      * @param \Common\UtilityBundle\Entity\FgCmsForms $form
+     *
      * @return FgCmsContactFormApplications
      */
     public function setForm(\Common\UtilityBundle\Entity\FgCmsForms $form = null)
     {
         $this->form = $form;
-    
+
         return $this;
     }
 
     /**
      * Get form
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsForms 
+     * @return \Common\UtilityBundle\Entity\FgCmsForms
      */
     public function getForm()
     {
@@ -207,19 +211,20 @@ class FgCmsContactFormApplications
      * Set decidedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $decidedBy
+     *
      * @return FgCmsContactFormApplications
      */
     public function setDecidedBy(\Common\UtilityBundle\Entity\FgCmContact $decidedBy = null)
     {
         $this->decidedBy = $decidedBy;
-    
+
         return $this;
     }
 
     /**
      * Get decidedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getDecidedBy()
     {
@@ -230,22 +235,24 @@ class FgCmsContactFormApplications
      * Set clubContact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $clubContact
+     *
      * @return FgCmsContactFormApplications
      */
     public function setClubContact(\Common\UtilityBundle\Entity\FgCmContact $clubContact = null)
     {
         $this->clubContact = $clubContact;
-    
+
         return $this;
     }
 
     /**
      * Get clubContact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getClubContact()
     {
         return $this->clubContact;
     }
 }
+

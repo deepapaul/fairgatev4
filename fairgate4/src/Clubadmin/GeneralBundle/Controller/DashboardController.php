@@ -407,50 +407,14 @@ class DashboardController extends FgController {
      * @return Json array
      */
     public function getNextBirthdaysAction() {
-        $club = $this->get('club');
-        $container = $this->container;
-        $contactlistClass = new Contactlist($container, '', $club);
-        $userRights = $club->get('allowedRights');
-        $contactRights = (in_array('contact', $userRights)|| in_array('readonly_contact', $userRights)) ? 1 : 0;
-        $contactPdo = new ContactPdo($container);
-        $nextBirthDays = $contactPdo->getNextBirthDaysFromContactListBackend($contactlistClass, $container);
-        for ($i = 0; $i < count($nextBirthDays); $i++) {
-            if ($nextBirthDays[$i]['nextBirthDay'] === date('d.m.Y')) {
-                $nextBirthDays[$i]['nextBirthDay'] = $this->get('translator')->trans('DASHBOARD_TODAY');
-            } else {
-                $nextBirthDays[$i]['nextBirthDay'] = $container->get('club')->formatDate($nextBirthDays[$i]['nextBirthDay'],'date','d.m.Y');
-            }
-            $nextBirthDays[$i]['contactRights'] = $contactRights;
-            $contactsIdsArray = explode(",", $nextBirthDays[$i]['contacts']);
-            $contactsArray = $this->getArrayOfContactDetails($contactsIdsArray);
-            $nextBirthDays[$i]['contacts'] = $contactsArray;
-            $nextBirthDays[$i]['contactsNumber'] = count($contactsArray);
-        }
+        $contactPdo = new ContactPdo($this->container);
+        $nextBirthDays = $contactPdo->getNextBirthDaysFromContactListBackend($this->container);
+        
         $textShowAll = $this->get('translator')->trans('DASHBOARD_SHOW_ALL');
         $textShowLess = $this->get('translator')->trans('DASHBOARD_SHOW_LESS');
-        $return = json_encode(array("birthdayDetails" => $nextBirthDays, "textShowAll" => $textShowAll, "textShowLess" => $textShowLess ));
+        $return = array("birthdayDetails" => $nextBirthDays, "textShowAll" => $textShowAll, "textShowLess" => $textShowLess );
 
-        return new Response($return, 200, array('Content-Type' => 'application/json'));
-    }
-
-    /*
-     * Function to return array of name, contact-overview url, age of each contacts
-     * param $contactsIdsArray array of string for each contact
-     * that string is in tyhe format contactname~age~contactId
-     * $return  array
-     */
-    private function getArrayOfContactDetails($contactsIdsArray) {
-        $contactsArray = array();
-        $c = 0;
-        foreach ($contactsIdsArray as $contact) {
-            $c++;
-            $classname = ($c <= 5) ? "" : "fg-bithday-contact hide";
-            $contactDetails = explode("~", $contact);
-            $path = $this->generateUrl('render_contact_overview', array('offset' => '0', 'contact' => $contactDetails[2]));
-            array_push($contactsArray, array("name" => $contactDetails[0], "path" => $path, "age" => $contactDetails[1], 'classname' => $classname));
-        }
-
-        return $contactsArray;
+        return new JsonResponse($return);
     }
 
     /*

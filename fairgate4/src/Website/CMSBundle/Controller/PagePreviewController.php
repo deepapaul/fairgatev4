@@ -56,7 +56,10 @@ class PagePreviewController extends Controller
         $queryParam = $request->query->all();
         $websiteObj = new FgWebsite($this->container);
         $navObj = $em->getRepository('CommonUtilityBundle:FgCmsNavigation')->findOneBy(array('page' => $pageDetails['id']));
-        $returnArray['currentNavigationId'] = $navObj->getId();
+        if($navObj != ''){
+            $returnArray['currentNavigationId'] = $navObj->getId();
+        }
+        
         switch ($pageDetails['type']) {
             case 'article':
                 $returnArray['pagecontentData'] = $websiteObj->getPageDetails($pageDetails['id'], false, false);

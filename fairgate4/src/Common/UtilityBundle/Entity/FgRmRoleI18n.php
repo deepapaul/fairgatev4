@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgRmRoleI18n
  */
@@ -47,9 +45,7 @@ class FgRmRoleI18n
         $this->lang = $lang;
 
         return $this;
-
     }
-
 
     /**
      * Get lang
@@ -59,9 +55,7 @@ class FgRmRoleI18n
     public function getLang()
     {
         return $this->lang;
-
     }
-
 
     /**
      * Set titleLang
@@ -75,7 +69,6 @@ class FgRmRoleI18n
         $this->titleLang = $titleLang;
 
         return $this;
-
     }
 
     /**
@@ -86,9 +79,7 @@ class FgRmRoleI18n
     public function getTitleLang()
     {
         return $this->titleLang;
-
     }
-
 
     /**
      * Set descriptionLang
@@ -102,9 +93,7 @@ class FgRmRoleI18n
         $this->descriptionLang = $descriptionLang;
 
         return $this;
-
     }
-
 
     /**
      * Get descriptionLang
@@ -114,9 +103,7 @@ class FgRmRoleI18n
     public function getDescriptionLang()
     {
         return $this->descriptionLang;
-
     }
-
 
     /**
      * Set isActive
@@ -130,9 +117,7 @@ class FgRmRoleI18n
         $this->isActive = $isActive;
 
         return $this;
-
     }
-
 
     /**
      * Get isActive
@@ -142,9 +127,7 @@ class FgRmRoleI18n
     public function getIsActive()
     {
         return $this->isActive;
-
     }
-
 
     /**
      * Set id
@@ -158,9 +141,7 @@ class FgRmRoleI18n
         $this->id = $id;
 
         return $this;
-
     }
-
 
     /**
      * Get id
@@ -170,8 +151,6 @@ class FgRmRoleI18n
     public function getId()
     {
         return $this->id;
-
     }
-
-
 }
+

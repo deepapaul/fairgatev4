@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgMessageData
  */
@@ -17,27 +15,12 @@ class FgMessageData
     /**
      * @var string
      */
-    private $subject;
-
-    /**
-     * @var string
-     */
     private $message;
-
-    /**
-     * @var boolean
-     */
-    private $isRead;
 
     /**
      * @var \DateTime
      */
     private $updatedAt;
-
-    /**
-     * @var boolean
-     */
-    private $isDeleted;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgMessage
@@ -61,32 +44,10 @@ class FgMessageData
     }
 
     /**
-     * Set subject
-     *
-     * @param string $subject
-     * @return FgMessageData
-     */
-    public function setSubject($subject)
-    {
-        $this->subject = $subject;
-
-        return $this;
-    }
-
-    /**
-     * Get subject
-     *
-     * @return string
-     */
-    public function getSubject()
-    {
-        return $this->subject;
-    }
-
-    /**
      * Set message
      *
      * @param string $message
+     *
      * @return FgMessageData
      */
     public function setMessage($message)
@@ -107,32 +68,10 @@ class FgMessageData
     }
 
     /**
-     * Set isRead
-     *
-     * @param boolean $isRead
-     * @return FgMessageData
-     */
-    public function setIsRead($isRead)
-    {
-        $this->isRead = $isRead;
-
-        return $this;
-    }
-
-    /**
-     * Get isRead
-     *
-     * @return boolean
-     */
-    public function getIsRead()
-    {
-        return $this->isRead;
-    }
-
-    /**
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
+     *
      * @return FgMessageData
      */
     public function setUpdatedAt($updatedAt)
@@ -153,32 +92,10 @@ class FgMessageData
     }
 
     /**
-     * Set isDeleted
-     *
-     * @param boolean $isDeleted
-     * @return FgMessageData
-     */
-    public function setIsDeleted($isDeleted)
-    {
-        $this->isDeleted = $isDeleted;
-
-        return $this;
-    }
-
-    /**
-     * Get isDeleted
-     *
-     * @return boolean
-     */
-    public function getIsDeleted()
-    {
-        return $this->isDeleted;
-    }
-
-    /**
      * Set message2
      *
      * @param \Common\UtilityBundle\Entity\FgMessage $message2
+     *
      * @return FgMessageData
      */
     public function setMessage2(\Common\UtilityBundle\Entity\FgMessage $message2 = null)
@@ -202,6 +119,7 @@ class FgMessageData
      * Set sender
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $sender
+     *
      * @return FgMessageData
      */
     public function setSender(\Common\UtilityBundle\Entity\FgCmContact $sender = null)
@@ -221,3 +139,4 @@ class FgMessageData
         return $this->sender;
     }
 }
+

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgFilter
  */
@@ -68,7 +66,7 @@ class FgFilter
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -79,19 +77,20 @@ class FgFilter
      * Set name
      *
      * @param string $name
+     *
      * @return FgFilter
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -102,19 +101,20 @@ class FgFilter
      * Set type
      *
      * @param string $type
+     *
      * @return FgFilter
      */
     public function setType($type)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -125,19 +125,20 @@ class FgFilter
      * Set tableRows
      *
      * @param integer $tableRows
+     *
      * @return FgFilter
      */
     public function setTableRows($tableRows)
     {
         $this->tableRows = $tableRows;
-    
+
         return $this;
     }
 
     /**
      * Get tableRows
      *
-     * @return integer 
+     * @return integer
      */
     public function getTableRows()
     {
@@ -148,19 +149,20 @@ class FgFilter
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
+     *
      * @return FgFilter
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
-    
+
         return $this;
     }
 
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -171,19 +173,20 @@ class FgFilter
      * Set filterData
      *
      * @param string $filterData
+     *
      * @return FgFilter
      */
     public function setFilterData($filterData)
     {
         $this->filterData = $filterData;
-    
+
         return $this;
     }
 
     /**
      * Get filterData
      *
-     * @return string 
+     * @return string
      */
     public function getFilterData()
     {
@@ -194,19 +197,20 @@ class FgFilter
      * Set isBroken
      *
      * @param boolean $isBroken
+     *
      * @return FgFilter
      */
     public function setIsBroken($isBroken)
     {
         $this->isBroken = $isBroken;
-    
+
         return $this;
     }
 
     /**
      * Get isBroken
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsBroken()
     {
@@ -217,19 +221,20 @@ class FgFilter
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgFilter
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -240,19 +245,20 @@ class FgFilter
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgFilter
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -263,19 +269,20 @@ class FgFilter
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgFilter
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
     {
         $this->contact = $contact;
-    
+
         return $this;
     }
 
     /**
      * Get contact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getContact()
     {
@@ -286,22 +293,24 @@ class FgFilter
      * Set tableAttributes
      *
      * @param \Common\UtilityBundle\Entity\FgTableSettings $tableAttributes
+     *
      * @return FgFilter
      */
     public function setTableAttributes(\Common\UtilityBundle\Entity\FgTableSettings $tableAttributes = null)
     {
         $this->tableAttributes = $tableAttributes;
-    
+
         return $this;
     }
 
     /**
      * Get tableAttributes
      *
-     * @return \Common\UtilityBundle\Entity\FgTableSettings 
+     * @return \Common\UtilityBundle\Entity\FgTableSettings
      */
     public function getTableAttributes()
     {
         return $this->tableAttributes;
     }
 }
+

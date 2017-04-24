@@ -28,6 +28,7 @@ class Clublist
     public $clubId;
     private $container;
     private $conn;
+    private $clubadminConn;
 
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container container
@@ -39,6 +40,7 @@ class Clublist
         $this->clubId = $club->get("id");
         $this->container = $container;
         $this->conn = $this->container->get('database_connection');
+        $this->clubadminConn = $this->container->get('fg.admin.connection')->getAdminConnection();
     }
 
     /**
@@ -154,7 +156,7 @@ class Clublist
     public function setLimit($limit = '')
     {
         if ($limit != '') {
-            $this->limit = " LIMIT " . FgUtility::getSecuredData($limit, $this->conn);
+            $this->limit = " LIMIT " . FgUtility::getSecuredData($limit, $this->clubadminConn);
         }
 
         return $this->limit;

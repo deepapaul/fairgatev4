@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnSmsExcludedNumbers
  */
@@ -39,6 +37,7 @@ class FgCnSmsExcludedNumbers
      * Set mobileNumber
      *
      * @param string $mobileNumber
+     *
      * @return FgCnSmsExcludedNumbers
      */
     public function setMobileNumber($mobileNumber)
@@ -62,6 +61,7 @@ class FgCnSmsExcludedNumbers
      * Set sms
      *
      * @param \Common\UtilityBundle\Entity\FgCnSms $sms
+     *
      * @return FgCnSmsExcludedNumbers
      */
     public function setSms(\Common\UtilityBundle\Entity\FgCnSms $sms = null)
@@ -81,3 +81,4 @@ class FgCnSmsExcludedNumbers
         return $this->sms;
     }
 }
+

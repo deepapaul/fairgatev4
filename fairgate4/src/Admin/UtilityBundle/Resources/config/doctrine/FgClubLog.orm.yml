@@ -1,0 +1,92 @@
+Admin\UtilityBundle\Entity\FgClubLog:
+    repositoryClass: Admin\UtilityBundle\Repository\FgClubLogRepository
+    type: entity
+    table: fg_club_log
+    indexes:
+        fk_fg_club_log_fg_club1:
+            columns:
+                - club_id
+        fk_fg_club_log_fg_cm_contact1:
+            columns:
+                - changed_by
+        fk_fg_club_log_fg_club_class_log1_idx:
+            columns:
+                - class_log_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        date:
+            type: datetime
+            nullable: true
+        kind:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        field:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        valueBefore:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: value_before
+        valueAfter:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: value_after
+        changedByName:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: changed_by_name
+    manyToOne:
+        changedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                changed_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        classLog:
+            targetEntity: FgClubClass
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                class_log_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,17 +1,26 @@
 # This file is auto-generated during the composer install
 parameters:
-    database_driver: 
-    database_host: 
+    database_driver: pdo_mysql
+    database_host: 192.168.0.203
+
     database_port: 
-    database_name: 
-    database_user: 
-    database_password: 
+    database_name: fairgate_migrate_new
+    database_user: admin
+    database_password: admin123
+    
+    admin_database_driver: pdo_mysql
+    admin_database_host: 192.168.0.203
+    admin_database_port: 
+    admin_database_name: fairgate_admin_ui
+    admin_database_user: admin
+    admin_database_password: admin123
+    
     mailer_transport: mail
     mailer_encryption: ssl
     locale: de
-    
+
     ### Secret key ###
-    secret: 
+    secret: 69b02ecb6bdffefedc703ca40822f44d
     
     ### Service classes for fairgate ###
     Club.service.class: Common\UtilityBundle\Routing\FgRoutingListener
@@ -25,8 +34,8 @@ parameters:
     
     ### FOSUser classes overriden ###
     security.mailer.class: Internal\UserBundle\Mailer\Mailer
-    
-    ### Symfony classes overriden ###    
+    security.user_manager.class: Internal\UserBundle\Security\UserManager
+    ### Symfony classes overriden ###   
     security.exception_listener.class: Common\UtilityBundle\Listener\SecurityExceptionListener
     doctrine_cache.apcu.class: Common\UtilityBundle\Cache\FgApcuCache
     
@@ -38,4 +47,4 @@ parameters:
     internal_user_logout_path: internal_user_security_logout
     security.userprovider.class: Internal\UserBundle\Security\UserProvider
     fg.avatar.class: Common\UtilityBundle\Util\FgAvatar
-    
+    fg.admin.connection.class: Common\UtilityBundle\Util\FgAdminConnection

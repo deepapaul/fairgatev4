@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsArticleSelectedcategories
  */
@@ -28,7 +26,7 @@ class FgCmsArticleSelectedcategories
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +37,20 @@ class FgCmsArticleSelectedcategories
      * Set article
      *
      * @param \Common\UtilityBundle\Entity\FgCmsArticle $article
+     *
      * @return FgCmsArticleSelectedcategories
      */
     public function setArticle(\Common\UtilityBundle\Entity\FgCmsArticle $article = null)
     {
         $this->article = $article;
-    
+
         return $this;
     }
 
     /**
      * Get article
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsArticle 
+     * @return \Common\UtilityBundle\Entity\FgCmsArticle
      */
     public function getArticle()
     {
@@ -62,22 +61,24 @@ class FgCmsArticleSelectedcategories
      * Set category
      *
      * @param \Common\UtilityBundle\Entity\FgCmsArticleCategory $category
+     *
      * @return FgCmsArticleSelectedcategories
      */
     public function setCategory(\Common\UtilityBundle\Entity\FgCmsArticleCategory $category = null)
     {
         $this->category = $category;
-    
+
         return $this;
     }
 
     /**
      * Get category
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsArticleCategory 
+     * @return \Common\UtilityBundle\Entity\FgCmsArticleCategory
      */
     public function getCategory()
     {
         return $this->category;
     }
 }
+

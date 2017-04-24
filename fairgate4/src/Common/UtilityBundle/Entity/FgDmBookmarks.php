@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgDmBookmarks
  */
@@ -48,7 +46,7 @@ class FgDmBookmarks
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -59,19 +57,20 @@ class FgDmBookmarks
      * Set type
      *
      * @param string $type
+     *
      * @return FgDmBookmarks
      */
     public function setType($type)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -82,19 +81,20 @@ class FgDmBookmarks
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgDmBookmarks
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -105,19 +105,20 @@ class FgDmBookmarks
      * Set category
      *
      * @param \Common\UtilityBundle\Entity\FgDmDocumentCategory $category
+     *
      * @return FgDmBookmarks
      */
     public function setCategory(\Common\UtilityBundle\Entity\FgDmDocumentCategory $category = null)
     {
         $this->category = $category;
-    
+
         return $this;
     }
 
     /**
      * Get category
      *
-     * @return \Common\UtilityBundle\Entity\FgDmDocumentCategory 
+     * @return \Common\UtilityBundle\Entity\FgDmDocumentCategory
      */
     public function getCategory()
     {
@@ -128,19 +129,20 @@ class FgDmBookmarks
      * Set subcategory
      *
      * @param \Common\UtilityBundle\Entity\FgDmDocumentSubcategory $subcategory
+     *
      * @return FgDmBookmarks
      */
     public function setSubcategory(\Common\UtilityBundle\Entity\FgDmDocumentSubcategory $subcategory = null)
     {
         $this->subcategory = $subcategory;
-    
+
         return $this;
     }
 
     /**
      * Get subcategory
      *
-     * @return \Common\UtilityBundle\Entity\FgDmDocumentSubcategory 
+     * @return \Common\UtilityBundle\Entity\FgDmDocumentSubcategory
      */
     public function getSubcategory()
     {
@@ -151,19 +153,20 @@ class FgDmBookmarks
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgDmBookmarks
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -174,22 +177,24 @@ class FgDmBookmarks
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgDmBookmarks
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
     {
         $this->contact = $contact;
-    
+
         return $this;
     }
 
     /**
      * Get contact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getContact()
     {
         return $this->contact;
     }
 }
+

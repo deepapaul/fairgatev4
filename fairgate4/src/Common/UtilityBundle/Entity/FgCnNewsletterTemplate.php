@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnNewsletterTemplate
  */
@@ -22,22 +20,37 @@ class FgCnNewsletterTemplate
     /**
      * @var string
      */
-    private $themeName;
+    private $headerImage;
 
     /**
      * @var string
      */
-    private $headerImage;
+    private $articleDisplay;
 
     /**
-     * @var boolean
+     * @var string
      */
-    private $isArticleDisplay;
+    private $senderName;
 
     /**
-     * @var boolean
+     * @var string
      */
-    private $showArticleImage;
+    private $senderEmail;
+
+    /**
+     * @var string
+     */
+    private $salutationType;
+
+    /**
+     * @var string
+     */
+    private $salutation;
+
+    /**
+     * @var string
+     */
+    private $languageSelection;
 
     /**
      * @var string
@@ -70,9 +83,24 @@ class FgCnNewsletterTemplate
     private $lastUpdated;
 
     /**
+     * @var \DateTime
+     */
+    private $createdOn;
+
+    /**
      * @var \Common\UtilityBundle\Entity\FgClub
      */
     private $club;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgCmContact
+     */
+    private $editedBy;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgCmContact
+     */
+    private $createdBy;
 
 
     /**
@@ -89,6 +117,7 @@ class FgCnNewsletterTemplate
      * Set title
      *
      * @param string $title
+     *
      * @return FgCnNewsletterTemplate
      */
     public function setTitle($title)
@@ -109,32 +138,10 @@ class FgCnNewsletterTemplate
     }
 
     /**
-     * Set themeName
-     *
-     * @param string $themeName
-     * @return FgCnNewsletterTemplate
-     */
-    public function setThemeName($themeName)
-    {
-        $this->themeName = $themeName;
-
-        return $this;
-    }
-
-    /**
-     * Get themeName
-     *
-     * @return string
-     */
-    public function getThemeName()
-    {
-        return $this->themeName;
-    }
-
-    /**
      * Set headerImage
      *
      * @param string $headerImage
+     *
      * @return FgCnNewsletterTemplate
      */
     public function setHeaderImage($headerImage)
@@ -155,55 +162,154 @@ class FgCnNewsletterTemplate
     }
 
     /**
-     * Set isArticleDisplay
+     * Set articleDisplay
      *
-     * @param boolean $isArticleDisplay
+     * @param string $articleDisplay
+     *
      * @return FgCnNewsletterTemplate
      */
-    public function setIsArticleDisplay($isArticleDisplay)
+    public function setArticleDisplay($articleDisplay)
     {
-        $this->isArticleDisplay = $isArticleDisplay;
+        $this->articleDisplay = $articleDisplay;
 
         return $this;
     }
 
     /**
-     * Get isArticleDisplay
+     * Get articleDisplay
      *
-     * @return boolean
+     * @return string
      */
-    public function getIsArticleDisplay()
+    public function getArticleDisplay()
     {
-        return $this->isArticleDisplay;
+        return $this->articleDisplay;
     }
 
     /**
-     * Set showArticleImage
+     * Set senderName
      *
-     * @param boolean $showArticleImage
+     * @param string $senderName
+     *
      * @return FgCnNewsletterTemplate
      */
-    public function setShowArticleImage($showArticleImage)
+    public function setSenderName($senderName)
     {
-        $this->showArticleImage = $showArticleImage;
+        $this->senderName = $senderName;
 
         return $this;
     }
 
     /**
-     * Get showArticleImage
+     * Get senderName
      *
-     * @return boolean
+     * @return string
      */
-    public function getShowArticleImage()
+    public function getSenderName()
     {
-        return $this->showArticleImage;
+        return $this->senderName;
+    }
+
+    /**
+     * Set senderEmail
+     *
+     * @param string $senderEmail
+     *
+     * @return FgCnNewsletterTemplate
+     */
+    public function setSenderEmail($senderEmail)
+    {
+        $this->senderEmail = $senderEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get senderEmail
+     *
+     * @return string
+     */
+    public function getSenderEmail()
+    {
+        return $this->senderEmail;
+    }
+
+    /**
+     * Set salutationType
+     *
+     * @param string $salutationType
+     *
+     * @return FgCnNewsletterTemplate
+     */
+    public function setSalutationType($salutationType)
+    {
+        $this->salutationType = $salutationType;
+
+        return $this;
+    }
+
+    /**
+     * Get salutationType
+     *
+     * @return string
+     */
+    public function getSalutationType()
+    {
+        return $this->salutationType;
+    }
+
+    /**
+     * Set salutation
+     *
+     * @param string $salutation
+     *
+     * @return FgCnNewsletterTemplate
+     */
+    public function setSalutation($salutation)
+    {
+        $this->salutation = $salutation;
+
+        return $this;
+    }
+
+    /**
+     * Get salutation
+     *
+     * @return string
+     */
+    public function getSalutation()
+    {
+        return $this->salutation;
+    }
+
+    /**
+     * Set languageSelection
+     *
+     * @param string $languageSelection
+     *
+     * @return FgCnNewsletterTemplate
+     */
+    public function setLanguageSelection($languageSelection)
+    {
+        $this->languageSelection = $languageSelection;
+
+        return $this;
+    }
+
+    /**
+     * Get languageSelection
+     *
+     * @return string
+     */
+    public function getLanguageSelection()
+    {
+        return $this->languageSelection;
     }
 
     /**
      * Set colorBg
      *
      * @param string $colorBg
+     *
      * @return FgCnNewsletterTemplate
      */
     public function setColorBg($colorBg)
@@ -227,6 +333,7 @@ class FgCnNewsletterTemplate
      * Set colorTocBg
      *
      * @param string $colorTocBg
+     *
      * @return FgCnNewsletterTemplate
      */
     public function setColorTocBg($colorTocBg)
@@ -250,6 +357,7 @@ class FgCnNewsletterTemplate
      * Set colorStdText
      *
      * @param string $colorStdText
+     *
      * @return FgCnNewsletterTemplate
      */
     public function setColorStdText($colorStdText)
@@ -273,6 +381,7 @@ class FgCnNewsletterTemplate
      * Set colorTocText
      *
      * @param string $colorTocText
+     *
      * @return FgCnNewsletterTemplate
      */
     public function setColorTocText($colorTocText)
@@ -296,6 +405,7 @@ class FgCnNewsletterTemplate
      * Set colorTitleText
      *
      * @param string $colorTitleText
+     *
      * @return FgCnNewsletterTemplate
      */
     public function setColorTitleText($colorTitleText)
@@ -319,6 +429,7 @@ class FgCnNewsletterTemplate
      * Set lastUpdated
      *
      * @param \DateTime $lastUpdated
+     *
      * @return FgCnNewsletterTemplate
      */
     public function setLastUpdated($lastUpdated)
@@ -339,9 +450,34 @@ class FgCnNewsletterTemplate
     }
 
     /**
+     * Set createdOn
+     *
+     * @param \DateTime $createdOn
+     *
+     * @return FgCnNewsletterTemplate
+     */
+    public function setCreatedOn($createdOn)
+    {
+        $this->createdOn = $createdOn;
+
+        return $this;
+    }
+
+    /**
+     * Get createdOn
+     *
+     * @return \DateTime
+     */
+    public function getCreatedOn()
+    {
+        return $this->createdOn;
+    }
+
+    /**
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCnNewsletterTemplate
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
@@ -360,284 +496,53 @@ class FgCnNewsletterTemplate
     {
         return $this->club;
     }
-    /**
-     * @var string
-     */
-    private $articleDisplay;
-
-    /**
-     * @var \Common\UtilityBundle\Entity\FgCmContact
-     */
-    private $editedBy;
-
-
-    /**
-     * Set articleDisplay
-     *
-     * @param string $articleDisplay
-     * @return FgCnNewsletterTemplate
-     */
-    public function setArticleDisplay($articleDisplay)
-    {
-        $this->articleDisplay = $articleDisplay;
-    
-        return $this;
-    }
-
-    /**
-     * Get articleDisplay
-     *
-     * @return string 
-     */
-    public function getArticleDisplay()
-    {
-        return $this->articleDisplay;
-    }
 
     /**
      * Set editedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $editedBy
+     *
      * @return FgCnNewsletterTemplate
      */
     public function setEditedBy(\Common\UtilityBundle\Entity\FgCmContact $editedBy = null)
     {
         $this->editedBy = $editedBy;
-    
+
         return $this;
     }
 
     /**
      * Get editedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getEditedBy()
     {
         return $this->editedBy;
-    }
-    /**
-     * @var \DateTime
-     */
-    private $createdOn;
-
-    /**
-     * @var \Common\UtilityBundle\Entity\FgCmContact
-     */
-    private $createdBy;
-
-
-    /**
-     * Set createdOn
-     *
-     * @param \DateTime $createdOn
-     * @return FgCnNewsletterTemplate
-     */
-    public function setCreatedOn($createdOn)
-    {
-        $this->createdOn = $createdOn;
-    
-        return $this;
-    }
-
-    /**
-     * Get createdOn
-     *
-     * @return \DateTime 
-     */
-    public function getCreatedOn()
-    {
-        return $this->createdOn;
     }
 
     /**
      * Set createdBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $createdBy
+     *
      * @return FgCnNewsletterTemplate
      */
     public function setCreatedBy(\Common\UtilityBundle\Entity\FgCmContact $createdBy = null)
     {
         $this->createdBy = $createdBy;
-    
+
         return $this;
     }
 
     /**
      * Get createdBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getCreatedBy()
     {
         return $this->createdBy;
     }
-    /**
-     * @var integer
-     */
-    private $clubId;
-
-    /**
-     * @var string
-     */
-    private $senderName;
-
-    /**
-     * @var string
-     */
-    private $senderEmail;
-
-    /**
-     * @var string
-     */
-    private $salutationType;
-
-    /**
-     * @var string
-     */
-    private $salutation;
-
-    /**
-     * @var string
-     */
-    private $languageSelection;
-
-
-    /**
-     * Set clubId
-     *
-     * @param integer $clubId
-     * @return FgCnNewsletterTemplate
-     */
-    public function setClubId($clubId)
-    {
-        $this->clubId = $clubId;
-    
-        return $this;
-    }
-
-    /**
-     * Get clubId
-     *
-     * @return integer 
-     */
-    public function getClubId()
-    {
-        return $this->clubId;
-    }
-
-    /**
-     * Set senderName
-     *
-     * @param string $senderName
-     * @return FgCnNewsletterTemplate
-     */
-    public function setSenderName($senderName)
-    {
-        $this->senderName = $senderName;
-    
-        return $this;
-    }
-
-    /**
-     * Get senderName
-     *
-     * @return string 
-     */
-    public function getSenderName()
-    {
-        return $this->senderName;
-    }
-
-    /**
-     * Set senderEmail
-     *
-     * @param string $senderEmail
-     * @return FgCnNewsletterTemplate
-     */
-    public function setSenderEmail($senderEmail)
-    {
-        $this->senderEmail = $senderEmail;
-    
-        return $this;
-    }
-
-    /**
-     * Get senderEmail
-     *
-     * @return string 
-     */
-    public function getSenderEmail()
-    {
-        return $this->senderEmail;
-    }
-
-    /**
-     * Set salutationType
-     *
-     * @param string $salutationType
-     * @return FgCnNewsletterTemplate
-     */
-    public function setSalutationType($salutationType)
-    {
-        $this->salutationType = $salutationType;
-    
-        return $this;
-    }
-
-    /**
-     * Get salutationType
-     *
-     * @return string 
-     */
-    public function getSalutationType()
-    {
-        return $this->salutationType;
-    }
-
-    /**
-     * Set salutation
-     *
-     * @param string $salutation
-     * @return FgCnNewsletterTemplate
-     */
-    public function setSalutation($salutation)
-    {
-        $this->salutation = $salutation;
-    
-        return $this;
-    }
-
-    /**
-     * Get salutation
-     *
-     * @return string 
-     */
-    public function getSalutation()
-    {
-        return $this->salutation;
-    }
-
-    /**
-     * Set languageSelection
-     *
-     * @param string $languageSelection
-     * @return FgCnNewsletterTemplate
-     */
-    public function setLanguageSelection($languageSelection)
-    {
-        $this->languageSelection = $languageSelection;
-    
-        return $this;
-    }
-
-    /**
-     * Get languageSelection
-     *
-     * @return string 
-     */
-    public function getLanguageSelection()
-    {
-        return $this->languageSelection;
-    }
 }
+

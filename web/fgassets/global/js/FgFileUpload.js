@@ -104,10 +104,10 @@ FgFileUpload = {
         var uploadActions = {
                     uploadActionSettings : {},
                     add: function (e, data) {  
-                        uploadSettings = uploadActions.uploadActionSettings;
-                        
+                       uploadSettings = uploadActions.uploadActionSettings;
                         // make save button disabled until uploads finished
                         if(uploadSettings.saveButtonDisableOnUploading) {
+                           
                             $('#'+uploadSettings.saveButtonId).addClass('disabled');
                         }
                         var timestamp = $.now();
@@ -169,10 +169,7 @@ FgFileUpload = {
                         if(uploadSettings.progressAllCallBack){
                             uploadSettings.progressAllCallBack.call();
                         }
-                        // make save button disabled until uploads finished
-                        if(uploadSettings.saveButtonDisableOnUploading) {
-                            $('#'+uploadSettings.saveButtonId).removeClass('disabled');
-                        }
+                       
                      },
                     done: function(e,data){
                         uploadSettings = uploadActions.uploadActionSettings;
@@ -198,7 +195,10 @@ FgFileUpload = {
                                 $this.call_callback(uploadSettings.onFileUploadError, $this, data, uploadSettings);
                             
                         }
-                        
+                         // make save button disabled until uploads finished
+                        if(uploadSettings.saveButtonDisableOnUploading) {
+                            $('#'+uploadSettings.saveButtonId).removeClass('disabled');
+                        }
                     },
                     fail: function(e,data){
 

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmDocuments
  */
@@ -59,6 +57,7 @@ class FgCmDocuments
      * Set title
      *
      * @param string $title
+     *
      * @return FgCmDocuments
      */
     public function setTitle($title)
@@ -82,6 +81,7 @@ class FgCmDocuments
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return FgCmDocuments
      */
     public function setDate($date)
@@ -105,6 +105,7 @@ class FgCmDocuments
      * Set file
      *
      * @param string $file
+     *
      * @return FgCmDocuments
      */
     public function setFile($file)
@@ -128,6 +129,7 @@ class FgCmDocuments
      * Set fileSize
      *
      * @param string $fileSize
+     *
      * @return FgCmDocuments
      */
     public function setFileSize($fileSize)
@@ -151,6 +153,7 @@ class FgCmDocuments
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgCmDocuments
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
@@ -174,6 +177,7 @@ class FgCmDocuments
      * Set createdBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $createdBy
+     *
      * @return FgCmDocuments
      */
     public function setCreatedBy(\Common\UtilityBundle\Entity\FgCmContact $createdBy = null)
@@ -193,3 +197,4 @@ class FgCmDocuments
         return $this->createdBy;
     }
 }
+

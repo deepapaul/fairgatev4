@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsNavigation
  */
@@ -93,7 +91,7 @@ class FgCmsNavigation
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -104,19 +102,20 @@ class FgCmsNavigation
      * Set title
      *
      * @param string $title
+     *
      * @return FgCmsNavigation
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -127,19 +126,20 @@ class FgCmsNavigation
      * Set isActive
      *
      * @param boolean $isActive
+     *
      * @return FgCmsNavigation
      */
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
-    
+
         return $this;
     }
 
     /**
      * Get isActive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsActive()
     {
@@ -150,19 +150,20 @@ class FgCmsNavigation
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgCmsNavigation
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -173,19 +174,20 @@ class FgCmsNavigation
      * Set isPublic
      *
      * @param boolean $isPublic
+     *
      * @return FgCmsNavigation
      */
     public function setIsPublic($isPublic)
     {
         $this->isPublic = $isPublic;
-    
+
         return $this;
     }
 
     /**
      * Get isPublic
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsPublic()
     {
@@ -196,19 +198,20 @@ class FgCmsNavigation
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return FgCmsNavigation
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -219,19 +222,20 @@ class FgCmsNavigation
      * Set editedAt
      *
      * @param \DateTime $editedAt
+     *
      * @return FgCmsNavigation
      */
     public function setEditedAt($editedAt)
     {
         $this->editedAt = $editedAt;
-    
+
         return $this;
     }
 
     /**
      * Get editedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getEditedAt()
     {
@@ -242,19 +246,20 @@ class FgCmsNavigation
      * Set type
      *
      * @param string $type
+     *
      * @return FgCmsNavigation
      */
     public function setType($type)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -265,19 +270,20 @@ class FgCmsNavigation
      * Set externalLink
      *
      * @param string $externalLink
+     *
      * @return FgCmsNavigation
      */
     public function setExternalLink($externalLink)
     {
         $this->externalLink = $externalLink;
-    
+
         return $this;
     }
 
     /**
      * Get externalLink
      *
-     * @return string 
+     * @return string
      */
     public function getExternalLink()
     {
@@ -288,19 +294,20 @@ class FgCmsNavigation
      * Set navigationUrl
      *
      * @param string $navigationUrl
+     *
      * @return FgCmsNavigation
      */
     public function setNavigationUrl($navigationUrl)
     {
         $this->navigationUrl = $navigationUrl;
-    
+
         return $this;
     }
 
     /**
      * Get navigationUrl
      *
-     * @return string 
+     * @return string
      */
     public function getNavigationUrl()
     {
@@ -311,19 +318,20 @@ class FgCmsNavigation
      * Set isAdditional
      *
      * @param boolean $isAdditional
+     *
      * @return FgCmsNavigation
      */
     public function setIsAdditional($isAdditional)
     {
         $this->isAdditional = $isAdditional;
-    
+
         return $this;
     }
 
     /**
      * Get isAdditional
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsAdditional()
     {
@@ -334,19 +342,20 @@ class FgCmsNavigation
      * Set parent
      *
      * @param \Common\UtilityBundle\Entity\FgCmsNavigation $parent
+     *
      * @return FgCmsNavigation
      */
     public function setParent(\Common\UtilityBundle\Entity\FgCmsNavigation $parent = null)
     {
         $this->parent = $parent;
-    
+
         return $this;
     }
 
     /**
      * Get parent
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsNavigation 
+     * @return \Common\UtilityBundle\Entity\FgCmsNavigation
      */
     public function getParent()
     {
@@ -357,19 +366,20 @@ class FgCmsNavigation
      * Set page
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPage $page
+     *
      * @return FgCmsNavigation
      */
     public function setPage(\Common\UtilityBundle\Entity\FgCmsPage $page = null)
     {
         $this->page = $page;
-    
+
         return $this;
     }
 
     /**
      * Get page
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPage 
+     * @return \Common\UtilityBundle\Entity\FgCmsPage
      */
     public function getPage()
     {
@@ -380,19 +390,20 @@ class FgCmsNavigation
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmsNavigation
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -403,19 +414,20 @@ class FgCmsNavigation
      * Set createdBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $createdBy
+     *
      * @return FgCmsNavigation
      */
     public function setCreatedBy(\Common\UtilityBundle\Entity\FgCmContact $createdBy = null)
     {
         $this->createdBy = $createdBy;
-    
+
         return $this;
     }
 
     /**
      * Get createdBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getCreatedBy()
     {
@@ -426,22 +438,24 @@ class FgCmsNavigation
      * Set editedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $editedBy
+     *
      * @return FgCmsNavigation
      */
     public function setEditedBy(\Common\UtilityBundle\Entity\FgCmContact $editedBy = null)
     {
         $this->editedBy = $editedBy;
-    
+
         return $this;
     }
 
     /**
      * Get editedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getEditedBy()
     {
         return $this->editedBy;
     }
 }
+

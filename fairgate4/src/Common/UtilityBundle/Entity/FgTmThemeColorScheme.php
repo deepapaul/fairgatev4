@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgTmThemeColorScheme
  */
@@ -43,7 +41,7 @@ class FgTmThemeColorScheme
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -54,19 +52,20 @@ class FgTmThemeColorScheme
      * Set colorSchemes
      *
      * @param string $colorSchemes
+     *
      * @return FgTmThemeColorScheme
      */
     public function setColorSchemes($colorSchemes)
     {
         $this->colorSchemes = $colorSchemes;
-    
+
         return $this;
     }
 
     /**
      * Get colorSchemes
      *
-     * @return string 
+     * @return string
      */
     public function getColorSchemes()
     {
@@ -77,19 +76,20 @@ class FgTmThemeColorScheme
      * Set cssFilename
      *
      * @param string $cssFilename
+     *
      * @return FgTmThemeColorScheme
      */
     public function setCssFilename($cssFilename)
     {
         $this->cssFilename = $cssFilename;
-    
+
         return $this;
     }
 
     /**
      * Get cssFilename
      *
-     * @return string 
+     * @return string
      */
     public function getCssFilename()
     {
@@ -100,19 +100,20 @@ class FgTmThemeColorScheme
      * Set isDefault
      *
      * @param boolean $isDefault
+     *
      * @return FgTmThemeColorScheme
      */
     public function setIsDefault($isDefault)
     {
         $this->isDefault = $isDefault;
-    
+
         return $this;
     }
 
     /**
      * Get isDefault
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsDefault()
     {
@@ -123,19 +124,20 @@ class FgTmThemeColorScheme
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgTmThemeColorScheme
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -146,22 +148,24 @@ class FgTmThemeColorScheme
      * Set theme
      *
      * @param \Common\UtilityBundle\Entity\FgTmTheme $theme
+     *
      * @return FgTmThemeColorScheme
      */
     public function setTheme(\Common\UtilityBundle\Entity\FgTmTheme $theme = null)
     {
         $this->theme = $theme;
-    
+
         return $this;
     }
 
     /**
      * Get theme
      *
-     * @return \Common\UtilityBundle\Entity\FgTmTheme 
+     * @return \Common\UtilityBundle\Entity\FgTmTheme
      */
     public function getTheme()
     {
         return $this->theme;
     }
 }
+

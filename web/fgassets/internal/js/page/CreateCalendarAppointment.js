@@ -38,7 +38,10 @@ $(function () {
 var Calendar = {
     init: function(){
         FgFormTools.handleUniform();
-        FgFormTools.handleDatepicker();
+        var extraSettings = {
+            orientation: "bottom auto"
+        };
+        FgFormTools.handleDatepicker(extraSettings);
         Calendar.handleDateTimepicker();
         $('#until-date-icon').on('click', function(){
             var isDisabled = $('.fg-event-until').is(':disabled');

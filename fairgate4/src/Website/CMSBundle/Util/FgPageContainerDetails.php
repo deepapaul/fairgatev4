@@ -8,6 +8,7 @@ namespace Website\CMSBundle\Util;
 use Common\UtilityBundle\Repository\Pdo\ContactPdo;
 use Website\CMSBundle\Util\FgPageContent;
 use Website\CMSBundle\Util\FgCmsPortraitContainer;
+use Website\CMSBundle\Util\FgCmsArticleContainer;
 use Common\UtilityBundle\Repository\Pdo\CmsPdo;
 
 /**
@@ -348,6 +349,8 @@ class FgPageContainerDetails
                             //any change in column sizes should adjust the portrait element size settings if any within that column.
                             $fgCmsPortraitContainer = new FgCmsPortraitContainer($this->container);
                             $fgCmsPortraitContainer->adjustPortraitElementOnContainerResize($containerId);
+                            $fgCmsArticleContainer = new FgCmsArticleContainer($this->container);
+                            $fgCmsArticleContainer->adjustArticleElementOnContainerResize($containerId);
                         }
                     }
                 }

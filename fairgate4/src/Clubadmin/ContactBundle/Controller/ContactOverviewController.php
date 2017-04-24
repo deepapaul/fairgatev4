@@ -26,7 +26,7 @@ use Common\FilemanagerBundle\Util\FileChecking;
 use Clubadmin\ContactBundle\Util\FgClubAssignmentValidator;
 use Clubadmin\ContactBundle\Util\ContactDetailsSave;
 use Symfony\Component\HttpFoundation\Request;
-use Common\UtilityBundle\Repository\Pdo\ClubPdo;
+use Admin\UtilityBundle\Repository\Pdo\ClubPdo;
 use Common\UtilityBundle\Repository\Pdo\membershipPdo;
 /**
  * ContactOverview controller for handlying overview and settings.
@@ -1479,7 +1479,7 @@ class ContactOverviewController extends FgController
                         $date = strtotime($value);
                         if ($date !== false) {
                             $fromDate = date('Y-m-d H:i:s', $date);
-                            $clubObj = new ClubPdo($this->container);
+                            $clubObj = new \Common\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
                             $clubObj->updateClubAssignmentDate($clubAssignmentId, 'from_date', $fromDate);
                         }
                     }
@@ -1490,7 +1490,7 @@ class ContactOverviewController extends FgController
                         $date = strtotime($value);
                         if ($date !== false) {
                             $toDate = date('Y-m-d H:i:s', $date);
-                            $clubObj = new ClubPdo($this->container);
+                            $clubObj = new \Common\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
                             $clubObj->updateClubAssignmentDate($clubAssignmentId, 'to_date', $toDate);
                         }
                     }

@@ -48,8 +48,8 @@ var FgWebsiteArticle = (function () {
                 if ($('.fg-dev-article-list').length == 0) {
                     $('#fg-article-container').html('<p>' + articleEmptyMessage + '</p>');
                 }
-                if (response.articleData.length == _this.paginationCount) {
-                    $('#fg-article-container article:last').after('<span id="fg-dev-article-loader"></span>');
+                if (response.articleData.length <= _this.paginationCount) {
+                    $('#fg-article-container .fg-dev-article-list:last').after('<span id="fg-dev-article-loader"></span>');
                 }
             },
             dataType: 'json'

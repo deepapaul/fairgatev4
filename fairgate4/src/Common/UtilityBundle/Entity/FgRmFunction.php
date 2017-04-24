@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgRmFunction
  */
@@ -35,6 +33,16 @@ class FgRmFunction
     private $sortOrder;
 
     /**
+     * @var boolean
+     */
+    private $isFederation;
+
+    /**
+     * @var boolean
+     */
+    private $isRequiredAssignment;
+
+    /**
      * @var \Common\UtilityBundle\Entity\FgRmCategory
      */
     private $category;
@@ -48,9 +56,7 @@ class FgRmFunction
     public function getId()
     {
         return $this->id;
-
     }
-
 
     /**
      * Set title
@@ -64,9 +70,7 @@ class FgRmFunction
         $this->title = $title;
 
         return $this;
-
     }
-
 
     /**
      * Get title
@@ -76,9 +80,7 @@ class FgRmFunction
     public function getTitle()
     {
         return $this->title;
-
     }
-
 
     /**
      * Set isActive
@@ -92,9 +94,7 @@ class FgRmFunction
         $this->isActive = $isActive;
 
         return $this;
-
     }
-
 
     /**
      * Get isActive
@@ -104,9 +104,7 @@ class FgRmFunction
     public function getIsActive()
     {
         return $this->isActive;
-
     }
-
 
     /**
      * Set isVisible
@@ -120,9 +118,7 @@ class FgRmFunction
         $this->isVisible = $isVisible;
 
         return $this;
-
     }
-
 
     /**
      * Get isVisible
@@ -132,9 +128,7 @@ class FgRmFunction
     public function getIsVisible()
     {
         return $this->isVisible;
-
     }
-
 
     /**
      * Set sortOrder
@@ -148,9 +142,7 @@ class FgRmFunction
         $this->sortOrder = $sortOrder;
 
         return $this;
-
     }
-
 
     /**
      * Get sortOrder
@@ -160,47 +152,7 @@ class FgRmFunction
     public function getSortOrder()
     {
         return $this->sortOrder;
-
     }
-
-
-    /**
-     * Set category
-     *
-     * @param \Common\UtilityBundle\Entity\FgRmCategory $category
-     *
-     * @return FgRmFunction
-     */
-    public function setCategory(\Common\UtilityBundle\Entity\FgRmCategory $category = null)
-    {
-        $this->category = $category;
-
-        return $this;
-
-    }
-
-
-    /**
-     * Get category
-     *
-     * @return \Common\UtilityBundle\Entity\FgRmCategory
-     */
-    public function getCategory()
-    {
-        return $this->category;
-
-    }
-
-    /**
-     * @var boolean
-     */
-    private $isFederation;
-
-    /**
-     * @var boolean
-     */
-    private $isRequiredAssignment;
-
 
     /**
      * Set isFederation
@@ -214,9 +166,7 @@ class FgRmFunction
         $this->isFederation = $isFederation;
 
         return $this;
-
     }
-
 
     /**
      * Get isFederation
@@ -226,9 +176,7 @@ class FgRmFunction
     public function getIsFederation()
     {
         return $this->isFederation;
-
     }
-
 
     /**
      * Set isRequiredAssignment
@@ -242,9 +190,7 @@ class FgRmFunction
         $this->isRequiredAssignment = $isRequiredAssignment;
 
         return $this;
-
     }
-
 
     /**
      * Get isRequiredAssignment
@@ -254,8 +200,30 @@ class FgRmFunction
     public function getIsRequiredAssignment()
     {
         return $this->isRequiredAssignment;
-
     }
 
+    /**
+     * Set category
+     *
+     * @param \Common\UtilityBundle\Entity\FgRmCategory $category
+     *
+     * @return FgRmFunction
+     */
+    public function setCategory(\Common\UtilityBundle\Entity\FgRmCategory $category = null)
+    {
+        $this->category = $category;
 
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return \Common\UtilityBundle\Entity\FgRmCategory
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
 }
+

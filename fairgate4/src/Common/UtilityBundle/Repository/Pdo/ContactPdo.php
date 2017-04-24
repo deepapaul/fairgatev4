@@ -285,7 +285,8 @@ class ContactPdo
     public function checkWhetherContactHasAccessToClubFrontend($contactId, $clubId, $fedContactId, $subfedContactId, $clubTable = '', $clubType)
     {
         $hasAccess = 0;
-        $contact = $this->container->get('contact');
+        $clubBookedModules = $this->container->get('club')->get('bookedModulesDet');
+        
         if ($clubTable != '') {
             $contactField = 'id';
             switch ($clubType) {
@@ -300,13 +301,15 @@ class ContactPdo
                     $contactField = 'fed_contact_id';
             }
 
-            $sql = 'SELECT C.intranet_access AS intranetAccess FROM fg_cm_contact C INNER JOIN sf_guard_user S ON S.contact_id = C.id '
-                . "AND S.club_id = $clubId LEFT JOIN fg_mb_club_modules CM ON CM.club_id = $clubId LEFT JOIN fg_mb_module M "
-                . "ON CM.module_id = M.id WHERE C.$contactField = $contactId AND M.module_key = 'frontend1' AND CM.is_module_active = 1 "
-                . 'AND C.is_deleted = 0 AND C.is_permanent_delete = 0';
+            if(!in_array('frontend1', $clubBookedModules)) {
+                $hasAccess = 0;
+            } else {
+                $sql = 'SELECT C.intranet_access AS intranetAccess FROM fg_cm_contact C INNER JOIN sf_guard_user S ON S.contact_id = C.id '
+                        . "AND S.club_id = $clubId WHERE C.$contactField = $contactId AND C.is_deleted = 0 AND C.is_permanent_delete = 0";
 
-            $result = $this->conn->fetchAll($sql, array('contactId' => $contactId, 'clubId' => $clubId));
-            $hasAccess = (count($result) > 0) ? $result[0]['intranetAccess'] : 0;
+                $result = $this->conn->fetchAll($sql, array('contactId' => $contactId, 'clubId' => $clubId));
+                $hasAccess = (count($result) > 0) ? $result[0]['intranetAccess'] : 0;
+            }
         }
 
         return $hasAccess;
@@ -1302,16 +1305,21 @@ class ContactPdo
         $this->conn->executeQuery("$updateSubscriber");
         $delSubscriber = "Delete S from `fg_cn_subscriber` S JOIN fg_cm_contact C ON C.club_id=S.club_id INNER JOIN master_system M ON M.fed_contact_id=C.fed_contact_id and lower(S.`email`)=lower(M.`$primaryEmail`) INNER JOIN $importTable T ON T.fed_contact_id=M.fed_contact_id  where C.fed_contact_id=T.fed_contact_id  ";
         $this->conn->executeQuery("$delSubscriber");
+        
+        $sql = "SELECT GROUP_CONCAT(contact_id) As idList FROM $importTable";
+        $results = $this->conn->fetchAll($sql);
+        $contactIdArray = explode(',',$results[0]['idList']);
+        return $contactIdArray;
     }
 
     /**
      * Function to reorder sort value after deletion of a row
-     * 
+     *
      * @param String $tableName      Table name of sort table
      * @param String $joinFieldName  Field name of table
      * @param String $joinFieldValue Field value
      * @param String $sortField      Sort field name
-     * 
+     *
      * @return boolean
      */
     public function reorderSortPosition($tableName, $joinFieldName, $joinFieldValue, $sortField)
@@ -1337,7 +1345,7 @@ class ContactPdo
 
     /**
      * Function to share imported contacts
-     * 
+     *
      * @param string $importTable Temporary table for import
      * @param object $log         Log file object
      */
@@ -1362,9 +1370,9 @@ class ContactPdo
     }
 
     /**
-     * This function is used to get the contact fields to be populated in 
+     * This function is used to get the contact fields to be populated in
      * contact table element second step 'select columns'
-     * 
+     *
      * @return array $fieldsArray Array of all contact fields available in this club with details
      */
     public function getContactFieldsForContactTableColumns()
@@ -1415,11 +1423,11 @@ class ContactPdo
     }
 
     /**
-     * This function is used to get the role categories and its details available in a club for 
+     * This function is used to get the role categories and its details available in a club for
      * contact table element columns
-     * 
+     *
      * @param boolean $filterRole Flag for identifying filter role or manual role category
-     * 
+     *
      * @return array $result Result array
      */
     public function getRoleCategoriesForContactTableColumns($filterRole = false)
@@ -1453,9 +1461,9 @@ class ContactPdo
 
     /**
      * This function get the filter role category count
-     * 
+     *
      * @param boolean $filterRole Flag for identifying filter role or manual role category
-     * 
+     *
      * @return array $result Result array
      */
     public function getRoleCategoriesCountContactTableColumns($filterRole = false)
@@ -1482,10 +1490,10 @@ class ContactPdo
     }
 
     /**
-     * This function to create the category visibility condition 
+     * This function to create the category visibility condition
      *
-     * 
-     * @return string $result 
+     *
+     * @return string $result
      */
     private function categoryVisibilityCondition()
     {
@@ -1516,9 +1524,9 @@ class ContactPdo
     }
 
     /**
-     * This function is used ti get the team functions and workgroups available in a club for 
+     * This function is used ti get the team functions and workgroups available in a club for
      * contact table element columns
-     * 
+     *
      * @return array $result Result array
      */
     public function getTeamAndWorkgroupDetailsForContactTableColumns()
@@ -1543,11 +1551,11 @@ class ContactPdo
 
     /**
      * This function is used to update contact field value in master_system, master_club and master_federation tables.
-     * 
+     *
      * @param int       $attrId     Contact field attribute id
      * @param int       $contactId  Contact id
      * @param string    $value      Upadating value
-     * 
+     *
      * @return void
      */
     public function updateContactField($attrId, $contactId, $value)
@@ -1613,7 +1621,6 @@ class ContactPdo
     /**
      * Function to get next birthdays bithday details
      *
-     * @param object $contactlistClass Object of class contactlist
      * @param object $container        Object of container
      * @param string $roleType         team or workgroup
      * @param int    $roleId           individual role id
@@ -1622,74 +1629,167 @@ class ContactPdo
      *
      * @return array
      */
-    public function getNextBirthDaysFromContactList($contactlistClass, $container, $roleType = '', $roleId = '', $categoryId, $clubId)
+    public function getNextBirthDaysFromContactList($container, $roleType = '', $roleId = '', $categoryId)
     {
+        $club = $container->get('club');
+        $clubId = $club->get('id');
+        $clubType = $club->get('type');
         if ($roleType != '' && $roleId == '') {
             return array();
         }
-        $dob = $container->getParameter('system_field_dob');
         $select = '';
         if ($roleId != '') {
             $select = "SELECT DISTINCT(fg_cnt.contact_id) FROM `fg_rm_role_contact` fg_cnt LEFT JOIN `fg_rm_category_role_function` fcat ON fcat.id = fg_cnt.fg_rm_crf_id LEFT JOIN fg_rm_role r ON fcat.role_id= r.id WHERE fcat.role_id = $roleId AND fg_cnt.assined_club_id = $clubId AND fcat.category_id = $categoryId AND r.is_active=1";
         }
-        $currentYear = date('Y');
-        $contactlistClass->setColumns(array(
-            " DATE_FORMAT(IF(DATE(NOW()) > CONCAT('" . $currentYear . "-',DATE_FORMAT(`" . $dob . "`,'%m-%d')), CONCAT('" . ($currentYear + 1) . "-',DATE_FORMAT(`" . $dob . "`,'%m-%d')), CONCAT('" . $currentYear . "-',DATE_FORMAT(`" . $dob . "`,'%m-%d'))),'%d.%m.%Y') as nextBirthDay, "
-            . " IF(DATE(NOW()) > CONCAT('" . $currentYear . "-',DATE_FORMAT(`" . $dob . "`,'%m-%d')), CONCAT('" . ($currentYear + 1) . "-',DATE_FORMAT(`" . $dob . "`,'%m-%d')), CONCAT('" . $currentYear . "-',DATE_FORMAT(`" . $dob . "`,'%m-%d'))) as nextDate, "
-            . "contactNameNoSort(fg_cm_contact.id, 0) AS personName, "
-            . "( DATE_FORMAT(IF(DATE(NOW()) > CONCAT('" . $currentYear . "-',DATE_FORMAT(`" . $dob . "`,'%m-%d')), CONCAT('" . ($currentYear + 1) . "-',DATE_FORMAT(`" . $dob . "`,'%m-%d')), CONCAT('" . $currentYear . "-',DATE_FORMAT(`" . $dob . "`,'%m-%d'))),'%Y') - DATE_FORMAT(`" . $dob . "`,'%Y')) as age, "
-            . "DATE(`" . $dob . "`) as birthyear", "isCompany", "contactName", "fg_cm_contact.is_stealth_mode AS isStealthMode"));
-        $contactlistClass->setFrom();
-        $contactlistClass->setCondition();
+        $dob = $container->getParameter('system_field_dob');
+        $cName = $container->getParameter('system_field_companyname');
+        $fName = $container->getParameter('system_field_firstname');
+        $lName = $container->getParameter('system_field_lastname');
+
+        $query = "SELECT "
+            . "DATE_ADD(`" . $dob . "`, INTERVAL IF(DAYOFYEAR(`" . $dob . "`) >= DAYOFYEAR(CURDATE()), YEAR(CURDATE())-YEAR(`" . $dob . "`), YEAR(CURDATE())-YEAR(`" . $dob . "`)+1 ) YEAR ) AS `nextDate`, "
+            . "GROUP_CONCAT( CONCAT( IF((fg_cm_contact.is_company = 1 AND fg_cm_contact.has_main_contact = 1),concat('`" . $cName . "` (', `" . $fName . "`, ' ', `" . $lName . "`, ')'), concat(`" . $fName . "`, ' ', `" . $lName . "`)) ,'~',YEAR(NOW()) - YEAR(`" . $dob . "`) - (DATE_FORMAT(NOW(), '00-%m-%d') < DATE_FORMAT(`" . $dob . "`, '00-%m-%d')) ,'~',fg_cm_contact.id,'~',fg_cm_contact.is_stealth_mode) separator ',') AS contacts "
+            . "FROM fg_cm_contact "
+            . "INNER JOIN master_system as ms on ms.fed_contact_id = fg_cm_contact.fed_contact_id "
+            . "WHERE fg_cm_contact.is_permanent_delete = 0 AND "
+            . "fg_cm_contact.is_deleted = 0 AND "
+            . "fg_cm_contact.club_id = " . $clubId . " AND "
+            . "(fg_cm_contact.main_club_id =" . $clubId . "  OR fg_cm_contact.fed_membership_cat_id IS NOT NULL) AND ";
+         
+        if($clubType == 'federation' || $clubType == 'sub_federation'){
+            $query .= "(fg_cm_contact.is_fed_membership_confirmed = '0' OR "
+                . "(fg_cm_contact.is_fed_membership_confirmed = '1' AND fg_cm_contact.old_fed_membership_id IS NOT NULL)) AND ";
+        }
+        
+        $query .= "fg_cm_contact.is_draft=0  ";
         if ($roleId != '') {
-            $contactlistClass->addCondition("fg_cm_contact.id IN ($select)");
+            $query .= "AND fg_cm_contact.id IN ($select)  ";
         }
-        $contactlistClass->addCondition("`" . $dob . "` IS NOT NULL AND DATE(`" . $dob . "`) != '0000-00-00' AND DATE(`" . $dob . "`) <= CURDATE() ");
-        $contactlistClass->addCondition("fg_cm_contact.is_company = 0 OR (fg_cm_contact.is_company = 1 AND fg_cm_contact.`comp_def_contact` IS NULL AND fg_cm_contact.`has_main_contact` = 1)");
+        $query .= "AND (`" . $dob . "` IS NOT NULL AND DATE(`" . $dob . "`) != '0000-00-00' AND DATE(`" . $dob . "`) <= CURDATE() ) AND "
+            . "(fg_cm_contact.is_company = 0 OR "
+            . "(fg_cm_contact.is_company = 1 AND fg_cm_contact.`comp_def_contact` IS NULL AND fg_cm_contact.`has_main_contact` = 1) ) ";
+
         if ($roleId == '') {
-            $contactlistClass->addCondition("fg_cm_contact.is_stealth_mode != 1");
+            $query .= " AND fg_cm_contact.is_stealth_mode != 1 ";
         }
-        $contactlistClass->addOrderBy('nextDate ASC');
-        $query = $contactlistClass->getResult();
-        $finalQuery = "SELECT nextBirthDay, nextDate, group_concat(`contacts` separator ',') as `contacts` FROM (SELECT *, "
-            . "CONCAT( personName,'~',age,'~',id, '~', isStealthMode) AS contacts FROM "
-            . "(" . $query . " ) TAB ORDER BY contacts ASC) TAB2 group by nextBirthDay,nextDate ORDER BY nextDate ASC LIMIT 6 ";
-        $nextBirthDays = $this->em->getRepository('CommonUtilityBundle:FgCmMembership')->getContactList($finalQuery);
+        $query .= "GROUP BY nextDate "
+            . "ORDER BY nextDate, contacts "
+            . "ASC LIMIT 6";
+
+        $nextBirthDays = $this->conn->fetchAll($query);
+        //group Next Birthday In Desired Format
+        $nextBirthDay = $this->groupNextBirthdayDesiredFormat($nextBirthDays, 'internal');
+
+        return $nextBirthDay;
+    }
+    /*
+     * Function to get next birthdays of active contacts in dashboard
+     * @param $container             Object of container
+     *
+     * return array $nextBirthDay
+     */
+
+    public function getNextBirthDaysFromContactListBackend($container)
+    {
+        $club = $container->get('club');
+        $clubId = $club->get('id');
+        $clubType = $club->get('type');
+
+        $dob = $container->getParameter('system_field_dob');
+        $cName = $container->getParameter('system_field_companyname');
+        $fName = $container->getParameter('system_field_firstname');
+        $lName = $container->getParameter('system_field_lastname');
+
+        $query = "SELECT "
+            . "DATE_ADD(`" . $dob . "`, INTERVAL IF(DAYOFYEAR(`" . $dob . "`) >= DAYOFYEAR(CURDATE()), YEAR(CURDATE())-YEAR(`" . $dob . "`), YEAR(CURDATE())-YEAR(`" . $dob . "`)+1 ) YEAR ) AS `nextDate`, "
+            . "GROUP_CONCAT( CONCAT( IF((fg_cm_contact.is_company = 1 AND fg_cm_contact.has_main_contact = 1),concat('`" . $cName . "` (', `" . $fName . "`, ' ', `" . $lName . "`, ')'), concat(`" . $fName . "`, ' ', `" . $lName . "`)) ,'~',YEAR(NOW()) - YEAR(`" . $dob . "`) - (DATE_FORMAT(NOW(), '00-%m-%d') < DATE_FORMAT(`" . $dob . "`, '00-%m-%d')) ,'~',fg_cm_contact.id) separator ',') AS contacts "
+            . "FROM fg_cm_contact "
+            . "INNER JOIN master_system as ms on ms.fed_contact_id = fg_cm_contact.fed_contact_id "
+            . "WHERE "
+            . "fg_cm_contact.is_permanent_delete = 0 AND "
+            . "fg_cm_contact.is_deleted = 0 AND "
+            . "fg_cm_contact.club_id = " . $clubId . " AND "
+            . "(fg_cm_contact.main_club_id =" . $clubId . "  OR fg_cm_contact.fed_membership_cat_id IS NOT NULL) AND ";
+        
+        if($clubType == 'federation' || $clubType == 'sub_federation'){
+            $query .= "(fg_cm_contact.is_fed_membership_confirmed = '0' OR "
+                . "(fg_cm_contact.is_fed_membership_confirmed = '1' AND fg_cm_contact.old_fed_membership_id IS NOT NULL)) AND ";
+        }
+        
+        $query .= "fg_cm_contact.is_draft=0 AND "
+            . "(`" . $dob . "` IS NOT NULL AND DATE(`" . $dob . "`) != '0000-00-00' AND DATE(`" . $dob . "`) <= CURDATE() ) AND "
+            . "(fg_cm_contact.is_company = 0 OR "
+            . "(fg_cm_contact.is_company = 1 AND fg_cm_contact.`comp_def_contact` IS NULL AND fg_cm_contact.`has_main_contact` = 1) ) "
+            . "GROUP BY nextDate "
+            . "ORDER BY nextDate, contacts "
+            . "ASC LIMIT 7";
+
+
+        $nextBirthDays = $this->conn->fetchAll($query);
+
+        //group Next Birthday In Desired Format
+        $nextBirthDay = $this->groupNextBirthdayDesiredFormat($nextBirthDays, 'backend');
+
+        return $nextBirthDay;
+    }
+
+    /**
+     * group Next Birthday In Desired Format
+     *
+     * @param array $nextBirthDays  next BirthDay list
+     *
+     * @return array
+     */
+    private function groupNextBirthdayDesiredFormat($nextBirthDays, $from)
+    {
+        $clubObj = $this->container->get('club');
+        $userRights = $clubObj->get('allowedRights');
+        $contactRights = (in_array('contact', $userRights) || in_array('readonly_contact', $userRights)) ? 1 : 0;
+        for ($i = 0; $i < count($nextBirthDays); $i++) {
+            $nextBirthDays[$i]['contactRights'] = $contactRights;
+            $contactsIdsArray = explode(",", $nextBirthDays[$i]['contacts']);
+            if ($nextBirthDays[$i]['nextDate'] === date('Y-m-d')) {
+                $contactsArray = $this->getArrayOfContactDetails($contactsIdsArray, 'today', $from);
+                $nextBirthDays[$i]['nextBirthDay'] = $this->container->get('translator')->trans('DASHBOARD_TODAY');
+            } else {
+                $contactsArray = $this->getArrayOfContactDetails($contactsIdsArray, 'nottoday', $from);
+                $nextBirthDays[$i]['nextBirthDay'] = $clubObj->formatDate($nextBirthDays[$i]['nextDate'], 'date', 'Y-m-d');
+            }
+            $nextBirthDays[$i]['contacts'] = $contactsArray;
+            $nextBirthDays[$i]['contactsNumber'] = count($contactsArray);
+        }
 
         return $nextBirthDays;
     }
     /*
-     * function to get next birthdays of active contacts in dashboard
-     * param $contactlistClass      Object of class contactlist
-     * param $container             Object of container
+     * Function to return array of name, contact-overview url, age of each contacts
+     * param $contactsIdsArray array of string for each contact
+     * that string is in the format contactname~age~contactId
+     * $return  array
      */
 
-    public function getNextBirthDaysFromContactListBackend($contactlistClass, $container)
+    private function getArrayOfContactDetails($contactsIdsArray, $when, $from)
     {
-        $dob = $container->getParameter('system_field_dob');
-        $currentYear = date('Y');
-        $contactlistClass->setColumns(array("DATE_FORMAT(IF(DATE(NOW()) > CONCAT('" . $currentYear . "-',DATE_FORMAT(`" . $dob . "`,'%m-%d')), CONCAT('" . ($currentYear + 1) . "-',DATE_FORMAT(`" . $dob . "`,'%m-%d')), CONCAT('" . $currentYear . "-',DATE_FORMAT(`" . $dob . "`,'%m-%d'))),'%d.%m.%Y') as nextBirthDay, "
-            . " IF(DATE(NOW()) > CONCAT('" . $currentYear . "-',DATE_FORMAT(`" . $dob . "`,'%m-%d')), CONCAT('" . ($currentYear + 1) . "-',DATE_FORMAT(`" . $dob . "`,'%m-%d')), CONCAT('" . $currentYear . "-',DATE_FORMAT(`" . $dob . "`,'%m-%d'))) as nextDate, "
-            . "contactNameNoSort(fg_cm_contact.id, 0) AS personName, "
-            . "( DATE_FORMAT(IF(DATE(NOW()) > CONCAT('" . $currentYear . "-',DATE_FORMAT(`" . $dob . "`,'%m-%d')), CONCAT('" . ($currentYear + 1) . "-',DATE_FORMAT(`" . $dob . "`,'%m-%d')), CONCAT('" . $currentYear . "-',DATE_FORMAT(`" . $dob . "`,'%m-%d'))),'%Y') - DATE_FORMAT(`" . $dob . "`,'%Y')) as age, "
-            . "DATE(`" . $dob . "`) as birthyear", "contactName", "isCompany"));
-        $contactlistClass->setFrom();
-        $contactlistClass->setCondition();
-        $contactlistClass->addCondition("`" . $dob . "` IS NOT NULL AND DATE(`" . $dob . "`) != '0000-00-00' AND DATE(`" . $dob . "`) <= CURDATE() ");
-        $contactlistClass->addCondition("fg_cm_contact.is_company = 0 OR (fg_cm_contact.is_company = 1 AND fg_cm_contact.`comp_def_contact` IS NULL AND fg_cm_contact.`has_main_contact` = 1)");
-        $contactlistClass->addOrderBy('nextDate ASC');
-        $query = $contactlistClass->getResult();
-        $finalQuery = "SELECT nextBirthDay, nextDate, group_concat(`contacts` separator ',') as `contacts` FROM (SELECT *, "
-            . "CONCAT( personName,'~',age,'~', id) AS contacts FROM "
-            . "(" . $query . " ) TAB ORDER BY contacts ASC) TAB2 group by nextBirthDay,nextDate ORDER BY nextDate ASC LIMIT 7 ";
-        $nextBirthDays = $this->em->getRepository('CommonUtilityBundle:FgCmMembership')->getContactList($finalQuery);
+        $contactsArray = array();
+        $c = 0;
+        foreach ($contactsIdsArray as $contact) {
+            $c++;
+            $classname = ($c <= 5) ? "" : "fg-bithday-contact hide";
+            $contactDetails = explode("~", $contact);
+            if ($from == 'backend') {
+                $path = $this->container->get('router')->generate('render_contact_overview', array('offset' => '0', 'contact' => $contactDetails[2]));
+            } else {
+                $path = $this->container->get('router')->generate('internal_community_profile', array('contactId' => $contactDetails[2]));
+            }
+            array_push($contactsArray, array("name" => $contactDetails[0], "path" => $path, "age" => $when == 'nottoday' ? $contactDetails[1] + 1 : $contactDetails[1], 'classname' => $classname, 'isStealthMode' => $contactDetails[3]));
+        }
 
-        return $nextBirthDays;
+        return $contactsArray;
     }
 
     /**
      * Function to get contact name in log controller
-     * 
+     *
      * @param int $contactId Contact Id
      *
      * @return array of contact details
@@ -1712,7 +1812,7 @@ class ContactPdo
 
     /**
      * Function to get the assignment log entries of a contact
-     * 
+     *
      * @param array $clubDetails Club details
      * @param int   $contactId   Contact Id
      *
@@ -1742,7 +1842,7 @@ class ContactPdo
                 break;
         }
         $clubTitleQuery = "SELECT COALESCE(NULLIF(Ci18N.title_lang,''),FC.title) AS title FROM fg_cm_contact CT LEFT JOIN fg_club FC ON CT.main_club_id = FC.id LEFT JOIN fg_club_i18n Ci18N ON Ci18N.id = FC.id AND Ci18N.lang = '$defaultLang' WHERE CT.id = c.changed_by";
-        $sql = "SELECT c.id,c.contact_id,c.category_title AS columnVal2,'assignments' AS kind,c.value_before,c.value_after,c.changed_by, c.date AS dateOriginal,date_format( c.date,'" . $dateFormat . "') AS date, 
+        $sql = "SELECT c.id,c.contact_id,c.category_title AS columnVal2,'assignments' AS kind,c.value_before,c.value_after,c.changed_by, c.date AS dateOriginal,date_format( c.date,'" . $dateFormat . "') AS date,
                 IF((checkActiveContact(c.changed_by, $clubId) IS NULL && c.changed_by != 1), CONCAT(contactName(c.changed_by),' (',($clubTitleQuery),')'),contactName(c.changed_by) )as editedBy,
                  (CASE WHEN ((c.value_before IS NOT NULL AND c.value_before != '' AND c.value_before != '-') AND (c.value_after IS NULL OR c.value_after = '' OR c.value_after = '-')) THEN 'removed'
                        WHEN ((c.value_before IS NULL OR c.value_before = '' OR c.value_before = '-') AND (c.value_after IS NOT NULL AND c.value_after != '' AND c.value_after != '-')) THEN 'added'
@@ -1828,7 +1928,7 @@ class ContactPdo
         $clubId = $clubDetails['clubId'];
         $defaultLang = $clubDetails['clubDefaultLang'];
         $clubTitleQuery = "SELECT COALESCE(NULLIF(Ci18N.title_lang,''),FC.title) AS title FROM fg_cm_contact CT LEFT JOIN fg_club FC ON CT.main_club_id = FC.id LEFT JOIN fg_club_i18n Ci18N ON Ci18N.id = FC.id AND Ci18N.lang = '$defaultLang' WHERE CT.id = c.changed_by";
-        $sql = "SELECT c.id,c.contact_id,c.kind AS columnVal2,c.kind,c.field,c.value_before,c.value_after,c.changed_by,c.date AS dateOriginal,date_format( c.date,'" . $dateFormat . "') AS date, 
+        $sql = "SELECT c.id,c.contact_id,c.kind AS columnVal2,c.kind,c.field,c.value_before,c.value_after,c.changed_by,c.date AS dateOriginal,date_format( c.date,'" . $dateFormat . "') AS date,
                 IF((checkActiveContact(c.changed_by, $clubId) IS NULL && c.changed_by != 1), CONCAT(contactName(c.changed_by),' (',($clubTitleQuery),')') ,contactName(c.changed_by))as editedBy,
                   if(c.kind = 'system' AND c.club_id =:clubId,
                     (CASE WHEN ((c.value_before IS NOT NULL AND c.value_before != '') AND (c.value_after IS NOT NULL AND c.value_after != '')) THEN 'changed'
@@ -1927,7 +2027,7 @@ class ContactPdo
         $condition = ($ClubLangCount > 1) ? "" : " AND c.attribute_id != '$systemFieldCorressLang'";
         $clubTitleQuery = "SELECT COALESCE(NULLIF(Ci18N.title_lang,''),FC.title) AS title FROM fg_cm_contact CT LEFT JOIN fg_club FC ON CT.main_club_id = FC.id LEFT JOIN fg_club_i18n Ci18N ON Ci18N.id = FC.id AND Ci18N.lang = '$defaultLang' WHERE CT.id = c.changed_by";
         $sql = "SELECT  c.id,c.contact_id,c.kind,c.field,c.value_before,c.value_after,c.changed_by,a.input_type,c.attribute_id,
-                        c.date AS dateOriginal,date_format( c.date,'" . $dateFormat1 . "') AS date, 
+                        c.date AS dateOriginal,date_format( c.date,'" . $dateFormat1 . "') AS date,
                         IF((checkActiveContact(c.changed_by, $clubId) is null && c.changed_by != 1), CONCAT(contactName(c.changed_by),' (',($clubTitleQuery),')') , contactName(c.changed_by) )as editedBy,
                         (CASE WHEN ((c.value_before IS NOT NULL AND c.value_before != '') AND (c.value_after IS NOT NULL AND c.value_after != '')) THEN 'changed'
                               WHEN ((c.value_before IS NOT NULL AND c.value_before != '') AND (c.value_after IS NULL OR c.value_after = '')) THEN 'removed'
@@ -1937,15 +2037,15 @@ class ContactPdo
                         IF(ai18n.fieldname_lang IS NULL OR ai18n.fieldname_lang='', a.fieldname, ai18n.fieldname_lang) AS contact_field_title,
                         IF((a.input_type='date' AND c.value_before IS NOT NULL AND c.value_before != '' AND c.value_before != '-'), date_format(c.value_before,'" . $dateFormat2 . "'),c.value_before) AS value_before,
                         IF((a.input_type='date' AND c.value_after IS NOT NULL AND c.value_after != '' AND c.value_after != '-'), date_format(c.value_after,'" . $dateFormat2 . "'),c.value_after) AS value_after
-                 FROM fg_cm_change_log c 
+                 FROM fg_cm_change_log c
                  LEFT JOIN fg_cm_attribute a ON c.attribute_id = a.id
                  LEFT JOIN fg_cm_club_attribute fca ON fca.attribute_id=a.id AND fca.club_id=:clubId
                  LEFT JOIN fg_cm_attribute_i18n ai18n ON ai18n.id = a.id AND ai18n.lang = '" . $defaultLang . "'
                  WHERE c.contact_id IN ($id) AND c.kind='data' AND
                        (c.is_confirmed = 1 OR c.is_confirmed IS NULL) AND
-                       (((a.is_system_field = 1 OR a.is_fairgate_field = 1) OR (" . $fieldVisibility . ")) OR 
+                       (((a.is_system_field = 1 OR a.is_fairgate_field = 1) OR (" . $fieldVisibility . ")) OR
                          (a.id IN (" . implode(',', $picContactFields) . "))
-                       ) 
+                       )
                        AND (a.is_crucial_system_field=1 OR fca.is_active=1) $condition";
 
         $result = $this->conn->fetchAll($sql, array('clubId' => $clubId));
@@ -1998,7 +2098,7 @@ class ContactPdo
         $defaultLang = $clubDetails['clubDefaultLang'];
         $where = "mh.contact_id=:contactId AND IF((m.club_id =:clubId),1,(m.club_id = $federationId))";
         $clubTitleQuery = "SELECT COALESCE(NULLIF(Ci18N.title_lang,''),FC.title) AS title FROM fg_cm_contact CT LEFT JOIN fg_club FC ON CT.main_club_id = FC.id LEFT JOIN fg_club_i18n Ci18N ON Ci18N.id = FC.id AND Ci18N.lang = '$defaultLang' WHERE CT.id = mh.changed_by";
-        $sql = "SELECT mh.id,mh.joining_date AS dateFromOriginal, mh.leaving_date AS dateToOriginal, m.title, mh.changed_by, date_format(mh.joining_date,'" . $dateFormat . "') AS MembershipFrom, date_format(mh.leaving_date,'" . $dateFormat . "') AS MembershipTo, 
+        $sql = "SELECT mh.id,mh.joining_date AS dateFromOriginal, mh.leaving_date AS dateToOriginal, m.title, mh.changed_by, date_format(mh.joining_date,'" . $dateFormat . "') AS MembershipFrom, date_format(mh.leaving_date,'" . $dateFormat . "') AS MembershipTo,
                 IF((checkActiveContact(mh.changed_by, $clubId) is null && mh.changed_by != 1), CONCAT(contactName(mh.changed_by),' (',($clubTitleQuery),')') ,contactName(mh.changed_by) )as editedBy,
                  IF(mi18n.title_lang IS NULL OR mi18n.title_lang='', m.title, mi18n.title_lang) AS Membership, m.id AS membershipId,
                  IF(mh.leaving_date IS NULL,1,0) AS isActiveMembership,mh.membership_id AS membershipId,checkActiveContact(mh.changed_by, $clubId) as activeContact,mh.changed_by
@@ -2018,7 +2118,7 @@ class ContactPdo
      * @param array $defaultLang default lang
      * @param array $federationId federation id
      * @param int   $clubId       current club id
-     * 
+     *
      * @return array $result Array of log entries
      */
     public function getFedMembershipLogEntries($contactId, $defaultLang, $federationId, $clubId)
@@ -2026,8 +2126,8 @@ class ContactPdo
         $dateFormat = FgSettings::getMysqlDateFormat();
         $where = "mh.contact_id=:contactId AND (m.club_id = $federationId)";
         $clubTitleQuery = "SELECT COALESCE(NULLIF(Ci18N.title_lang,''),FC.title) AS title FROM fg_cm_contact CT LEFT JOIN fg_club FC ON CT.main_club_id = FC.id LEFT JOIN fg_club_i18n Ci18N ON Ci18N.id = FC.id AND Ci18N.lang = '$defaultLang' WHERE CT.id = mh.changed_by";
-        $sql = "SELECT mh.id,mh.joining_date AS dateFromOriginal, mh.leaving_date AS dateToOriginal, m.title, mh.changed_by, 
-                date_format(mh.joining_date,'" . $dateFormat . "') AS MembershipFrom, 
+        $sql = "SELECT mh.id,mh.joining_date AS dateFromOriginal, mh.leaving_date AS dateToOriginal, m.title, mh.changed_by,
+                date_format(mh.joining_date,'" . $dateFormat . "') AS MembershipFrom,
                 date_format(mh.leaving_date,'" . $dateFormat . "') AS MembershipTo,checkActiveContact(mh.changed_by, $clubId) as activeContact,mh.changed_by,
                 IF((checkActiveContact(mh.changed_by, $clubId) is null && mh.changed_by != 1) , CONCAT(contactName(mh.changed_by),' (',($clubTitleQuery),')') ,contactName(mh.changed_by) )as editedBy,
                  IF(mi18n.title_lang IS NULL OR mi18n.title_lang='', m.title, mi18n.title_lang) AS Membership, m.id AS membershipId,
@@ -2040,4 +2140,18 @@ class ContactPdo
 
         return $result;
     }
+    
+    /**
+ * 
+ * @param string $contactIds comma separated contact ids
+ * @return array
+ */
+    public function getContactIdDetails($contactIds)
+    {
+        $sql = "SELECT c.id,c.fed_contact_id,c.subfed_contact_id FROM fg_cm_contact c  WHERE c.id  IN($contactIds)";
+        $details = $this->conn->fetchAll($sql);
+        
+        return $details;
+    }
+    
 }

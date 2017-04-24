@@ -18,7 +18,8 @@ use Common\UtilityBundle\Util\FgUtility;
 use Symfony\Component\HttpFoundation\Response;
 use Clubadmin\Classes\Clublist;
 use Clubadmin\Classes\Clubfilter;
-use Common\UtilityBundle\Repository\Pdo\ClubPdo;
+use Admin\UtilityBundle\Repository\Pdo\ClubPdo;
+use Common\UtilityBundle\Util\FgAdminQueryhandler;
 
 /**
  * FilterController used for managing club assignment functionalities
@@ -98,7 +99,7 @@ class FilterController extends FgController
         $filterData['AF']['entry'][] = array('id' => 'Documents', 'title' => $this->get('translator')->trans('CL_DOCUMENTS'), 'type' => 'number', 'selectgroup' => $this->get('translator')->trans('CL_AF'), 'show_filter' => 0);
         //collect the all subfederations under the federation
         $clubPdo = new ClubPdo($this->container);
-        $rowClubsArray = $clubPdo->getAllSubLevelClubs($this->clubId, $this->contactId, 'c.is_sub_federation=1', 0, $club->get('default_lang'));        
+        $rowClubsArray = $clubPdo->getAllSubLevelClubs($this->clubId, $this->contactId, 'c.is_sub_federation=1', 0, $club->get('default_lang')); 
         if (count($rowClubsArray) > 0) {
             //club options
             $filterData['CO']['id'] = 'CO';
@@ -170,7 +171,7 @@ class FilterController extends FgController
         } else {
             $filterData['class']['show_filter'] = 1;
         }
-        $allSavedFilter = $this->em->getRepository('CommonUtilityBundle:FgClubFilter')->getSideBarSavedFilter($this->contactId, $this->clubId);
+        $allSavedFilter = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubFilter')->getSideBarSavedFilter($this->contactId, $this->clubId);
         $filterData['filter']['show_filter'] = 0;
         $filterData['filter']['id'] = 'filter';
         $filterData['filter']['entry'] = $allSavedFilter;
@@ -191,7 +192,8 @@ class FilterController extends FgController
      */
     public function getFilterDataAction($id = 0)
     {
-        $rowFilter = $this->em->getRepository('CommonUtilityBundle:FgClubFilter')->find($id);
+        $rowFilter = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubFilter')->find($id);
+        
         if ($rowFilter) {
             $rowClubId = $rowFilter->getClub()->getId();
             if ($rowClubId == 1 || $rowClubId == $this->clubId) {
@@ -214,10 +216,9 @@ class FilterController extends FgController
      */
     public function getFilterCountAction($id = 0)
     {
-
         try {
             //call a service for collect all relevant data related to the club
-            $singleSavedFilter = $this->em->getRepository('CommonUtilityBundle:FgClubFilter')->getSingleSavedClubSidebarFilter($id, $this->contactId, $this->clubId);
+            $singleSavedFilter = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubFilter')->getSingleSavedClubSidebarFilter($id, $this->contactId, $this->clubId);
             $filterdata = $singleSavedFilter[0]['filterData'];
             $club = $this->get('club');
 
@@ -233,12 +234,10 @@ class FilterController extends FgController
             $clublistClass->addCondition($sWhere);
             //call query for collect the data
             $countQuery = $clublistClass->getResult();
-            $totalcontactlist = $this->em->getRepository('CommonUtilityBundle:FgCmMembership')->getContactList($countQuery);
-
+            $totalcontactlist = $this->adminEntityManager->getConnection()->executeQuery($countQuery)->fetchAll();
             return new Response($totalcontactlist[0]['count']);
         } catch (\Doctrine\DBAL\DBALException $e) {
             $error = '-1';
-
             return new Response($error);
         }
     }
@@ -252,7 +251,7 @@ class FilterController extends FgController
      */
     public function sidebarSavedFilterAction()
     {
-        $allSavedFilter = $this->em->getRepository('CommonUtilityBundle:FgClubFilter')->getSideBarSavedFilter($this->contactId, $this->clubId);
+        $allSavedFilter = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubFilter')->getSideBarSavedFilter($this->contactId, $this->clubId);
 
         return new JsonResponse($allSavedFilter);
     }
@@ -269,7 +268,7 @@ class FilterController extends FgController
         $filterdata['name'] = $request->get('value');
         $filterdata['clubId'] = $this->clubId;
         $filterdata['contactId'] = $this->contactId;
-        $filter = $this->em->getRepository('CommonUtilityBundle:FgClubFilter')->saveClubFilter($filterdata,$this->container);
+        $filter = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubFilter')->saveClubFilter($filterdata,$this->container);
         $input[] = array('id' => $filter['last_id'], 'title' => $filterdata['name'], 'itemType' => 'filter', 'count' => 0, 'bookMarkId' => '');
 
         return new JsonResponse(array("input" => $input, 'operation' => $filter['operation']));
@@ -286,7 +285,7 @@ class FilterController extends FgController
     {
         $request = $this->container->get('request_stack')->getCurrentRequest();
         $id = $request->get('id');
-        $singleSavedFilter = $this->em->getRepository('CommonUtilityBundle:FgClubFilter')->getSingleSavedClubSidebarFilter($id, $this->contactId, $this->clubId);
+        $singleSavedFilter = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubFilter')->getSingleSavedClubSidebarFilter($id, $this->contactId, $this->clubId);
 
         return new JsonResponse(array('singleSavedFilter' => $singleSavedFilter));
     }
@@ -304,7 +303,7 @@ class FilterController extends FgController
         if ($request->getMethod() == 'POST') {
             $id = $request->get('id');
             $broken = $request->get('broken');
-            $singleSavedFilter = $this->em->getRepository('CommonUtilityBundle:FgClubFilter')->updateClubBorkenFilter($id, $broken);
+            $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubFilter')->updateClubBorkenFilter($id, $broken);
             exit;
         }
     }
@@ -323,8 +322,9 @@ class FilterController extends FgController
         if ($request->getMethod() == 'POST') {
             $flitArr = json_decode($request->request->get('filterArr'), true);
             if (count($flitArr) > 0) {
-                $this->generatequeryAction('fg_club_filter', $flitArr, $this->clubId);
-
+                $genericQueryhandler = new FgAdminQueryhandler($this->container);
+                $genericQueryhandler->generatequeryAction('fg_club_filter', $flitArr);
+                
                 return new JsonResponse(array('status' => 'SUCCESS', 'sync' => 1, 'redirect' => $redirect, 'flash' => $this->get('translator')->trans('CM_CONTACT_FILTER_SAVE_SUCCESS')));
             }
 

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPageContentTextElement
  */
@@ -38,7 +36,7 @@ class FgCmsPageContentTextElement
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -49,19 +47,20 @@ class FgCmsPageContentTextElement
      * Set text
      *
      * @param string $text
+     *
      * @return FgCmsPageContentTextElement
      */
     public function setText($text)
     {
         $this->text = $text;
-    
+
         return $this;
     }
 
     /**
      * Get text
      *
-     * @return string 
+     * @return string
      */
     public function getText()
     {
@@ -72,19 +71,20 @@ class FgCmsPageContentTextElement
      * Set position
      *
      * @param string $position
+     *
      * @return FgCmsPageContentTextElement
      */
     public function setPosition($position)
     {
         $this->position = $position;
-    
+
         return $this;
     }
 
     /**
      * Get position
      *
-     * @return string 
+     * @return string
      */
     public function getPosition()
     {
@@ -95,19 +95,20 @@ class FgCmsPageContentTextElement
      * Set version
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPageContentTextElementHistory $version
+     *
      * @return FgCmsPageContentTextElement
      */
     public function setVersion(\Common\UtilityBundle\Entity\FgCmsPageContentTextElementHistory $version = null)
     {
         $this->version = $version;
-    
+
         return $this;
     }
 
     /**
      * Get version
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPageContentTextElementHistory 
+     * @return \Common\UtilityBundle\Entity\FgCmsPageContentTextElementHistory
      */
     public function getVersion()
     {
@@ -118,22 +119,24 @@ class FgCmsPageContentTextElement
      * Set element
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPageContentElement $element
+     *
      * @return FgCmsPageContentTextElement
      */
     public function setElement(\Common\UtilityBundle\Entity\FgCmsPageContentElement $element = null)
     {
         $this->element = $element;
-    
+
         return $this;
     }
 
     /**
      * Get element
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPageContentElement 
+     * @return \Common\UtilityBundle\Entity\FgCmsPageContentElement
      */
     public function getElement()
     {
         return $this->element;
     }
 }
+

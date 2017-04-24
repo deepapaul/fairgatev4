@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmAttributeRequired
  */
@@ -44,6 +42,7 @@ class FgCmAttributeRequired
      * Set attribute
      *
      * @param \Common\UtilityBundle\Entity\FgCmAttribute $attribute
+     *
      * @return FgCmAttributeRequired
      */
     public function setAttribute(\Common\UtilityBundle\Entity\FgCmAttribute $attribute = null)
@@ -67,6 +66,7 @@ class FgCmAttributeRequired
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmAttributeRequired
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
@@ -90,6 +90,7 @@ class FgCmAttributeRequired
      * Set membership
      *
      * @param \Common\UtilityBundle\Entity\FgCmMembership $membership
+     *
      * @return FgCmAttributeRequired
      */
     public function setMembership(\Common\UtilityBundle\Entity\FgCmMembership $membership = null)
@@ -109,3 +110,4 @@ class FgCmAttributeRequired
         return $this->membership;
     }
 }
+

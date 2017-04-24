@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmContact
  */
@@ -274,6 +272,7 @@ class FgCmContact
      * Set memberId
      *
      * @param integer $memberId
+     *
      * @return FgCmContact
      */
     public function setMemberId($memberId)
@@ -297,6 +296,7 @@ class FgCmContact
      * Set isCompany
      *
      * @param boolean $isCompany
+     *
      * @return FgCmContact
      */
     public function setIsCompany($isCompany)
@@ -320,6 +320,7 @@ class FgCmContact
      * Set isSponsor
      *
      * @param boolean $isSponsor
+     *
      * @return FgCmContact
      */
     public function setIsSponsor($isSponsor)
@@ -343,6 +344,7 @@ class FgCmContact
      * Set isStealthMode
      *
      * @param boolean $isStealthMode
+     *
      * @return FgCmContact
      */
     public function setIsStealthMode($isStealthMode)
@@ -366,6 +368,7 @@ class FgCmContact
      * Set intranetAccess
      *
      * @param boolean $intranetAccess
+     *
      * @return FgCmContact
      */
     public function setIntranetAccess($intranetAccess)
@@ -389,6 +392,7 @@ class FgCmContact
      * Set isSubscriber
      *
      * @param boolean $isSubscriber
+     *
      * @return FgCmContact
      */
     public function setIsSubscriber($isSubscriber)
@@ -412,6 +416,7 @@ class FgCmContact
      * Set isDeleted
      *
      * @param boolean $isDeleted
+     *
      * @return FgCmContact
      */
     public function setIsDeleted($isDeleted)
@@ -435,6 +440,7 @@ class FgCmContact
      * Set systemLanguage
      *
      * @param string $systemLanguage
+     *
      * @return FgCmContact
      */
     public function setSystemLanguage($systemLanguage)
@@ -458,6 +464,7 @@ class FgCmContact
      * Set isPermanentDelete
      *
      * @param boolean $isPermanentDelete
+     *
      * @return FgCmContact
      */
     public function setIsPermanentDelete($isPermanentDelete)
@@ -481,6 +488,7 @@ class FgCmContact
      * Set isDraft
      *
      * @param boolean $isDraft
+     *
      * @return FgCmContact
      */
     public function setIsDraft($isDraft)
@@ -504,6 +512,7 @@ class FgCmContact
      * Set isPostalAddress
      *
      * @param boolean $isPostalAddress
+     *
      * @return FgCmContact
      */
     public function setIsPostalAddress($isPostalAddress)
@@ -527,6 +536,7 @@ class FgCmContact
      * Set isNew
      *
      * @param boolean $isNew
+     *
      * @return FgCmContact
      */
     public function setIsNew($isNew)
@@ -550,6 +560,7 @@ class FgCmContact
      * Set isFairgate
      *
      * @param boolean $isFairgate
+     *
      * @return FgCmContact
      */
     public function setIsFairgate($isFairgate)
@@ -573,6 +584,7 @@ class FgCmContact
      * Set isFormerFedMember
      *
      * @param boolean $isFormerFedMember
+     *
      * @return FgCmContact
      */
     public function setIsFormerFedMember($isFormerFedMember)
@@ -596,6 +608,7 @@ class FgCmContact
      * Set isFedMembershipConfirmed
      *
      * @param string $isFedMembershipConfirmed
+     *
      * @return FgCmContact
      */
     public function setIsFedMembershipConfirmed($isFedMembershipConfirmed)
@@ -619,6 +632,7 @@ class FgCmContact
      * Set isClubAssignmentConfirmed
      *
      * @param boolean $isClubAssignmentConfirmed
+     *
      * @return FgCmContact
      */
     public function setIsClubAssignmentConfirmed($isClubAssignmentConfirmed)
@@ -642,6 +656,7 @@ class FgCmContact
      * Set compDefContact
      *
      * @param integer $compDefContact
+     *
      * @return FgCmContact
      */
     public function setCompDefContact($compDefContact)
@@ -665,6 +680,7 @@ class FgCmContact
      * Set compDefContactFun
      *
      * @param string $compDefContactFun
+     *
      * @return FgCmContact
      */
     public function setCompDefContactFun($compDefContactFun)
@@ -688,6 +704,7 @@ class FgCmContact
      * Set lastUpdated
      *
      * @param \DateTime $lastUpdated
+     *
      * @return FgCmContact
      */
     public function setLastUpdated($lastUpdated)
@@ -711,6 +728,7 @@ class FgCmContact
      * Set dispatchTypeInvoice
      *
      * @param string $dispatchTypeInvoice
+     *
      * @return FgCmContact
      */
     public function setDispatchTypeInvoice($dispatchTypeInvoice)
@@ -734,6 +752,7 @@ class FgCmContact
      * Set dispatchTypeDun
      *
      * @param string $dispatchTypeDun
+     *
      * @return FgCmContact
      */
     public function setDispatchTypeDun($dispatchTypeDun)
@@ -757,6 +776,7 @@ class FgCmContact
      * Set hasMainContact
      *
      * @param boolean $hasMainContact
+     *
      * @return FgCmContact
      */
     public function setHasMainContact($hasMainContact)
@@ -780,6 +800,7 @@ class FgCmContact
      * Set hasMainContactAddress
      *
      * @param boolean $hasMainContactAddress
+     *
      * @return FgCmContact
      */
     public function setHasMainContactAddress($hasMainContactAddress)
@@ -803,6 +824,7 @@ class FgCmContact
      * Set isHouseholdHead
      *
      * @param boolean $isHouseholdHead
+     *
      * @return FgCmContact
      */
     public function setIsHouseholdHead($isHouseholdHead)
@@ -826,6 +848,7 @@ class FgCmContact
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return FgCmContact
      */
     public function setCreatedAt($createdAt)
@@ -849,6 +872,7 @@ class FgCmContact
      * Set joiningDate
      *
      * @param \DateTime $joiningDate
+     *
      * @return FgCmContact
      */
     public function setJoiningDate($joiningDate)
@@ -872,6 +896,7 @@ class FgCmContact
      * Set leavingDate
      *
      * @param \DateTime $leavingDate
+     *
      * @return FgCmContact
      */
     public function setLeavingDate($leavingDate)
@@ -895,6 +920,7 @@ class FgCmContact
      * Set firstJoiningDate
      *
      * @param \DateTime $firstJoiningDate
+     *
      * @return FgCmContact
      */
     public function setFirstJoiningDate($firstJoiningDate)
@@ -918,6 +944,7 @@ class FgCmContact
      * Set archivedOn
      *
      * @param \DateTime $archivedOn
+     *
      * @return FgCmContact
      */
     public function setArchivedOn($archivedOn)
@@ -941,6 +968,7 @@ class FgCmContact
      * Set isSeperateInvoice
      *
      * @param boolean $isSeperateInvoice
+     *
      * @return FgCmContact
      */
     public function setIsSeperateInvoice($isSeperateInvoice)
@@ -964,6 +992,7 @@ class FgCmContact
      * Set sameInvoiceAddress
      *
      * @param boolean $sameInvoiceAddress
+     *
      * @return FgCmContact
      */
     public function setSameInvoiceAddress($sameInvoiceAddress)
@@ -987,6 +1016,7 @@ class FgCmContact
      * Set loginCount
      *
      * @param integer $loginCount
+     *
      * @return FgCmContact
      */
     public function setLoginCount($loginCount)
@@ -1010,6 +1040,7 @@ class FgCmContact
      * Set lastLogin
      *
      * @param \DateTime $lastLogin
+     *
      * @return FgCmContact
      */
     public function setLastLogin($lastLogin)
@@ -1033,6 +1064,7 @@ class FgCmContact
      * Set importTable
      *
      * @param string $importTable
+     *
      * @return FgCmContact
      */
     public function setImportTable($importTable)
@@ -1056,6 +1088,7 @@ class FgCmContact
      * Set importId
      *
      * @param integer $importId
+     *
      * @return FgCmContact
      */
     public function setImportId($importId)
@@ -1079,6 +1112,7 @@ class FgCmContact
      * Set allowMerging
      *
      * @param boolean $allowMerging
+     *
      * @return FgCmContact
      */
     public function setAllowMerging($allowMerging)
@@ -1102,6 +1136,7 @@ class FgCmContact
      * Set resignedOn
      *
      * @param \DateTime $resignedOn
+     *
      * @return FgCmContact
      */
     public function setResignedOn($resignedOn)
@@ -1125,6 +1160,7 @@ class FgCmContact
      * Set quickwindowVisibilty
      *
      * @param boolean $quickwindowVisibilty
+     *
      * @return FgCmContact
      */
     public function setQuickwindowVisibilty($quickwindowVisibilty)
@@ -1148,19 +1184,20 @@ class FgCmContact
      * Set isFedAdmin
      *
      * @param boolean $isFedAdmin
+     *
      * @return FgCmContact
      */
     public function setIsFedAdmin($isFedAdmin)
     {
         $this->isFedAdmin = $isFedAdmin;
-    
+
         return $this;
     }
 
     /**
      * Get isFedAdmin
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsFedAdmin()
     {
@@ -1171,6 +1208,7 @@ class FgCmContact
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmContact
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
@@ -1194,6 +1232,7 @@ class FgCmContact
      * Set mainClub
      *
      * @param \Common\UtilityBundle\Entity\FgClub $mainClub
+     *
      * @return FgCmContact
      */
     public function setMainClub(\Common\UtilityBundle\Entity\FgClub $mainClub = null)
@@ -1217,6 +1256,7 @@ class FgCmContact
      * Set mergeToContact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $mergeToContact
+     *
      * @return FgCmContact
      */
     public function setMergeToContact(\Common\UtilityBundle\Entity\FgCmContact $mergeToContact = null)
@@ -1240,6 +1280,7 @@ class FgCmContact
      * Set clubMembershipCat
      *
      * @param \Common\UtilityBundle\Entity\FgCmMembership $clubMembershipCat
+     *
      * @return FgCmContact
      */
     public function setClubMembershipCat(\Common\UtilityBundle\Entity\FgCmMembership $clubMembershipCat = null)
@@ -1263,6 +1304,7 @@ class FgCmContact
      * Set fedMembershipCat
      *
      * @param \Common\UtilityBundle\Entity\FgCmMembership $fedMembershipCat
+     *
      * @return FgCmContact
      */
     public function setFedMembershipCat(\Common\UtilityBundle\Entity\FgCmMembership $fedMembershipCat = null)
@@ -1286,6 +1328,7 @@ class FgCmContact
      * Set oldFedMembership
      *
      * @param \Common\UtilityBundle\Entity\FgCmMembership $oldFedMembership
+     *
      * @return FgCmContact
      */
     public function setOldFedMembership(\Common\UtilityBundle\Entity\FgCmMembership $oldFedMembership = null)
@@ -1309,6 +1352,7 @@ class FgCmContact
      * Set fedMembershipAssignedClub
      *
      * @param \Common\UtilityBundle\Entity\FgClub $fedMembershipAssignedClub
+     *
      * @return FgCmContact
      */
     public function setFedMembershipAssignedClub(\Common\UtilityBundle\Entity\FgClub $fedMembershipAssignedClub = null)
@@ -1332,6 +1376,7 @@ class FgCmContact
      * Set createdClub
      *
      * @param \Common\UtilityBundle\Entity\FgClub $createdClub
+     *
      * @return FgCmContact
      */
     public function setCreatedClub(\Common\UtilityBundle\Entity\FgClub $createdClub = null)
@@ -1355,6 +1400,7 @@ class FgCmContact
      * Set fedContact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $fedContact
+     *
      * @return FgCmContact
      */
     public function setFedContact(\Common\UtilityBundle\Entity\FgCmContact $fedContact = null)
@@ -1378,6 +1424,7 @@ class FgCmContact
      * Set subfedContact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $subfedContact
+     *
      * @return FgCmContact
      */
     public function setSubfedContact(\Common\UtilityBundle\Entity\FgCmContact $subfedContact = null)
@@ -1397,3 +1444,4 @@ class FgCmContact
         return $this->subfedContact;
     }
 }
+

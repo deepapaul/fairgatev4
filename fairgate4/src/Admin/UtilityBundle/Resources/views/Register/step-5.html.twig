@@ -1,0 +1,69 @@
+<div class="tab-pane" id="tab5">
+                      <h3 class="block">Set your own credentials</h3>
+                      <div class="alert alert-danger"><p>Organization name is missing in step 2Organization name is missing in step 2
+</p>                    </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">Email as UserID
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6">
+                          <input class="form-control" type="text" name="fg_reg_email"  id="fg_reg_email">
+                          <span class="help-inline help-block">invalid</span>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">
+                          <span class="fg-btm-dashed tooltips" data-container="body" data-placement="top" data-original-title="Password must have ** Charactes" data-toggle="tooltip">New Password</span>
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6">
+                          <div class="input-icon right">
+                            <i class="fa fa-eye fg-show-password" data-placement="top" data-original-title="Will show or hide your password in this field" data-toggle="tooltip"></i>
+                            <input class="fg-check-strength form-control" type="password" name="fg_reg_password" id="fg_reg_password">
+                            <span class="help-inline help-block">invalid</span>
+                          </div>
+                          <div class="help-block">
+                            <a class="fg-link-icon fg-m-top-2 fg-dis-IB" href="#">
+                              <i class="fa fa-magic"></i>Generate password</a>
+                            <div class="fg-pw-strength-wrapper">
+                              <div class="fg-progress"></div>
+                              <div class="fg-verdict"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">Retype Password
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6">
+                          <div class="input-icon right">
+                            <i class="fa fa-eye fg-show-password" data-placement="top" data-original-title="Will show or hide your password in this field" data-toggle="tooltip"></i>
+                            <input class="form-control" type="password" name="fg_reg_confirm_password" id="fg_reg_confirm_password">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">Spam prevention
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6">
+                          <div class="g-recaptcha" id="fg-captcha" data-sitekey="6LeKIyATAAAAAMZ9FMZMkv8zs2aU-mrGv_X-DePn"></div>
+                          {#<script src="https://www.google.com/recaptcha/api.js"></script>#}
+                        </div>
+                      </div>
+                      <h3 class="block">Accept our legal terms</h3>
+                      <div class="form-accept-terms fg-m-top-30">
+                        <button class="btn green fg-btn-icon" type="button"  data-toggle="modal" data-target="#legalterms" >Verify the fairgate legal terms
+                          <i class="fa fa-chevron-right"></i>
+                        </button>
+                        <div class="mt-checkbox-inline">
+                          <label class="mt-checkbox mt-checkbox-outline">
+                            <input type="checkbox" name="fg_reg_accept_legalterms"  id="fg_reg_accept_legalterms">I have read and accepted the legal terms
+                            <span></span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                          
+            {% include 'AdminUtilityBundle:Register:legalterms.html.twig' %}

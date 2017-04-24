@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnRecepientsMandatory
  */
@@ -30,9 +28,9 @@ class FgCnRecepientsMandatory
     private $salutation;
 
     /**
-     * @var \Common\UtilityBundle\Entity\FgCnRecepients
+     * @var string
      */
-    private $recepientList;
+    private $corresLang;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgCmAttribute
@@ -49,11 +47,16 @@ class FgCnRecepientsMandatory
      */
     private $contact;
 
+    /**
+     * @var \Common\UtilityBundle\Entity\FgCnRecepients
+     */
+    private $recepientList;
+
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -64,19 +67,20 @@ class FgCnRecepientsMandatory
      * Set emailType
      *
      * @param string $emailType
+     *
      * @return FgCnRecepientsMandatory
      */
     public function setEmailType($emailType)
     {
         $this->emailType = $emailType;
-    
+
         return $this;
     }
 
     /**
      * Get emailType
      *
-     * @return string 
+     * @return string
      */
     public function getEmailType()
     {
@@ -87,19 +91,20 @@ class FgCnRecepientsMandatory
      * Set email
      *
      * @param string $email
+     *
      * @return FgCnRecepientsMandatory
      */
     public function setEmail($email)
     {
         $this->email = $email;
-    
+
         return $this;
     }
 
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -110,19 +115,20 @@ class FgCnRecepientsMandatory
      * Set salutation
      *
      * @param string $salutation
+     *
      * @return FgCnRecepientsMandatory
      */
     public function setSalutation($salutation)
     {
         $this->salutation = $salutation;
-    
+
         return $this;
     }
 
     /**
      * Get salutation
      *
-     * @return string 
+     * @return string
      */
     public function getSalutation()
     {
@@ -130,45 +136,47 @@ class FgCnRecepientsMandatory
     }
 
     /**
-     * Set recepientList
+     * Set corresLang
      *
-     * @param \Common\UtilityBundle\Entity\FgCnRecepients $recepientList
+     * @param string $corresLang
+     *
      * @return FgCnRecepientsMandatory
      */
-    public function setRecepientList(\Common\UtilityBundle\Entity\FgCnRecepients $recepientList = null)
+    public function setCorresLang($corresLang)
     {
-        $this->recepientList = $recepientList;
-    
+        $this->corresLang = $corresLang;
+
         return $this;
     }
 
     /**
-     * Get recepientList
+     * Get corresLang
      *
-     * @return \Common\UtilityBundle\Entity\FgCnRecepients 
+     * @return string
      */
-    public function getRecepientList()
+    public function getCorresLang()
     {
-        return $this->recepientList;
+        return $this->corresLang;
     }
 
     /**
      * Set emailField
      *
      * @param \Common\UtilityBundle\Entity\FgCmAttribute $emailField
+     *
      * @return FgCnRecepientsMandatory
      */
     public function setEmailField(\Common\UtilityBundle\Entity\FgCmAttribute $emailField = null)
     {
         $this->emailField = $emailField;
-    
+
         return $this;
     }
 
     /**
      * Get emailField
      *
-     * @return \Common\UtilityBundle\Entity\FgCmAttribute 
+     * @return \Common\UtilityBundle\Entity\FgCmAttribute
      */
     public function getEmailField()
     {
@@ -179,19 +187,20 @@ class FgCnRecepientsMandatory
      * Set linkedContact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $linkedContact
+     *
      * @return FgCnRecepientsMandatory
      */
     public function setLinkedContact(\Common\UtilityBundle\Entity\FgCmContact $linkedContact = null)
     {
         $this->linkedContact = $linkedContact;
-    
+
         return $this;
     }
 
     /**
      * Get linkedContact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getLinkedContact()
     {
@@ -202,50 +211,48 @@ class FgCnRecepientsMandatory
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgCnRecepientsMandatory
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
     {
         $this->contact = $contact;
-    
+
         return $this;
     }
 
     /**
      * Get contact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getContact()
     {
         return $this->contact;
     }
-    /**
-     * @var string
-     */
-    private $corresLang;
-
 
     /**
-     * Set corresLang
+     * Set recepientList
      *
-     * @param string $corresLang
+     * @param \Common\UtilityBundle\Entity\FgCnRecepients $recepientList
+     *
      * @return FgCnRecepientsMandatory
      */
-    public function setCorresLang($corresLang)
+    public function setRecepientList(\Common\UtilityBundle\Entity\FgCnRecepients $recepientList = null)
     {
-        $this->corresLang = $corresLang;
-    
+        $this->recepientList = $recepientList;
+
         return $this;
     }
 
     /**
-     * Get corresLang
+     * Get recepientList
      *
-     * @return string 
+     * @return \Common\UtilityBundle\Entity\FgCnRecepients
      */
-    public function getCorresLang()
+    public function getRecepientList()
     {
-        return $this->corresLang;
+        return $this->recepientList;
     }
 }
+

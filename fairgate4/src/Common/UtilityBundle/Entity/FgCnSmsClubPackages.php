@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnSmsClubPackages
  */
@@ -84,6 +82,7 @@ class FgCnSmsClubPackages
      * Set title
      *
      * @param string $title
+     *
      * @return FgCnSmsClubPackages
      */
     public function setTitle($title)
@@ -107,6 +106,7 @@ class FgCnSmsClubPackages
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgCnSmsClubPackages
      */
     public function setSortOrder($sortOrder)
@@ -130,6 +130,7 @@ class FgCnSmsClubPackages
      * Set price
      *
      * @param string $price
+     *
      * @return FgCnSmsClubPackages
      */
     public function setPrice($price)
@@ -153,6 +154,7 @@ class FgCnSmsClubPackages
      * Set totalCredits
      *
      * @param integer $totalCredits
+     *
      * @return FgCnSmsClubPackages
      */
     public function setTotalCredits($totalCredits)
@@ -176,6 +178,7 @@ class FgCnSmsClubPackages
      * Set balanceCredits
      *
      * @param integer $balanceCredits
+     *
      * @return FgCnSmsClubPackages
      */
     public function setBalanceCredits($balanceCredits)
@@ -199,6 +202,7 @@ class FgCnSmsClubPackages
      * Set sponsorType
      *
      * @param string $sponsorType
+     *
      * @return FgCnSmsClubPackages
      */
     public function setSponsorType($sponsorType)
@@ -222,6 +226,7 @@ class FgCnSmsClubPackages
      * Set sponsorText
      *
      * @param string $sponsorText
+     *
      * @return FgCnSmsClubPackages
      */
     public function setSponsorText($sponsorText)
@@ -245,6 +250,7 @@ class FgCnSmsClubPackages
      * Set clubId
      *
      * @param integer $clubId
+     *
      * @return FgCnSmsClubPackages
      */
     public function setClubId($clubId)
@@ -268,6 +274,7 @@ class FgCnSmsClubPackages
      * Set bookingDate
      *
      * @param \DateTime $bookingDate
+     *
      * @return FgCnSmsClubPackages
      */
     public function setBookingDate($bookingDate)
@@ -291,6 +298,7 @@ class FgCnSmsClubPackages
      * Set isClub
      *
      * @param boolean $isClub
+     *
      * @return FgCnSmsClubPackages
      */
     public function setIsClub($isClub)
@@ -314,6 +322,7 @@ class FgCnSmsClubPackages
      * Set isAll
      *
      * @param integer $isAll
+     *
      * @return FgCnSmsClubPackages
      */
     public function setIsAll($isAll)
@@ -333,3 +342,4 @@ class FgCnSmsClubPackages
         return $this->isAll;
     }
 }
+

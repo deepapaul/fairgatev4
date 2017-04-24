@@ -23,14 +23,21 @@ class FgCmBookmarksRepository extends EntityRepository {
      * Function to get updatebookmark of a perticular Contact
      *
      * Function used to Edit/ Delete bookmark
-     * @param $bookmarkArr contains the data related to the bookmark
-     * @param $action Determines whether it is Edit/ Delete action performed
+     * 
+     * @param $bookmarkArr      contains the data related to the bookmark
+     * @param $conn             The connection to be used
+     * 
      * @return boolean true or false
      */
-    public function updatebookmark($bookmarkArr, $tablename = 'fg_cm_bookmarks') {
+    public function updatebookmark($bookmarkArr, $tablename = 'fg_cm_bookmarks', $conn) {
         // GENERATE PDO QUERY FOR MULTIPLE UPDATE AND DELETE.
         $delQryStr = '';
         $updateQry = '';
+        
+        if(null === $conn){
+            $conn = $this->getEntityManager()->getConnection();
+        }
+            
         if (count($bookmarkArr) > 0) {
             foreach ($bookmarkArr as $bookmarkId => $data) {
                 $updateQryStr = 'SET ';
@@ -49,7 +56,7 @@ class FgCmBookmarksRepository extends EntityRepository {
         }
         //GENERATE PDO QUERY FOR MULTIPLE UPDATE AND DELETE
         if ($updateQry !== '' || $delQryStr != '') {
-            $conn = $this->getEntityManager()->getConnection();
+            
             try {
                 $conn->beginTransaction();
                 if ($updateQry !== '') {

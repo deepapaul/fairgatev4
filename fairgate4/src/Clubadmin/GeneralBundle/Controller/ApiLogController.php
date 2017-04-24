@@ -35,8 +35,9 @@ class ApiLogController extends FgController
         }
 
         $breadCrumb = array('breadCrumb' => array('back' => $this->generateUrl('filemanager_listModuleFiles')));
+        $responseCode = array(401, 403, 404, 409, 500);
 
-        return $this->render('ClubadminGeneralBundle:ApiLog:accesslog.html.twig', array('breadCrumb' => $breadCrumb));
+        return $this->render('ClubadminGeneralBundle:ApiLog:accesslog.html.twig', array('breadCrumb' => $breadCrumb, 'responseCode' => $responseCode));
     }
 
     /**
@@ -71,6 +72,10 @@ class ApiLogController extends FgController
         if ($orderColumnRef != '') {
             $filterArray['orderColumn'] = $columnData[$orderColumnRef]['name'];
             $filterArray['orderColumnDirection'] = $orderData[0]['dir'];
+        }
+        
+        if($request->get('resCode')){
+            $filterArray['resCode'] = $request->get('resCode'); 
         }
         
         $filterArray['limitStart'] = $request->get('start', 0);

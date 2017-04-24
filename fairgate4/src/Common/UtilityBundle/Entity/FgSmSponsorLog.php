@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgSmSponsorLog
  */
@@ -30,14 +28,19 @@ class FgSmSponsorLog
     private $actionType;
 
     /**
+     * @var \Common\UtilityBundle\Entity\FgCmContact
+     */
+    private $contact;
+
+    /**
      * @var \Common\UtilityBundle\Entity\FgClub
      */
     private $club;
 
     /**
-     * @var \Common\UtilityBundle\Entity\FgSmServices
+     * @var \Common\UtilityBundle\Entity\FgCmContact
      */
-    private $service;
+    private $changedBy;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgSmCategory
@@ -45,15 +48,15 @@ class FgSmSponsorLog
     private $category;
 
     /**
-     * @var \Common\UtilityBundle\Entity\FgCmContact
+     * @var \Common\UtilityBundle\Entity\FgSmServices
      */
-    private $changedBy;
+    private $service;
 
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -64,19 +67,20 @@ class FgSmSponsorLog
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return FgSmSponsorLog
      */
     public function setDate($date)
     {
         $this->date = $date;
-    
+
         return $this;
     }
 
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -87,19 +91,20 @@ class FgSmSponsorLog
      * Set kind
      *
      * @param string $kind
+     *
      * @return FgSmSponsorLog
      */
     public function setKind($kind)
     {
         $this->kind = $kind;
-    
+
         return $this;
     }
 
     /**
      * Get kind
      *
-     * @return string 
+     * @return string
      */
     public function getKind()
     {
@@ -110,19 +115,20 @@ class FgSmSponsorLog
      * Set actionType
      *
      * @param string $actionType
+     *
      * @return FgSmSponsorLog
      */
     public function setActionType($actionType)
     {
         $this->actionType = $actionType;
-    
+
         return $this;
     }
 
     /**
      * Get actionType
      *
-     * @return string 
+     * @return string
      */
     public function getActionType()
     {
@@ -130,22 +136,47 @@ class FgSmSponsorLog
     }
 
     /**
+     * Set contact
+     *
+     * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
+     * @return FgSmSponsorLog
+     */
+    public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
+    {
+        $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return \Common\UtilityBundle\Entity\FgCmContact
+     */
+    public function getContact()
+    {
+        return $this->contact;
+    }
+
+    /**
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgSmSponsorLog
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -153,45 +184,47 @@ class FgSmSponsorLog
     }
 
     /**
-     * Set service
+     * Set changedBy
      *
-     * @param \Common\UtilityBundle\Entity\FgSmServices $service
+     * @param \Common\UtilityBundle\Entity\FgCmContact $changedBy
+     *
      * @return FgSmSponsorLog
      */
-    public function setService(\Common\UtilityBundle\Entity\FgSmServices $service = null)
+    public function setChangedBy(\Common\UtilityBundle\Entity\FgCmContact $changedBy = null)
     {
-        $this->service = $service;
-    
+        $this->changedBy = $changedBy;
+
         return $this;
     }
 
     /**
-     * Get service
+     * Get changedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgSmServices 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
-    public function getService()
+    public function getChangedBy()
     {
-        return $this->service;
+        return $this->changedBy;
     }
 
     /**
      * Set category
      *
      * @param \Common\UtilityBundle\Entity\FgSmCategory $category
+     *
      * @return FgSmSponsorLog
      */
     public function setCategory(\Common\UtilityBundle\Entity\FgSmCategory $category = null)
     {
         $this->category = $category;
-    
+
         return $this;
     }
 
     /**
      * Get category
      *
-     * @return \Common\UtilityBundle\Entity\FgSmCategory 
+     * @return \Common\UtilityBundle\Entity\FgSmCategory
      */
     public function getCategory()
     {
@@ -199,53 +232,27 @@ class FgSmSponsorLog
     }
 
     /**
-     * Set changedBy
+     * Set service
      *
-     * @param \Common\UtilityBundle\Entity\FgCmContact $changedBy
+     * @param \Common\UtilityBundle\Entity\FgSmServices $service
+     *
      * @return FgSmSponsorLog
      */
-    public function setChangedBy(\Common\UtilityBundle\Entity\FgCmContact $changedBy = null)
+    public function setService(\Common\UtilityBundle\Entity\FgSmServices $service = null)
     {
-        $this->changedBy = $changedBy;
-    
+        $this->service = $service;
+
         return $this;
     }
 
     /**
-     * Get changedBy
+     * Get service
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgSmServices
      */
-    public function getChangedBy()
+    public function getService()
     {
-        return $this->changedBy;
-    }
-    /**
-     * @var \Common\UtilityBundle\Entity\FgCmContact
-     */
-    private $contact;
-
-
-    /**
-     * Set contact
-     *
-     * @param \Common\UtilityBundle\Entity\FgCmContact $contact
-     * @return FgSmSponsorLog
-     */
-    public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
-    {
-        $this->contact = $contact;
-    
-        return $this;
-    }
-
-    /**
-     * Get contact
-     *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
-     */
-    public function getContact()
-    {
-        return $this->contact;
+        return $this->service;
     }
 }
+

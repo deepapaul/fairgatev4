@@ -1,0 +1,94 @@
+Admin\UtilityBundle\Entity\FgClubBookmarks:
+    repositoryClass: Admin\UtilityBundle\Repository\FgClubBookmarksRepository
+    type: entity
+    table: fg_club_bookmarks
+    indexes:
+        fk_fg_club_bookmarks_fg_cm_contact1_idx:
+            columns:
+                - contact_id
+        fk_fg_club_bookmarks_fg_club1_idx:
+            columns:
+                - club_id
+        fk_fg_club_bookmarks_fg_club2_idx:
+            columns:
+                - subfed_id
+        fk_fg_club_bookmarks_fg_club_filter1_idx:
+            columns:
+                - filter_id
+        fk_fg_club_bookmarks_fg_club_class1_idx:
+            columns:
+                - class_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        type:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        sortOrder:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            column: sort_order
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        subfed:
+            targetEntity: FgClub
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                subfed_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        filter:
+            targetEntity: FgClubFilter
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                filter_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        class:
+            targetEntity: FgClubClass
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                class_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

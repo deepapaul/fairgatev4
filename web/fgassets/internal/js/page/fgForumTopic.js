@@ -20,6 +20,7 @@
         
         saveChanges: function(){
             $('#save_changes').click(function() {
+                FgXmlHttp.isDisabled = false;
                  var validation = 0;
                 var bbcodeTohtml = bbcodeParser.bbcodeToHtml($('#forum-post-text').val()).replace(/(<(?!a|img)([^>]+)>)/ig,"");
                 if ($('#subject').val() == '') { // Setting validation flag if there is any errors

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgClubI18n
  */
@@ -34,6 +32,7 @@ class FgClubI18n
      * Set lang
      *
      * @param string $lang
+     *
      * @return FgClubI18n
      */
     public function setLang($lang)
@@ -57,6 +56,7 @@ class FgClubI18n
      * Set titleLang
      *
      * @param string $titleLang
+     *
      * @return FgClubI18n
      */
     public function setTitleLang($titleLang)
@@ -80,6 +80,7 @@ class FgClubI18n
      * Set isActive
      *
      * @param boolean $isActive
+     *
      * @return FgClubI18n
      */
     public function setIsActive($isActive)
@@ -103,6 +104,7 @@ class FgClubI18n
      * Set id
      *
      * @param \Common\UtilityBundle\Entity\FgClub $id
+     *
      * @return FgClubI18n
      */
     public function setId(\Common\UtilityBundle\Entity\FgClub $id = null)
@@ -122,3 +124,4 @@ class FgClubI18n
         return $this->id;
     }
 }
+

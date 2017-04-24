@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnNewsletterIntroClosingWords
  */
@@ -64,6 +62,7 @@ class FgCnNewsletterIntroClosingWords
      * Set title
      *
      * @param string $title
+     *
      * @return FgCnNewsletterIntroClosingWords
      */
     public function setTitle($title)
@@ -87,6 +86,7 @@ class FgCnNewsletterIntroClosingWords
      * Set introText
      *
      * @param string $introText
+     *
      * @return FgCnNewsletterIntroClosingWords
      */
     public function setIntroText($introText)
@@ -110,6 +110,7 @@ class FgCnNewsletterIntroClosingWords
      * Set wordType
      *
      * @param string $wordType
+     *
      * @return FgCnNewsletterIntroClosingWords
      */
     public function setWordType($wordType)
@@ -133,6 +134,7 @@ class FgCnNewsletterIntroClosingWords
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgCnNewsletterIntroClosingWords
      */
     public function setSortOrder($sortOrder)
@@ -156,6 +158,7 @@ class FgCnNewsletterIntroClosingWords
      * Set updatedDate
      *
      * @param \DateTime $updatedDate
+     *
      * @return FgCnNewsletterIntroClosingWords
      */
     public function setUpdatedDate($updatedDate)
@@ -179,6 +182,7 @@ class FgCnNewsletterIntroClosingWords
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCnNewsletterIntroClosingWords
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
@@ -202,6 +206,7 @@ class FgCnNewsletterIntroClosingWords
      * Set updatedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $updatedBy
+     *
      * @return FgCnNewsletterIntroClosingWords
      */
     public function setUpdatedBy(\Common\UtilityBundle\Entity\FgCmContact $updatedBy = null)
@@ -221,3 +226,4 @@ class FgCnNewsletterIntroClosingWords
         return $this->updatedBy;
     }
 }
+

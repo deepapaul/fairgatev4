@@ -2,14 +2,11 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPortraitContainerColumn
  */
 class FgCmsPortraitContainerColumn
 {
-
     /**
      * @var integer
      */
@@ -26,15 +23,15 @@ class FgCmsPortraitContainerColumn
     private $sortOrder;
 
     /**
-     *
      * @var \Common\UtilityBundle\Entity\FgCmsPortraitContainer
      */
     private $container;
 
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -45,6 +42,7 @@ class FgCmsPortraitContainerColumn
      * Set size
      *
      * @param integer $size
+     *
      * @return FgCmsPortraitContainerColumn
      */
     public function setSize($size)
@@ -57,7 +55,7 @@ class FgCmsPortraitContainerColumn
     /**
      * Get size
      *
-     * @return integer 
+     * @return integer
      */
     public function getSize()
     {
@@ -68,7 +66,8 @@ class FgCmsPortraitContainerColumn
      * Set sortOrder
      *
      * @param integer $sortOrder
-     * @return FgCmsPortraitContainer
+     *
+     * @return FgCmsPortraitContainerColumn
      */
     public function setSortOrder($sortOrder)
     {
@@ -80,7 +79,7 @@ class FgCmsPortraitContainerColumn
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -91,6 +90,7 @@ class FgCmsPortraitContainerColumn
      * Set container
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPortraitContainer $container
+     *
      * @return FgCmsPortraitContainerColumn
      */
     public function setContainer(\Common\UtilityBundle\Entity\FgCmsPortraitContainer $container = null)
@@ -103,10 +103,11 @@ class FgCmsPortraitContainerColumn
     /**
      * Get container
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPortraitContainer 
+     * @return \Common\UtilityBundle\Entity\FgCmsPortraitContainer
      */
     public function getContainer()
     {
         return $this->container;
     }
 }
+

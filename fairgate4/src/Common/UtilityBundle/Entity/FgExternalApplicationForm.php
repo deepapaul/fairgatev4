@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgExternalApplicationForm
  */
@@ -73,7 +71,7 @@ class FgExternalApplicationForm
      * @var string
      */
     private $employer;
-    
+
     /**
      * @var integer
      */
@@ -128,7 +126,7 @@ class FgExternalApplicationForm
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -139,19 +137,20 @@ class FgExternalApplicationForm
      * Set firstName
      *
      * @param string $firstName
+     *
      * @return FgExternalApplicationForm
      */
     public function setFirstName($firstName)
     {
         $this->firstName = $firstName;
-    
+
         return $this;
     }
 
     /**
      * Get firstName
      *
-     * @return string 
+     * @return string
      */
     public function getFirstName()
     {
@@ -162,19 +161,20 @@ class FgExternalApplicationForm
      * Set lastName
      *
      * @param string $lastName
+     *
      * @return FgExternalApplicationForm
      */
     public function setLastName($lastName)
     {
         $this->lastName = $lastName;
-    
+
         return $this;
     }
 
     /**
      * Get lastName
      *
-     * @return string 
+     * @return string
      */
     public function getLastName()
     {
@@ -185,19 +185,20 @@ class FgExternalApplicationForm
      * Set gender
      *
      * @param string $gender
+     *
      * @return FgExternalApplicationForm
      */
     public function setGender($gender)
     {
         $this->gender = $gender;
-    
+
         return $this;
     }
 
     /**
      * Get gender
      *
-     * @return string 
+     * @return string
      */
     public function getGender()
     {
@@ -208,19 +209,20 @@ class FgExternalApplicationForm
      * Set dob
      *
      * @param \DateTime $dob
+     *
      * @return FgExternalApplicationForm
      */
     public function setDob($dob)
     {
         $this->dob = $dob;
-    
+
         return $this;
     }
 
     /**
      * Get dob
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDob()
     {
@@ -231,19 +233,20 @@ class FgExternalApplicationForm
      * Set email
      *
      * @param string $email
+     *
      * @return FgExternalApplicationForm
      */
     public function setEmail($email)
     {
         $this->email = $email;
-    
+
         return $this;
     }
 
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -254,19 +257,20 @@ class FgExternalApplicationForm
      * Set street
      *
      * @param string $street
+     *
      * @return FgExternalApplicationForm
      */
     public function setStreet($street)
     {
         $this->street = $street;
-    
+
         return $this;
     }
 
     /**
      * Get street
      *
-     * @return string 
+     * @return string
      */
     public function getStreet()
     {
@@ -277,19 +281,20 @@ class FgExternalApplicationForm
      * Set zipcode
      *
      * @param string $zipcode
+     *
      * @return FgExternalApplicationForm
      */
     public function setZipcode($zipcode)
     {
         $this->zipcode = $zipcode;
-    
+
         return $this;
     }
 
     /**
      * Get zipcode
      *
-     * @return string 
+     * @return string
      */
     public function getZipcode()
     {
@@ -300,19 +305,20 @@ class FgExternalApplicationForm
      * Set location
      *
      * @param string $location
+     *
      * @return FgExternalApplicationForm
      */
     public function setLocation($location)
     {
         $this->location = $location;
-    
+
         return $this;
     }
 
     /**
      * Get location
      *
-     * @return string 
+     * @return string
      */
     public function getLocation()
     {
@@ -323,19 +329,20 @@ class FgExternalApplicationForm
      * Set telM
      *
      * @param string $telM
+     *
      * @return FgExternalApplicationForm
      */
     public function setTelM($telM)
     {
         $this->telM = $telM;
-    
+
         return $this;
     }
 
     /**
      * Get telM
      *
-     * @return string 
+     * @return string
      */
     public function getTelM()
     {
@@ -346,19 +353,20 @@ class FgExternalApplicationForm
      * Set telG
      *
      * @param string $telG
+     *
      * @return FgExternalApplicationForm
      */
     public function setTelG($telG)
     {
         $this->telG = $telG;
-    
+
         return $this;
     }
 
     /**
      * Get telG
      *
-     * @return string 
+     * @return string
      */
     public function getTelG()
     {
@@ -369,19 +377,20 @@ class FgExternalApplicationForm
      * Set relatives
      *
      * @param string $relatives
+     *
      * @return FgExternalApplicationForm
      */
     public function setRelatives($relatives)
     {
         $this->relatives = $relatives;
-    
+
         return $this;
     }
 
     /**
      * Get relatives
      *
-     * @return string 
+     * @return string
      */
     public function getRelatives()
     {
@@ -392,43 +401,44 @@ class FgExternalApplicationForm
      * Set employer
      *
      * @param string $employer
+     *
      * @return FgExternalApplicationForm
      */
     public function setEmployer($employer)
     {
         $this->employer = $employer;
-    
+
         return $this;
     }
-    
+
     /**
      * Get employer
      *
-     * @return string 
+     * @return string
      */
     public function getEmployer()
     {
         return $this->employer;
     }
-    
+
     /**
      * Set personalNumber
      *
-     * @param int $personalNumber
-     * 
+     * @param integer $personalNumber
+     *
      * @return FgExternalApplicationForm
      */
     public function setPersonalNumber($personalNumber)
     {
         $this->personalNumber = $personalNumber;
-    
+
         return $this;
     }
-    
+
     /**
-     * Get $personalNumber
+     * Get personalNumber
      *
-     * @return int 
+     * @return integer
      */
     public function getPersonalNumber()
     {
@@ -439,19 +449,20 @@ class FgExternalApplicationForm
      * Set comment
      *
      * @param string $comment
+     *
      * @return FgExternalApplicationForm
      */
     public function setComment($comment)
     {
         $this->comment = $comment;
-    
+
         return $this;
     }
 
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -462,19 +473,20 @@ class FgExternalApplicationForm
      * Set clubSelected
      *
      * @param string $clubSelected
+     *
      * @return FgExternalApplicationForm
      */
     public function setClubSelected($clubSelected)
     {
         $this->clubSelected = $clubSelected;
-    
+
         return $this;
     }
 
     /**
      * Get clubSelected
      *
-     * @return string 
+     * @return string
      */
     public function getClubSelected()
     {
@@ -485,19 +497,20 @@ class FgExternalApplicationForm
      * Set createdDate
      *
      * @param \DateTime $createdDate
+     *
      * @return FgExternalApplicationForm
      */
     public function setCreatedDate($createdDate)
     {
         $this->createdDate = $createdDate;
-    
+
         return $this;
     }
 
     /**
      * Get createdDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedDate()
     {
@@ -508,19 +521,20 @@ class FgExternalApplicationForm
      * Set decisionDate
      *
      * @param \DateTime $decisionDate
+     *
      * @return FgExternalApplicationForm
      */
     public function setDecisionDate($decisionDate)
     {
         $this->decisionDate = $decisionDate;
-    
+
         return $this;
     }
 
     /**
      * Get decisionDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDecisionDate()
     {
@@ -531,19 +545,20 @@ class FgExternalApplicationForm
      * Set status
      *
      * @param string $status
+     *
      * @return FgExternalApplicationForm
      */
     public function setStatus($status)
     {
         $this->status = $status;
-    
+
         return $this;
     }
 
     /**
      * Get status
      *
-     * @return string 
+     * @return string
      */
     public function getStatus()
     {
@@ -554,19 +569,20 @@ class FgExternalApplicationForm
      * Set fedMembership
      *
      * @param \Common\UtilityBundle\Entity\FgCmMembership $fedMembership
+     *
      * @return FgExternalApplicationForm
      */
     public function setFedMembership(\Common\UtilityBundle\Entity\FgCmMembership $fedMembership = null)
     {
         $this->fedMembership = $fedMembership;
-    
+
         return $this;
     }
 
     /**
      * Get fedMembership
      *
-     * @return \Common\UtilityBundle\Entity\FgCmMembership 
+     * @return \Common\UtilityBundle\Entity\FgCmMembership
      */
     public function getFedMembership()
     {
@@ -577,19 +593,20 @@ class FgExternalApplicationForm
      * Set decidedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $decidedBy
+     *
      * @return FgExternalApplicationForm
      */
     public function setDecidedBy(\Common\UtilityBundle\Entity\FgCmContact $decidedBy = null)
     {
         $this->decidedBy = $decidedBy;
-    
+
         return $this;
     }
 
     /**
      * Get decidedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getDecidedBy()
     {
@@ -600,19 +617,20 @@ class FgExternalApplicationForm
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgExternalApplicationForm
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -623,46 +641,24 @@ class FgExternalApplicationForm
      * Set fedContact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $fedContact
+     *
      * @return FgExternalApplicationForm
      */
     public function setFedContact(\Common\UtilityBundle\Entity\FgCmContact $fedContact = null)
     {
         $this->fedContact = $fedContact;
-    
+
         return $this;
     }
 
     /**
      * Get fedContact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getFedContact()
     {
         return $this->fedContact;
     }
-    
-    /**
-     * Set employernumber
-     *
-     * @param int employernumber
-     * 
-     * @return FgExternalApplicationForm
-     */
-    public function setEmployernumber($employernumber)
-    {
-        $this->employernumber = $employernumber;
-    
-        return $this;
-    }
-    
-    /**
-     * Get $personalNumber
-     *
-     * @return int 
-     */
-    public function getEmployernumber()
-    {
-        return $this->employernumber;
-    }
 }
+

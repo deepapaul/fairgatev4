@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmMembership
  */
@@ -44,6 +42,7 @@ class FgCmMembership
      * Set title
      *
      * @param string $title
+     *
      * @return FgCmMembership
      */
     public function setTitle($title)
@@ -67,6 +66,7 @@ class FgCmMembership
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgCmMembership
      */
     public function setSortOrder($sortOrder)
@@ -90,6 +90,7 @@ class FgCmMembership
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmMembership
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
@@ -109,3 +110,4 @@ class FgCmMembership
         return $this->club;
     }
 }
+

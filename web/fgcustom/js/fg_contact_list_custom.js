@@ -120,10 +120,8 @@ FgContactListCustom = {
                 }
                 if (FgSidebar.isFirstTime && contactType == 'contact') {
                     callSidebar();
+                    FgContactListCustom.getMissingAssignment(isReadOnlyContact);
                     FgContactListCustom.setSidebarCount();
-                    if(isReadOnlyContact == 0) { // If logged in contact is readonly, no need to show missing assignment alert in side bar
-                        FgContactListCustom.getMissingAssignment();
-                    }
                     FgSidebar.isFirstTime = false;
                 }
                 FgTooltip.init();
@@ -141,16 +139,18 @@ FgContactListCustom = {
             FgCountUpdate.update('show', 'contact', 'active', countData, 2);
         });
     },
-    getMissingAssignment: function () {
+    getMissingAssignment: function (isReadOnlyContact) {
         $('#MissingReqAssgmtError').addClass('display-hide');
-        $.getJSON(CLParams.sidebarMissingAssignmentsUrl, function (data) {
-            var missingAssignData = data;
-            if (Object.keys(missingAssignData).length > 0) {
-                FgCountUpdate.updateMissingAssignments(missingAssignData);
-                reqRoleMissing = true;
-            }
-            FgSidebar.show('');
-        });
+        if (isReadOnlyContact == 0 && !(CLParams.type == 'federation' || CLParams.type == 'standard_club')) { // If logged in contact is readonly, no need to show missing assignment alert in side bar
+            $.getJSON(CLParams.sidebarMissingAssignmentsUrl, function (data) {
+                var missingAssignData = data;
+                if (Object.keys(missingAssignData).length > 0) {
+                    FgCountUpdate.updateMissingAssignments(missingAssignData);
+                    reqRoleMissing = true;
+                }
+                FgSidebar.show('');
+            });
+        }
     }
 
 
@@ -411,15 +411,15 @@ function callSidebar() {
     if(type == 'federation_club' || type == 'sub_federation_club'){
         if(clubMembershipAvailable == 1)
             contactData[1]['hasSettings'] = 0;
-        else 
+        else
             contactData[0]['hasSettings'] = 0;
     }
-    
-    
+
+
     var createTitle = (type=='federation') ? CLTrans.SIDEBAR_CREATE_FEDMEMBERSHIP : CLTrans.SIDEBAR_CREATE_MEMBERSHIP;
     var manageTitle = (type=='federation') ? CLTrans.SIDEBAR_FEDMEMBERSHIP_SETTINGS : CLTrans.SIDEBAR_MEMBERSHIP_SETTINGS;
     var settings = {"0": {'type': 'newElement', 'title': createTitle, 'url': '#', 'contentType': contentType, 'hierarchy': '1'}, "1": {'title': manageTitle, 'url': CLParams.membershipListPath}};
-    
+
     if(_.size(contactData) == 1){
         var contactMenu = {templateType: 'general', menuType: 'membership', 'parent': {id: contactId, class: contactId}, title: contactData[0].title, template: '#template_sidebar_menu', 'menu': {'items': contactData[0].input}};
         settings[0]['target'] = '#CONTACT_li';
@@ -432,7 +432,7 @@ function callSidebar() {
         var contactMenu = {templateType: 'menu2level', menuType: 'membership', 'parent': {id: contactId, class: contactId}, title: contactDataTitle, template: '#template_sidebar_menu2level', 'menu': {'items': contactData}};
         contactMenu.settingsLevel2 = settings;
     }
-    
+
     FgSidebar.settings[contactId] = contactMenu;
     FgSidebar.options.push({'id': contactId, 'title': contactDataTitle});
     $.each(jsonData, function (key, data) {

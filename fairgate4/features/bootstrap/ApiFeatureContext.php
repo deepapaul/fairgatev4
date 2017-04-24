@@ -9,6 +9,7 @@ use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Behat\Behat\Tester\Exception\PendingException;
+use Behat\Gherkin\Node\TableNode;
 
 require_once __DIR__ . '/../../vendor/phpunit/phpunit/src/Framework/Assert/Functions.php';
 
@@ -107,7 +108,8 @@ class ApiFeatureContext implements Context
     public function __construct()
     {
         $this->client = new Client([
-            'base_uri' => 'http://localhost:8088',
+            //'base_uri' => 'http://localhost:8088',
+            'base_uri' => 'http://192.168.1.51:9055',
             'exceptions' => false
         ]);
     }
@@ -694,7 +696,7 @@ class ApiFeatureContext implements Context
             throw new Exception('Specified contact not found');
         }
     }
-    
+
     
      /**
      * @Then the error message should be :arg1
@@ -730,14 +732,14 @@ class ApiFeatureContext implements Context
             $con = mysql_connect("192.168.0.203","admin","admin123");
             mysql_select_db("fairgate_migrate", $con);
             mysql_query("DELETE FROM `fg_api_gotcourts` WHERE club_id = $arg2");
-            mysql_query("INSERT INTO `fg_api_gotcourts` (`club_id`, `apitoken`, `status`, `booked_by`, `booked_on`) VALUES ($arg2, '$arg1', 'generated', '1', 'now()')");
+            mysql_query("INSERT INTO `fg_api_gotcourts` (`club_id`, `apitoken`, `status`, `is_active`, `booked_by`, `booked_on`) VALUES ($arg2, '$arg1', 'generated', '0', '1', 'now()')");
             mysql_close($con);
         } catch (Exception $e){
             throw new Exception('Token Update failed');
         }
     }
-                                                                                     
 
+                                                                                     
     /**
      * @Then the response should have the category fields :arg1 for categoryid :arg2
      */
@@ -815,4 +817,65 @@ class ApiFeatureContext implements Context
             throw new Exception('Category not in the result');
         }
     }
+    
+    
+    /**
+     * @Then the response should have the contact fields :arg1 for contactid :arg2
+     */
+    public function theResponseShouldHaveTheContactFieldsForContactid($arg1, $arg2)
+    {
+        $body = $this->lastResponse->getBody()->getContents();
+        $responseArray = json_decode($body, true);
+        $exception = false;
+            if($responseArray['contactidhash'] == $arg2){
+                $result = array_diff(explode(',',$arg1), array_keys($responseArray));
+                if(count($result) > 0){
+                    $exception = true; 
+                }
+            }
+        if($exception){
+            throw new Exception('Some fields are missing');
+        }
+    }
+        
+    /**
+     * @Then the response should have the category fields"
+     */
+    public function theResponseShouldHaveTheCategoryFields(TableNode $table)
+    {
+        $body = $this->lastResponse->getBody()->getContents();
+        $responseArray = json_decode($body, true);
+        $exception = false;
+        foreach ($table as $row) {
+            if (!array_column($responseArray['categories'], $row['field'])) {
+                $exception = true; 
+            }
+        }
+        
+        if($exception){
+            throw new Exception('Some fields are missing');
+        }
+    }
+
+    
+     /**
+     * @Then the response should have the fields"
+     */
+    public function theResponseShouldHaveTheFields(TableNode $table)
+    {
+        $body = $this->lastResponse->getBody()->getContents();
+        $responseArray = json_decode($body, true);
+        $exception = false;
+        foreach ($table as $row) {
+            if (!array_column($responseArray['contacts'], $row['field'])) {
+                $exception = true; 
+            }
+        }
+        
+        if($exception){
+            throw new Exception('Some fields are missing');
+        }
+        
+    }
+
 }

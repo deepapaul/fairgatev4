@@ -1,5 +1,4 @@
-<?php
-
+<?php 
 namespace Clubadmin\ContactBundle\Controller;
 
 use Common\UtilityBundle\Controller\FgController;
@@ -12,6 +11,10 @@ use Common\UtilityBundle\Repository\Pdo\ContactPdo;
 use Common\UtilityBundle\Util\FgFedMemberships;
 use Symfony\Component\HttpFoundation\Request;
 use Common\UtilityBundle\Repository\Pdo\membershipPdo;
+use Admin\UtilityBundle\Classes\SyncFgadmin;
+use Common\UtilityBundle\Util\FgClubSyncDataToAdmin;
+use Common\UtilityBundle\Util\FgContactSyncDataToAdmin;
+use Common\UtilityBundle\Util\FgPermissions;
 
 /**
  * ArchiveController.
@@ -50,38 +53,36 @@ class ArchiveController extends FgController
             }
         }
 
-        $return = array('actionType' => $actionType, 'clubId' => $this->clubId, 'clubType' => $this->clubType, 'selActionType' => $selActionType, 'loggedContactId' => $this->contactId, 'joiningDate' => $joiningDate, 'memberCount' => $joiningDateDetails['memberId'], 'dateToday' => $dateToday, 'serviceAssignArray' => json_encode($serviceAssignArray),'communicationModule'=>$communicationModule);
+        $return = array('actionType' => $actionType, 'clubId' => $this->clubId, 'clubType' => $this->clubType, 'selActionType' => $selActionType, 'loggedContactId' => $this->contactId, 'joiningDate' => $joiningDate, 'memberCount' => $joiningDateDetails['memberId'], 'dateToday' => $dateToday, 'serviceAssignArray' => json_encode($serviceAssignArray), 'communicationModule' => $communicationModule);
 
         return $this->render('ClubadminContactBundle:Archive:archivecontacts.html.twig', $return);
     }
-    
-    
-     /**
+
+    /**
      * Function to get Subscriber
      *
      * @return json data
      */
     public function checkSubscriberAction(Request $request)
     {
-        
-        $selContactIds =  $request->get('selContacts') ? $request->get('selContacts') : '';
+
+        $selContactIds = $request->get('selContacts') ? $request->get('selContacts') : '';
         $selContactIds = json_decode($selContactIds);
         $selectedIds = implode(',', $selContactIds);
         $email = $this->container->getParameter('system_field_primaryemail');
         $columns = array('contactName', 'contactid', 'clubId', "`$email` as email");
         $getSubscriber = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->getContactsHavingPrimaryEmail($this->container, $this->contactId, $this->container->get('club'), $columns, 'contact', 1, false, $selectedIds);
-                                                                                                                    
+
         $getSubscriberArray = array();
         $getSubscriberEmailArray = array();
-                
+
         foreach ($getSubscriber as $key => $val) {
             $getSubscriberArray[] = $val['id'];
-            $getSubscriberEmailArray[] = $val ;
+            $getSubscriberEmailArray[] = $val;
         }
-        
-        return new JsonResponse(array('getSubscriber' => $getSubscriberArray ,'getSubscriberEmail' => $getSubscriberEmailArray ));
-    }
 
+        return new JsonResponse(array('getSubscriber' => $getSubscriberArray, 'getSubscriberEmail' => $getSubscriberEmailArray));
+    }
 
     /**
      * Save selected contacts as archive contacts.
@@ -97,27 +98,27 @@ class ArchiveController extends FgController
         $leavingDate = $request->get('leavingDate', '');
         $subscriberData = $request->get('subscriberData', '');
         $subscriberArray = json_decode($subscriberData);
-        
-       
+
+
         $phpDateFormat = FgSettings::getPhpDateFormat();
         $dateObj = new \DateTime();
         $leavingDate = $dateObj->createFromFormat($phpDateFormat, $leavingDate)->format('Y-m-d H:i:s');
         $totalOwnMembers = $request->get('totalOwnMembers', '');
         $terminologyService = $this->get('fairgate_terminology_service');
-       
+
         $nowdate = strtotime(date('Y-m-d H:i:s'));
         $dateToday = date('Y-m-d H:i:s', $nowdate);
         if ($request->getMethod() == 'POST') {
-           
+
             foreach ($archiveContacts as $cont) {
                 $contactIds[] = $cont;
                 if ($actionType == 'archive') {
                     $is_subscriber = 0;
-                    
-                    if(in_array($cont, $subscriberArray)){
+
+                    if (in_array($cont, $subscriberArray)) {
                         $is_subscriber = 1;
                     }
-                         
+
                     $insert .= "( '" . $cont . "','" . $this->clubId . "','" . $this->contactId . "','" . $dateToday . "','" . $is_subscriber . "'),";
                 }
             }
@@ -153,8 +154,20 @@ class ArchiveController extends FgController
                         $toBeArchivedContacts[] = $contactId;
                     }
                 };
-               
-                $this->em->getRepository('CommonUtilityBundle:FgCmContact')->archiveContact($toBeArchivedContacts, $this->contactId, $insert, $dateToday, $this->clubId, $this->container->getParameter('system_field_firstname'), $this->container->getParameter('system_field_lastname'), $this->container->getParameter('system_field_companyname'), $this->container->getParameter('system_field_dob'), $teamTerminology, $clubHeirarchy, $this->clubType, $this->container->getParameter('system_field_primaryemail'), $this->container->getParameter('system_field_salutaion'), $this->container->getParameter('system_field_gender'), $this->container->getParameter('system_field_corress_lang'), $leavingDate ,1 );
+
+                $this->em->getRepository('CommonUtilityBundle:FgCmContact')->archiveContact($toBeArchivedContacts, $this->contactId, $insert, $dateToday, $this->clubId, $this->container->getParameter('system_field_firstname'), $this->container->getParameter('system_field_lastname'), $this->container->getParameter('system_field_companyname'), $this->container->getParameter('system_field_dob'), $teamTerminology, $clubHeirarchy, $this->clubType, $this->container->getParameter('system_field_primaryemail'), $this->container->getParameter('system_field_salutaion'), $this->container->getParameter('system_field_gender'), $this->container->getParameter('system_field_corress_lang'), $leavingDate, 1);
+                /** Sync Fed member count to the AdminDB * */
+                $fgAdmin = new SyncFgadmin($this->container);
+                $fgAdmin->syncFedMemberCount();
+                /*                 * ************************************** */
+                
+                /** Sync count to the AdminDB **/
+                $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
+                $clubSyncObject->updateSubscriberCount($this->clubId)
+                                ->updateAdminCount($this->clubId)
+                                ->updateActiveContactCount($this->clubId);
+                /*****************************************/
+                
                 if ($fromPage == 'contactlist') {
                     $flashMsg = '';
                     if ($actionType == 'archive') {
@@ -273,10 +286,17 @@ class ArchiveController extends FgController
             if ($updateIds != '') {
                 $ids = ltrim($updateIds, ',');
                 $subscriberIds = ltrim($subscriberIds, ',');
-                $this->em->getRepository('CommonUtilityBundle:FgCmContact')->activateContact($ids, $this->contactId, $subscriberIds, $this->clubId, $hasFedmembership);
+                $this->em->getRepository('CommonUtilityBundle:FgCmContact')->activateContact($ids, $this->contactId, $subscriberIds, $this->clubId, $hasFedmembership, $this->container);
                 $flashMsg = 'REACTIVATE_SUCCESS_MESSAGE';
                 $status = array('status' => 'SUCCESS', 'pageTpe' => $contactType, 'totalCount' => count($selectedIds), 'flash' => $this->get('translator')->trans($flashMsg, array('%totalcount%' => count($selectedIds), '%updatecount%' => $updateIdsCount)));
 
+                /** Sync count to the AdminDB **/
+                $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
+                $clubSyncObject->updateSubscriberCount($this->clubId)
+                                ->updateAdminCount($this->clubId)
+                                ->updateActiveContactCount($this->clubId);
+                /*****************************************/
+                
                 return new JsonResponse($status);
             } else {
                 $flashMsg = 'REACTIVATE_NOT_SUCCESS_MESSAGE';
@@ -372,7 +392,7 @@ class ArchiveController extends FgController
         if ($updateIdss != '') {
             $ids = ltrim($updateIdss, ',');
             $subscriberIds = ltrim($subscriberIds, ',');
-            $this->em->getRepository('CommonUtilityBundle:FgCmContact')->activateContact($ids, $this->contactId, $subscriberIds, $this->clubId, $hasFedmembership);
+            $this->em->getRepository('CommonUtilityBundle:FgCmContact')->activateContact($ids, $this->contactId, $subscriberIds, $this->clubId, $hasFedmembership, $this->container);
             $flashMsg = 'REACTIVATE_SUCCESS_MESSAGE';
             if ($return['mergeable'] == false) {
                 $return['flash'] = $this->get('translator')->trans($flashMsg, array('%totalcount%' => count($selectedIds), '%updatecount%' => $count));
@@ -421,9 +441,16 @@ class ArchiveController extends FgController
                     $subscriberId = $contactData['id'];
                 }
 
-                $this->em->getRepository('CommonUtilityBundle:FgCmContact')->activateContact($contactData['id'], $this->contactId, $subscriberId, $this->clubId, 1);
+                $this->em->getRepository('CommonUtilityBundle:FgCmContact')->activateContact($contactData['id'], $this->contactId, $subscriberId, $this->clubId, 1, $this->container);
                 $flashMsg = 'REACTIVATE_SUCCESS_MESSAGE';
                 $status = array('status' => 'SUCCESS', 'pageTpe' => $contactType, 'totalCount' => count($contactData['id']), 'flash' => $this->get('translator')->trans($flashMsg, array('%totalcount%' => count($contactData['id']), '%updatecount%' => count($contactData['id']))));
+
+                /** Sync count to the AdminDB **/
+                $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
+                $clubSyncObject->updateSubscriberCount($this->clubId)
+                                ->updateAdminCount($this->clubId)
+                                ->updateActiveContactCount($this->clubId);
+                /*****************************************/
 
                 return new JsonResponse($status);
             } else {
@@ -452,7 +479,7 @@ class ArchiveController extends FgController
                         $subscriberId = $contact;
                     }
 
-                    $this->em->getRepository('CommonUtilityBundle:FgCmContact')->activateContact($contact, $this->contactId, $subscriberId, $this->clubId, 1);
+                    $this->em->getRepository('CommonUtilityBundle:FgCmContact')->activateContact($contact, $this->contactId, $subscriberId, $this->clubId, 1, $this->container);
                 } else {
                     unset($contactData[$contact]);
                 }
@@ -460,7 +487,14 @@ class ArchiveController extends FgController
 
             $flashMsg = (count($contactData) + $alreadyActivated > 0) ? 'REACTIVATE_SUCCESS_MESSAGE' : 'REACTIVATE_NOT_SUCCESS_MESSAGE';
             $status = array('status' => 'SUCCESS', 'noparentload' => true, 'pageTpe' => $contactType, 'totalCount' => count($contactData) + $alreadyActivated, 'flash' => $this->get('translator')->trans($flashMsg, array('%totalcount%' => $totalCnt, '%updatecount%' => count($contactData) + $alreadyActivated)));
-
+           
+            /** Sync count to the AdminDB **/
+            $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
+            $clubSyncObject->updateSubscriberCount($this->clubId)
+                            ->updateAdminCount($this->clubId)
+                            ->updateActiveContactCount($this->clubId);
+            /*****************************************/
+                
             return new JsonResponse($status);
         }
     }
@@ -625,6 +659,9 @@ class ArchiveController extends FgController
         $clubService = $this->container->get('club');
         $totalCount = '';
         $primaryEmail = $this->container->getParameter('system_field_primaryemail');
+        
+        $permissionObj = new FgPermissions($this->container);
+        
         //Get the POST data
         $archiveDatas = $request->get('selcontactIds', '');
         $clubService = $this->container->get('club');
@@ -632,10 +669,12 @@ class ArchiveController extends FgController
         $fedMembershipMandatory = $clubService->get('fedMembershipMandatory');
         $fedId = $this->clubType == 'federation' ? $this->clubId : $this->federationId;
         if ($archiveDatas != '') {
-            $selectedIds = explode(',', $archiveDatas['selcontactIds']);
+            $selectedIds = explode(',', $archiveDatas);
             $contactNameArray = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->getContactName($archiveDatas, '', $clubService, $this->container, 'archive');
             $return = array('contactnames' => $contactNameArray, 'contactIds' => $selectedIds);
-
+            if( !$permissionObj ->checkContactCount(count($selectedIds))) {
+                return $this->render('CommonUtilityBundle:Permissionpopup:contactcreationwarningpopup.html.twig');  
+            }
             if ($fedMembershipMandatory) {
                 $objMembershipPdo = new membershipPdo($this->container);
                 $membersipFields = $objMembershipPdo->getMemberships($this->clubType, $this->clubId, $this->subFederationId, $this->federationId);
@@ -830,6 +869,11 @@ class ArchiveController extends FgController
                 $flashMsg = 'FORMERFED_MEM_DELETE_SUCCESS_MESSAGE';
                 $status = array('status' => 'SUCCESS', 'flash' => $this->get('translator')->trans($flashMsg, array('%totalcount%' => count($selectedIds), '%updatecount%' => count($selectedIds))));
             }
+            
+            /** Sync subscriber count to the AdminDB **/
+            $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
+            $clubSyncObject->updateSubscriberCount($this->clubId)->updateAdminCount($this->clubId);
+            /*****************************************/
         } else {
             $status = array('Count' => '', 'status' => 'FAILURE');
         }

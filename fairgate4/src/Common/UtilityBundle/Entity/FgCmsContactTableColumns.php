@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsContactTableColumns
  */
@@ -94,12 +92,16 @@ class FgCmsContactTableColumns
      */
     private $attribute;
 
+    /**
+     * @var \Common\UtilityBundle\Entity\FgCmsPortraitContainerColumn
+     */
+    private $column;
 
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -110,19 +112,20 @@ class FgCmsContactTableColumns
      * Set columnType
      *
      * @param string $columnType
+     *
      * @return FgCmsContactTableColumns
      */
     public function setColumnType($columnType)
     {
         $this->columnType = $columnType;
-    
+
         return $this;
     }
 
     /**
      * Get columnType
      *
-     * @return string 
+     * @return string
      */
     public function getColumnType()
     {
@@ -133,19 +136,20 @@ class FgCmsContactTableColumns
      * Set title
      *
      * @param string $title
+     *
      * @return FgCmsContactTableColumns
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -156,19 +160,20 @@ class FgCmsContactTableColumns
      * Set columnSubtype
      *
      * @param string $columnSubtype
+     *
      * @return FgCmsContactTableColumns
      */
     public function setColumnSubtype($columnSubtype)
     {
         $this->columnSubtype = $columnSubtype;
-    
+
         return $this;
     }
 
     /**
      * Get columnSubtype
      *
-     * @return string 
+     * @return string
      */
     public function getColumnSubtype()
     {
@@ -179,19 +184,20 @@ class FgCmsContactTableColumns
      * Set functionIds
      *
      * @param string $functionIds
+     *
      * @return FgCmsContactTableColumns
      */
     public function setFunctionIds($functionIds)
     {
         $this->functionIds = $functionIds;
-    
+
         return $this;
     }
 
     /**
      * Get functionIds
      *
-     * @return string 
+     * @return string
      */
     public function getFunctionIds()
     {
@@ -202,19 +208,20 @@ class FgCmsContactTableColumns
      * Set showProfilePicture
      *
      * @param boolean $showProfilePicture
+     *
      * @return FgCmsContactTableColumns
      */
     public function setShowProfilePicture($showProfilePicture)
     {
         $this->showProfilePicture = $showProfilePicture;
-    
+
         return $this;
     }
 
     /**
      * Get showProfilePicture
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getShowProfilePicture()
     {
@@ -225,19 +232,20 @@ class FgCmsContactTableColumns
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgCmsContactTableColumns
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -248,19 +256,20 @@ class FgCmsContactTableColumns
      * Set isDeleted
      *
      * @param boolean $isDeleted
+     *
      * @return FgCmsContactTableColumns
      */
     public function setIsDeleted($isDeleted)
     {
         $this->isDeleted = $isDeleted;
-    
+
         return $this;
     }
 
     /**
      * Get isDeleted
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsDeleted()
     {
@@ -271,19 +280,20 @@ class FgCmsContactTableColumns
      * Set fieldDisplayType
      *
      * @param string $fieldDisplayType
+     *
      * @return FgCmsContactTableColumns
      */
     public function setFieldDisplayType($fieldDisplayType)
     {
         $this->fieldDisplayType = $fieldDisplayType;
-    
+
         return $this;
     }
 
     /**
      * Get fieldDisplayType
      *
-     * @return string 
+     * @return string
      */
     public function getFieldDisplayType()
     {
@@ -294,19 +304,20 @@ class FgCmsContactTableColumns
      * Set lineBreakBefore
      *
      * @param integer $lineBreakBefore
+     *
      * @return FgCmsContactTableColumns
      */
     public function setLineBreakBefore($lineBreakBefore)
     {
         $this->lineBreakBefore = $lineBreakBefore;
-    
+
         return $this;
     }
 
     /**
      * Get lineBreakBefore
      *
-     * @return integer 
+     * @return integer
      */
     public function getLineBreakBefore()
     {
@@ -317,19 +328,20 @@ class FgCmsContactTableColumns
      * Set emptyValueDisplay
      *
      * @param string $emptyValueDisplay
+     *
      * @return FgCmsContactTableColumns
      */
     public function setEmptyValueDisplay($emptyValueDisplay)
     {
         $this->emptyValueDisplay = $emptyValueDisplay;
-    
+
         return $this;
     }
 
     /**
      * Get emptyValueDisplay
      *
-     * @return string 
+     * @return string
      */
     public function getEmptyValueDisplay()
     {
@@ -340,43 +352,44 @@ class FgCmsContactTableColumns
      * Set separateListing
      *
      * @param string $separateListing
+     *
      * @return FgCmsContactTableColumns
      */
     public function setSeparateListing($separateListing)
     {
         $this->separateListing = $separateListing;
-    
+
         return $this;
     }
 
     /**
      * Get separateListing
      *
-     * @return string 
+     * @return string
      */
     public function getSeparateListing()
     {
         return $this->separateListing;
     }
 
-
     /**
      * Set profileImage
      *
      * @param string $profileImage
+     *
      * @return FgCmsContactTableColumns
      */
     public function setProfileImage($profileImage)
     {
         $this->profileImage = $profileImage;
-    
+
         return $this;
     }
 
     /**
      * Get profileImage
      *
-     * @return string 
+     * @return string
      */
     public function getProfileImage()
     {
@@ -387,19 +400,20 @@ class FgCmsContactTableColumns
      * Set role
      *
      * @param \Common\UtilityBundle\Entity\FgRmRole $role
+     *
      * @return FgCmsContactTableColumns
      */
     public function setRole(\Common\UtilityBundle\Entity\FgRmRole $role = null)
     {
         $this->role = $role;
-    
+
         return $this;
     }
 
     /**
      * Get role
      *
-     * @return \Common\UtilityBundle\Entity\FgRmRole 
+     * @return \Common\UtilityBundle\Entity\FgRmRole
      */
     public function getRole()
     {
@@ -410,19 +424,20 @@ class FgCmsContactTableColumns
      * Set roleCategory
      *
      * @param \Common\UtilityBundle\Entity\FgRmCategory $roleCategory
+     *
      * @return FgCmsContactTableColumns
      */
     public function setRoleCategory(\Common\UtilityBundle\Entity\FgRmCategory $roleCategory = null)
     {
         $this->roleCategory = $roleCategory;
-    
+
         return $this;
     }
 
     /**
      * Get roleCategory
      *
-     * @return \Common\UtilityBundle\Entity\FgRmCategory 
+     * @return \Common\UtilityBundle\Entity\FgRmCategory
      */
     public function getRoleCategory()
     {
@@ -433,19 +448,20 @@ class FgCmsContactTableColumns
      * Set table
      *
      * @param \Common\UtilityBundle\Entity\FgCmsContactTable $table
+     *
      * @return FgCmsContactTableColumns
      */
     public function setTable(\Common\UtilityBundle\Entity\FgCmsContactTable $table = null)
     {
         $this->table = $table;
-    
+
         return $this;
     }
 
     /**
      * Get table
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsContactTable 
+     * @return \Common\UtilityBundle\Entity\FgCmsContactTable
      */
     public function getTable()
     {
@@ -456,52 +472,48 @@ class FgCmsContactTableColumns
      * Set attribute
      *
      * @param \Common\UtilityBundle\Entity\FgCmAttribute $attribute
+     *
      * @return FgCmsContactTableColumns
      */
     public function setAttribute(\Common\UtilityBundle\Entity\FgCmAttribute $attribute = null)
     {
         $this->attribute = $attribute;
-    
+
         return $this;
     }
 
     /**
      * Get attribute
      *
-     * @return \Common\UtilityBundle\Entity\FgCmAttribute 
+     * @return \Common\UtilityBundle\Entity\FgCmAttribute
      */
     public function getAttribute()
     {
         return $this->attribute;
     }
 
-
-    /**
-     * @var \Common\UtilityBundle\Entity\FgCmsPortraitContainerColumn
-     */
-    private $column;
-
-
     /**
      * Set column
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPortraitContainerColumn $column
+     *
      * @return FgCmsContactTableColumns
      */
     public function setColumn(\Common\UtilityBundle\Entity\FgCmsPortraitContainerColumn $column = null)
     {
         $this->column = $column;
-    
+
         return $this;
-}
+    }
 
     /**
      * Get column
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPortraitContainerColumn 
+     * @return \Common\UtilityBundle\Entity\FgCmsPortraitContainerColumn
      */
     public function getColumn()
     {
         return $this->column;
     }
 }
+

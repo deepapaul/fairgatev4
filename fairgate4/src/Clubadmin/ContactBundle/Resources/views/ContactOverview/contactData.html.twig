@@ -178,12 +178,14 @@
                                                     
    
 {% block javascripts %}
+    <script>   var contactType ="{{currentcontactType}}"; </script> 
     {% if (not(isAjax))%}
         <script>  
+            
         readOnlyCont = '{{isReadOnlyContact}}';      
         $(window).load(function() {
         
-            if(readOnlyCont==1){
+            if(readOnlyCont==1 || contactType == 'formerfederationmember'){
                      $('#fg-contact-data').removeClass('hide');
             }else{
                  contactEdit.preValidate()
@@ -234,7 +236,7 @@
         var mainContactLink = {{ (mainContactVisible) ? 'true':'false'}};
         var autosuggestLinkUrl='{{ (mainContactVisible) ? url('render_contact_overview',{'offset':0 ,'contact': 'dummyContact'}) :''}}';
         indexPath= (pageType == 'sponsor')? "{{path('clubadmin_sponsor_homepage')}}" : "{{path('contact_index')}}";
-        var contactType ="{{currentcontactType}}";
+        
         clubId = '{{clubId}}';
         var club_id = '{{clubId}}';
         globalDefaultMessage = '{{'DATA_DROP_IMAGE'|trans}}';

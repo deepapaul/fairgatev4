@@ -181,7 +181,6 @@ var createContact={
     },
     handleSameAs:function(){
         if($('input#same_invoice_address').is(':checked')){
-            $('div[data-catId=137] :input').attr('checked',false);
             $('div[data-catId=2] :input[data-addresstype=both]').each(function(){
                 addressId=$(this).attr('data-attrId');
                 $('div[data-catId=137] :input[data-addressid='+addressId+']').val($(this).val());

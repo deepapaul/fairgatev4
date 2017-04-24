@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnNewsletter
  */
@@ -80,7 +78,7 @@ class FgCnNewsletter
     private $lastUpdated;
 
     /**
-     * @var boolean
+     * @var integer
      */
     private $step;
 
@@ -150,9 +148,14 @@ class FgCnNewsletter
     private $isRecepientUpdated;
 
     /**
-     * @var boolean
+     * @var integer
      */
     private $resentStatus;
+
+    /**
+     * @var \DateTime
+     */
+    private $templateUpdated;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgCmContact
@@ -183,7 +186,7 @@ class FgCnNewsletter
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -194,19 +197,20 @@ class FgCnNewsletter
      * Set subject
      *
      * @param string $subject
+     *
      * @return FgCnNewsletter
      */
     public function setSubject($subject)
     {
         $this->subject = $subject;
-    
+
         return $this;
     }
 
     /**
      * Get subject
      *
-     * @return string 
+     * @return string
      */
     public function getSubject()
     {
@@ -217,19 +221,20 @@ class FgCnNewsletter
      * Set senderName
      *
      * @param string $senderName
+     *
      * @return FgCnNewsletter
      */
     public function setSenderName($senderName)
     {
         $this->senderName = $senderName;
-    
+
         return $this;
     }
 
     /**
      * Get senderName
      *
-     * @return string 
+     * @return string
      */
     public function getSenderName()
     {
@@ -240,19 +245,20 @@ class FgCnNewsletter
      * Set senderEmail
      *
      * @param string $senderEmail
+     *
      * @return FgCnNewsletter
      */
     public function setSenderEmail($senderEmail)
     {
         $this->senderEmail = $senderEmail;
-    
+
         return $this;
     }
 
     /**
      * Get senderEmail
      *
-     * @return string 
+     * @return string
      */
     public function getSenderEmail()
     {
@@ -263,19 +269,20 @@ class FgCnNewsletter
      * Set salutationType
      *
      * @param string $salutationType
+     *
      * @return FgCnNewsletter
      */
     public function setSalutationType($salutationType)
     {
         $this->salutationType = $salutationType;
-    
+
         return $this;
     }
 
     /**
      * Get salutationType
      *
-     * @return string 
+     * @return string
      */
     public function getSalutationType()
     {
@@ -286,19 +293,20 @@ class FgCnNewsletter
      * Set salutation
      *
      * @param string $salutation
+     *
      * @return FgCnNewsletter
      */
     public function setSalutation($salutation)
     {
         $this->salutation = $salutation;
-    
+
         return $this;
     }
 
     /**
      * Get salutation
      *
-     * @return string 
+     * @return string
      */
     public function getSalutation()
     {
@@ -309,19 +317,20 @@ class FgCnNewsletter
      * Set isHideTableContents
      *
      * @param boolean $isHideTableContents
+     *
      * @return FgCnNewsletter
      */
     public function setIsHideTableContents($isHideTableContents)
     {
         $this->isHideTableContents = $isHideTableContents;
-    
+
         return $this;
     }
 
     /**
      * Get isHideTableContents
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsHideTableContents()
     {
@@ -332,19 +341,20 @@ class FgCnNewsletter
      * Set newsletterType
      *
      * @param string $newsletterType
+     *
      * @return FgCnNewsletter
      */
     public function setNewsletterType($newsletterType)
     {
         $this->newsletterType = $newsletterType;
-    
+
         return $this;
     }
 
     /**
      * Get newsletterType
      *
-     * @return string 
+     * @return string
      */
     public function getNewsletterType()
     {
@@ -355,19 +365,20 @@ class FgCnNewsletter
      * Set emailContent
      *
      * @param string $emailContent
+     *
      * @return FgCnNewsletter
      */
     public function setEmailContent($emailContent)
     {
         $this->emailContent = $emailContent;
-    
+
         return $this;
     }
 
     /**
      * Get emailContent
      *
-     * @return string 
+     * @return string
      */
     public function getEmailContent()
     {
@@ -378,19 +389,20 @@ class FgCnNewsletter
      * Set sendMode
      *
      * @param string $sendMode
+     *
      * @return FgCnNewsletter
      */
     public function setSendMode($sendMode)
     {
         $this->sendMode = $sendMode;
-    
+
         return $this;
     }
 
     /**
      * Get sendMode
      *
-     * @return string 
+     * @return string
      */
     public function getSendMode()
     {
@@ -401,19 +413,20 @@ class FgCnNewsletter
      * Set sendDate
      *
      * @param \DateTime $sendDate
+     *
      * @return FgCnNewsletter
      */
     public function setSendDate($sendDate)
     {
         $this->sendDate = $sendDate;
-    
+
         return $this;
     }
 
     /**
      * Get sendDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getSendDate()
     {
@@ -424,19 +437,20 @@ class FgCnNewsletter
      * Set isDisplayInArchive
      *
      * @param boolean $isDisplayInArchive
+     *
      * @return FgCnNewsletter
      */
     public function setIsDisplayInArchive($isDisplayInArchive)
     {
         $this->isDisplayInArchive = $isDisplayInArchive;
-    
+
         return $this;
     }
 
     /**
      * Get isDisplayInArchive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsDisplayInArchive()
     {
@@ -447,19 +461,20 @@ class FgCnNewsletter
      * Set publishType
      *
      * @param string $publishType
+     *
      * @return FgCnNewsletter
      */
     public function setPublishType($publishType)
     {
         $this->publishType = $publishType;
-    
+
         return $this;
     }
 
     /**
      * Get publishType
      *
-     * @return string 
+     * @return string
      */
     public function getPublishType()
     {
@@ -470,19 +485,20 @@ class FgCnNewsletter
      * Set lastUpdated
      *
      * @param \DateTime $lastUpdated
+     *
      * @return FgCnNewsletter
      */
     public function setLastUpdated($lastUpdated)
     {
         $this->lastUpdated = $lastUpdated;
-    
+
         return $this;
     }
 
     /**
      * Get lastUpdated
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLastUpdated()
     {
@@ -492,20 +508,21 @@ class FgCnNewsletter
     /**
      * Set step
      *
-     * @param boolean $step
+     * @param integer $step
+     *
      * @return FgCnNewsletter
      */
     public function setStep($step)
     {
         $this->step = $step;
-    
+
         return $this;
     }
 
     /**
      * Get step
      *
-     * @return boolean 
+     * @return integer
      */
     public function getStep()
     {
@@ -516,19 +533,20 @@ class FgCnNewsletter
      * Set status
      *
      * @param string $status
+     *
      * @return FgCnNewsletter
      */
     public function setStatus($status)
     {
         $this->status = $status;
-    
+
         return $this;
     }
 
     /**
      * Get status
      *
-     * @return string 
+     * @return string
      */
     public function getStatus()
     {
@@ -539,19 +557,20 @@ class FgCnNewsletter
      * Set languageSelection
      *
      * @param string $languageSelection
+     *
      * @return FgCnNewsletter
      */
     public function setLanguageSelection($languageSelection)
     {
         $this->languageSelection = $languageSelection;
-    
+
         return $this;
     }
 
     /**
      * Get languageSelection
      *
-     * @return string 
+     * @return string
      */
     public function getLanguageSelection()
     {
@@ -562,19 +581,20 @@ class FgCnNewsletter
      * Set lastSpoolContactId
      *
      * @param integer $lastSpoolContactId
+     *
      * @return FgCnNewsletter
      */
     public function setLastSpoolContactId($lastSpoolContactId)
     {
         $this->lastSpoolContactId = $lastSpoolContactId;
-    
+
         return $this;
     }
 
     /**
      * Get lastSpoolContactId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLastSpoolContactId()
     {
@@ -585,19 +605,20 @@ class FgCnNewsletter
      * Set lastContactId
      *
      * @param integer $lastContactId
+     *
      * @return FgCnNewsletter
      */
     public function setLastContactId($lastContactId)
     {
         $this->lastContactId = $lastContactId;
-    
+
         return $this;
     }
 
     /**
      * Get lastContactId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLastContactId()
     {
@@ -608,19 +629,20 @@ class FgCnNewsletter
      * Set lastSpoolAdminReceiverId
      *
      * @param integer $lastSpoolAdminReceiverId
+     *
      * @return FgCnNewsletter
      */
     public function setLastSpoolAdminReceiverId($lastSpoolAdminReceiverId)
     {
         $this->lastSpoolAdminReceiverId = $lastSpoolAdminReceiverId;
-    
+
         return $this;
     }
 
     /**
      * Get lastSpoolAdminReceiverId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLastSpoolAdminReceiverId()
     {
@@ -631,19 +653,20 @@ class FgCnNewsletter
      * Set recepientCount
      *
      * @param integer $recepientCount
+     *
      * @return FgCnNewsletter
      */
     public function setRecepientCount($recepientCount)
     {
         $this->recepientCount = $recepientCount;
-    
+
         return $this;
     }
 
     /**
      * Get recepientCount
      *
-     * @return integer 
+     * @return integer
      */
     public function getRecepientCount()
     {
@@ -654,19 +677,20 @@ class FgCnNewsletter
      * Set isCron
      *
      * @param boolean $isCron
+     *
      * @return FgCnNewsletter
      */
     public function setIsCron($isCron)
     {
         $this->isCron = $isCron;
-    
+
         return $this;
     }
 
     /**
      * Get isCron
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsCron()
     {
@@ -677,19 +701,20 @@ class FgCnNewsletter
      * Set isSubscriberSelection
      *
      * @param string $isSubscriberSelection
+     *
      * @return FgCnNewsletter
      */
     public function setIsSubscriberSelection($isSubscriberSelection)
     {
         $this->isSubscriberSelection = $isSubscriberSelection;
-    
+
         return $this;
     }
 
     /**
      * Get isSubscriberSelection
      *
-     * @return string 
+     * @return string
      */
     public function getIsSubscriberSelection()
     {
@@ -700,19 +725,20 @@ class FgCnNewsletter
      * Set receiverType
      *
      * @param string $receiverType
+     *
      * @return FgCnNewsletter
      */
     public function setReceiverType($receiverType)
     {
         $this->receiverType = $receiverType;
-    
+
         return $this;
     }
 
     /**
      * Get receiverType
      *
-     * @return string 
+     * @return string
      */
     public function getReceiverType()
     {
@@ -723,19 +749,20 @@ class FgCnNewsletter
      * Set newsletterContent
      *
      * @param string $newsletterContent
+     *
      * @return FgCnNewsletter
      */
     public function setNewsletterContent($newsletterContent)
     {
         $this->newsletterContent = $newsletterContent;
-    
+
         return $this;
     }
 
     /**
      * Get newsletterContent
      *
-     * @return string 
+     * @return string
      */
     public function getNewsletterContent()
     {
@@ -746,19 +773,20 @@ class FgCnNewsletter
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return FgCnNewsletter
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -769,19 +797,20 @@ class FgCnNewsletter
      * Set includeFormerMembers
      *
      * @param boolean $includeFormerMembers
+     *
      * @return FgCnNewsletter
      */
     public function setIncludeFormerMembers($includeFormerMembers)
     {
         $this->includeFormerMembers = $includeFormerMembers;
-    
+
         return $this;
     }
 
     /**
      * Get includeFormerMembers
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIncludeFormerMembers()
     {
@@ -792,19 +821,20 @@ class FgCnNewsletter
      * Set isRecepientUpdated
      *
      * @param boolean $isRecepientUpdated
+     *
      * @return FgCnNewsletter
      */
     public function setIsRecepientUpdated($isRecepientUpdated)
     {
         $this->isRecepientUpdated = $isRecepientUpdated;
-    
+
         return $this;
     }
 
     /**
      * Get isRecepientUpdated
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsRecepientUpdated()
     {
@@ -814,20 +844,21 @@ class FgCnNewsletter
     /**
      * Set resentStatus
      *
-     * @param boolean $resentStatus
+     * @param integer $resentStatus
+     *
      * @return FgCnNewsletter
      */
     public function setResentStatus($resentStatus)
     {
         $this->resentStatus = $resentStatus;
-    
+
         return $this;
     }
 
     /**
      * Get resentStatus
      *
-     * @return boolean 
+     * @return integer
      */
     public function getResentStatus()
     {
@@ -835,22 +866,47 @@ class FgCnNewsletter
     }
 
     /**
+     * Set templateUpdated
+     *
+     * @param \DateTime $templateUpdated
+     *
+     * @return FgCnNewsletter
+     */
+    public function setTemplateUpdated($templateUpdated)
+    {
+        $this->templateUpdated = $templateUpdated;
+
+        return $this;
+    }
+
+    /**
+     * Get templateUpdated
+     *
+     * @return \DateTime
+     */
+    public function getTemplateUpdated()
+    {
+        return $this->templateUpdated;
+    }
+
+    /**
      * Set updatedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $updatedBy
+     *
      * @return FgCnNewsletter
      */
     public function setUpdatedBy(\Common\UtilityBundle\Entity\FgCmContact $updatedBy = null)
     {
         $this->updatedBy = $updatedBy;
-    
+
         return $this;
     }
 
     /**
      * Get updatedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getUpdatedBy()
     {
@@ -861,19 +917,20 @@ class FgCnNewsletter
      * Set template
      *
      * @param \Common\UtilityBundle\Entity\FgCnNewsletterTemplate $template
+     *
      * @return FgCnNewsletter
      */
     public function setTemplate(\Common\UtilityBundle\Entity\FgCnNewsletterTemplate $template = null)
     {
         $this->template = $template;
-    
+
         return $this;
     }
 
     /**
      * Get template
      *
-     * @return \Common\UtilityBundle\Entity\FgCnNewsletterTemplate 
+     * @return \Common\UtilityBundle\Entity\FgCnNewsletterTemplate
      */
     public function getTemplate()
     {
@@ -884,19 +941,20 @@ class FgCnNewsletter
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCnNewsletter
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -907,19 +965,20 @@ class FgCnNewsletter
      * Set createdBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $createdBy
+     *
      * @return FgCnNewsletter
      */
     public function setCreatedBy(\Common\UtilityBundle\Entity\FgCmContact $createdBy = null)
     {
         $this->createdBy = $createdBy;
-    
+
         return $this;
     }
 
     /**
      * Get createdBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getCreatedBy()
     {
@@ -930,50 +989,24 @@ class FgCnNewsletter
      * Set recepientList
      *
      * @param \Common\UtilityBundle\Entity\FgCnRecepients $recepientList
+     *
      * @return FgCnNewsletter
      */
     public function setRecepientList(\Common\UtilityBundle\Entity\FgCnRecepients $recepientList = null)
     {
         $this->recepientList = $recepientList;
-    
+
         return $this;
     }
 
     /**
      * Get recepientList
      *
-     * @return \Common\UtilityBundle\Entity\FgCnRecepients 
+     * @return \Common\UtilityBundle\Entity\FgCnRecepients
      */
     public function getRecepientList()
     {
         return $this->recepientList;
     }
-    /**
-     * @var \DateTime
-     */
-    private $templateUpdated;
-
-
-    /**
-     * Set templateUpdated
-     *
-     * @param \DateTime $templateUpdated
-     * @return FgCnNewsletter
-     */
-    public function setTemplateUpdated($templateUpdated)
-    {
-        $this->templateUpdated = $templateUpdated;
-    
-        return $this;
-    }
-
-    /**
-     * Get templateUpdated
-     *
-     * @return \DateTime 
-     */
-    public function getTemplateUpdated()
-    {
-        return $this->templateUpdated;
-    }
 }
+

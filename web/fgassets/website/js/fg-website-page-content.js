@@ -1,6 +1,3 @@
-/// <reference path="../directives/jquery.d.ts" />
-/// <reference path="../directives/underscore.d.ts" />
-/// <reference path="../directives/jqueryui.d.ts" />
 var Fgwebsitepage = (function () {
     function Fgwebsitepage() {
         this.loginElement = [];
@@ -22,15 +19,15 @@ var Fgwebsitepage = (function () {
             mainContainer: '#mainContainer',
             container: {
                 data: {},
-                templateId: 'containerBox' // ID of template to render container data
+                templateId: 'containerBox'
             },
             column: {
                 data: {},
-                templateId: 'columnBox' // ID of template to render column data
+                templateId: 'columnBox'
             },
             columnbox: {
                 data: {},
-                templateId: 'Box' // ID of template to render box data
+                templateId: 'Box'
             },
             elementbox: {
                 data: {},
@@ -54,7 +51,7 @@ var Fgwebsitepage = (function () {
                     'newsletter-subscription': 'templateSubscriptionForm',
                     'newsletter-archive': 'templateNewsletterArchive',
                     'twitter': 'templateTwitter'
-                } // ID of template to render box data
+                }
             },
             initContainerCallback: function () { },
             initColumnCallback: function () { },
@@ -73,10 +70,6 @@ var Fgwebsitepage = (function () {
             tolerance: "pointer"
         };
     }
-    /**
-     * Page document initialisation
-     *
-     */
     Fgwebsitepage.prototype.pagedocInit = function () {
         this.initSettings(cmsOptions);
         if (_.size(jsonData.page) > 0) {
@@ -93,16 +86,9 @@ var Fgwebsitepage = (function () {
             var footerContent = this.footerInit();
             this.appendContent(cmsOptions.footerContainer, footerContent);
         }
-        //callback after all contents of a page are present in dom
         this.settings.renderAllAreaContentCallback.call();
     };
-    /**
-     * initialize settings
-     *
-     * @param options
-     */
     Fgwebsitepage.prototype.initSettings = function (options) {
-        // for hiding link icon in images without links in image element with links
         $('body').on('mouseover', '.ug-gallery-wrapper .ug-thumb-wrapper', function () {
             var href = $(this).attr('href');
             if (href == 'javascript:void(0)') {
@@ -116,12 +102,6 @@ var Fgwebsitepage = (function () {
             FgWebsiteThemeObj.makeFooterSticky();
         });
     };
-    /**
-     * Initialize the content area
-     *
-     * call back initMainContentCallback
-     *
-     */
     Fgwebsitepage.prototype.contentInit = function () {
         this.settings.data.page.container = jsonData.page.page.container;
         this.settings.containerType = 'content';
@@ -132,17 +112,10 @@ var Fgwebsitepage = (function () {
         this.settings.initMainContentCallback.call();
         return pageHtml;
     };
-    /**
-     * Initialize the sidebar area
-     *
-     * callback initSidebarContentCallback
-     *
-     */
     Fgwebsitepage.prototype.sidebarInit = function () {
         this.settings.data.page.container = jsonData.sidebar.page.container;
         this.settings.containerType = 'sidebar';
         this.settings.sidebarSide = (_.size(this.settings.data.sidebar) > 0) ? this.settings.data.sidebar.side : '';
-        // To set the sidebar size
         this.settings.sidebarSize = (_.size(this.settings.data.sidebar) > 0) ? this.settings.data.sidebar.width_value : '';
         var pageHtml = this.pageContainer();
         if (typeof jsonData['ajax']['sidebar'] != "undefined") {
@@ -151,12 +124,6 @@ var Fgwebsitepage = (function () {
         this.settings.initSidebarContentCallback.call();
         return pageHtml;
     };
-    /**
-     * Initialize the footer area
-     *
-     * call back initFooterContentCallback
-     *
-     */
     Fgwebsitepage.prototype.footerInit = function () {
         this.settings.data.page.container = jsonData.footer.page.container;
         this.settings.containerType = 'footer';
@@ -167,20 +134,13 @@ var Fgwebsitepage = (function () {
         this.settings.initFooterContentCallback.call();
         return pageHtml;
     };
-    /**
-     * Render the container
-     *
-     * callback initContainerCallback
-     */
     Fgwebsitepage.prototype.pageContainer = function () {
         var containerHtml = '';
         var _this = this;
         var container = '';
         this.settings.data.page.container = _.sortBy(this.settings.data.page.container, 'sortOrder');
         _.each(this.settings.data.page.container, function (containerValues, index) {
-            //crea t e container box id
             container = 'pagecontainer-' + containerValues.containerId;
-            //create container
             _this.settings.container.data = containerValues;
             containerHtml += _this.renderContainerBox(container);
             _this.settings.containerBoxCompletedCallback.call(containerValues);
@@ -188,81 +148,48 @@ var Fgwebsitepage = (function () {
         _this.settings.initContainerCallback.call();
         return containerHtml;
     };
-    /**
-     * Render container box
-     *
-     * @param   container
-     */
     Fgwebsitepage.prototype.renderContainerBox = function (container) {
         if (_.size(this.settings.container.data) > 0) {
-            //render all columns of particular container
             var columnContent = this.containerColumns();
             return FGTemplate.bind(this.settings.container.templateId, { details: this.settings.container.data, containerid: container, columnDetails: columnContent, pageId: this.settings.data.page.id, settingDetails: this.settings, });
         }
     };
-    /**
-     * Render container column
-     *
-     * callback initColumnCallback
-     */
     Fgwebsitepage.prototype.containerColumns = function () {
         var columnHtml = '';
         var idColumn = '';
         var _this = this;
         this.settings.container.data.columns = _.sortBy(this.settings.container.data.columns, 'sortOrder');
         _.each(this.settings.container.data.columns, function (columnValues, index) {
-            //create column box id
             idColumn = 'containercolumn-' + columnValues.columnId;
-            //create columns
             _this.settings.column.data = columnValues;
             columnHtml += _this.renderColumnBox(idColumn);
         });
         this.settings.initColumnCallback.call();
         return columnHtml;
     };
-    /**
-     * Render column box
-     *
-     * @idcolumn html id of column
-     */
     Fgwebsitepage.prototype.renderColumnBox = function (idColumn) {
-        //render all column box
         var boxContent = this.columnBox();
         return FGTemplate.bind(this.settings.column.templateId, { details: this.settings.column.data, columnid: idColumn, settingDetails: this.settings, boxDetails: boxContent });
         $('#columnbox-' + idColumn).trigger("loaded.fg.columnBox");
     };
-    /**
-     * Render column box
-     */
     Fgwebsitepage.prototype.columnBox = function () {
         var boxHtml = '';
         var _this = this;
         var idBox = '';
         this.settings.column.data.box = _.sortBy(this.settings.column.data.box, 'sortOrder');
         _.each(this.settings.column.data.box, function (boxValues, index) {
-            //create box id
             idBox = 'columnbox-' + boxValues.boxId;
-            //create box
             _this.settings.columnbox.data = boxValues;
             boxHtml += _this.renderBox(idBox);
-            //append box to specified columns
         });
         this.settings.initColumnBoxCallback.call();
         return boxHtml;
     };
-    /**
-     * Render box
-     * @param idBox html id of box
-     */
     Fgwebsitepage.prototype.renderBox = function (idBox) {
-        //render all the box element
         var elementContent = this.elementBox();
         return FGTemplate.bind(this.settings.columnbox.templateId, { details: this.settings.columnbox.data, boxid: idBox, elementDetails: elementContent });
         $('#' + idBox).trigger("loaded.fg.box");
     };
-    /**
-     * Render element box
-     */
     Fgwebsitepage.prototype.elementBox = function () {
         var elementHtml = '';
         var _this = this;
@@ -277,11 +204,6 @@ var Fgwebsitepage = (function () {
         this.settings.initElementBoxCallback.call();
         return elementHtml;
     };
-    /**
-     * Render elements
-     *
-     * @param idElement html id of elements
-     */
     Fgwebsitepage.prototype.renderElement = function (idElement) {
         var pageElements = JSON.parse(jsonData.pageElements);
         var sidebarElements = JSON.parse(jsonData.sidebarElements);
@@ -307,14 +229,9 @@ var Fgwebsitepage = (function () {
                 this.buildAjaxArray('footer', this.settings.elementbox.data.elementType, dataE);
             }
         }
-        //render the outer element div for both onload and ajax elelemnts
         return FGTemplate.bind(this.settings.elementbox.templateId[this.settings.elementbox.data.elementType], { details: this.settings.elementbox.data, elementid: idElement, settingDetails: this.settings, clubDefaultLang: clubDefaultLang });
     };
-    /**
-     * build the ajax element array type wise
-     */
     Fgwebsitepage.prototype.buildAjaxArray = function (pageType, elementType, dataE) {
-        //Build an array of the ajax call needed elements
         if (!jsonData['ajax'][pageType].hasOwnProperty(elementType)) {
             jsonData['ajax'][pageType][elementType] = [];
             jsonData['ajax'][pageType][elementType][0] = dataE;
@@ -323,15 +240,8 @@ var Fgwebsitepage = (function () {
             jsonData['ajax'][pageType][elementType].push(dataE);
         }
     };
-    /**
-     * Render ajax call elements
-     * @param pageId page id of page/sidebar/footer
-     */
     Fgwebsitepage.prototype.ajaxElementCalls = function (json, page) {
         var _this = this;
-        /**
-         * Image element
-         */
         if (typeof json.image != "undefined" && _.size(json.image) > 0) {
             var baseImageHtml_1 = _.template($('#' + this.defaultSettings.elementbox.templateId['imageBase']).html());
             var elemIds = _.pluck(json.image, "elementId");
@@ -344,9 +254,6 @@ var Fgwebsitepage = (function () {
                 });
             });
         }
-        /**
-         * Text element
-         */
         if (typeof json.text != "undefined" && _.size(json.text) > 0) {
             var baseTextHtml_1 = _.template($('#' + this.defaultSettings.elementbox.templateId['textBase']).html());
             var elemIds = _.pluck(json.text, "elementId");
@@ -358,20 +265,17 @@ var Fgwebsitepage = (function () {
                 });
             });
         }
-        /**
-         * Articles element
-         */
         if (typeof json.articles != "undefined" && _.size(json.articles) > 0) {
             _.each(json.articles, function (data) {
                 var articleUrl = jsonData['ajaxUrl']['articles'].replace('%23dummyElement%23', data.elementId).replace('%23dummy%23', page) + '?menu=' + menu;
                 $.post(articleUrl, {}, function (articleData) {
                     $('#elementbox-' + data.elementId).html(articleData.htmlContent);
+                    $('#elementbox-' + data.elementId).find(" a:first").addClass("active");
+                    $('#elementbox-' + data.elementId).find(" ul li:first").addClass("active");
+                    _this.articleElementCarouselSettings(data.elementId);
                 });
             });
         }
-        /**
-         * Calendar element
-         */
         if (typeof json.calendar != "undefined" && _.size(json.calendar) > 0) {
             _.each(json['calendar'], function (data) {
                 var calendarUrl = jsonData['ajaxUrl']['calendar'].replace('%23dummyElement%23', data.elementId).replace('%23dummy%23', page);
@@ -381,9 +285,6 @@ var Fgwebsitepage = (function () {
                 });
             });
         }
-        /**
-         * Contact Table element
-         */
         if (typeof json['contacts-table'] != "undefined" && _.size(json['contacts-table']) > 0) {
             _.each(json['contacts-table'], function (data) {
                 var cTUrl = jsonData['ajaxUrl']['contacts-table'].replace('%23dummyElement%23', data.elementId);
@@ -392,9 +293,6 @@ var Fgwebsitepage = (function () {
                 });
             });
         }
-        /**
-         * Form Element
-         */
         if (typeof json.form != "undefined" && _.size(json.form) > 0) {
             _.each(json.form, function (data) {
                 var formUrl = jsonData['ajaxUrl']['form'].replace('%23dummyElement%23', data.elementId);
@@ -404,9 +302,6 @@ var Fgwebsitepage = (function () {
                 });
             });
         }
-        /**
-         * Contact application form
-         */
         if (typeof json['contact-application-form'] != "undefined" && _.size(json['contact-application-form']) > 0) {
             _.each(json['contact-application-form'], function (data) {
                 var cformUrl = jsonData['ajaxUrl']['contact-application-form'].replace('%23dummyElement%23', data.elementId);
@@ -416,9 +311,6 @@ var Fgwebsitepage = (function () {
                 });
             });
         }
-        /**
-         * Newsletter archive
-         */
         if (typeof json['newsletter-archive'] != "undefined" && _.size(json['newsletter-archive']) > 0) {
             _.each(json['newsletter-archive'], function (data) {
                 var elementId = data.elementId;
@@ -428,9 +320,6 @@ var Fgwebsitepage = (function () {
                 });
             });
         }
-        /**
-         * Newsletter Subscription
-         */
         if (typeof json['newsletter-subscription'] != "undefined" && _.size(json['newsletter-subscription']) > 0) {
             _.each(json['newsletter-subscription'], function (data) {
                 var elementId = data.elementId;
@@ -441,9 +330,6 @@ var Fgwebsitepage = (function () {
                 });
             });
         }
-        /**
-         * Portrait Element
-         */
         if (typeof json['portrait-element'] != "undefined" && _.size(json['portrait-element']) > 0) {
             _.each(json['portrait-element'], function (data) {
                 var elementId = data.elementId;
@@ -453,9 +339,6 @@ var Fgwebsitepage = (function () {
                 });
             });
         }
-        /**
-         * Sponsor ads
-         */
         if (typeof json['sponsor-ads'] != "undefined" && _.size(json['sponsor-ads']) > 0) {
             _.each(json['sponsor-ads'], function (data) {
                 var SelementId = data.elementId;
@@ -467,9 +350,6 @@ var Fgwebsitepage = (function () {
             });
         }
     };
-    /**
-     * sponsor ads callback
-     */
     Fgwebsitepage.prototype.sponsorAdsCallback = function (elementId, elemId) {
         var _this = this;
         FgTooltip.init();
@@ -493,18 +373,12 @@ var Fgwebsitepage = (function () {
             }, 5000);
         });
     };
-    /**
-     * Redirect calendar list clicks to detail page
-     */
     Fgwebsitepage.prototype.handleCalendarClicks = function () {
         $('.fg-dev-calendar-detail').on('click', function () {
             var hrefUrl = $(this).attr('data-href').replace('NAV_IDENTIFIER', menu);
             window.location.href = hrefUrl;
         });
     };
-    /**
-    * Handle form element submit
-    */
     Fgwebsitepage.prototype.handleFormElementSubmit = function (elementId) {
         $("body").off("click", "#" + elementId + ' .fg-form-element-submit');
         $("body").on("click", "#" + elementId + ' .fg-form-element-submit', function () {
@@ -513,11 +387,6 @@ var Fgwebsitepage = (function () {
             validObj.validateForm();
         });
     };
-    /**
-     * Handle the contact table element
-     * @param   elementId
-     * @param   data
-     */
     Fgwebsitepage.prototype.handleCotactTableElement = function (elementId, data) {
         contactTable = new FgCmsContactTable();
         contactTable.elementId = elementId;
@@ -534,11 +403,6 @@ var Fgwebsitepage = (function () {
         contactTable.renderFilter();
         contactTable.drawContactTable();
     };
-    /**
-     * Handle the portrait element
-     * @param   elementId   html id of portrait element
-     * @param   data        portrait setting object
-     */
     Fgwebsitepage.prototype.handleContactPortraitElement = function (elementId, data) {
         var elmtId = $("#" + elementId).attr('element-id');
         var self = this;
@@ -565,8 +429,6 @@ var Fgwebsitepage = (function () {
                         itemsOnPage: parseInt(portraitData.rowPerpage) * parseInt(portraitData.portraitPerRow),
                         displayedPages: displayedPortraitPages,
                         onPageClick: function (pageNumber, event) {
-                            // Callback triggered when a page is clicked
-                            // Page number is given as an optional parameter
                             FgPortraitElement.getContacts(false, elementId, pageNumber);
                         }
                     } },
@@ -577,9 +439,6 @@ var Fgwebsitepage = (function () {
             FgPortraitElement.initSettings(options);
         }
     };
-    /**
-     * handle Newsletter Archive Element
-     */
     Fgwebsitepage.prototype.handleNewsletterArchiveElement = function (elementId, data, widthValue) {
         var fgCmsNewsletterArchive = new FgCmsNewsletterArchive();
         fgCmsNewsletterArchive.tableId = 'website-datatable-list-' + elementId;
@@ -588,10 +447,6 @@ var Fgwebsitepage = (function () {
         fgCmsNewsletterArchive.widthValue = widthValue;
         fgCmsNewsletterArchive.drawNewsletterArchiveTable();
     };
-    /**
-     * handle date picker
-     * @param elementId element id
-     */
     Fgwebsitepage.prototype.handleTimePicker = function (elementId) {
         var timeFormatData = {};
         timeFormatData['hh:ii'] = { format: 'hh:mm', seperator: ':' };
@@ -616,9 +471,6 @@ var Fgwebsitepage = (function () {
             });
         });
     };
-    /**
-     * Handle form element submit
-     */
     Fgwebsitepage.prototype.handleFormFileUpload = function (elementId) {
         $("#" + elementId + " input[type=file]").each(function () {
             var fieldType = $(this).attr('fieldtype');
@@ -678,9 +530,6 @@ var Fgwebsitepage = (function () {
             $(this).parent().addClass('hide');
         });
     };
-    /**
-     * handle the form eleemnt
-     */
     Fgwebsitepage.prototype.handleFormElement = function (elementId, data) {
         if (data.formData == null || data.formData == '') {
             return true;
@@ -747,9 +596,6 @@ var Fgwebsitepage = (function () {
             setTimeout(function () { formCaptcha(); }, 1000);
         }
     };
-    /**
-     * tooltip click actions
-     */
     Fgwebsitepage.prototype.handleToolTip = function (elementId) {
         var thisClass = this;
         $("#" + elementId + " label span[data-content]").each(function () {
@@ -767,31 +613,19 @@ var Fgwebsitepage = (function () {
             $('.popover .popover-content').width('');
         });
     };
-    /**
-     * show tool tips
-     */
     Fgwebsitepage.prototype.showTooltip = function (obj) {
         var targetElement = $('body').find('.custom-popup'), elementContent = targetElement.find('.popover-content');
         elementContent.html(obj.content);
         targetElement.css({ 'left': obj.position[0], 'top': obj.position[1] });
         targetElement.show();
     };
-    /**
-     * render page
-     */
     Fgwebsitepage.prototype.renderPage = function (jsonData) {
         return FGTemplate.bind(this.settings.boxTemplateId, jsonData);
     };
-    /**
-     * append content
-     */
     Fgwebsitepage.prototype.appendContent = function (appendObj, pageContent) {
         $(appendObj).html(pageContent);
         this.settings.pageInitCallback.call();
     };
-    /**
-     * calculate column width
-     */
     Fgwebsitepage.prototype.columnWidthCalculation = function (currentContainer) {
         var _this = this;
         var totalWidth = 6;
@@ -813,18 +647,13 @@ var Fgwebsitepage = (function () {
         _.each(currentContainer.find('.rowColumn'), function (value, key) {
             calculatedWidth = calculatedWidth + parseInt($(value).attr('column-size'));
             if (parseInt($(value).attr('column-size')) > 1) {
-                //decrease button
                 $(value).find(".fg-left").show();
             }
         });
         if (calculatedWidth < totalWidth) {
-            //set increase button to all column
             $(currentContainer).find(".fg-right").show();
         }
     };
-    /**
-     * column count
-     */
     Fgwebsitepage.prototype.getMaxColumnCount = function () {
         var totalColumnCount = 6;
         if (this.settings.containerType == 'sidebar' && this.settings.data.sidebar.size == 'wide') {
@@ -841,18 +670,13 @@ var Fgwebsitepage = (function () {
         }
         return totalColumnCount;
     };
-    //ajax call for form submission
     Fgwebsitepage.prototype.requestCall = function (columnDetails) {
         FgXmlHttp.post(pageDetailSavePath, {
             'postArr': columnDetails,
             'pageDetails': JSON.stringify(jsonData)
         }, false, this.callBackFn);
     };
-    /**
-     * map generation
-     */
     Fgwebsitepage.prototype.mapGeneration = function () {
-        //MAP GENERATING CODE
         $('.columnBox .fg-dev-map-element').each(function (i, value) {
             var elementId = $(value).attr('element-id');
             var mapDisplay = $("#mapDisplay-" + elementId).val().toUpperCase();
@@ -865,9 +689,6 @@ var Fgwebsitepage = (function () {
             FgMapSettings.mapShow(latitude, longitude, mapDisplay, mapZoom, mapMarker, mapId, '');
         });
     };
-    /**
-     * unite gallery settings for image element
-     */
     Fgwebsitepage.prototype.imageElementUniteGallerySettings = function (elementId) {
         var _this = this;
         var option3 = {
@@ -938,9 +759,6 @@ var Fgwebsitepage = (function () {
             _this.unitgalleryCall("#slider-gallery-" + elementId, option3);
         }
     };
-    /**
-     * unite gallery text element settings and options
-     */
     Fgwebsitepage.prototype.textElementUniteGallerySettings = function (elementId) {
         var _this = this;
         var singleImageOption = {
@@ -977,37 +795,36 @@ var Fgwebsitepage = (function () {
             _this.unitgalleryCall("#gallery-textelement-" + elementId, sliderOption);
         }
     };
-    /**
-     * sponsor element options
-     */
+    Fgwebsitepage.prototype.articleElementCarouselSettings = function (elemId) {
+        console.log($("#carousel-" + elemId).length);
+        $("#carousel-" + elemId).carousel({
+            interval: 4000
+        });
+        var clickEvent = false;
+        $("#carousel-" + elemId).on('click', '.nav a', function () {
+            clickEvent = true;
+            $('.nav li').removeClass('active');
+            $(this).parent().addClass('active');
+        }).on('slid.bs.carousel', function (e) {
+            $("#carousel-" + elemId + ' .nav li.active').removeClass('active');
+            $("#carousel-" + elemId + ' .nav li:eq(' + $(e.relatedTarget).index() + ')').addClass('active');
+        });
+    };
     Fgwebsitepage.prototype.sponsorElementOptions = function (elementId) {
         var sliderTime = $("#slider_" + elementId).attr('interval');
         $("#slider_" + elementId).FgFader({
             duration: sliderTime * 1000,
         });
     };
-    /**
-     * unite gallery call
-     */
     Fgwebsitepage.prototype.unitgalleryCall = function (identifier, slideroptions) {
         $(identifier).unitegallery(slideroptions);
     };
     Fgwebsitepage.prototype.pageCallBackFunction = function () {
-        //  ADD/EDIT CONTAINER POP UP
-        // MAP GENERATING CODE
         this.mapGeneration();
-        //IMAGE SLIDER
     };
-    /**
-     * Handle login and logout buttons click  with parameters as elementId & initialHtmlContent
-     * @param   elementId          string html id of login element
-     * @param   initialHtmlContent string initial Html Content
-     */
     Fgwebsitepage.prototype.handleLoginButtonsClick = function (elementId, initialHtmlContent) {
-        //make remember checkbox uniform
         $('.uniform').uniform();
         var _this = this;
-        //login button click
         $("body").on("click", "#" + elementId + " .fg-dev-login-btn", function (e) {
             var thisObj = $(this);
             e.preventDefault();
@@ -1027,7 +844,6 @@ var Fgwebsitepage = (function () {
                 }
             });
         });
-        //logout button click
         $("body").on("click", "#" + elementId + " .fg-dev-logout-btn", function (e) {
             e.preventDefault();
             $.ajax({
@@ -1040,21 +856,13 @@ var Fgwebsitepage = (function () {
                 },
             });
         });
-        //forgot password
         $("body").on("click", "#" + elementId + " .fg-dev-forgot-password", function (e) {
             _this.renderForgotPasswordTemplate(elementId, initialHtmlContent, 'forgotPassword');
         });
-        //activate account
         $("body").on("click", "#" + elementId + " .fg-dev-activate-login", function (e) {
             _this.renderForgotPasswordTemplate(elementId, initialHtmlContent, 'activateLogin');
         });
     };
-    /**
-     * Function to render login password template / activate login template
-     * @param string elementId
-     * @param string initialHtmlContent
-     * @param string templateName (forgotPassword/activateLogin)
-     */
     Fgwebsitepage.prototype.renderForgotPasswordTemplate = function (elementId, initialHtmlContent, templateName) {
         var htmlFinal = FGTemplate.bind('templateLoginForgotPassword', { 'elementId': elementId, 'templateName': templateName });
         $("#" + elementId).html(htmlFinal);
@@ -1067,28 +875,20 @@ var Fgwebsitepage = (function () {
                 }
             });
         };
-        loadCaptcha(); // THIS LINE WAS MISSING
+        loadCaptcha();
         this.handleForgotPasswordSubmit(elementId, initialHtmlContent);
         this.handleBackToLoginButton(elementId, initialHtmlContent);
     };
-    /*
-     * Handle handle BackToLoginButton
-     */
     Fgwebsitepage.prototype.handleBackToLoginButton = function (elementId, initialHtmlContent) {
         var _this = this;
-        //back to login button
         $("#" + elementId).find('.fg-dev-back-button').on("click", function () {
             $("#" + elementId).html(initialHtmlContent);
             FgWebsiteThemeObj.makeFooterSticky();
             _this.handleLoginButtonsClick(elementId, initialHtmlContent);
         });
     };
-    /*
-     * Forgot password submit button
-     */
     Fgwebsitepage.prototype.handleForgotPasswordSubmit = function (elementId, initialHtmlContent) {
         var _this = this;
-        //forgot password send button
         $("#" + elementId).find('.fg-dev-activate-submit').off('click');
         $("#" + elementId).find('.fg-dev-activate-submit').on("click", function (e) {
             var thisObj = $(this);
@@ -1117,16 +917,12 @@ var Fgwebsitepage = (function () {
             });
         });
     };
-    // Function to get the video details for website
     Fgwebsitepage.prototype.getCmsVideoDetails = function (videoUrl, el) {
         var vDet = FgVideoThumbnail.getVideoId(videoUrl);
         var vType = (vDet.type == 'y') ? 'youtube' : ((vDet.type == 'v') ? 'vimeo' : '');
         $(el).attr('data-type', vType);
         $(el).attr('data-videoid', vDet.id);
     };
-    /**
-     * handle subscription form
-     */
     Fgwebsitepage.prototype.handleSubscriptionForm = function (elementId) {
         $('#' + elementId + ' .bs-select').selectpicker();
         var subscriberCaptcha = function () {
@@ -1140,9 +936,6 @@ var Fgwebsitepage = (function () {
         setTimeout(function () { subscriberCaptcha(); }, 1000);
         this.handleSubscriptionSubmit(elementId);
     };
-    /**
-     * submit subscription
-     */
     Fgwebsitepage.prototype.handleSubscriptionSubmit = function (elementId) {
         var form = $("#subscription-form-" + elementId);
         form.on('click', '.subscribeFormSubmit', function () {
@@ -1152,7 +945,6 @@ var Fgwebsitepage = (function () {
                 return;
             form.find('.help-block').addClass('hide');
             $('div[dataerror-group]').removeClass('has-error');
-            //validate email
             if ($('#email-' + id).val() == '') {
                 error = true;
                 $('#email-' + id + '-required-error').removeClass('hide');
@@ -1172,7 +964,6 @@ var Fgwebsitepage = (function () {
                 $('#language-' + id + '-required-error').removeClass('hide');
                 $('#language-' + id).parent().parent().addClass('has-error');
             }
-            //sent request
             if (!error) {
                 $(this).attr('disabled', 'disabled');
                 var formData = {};
@@ -1202,19 +993,12 @@ var Fgwebsitepage = (function () {
             }
         });
     };
-    /**
-     * gather all the og tags of a page
-     */
     Fgwebsitepage.prototype.gatherOGTagDetails = function (ogTagDetails) {
         if (ogTagDetails.length > 0) {
             this.ogTags = this.ogTags.concat(ogTagDetails);
         }
     };
-    /**
-     * og tag
-     */
     Fgwebsitepage.prototype.checkAndSaveOGTags = function () {
-        // will handle the pages where the tag update not needed eg: article detail page
         if (typeof ogTagUpdateUrl == 'string') {
             var currentOGTags_1 = [];
             $('meta[property="og:image"]').each(function (index, metatag) {

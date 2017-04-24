@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnRecepientsEmail
  */
@@ -36,22 +34,9 @@ class FgCnRecepientsEmail
 
 
     /**
-     * Set id
-     *
-     * @param integer $id
-     * @return FgCnRecepientsEmail
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    
-        return $this;
-    }
-
-    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -62,19 +47,20 @@ class FgCnRecepientsEmail
      * Set selectionType
      *
      * @param string $selectionType
+     *
      * @return FgCnRecepientsEmail
      */
     public function setSelectionType($selectionType)
     {
         $this->selectionType = $selectionType;
-    
+
         return $this;
     }
 
     /**
      * Get selectionType
      *
-     * @return string 
+     * @return string
      */
     public function getSelectionType()
     {
@@ -85,19 +71,20 @@ class FgCnRecepientsEmail
      * Set emailType
      *
      * @param string $emailType
+     *
      * @return FgCnRecepientsEmail
      */
     public function setEmailType($emailType)
     {
         $this->emailType = $emailType;
-    
+
         return $this;
     }
 
     /**
      * Get emailType
      *
-     * @return string 
+     * @return string
      */
     public function getEmailType()
     {
@@ -108,19 +95,20 @@ class FgCnRecepientsEmail
      * Set emailField
      *
      * @param \Common\UtilityBundle\Entity\FgCmAttribute $emailField
+     *
      * @return FgCnRecepientsEmail
      */
     public function setEmailField(\Common\UtilityBundle\Entity\FgCmAttribute $emailField = null)
     {
         $this->emailField = $emailField;
-    
+
         return $this;
     }
 
     /**
      * Get emailField
      *
-     * @return \Common\UtilityBundle\Entity\FgCmAttribute 
+     * @return \Common\UtilityBundle\Entity\FgCmAttribute
      */
     public function getEmailField()
     {
@@ -131,22 +119,24 @@ class FgCnRecepientsEmail
      * Set recepientList
      *
      * @param \Common\UtilityBundle\Entity\FgCnRecepients $recepientList
+     *
      * @return FgCnRecepientsEmail
      */
     public function setRecepientList(\Common\UtilityBundle\Entity\FgCnRecepients $recepientList = null)
     {
         $this->recepientList = $recepientList;
-    
+
         return $this;
     }
 
     /**
      * Get recepientList
      *
-     * @return \Common\UtilityBundle\Entity\FgCnRecepients 
+     * @return \Common\UtilityBundle\Entity\FgCnRecepients
      */
     public function getRecepientList()
     {
         return $this->recepientList;
     }
 }
+

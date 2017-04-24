@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgClubTerminology
  */
@@ -17,7 +15,12 @@ class FgClubTerminology
     /**
      * @var string
      */
-    private $defaultTerm;
+    private $defaultSingularTerm;
+
+    /**
+     * @var string
+     */
+    private $defaultPluralTerm;
 
     /**
      * @var string
@@ -33,6 +36,11 @@ class FgClubTerminology
      * @var integer
      */
     private $sortOrder;
+
+    /**
+     * @var boolean
+     */
+    private $isFederation;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgClub
@@ -51,134 +59,10 @@ class FgClubTerminology
     }
 
     /**
-     * Set defaultTerm
-     *
-     * @param string $defaultTerm
-     * @return FgClubTerminology
-     */
-    public function setDefaultTerm($defaultTerm)
-    {
-        $this->defaultTerm = $defaultTerm;
-
-        return $this;
-    }
-
-    /**
-     * Get defaultTerm
-     *
-     * @return string
-     */
-    public function getDefaultTerm()
-    {
-        return $this->defaultTerm;
-    }
-
-    /**
-     * Set singular
-     *
-     * @param string $singular
-     * @return FgClubTerminology
-     */
-    public function setSingular($singular)
-    {
-        $this->singular = $singular;
-
-        return $this;
-    }
-
-    /**
-     * Get singular
-     *
-     * @return string
-     */
-    public function getSingular()
-    {
-        return $this->singular;
-    }
-
-    /**
-     * Set plural
-     *
-     * @param string $plural
-     * @return FgClubTerminology
-     */
-    public function setPlural($plural)
-    {
-        $this->plural = $plural;
-
-        return $this;
-    }
-
-    /**
-     * Get plural
-     *
-     * @return string
-     */
-    public function getPlural()
-    {
-        return $this->plural;
-    }
-
-    /**
-     * Set sortOrder
-     *
-     * @param integer $sortOrder
-     * @return FgClubTerminology
-     */
-    public function setSortOrder($sortOrder)
-    {
-        $this->sortOrder = $sortOrder;
-
-        return $this;
-    }
-
-    /**
-     * Get sortOrder
-     *
-     * @return integer
-     */
-    public function getSortOrder()
-    {
-        return $this->sortOrder;
-    }
-
-    /**
-     * Set club
-     *
-     * @param \Common\UtilityBundle\Entity\FgClub $club
-     * @return FgClubTerminology
-     */
-    public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
-    {
-        $this->club = $club;
-
-        return $this;
-    }
-
-    /**
-     * Get club
-     *
-     * @return \Common\UtilityBundle\Entity\FgClub
-     */
-    public function getClub()
-    {
-        return $this->club;
-    }
-    /**
-     * @var string
-     */
-    private $defaultSingularTerm;
-
-    /**
-     * @var string
-     */
-    private $defaultPluralTerm;
-
-
-    /**
      * Set defaultSingularTerm
      *
      * @param string $defaultSingularTerm
+     *
      * @return FgClubTerminology
      */
     public function setDefaultSingularTerm($defaultSingularTerm)
@@ -202,6 +86,7 @@ class FgClubTerminology
      * Set defaultPluralTerm
      *
      * @param string $defaultPluralTerm
+     *
      * @return FgClubTerminology
      */
     public function setDefaultPluralTerm($defaultPluralTerm)
@@ -220,16 +105,84 @@ class FgClubTerminology
     {
         return $this->defaultPluralTerm;
     }
-    /**
-     * @var boolean
-     */
-    private $isFederation;
 
+    /**
+     * Set singular
+     *
+     * @param string $singular
+     *
+     * @return FgClubTerminology
+     */
+    public function setSingular($singular)
+    {
+        $this->singular = $singular;
+
+        return $this;
+    }
+
+    /**
+     * Get singular
+     *
+     * @return string
+     */
+    public function getSingular()
+    {
+        return $this->singular;
+    }
+
+    /**
+     * Set plural
+     *
+     * @param string $plural
+     *
+     * @return FgClubTerminology
+     */
+    public function setPlural($plural)
+    {
+        $this->plural = $plural;
+
+        return $this;
+    }
+
+    /**
+     * Get plural
+     *
+     * @return string
+     */
+    public function getPlural()
+    {
+        return $this->plural;
+    }
+
+    /**
+     * Set sortOrder
+     *
+     * @param integer $sortOrder
+     *
+     * @return FgClubTerminology
+     */
+    public function setSortOrder($sortOrder)
+    {
+        $this->sortOrder = $sortOrder;
+
+        return $this;
+    }
+
+    /**
+     * Get sortOrder
+     *
+     * @return integer
+     */
+    public function getSortOrder()
+    {
+        return $this->sortOrder;
+    }
 
     /**
      * Set isFederation
      *
      * @param boolean $isFederation
+     *
      * @return FgClubTerminology
      */
     public function setIsFederation($isFederation)
@@ -248,4 +201,29 @@ class FgClubTerminology
     {
         return $this->isFederation;
     }
+
+    /**
+     * Set club
+     *
+     * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
+     * @return FgClubTerminology
+     */
+    public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
+    {
+        $this->club = $club;
+
+        return $this;
+    }
+
+    /**
+     * Get club
+     *
+     * @return \Common\UtilityBundle\Entity\FgClub
+     */
+    public function getClub()
+    {
+        return $this->club;
+    }
 }
+

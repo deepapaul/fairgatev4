@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgGmAlbumItems
  */
@@ -38,7 +36,7 @@ class FgGmAlbumItems
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -49,19 +47,20 @@ class FgGmAlbumItems
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgGmAlbumItems
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -72,19 +71,20 @@ class FgGmAlbumItems
      * Set isCoverImage
      *
      * @param boolean $isCoverImage
+     *
      * @return FgGmAlbumItems
      */
     public function setIsCoverImage($isCoverImage)
     {
         $this->isCoverImage = $isCoverImage;
-    
+
         return $this;
     }
 
     /**
      * Get isCoverImage
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsCoverImage()
     {
@@ -95,19 +95,20 @@ class FgGmAlbumItems
      * Set items
      *
      * @param \Common\UtilityBundle\Entity\FgGmItems $items
+     *
      * @return FgGmAlbumItems
      */
     public function setItems(\Common\UtilityBundle\Entity\FgGmItems $items = null)
     {
         $this->items = $items;
-    
+
         return $this;
     }
 
     /**
      * Get items
      *
-     * @return \Common\UtilityBundle\Entity\FgGmItems 
+     * @return \Common\UtilityBundle\Entity\FgGmItems
      */
     public function getItems()
     {
@@ -118,22 +119,24 @@ class FgGmAlbumItems
      * Set album
      *
      * @param \Common\UtilityBundle\Entity\FgGmAlbum $album
+     *
      * @return FgGmAlbumItems
      */
     public function setAlbum(\Common\UtilityBundle\Entity\FgGmAlbum $album = null)
     {
         $this->album = $album;
-    
+
         return $this;
     }
 
     /**
      * Get album
      *
-     * @return \Common\UtilityBundle\Entity\FgGmAlbum 
+     * @return \Common\UtilityBundle\Entity\FgGmAlbum
      */
     public function getAlbum()
     {
         return $this->album;
     }
 }
+

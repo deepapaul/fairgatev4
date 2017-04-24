@@ -75,6 +75,7 @@
                var callBack = (pageType == 'gallery') ? CmsSpecialPage.gallerySaveCallback : CmsSpecialPage.specialPageSaveCallback;
                
                FgXmlHttp.post(saveGallerySpecialPage, data, false, callBack);
+               $(document).off('click', '#addSpecialPageBtn');
             }
 
         });

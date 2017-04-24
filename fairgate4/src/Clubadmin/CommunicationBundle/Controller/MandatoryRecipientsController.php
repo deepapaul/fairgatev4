@@ -6,7 +6,7 @@ use Common\UtilityBundle\Controller\FgController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Common\UtilityBundle\Util\FgUtility;
 use Symfony\Component\HttpFoundation\Request;
-use Common\UtilityBundle\Repository\Pdo\ClubPdo;
+use Admin\UtilityBundle\Repository\Pdo\ClubPdo;
 
 /**
  * MandatoryRecipientsController.

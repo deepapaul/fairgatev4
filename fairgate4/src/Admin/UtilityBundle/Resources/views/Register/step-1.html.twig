@@ -1,0 +1,81 @@
+<div class="tab-pane active" id="tab1">
+    <h3 class="block">Your Club / Your Organization</h3>
+    <div class="form-group">
+        <label class="control-label col-md-3 col-sm-4">Organization
+            <span class="required"> *</span>
+        </label>
+        <div class="col-lg-4 col-md-5 col-sm-6">
+            <input class="form-control" type="text" name="fg_reg_club_name" id="fg_reg_club_name" required="required">
+            <span class="help-inline help-block hide">Code error/ invalid</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-3 col-sm-4">Identifier
+            <span class="required"> *</span>
+        </label>
+        <div class="col-lg-4 col-md-5 col-sm-6">
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-info"></i>
+                </span>
+                <input class="form-control" type="text" name="fg_reg_club_identifier" required="required">
+            </div>
+            <span class="help-inline help-block hide">Code error/ invalid</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-3 col-sm-4">occupation
+            <span class="required"> *</span>
+        </label>
+        <div class="col-lg-4 col-md-5 col-sm-6">
+            <select class="form-control bs-select" name="fg_reg_occupation" required="required">
+                <option value="">{{'SELECT'|trans}}</option>
+                 {% for category in categories %}
+                        <optgroup label="{{category.name}}">
+                        {% for value in category.values %}
+                            <option value="{{value.subSubCatId}}">{{value.subSubCategory}}</option>
+                        {% endfor %}
+                        </optgroup>
+                {% endfor %}
+            </select>
+            <span class="help-inline help-block hide">Code error/ invalid</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-3 col-sm-4" >Correspondence language
+            <span class="required"> *</span>
+        </label>
+        <div class="col-lg-4 col-md-5 col-sm-6">
+            <select class="form-control bs-select" name="fg_reg_corres_lang" required="required">
+                <option>{{'SELECT'|trans}}</option>
+               {% for id, lang in corresLang %}
+                    <option value="{{id}}">{{lang}}</option>
+                {% endfor %}
+            </select>
+            
+            <span class="help-inline help-block hide">Code error/ invalid</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-3 col-sm-4">Number of Contacts
+            <span class="required"> *</span>
+        </label>
+        <div class="col-lg-4 col-md-5 col-sm-6">
+            <input class="form-control" type="text" name="fg_reg_no_contacts">
+            <span class="help-inline help-block hide">Code error/ invalid</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-3 col-sm-offset-4 col-lg-4 col-md-5 col-sm-6">
+            <div class="alert alert-success">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</div>
+        </div>
+        <div class="clearfix"></div>
+        <label class="control-label col-md-3 col-sm-4">Voucher code
+            <span class="required"> *</span>
+        </label>
+        <div class="col-md-5 col-sm-8">
+            <input class="form-control input-inline input-medium" id="input_ipv4" type="text" name="fg_reg_voucher_code" value="{{voucherCode|default('')}}" placeholder="xxxx-xxxx-xxxx">
+            <span class="help-inline help-block hide">Code error/ invalid</span>
+        </div>
+    </div>
+</div>

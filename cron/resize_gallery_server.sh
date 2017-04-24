@@ -24,13 +24,13 @@ do
                 #exif auto orient images
                 gm convert "/var/www/html/fairgate_fedv2_qa/web/uploads/$club_id/gallery/original/$temp" -auto-orient "/var/www/html/fairgate_fedv2_qa/web/uploads/$club_id/gallery/original/$temp";
 
-                dim1=`php /var/www/html/fairgate_fedv2_qa/fairgate4/app/console gallery:resize --file=$i --maxHeight=1080 --maxWidth=1920`
+                dim1=`php /var/www/html/fairgate_fedv2_qa/fairgate4/bin/console gallery:resize --file=$i --maxHeight=1080 --maxWidth=1920 --env=prod`
                 gm convert  "/var/www/html/fairgate_fedv2_qa/web/uploads/$club_id/gallery/original/$temp" +dither -resize $dim1 "/var/www/html/fairgate_fedv2_qa/web/uploads/$club_id/gallery/width_1920/$original";
 
-                dim2=`php /var/www/html/fairgate_fedv2_qa/fairgate4/app/console gallery:resize --file=$i --maxHeight=300 --maxWidth=300`
+                dim2=`php /var/www/html/fairgate_fedv2_qa/fairgate4/bin/console gallery:resize --file=$i --maxHeight=300 --maxWidth=300 --env=prod`
                 gm convert  "/var/www/html/fairgate_fedv2_qa/web/uploads/$club_id/gallery/original/$temp" +dither -resize $dim2 "/var/www/html/fairgate_fedv2_qa/web/uploads/$club_id/gallery/width_300/$original";
 
-                dim3=`php /var/www/html/fairgate_fedv2_qa/fairgate4/app/console gallery:resize --file=$i --maxHeight=100 --maxWidth=100`
+                dim3=`php /var/www/html/fairgate_fedv2_qa/fairgate4/bin/console gallery:resize --file=$i --maxHeight=100 --maxWidth=100 --env=prod`
                 gm convert  "/var/www/html/fairgate_fedv2_qa/web/uploads/$club_id/gallery/original/$temp" +dither -resize $dim3 "/var/www/html/fairgate_fedv2_qa/web/uploads/$club_id/gallery/width_100/$original";
 
                 gm convert  "/var/www/html/fairgate_fedv2_qa/web/uploads/$club_id/gallery/original/$temp" +dither -resize 580x\> "/var/www/html/fairgate_fedv2_qa/web/uploads/$club_id/gallery/width_580/$original";

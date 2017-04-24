@@ -18,10 +18,10 @@
             <div class="row fg-cms-elements-head-edit-wrapper" id="elementArticleWrapper">
                 <div class="col-md-12">
                     <div class="form-body">
-                        <form id="addArticleElement" class="" method="post" data-validation="true" onsubmit="return false;" novalidate="novalidate">
+                        <form id="addArticleElement" class="form-horizontal" method="post" data-validation="true" onsubmit="return false;" novalidate="novalidate">
                             <div class="form-group fg-clear fg-cms-article-areas">
-                                <label class="col-md-2 control-label fg-marg-top-5 text-right" for="articleTitle">{{'ARTICLE_AREAS'|trans}}</label>
-                                <div class="col-md-6  col-lg-5 ">
+                                <label class="col-md-2 col-sm-4 control-label fg-marg-top-5" for="articleTitle">{{'ARTICLE_AREAS'|trans}}</label>
+                                <div class="col-md-4  col-lg-3 col-sm-6 ">
                                     <select class="form-control selectpicker"  multiple="multiple" name='articleAreas' id='articleAreas'>
                                         <optgroup label="">
                                              {% if selectedAreasandCategories is not empty %}
@@ -62,8 +62,8 @@
                                 </div>
                             </div>
                             <div class="form-group fg-clear fg-cms-article-categories">
-                                <label class="col-md-2 control-label fg-marg-top-5  text-right" for="from-date">{{'ARTICLE_CATEGORIES'|trans}}</label>
-                                <div class="col-md-6  col-lg-5 ">
+                                <label class="col-md-2 col-sm-4 control-label fg-marg-top-5" for="from-date">{{'ARTICLE_CATEGORIES'|trans}}</label>
+                                <div class="col-md-4  col-lg-3 col-sm-6 ">
                                     <select name="articleCategories" id="articleCategories" class="form-control selectpicker" multiple="multiple" >
                                         <optgroup label="">
                                              {% if selectedAreasandCategories is not empty %}
@@ -102,8 +102,108 @@
                                     </label>
                                 </div>
                             </div>
-                            {% endif %}        
-
+                            {% endif %}     
+                         
+                            <div class="form-group fg-clear" id="displayType">
+                                <label class="col-md-2 control-label col-sm-4" for="articleDisplay">{{'ARTICLE_DISPLAY_TYPE'|trans}}</label>  
+                                <div class="col-md-6 col-lg-5 col-sm-8 ">
+                                    <div class="fg-active-IB fg-width-200">
+                                        <div class="switch-toggle switch-fg bootstrap-switch">
+                                            <input id="listView" name="articleDisplay" type="radio" data-key="article_display" {% if articleEditData is not empty and articleEditData.articleDisplayType == 'listing'%} checked {% endif %} class="make-switch fg-dev-newfield" value="listing">
+                                            <label for="listView">{{'ARTICLE_DISPLAY_LISTING'|trans}}</label>
+                                            <input id="sliderView" name="articleDisplay" type="radio" data-key="article_display" {% if articleEditData is not empty and articleEditData.articleDisplayType == 'slider'%} checked {% endif %} class="make-switch fg-dev-newfield" value="slider">
+                                            <label for="sliderView">{{'ARTICLE_DISPLAY_SLIDER'|trans}}</label>
+                                            <a class="btn btn-primary"></a>
+                                        </div>
+                                    </div>  
+                                </div>
+                            </div>
+             {#     list view template #}
+                      <div class="fg-clear hide" id="view_listing">
+                             <div class="form-group fg-clear">
+                                <label class="col-md-2 col-sm-4 control-label ">{{'ARTICLES_PER_ROW'|trans|raw}}</label>
+                                <div class="col-md-2 col-sm-3">
+                                    <div class="fg-input-plus-minus">
+                                            <button class="left minus form-control FL selectButton btn-number" data-field="articlePerRow" data-type="minus" type="button">-</button>
+                                            <input type="text" required="true" min="1" disabled="" oldCount="1" data-key="articlePerRow"  class="form-control FL number input-number" max="{{colSize}}" name="articlePerRow" value="{% if articleEditData is not empty and articleEditData.articlePerRow is defined %} {{articleEditData.articlePerRow}} {% endif %}" id="articlePerRow" maxlength="1" >                                
+                                            <button class="right plus form-control FL selectButton btn-number" data-field="articlePerRow" data-type="plus" type="button">+</button>
+                                    </div>
+                                    <span class="help-block" id="articlesPerRowMsg"></span>                         
+                                </div>
+                            </div>  
+                           <div class="form-group">
+                            <label class="col-md-2 col-sm-4 control-label ">{{'ARTICLE_MAXIMUM_ROWS'|trans|raw}}</label>
+                                <div class="col-md-2 col-sm-3">
+                                    <div class="fg-input-plus-minus">
+                                            <button class="left minus form-control FL selectButton btn-number" data-field="maxRows" data-type="minus" type="button">-</button>
+                                            <input type="text" required="true" min="1" disabled="" oldCount="1" data-key="maxRows" class="form-control FL number input-number" max="20" name="maxRows" value="{% if articleEditData is not empty and articleEditData.articleRowsCount is defined %} {{articleEditData.articleRowsCount}} {% endif %}" id="maxRows">                                
+                                            <button class="right plus form-control FL selectButton btn-number" data-field="maxRows" data-type="plus" type="button">+</button>
+                                    </div>
+                                    <span class="help-block">
+                                        <span id="rowsCount"></span> {{'ARTICLE_DISPLAY_COUNT'|trans}}
+                                    </span>  
+                                    
+                                </div>
+                          </div> 
+                      </div>    
+{#                   list view template#}   
+{#                       slider starts   #}
+                      <div class=" fg-clear" id="view_slider"> 
+                           <div class="form-group">
+                            <label class="col-md-2 col-sm-4 control-label ">{{'MAX_NUMBER_OF_ARTICLES'|trans|raw}}</label>
+                                <div class="col-md-2 col-sm-3 ">
+                                    <div class="fg-input-plus-minus">
+                                            <button class="left minus form-control FL selectButton btn-number" data-field="maxArticles" data-type="minus" type="button">-</button>
+                                            <input type="text" required="true" min="1" disabled="" oldCount="1" data-key="maxArticles" class="form-control FL number input-number" max="5" name="maxArticles" value="{% if articleEditData is not empty and articleEditData.articleCount is defined %} {{articleEditData.articleCount}} {% endif %}" id="maxArticles" >                                
+                                            <button class="right plus form-control FL selectButton btn-number" data-field="maxArticles" data-type="plus" type="button">+</button>
+                                    </div>
+                                </div>
+                          </div> 
+                          <div class="form-group fg-clear" >
+                                    <label class="col-md-2 col-sm-4 control-label ">{{'ARTICLE_SLIDER_NAVIGATION'|trans}}</label>
+                                    <div class="col-md-8  col-sm-8 ">
+                                        <label class="radio-inline fg-pad-left-0" for="nav_none">
+                                            <input type="radio" name="slider_nav" id="nav_none" data-key="slider_nav" {% if articleEditData is not empty and articleEditData.articleSliderNavigation == 'none'%} checked {% endif %} class="uniform" value="none">
+                                             <span>{{'ARTICLE_SLIDER_NONE'|trans}}</span>
+                                        </label>
+                                        <label class="radio-inline" for="slider_right">
+                                            <input type="radio" name="slider_nav" id="slider_right" data-key="slider_nav" {% if articleEditData is not empty and articleEditData.articleSliderNavigation == 'right'%} checked {% endif %} class="uniform" value="right">
+                                             <span>{{'ARTICLE_SLIDER_RIGHT'|trans}}</span>
+                                        </label>
+                                        <label class="radio-inline" for="bottom">
+                                            <input type="radio" name="slider_nav" id="slider_bottom" data-key="slider_nav" {% if articleEditData is not empty and articleEditData.articleSliderNavigation == 'bottom'%} checked {% endif %} class="uniform" value="bottom">
+                                             <span>{{'ARTICLE_SLIDER_BOTTOM'|trans}}</span>
+                                        </label>
+                                    </div>
+                           </div>
+                            <div class="form-group">
+                                    <div class="col-md-6 col-sm-8 col-lg-5 col-md-offset-2 col-sm-offset-4">
+                                        <label class="checkbox-inline fg-pad-left-0 " for="thumbnail">
+                                            <input type="checkbox" name="thumbnail" id="thumbnail" data-key="slider_thumbnail" {% if articleEditData is not empty and articleEditData.articleShowThumbImg == '1' %} checked {% endif %} class="uniform">
+                                            {{'ARTICLE_SLIDER_THUMBNAIL'|trans}}
+                                        </label>
+                                    </div>
+                             </div>        
+                      </div>   
+                {#       slider end #}
+                {#      show details         #}       
+                           <div class="form-group fg-clear">
+                                <label class="col-md-2 col-sm-4 control-label">{{'ARTICLE_SHOW_DETAILS'|trans|raw}}</label>
+                                <div class="col-sm-8 col-md-9">
+                                    <label class="checkbox-inline fg-pad-left-0 " for="showDate">
+                                            <input type="checkbox" name="showDate" id="showDate" data-key="showDate" {% if articleEditData is not empty and articleEditData.articleShowDate == '1'%} checked {% endif %} class="uniform">
+                                            {{'ARTICLE_SHOW_DATE'|trans}}
+                                    </label>
+                                    <label class="checkbox-inline fg-pad-left-0 " for="showAreas">
+                                            <input type="checkbox" name="showAreas" id="showAreas" data-key="showAreas" {% if articleEditData is not empty and articleEditData.articleShowArea == '1'%} checked {% endif %} class="uniform">
+                                            {{'ARTICLE_SHOW_AREA'|trans}}
+                                    </label>
+                                    <label class="checkbox-inline fg-pad-left-0 " for="showCategory">
+                                            <input type="checkbox" name="showCategory" id="showCategory" data-key="showCategory" {% if articleEditData is not empty and articleEditData.articleShowCategory == '1'%} checked {% endif %} class="uniform">
+                                            {{'ARTICLE_SHOW_CATEGORY'|trans}}
+                                    </label>
+                                </div>
+                            </div>        
                             {%if (elementId > 0)%}
                                 {% include 'internal/savebutton.html.twig' with {'save_button_val':'CMS_ELEMENT_SAVE_BUTTON'|trans,'second_btn_val':'CMS_ELEMENT_SAVE_AND_BACK_BUTTON'|trans, 'second_button_id':'save_bac', 'discard_button_val':'CMS_ELEMENT_DISCARD_BUTTON'|trans, 'backLink': path('website_cms_page_edit',{'pageId': pageId}) } %}
                             {%else%}
@@ -118,10 +218,12 @@
     {% endblock %}
     {% block javascripts %}
         <script src="{{ asset('fgassets/internal/js/fg_tab_selection_process.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/website/js/fg_plusminus_input.js')}}" type="text/javascript"></script> 
         <script src="{{ asset('fgassets/website/js/Fg_cms_article_element.js') }}" type="text/javascript"></script>
         <script>
             var FgPageTitlebar;
             var tabheadingArray = {{ tabs|json_encode()|raw }};
+            var articleEditData = {{ articleEditData|json_encode()|raw }};
             var elementLogDetailsPath = "{{path('website_cms_element_log_data')}}";
             var saveArticleElement = "{{path('website_cms_save_article_element')}}";
             var profilePath = "{{ path('internal_community_profile', {'contactId': "dummy" }) }}";
@@ -141,7 +243,14 @@
                 'element' : "{{ 'CMS_ELEMENT'|trans }}",
                 'page_assignment' :"{{ 'CMS_PAGE_ASSIGNMENT'|trans }}"
             };
-
+            var articlesPerRowMsg = {
+                1: '{{ 'ARTICLES_PER_ROW_MSG'|trans({'%smaller%':1,'%mobile%':1})|raw }}',
+                2: '{{ 'ARTICLES_PER_ROW_MSG'|trans({'%smaller%':1,'%mobile%':1})|raw }}',
+                3: '{{ 'ARTICLES_PER_ROW_MSG'|trans({'%smaller%':1,'%mobile%':1})|raw }}',
+                4: '{{ 'ARTICLES_PER_ROW_MSG'|trans({'%smaller%':2,'%mobile%':1})|raw }}',
+                5: '{{ 'ARTICLES_PER_ROW_MSG'|trans({'%smaller%':2,'%mobile%':1})|raw }}',
+                6: '{{ 'ARTICLES_PER_ROW_MSG'|trans({'%smaller%':3,'%mobile%':1})|raw }}',
+        };
             var CmsArticleElement = new FgCmsArticleElement();
             $(document).ready(function () {
                     scope = angular.element($("#BaseController")).scope();
@@ -165,6 +274,7 @@
                     var ArticleElementLog = new FgCmsArticleElementLog();
                     ArticleElementLog.init();
                     CmsArticleElement.renderContent();
+                    CmsArticleElement.handleArticleDisplay(articleEditData);
                     $('.selectpicker').selectpicker();
                     $('select.selectpicker').selectpicker({noneSelectedText: statusTranslations['select']});
                     $('select.selectpicker').selectpicker('render');
@@ -182,6 +292,8 @@
                 var fedIdVal = ($("#fedShared").is(':checked')) ? fedId : '';
                 var subFedIdVal = ($("#subFedShared").is(':checked')) ? subFedId  : '';
                 var isValid =  CmsArticleElement.isValidForm(articleAreas, articleCategories, fedIdVal, subFedIdVal);
+                var objectArticleData = FgInternalParseFormField.fieldParse();
+                stringifyData = JSON.stringify(objectArticleData);
                 if(isValid){
                   $("#fedShared").attr('data-id', fedIdVal); 
                   $("#subFedShared").attr('data-id', subFedIdVal);
@@ -189,7 +301,7 @@
                   var isAllCat = (articleCategories == 'ALL_CATS') ? 1 : '';
                 
                   var saveType = (currentSelectedButton == 'save_changes') ? 'save' : 'saveBack';
-                  var data = {'areas': articleAreas, 'categories': articleCategories, 'boxId':boxId, 'elementId':elementId, 'sortOrder':sortOrder, 'pageId':pageId, 'isAllArea':isAllArea, 'isAllCat':isAllCat, 'saveType':saveType, 'fedSharedVal':fedIdVal, 'subFedSharedVal':subFedIdVal };
+                  var data = {'areas': articleAreas, 'categories': articleCategories,'displayDetails':stringifyData, 'boxId':boxId, 'elementId':elementId, 'sortOrder':sortOrder, 'pageId':pageId, 'isAllArea':isAllArea, 'isAllCat':isAllCat, 'saveType':saveType, 'fedSharedVal':fedIdVal, 'subFedSharedVal':subFedIdVal };
                   FgDirtyFields.removeAllDirtyInstances();
                   //return false;
                   FgXmlHttp.post(saveArticleElement, data, false, CmsArticleElement.saveElementCallback);
@@ -202,6 +314,6 @@
                   window.location.href = contentEditPagePath;
            });
 
-
+                
         </script>
     {% endblock %}

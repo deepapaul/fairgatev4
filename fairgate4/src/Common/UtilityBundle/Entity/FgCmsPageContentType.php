@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPageContentType
  */
@@ -43,7 +41,7 @@ class FgCmsPageContentType
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -54,19 +52,20 @@ class FgCmsPageContentType
      * Set type
      *
      * @param string $type
+     *
      * @return FgCmsPageContentType
      */
     public function setType($type)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -77,19 +76,20 @@ class FgCmsPageContentType
      * Set logoName
      *
      * @param string $logoName
+     *
      * @return FgCmsPageContentType
      */
     public function setLogoName($logoName)
     {
         $this->logoName = $logoName;
-    
+
         return $this;
     }
 
     /**
      * Get logoName
      *
-     * @return string 
+     * @return string
      */
     public function getLogoName()
     {
@@ -100,19 +100,20 @@ class FgCmsPageContentType
      * Set label
      *
      * @param string $label
+     *
      * @return FgCmsPageContentType
      */
     public function setLabel($label)
     {
         $this->label = $label;
-    
+
         return $this;
     }
 
     /**
      * Get label
      *
-     * @return string 
+     * @return string
      */
     public function getLabel()
     {
@@ -123,19 +124,20 @@ class FgCmsPageContentType
      * Set tableName
      *
      * @param string $tableName
+     *
      * @return FgCmsPageContentType
      */
     public function setTableName($tableName)
     {
         $this->tableName = $tableName;
-    
+
         return $this;
     }
 
     /**
      * Get tableName
      *
-     * @return string 
+     * @return string
      */
     public function getTableName()
     {
@@ -146,22 +148,24 @@ class FgCmsPageContentType
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgCmsPageContentType
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
         return $this->sortOrder;
     }
 }
+

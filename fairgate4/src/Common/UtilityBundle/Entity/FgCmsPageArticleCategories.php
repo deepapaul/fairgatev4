@@ -2,10 +2,8 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
- * FgCmsPageCategories
+ * FgCmsPageArticleCategories
  */
 class FgCmsPageArticleCategories
 {
@@ -15,20 +13,20 @@ class FgCmsPageArticleCategories
     private $id;
 
     /**
-     * @param \Common\UtilityBundle\Entity\FgCmsArticleCategory $category
-     */
-    private $category;
-
-    /**
      * @var \Common\UtilityBundle\Entity\FgCmsPage
      */
     private $page;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgCmsArticleCategory
+     */
+    private $category;
 
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -36,47 +34,51 @@ class FgCmsPageArticleCategories
     }
 
     /**
-     * Set category
-     *
-     * @param \Common\UtilityBundle\Entity\FgCmsArticleCategory $category
-     * @return FgCmsPageCategories
-     */
-    public function setCategory(\Common\UtilityBundle\Entity\FgCmsArticleCategory $category = null)
-    {
-        $this->category = $category;
-    
-        return $this;
-    }
-
-    /**
-     * Get category
-     * @return integer 
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
      * Set page
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPage $page
-     * @return FgCmsPageCategories
+     *
+     * @return FgCmsPageArticleCategories
      */
     public function setPage(\Common\UtilityBundle\Entity\FgCmsPage $page = null)
     {
         $this->page = $page;
-    
+
         return $this;
     }
 
     /**
      * Get page
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPage 
+     * @return \Common\UtilityBundle\Entity\FgCmsPage
      */
     public function getPage()
     {
         return $this->page;
     }
+
+    /**
+     * Set category
+     *
+     * @param \Common\UtilityBundle\Entity\FgCmsArticleCategory $category
+     *
+     * @return FgCmsPageArticleCategories
+     */
+    public function setCategory(\Common\UtilityBundle\Entity\FgCmsArticleCategory $category = null)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return \Common\UtilityBundle\Entity\FgCmsArticleCategory
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
 }
+

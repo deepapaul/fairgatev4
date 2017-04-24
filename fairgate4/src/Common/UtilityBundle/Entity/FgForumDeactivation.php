@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgForumDeactivation
  */
@@ -33,7 +31,7 @@ class FgForumDeactivation
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -44,19 +42,20 @@ class FgForumDeactivation
      * Set isDeactivatedForum
      *
      * @param boolean $isDeactivatedForum
+     *
      * @return FgForumDeactivation
      */
     public function setIsDeactivatedForum($isDeactivatedForum)
     {
         $this->isDeactivatedForum = $isDeactivatedForum;
-    
+
         return $this;
     }
 
     /**
      * Get isDeactivatedForum
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsDeactivatedForum()
     {
@@ -67,19 +66,20 @@ class FgForumDeactivation
      * Set group
      *
      * @param \Common\UtilityBundle\Entity\FgRmRole $group
+     *
      * @return FgForumDeactivation
      */
     public function setGroup(\Common\UtilityBundle\Entity\FgRmRole $group = null)
     {
         $this->group = $group;
-    
+
         return $this;
     }
 
     /**
      * Get group
      *
-     * @return \Common\UtilityBundle\Entity\FgRmRole 
+     * @return \Common\UtilityBundle\Entity\FgRmRole
      */
     public function getGroup()
     {
@@ -90,22 +90,24 @@ class FgForumDeactivation
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgForumDeactivation
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
         return $this->club;
     }
 }
+

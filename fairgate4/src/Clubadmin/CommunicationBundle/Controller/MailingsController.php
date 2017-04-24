@@ -21,7 +21,7 @@ use Clubadmin\ContactBundle\Util\FgRecepientEmailValidator;
 use Clubadmin\ContactBundle\Util\ContactDetailsSave;
 use Clubadmin\CommunicationBundle\Util\FgSentNewsletterRecipients;
 use Clubadmin\Util\Contactlist;
-use Common\UtilityBundle\Repository\Pdo\ClubPdo;
+use Admin\UtilityBundle\Repository\Pdo\ClubPdo;
 
 /**
  * Manage mailings of a newsletter

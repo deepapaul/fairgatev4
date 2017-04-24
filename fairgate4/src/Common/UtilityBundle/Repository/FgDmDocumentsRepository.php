@@ -486,8 +486,7 @@ class FgDmDocumentsRepository extends EntityRepository
             $docIdseperated = implode(",", $docIds);
             $oldDepositedWithSelectionIds = $this->_em->getRepository('CommonUtilityBundle:FgDmAssigment')->getPreviousAssignments($docIdseperated, 'contact');
             if ($oldDepositedWithSelectionIds) {
-                $contactIds = ltrim($oldDepositedWithSelectionIds, ',');
-                $this->_em->getRepository('CommonUtilityBundle:FgCmContact')->updateLastUpdated($contactIds, 'id');
+                $this->_em->getRepository('CommonUtilityBundle:FgCmContact')->updateLastUpdated($oldDepositedWithSelectionIds, 'id');
             }
             $oldDepositedArr = ($oldDepositedWithSelectionIds) ? explode(',', $oldDepositedWithSelectionIds) : array();
             foreach ($docIds as $id) {
@@ -554,8 +553,7 @@ class FgDmDocumentsRepository extends EntityRepository
         $array2 = array_diff($newDepositedArr, $oldDepositedArr);
         $contactForLastUpdate = array_merge($array2, $array1);
         if (count($contactForLastUpdate) > 0) {
-            $contactIds = implode(',', $contactForLastUpdate);
-            $this->_em->getRepository('CommonUtilityBundle:FgCmContact')->updateLastUpdated($contactIds, 'id');
+            $this->_em->getRepository('CommonUtilityBundle:FgCmContact')->updateLastUpdated($contactForLastUpdate, 'id');
         }
         if (count($excludeContactsArr) > 0) {
             foreach ($excludeContactsArr as $key => $contact) {
@@ -578,9 +576,7 @@ class FgDmDocumentsRepository extends EntityRepository
             $docPdo = new DocumentPdo($container);
             $docPdo->updateDocumentFilterContacts($documentId, $filterData, $oldFilterDepositedArr);
         } elseif (count($oldFilterDepositedArr) > 0) {
-            $contactIdsString = implode(',', $oldFilterDepositedArr);
-            $currentDate = date('Y-m-d H:i:s');
-            $this->_em->getConnection()->executeQuery("UPDATE fg_cm_contact SET last_updated='$currentDate' WHERE id IN ($contactIdsString)");
+            $this->_em->getRepository('CommonUtilityBundle:FgCmContact')->updateLastUpdated($oldFilterDepositedArr, 'id');
         }
     }
 

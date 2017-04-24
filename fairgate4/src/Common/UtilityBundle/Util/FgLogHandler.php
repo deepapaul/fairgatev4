@@ -18,7 +18,7 @@ class FgLogHandler {
      *
      * @var int
      */
-    private $clubId;
+    public $clubId;
 
     /**
      * Club Contact Id
@@ -63,12 +63,13 @@ class FgLogHandler {
     public function __construct($container) {
         $this->container = $container;
         $this->club = $this->container->get('club');
-        $this->clubId = $this->club->get('id');
-        $this->federationClubId = $this->club->get('federation_id');
+        $this->clubId = $this->club->get('id');        
         $this->contactId = $this->club->get('contactId');
         $this->fedContactId = $this->club->get('fedContactId');
         $this->conn = $this->container->get('database_connection');
-        $this->em = $this->container->get('doctrine')->getManager();
+        $this->adminConn = $this->container->get("fg.admin.connection")->getAdminConnection();
+        $this->adminEntityManager = $this->container->get("fg.admin.connection")->getAdminEntityManager();
+        $this->em = $this->container->get('doctrine')->getManager();  
     }
 
     /**
@@ -87,8 +88,8 @@ class FgLogHandler {
         foreach ($logValues as $key => $valueArr) {
             $this->logValueArr = array();
             $this->prepareLogValueArray($logType, $valueArr);
-            //prepare log entry for inserting
-            $this->executeLogEntryAction($logTablename);
+            //prepare log entry for inserting            
+            $this->executeLogEntryAction($logTablename);            
         }
     }
 
@@ -141,7 +142,7 @@ class FgLogHandler {
                 $this->logFieldArr = array(0 => 'contact_id', 1 => 'category_club_id', 2 => 'role_type', 3 => 'category_id', 4 => 'role_id', 5 => 'function_id', 6 => 'date', 7 => 'category_title', 8 => 'value_before', 9 => 'value_after', 10 => 'changed_by');
                 break;
             case 'assignment_club':
-                $this->logFieldArr[7] = 'rolelog_id';
+                //$this->logFieldArr[7] = 'rolelog_id';
                 break;
             case 'assignment_role':
                 $this->logFieldArr[7] = 'role_id';
@@ -203,11 +204,29 @@ class FgLogHandler {
                     $this->logValueArr[":$value"] = ($logType == 'fedmembership') ? $this->fedContactId: (isset($logValues[$value]) ? $logValues[$value] : $this->contactId);
                 }
             } else if ($value == 'club_id' && ($logType != 'contact_field' && $logType != 'contact_field_confirm' && $logType != 'assignment_role' && $logType != 'contactSystemLogs')) {
-                $this->logValueArr[":$value"] = ($logType == 'fedmembership' || $logType == 'fedMembershipAssignment') ? $this->federationClubId : $this->clubId;
+                $federationClubId = $this->getFederationClubId(); 
+                $this->logValueArr[":$value"] = ($logType == 'fedmembership' || $logType == 'fedMembershipAssignment') ? $federationClubId : $this->clubId;
             } else {
                 $this->logValueArr[":$value"] = $logValues[$value];
             }
         }
+    }
+    
+    /**
+     * Method to get federation clubId of current club
+     * 
+     * @return int federation clubId
+     */
+    private function getFederationClubId() {
+        $clubObj = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClub')->find($this->clubId);
+        $clubType = $clubObj->getClubType();
+        if($clubType == 'federation' || $clubType == 'standard_club') {
+            $federationId = $this->clubId;
+        } else {
+            $federationId = $clubObj->getFederationId();
+        }
+        
+        return $federationId;
     }
 
     /**
@@ -222,7 +241,13 @@ class FgLogHandler {
         $logEntryQuery2 = str_replace(',:@contactId', ',@contactId', $logEntryQuery1);
         $logEntryQuery3 = str_replace(',:@fedcontactId', ',@fedcontactId', $logEntryQuery2);
         $logEntryQuery4 = str_replace(',:@subfedcontactId', ',@subfedcontactId', $logEntryQuery3);
-        $stmt = $this->conn->prepare($logEntryQuery4);
+        
+        if(in_array($logTablename, array('fg_club_log'))){
+            $stmt = $this->adminConn->prepare($logEntryQuery4);
+        } else {
+            $stmt = $this->conn->prepare($logEntryQuery4);
+        }
+        
         $stmt->execute($this->logValueArr);
     }
 }

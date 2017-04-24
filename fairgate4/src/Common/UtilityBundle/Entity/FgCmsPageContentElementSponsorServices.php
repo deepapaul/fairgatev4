@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPageContentElementSponsorServices
  */
@@ -28,7 +26,7 @@ class FgCmsPageContentElementSponsorServices
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +37,20 @@ class FgCmsPageContentElementSponsorServices
      * Set element
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPageContentElement $element
+     *
      * @return FgCmsPageContentElementSponsorServices
      */
     public function setElement(\Common\UtilityBundle\Entity\FgCmsPageContentElement $element = null)
     {
         $this->element = $element;
-    
+
         return $this;
     }
 
     /**
      * Get element
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPageContentElement 
+     * @return \Common\UtilityBundle\Entity\FgCmsPageContentElement
      */
     public function getElement()
     {
@@ -62,22 +61,24 @@ class FgCmsPageContentElementSponsorServices
      * Set service
      *
      * @param \Common\UtilityBundle\Entity\FgSmServices $service
+     *
      * @return FgCmsPageContentElementSponsorServices
      */
     public function setService(\Common\UtilityBundle\Entity\FgSmServices $service = null)
     {
         $this->service = $service;
-    
+
         return $this;
     }
 
     /**
      * Get service
      *
-     * @return \Common\UtilityBundle\Entity\FgSmServices 
+     * @return \Common\UtilityBundle\Entity\FgSmServices
      */
     public function getService()
     {
         return $this->service;
     }
 }
+

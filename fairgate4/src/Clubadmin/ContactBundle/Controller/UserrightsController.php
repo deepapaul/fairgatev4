@@ -9,6 +9,7 @@ use Clubadmin\Util\Contactlist;
 use Clubadmin\ContactBundle\Util\ContactDetailsAccess;
 use Clubadmin\ContactBundle\Util\NextpreviousContact;
 use Symfony\Component\HttpFoundation\Request;
+use Common\UtilityBundle\Util\FgContactSyncDataToAdmin;
 
 /**
  * UserrightsController
@@ -404,6 +405,15 @@ class UserrightsController extends FgController
         $userRightsArray = $this->formatUserRightsArray($userRightsArray); // Calling function to format the result array
         // Calling common save function to save the user rights
         $resultSuccess = $this->em->getRepository('CommonUtilityBundle:SfGuardGroup')->saveUserRights($this->conn, $userRightsArray, $this->clubId, $this->contactId, $this->container);
+        
+        /** Sync the contact name data to the Admin DB **/
+        $userRightContactDetails = ((is_array($userRightsArray['new_users']['clubAdmin']))?$userRightsArray['new_users']['clubAdmin']:array()) +
+                            ((is_array($userRightsArray['new_users']['fedAdmin']))?$userRightsArray['new_users']['fedAdmin']:array());
+        $userRightContacts = array_column($userRightContactDetails, 'id');
+        $contactSyncObject = new FgContactSyncDataToAdmin($this->container);
+        $contactSyncObject->updateUserRights($userRightContacts)->updateLastUpdated($this->clubId)->executeQuery();
+        /***********************************************/
+        
         if ($resultSuccess) {
             return new JsonResponse(array('status' => 'SUCCESS', 'flash' => $this->get('translator')->trans('USER_RIGHTS_SAVED_SUCCESS')));
         } else {
@@ -671,6 +681,14 @@ class UserrightsController extends FgController
         $userRightsArray = $this->formatOverviewUserRights($userRightsArray); // Calling format function to format the array to use the common save
         // Calling common save function to save the user rights
         $resultSuccess = $this->em->getRepository('CommonUtilityBundle:SfGuardGroup')->saveUserRights($this->conn, $userRightsArray, $this->clubId, $this->contactId, $this->container);
+        
+        /** Sync the contact name data to the Admin DB **/
+        $userRightContacts = ((is_array(array_keys($userRightsArray['new']['group'][2]['contact'])))?array_keys($userRightsArray['new']['group'][2]['contact']):array()) +
+                            ((is_array(array_keys($userRightsArray['new']['group'][17]['contact'])))?array_keys($userRightsArray['new']['group'][17]['contact']):array());
+        $contactSyncObject = new FgContactSyncDataToAdmin($this->container);
+        $contactSyncObject->updateUserRights($userRightContacts)->updateLastUpdated($this->clubId)->executeQuery();
+        /***********************************************/
+
         if ($resultSuccess) {
             return new JsonResponse(array('status' => 'SUCCESS', 'flash' => $this->get('translator')->trans('USER_RIGHTS_SAVED_SUCCESS')));
         } else {

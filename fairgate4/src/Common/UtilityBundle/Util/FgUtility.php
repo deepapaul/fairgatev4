@@ -359,7 +359,11 @@ class FgUtility
         } else {
 
             $request = $container->get('request_stack')->getCurrentRequest();
-            $returnDomain = 'http://' . $request->getHttpHost();
+            if ($request->isSecure()) {
+                $returnDomain = 'https://' . $request->getHttpHost();
+            } else {
+                $returnDomain = 'http://' . $request->getHttpHost();
+            }
         }
 
         return $returnDomain;
@@ -1842,5 +1846,17 @@ class FgUtility
         }
 
         return $newstr;
+    }
+    
+    /**
+     * Elastic search
+     */
+    public function elasticSearch(){
+        $finder = $this->container->get('fos_elastica.finder.searches.clubs');
+        $results = $finder->find('swisstennis');
+        foreach($results as $value){    
+            echo 'Club Id: '.$value->getParentClubId(),'<br/>'; 
+            echo 'UrlIdentifier: '.$value->getUrlIdentifier();
+        }
     }
 }

@@ -2,18 +2,18 @@
 <div class="internal-sticky-area portlet-body form">
     <div class="form-actions fluid">
         <div class="col-md-offset-0  col-md-12 col-sm-12 col-xs-12 {% if (is_right_aligned is defined) %} fg-button-right-wrapper {% endif %}">
-            <button {% if (save_button_id is defined) %} id="{{save_button_id}}" {% else %} id="save_changes" {% endif %}  type="submit" class="btn green">{% if (save_button_val is defined) %} {{save_button_val}} {% else %}{%trans%}SAVE_CHANGES{%endtrans%}{% endif %}</button>
+            <button {% if (save_button_id is defined) %} id="{{save_button_id}}" {% else %} id="save_changes" {% endif %}  type="submit" class="btn green fg-dev-btnsave">{% if (save_button_val is defined) %} {{save_button_val}} {% else %}{%trans%}SAVE_CHANGES{%endtrans%}{% endif %}</button>
             {% if second_btn_val is defined %}
-                <button {% if (second_button_id is defined) %} id="{{second_button_id}}" class="btn green" {% else %} id="preview" class="btn default" {% endif %} type="button" >{{second_btn_val}}</button>                                
+                <button {% if (second_button_id is defined) %} id="{{second_button_id}}" class="btn green fg-dev-btnsave" {% else %} id="preview" class="btn default fg-dev-btnsave" {% endif %} type="button" >{{second_btn_val}}</button>                                
             {% endif %}
             {% if noDiscardChange is not defined %}
-            <button {% if (reset_button_id is defined) %} id="{{reset_button_id}}" {% else %} id="reset_changes" {% endif %} type="button" class="btn default">{% if (discard_button_val is defined) %}{{discard_button_val}}{% else %}{%trans%}DISCARD_CHANGES{%endtrans%}{% endif %}</button>
+            <button {% if (reset_button_id is defined) %} id="{{reset_button_id}}" {% else %} id="reset_changes" {% endif %} type="button" class="btn default fg-dev-btndiscard">{% if (discard_button_val is defined) %}{{discard_button_val}}{% else %}{%trans%}DISCARD_CHANGES{%endtrans%}{% endif %}</button>
             {% endif %}
             
             {% if noBackLinkFlag is not defined %}
                 <div class="btn-group pull-right">                
                     {% if (settings is not defined) %}
-                    <button type="button" class="btn default-ash bckid fg-backbtn-btm" data-auto="back_button_bottom" data-url="{% if (backLink is defined) %} {{backLink}}  {% endif %}"><i class="fa fg-chevron-left"></i> {%trans%}BACK{%endtrans%}</button>
+                    <button type="button" class="btn default-ash bckid fg-backbtn-btm fg-dev-btnsave" data-auto="back_button_bottom" data-url="{% if (backLink is defined) %} {{backLink}}  {% endif %}"><i class="fa fg-chevron-left"></i> {%trans%}BACK{%endtrans%}</button>
                     {% endif %}
                 </div>
             {% endif %}

@@ -11,6 +11,7 @@ imports:
     - { resource: file_types.yml }
     - { resource: doc_param.yml }
     - { resource: "@FairgateApiBundle/Resources/config/services.yml" }
+    - { resource: "@AdminUtilityBundle/Resources/config/services.yml" }
     
     
 framework:
@@ -23,7 +24,7 @@ framework:
     templating:
         engines: ['twig']
     assets:
-        version: '2.0.2'
+        version: '1.0.3'
         version_format: '%%s?version=%%s'
         base_path: /
     default_locale:  de
@@ -52,29 +53,62 @@ twig:
 
 # Doctrine Configuration
 doctrine:
+    # Configure the abstraction layer
     dbal:
-        driver:   "%database_driver%"
-        host:     "%database_host%"
-        port:     "%database_port%"
-        dbname:   "%database_name%"
-        user:     "%database_user%"
-        password: "%database_password%"
-        logging: "%kernel.debug%"
-        charset:  UTF8
-        mapping_types:
-          enum: string
+        # Set the default connection to default
+        default_connection: default
+        connections:
+            default:
+                driver:   "%database_driver%"
+                host:     "%database_host%"
+                port:     "%database_port%"
+                dbname:   "%database_name%"
+                user:     "%database_user%"
+                password: "%database_password%"
+                logging:  "%kernel.debug%"
+                charset:  UTF8
+                mapping_types:
+                    enum: string
+            admin:
+                driver:   "%admin_database_driver%"
+                host:     "%admin_database_host%"
+                port:     "%admin_database_port%"
+                dbname:   "%admin_database_name%"
+                user:     "%admin_database_user%"
+                password: "%admin_database_password%"
+                logging:  "%kernel.debug%"
+                charset:  UTF8
+                mapping_types:
+                    enum: string
         # if using pdo_sqlite as your database driver, add the path in parameters.yml
         # e.g. database_path: "%kernel.root_dir%/data/data.db3"
         # path:     "%database_path%"
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
+        default_entity_manager: default        
         entity_managers: 
-            default: 
+            # Register which bundle should use which connection
+            default:
+                connection: default
                 metadata_cache_driver: apcu
                 result_cache_driver: apcu
                 query_cache_driver: apcu
-                auto_mapping: true
+                mappings:
+                    CommonUtilityBundle: ~              
+                dql: 
+                    string_functions: 
+                        GROUP_CONCAT: Common\UtilityBundle\Extensions\GroupConcat
+                        FIND_IN_SET: Common\UtilityBundle\Extensions\FindInSet
+                        MD5: Common\UtilityBundle\Extensions\Md5
+            admin: 
+                connection: admin
+                metadata_cache_driver: apcu
+                result_cache_driver: apcu
+                query_cache_driver: apcu
+                naming_strategy: doctrine.orm.naming_strategy.underscore
+                mappings:
+                    AdminUtilityBundle: ~
                 dql: 
                     string_functions: 
                         GROUP_CONCAT: Common\UtilityBundle\Extensions\GroupConcat
@@ -93,7 +127,11 @@ fos_user:
     group:
         group_class: "%Clubadmin.entity.group.class%"
     service:
+        user_manager: fg.fos_user.user_manager        
         mailer: fg.fos_user.mailer
+    from_email:
+              address:        noreply@fairgate.ch
+              sender_name:    Fairgate
 # KNPSnappy pdf Configuration 
 knp_snappy:
     pdf:
@@ -101,7 +139,7 @@ knp_snappy:
         binary:      %kernel.root_dir%/../vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64
         options:    []
 
-igorw_file_serve:
+common_file_serve:
     factory: xsendfile
     skip_file_exists: true
     
@@ -121,3 +159,22 @@ fos_rest:
             'Doctrine\ORM\OptimisticLockException': HTTP_CONFLICT
           exception_controller: 'FairgateApiBundle\Controller\FedContactsController::errorAction'
 nelmio_api_doc: ~
+#fos_elastica:
+#     clients:
+#         default: { host: %fos_elastica.host%, port: %fos_elastica.port% }
+#     indexes:
+#        searches:
+#             client: default
+#             types:
+#                 clubs:
+#                     dynamic: strict
+#                     mappings:
+#                         urlIdentifier: 
+#                             type: string
+#                     persistence:
+#                         driver: orm
+#                         model: Common\UtilityBundle\Entity\FgClub
+#                         finder: ~
+#                         provider: ~
+#                         listener: ~                            
+

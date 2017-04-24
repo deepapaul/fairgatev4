@@ -19,11 +19,12 @@ class NextpreviousBase
      * @param int    $listquery                   Generated query
      * @param String $nextPreDataSessionName      Next previous data session name
      * @param Object $session                     Session object
-     * @param Object $em                          Entity object
+     * @param Object $em                          Entity object/container object(pass container object when isClubadmin flag is true)
+     * @param Object $isClubadmin                 Flag to check whether this call from club admin entity
      *
      * @return array
      */
-    public function checkNextPreviousFlag($flag, $nextPreviousContactListData, $contact, $sessionFlag, $listquery, $nextPreDataSessionName, $session, $em) {
+    public function checkNextPreviousFlag($flag, $nextPreviousContactListData, $contact, $sessionFlag, $listquery, $nextPreDataSessionName, $session, $em,$isClubadmin=false) {
         $callQueryFlag = 1;
 
         // Flag to indicate that the function is called inside the same function recursively.
@@ -43,7 +44,8 @@ class NextpreviousBase
 
         // Checking whether to call the query again to get the contact data
         if ($callQueryFlag == 1 || $sessionFlag == 1) {
-            $contactlistDatas = $em->getRepository('CommonUtilityBundle:FgCmMembership')->getContactList($listquery);
+            //if isClubadmin is true, $em contain the object of container which used to call the servoce for execute the query
+            $contactlistDatas = ($isClubadmin) ? $em->get('fg.admin.connection')->executeQuery($listquery) :$em->getRepository('CommonUtilityBundle:FgCmMembership')->getContactList($listquery);
             $session->set($nextPreDataSessionName, $contactlistDatas);
         }
 

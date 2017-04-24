@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgClubAssignment
  */
@@ -43,7 +41,7 @@ class FgClubAssignment
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -54,19 +52,20 @@ class FgClubAssignment
      * Set fromDate
      *
      * @param \DateTime $fromDate
+     *
      * @return FgClubAssignment
      */
     public function setFromDate($fromDate)
     {
         $this->fromDate = $fromDate;
-    
+
         return $this;
     }
 
     /**
      * Get fromDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFromDate()
     {
@@ -77,19 +76,20 @@ class FgClubAssignment
      * Set toDate
      *
      * @param \DateTime $toDate
+     *
      * @return FgClubAssignment
      */
     public function setToDate($toDate)
     {
         $this->toDate = $toDate;
-    
+
         return $this;
     }
 
     /**
      * Get toDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getToDate()
     {
@@ -100,19 +100,20 @@ class FgClubAssignment
      * Set isApproved
      *
      * @param boolean $isApproved
+     *
      * @return FgClubAssignment
      */
     public function setIsApproved($isApproved)
     {
         $this->isApproved = $isApproved;
-    
+
         return $this;
     }
 
     /**
      * Get isApproved
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsApproved()
     {
@@ -123,19 +124,20 @@ class FgClubAssignment
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgClubAssignment
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -146,22 +148,24 @@ class FgClubAssignment
      * Set fedContact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $fedContact
+     *
      * @return FgClubAssignment
      */
     public function setFedContact(\Common\UtilityBundle\Entity\FgCmContact $fedContact = null)
     {
         $this->fedContact = $fedContact;
-    
+
         return $this;
     }
 
     /**
      * Get fedContact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getFedContact()
     {
         return $this->fedContact;
     }
 }
+

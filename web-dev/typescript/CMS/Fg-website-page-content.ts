@@ -434,6 +434,9 @@ class Fgwebsitepage {
                 let articleUrl = jsonData['ajaxUrl']['articles'].replace('%23dummyElement%23',data.elementId).replace('%23dummy%23',page)+ '?menu=' + menu;
                 $.post(articleUrl , {},function(articleData) {
                     $('#elementbox-' +data.elementId).html(articleData.htmlContent);
+                    $( '#elementbox-' +data.elementId ).find(" a:first" ).addClass( "active" );
+                    $( '#elementbox-' +data.elementId ).find(" ul li:first" ).addClass( "active" );
+                    _this.articleElementCarouselSettings(data.elementId);
                 });
                 
             });
@@ -584,6 +587,7 @@ class Fgwebsitepage {
     * Handle form element submit
     */
     public handleFormElementSubmit(elementId: string) {
+        $("body").off("click", "#" + elementId + ' .fg-form-element-submit');
         $("body").on("click","#" + elementId + ' .fg-form-element-submit', function() {
             var formId = $(this).parents('form').attr('id');
             var validObj = new FgWebsiteFormValidation(formId);
@@ -1080,6 +1084,25 @@ class Fgwebsitepage {
 
 
 
+    }
+    /**
+     * article element carousel settings and options
+     */
+    public articleElementCarouselSettings(elemId) {
+        console.log($("#carousel-" + elemId).length);
+        $("#carousel-" + elemId).carousel({
+              interval:   4000
+            });
+         var clickEvent = false;
+            $("#carousel-" + elemId).on('click', '.nav a', function() {
+              clickEvent = true;
+              $('.nav li').removeClass('active');
+              $(this).parent().addClass('active');    
+            }).on('slid.bs.carousel', function(e) {
+                $("#carousel-" + elemId+' .nav li.active').removeClass('active');
+                $("#carousel-" + elemId+' .nav li:eq('+$(e.relatedTarget).index()+')').addClass('active');
+            });    
+            
     }
     /**
      * sponsor element options

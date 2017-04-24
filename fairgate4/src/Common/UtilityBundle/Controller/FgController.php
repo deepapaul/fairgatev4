@@ -1,5 +1,4 @@
 <?php
-
 /**
  * FgController
  *
@@ -10,7 +9,6 @@
  * @author     pitsolutions.ch
  * @version    Fairgate V4
  */
-
 namespace Common\UtilityBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,7 +17,7 @@ use Clubadmin\Util\Contactlist;
 use Common\UtilityBundle\Util\FgGenericQueryhandler;
 use Clubadmin\DocumentsBundle\Util\Documentlist;
 use Clubadmin\ContactBundle\Util\ContactlistData;
-use Common\UtilityBundle\Util\FgPermissions; 
+use Common\UtilityBundle\Util\FgPermissions;
 use Common\UtilityBundle\Util\FgUtility;
 
 /**
@@ -27,7 +25,8 @@ use Common\UtilityBundle\Util\FgUtility;
  *
  * @author PIT Solutions <pit@solutions.com>
  */
-class FgController extends Controller {
+class FgController extends Controller
+{
 
     /**
      * doctrine entity manager
@@ -120,10 +119,17 @@ class FgController extends Controller {
     public $fgpermission;
 
     /**
+     * Club admin manage entity manager
+     * @var type 
+     */
+    public $adminEntityManager;
+
+    /**
      * This function is used to preexecute commonly used services, to reduce the number of requests
      *
      */
-    public function preExecute() {
+    public function preExecute()
+    {
         $club = $this->get('club');
         $clubId = $club->get('id');
         if ($clubId == 0) {
@@ -149,14 +155,14 @@ class FgController extends Controller {
         $this->session = $this->request->getSession();
         $this->em = $this->container->get('doctrine')->getManager();
         $this->conn = $this->container->get('database_connection');
-        $this->fgpermission = new FgPermissions($this->container); 
-                 
+        $this->fgpermission = new FgPermissions($this->container);
+
 
         // Handled for login related functionalities
         if ($this->container->get('security.token_storage')->getToken()->getUser()) {
             $user = $this->container->get('security.token_storage')->getToken()->getUser();
             $contact = $this->get('contact');
-            $this->session->set('loggedClubUserId', $contact->get("id") );
+            $this->session->set('loggedClubUserId', $contact->get("id"));
             $this->session->set('loggedContactName', $contact->get("name"));
             $newUserArray = $contact->get("allowedModules");
             $this->session->set('allowedUserRights', $newUserArray);
@@ -170,6 +176,8 @@ class FgController extends Controller {
                 $this->em->getRepository('CommonUtilityBundle:SfGuardUser')->customLogoutTrigger($this->container, $this->session, $this->generateUrl('fairgate_user_security_logout'), $this->request, $user);
             }
         }
+        //Club admin entity manger
+        $this->adminEntityManager = $this->container->get("fg.admin.connection")->getAdminEntityManager();
     }
 
     /**
@@ -181,11 +189,12 @@ class FgController extends Controller {
      * @param Array  $catArr    category array
      * @param Int    $clubId    Club id
      */
-    public function generatequeryAction($tablename, $catArr, $clubId = '', $contactType = 'contact') {
+    public function generatequeryAction($tablename, $catArr, $clubId = '', $contactType = 'contact')
+    {
         $genericQueryhandler = new FgGenericQueryhandler($this->container);
         $genericQueryhandler->generatequeryAction($tablename, $catArr, $contactType);
-        
-        return array('deleledIds'=>$genericQueryhandler->deletedIdArray);
+
+        return array('deleledIds' => $genericQueryhandler->deletedIdArray);
     }
 
     /**
@@ -200,7 +209,8 @@ class FgController extends Controller {
      * @param int    $clubId        ClubId
      * @param int    $updateLog     updateLog
      */
-    public function addtotransaction($updateFullQry, $delQryStr, $unsetFedCat, $tablename, $bookmarkArr, $clubId, $updateLog = '') {
+    public function addtotransaction($updateFullQry, $delQryStr, $unsetFedCat, $tablename, $bookmarkArr, $clubId, $updateLog = '')
+    {
         /*         * ******** BEGIN TRANSACTION ******** */
         if ($updateFullQry !== '' || $delQryStr != '' || count($unsetFedCat) > 0) {
             $conn = $this->container->get("database_connection");
@@ -242,12 +252,17 @@ class FgController extends Controller {
      * @param String $type            Type
      * @param Int    $clubId          ClubId
      * @param String $whereExtraParam Where condition
+     * @param Object $conn            The connection to be used
      *
      * @return int
      */
-    public function getMaxSortOrderTable($tablename, $type = '', $clubId = '', $whereExtraParam = '') {
+    public function getMaxSortOrderTable($tablename, $type = '', $clubId = '', $whereExtraParam = '', $conn = null)
+    {
         if ($clubId) {
-            $conn = $this->container->get("database_connection");
+            if (null === $conn) {
+                $conn = $this->container->get("database_connection");
+            }
+
             $where = $whereExtraParam;
             if (($type == 'executiveFunction' || $tablename == 'fg_rm_function')) {
                 $where = ' category_id=' . $clubId;
@@ -264,11 +279,19 @@ class FgController extends Controller {
 
     /**
      * Function to insert tables from sidebar
-     *
+     * 
      * @param Array $tableValues Table values
-
+     * @param type $connection   database connection
      */
-    public function insertIntoTableSidebar($tableValues) {
+    public function insertIntoTableSidebar($tableValues, $connection = null)
+    {
+
+        if (null === $connection) {
+            $connection = $this->container->get("database_connection");
+        }
+
+        //$connection = ($connectionType=='clubadmin') ? $this->container->get("fg.admin.connection")->getAdminConnection() :  $this->conn;
+
         $query = array();
         $clubDefaultLang = $this->get('club')->get('club_default_lang');
         foreach ($tableValues as $table => $values) {
@@ -283,7 +306,7 @@ class FgController extends Controller {
             }
         }
         if (count($query) > 0) {
-            $this->conn->executeQuery(implode(';', $query));
+            $connection->executeQuery(implode(';', $query));
         }
     }
 
@@ -295,11 +318,15 @@ class FgController extends Controller {
      * @param String $tablename name of the table of which the sort order is needed
      * @param Int    $type      Type
      * @param String $where     Where condition
-     *
+     * @param Object $conn      The connection to be used
+     * 
      * @return int
      */
-    public function getLastInsertedId($tablename, $type = '', $where = '') {
-        $conn = $this->container->get("database_connection");
+    public function getLastInsertedId($tablename, $type = '', $where = '', $conn = null)
+    {
+        if (null === $conn) {
+            $conn = $this->container->get("database_connection");
+        }
         $whereCond = "WHERE $where";
         if (($type == 'membership' || $type == 'rolecategory' || $type == 'teamcategory') && $arg != '') {
             $where = "WHERE $where";
@@ -320,11 +347,11 @@ class FgController extends Controller {
      *
      * @return int
      */
-    public function isFrontend1Booked($clubId = "") {
+    public function isFrontend1Booked($clubId = "")
+    {
         return 1;
     }
 
-    
     /**
      * Function of next and previous buttons in the header
      *
@@ -337,7 +364,8 @@ class FgController extends Controller {
      *
      * @return array
      */
-    public function nextPreviousBtnDocumentAction($documentId, $offset, $url, $param1, $param2, $flag = 0) {
+    public function nextPreviousBtnDocumentAction($documentId, $offset, $url, $param1, $param2, $flag = 0)
+    {
         // Session values in the contact listing page
         $displayLength = $this->session->get('documentsFilteredContactDetailsDisplayLength');
         $displayLimit = $this->session->get('documentsLimitVal');
@@ -463,7 +491,8 @@ class FgController extends Controller {
      * @param array  $mDataProp           Data session value
      * @param array  $sSortDir            Sort column
      */
-    private function setDocOrderLimit($displayLimit, $displayLength, $documentlistClass, $dataTableColumnData, $fieldArray, $iSortCol, $mDataProp, $sSortDir) {
+    private function setDocOrderLimit($displayLimit, $displayLength, $documentlistClass, $dataTableColumnData, $fieldArray, $iSortCol, $mDataProp, $sSortDir)
+    {
         //echo $displayLimit."----".$displayLength;exit;
         if ($displayLimit != '') {
             //echo $displayLimit."----".$displayLength;
@@ -486,7 +515,8 @@ class FgController extends Controller {
      *
      * @return string
      */
-    private function getSortValue($mDataProp, $sSortDirVal, $fieldArray) {
+    private function getSortValue($mDataProp, $sSortDirVal, $fieldArray)
+    {
         $club = $this->get('club');
         $sortColumn = $mDataProp;
         $splitColumn = explode("_", $sortColumn);
@@ -507,7 +537,8 @@ class FgController extends Controller {
      *
      * @return string
      */
-    private function getAddCondition($searchPostValue, $fieldArray) {
+    private function getAddCondition($searchPostValue, $fieldArray)
+    {
 
         foreach ($fieldArray as $field) {
             $columns[] = $field;
@@ -537,7 +568,8 @@ class FgController extends Controller {
      *
      * @return HTML
      */
-    public function getTabIconInfoAction(Request $request, $contact) {
+    public function getTabIconInfoAction(Request $request, $contact)
+    {
         $club = $this->container->get('club');
         $bookedModulesDet = array();
         $bookedModulesDet = $club->get('bookedModulesDet');
@@ -548,7 +580,7 @@ class FgController extends Controller {
         $fedIconSrc = FgUtility::getClubLogo($federationId);
         $contactType = $request->getSession()->get('contactType');
         $contactType = ($contactType == '') ? 'contact' : $contactType;
-        $tabiconDetails = $this->contactName($contact, $contactType);    
+        $tabiconDetails = $this->contactName($contact, $contactType);
         $em = $this->getDoctrine()->getManager();
         $systemFieldTeamPicture = $this->container->getParameter('system_field_team_picture');
         $systemFieldCommunitypicture = $this->container->getParameter('system_field_communitypicture');
@@ -565,10 +597,11 @@ class FgController extends Controller {
      *
      * @return array
      */
-    protected function contactName($contactId, $contactType = 'contact') {
+    protected function contactName($contactId, $contactType = 'contact')
+    {
         $club = $this->get('club');
         $contactlistClass = new Contactlist($this->container, '', $club, 'noCondition');
-        $contactlistClass->setColumns(array('contactName', 'isMember', 'gender', 'isCompany','fed_membership_cat_id', 'club_membership_cat_id', 'is_sponsor', 'is_subscriber', 'intranet_access', 'is_company', '`72`','fg_cm_contact.is_permanent_delete'));
+        $contactlistClass->setColumns(array('contactName', 'isMember', 'gender', 'isCompany', 'fed_membership_cat_id', 'club_membership_cat_id', 'is_sponsor', 'is_subscriber', 'intranet_access', 'is_company', '`72`', 'fg_cm_contact.is_permanent_delete'));
         $contactlistClass->setFrom('*');
         $contactlistClass->setCondition();
         $sWhere = " fg_cm_contact.id = $contactId";
@@ -584,7 +617,8 @@ class FgController extends Controller {
      *
      * @return array
      */
-    public function getDatatableListdata() {
+    public function getDatatableListdata()
+    {
         // Session values in the contact listing page
         $displayLength = $this->session->get('filteredContactDetailsDisplayLength');
         $iSortCol = $this->session->get('filteredContactDetailsiSortCol_0');
@@ -673,7 +707,8 @@ class FgController extends Controller {
      *
      * @return array
      */
-    private function CheckContactAuthentication($contactId) {
+    private function CheckContactAuthentication($contactId)
+    {
         $club = $this->get('club');
         $allowedContact = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->getAllAuthenticatedContact($club, $contactId);
 
@@ -686,7 +721,8 @@ class FgController extends Controller {
      *
      * @return array
      */
-    private function setUserRoles($userRoleArr) {
+    private function setUserRoles($userRoleArr)
+    {
         foreach ($userRoleArr as $key => $role) {
             if ($role == 'ROLE_COMMUNICATION') {
                 $newUserArray['communication'] = 'communication';

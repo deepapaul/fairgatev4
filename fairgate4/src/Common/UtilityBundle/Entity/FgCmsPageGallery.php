@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPageGallery
  */
@@ -33,7 +31,7 @@ class FgCmsPageGallery
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -44,19 +42,20 @@ class FgCmsPageGallery
      * Set galleryType
      *
      * @param string $galleryType
+     *
      * @return FgCmsPageGallery
      */
     public function setGalleryType($galleryType)
     {
         $this->galleryType = $galleryType;
-    
+
         return $this;
     }
 
     /**
      * Get galleryType
      *
-     * @return string 
+     * @return string
      */
     public function getGalleryType()
     {
@@ -67,19 +66,20 @@ class FgCmsPageGallery
      * Set page
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPage $page
+     *
      * @return FgCmsPageGallery
      */
     public function setPage(\Common\UtilityBundle\Entity\FgCmsPage $page = null)
     {
         $this->page = $page;
-    
+
         return $this;
     }
 
     /**
      * Get page
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPage 
+     * @return \Common\UtilityBundle\Entity\FgCmsPage
      */
     public function getPage()
     {
@@ -90,22 +90,24 @@ class FgCmsPageGallery
      * Set galleryRole
      *
      * @param \Common\UtilityBundle\Entity\FgRmRole $galleryRole
+     *
      * @return FgCmsPageGallery
      */
     public function setGalleryRole(\Common\UtilityBundle\Entity\FgRmRole $galleryRole = null)
     {
         $this->galleryRole = $galleryRole;
-    
+
         return $this;
     }
 
     /**
      * Get galleryRole
      *
-     * @return \Common\UtilityBundle\Entity\FgRmRole 
+     * @return \Common\UtilityBundle\Entity\FgRmRole
      */
     public function getGalleryRole()
     {
         return $this->galleryRole;
     }
 }
+

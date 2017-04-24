@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnNewsletterPublishLang
  */
@@ -39,6 +37,7 @@ class FgCnNewsletterPublishLang
      * Set languageCode
      *
      * @param string $languageCode
+     *
      * @return FgCnNewsletterPublishLang
      */
     public function setLanguageCode($languageCode)
@@ -62,6 +61,7 @@ class FgCnNewsletterPublishLang
      * Set newsletter
      *
      * @param \Common\UtilityBundle\Entity\FgCnNewsletter $newsletter
+     *
      * @return FgCnNewsletterPublishLang
      */
     public function setNewsletter(\Common\UtilityBundle\Entity\FgCnNewsletter $newsletter = null)
@@ -81,3 +81,4 @@ class FgCnNewsletterPublishLang
         return $this->newsletter;
     }
 }
+

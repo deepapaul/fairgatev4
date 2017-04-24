@@ -2,14 +2,11 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPortraitContainer
  */
 class FgCmsPortraitContainer
 {
-
     /**
      * @var integer
      */
@@ -30,10 +27,11 @@ class FgCmsPortraitContainer
      */
     private $portrait;
 
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -44,6 +42,7 @@ class FgCmsPortraitContainer
      * Set size
      *
      * @param integer $size
+     *
      * @return FgCmsPortraitContainer
      */
     public function setSize($size)
@@ -56,7 +55,7 @@ class FgCmsPortraitContainer
     /**
      * Get size
      *
-     * @return integer 
+     * @return integer
      */
     public function getSize()
     {
@@ -67,6 +66,7 @@ class FgCmsPortraitContainer
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgCmsPortraitContainer
      */
     public function setSortOrder($sortOrder)
@@ -79,7 +79,7 @@ class FgCmsPortraitContainer
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -90,6 +90,7 @@ class FgCmsPortraitContainer
      * Set portrait
      *
      * @param \Common\UtilityBundle\Entity\FgCmsContactTable $portrait
+     *
      * @return FgCmsPortraitContainer
      */
     public function setPortrait(\Common\UtilityBundle\Entity\FgCmsContactTable $portrait = null)
@@ -102,10 +103,11 @@ class FgCmsPortraitContainer
     /**
      * Get portrait
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsContactTable 
+     * @return \Common\UtilityBundle\Entity\FgCmsContactTable
      */
     public function getPortrait()
     {
         return $this->portrait;
     }
 }
+

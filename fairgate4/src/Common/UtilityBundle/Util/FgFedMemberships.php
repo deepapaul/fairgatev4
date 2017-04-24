@@ -5,6 +5,8 @@ namespace Common\UtilityBundle\Util;
 use Clubadmin\ContactBundle\Util\FedMemApplication;
 use Common\UtilityBundle\Repository\Pdo\ContactPdo;
 use Clubadmin\ContactBundle\Util\DuplicateContactDetails;
+use Admin\UtilityBundle\Classes\SyncFgadmin;
+use Common\UtilityBundle\Util\FgClubSyncDataToAdmin;
 
 /**
  * FgFedMemberships.
@@ -51,14 +53,14 @@ class FgFedMemberships
      *
      * @var int
      */
-    private $clubId;
+    public $clubId;
 
     /**
      * Federation Id.
      *
      * @var int
      */
-    private $federationId;
+    public $federationId;
 
     /**
      * Subfederation Id.
@@ -174,6 +176,7 @@ class FgFedMemberships
         $this->em = $this->container->get('doctrine')->getManager();
         $this->club = $this->container->get('club');
         $this->contact = $this->container->get('contact');
+        $this->loggedContactId = $this->contact->get('id');
         $this->getClubDetails();
     }
 
@@ -265,11 +268,20 @@ class FgFedMemberships
                 //if the contact has a fed-membership change
                 $this->membershipProcess = 'change';
                 $this->changeFedMembership();
-            } else {
+            } else {                
                 //if the contact is assigned a fed-membership
                 $this->assignFedMembership();
             }
-        }
+        }         
+        /** Sync Fed member count to the Admin DB **/
+        $fgAdmin = new SyncFgadmin($this->container);
+        $fgAdmin->syncFedMemberCount();
+        /***********************************************/
+        
+        /** Update the subscriber count **/
+        $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
+        $clubSyncObject->updateSubscriberCount($this->clubId)->updateAdminCount($this->clubId);
+        /***********************************************/
     }
 
     /**
@@ -295,12 +307,12 @@ class FgFedMemberships
         $fedMemberAlreadyExist = $this->checkWhetherFedMembershipCanBeAssigned();
         $mergeToContactId = $this->contactData['mergeToContact'];
         $allowMerging = $this->contactData['allowMerging'];
-        if ((!$fedMemberAlreadyExist && empty($mergeToContactId)) || ($this->assignFedmembershipWithApplication == 1 && !empty($mergeToContactId))) {
+        if ((!$fedMemberAlreadyExist && empty($mergeToContactId)) || ($this->assignFedmembershipWithApplication == 1 && !empty($mergeToContactId))) {            
             //check for customization C.3 only in sub_federation_club and federation_club levels
             if ($this->assignFedmembershipWithApplication) {
                 $this->isMerging = (!empty($mergeToContactId)) ? 1 : 0;
                 $this->assignFedMembershipWithApplication();
-            } else {
+            } else {                
                 $this->assignFedMembershipWithoutApplication();
             }
         } elseif ($this->assignFedmembershipWithApplication != 1) { //with out application
@@ -328,7 +340,7 @@ class FgFedMemberships
     private function assignFedMembershipWithoutApplication()
     {
         $this->assignFedMembershipToContact();
-        $this->writeFedMembershipLog();
+        $this->writeFedMembershipLog();        
         $this->writeFedMembershipHistory();
         $this->writeClubAssignment();
     }
@@ -367,7 +379,8 @@ class FgFedMemberships
         }
 
         if (count($logArr) > 0) {
-            $logHandlerObj = new FgLogHandler($this->container);
+            $logHandlerObj = new FgLogHandler($this->container);            
+            $logHandlerObj->clubId = $this->clubId;
             $logHandlerObj->processLogEntryAction('fedMembershipAssignment', 'fg_cm_membership_log', $logArr);
         }
     }
@@ -378,7 +391,7 @@ class FgFedMemberships
     private function writeFedMembershipHistory()
     {
         //insert to fg_cm_membership history
-        $this->em->getRepository('CommonUtilityBundle:FgCmMembershipHistory')->insertFedMembershipHistory($this->federationId, $this->fedContactId, $this->newMembershipId, $this->contact->get('id'));
+        $this->em->getRepository('CommonUtilityBundle:FgCmMembershipHistory')->insertFedMembershipHistory($this->federationId, $this->fedContactId, $this->newMembershipId, $this->loggedContactId);
     }
 
     /**
@@ -395,7 +408,7 @@ class FgFedMemberships
      */
     private function createApplicationForFedMembershipConfirmation()
     {
-        $this->em->getRepository('CommonUtilityBundle:FgCmFedmembershipConfirmationLog')->createApplicationForConfirmation($this->clubId, $this->fedContactId, $this->federationId, $this->contact->get('id'), $this->oldMembershipId, $this->newMembershipId, $this->isMerging);
+        $this->em->getRepository('CommonUtilityBundle:FgCmFedmembershipConfirmationLog')->createApplicationForConfirmation($this->clubId, $this->fedContactId, $this->federationId, $this->loggedContactId, $this->oldMembershipId, $this->newMembershipId, $this->isMerging);
     }
 
     /**
@@ -488,14 +501,14 @@ class FgFedMemberships
     private function deleteFedMembershipSpecificDetailsOfContact()
     {
         //For deleting the connections-federation
-        $this->em->getRepository('CommonUtilityBundle:FgCmLinkedcontact')->deleteFederationConnectionsOfContact($this->federationId, $this->fedContactId, $this->contactData['isCompany'], $this->container, $this->club, $this->contact->get('id'), 'federation', $this->club->get('default_system_lang'));
+        $this->em->getRepository('CommonUtilityBundle:FgCmLinkedcontact')->deleteFederationConnectionsOfContact($this->federationId, $this->fedContactId, $this->contactData['isCompany'], $this->container, $this->club, $this->loggedContactId, 'federation', $this->club->get('default_system_lang'));
         //For deleting user rights -federation
         $this->em->getRepository('CommonUtilityBundle:SfGuardGroup')->deleteFederationUserrightsOfContact($this->federationId, $this->fedContactId);
         //For deleting heirarchy level documents - federation
         $this->em->getRepository('CommonUtilityBundle:FgDmAssigment')->removeFedDocsForContact($this->federationId, $this->fedContactId);
         if ($this->subfederationId != 0) {
             //For deleting the connections-subfederation
-            $this->em->getRepository('CommonUtilityBundle:FgCmLinkedcontact')->deleteFederationConnectionsOfContact($this->subfederationId, $this->subFedContactId, $this->contactData['isCompany'], $this->container, $this->club, $this->contact->get('id'), 'sub_federation', $this->club->get('default_system_lang'));
+            $this->em->getRepository('CommonUtilityBundle:FgCmLinkedcontact')->deleteFederationConnectionsOfContact($this->subfederationId, $this->subFedContactId, $this->contactData['isCompany'], $this->container, $this->club, $this->loggedContactId, 'sub_federation', $this->club->get('default_system_lang'));
             //For deleting user rights -subfederation
             $this->em->getRepository('CommonUtilityBundle:SfGuardGroup')->deleteFederationUserrightsOfContact($this->subfederationId, $this->subFedContactId);
             //For deleting heirarchy level documents - subfederation
@@ -541,7 +554,7 @@ class FgFedMemberships
         } else {
             $pendingApplicationsCount = $this->em->getRepository('CommonUtilityBundle:FgCmClubAssignmentConfirmationLog')->getPendingApplicationsCount($fedContactId, $this->clubId);
             if ($pendingApplicationsCount == 0) {
-                $this->em->getRepository('CommonUtilityBundle:FgCmClubAssignmentConfirmationLog')->createApplicationForConfirmation($this->clubId, $fedContactId, $this->federationId, $this->contact->get('id'));
+                $this->em->getRepository('CommonUtilityBundle:FgCmClubAssignmentConfirmationLog')->createApplicationForConfirmation($this->clubId, $fedContactId, $this->federationId, $this->loggedContactId);
                 $success = true;
             }
         }
@@ -790,11 +803,11 @@ class FgFedMemberships
     {
         $nowdate = strtotime(date('Y-m-d H:i:s'));
         $dateToday = date('Y-m-d H:i:s', $nowdate);
-        $insert .= "( '" . $this->contactId . "','" . $this->clubId . "','" . $this->contact->get('id') . "','" . $dateToday . "'),";
+        $insert .= "( '" . $this->contactId . "','" . $this->clubId . "','" . $this->loggedContactId . "','" . $dateToday . "'),";
         $teamTerminology = ucfirst($this->container->get('fairgate_terminology_service')->getTerminology('Team', $this->container->getParameter('singular')));
         $clubHeirarchy = $this->club->get('clubHeirarchy');
 
-        $this->em->getRepository('CommonUtilityBundle:FgCmContact')->archiveContact($this->contactId, $this->contact->get('id'), $insert, $dateToday, $this->clubId, $this->container->getParameter('system_field_firstname'), $this->container->getParameter('system_field_lastname'), $this->container->getParameter('system_field_companyname'), $this->container->getParameter('system_field_dob'), $teamTerminology, $clubHeirarchy, $this->club->get('type'), $this->container->getParameter('system_field_primaryemail'), $this->container->getParameter('system_field_salutaion'), $this->container->getParameter('system_field_gender'), $this->container->getParameter('system_field_corress_lang'), date('Y-m-d H:i:s'));
+        $this->em->getRepository('CommonUtilityBundle:FgCmContact')->archiveContact($this->contactId, $this->loggedContactId, $insert, $dateToday, $this->clubId, $this->container->getParameter('system_field_firstname'), $this->container->getParameter('system_field_lastname'), $this->container->getParameter('system_field_companyname'), $this->container->getParameter('system_field_dob'), $teamTerminology, $clubHeirarchy, $this->club->get('type'), $this->container->getParameter('system_field_primaryemail'), $this->container->getParameter('system_field_salutaion'), $this->container->getParameter('system_field_gender'), $this->container->getParameter('system_field_corress_lang'), date('Y-m-d H:i:s'));
     }
 
     /**
