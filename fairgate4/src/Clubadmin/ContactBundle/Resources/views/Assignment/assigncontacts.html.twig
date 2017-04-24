@@ -1,0 +1,766 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title"></h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="#" class="form-horizontal form-row-sepe" id="assigncontacts">
+                    <div class="form-body">
+
+                        <div id="block_0">
+                            <!-- CATEGORY SECTION STARTS -->
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 col-md-3">{{'TYPE_OR_CATEGORY'|trans}}</label>
+                                <div class="col-lg-9 col-md-8">
+                                    <select class="form-control select2me" data-placeholder="Contact fields" id="category_dropdown">
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- CATEGORY SECTION ENDS -->
+
+                            <!-- ROLE SECTION STARTS -->
+                            <div class="form-group hide" data-id="show_role_section">
+                                <label id="fg-dev-role-label" class="control-label col-lg-3 col-md-3">{{'ROLE'|trans}}</label>
+                                <div class="col-lg-9 col-md-8">
+                                    <select class="form-control select2me" data-placeholder="Contact fields" id="roles_dropdown">
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- ROLE SECTION ENDS -->
+
+                            <!-- FUNCTION SECTION STARTS -->
+                            <!-- For single contact -->
+                            <div class="form-group hide" data-id="show_fun_section_singleCnt">
+                                <label class="control-label col-lg-3 col-md-3">{{'FUNCTION'|trans}}<span aria-required="true" class="required  hide" id="fn_singleCnt"> *</span></label>
+                                <div class="col-lg-9 col-md-8">
+                                    <select class="form-control select2me" data-placeholder="Contact fields" id="functions_dropdown_single">
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- For multiple contacts -->
+                            <div class="form-group hide" data-id="show_fun_section">
+                                <label class="control-label col-lg-3 col-md-3">{{'FUNCTION'|trans}}<span aria-required="true" class="required  hide" id="fn_multiple"> *</span></label>
+                                <div class="col-lg-9 col-md-8 col-xs-12">
+                                    <div class="fg-aignblock-div"><label><input type="radio" name="function_type" id="function_type1" value="common" checked /></label></div>
+                                    <div class="fg-aignblock-right">
+                                        <select class="form-control select2me" data-placeholder="Contact fields" id="functions_dropdown">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group hide" data-id="show_fun_section">
+                                <div class="col-lg-9 col-md-8 col-xs-12 pull-right">
+                                    <div class="fg-aignblock-div"><label><input type="radio" name="function_type" id="function_type2" value="individual" /></label></div>
+                                    <div class="fg-aignblock-right">
+                                        <label class="control-label" for="function_type2">{{'INDIVIDUAL_FUNCTION_PER_CONTACT'|trans}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- FUNCTION SECTION ENDS -->
+
+                            <!-- NOT ALLOWED TO ASSIGN ERROR STARTS -->
+                            <div class="alert  alert-danger fg-poup-alert hide" id="notallowed_error">
+                                <p><strong>{{'ERROR'|trans}}: </strong><span></span></p>
+                            </div>
+                            <!-- NOT ALLOWED TO ASSIGN ERROR ENDS -->
+
+                            <!-- NON-FEDERATION MEMBER ERROR STARTS -->
+                            <div class="alert  alert-danger fg-poup-alert hide" id="nonfedmember_error">
+                                <p><strong>{{'ERROR'|trans}}: </strong>{%trans with {'%fedmember%': fgtwig.getTerminolgyName('Federation member', plural)}%}SOME_CONTACTS_CANT_BE_ASSIGNED_BECAUSE_THEY_ARENT_%fedmember%{%endtrans%}.</p>
+                                <div class="fg-popup-link">
+                                </div>
+                            </div>
+                            <!-- NON-FEDERATION MEMBER ERROR ENDS -->
+
+                            <!-- FEDERATION MEMBER ERROR STARTS -->
+                            <div class="alert  alert-danger fg-poup-alert hide" id="req_asgmnt_error">
+                                <p><strong>{{'ERROR'|trans}}: </strong><span>{{'SOME_CONTACTS_CANT_BE_REMOVED_FROM_%group1%_BECAUSE_THEY_ARE_REQUIRED_ASSIGNMENTS'|trans}}.</span></p>
+                                <div class="fg-popup-link">
+                                </div>
+                            </div>
+                            <!-- FEDERATION MEMBER ERROR ENDS -->
+
+                            <!-- MULTIPLE ASSIGNMENT ERROR STARTS -->
+                            <div class="alert  alert-danger fg-poup-alert hide" id="multiassignment_error">
+                            </div>
+                            <!-- MULTIPLE ASSIGNMENT ERROR ENDS -->
+                        </div>
+                        <div id="contactblocks">
+                            <!-- template for individual function selection here -->
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer form-actions fg-modal-footer">
+    <button type="button" class="btn default" id="cancel" data-dismiss="modal" data-function="cancel">{{'CANCEL'|trans}}</button>
+    <button type="button" class="btn green" id="save" data-function="save">{{'SAVE'|trans}}</button>
+</div>
+<!-- UNDERSCORE TEMPLATES STARTS -->
+<div id="divTemplates">
+    <script type="text/template" id="display_dropdown">
+        <% if (Object.keys(options).length > 0) { %>
+            <option value="">{{'SELECT_DROPDOWN'|trans}}</option>
+            <% _.each(options, function(option) { %>
+                <option value="<%- option['id'] %>" <% if (option['id'] == selectedId) { %> selected <% } %>><%- option['title'] %></option>
+            <% }); %>
+        <% } %>
+    </script>
+    <!-- Template for mutiple-assignment error -->
+    {% include 'ClubadminContactBundle:Assignment:multipleassignmenterror.html.twig' %}
+    <!-- Template for individual function selection -->
+    {% include 'ClubadminContactBundle:Assignment:individualfunctionselection.html.twig' %}
+</div>
+<!-- UNDERSCORE TEMPLATES ENDS -->
+<script src="{{ asset('fgcustom/js/fgtemplate.js')}}" type="text/javascript"></script>
+<script type="text/javascript">
+    var clubId = '{{clubId}}';
+    var clubType = '{{clubType}}';    
+    var labelArr = {{labelArr|raw}};   
+    var clubTeamId = '{{clubTeamId}}';
+    var clubWorkgroupId = '{{clubWorkgroupId}}';
+    var clubExecBoardId = '{{clubExecBoardId}}';
+    var actionType = '{{actionType}}';
+    var dragCatType = '{{dragCatType}}';
+    var selActionType = '{{selActionType}}';
+    var dragCat = '{{dragCat}}';
+    var dragRole = '{{dragRole}}';
+    var selectedCat = '{{dropCat}}';
+    var selectedRole = '{{dropRole}}';
+    var dropCatFnType = '{{dropCatFnType}}';
+    var selectedFun = '{{selectedFun}}';
+    var selCatType = '{{dropCatType}}';
+    var catArray = {};
+    var rolesArray = {};
+    var functionsArray = {};
+    var singleAssignmentCats = [];
+    var fedRoleCats = [];
+    var reqAssignmentCats = [];
+    var notAllowedCats = [];
+    var roleNames = {};
+    var catNames = {};
+    var totalContBlocks = 0;
+    var currContBlock = 0;
+    var popupHeadText = '';
+    var cantAssignContacts = [];
+    var notAllowedContacts = [];
+    var cantRemoveContacts = [];
+    var noMultiAsgmntContacts = [];
+    var toAssignContacts = [];
+    var saveAsgmntData = {};
+    /* get details of selected contacts starts */
+    var selContIds = [];
+    var selFedMembers = [];
+    var selNonFedMembers = [];
+    var selContNames = [];
+    var overViewPath = '{{ path('render_contact_overview', {'offset' : 0, 'contact' : '**dummy**' }) }}';
+    if ((selActionType == 'all') || (selActionType == 'single-select')) {
+        var allContactsData = $.parseJSON($('#selcontacthidden').val());        
+        $.each(allContactsData, function(cdKey, contactData) {
+            var contactId = contactData.id;
+            if ($.inArray(contactId, selContIds) == -1) {
+                selContIds.push(contactId);
+                if ((contactData.fedMembershipId != '') && (contactData.fedMembershipId != null)) {
+                    selFedMembers.push(contactId);
+                } else {
+                    selNonFedMembers.push(contactId);
+                }
+                selContNames.push({'id': contactId, 'name': contactData.contactname});
+            }
+        });
+    } else {
+        var selectedIdsElement = ($(".dataTables_wrapper div").hasClass('DTFC_LeftBodyWrapper')) ? ".DTFC_LeftBodyWrapper input.dataClass:checked" : "input.dataClass:checked";
+        $(selectedIdsElement).each(function() {
+            var contactId = $(this).attr('id');
+            if ($.inArray(contactId, selContIds) == -1) {
+                selContIds.push(contactId);
+                if (($(this).attr('data-fed-membership-id') != '') && ($(this).attr('data-fed-membership-id') != null)) {
+                    selFedMembers.push(contactId);
+                } else {
+                    selNonFedMembers.push(contactId);
+                }
+                selContNames.push({'id': contactId, 'name': $(this).parents('tr').find('.fg-dev-contactname').text()});
+            }
+        });
+    }
+    toAssignContacts = selContIds;
+    selContNames = selContNames.sort(function (a, b) {
+        return a.name.localeCompare( b.name );
+    });
+    /* get details of selected contacts ends */
+
+    $.getJSON('{{path("get_assignments")}}', function(assignments) {
+        var cat_i = 0;
+        var role_i = 0;
+        var function_i = 0;
+        var addedCats = [];
+        var addedRoles = [];
+        var addedFunctions = {};
+        var teamCatIds = [];
+        $.each(assignments, function(key, assignment) {
+            var catId = assignment.categoryId;
+            var roleId = assignment.roleId;
+            var functionId = assignment.functionId;
+            if ((catId != null) && (catId != 'null')) {
+                var catTitle = assignment.categoryTitle;
+                var groupTitleArray = assignment.groupTitle.split('-');
+                if (groupTitleArray[0] == 'TEAM') {
+                    teamCatIds.push(catId);
+                    catId = clubTeamId;
+                    catTitle = '{{fgtwig.getTerminolgyName('Team', plural, 'UCF')}}';
+                }
+                if (groupTitleArray[0] == 'WORKGROUP') {
+                    catTitle = '{{'WORKGROUPS'|trans}}';
+                }
+                if ($.inArray(catId, addedCats) == -1) {
+                    catArray[cat_i] = {'id': catId, 'title': catTitle};
+                    cat_i++;
+                    addedCats.push(catId);
+                    catNames[catId] = catTitle;
+                    if (assignment.roleAssign == 'single') {
+                        singleAssignmentCats.push(catId);
+                    }
+                    if (groupTitleArray[0] == 'FROLES') {
+                        fedRoleCats.push(catId);
+                        if ((clubType == 'sub_federation') && (assignment.catClubId != clubId)) {
+                            if ((assignment.isReqOnSubfed == 1) || (assignment.isReqOnSubfed == '1')) {
+                                reqAssignmentCats.push(catId);
+                            }
+                            if ((assignment.isAllowedOnSubfed == 0) || (assignment.isAllowedOnSubfed == '0')) {
+                                notAllowedCats.push(catId);
+                            }
+                        } else if (((clubType == 'federation_club') || (clubType == 'sub_federation_club')) && (assignment.catClubId != clubId)) {
+                            if ((assignment.isReqOnClub == 1) || (assignment.isReqOnClub == '1')) {
+                                reqAssignmentCats.push(catId);
+                            }
+                            if ((assignment.isAllowedOnClub == 0) || (assignment.isAllowedOnClub == '0')) {
+                                notAllowedCats.push(catId);
+                            }
+                        }
+                    }
+                }
+            }
+            //get category-wise roles
+            if ((roleId != null) && (roleId != 'null')) {
+                if ($.inArray(roleId, addedRoles) == -1) {
+                    if (rolesArray[catId] == undefined) {
+                        rolesArray[catId] = {};
+                    }
+                    var roleTitle = (roleId == clubExecBoardId) ? '{{fgtwig.getTerminolgyName('Executive Board',singular,'UCF')}}' : assignment.roleTitle;
+                    rolesArray[catId][role_i] = {'id': roleId, 'title': roleTitle};
+                    roleNames[roleId] = roleTitle;
+                    role_i++;
+                    addedRoles.push(roleId);
+                }
+            }
+            //get role-wise functions
+            if ((functionId != null) && (functionId != 'null')) {
+                if (addedFunctions[roleId] == undefined) {
+                    addedFunctions[roleId] = [];
+                }
+                if ($.inArray(functionId, addedFunctions[roleId]) == -1) {
+                    if (functionsArray[roleId] == undefined) {
+                        functionsArray[roleId] = {};
+                    }
+                    functionsArray[roleId][function_i] = {'id': functionId, 'title': assignment.functionTitle};
+                    function_i++;
+                    addedFunctions[roleId].push(functionId);
+                }
+            }
+        });
+        displayPopupHeading();
+        if ((selCatType == 'TEAM') && ($.inArray(selectedCat, teamCatIds) != -1)) {
+            selectedCat = clubTeamId;
+            $('select#category_dropdown option[value='+selectedCat+']').attr('selected', 'true');
+        }
+        if ((actionType == 'move') && (dragCat == selectedCat) && (selContIds.length == 1) && (dropCatFnType == 'same')) {
+            var passContactId = selContIds[0];
+            $.getJSON('{{path("get_assigned_function")}}', {'contactId': passContactId, 'catId': dragCat, 'roleId': dragRole, 'dragCatType': dragCatType}, function(assignment) {
+                selectedFun = (assignment[passContactId]['functionids'].length > 0) ? assignment[passContactId]['functionids'][0] : '';
+                displayDropdownOptions();
+            });
+        } else {
+            displayDropdownOptions();
+        }
+        $('#popup_contents input').uniform(); //for styling
+    });
+    $(document).off('click', '.modal-title .fg-dev-contact-names');
+    $(document).on('click', '.modal-title .fg-dev-contact-names', function(e) {
+        $(this).parent().toggleClass('fg-arrowicon');
+    });
+    
+    $('form').off('change', 'select#category_dropdown');
+    $('form').on('change', 'select#category_dropdown', function() {
+        $('input#function_type1').attr('checked', true);
+        $.uniform.update('input[name=function_type]');
+        renderBlockData();
+        toAssignContacts = selContIds;
+        selectedCat = $(this).val();
+        selectedRole = '';
+        selectedFun = '';
+        displayDropdownOptions();
+    });
+    $('form').off('change', 'select#roles_dropdown');
+    $('form').on('change', 'select#roles_dropdown', function() {
+        $('input#function_type1').attr('checked', true);
+        $.uniform.update('input[name=function_type]');
+        renderBlockData();
+        toAssignContacts = selContIds;
+        selectedRole = $(this).val();
+        selectedFun = '';
+        displayDropdownOptions();
+    });
+    $('form').off('change', 'select#functions_dropdown');
+    $('form').on('change', 'select#functions_dropdown', function() {
+        $('input#function_type1').attr('checked', true);
+        $.uniform.update('input[name=function_type]');
+        $('input#function_type1').trigger('click');
+    });
+    //change function type
+    $('form').off('click', 'input[name=function_type]');
+    $('form').on('click', 'input[name=function_type]', function() {
+        if (this.value == 'individual') {
+            $('form#assigncontacts select#functions_dropdown option[value=""]').attr('selected', 'true');
+            $('form#assigncontacts select#functions_dropdown').select2();
+        }
+        renderBlockData();
+    });
+    //pop-up buttons click
+    $(document).off('click', 'button[data-function=save], button[data-function=cancel]');
+    $(document).on('click', 'button[data-function=save], button[data-function=cancel]', function() {
+        var buttonId = this.id;
+        if (buttonId != 'cancel') {
+            if (buttonId == 'save') {
+                $('form#assigncontacts .help-block').remove();
+                $('form#assigncontacts .has-error').removeClass('has-error');
+                var isCommonFunction = true;
+                var selFunction = '';
+                var selContFunctions = {};
+                /* validation (req. field) starts */
+                var hasError = false;
+                if (selectedCat == '') {
+                    hasError = true;
+                    $('form#assigncontacts select#category_dropdown').parent().addClass('has-error');
+                    $('<span class="help-block">{{'REQUIRED'|trans}}.</span>').insertAfter($('form#assigncontacts select#category_dropdown'));
+                }
+                if (selectedRole == '') {
+                    hasError = true;
+                    $('form#assigncontacts select#roles_dropdown').parent().addClass('has-error');
+                    $('<span class="help-block">{{'REQUIRED'|trans}}.</span>').insertAfter($('form#assigncontacts select#roles_dropdown'));
+                }
+                if (selContIds.length == 1) {
+                    selFunction = $('form#assigncontacts select#functions_dropdown_single').val();
+                    if (($('form#assigncontacts select#functions_dropdown_single option').length > 0) && (selFunction == '')) {
+                        hasError = true;
+                        $('form#assigncontacts select#functions_dropdown_single').parent().addClass('has-error');
+                        $('<span class="help-block">{{'REQUIRED'|trans}}.</span>').insertAfter($('form#assigncontacts select#functions_dropdown_single'));
+                    }
+                } else {
+                    if ($('input[name=function_type]:checked').val() == 'common') {
+                        selFunction = $('form#assigncontacts select#functions_dropdown').val();
+                        if (($('form#assigncontacts select#functions_dropdown option').length > 0) && (selFunction == '')) {
+                            hasError = true;
+                            $('form#assigncontacts select#functions_dropdown').parent().addClass('has-error');
+                            $('<span class="help-block">{{'REQUIRED'|trans}}.</span>').insertAfter($('form#assigncontacts select#functions_dropdown'));
+                        }
+                    } else {
+                        isCommonFunction = false;
+                        $('form#assigncontacts select[id*=_functions_dropdown]').each(function() {
+                            var selCont = this.id.replace('_functions_dropdown', '');
+                            selContFunctions[selCont] = this.value;
+                            if (this.value == '') {
+                                hasError = true;
+                                $(this).parent().addClass('has-error');
+                                $('<span class="help-block">{{'REQUIRED'|trans}}.</span>').insertAfter($(this));
+                            }
+                        });
+                    }
+                }
+                /* validation (req. field) ends */
+                if (hasError) {
+                    var errorBlockId = $('form#assigncontacts .has-error:first').parents('.form-group').parent().attr('id');
+                    displayBlockData(errorBlockId);
+                    return false;
+                } else {
+                    /* save assignment starts */
+                    saveAsgmntData = {};
+                    //remove assignments
+                    $.each($('div#multiassignment_error table tbody input:checkbox:checked'), function(key, obj) {
+                        var remContId = $(obj).val();
+                        var remRoleId = $(obj).attr('data-roleid');
+                        var remFunIds = $(obj).attr('data-functionids').split(',');
+                        $.each(remFunIds, function(fkey, remFunId) {
+                            renderSaveJson(remContId, selectedCat, remRoleId, remFunId, 'is_deleted');
+                        });
+                    });
+                    //add assignments
+                    if (isCommonFunction) {
+                        $.each(toAssignContacts, function(ckey, toAssignContact) {
+                            renderSaveJson(toAssignContact, selectedCat, selectedRole, selFunction, 'is_new');
+                        });
+                    } else {
+                        $.each(selContFunctions, function(selContact, selFunction) {
+                            renderSaveJson(selContact, selectedCat, selectedRole, selFunction, 'is_new');
+                        });
+                    }
+                    if (actionType == 'move') {
+                        $.getJSON('{{path("get_assigned_function")}}', {'contactId': toAssignContacts.join(), 'catId': dragCat, 'roleId': dragRole, 'dragCatType': dragCatType}, function(assignment) {
+                            $.each(assignment, function(contactId, asgmnt) {
+                                var roleId = asgmnt['roleid'];
+                                if (asgmnt['functionids'].length > 0) {
+                                    $.each(asgmnt['functionids'], function(fkey, funId) {
+                                        renderSaveJson(contactId, dragCat, roleId, funId, 'is_deleted');
+                                    });
+                                }
+                            });
+                            saveAssignments();
+                        });
+                    } else {
+                        saveAssignments();
+                    }
+                    /* save assignment ends */
+                }
+            } else {
+                displayBlockData(buttonId);
+            }
+        }
+    });
+    //select or de-select multiple assignment restricted contacts
+    $(document).off('click', '#nomulti_check_all');
+    $(document).on('click', '#nomulti_check_all', function() {
+        $('div#multiassignment_error input:checkbox').attr('checked', this.checked);
+        $.uniform.update('div#multiassignment_error input:checkbox');
+        if (this.checked) {
+            $.each($('div#multiassignment_error table tbody input:checkbox'), function(key, obj) {
+                noMultiAsgmntContacts = _.without(noMultiAsgmntContacts, $(obj).val());
+                toAssignContacts.push($(obj).val());
+            });
+        } else {
+            $.each($('div#multiassignment_error table tbody input:checkbox'), function(key, obj) {
+                toAssignContacts = _.without(toAssignContacts, $(obj).val());
+                noMultiAsgmntContacts.push($(obj).val());
+            });
+        }
+        renderBlockData();
+        checkSave();
+    });
+    $(document).off('change', 'input[data-type=select_contact]');
+    $(document).on('change', 'input[data-type=select_contact]', function() {
+        if (this.checked) {
+            noMultiAsgmntContacts = _.without(noMultiAsgmntContacts, this.value);
+            toAssignContacts.push(this.value);
+        } else {
+            toAssignContacts = _.without(toAssignContacts, this.value);
+            noMultiAsgmntContacts.push(this.value);
+        }
+        if ($('div#multiassignment_error table tbody input:checkbox').not(':checked').length == 0) {
+            $('#nomulti_check_all').attr('checked', true);
+        } else {
+            $('#nomulti_check_all').attr('checked', false);
+        }
+        $.uniform.update('#nomulti_check_all');
+        renderBlockData();
+        checkSave();
+    });
+    function displayDropdownOptions() {
+        renderTemplateContent('display_dropdown', {'options': catArray, 'selectedId': selectedCat}, 'category_dropdown');
+        if (selectedCat == clubTeamId) {            
+            $('#fg-dev-role-label').text(labelArr['team']);
+        } else if (selectedCat == clubWorkgroupId) {
+            $('#fg-dev-role-label').text(labelArr['workgroup']);
+        } else {
+            $('#fg-dev-role-label').text(labelArr['role']);
+        }
+        var roleOptions = rolesArray[selectedCat] ? rolesArray[selectedCat] : {};
+        renderTemplateContent('display_dropdown', {'options': roleOptions, 'selectedId': selectedRole}, 'roles_dropdown');
+        if (Object.keys(roleOptions).length > 0) {
+            $('div[data-id=show_role_section]').removeClass('hide');
+        } else {
+            $('div[data-id=show_role_section]').addClass('hide');
+        }
+        var funcOptions = functionsArray[selectedRole] ? functionsArray[selectedRole] : {};
+        var funSelectId = (selContIds.length == 1) ? 'functions_dropdown_single' : 'functions_dropdown';
+        var funDivDataId = (selContIds.length == 1) ? 'show_fun_section_singleCnt' : 'show_fun_section';
+        var funDivReqId = (selContIds.length == 1) ? 'fn_singleCnt' : 'fn_multiple';
+        renderTemplateContent('display_dropdown', {'options': funcOptions, 'selectedId': selectedFun}, funSelectId);
+        if (Object.keys(funcOptions).length > 0) {
+            $('div[data-id=' + funDivDataId + ']').removeClass('hide');
+            
+                 $('div[data-id=' + funDivDataId + ']').addClass(' required');
+                $('#'+funDivReqId).removeClass('hide');
+            
+        } else {
+            $('div[data-id=' + funDivDataId + ']').addClass('hide');
+            $('div[data-id=' + funDivReqId + ']').addClass('hide');
+        }
+        $('#popup_contents select').select2(); //for styling
+        
+        //remove error divs
+        notAllowedContacts = [];
+        cantAssignContacts = [];
+        cantRemoveContacts = [];
+        noMultiAsgmntContacts = [];
+        $('div#nonfedmember_error .fg-popup-link, div#req_asgmnt_error .fg-popup-link, div#multiassignment_error').html('');
+        $('div#notallowed_error, div#nonfedmember_error, div#req_asgmnt_error, div#multiassignment_error').addClass('hide');
+
+        //check whether the selected contacts can be assigned to selected role
+        if (($.inArray(selectedCat, notAllowedCats) != -1) || ((actionType == 'move') && ($.inArray(dragCat, notAllowedCats) != -1))) {
+            notAllowedContacts = selContIds;
+            toAssignContacts = $(toAssignContacts).not(notAllowedContacts).get();
+            var errorText = '';
+            if ((actionType == 'move') && ($.inArray(dragCat, notAllowedCats) != -1)) {
+                $('div#block_0 .form-group').addClass('hide');
+                errorText = '{{'CONTACTS_ARE_NOT_ALLOWED_TO_MOVE_FROM_%catname%'|trans}}.'.replace('%catname%', catNames[dragCat]);
+            } else {
+                errorText = '{{'CONTACTS_ARE_NOT_ALLOWED_TO_ASSIGN_TO_%catname%'|trans}}.'.replace('%catname%', catNames[selectedCat]);
+            }
+            $('div#notallowed_error p span').text(errorText);
+            $('div#notallowed_error').removeClass('hide');
+        } else {
+
+            //if federation role category is selected, check whether the selected contacts have federation membership
+            if ($.inArray(selectedCat, fedRoleCats) != -1) {
+                if (selNonFedMembers.length > 0) {
+                    cantAssignContacts = selNonFedMembers;
+                    var contactNameLinks = {};
+                    var nonFedMemberHtml = '';
+                    $.each(selContNames, function(ckey, selContName) {
+                        if ($.inArray(selContName.id, selNonFedMembers) != -1) {
+                            contactNameLinks[selContName.id] = selContName.name;
+                            var contactOverviewPath = overViewPath.replace('**dummy**', selContName.id);
+                            nonFedMemberHtml += '<a href="'+contactOverviewPath+'" target="_blank" data-cont-id="'+selContName.id+'"></a>';
+                        }
+                    });
+                    $('div#nonfedmember_error .fg-popup-link').html(nonFedMemberHtml);
+                    displayContactNames(contactNameLinks);
+                    $('div#nonfedmember_error').removeClass('hide');
+                    toAssignContacts = $(toAssignContacts).not(cantAssignContacts).get();
+                }
+            }
+            //check whether the moved from category is required assignment category when contacts are moved or removed
+            if ((actionType == 'move') && (dragCat != selectedCat) && ($.inArray(dragCat, reqAssignmentCats) != -1) && (selFedMembers.length > 0)) {
+                $.getJSON('{{path("validate_assignments")}}', {'contactIds': selContIds.toString(), 'catId': dragCat, 'roleId': dragRole, 'dragCatType': dragCatType, 'actionType' : actionType+'_req_assn'}, function(assignments) {
+                    var alreadyAssignedConts = Object.keys(assignments);
+                    cantRemoveContacts = $(selContIds).not(alreadyAssignedConts).get();
+                    if (cantRemoveContacts.length > 0) {
+                        var contactNameLinks = {};
+                        var fedMemberHtml = '';
+                        $.each(selContNames, function(ckey, selContName) {
+                            if ($.inArray(selContName.id, cantRemoveContacts) != -1) {
+                                contactNameLinks[selContName.id] = selContName.name;
+                                var contactOverviewPath = overViewPath.replace('**dummy**', selContName.id);
+                                fedMemberHtml += '<a href="'+contactOverviewPath+'" target="_blank" data-cont-id="'+selContName.id+'"></a>';
+                            }
+                        });
+                        var errorText = $('div#req_asgmnt_error p span').text().replace('%group1%', roleNames[dragRole]);
+                        $('div#req_asgmnt_error p span').text(errorText);
+                        $('div#req_asgmnt_error .fg-popup-link').html(fedMemberHtml);
+                        displayContactNames(contactNameLinks);
+                        $('div#req_asgmnt_error').removeClass('hide');
+                        toAssignContacts = $(toAssignContacts).not(cantRemoveContacts).get();
+                    }
+                });
+            }
+            //check whether the selected contacts are already assigned to any role of this category
+            if ((actionType == 'assign') && ($.inArray(selectedCat, singleAssignmentCats) != -1) && (selectedRole != '')) {
+                $.getJSON('{{path("validate_assignments")}}', {'contactIds': selContIds.toString(), 'catId': selectedCat, 'roleId': selectedRole, 'dragCatType': dragCatType, 'actionType' : actionType}, function(assignments) {
+                    var assignedContacts = Object.keys(assignments);
+                    if (assignedContacts.length > 0) {
+                        noMultiAsgmntContacts = assignedContacts;
+                        renderTemplateContent('template-multiple-asgmnt-error', {'selContNames':selContNames, 'assignedContacts':assignedContacts, 'roleNames':roleNames, 'assignments':assignments}, 'multiassignment_error');
+                        $('div#multiassignment_error input:checkbox').uniform()
+                        $('div#multiassignment_error').removeClass('hide');
+                        toAssignContacts = $(toAssignContacts).not(noMultiAsgmntContacts).get();
+                    }
+                });
+            }
+        }
+        setTimeout(checkSave, 1000);
+    }
+    function renderTemplateContent(templateScriptId, jsonData, parentDivId) {
+        var htmlFinal = FGTemplate.bind(templateScriptId, jsonData);
+        $('#' + parentDivId).html(htmlFinal);
+    }
+    function displayPopupHeading() {
+        var singleAssignTxt = '{{'ASSIGN_%contname%_TO'|trans}}' + ' ';
+        var multipleAssignTxt = '{{'ASSIGN_%contcount%_CONTACTS_TO'|trans}}' + ' ';
+        var singleMoveTxt = '{{'MOVE_%contname%_FROM_%dragrole%_TO'|trans}}' + ' ';
+        var multipleMoveTxt = '{{'MOVE_%contcount%_CONTACTS_FROM_%dragrole%_TO'|trans}}' + ' ';
+        if (selContIds.length == 1) {
+            if (actionType == 'assign') {
+                popupHeadText = singleAssignTxt.replace('%contname%', selContNames[0].name);
+            } else if (actionType == 'move') {
+                popupHeadText = singleMoveTxt.replace('%contname%', selContNames[0].name).replace('%dragrole%', roleNames[dragRole]);
+            }
+            $('h4.modal-title').html('<div class="fg-popup-text" id="popup_head_text"></div>');
+            $('div#popup_head_text').text(popupHeadText + '...');
+        } else {
+            if (actionType == 'assign') {
+                popupHeadText = multipleAssignTxt.replace('%contcount%', selContIds.length);
+            } else if (actionType == 'move') {
+                popupHeadText = multipleMoveTxt.replace('%contcount%', selContIds.length).replace('%dragrole%', roleNames[dragRole]);
+            }
+            if (selActionType == 'all') {
+                $('h4.modal-title').html('<div class="fg-popup-text" id="popup_head_text"></div>');
+                $('div#popup_head_text').text(popupHeadText + '...');
+            } else {
+                var contNamesHtml = '';
+                var contactNameLinks = {};
+                var i = 0;
+                $.each(selContNames, function(ckey, selContName) {
+                    i++;
+                    if (i == 11) {
+                        contNamesHtml += '<li>&hellip;</li>';
+                        return false;
+                    } else {
+                        contactNameLinks[selContName.id] = selContName.name;
+                        var contactOverviewPath = overViewPath.replace('**dummy**', selContName.id);
+                        contNamesHtml += '<li><a href="'+contactOverviewPath+'" target="_blank" data-cont-id="'+selContName.id+'"></a></li>';
+                    }
+                });
+                $('h4.modal-title').html('<span class="fg-dev-contact-names"><a href="#" class="fg-plus-icon"></a><a href="#" class="fg-minus-icon"></a></span><div class="fg-popup-text" id="popup_head_text"></div>\n\
+                    <div class="fg-arrow-sh"><ul>' + contNamesHtml + '</ul></div>');
+                $('div#popup_head_text').text(popupHeadText + '...');
+                displayContactNames(contactNameLinks);
+            }
+        }
+    }
+    function renderBlockData() {
+        currContBlock = 0;
+        var functionTypeVal = $('input[name=function_type]:checked').val();
+        if ((functionTypeVal == 'individual') && (toAssignContacts.length > 0)) {
+            $('button#save').removeAttr('disabled');
+            totalContBlocks = Math.ceil(toAssignContacts.length/10);
+            displayBlockData('block_0');
+            //render individual selection template
+            renderTemplateContent('template-individual-func-selection', {'selContNames': selContNames, 'toAssignContacts': toAssignContacts, 'funSelectOptions': $('select#functions_dropdown').html()}, 'contactblocks');
+            //pre-select the value of function dropdown if 'common function' category is selected and contacts are moved from one role to another role of same category
+            if ((actionType == 'move') && (dragCat == selectedCat) && (dropCatFnType == 'same')) {
+                $.getJSON('{{path("get_assigned_function")}}', {'contactId': toAssignContacts.join(), 'catId': dragCat, 'roleId': dragRole, 'dragCatType': dragCatType}, function(assignment) {
+                    $.each(assignment, function(contactId, asgmnt) {
+                        if (asgmnt['functionids'].length > 0) {
+                            var funId = asgmnt['functionids']['0'];
+                            $('select#' + contactId + '_functions_dropdown option[value='+funId+']').attr('selected', 'true');
+                        }
+                    });
+                    $('div#contactblocks select option[value=""]').html('{{'SELECT_FUNCTION_DROPDOWN'|trans}}');
+                    $('div#contactblocks select').select2();
+                });
+            } else {
+                $('div#contactblocks select option[value=""]').html('{{'SELECT_FUNCTION_DROPDOWN'|trans}}');
+                $('div#contactblocks select').select2();
+            }
+        } else {
+            totalContBlocks = 0;
+            displayBlockData('block_0');
+            $('div#contactblocks').html(''); //clear contact blocks
+        }
+    }
+    function displayBlockData(blockId) {
+        /** Display selected Block **/
+        var blockIdToShow = blockId.replace('block_', '');
+        if (currContBlock != blockIdToShow) {
+            $('div#block_' + currContBlock).addClass('hide');
+            $('div#block_' + blockIdToShow).removeClass('hide');
+            currContBlock = parseInt(blockIdToShow);
+        }
+        /****************************/
+        //Pop-up Heading
+        var dropGroupName = (currContBlock == 0) ? '...' : ($('select#roles_dropdown option:checked').text() + ((totalContBlocks > 1) ? (' ['+currContBlock+'/'+totalContBlocks+']') : ''));
+        $('div#popup_head_text').text(popupHeadText + dropGroupName);
+
+        /** SAVE & CANCEL Buttons **/
+        if (totalContBlocks == 0) {
+            $('button[data-function=cancel]').attr({'id': 'cancel', 'data-dismiss': 'modal'}).html('{{'CANCEL'|trans}}');
+            $('button[data-function=save]').attr('id', 'save').html('{{'SAVE'|trans}}');
+        } else {
+            //save button
+            if (currContBlock == totalContBlocks) {
+                $('button[data-function=save]').attr('id', 'save').html('{{'SAVE'|trans}}');
+            } else {
+                var nextBlockHtml = (currContBlock == 0) ? '{{'CHOOSE_FUNCTIONS'|trans}}' : '{{'NEXT'|trans}}';
+                $('button[data-function=save]').attr('id', 'block_' + (currContBlock + 1)).html(nextBlockHtml);
+            }
+            //cancel button
+            if (currContBlock == 0) {
+                $('button[data-function=cancel]').attr({'id': 'cancel', 'data-dismiss': 'modal'}).html('{{'CANCEL'|trans}}');
+            } else {
+                $('button[data-function=cancel]').attr({'id': 'block_' + (currContBlock - 1), 'data-dismiss': ''}).html('{{'BACK'|trans}}');
+            }
+        }
+        /****************************/
+    }
+    function renderSaveJson(cntctId, catId, roleId, funId, type) {
+        if (catId == clubTeamId) {
+            catId = 'team' + clubTeamId;
+        }
+        if (saveAsgmntData[cntctId] == undefined) {
+            saveAsgmntData[cntctId] = {};
+        }
+        if (catId != '') {
+            if (saveAsgmntData[cntctId][catId] == undefined) {
+                saveAsgmntData[cntctId][catId] = {};
+            }
+            if (roleId != '') {
+                if (saveAsgmntData[cntctId][catId]['role'] == undefined) {
+                    saveAsgmntData[cntctId][catId]['role'] = {};
+                }
+                if (saveAsgmntData[cntctId][catId]['role'][roleId] == undefined) {
+                    saveAsgmntData[cntctId][catId]['role'][roleId] = {};
+                }
+                if (!((funId == '') || (funId == 'null') || (funId == null))) {
+                    if (saveAsgmntData[cntctId][catId]['role'][roleId]['function'] == undefined) {
+                        saveAsgmntData[cntctId][catId]['role'][roleId]['function'] = {};
+                    }
+                    if (saveAsgmntData[cntctId][catId]['role'][roleId]['function'][funId] == undefined) {
+                        saveAsgmntData[cntctId][catId]['role'][roleId]['function'][funId] = {};
+                    }
+                }
+            }
+        }
+        if ((funId == '') || (funId == 'null') || (funId == null)) {
+            saveAsgmntData[cntctId][catId]['role'][roleId][type] = 1;
+        } else {
+            saveAsgmntData[cntctId][catId]['role'][roleId]['function'][funId][type] = 1;
+        }
+    }
+    function checkSave() {
+        if (toAssignContacts.length <= 0) {
+            $('button#save').attr('disabled', 'true');
+        } else {
+            $('button#save').removeAttr('disabled');
+        }
+    }
+    function saveAssignments() {
+        var catArr = JSON.stringify(saveAsgmntData);
+        //console.log(catArr);return false;
+        $('#popup').modal('hide');
+        var passingData = {'catArr': catArr, 'contact_id': toAssignContacts.join(), 'selCount': toAssignContacts.length, 'totalCount': selContIds.length, 'fromPage': 'contactlist', 'actionType': actionType};
+        FgXmlHttp.post('{{path("update_contact_assignments")}}', passingData, false, callBackFn);
+    }
+    function callBackFn(result) {
+        FgCountUpdate.update('assignment','contact','active',result.sidebarCountArray, result.assignedCount);
+        $(".missingWarning").remove(); 
+        $(".fg-warning").parent().parent().remove(); 
+        $('#MissingReqAssgmtError').addClass('display-hide');
+        $.getJSON("{{url('sidebar_missing_assignments')}}", function(data) {
+            var missingAssignData=data;
+            if (Object.keys(missingAssignData).length > 0) {
+                FgCountUpdate.updateMissingAssignments(missingAssignData);
+            }
+        });
+        oTable.api().draw();
+        //FgTable.init();
+    }
+    function displayContactNames(contactNameLinks) {
+        $.each(contactNameLinks, function(selContId, selContName) {
+            $('a[data-cont-id='+selContId+']').text(selContName);
+        });
+    }
+</script>

@@ -1,0 +1,30 @@
+<script type="text/template" id="overviewConnectionsBox">
+        <% if (connections.length > 0) { %> 
+            <% var sortedConnections = _.sortBy(connections, 'type'); %>
+            <ul>
+                <% _.each(sortedConnections,function(connection, key){ %>
+                    <li >
+                        <% if( connection.isCompany != 1 || connection.imgPath == '') { %> 
+                            <div class="fg-inner-block fg-profile-img-blk40 <% if( connection.isCompany != 1) { %> fg-round-img <% } %> " style="background-image:url('<%- (connection.imgPath != '') ? connection.imgPath : '' %>')" >                        
+                            </div>
+                        <% } else { %>
+                            <div class="fg-profile-img-blk-CH40 " >
+                                <img src="<%- connection.imgPath %>" alt="">
+                            </div>
+                        <% } %>    
+                        <div class="fg-inner-block">
+                            <div>
+                                <% if (connection.isStealthMode == 0) { %> <a href="<%= connection.overviewUrl %>"> <% } %> <%= connection.contactName %> <% if (connection.isStealthMode == 0) { %> </a> <% } %>
+                            </div>
+                            <div>
+                                <span><%- connection.relationName %></span>
+                            </div>
+                        </div>
+                        <div class="fg-inner-block FR fg-connect-type">
+                            <%- (connection.connectionType == 'household') ? '{{ 'DASHBOARD_HOUSEHOLD'|trans }}' : ((connection.connectionType == 'maincontact') ? '{{ 'DASHBOARD_MAIN_CONTACT'|trans }}' : '{{ 'DASHBOARD_OTHER'|trans }}') %>
+                        </div>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } %>
+</script>

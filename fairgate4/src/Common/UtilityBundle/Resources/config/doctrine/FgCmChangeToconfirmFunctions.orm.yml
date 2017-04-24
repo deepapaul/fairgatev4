@@ -1,0 +1,38 @@
+Common\UtilityBundle\Entity\FgCmChangeToconfirmFunctions:
+    repositoryClass: Common\UtilityBundle\Repository\FgCmChangeToconfirmFunctionsRepository
+    type: entity
+    table: fg_cm_change_toconfirm_functions
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        actionType:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: action_type
+    manyToOne:
+        toconfirm:
+            targetEntity: FgCmChangeToconfirm
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                toconfirm_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        function:
+            targetEntity: FgRmFunction
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                function_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

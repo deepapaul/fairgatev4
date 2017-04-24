@@ -1,0 +1,58 @@
+Common\UtilityBundle\Entity\FgCnNewsletterArticleMedia:
+    type: entity
+    table: fg_cn_newsletter_article_media
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY        
+        mediaText:
+            type: text
+            nullable: true
+            column: media_text
+        description:
+            type: text
+            nullable: false
+        mediaType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: media_type
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sort_order
+    manyToOne:        
+        galleryItem:
+            targetEntity: FgGmItems
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                gallery_item_id:
+                    referencedColumnName: id
+            orphanRemoval: false    
+        fileManager:
+            targetEntity: FgFileManager
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                file_manager_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        article:
+            targetEntity: FgCnNewsletterArticle
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                article_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

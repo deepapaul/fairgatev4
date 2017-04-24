@@ -1,0 +1,63 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = contactName %}
+{% block pagecontent %}
+    <!-- BEGIN BREADCRUMB-->
+    <div class="row">
+        <div class="col-lg-12">
+            {% include 'internal/breadcrumb.html.twig' %}
+        </div>
+    </div>
+    <!-- END BREADCRUMB-->
+    <!-- PAGE TITLE -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-title">
+                {{contactName}}
+            </h3>              
+        </div>
+    </div>
+    <!-- END PAGE TITLE -->
+    <!-- BEGIN CONTENT -->
+    <div class="profileContents"></div>
+    
+    <div id='tooltip' class="tooltip"></div>
+    <!-- END CONTENT -->
+{% endblock %}
+{% block underscoretemplate %}
+        {% include 'InternalProfileBundle:Privacy:templateProfile.html.twig' %} 
+{% endblock %}
+{% block javascripts %}
+<script>
+    var fieldDetails = {{fieldDetails | raw}}; // Getting all field values
+    var resultArray = {{resultArray | raw}};
+    var countryList = {{countryList | raw}};
+    var languages = {{languages | raw}};
+    var assignedTeams = {{assignedTeams | raw}};
+    var imagePath = '{{imagePath}}';
+    var userEmail ='{{userEmail}}';
+    var clubmembershipTitle = '{{clubmembershipTitle |e('js')| raw}}';
+    var fedlogoPath = '{{fedlogoPath}}';
+    var fedmembershipTitle = '{{fedmembershipTitle |e('js')|raw}}';
+    var isFedMemberConfirmed ='{{isFedMemberConfirmed}}';
+    var correspondenceAddressCategory = '{{correspondenceAddressCategory}}';
+    var addressTranslatorString = '{{addressTranslatorString}}';
+    var isCompany = '{{isCompany}}';
+    var fedmembershipCatId = '{{fedmembershipCatId}}';
+    var oldFedMembershipId = '{{oldFedMembershipId}}';
+    var result_template = FGTemplate.bind('fg-community-profile-underscore', {fieldDetails: fieldDetails, resultArray: resultArray, countryList:countryList, languages:languages, assignedTeams:assignedTeams, imagePath:imagePath, userEmail: userEmail,clubmembershipTitle:clubmembershipTitle,fedmembershipTitle:fedmembershipTitle,fedlogoPath:fedlogoPath});
+    $('.profileContents').html(result_template); // Appending the listing template using underscore.js
+    
+    //Hide empty boxes
+    $('.fg-dev-communityprofilebox').each(function(){
+        if($(this).find('dd').length == 0){
+          $(this).hide();
+        }
+      });
+    var extraBreadcrumbTitle = {
+        0 : {text:'{{"INTERNAL_COMMUNITY_PROFILE_SEARCH"|trans}}'},
+        1 : {text:'{{contactName}}'}
+    };   
+    FgInternal.extraBreadcrumbTitle = extraBreadcrumbTitle;
+    FgPopOver.init(".fg-dev-Popovers", true);
+</script>
+{% endblock %}

@@ -1,0 +1,30 @@
+<script type="text/template" id="template-individual-func-selection">
+    <% i = 0 %>
+    <% contactNameLinks = {} %>
+    <% indvSelHtml = '' %>
+    <% _.each(selContNames, function(selContact) { %>
+        <% if ($.inArray(selContact.id, toAssignContacts) != -1) { %>
+            <% i++ %>
+            <% contactNameLinks[selContact.id] = selContact.name %>
+            <% indvSelHtml += '<div class="form-group">\n\
+                                <label class="control-label col-lg-5 col-md-5"><a href="contact/overviewcontact/0/'+selContact.id+'" target="_blank" data-cont-id="'+selContact.id+'"></a><span aria-required="true" class="required " id="fn_multiple"> *</span></label>\n\
+                                <div class="col-lg-7 col-md-7">\n\
+                                    <select class="form-control select2me" data-placeholder="Contact fields" id="'+selContact.id+'_functions_dropdown">\n\
+                                        ' + funSelectOptions + '\
+                                    </select>\n\
+                                </div>\n\
+                               </div>' %>
+
+            <% if ((i % 10) == 0) { %>
+                <% displayHtml = '<div id="block_' + Math.ceil(i/10) + '" class="hide">' + indvSelHtml + '</div>' %>
+                <%= displayHtml %>
+                <% indvSelHtml = '' %>
+            <% } %>
+        <% } %>
+    <% }); %>
+    <% if (indvSelHtml != '') { %>
+        <% displayHtml = '<div id="block_' + Math.ceil(i/10) + '" class="hide">' + indvSelHtml + '</div>' %>
+        <%= displayHtml %>
+    <% } %>
+    <% setTimeout(function(){displayContactNames(contactNameLinks);}, 1000); %>
+</script>

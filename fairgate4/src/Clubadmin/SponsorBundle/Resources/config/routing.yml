@@ -1,0 +1,347 @@
+clubadmin_sponsor_homepage:
+    path:     /sponsor
+    defaults: { _controller: ClubadminSponsorBundle:Sponsor:viewsponsor,module: sponsor, level1: sponsor }
+list_sponsor:
+    path:  /sponsor/list
+    defaults: { _controller: ClubadminSponsorBundle:Sponsor:listsponsor }
+sponsor_filter_data:
+    path:     /sponsor/filter/data/{contacttype}
+    defaults: { _controller: ClubadminSponsorBundle:Filter:filterData }
+sponsor_bookmark_create_delete:
+    path: /sponsor/bookmark/createdelete
+    defaults: {_controller: ClubadminSponsorBundle:Bookmark:createDeleteBookmark}
+    
+sponsor_overview_settings:
+    path: /sponsor/overview
+    defaults: { _controller: ClubadminSponsorBundle:SponsorOverview:index , level1: sponsor_overview_settings}
+    
+sponsor_overview_content:
+    path: /sponsor/overviewcontent
+    defaults: { _controller: ClubadminSponsorBundle:SponsorOverview:renderOverviewContent }
+    
+save_sponsor_overview_settings:
+    path: /sponsor/saveoverviewsettings
+    defaults: { _controller: ClubadminSponsorBundle:SponsorOverview:saveOverviewSettings }
+    
+sponsor_bookmark:
+    path:     /sponsor/bookmark
+    defaults: { _controller: ClubadminSponsorBundle:Bookmark:bookmarkList, level1: sponsor }
+
+sponsor_bookmark_update:
+    path:     /sponsor/bookmark/update
+    defaults: { _controller: ClubadminSponsorBundle:Bookmark:bookmarkUpdate } 
+sponsor_create_category:
+    path: /sponsor/createcategory
+    defaults: { _controller: ClubadminSponsorBundle:Sponsor:createCategory }
+    
+sponsor_category_edit:
+    path:     /sponsor/category
+    defaults: { _controller: ClubadminSponsorBundle:Category:editserviceCategory, level1: sponsor } 
+
+sponsor_category_update:
+    path:     /sponsor/category/update
+    defaults: { _controller: ClubadminSponsorBundle:Category:updateserviceCategory } 
+    
+sponsor_import_file:
+    path:  /sponsor/import
+    defaults: { _controller: ClubadminContactBundle:Import:index, module: sponsor, level1: sponsor  }
+    
+import_sponsor_data_assignment:
+    path:  /sponsor/importdata/{module}
+    defaults: { _controller: ClubadminContactBundle:Import:importFileSubmit, module: sponsor  }
+    
+import_sponsor_file_correction:
+    path:  /sponsor/importcorrection
+    defaults: { _controller: ClubadminContactBundle:Import:importFileCorrection, module: sponsor }  
+
+import_sponsor_duplcate:
+    path:  /sponsor/importduplicate
+    defaults: { _controller: ClubadminContactBundle:Import:importDuplicate, module: sponsor }    
+    
+import_sponsor_assignment_submit:
+    path:  /sponsor/importSubmit
+    defaults: { _controller: ClubadminContactBundle:Import:importAssignmentSubmit, module: sponsor }  
+    
+sponsor_club_service:
+    path:     /sponsor/assignservice
+    defaults: { _controller: ClubadminSponsorBundle:ServiceAssignment:assignService, level1: sponsor }   
+    
+sponsor_columnsettings:
+    path:  /sponsor/columnsettings/{settings_id}/{contacttype}
+    defaults: { _controller: ClubadminSponsorBundle:Columnsettings:index, level1: sponsor }
+    
+update_sponsor_columnsettings:
+    path:  /sponsor/updatecolumnsettings
+    defaults: { _controller: ClubadminSponsorBundle:Columnsettings:updateSponsorColumnsettings }
+delete_sponsor_columnsettings:
+    path: /sponsor/deletecolumnsettings
+    defaults: { _controller: ClubadminSponsorBundle:Columnsettings:deleteSponsorColumnsettings }
+
+sponsor_ads_area_settings:
+    path:  /sponsor/adscategory
+    defaults: { _controller: ClubadminSponsorBundle:AdsArea:editadsArea, level1: sponsor_ads_area }  
+
+sponsor_ads_area_update:
+    path:  /sponsor/adscategoryupdate
+    defaults: { _controller: ClubadminSponsorBundle:AdsArea:updateadsArea }
+    
+sponsor_add_from_existing_popup:
+    path:  /sponsor/addexistingpopup
+    defaults: { _controller: ClubadminSponsorBundle:Sponsor:popupAddExistingProspect }   
+    
+sponsor_addexist_autocomplete:
+    path:  /sponsor/getContactsForSponsors
+    defaults: { _controller: ClubadminSponsorBundle:Sponsor:getContactsForSponsors }       
+
+edit_services:
+    path: /sponsor/editservices/{catId}
+    defaults: { _controller: ClubadminSponsorBundle:Service:editServices, level1: sponsor }
+
+list_services:
+    path: /sponsor/getserviceslist/{catId}
+    defaults: { _controller: ClubadminSponsorBundle:Service:getServicesList, level1: sponsor }
+    
+service_log:
+    path: /sponsor/servicelog/{serviceId}
+    defaults: { _controller: ClubadminSponsorBundle:Service:serviceLog }
+
+update_services:
+    path: /sponsor/updateservices
+    defaults: { _controller: ClubadminSponsorBundle:Service:updateServices }
+
+sponsor_collect_contactname:
+    path:  /sponsor/getcontactname
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletterwizardrecipients:getcontactNames} 
+
+sponsor_addexist_ajax:
+    path:  /sponsor/assignContactstoSponsors
+    defaults: { _controller: ClubadminSponsorBundle:Sponsor:assignContactstoSponsors }       
+
+sponsor_remove_prospect:
+    path:  /sponsor/removeProspects
+    defaults: { _controller: ClubadminSponsorBundle:Sponsor:removeProspects } 
+    
+sponsor_remove_prospect_popup:
+    path:  /sponsor/removeProspectsPopup
+    defaults: { _controller: ClubadminSponsorBundle:Sponsor:removeProspectsPopup } 
+    
+sponsor_edit_booking:
+    path:     /sponsor/editbooking/{bookingId}
+    defaults: { _controller: ClubadminSponsorBundle:ServiceAssignment:assignService, level1: sponsor }
+
+sponsor_save_booking:
+    path:     /sponsor/savebooking
+    defaults: { _controller: ClubadminSponsorBundle:ServiceAssignment:saveAssignment }
+  
+create_prospect:
+    path:  /sponsor/createProspect
+    defaults: { _controller: ClubadminContactBundle:Default:createContact , level1: sponsor, module: sponsor}
+
+render_sponsor_overview:
+    path: /sponsor/overviewsponsor/{offset}/{sponsor}
+    defaults: { _controller: ClubadminSponsorBundle:SponsorOverview:displaySponsorOverview , level1: sponsor }
+
+getall_sponsor_contactids:
+    path:  /sponsor/getallsponsorcontactids
+    defaults: { _controller: ClubadminSponsorBundle:ServiceAssignment:getAllSponsorContactIds }
+    
+edit_sponsor:
+    path:  /sponsor/editSponsor/{contact}
+    defaults: { _controller: ClubadminContactBundle:Default:createContact, module: sponsor ,  level1: sponsor}
+    
+sponsor_contact_data:
+    path:  /sponsor/data/{offset}/{contact}
+    defaults: { _controller: ClubadminContactBundle:ContactOverview:contactData, level1: sponsor }   
+    
+sponsor_log_listing:
+    path:  /sponsor/log/{offset}/{contact}
+    defaults: { _controller: ClubadminSponsorBundle:SponsorLog:index, level1: sponsor }
+    
+sponsor_log_datas:
+    path: /sponsor/sponsorlogdatas/{contact}
+    defaults: { _controller: ClubadminSponsorBundle:SponsorLog:sponsorLogData } 
+    
+sponsor_connection:
+    path:  /sponsor/connection/{offset}/{contact}
+    defaults: { _controller: ClubadminContactBundle:Connection:index, level1: sponsor, module: sponsor }   
+    
+sponsor_documents:
+    path: /sponsor/documents/{offset}/{contact}
+    defaults: { _controller: ClubadminContactBundle:Document:index, level1: sponsor,module: sponsor }  
+    
+sponsor_export_file:
+    path:  /sponsor/export/{contactType}
+    defaults: { _controller: ClubadminContactBundle:Export:sponsorExport, level1: sponsor  }       
+    
+sponsor_pdfgeneration :
+    path: /sponsor/pdf
+    defaults: { _controller: ClubadminSponsorBundle:Sponsor:pdfgeneration }
+    
+sponsor_service_details :
+    path: /sponsor/services/listdata 
+    defaults: { _controller: ClubadminSponsorBundle:Service:getServiceDetail }
+
+sponsor_sidebar_count:
+    path: /sponsor/sidebar/count
+    defaults: {_controller: ClubadminSponsorBundle:Sponsor:getSidebarCount }
+    
+services_listing:
+    path: /sponsor/services/{offset}/{contact}
+    defaults: { _controller: ClubadminContactBundle:ServicesList:services, level1: sponsor }
+contact_services:
+    path: /sponsor/getservices/{contact}
+    defaults: { _controller: ClubadminContactBundle:ServicesList:listServices }
+    
+sponsor_ad_previews:
+    path: /sponsor/add/previews
+    defaults: {_controller: ClubadminSponsorBundle:AdsArea:getAddPreviews }  
+    
+sponsor_service_analysis:
+    path: /sponsor/analysis
+    defaults: {_controller: ClubadminSponsorBundle:Analysis:listServiceAnalysis, level1: analysis }
+    
+sponsor_service_analysis_list:
+    path: /sponsor/analysis/service/list/{startDate}/{endDate}
+    defaults: {_controller: ClubadminSponsorBundle:Analysis:getList }
+
+sponsor_ads:
+    path:  /sponsor/ads/{offset}/{contact}
+    defaults: { _controller: ClubadminSponsorBundle:SponsorAds:index, level1: sponsor, module: sponsor }
+    
+get_sponsor_ads:
+    path:  /sponsor/getaads/{contact}
+    defaults: { _controller: ClubadminSponsorBundle:SponsorAds:getSponsorAds }
+
+ads_file_upload:
+    path:     /sponsor/adsupload
+    defaults: { _controller: ClubadminSponsorBundle:SponsorAds:uploadFile }
+    
+update_sponsor_ads:
+    path:  /sponsor/updatesponsorads
+    defaults: { _controller: ClubadminSponsorBundle:SponsorAds:updateSponsorAds }
+
+sponsor_service_stop_popup:
+    path: /sponsor/stopservice/popup
+    defaults: { _controller: ClubadminSponsorBundle:ServiceAssignment:stopServicePopup } 
+    
+sponsor_service_stop:
+    path: /sponsor/stopservice
+    defaults: { _controller: ClubadminSponsorBundle:ServiceAssignment:stopService }  
+
+sponsor_service_export_popup:
+    path: /sponsor/exportservice/popup
+    defaults: { _controller: ClubadminSponsorBundle:SponsorServiceExport:serviceExportpopup }  
+
+sponsor_service_export:
+    path: /sponsor/exportservice/exportcsv
+    defaults: { _controller: ClubadminSponsorBundle:SponsorServiceExport:serviceExport }  
+
+sponsor_analysis_pdf:
+    path: /sponsor/analysis/service/pdf
+    defaults: { _controller: ClubadminSponsorBundle:Analysis:sponsorAnalysisPdf } 
+    
+sponsor_service_exportpdf:
+    path: /sponsor/exportservice/exportpdf
+    defaults: { _controller: ClubadminSponsorBundle:SponsorServiceExport:exportPdf }
+    
+sponsor_analysis_sponsor_list:
+    path: /sponsor/analysis/sponsor/list/{startDate}/{endDate}
+    defaults: {_controller: ClubadminSponsorBundle:Analysis:getSponsorList }
+
+sponsor_analysis_export_popup:
+    path: /sponsor/analysis/export/popup
+    defaults: { _controller: ClubadminSponsorBundle:Analysis:analysisExportpopup }
+    
+sponsor_analysis_export:
+    path: /sponsor/analysis/export
+    defaults: { _controller: ClubadminSponsorBundle:Analysis:analysisExport }  
+    
+view_archived_sponsors: 
+    path: /sponsor/archivedsponsor
+    defaults: { _controller: ClubadminSponsorBundle:ArchiveSponsor:viewarchivedSponsor,level1: archivedsponsor  }
+    
+sponsor_duplicate_assign:
+    path:     /sponsor/duplicatesponsorservice
+    defaults: { _controller: ClubadminSponsorBundle:ServiceAssignment:duplicateContactService, level1: sponsor }
+    
+sponsor_assignment_data:
+    path:     /sponsor/assignmentdata/{serviceType}
+    defaults: { _controller: ClubadminSponsorBundle:Assignment:getAssignmentlist }  
+    
+sponsor_service_skip:
+    path: /sponsor/skipservice
+    defaults: { _controller: ClubadminSponsorBundle:ServiceAssignment:skipService }    
+    
+sponsor_analysis_csv:
+    path: /sponsor/analysis/csv
+    defaults: { _controller: ClubadminSponsorBundle:Analysis:exportCsvSponsor }   
+    
+sponsor_assignment_overview_export:
+    path: /sponsor/assignmentoverview/exportcsv
+    defaults: { _controller: ClubadminSponsorBundle:SponsorServiceExport:assignmentOverviewExportCsv }  
+
+sponsor_assignment_overview_export_pdf:
+    path: /sponsor/assignmentoverview/exportpdf
+    defaults: { _controller: ClubadminSponsorBundle:SponsorServiceExport:assignmentOverviewExportPdf }  
+    
+sponsor_documents_ajax:
+    path: /sponsor/documents/{offset}/{contact}/ajax
+    defaults: { _controller: ClubadminContactBundle:Document:documentListingAjax }
+ 
+sponsor_documents_otherdocs_ajax:    
+    path: /sponsor/documents/{offset}/{contact}/ajaxGetOtherExistingDocs
+    defaults: { _controller: ClubadminContactBundle:Document:getOtherExistingDocsAjax }  
+    
+sponsor_documents_ajax_add:
+    path: /sponsor/documents/{offset}/{contact}/ajaxAddDocument
+    defaults: { _controller: ClubadminContactBundle:Document:documentAddAjax }  
+    
+sponsor_documents_ajax_remove:
+    path: /sponsor/documents/{offset}/{contact}/ajaxShowDeletePopup
+    defaults: { _controller: ClubadminContactBundle:Document:documentShowDeletePopup, module: sponsor }    
+    
+sponsor_documents_remove:
+    path: /sponsor/documents/{offset}/{contact}/ajaxRemoveDocument
+    defaults: { _controller: ClubadminContactBundle:Document:documentRemoveAjax }    
+    
+sponsor_profile_settings_data:
+    path:  /sponsor/overviewsponsor/getData/{contact}/{module}
+    defaults: { _controller: ClubadminContactBundle:ContactOverview:getDetailsForProfileBlock }
+    
+sponsor_saved_filter_settings:
+    path:  /sponsor/filter/settings
+    defaults: { _controller: ClubadminSponsorBundle:Filter:savedfilter, level1: sponsor }
+   
+filter_sponsor_data_single:
+    path:  /sponsor/filter/single/data
+    defaults: { _controller: ClubadminSponsorBundle:Filter:sidebarSingleFilter }
+
+get_sponsor_saved_filters:
+    path:  /sponsor/filter/getsavedfilterdata
+    defaults: { _controller: ClubadminSponsorBundle:Filter:getSponsorSavedFilters }
+get_contact_saved_filters:
+    path:  /contact/filter/getsavedfilterdata
+    defaults: { _controller: ClubadminSponsorBundle:Filter:getContactSavedFilters }
+create_delete_sponsor_bookmark:
+    path: /sponsor/bookmark/createdeletesponsorbookmark
+    defaults: { _controller: ClubadminSponsorBundle:Bookmark:createdeletesponsorbookmark }
+
+update_sponsor_filter_count:
+    path:  /sponsor/filter/count
+    defaults: { _controller: ClubadminSponsorBundle:Filter:sidebarSponsorFilterCount }
+    
+update_sposor_filter_data:
+    path:  /sponsor/filter/save
+    defaults: { _controller: ClubadminContactBundle:Filter:saveFilter }
+    
+sponsor_export_file_data:
+    path:  /sponsor/export/sponsor/exportdata
+    defaults: { _controller: ClubadminContactBundle:Export:export }
+    
+search_sponsorname:
+    path: /sponsor/search
+    defaults: { _controller: ClubadminContactBundle:Default:search }   
+    
+sponsor_name_search:
+    path: /sponsor/contactnames/{term}
+    defaults: { _controller: ClubadminContactBundle:Connection:contactNames }    

@@ -1,0 +1,1213 @@
+{% extends 'ClubadminCommunicationBundle:Newsletterwizard:newsletterWizard.html.twig' %}
+{% block wizardstep3 %}
+    <h3 class="block">{%trans%}NL_ADD_YOUR_MAIN_CONTENT{% endtrans %} </h3>
+    <form  data-post-type="json" autocomplete="off" data-validation="true" skipDirtyCheck data-url="{{path('newsletter_save_content',{'newsletterId':newsletterId})}}" class="form-horizontal fg-newsletter-content-wrapper" id="form-tab3" novalidate="novalidate">
+        <div class="alert alert-danger display-none">
+            <button class="close" data-dismiss="alert"></button>
+            <span data-error>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+        </div>
+        <div class="excludejs ui-sortable" id="membershiplist_sort">
+            <script type="text/template" id="newsletterContentlistWrap">
+                <%  _.each(data,function(item,key){ %>
+                    <% if(item.type=='SALUTATION' && item.text !=''){ %>
+                    <div id="<%- item.id %>" class="row fg-border-line fg-dev-non-draggable">
+                        <div class="fg-col-first-icon"><i class="fa fa-lock"></i></div>
+                        <div class="col-md-12 fg-col-hack fg-tab-ckedit">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-5 col-sm-6 ck-first-text"> {% trans %}NL_SALUTATION{% endtrans %}: <%- item.text %> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% } else if(item.type=='INTRO') {  %>
+                    <% itemId = item.id%>
+                    <div class="row fg-border-line fg-dev-non-draggable">
+                        <div class="fg-col-first-icon"><i class="fa fa-lock"></i><input type="hidden" value="<%- item.sortOrder %>" class="fg-dev-sortable sort-val" data-key="intro.<%- item.id %>.sort" /> </div>
+                        <div class="col-md-12 fg-col-hack fg-tab-ckedit">
+                            <div class="row" id ="<%- item.id %>">
+                                <div class="col-lg-3 col-md-5 col-sm-6 ck-first-text">{%trans%}NL_INTRO_TEXT{%endtrans%}</div>
+                                <div class="col-lg-8 col-md-7 col-sm-6 pull-right">
+                                    <div class="col-lg-6 col-sm-3 col-md-2 col-xs-12 cktext fg-list-toggle-wrap" data-id="<%- item.id %>" data-target="#data-<%- item.id %>" data-toggle="collapse" data-fn="editor.init"> 
+                                        <i class="fa fg-plus-icon-log fa-plus-square-o"></i>{% trans %}NL_CONTENT_TEXT{% endtrans %}
+                                    </div>
+                                    <div class="col-sm-3 pull-right">
+                                        <label onclick="" class="switch-light switch-light-sm switchhwd">
+                                            <input type="checkbox" <% if (item.isActive==1) { %>checked<% } %> name="intro_<%- item.id %>_isActive" data-key="intro.<%- item.id %>.isActive" class="make-switch">
+                                            <span><span>{% trans %}ON{% endtrans %}</span><span>{% trans %}OFF{% endtrans %}</span></span> <a class="btn btn-primary"></a> 
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                        <div id="data-<%- item.id %>" class="form-body fg-ck-wrap collapse">
+                            <div class="form-group last">
+                                <label class="col-md-3 col-sm-3 col-xs-12">
+                                    <select class="form-control select2 dynamic-templates" data-key="intro.<%- item.id %>.template"  id="dynamic-select-<%- item.id %>" data-url="{{path('newsletter_editor_content',{'type':'intro','newsletterId':newsletterId})}}" data-fn-init="editor.getTemplate" data-id="<%- item.id %>"></select>
+                                </label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <textarea class="ckeditor form-control basic" name="editor-<%- item.id %>" data-key="intro.<%- item.id %>.text" rows="6" data-type="simple" id="editor-<%- item.id %>"><%- item.text %></textarea>
+                                    <div class="fg-smaple-editor fg-editor-<%- item.id %>">
+                                        <a href="#" class="fg-advanced-editor">
+                                            <i class="fa fa-caret-square-o-down"></i><span>{% trans %}NL_ADVANCED_EDITER{% endtrans %}</span>
+                                        </a>
+                                        <a href="#" class="fg-simple-editor">
+                                            <i class="fa fa-caret-square-o-up"></i><span>{% trans %}NL_SIMPLE_EDITOR{% endtrans %}</span>
+                                        </a>
+                                    </div>
+                                    <div class="fg-save-template" data-id="<%- item.id %>">
+                                        <div class="fg-save-template-btn template-action-btn-<%- item.id %>">
+                                            <a href="#">
+                                                <i class="fa fa-check-circle"></i>{% trans %}NL_SAVE_TEMPLATE{% endtrans %}
+                                            </a>
+                                        </div>
+                                        <div class="fg-name-template" data-id="<%- item.id %>">
+                                            <input type="text" class="fg-template-name-<%- item.id %>" data-type="intro">
+                                            <a href="#" data-redirect-url="{{path('newsletter_editor_content',{'type':'intro','newsletterId':newsletterId})}}" data-url="{{path('newsletter_save_editorcontent',{'from':'save','wordType':'intro'})}}"  class="fg-name-template-save-<%- item.id %>" data-check="true"><i class="fa fa-check"></i></a>
+                                            <a href="#" class="fg-name-template-close"><i class="fa fa-times"></i></a>
+                                        </div>
+                                    </div>
+                                
+
+                                    <div class="fg-delete-template fg-delete-template-<%- item.id %> hidden"><a data-toggle="modal" href="#" data-url="{{path('newsletter_delete_editorcontent')}}"  data-type="intro"><i class="fa fa-times-circle"></i>{{'CKEDITOR_DELETE_TEMPLATE'|trans}}</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fg-col-last-icon">
+                        </div>
+                        <div class="fg-col-last-icon"></div>
+                    </div>
+                    <div aria-hidden="true" role="basic" tabindex="-1" id="basic3-<%-  item.id %>" class="modal fade">
+                        <div class="modal-dialog modal-wide">
+                          <div class="modal-content fg-popup-wrap">
+                            <div class="modal-header fg-modal-header">
+                              <button aria-hidden="true" data-dismiss="modal" class="close" type="button"></button>
+                              <h4 class="modal-title">{% trans %}NL_OVERWRITE_EXISTING{% endtrans %}</h4>
+                            </div>
+                            <div class="modal-body fg-modal-text">
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <div class="portlet-body form">
+                                    <!-- BEGIN FORM-->
+                                    <form novalidate="novalidate" skipDirtyCheck class="form-horizontal form-row-sepe" action="#">
+                                        <input type="hidden" id="closingOverwriteText" class="ignore fg-dev-overwrite-text" value="{{'NL_OVERWRITE_INTRO_TEXT'|trans}}" />
+                                        <div class="form-body"><p class="fg-dev-confirm-text"></p> </div>                     
+                                    </form>
+                                    <!-- END FORM-->
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="modal-footer form-actions fg-modal-footer">
+                              <button data-dismiss="modal" class="btn default" type="button">{{'Cancel'|trans}}</button>
+                              <a href="#" data-redirect-url="{{path('newsletter_editor_content',{'type':'intro','newsletterId':newsletterId})}}" data-url="{{path('newsletter_save_editorcontent',{'from':'overwrite','wordType':'default'})}}"  class="btn green fg-name-template-save-<%-  item.id %>">{{'OK'|trans}}</i></a>
+                            </div>
+                          </div>
+                          <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    <div aria-hidden="true" role="basic" tabindex="-1" id="basic2-<%-  item.id %>" class="modal fade">
+                        <div class="modal-dialog modal-wide">
+                          <div class="modal-content fg-popup-wrap">
+                            <div class="modal-header fg-modal-header">
+                              <button aria-hidden="true" data-dismiss="modal" class="close" type="button"></button>
+                              <h4 class="modal-title">{% trans %}NL_DELETE_TEMPLATE{% endtrans %}</h4>
+                            </div>
+                            <div class="modal-body fg-modal-text">
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <div class="portlet-body form">
+                                    <!-- BEGIN FORM-->
+                                    <form novalidate="novalidate" skipDirtyCheck class="form-horizontal form-row-sepe" action="#">
+                                        <input type="hidden" id="introDeleteText" class="ignore fg-dev-delete-text" value="{{'NL_DELETE_INTRO_TEXT'|trans}}" />
+                                        <div class="form-body"><p class="fg-dev-confirm-text"></p> </div>                     
+                                    </form>
+                                    <!-- END FORM-->
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="modal-footer form-actions fg-modal-footer">
+                              <button data-dismiss="modal" class="btn default" type="button">{{'Cancel'|trans}}</button>
+                              <a href="#" data-redirect-url="{{path('newsletter_editor_content',{'type':'intro','newsletterId':newsletterId})}}" data-url="{{path('newsletter_delete_editorcontent',{'type':'intro'})}}"  class="btn green fg-remove-template-<%- item.id %>">{{'OK'|trans}}</i></a>
+                            </div>
+                          </div>
+                          <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    <% } else if(item.type=='TABLEOFCONTENT') { %>
+                    <div class="row fg-border-line fg-dev-non-draggable">
+                        <div class="fg-col-first-icon"> <i class="fa fa-lock"></i> </div>
+                        <div class="col-md-12 fg-col-hack fg-tab-ckedit">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-5 col-sm-6 ck-first-text">{% trans %}NL_TABLE_OF_CONTENTS{% endtrans %}</div>
+                                <div class="col-lg-8 col-md-7 col-sm-6 pull-right">
+                                    <div class="col-sm-3 pull-right">
+                                        <label onclick="" class="switch-light switch-light-sm switchhwd">
+                                            <input data-key="toc.<%- item.id %>.isActive" name="toc_<%- item.id %>_isActive" type="checkbox" <% if (item.isActive==1) { %>checked<% } %> class="make-switch">
+                                            <span> <span>{% trans %}ON{% endtrans %}</span><span>{% trans %}OFF{% endtrans %}</span></span> <a class="btn btn-primary"></a> 
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                        
+                        <div class="fg-col-last-icon"></div>
+                    </div>
+                     <% } else if(item.type=='CLOSING') { %>
+                      <% itemId = item.id%>
+                    <div id="addContent"></div>
+                    <div class="row fg-border-line fg-dev-non-draggable">
+                        <div class="fg-col-first-icon"><i class="fa fa-lock"></i> <input type="hidden" value="<%- item.sortOrder %>" class="fg-dev-sortable sort-val" data-key="closing.<%- item.id %>.sort" /></div>
+                        <div class="col-md-12 fg-col-hack fg-tab-ckedit">
+                            <div class="row" id ="<%- item.id %>">
+                                <div class="col-lg-3 col-md-5 col-sm-6 ck-first-text"> {% trans %}NL_CLOSING_WORDS{% endtrans %}</div>
+                                <div class="col-lg-8 col-md-7 col-sm-6 pull-right">
+                                    <div class="col-lg-6 col-sm-3 col-md-2 col-xs-12 cktext fg-list-toggle-wrap" data-id="<%- item.id %>" data-target="#data-<%- item.id %>" data-toggle="collapse" data-fn="editor.init"> 
+                                        <i class="fa fg-plus-icon-log fa-plus-square-o"></i> {% trans %}NL_CONTENT_TEXT{% endtrans %}
+                                    </div>
+                                    <div class="col-sm-3 pull-right">
+                                        <label onclick="" class="switch-light switch-light-sm switchhwd">
+                                            <input name="closing_<%- item.id %>_isActive" data-key="closing.<%- item.id %>.isActive" type="checkbox" <% if (item.isActive==1) { %>checked<% } %> class="make-switch">
+                                            <span><span>{% trans %}ON{% endtrans %}</span><span>{% trans %}OFF{% endtrans %}</span></span> <a class="btn btn-primary"></a> 
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                        <div id="data-<%- item.id %>" class="form-body fg-ck-wrap collapse">
+                            <div class="form-group last">
+                                <label class="col-md-3 col-sm-3 col-xs-12">
+                                    <select class="form-control select2 dynamic-templates" id="dynamic-select-<%- item.id %>" data-url="{{path('newsletter_editor_content',{'type':'closing','newsletterId':newsletterId})}}" data-fn-init="editor.getTemplate" data-id="<%- item.id %>"></select>
+                                </label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <textarea class="ckeditor form-control basic" name="editor-<%- item.id %>" data-key="closing.<%- item.id %>.text" rows="6" data-type="simple" id="editor-<%- item.id %>"><%- item.text %></textarea>
+                                    <div class="fg-smaple-editor fg-editor-<%- item.id %>">
+                                        <a href="#" class="fg-advanced-editor">
+                                            <i class="fa fa-caret-square-o-down"></i><span>{% trans %}NL_ADVANCED_EDITER{% endtrans %}</span>
+                                        </a>
+                                        <a href="#" class="fg-simple-editor">
+                                            <i class="fa fa-caret-square-o-up"></i><span>{% trans %}NL_SIMPLE_EDITOR{% endtrans %}</span>
+                                        </a>
+                                    </div>
+                                    <div class="fg-save-template" data-id="<%- item.id %>">
+                                        <div class="fg-save-template-btn template-action-btn-<%- item.id %>">
+                                            <a href="#">
+                                                <i class="fa fa-check-circle"></i>{% trans %}NL_SAVE_TEMPLATE{% endtrans %}
+                                            </a>
+                                        </div>
+                                        <div class="fg-name-template" data-id="<%- item.id %>">
+                                            <input type="text" class="fg-template-name-<%- item.id %>" data-type="ending-words">
+                                            <a href="#" data-check="true" data-redirect-url="{{path('newsletter_editor_content',{'type':'closing','newsletterId':newsletterId})}}" data-url="{{path('newsletter_save_editorcontent',{'from':'save','wordType':'closing'})}}" class="fg-name-template-save-<%- item.id %>"><i class="fa fa-check"></i></a>
+                                            <a href="#" class="fg-name-template-close"><i class="fa fa-times"></i></a>
+
+                                        </div>
+                                    </div>
+                                
+
+                                    <div class="fg-delete-template fg-delete-template-<%- item.id %> hidden"><a data-toggle="modal" href="#" data-url="{{path('newsletter_delete_editorcontent')}}"  data-type="ending words"><i class="fa fa-times-circle"></i>{{'CKEDITOR_DELETE_TEMPLATE'|trans}}</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div aria-hidden="true" role="basic" tabindex="-1" id="basic3-<%-  item.id %>" class="modal fade">
+                        <div class="modal-dialog modal-wide">
+                          <div class="modal-content fg-popup-wrap">
+                            <div class="modal-header fg-modal-header">
+                              <button aria-hidden="true" data-dismiss="modal" class="close" type="button"></button>
+                              <h4 class="modal-title">{% trans %}NL_OVERWRITE_EXISTING{% endtrans %}</h4>
+                            </div>
+                            <div class="modal-body fg-modal-text">
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <div class="portlet-body form">
+                                    <!-- BEGIN FORM-->
+                                    <form novalidate="novalidate" skipDirtyCheck class="form-horizontal form-row-sepe" action="#">
+                                      <input type="hidden" id="closingOverwriteText" class="ignore fg-dev-overwrite-text" value="{{'NL_OVERWRITE_CLOSING_TEXT'|trans}}" />
+                                      <div class="form-body"><p class="fg-dev-confirm-text"></p></div>                     
+                                    </form>
+                                    <!-- END FORM-->
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="modal-footer form-actions fg-modal-footer">
+                              <button data-dismiss="modal" class="btn default" type="button">{{'Cancel'|trans}}</button>
+                              <a href="#" data-redirect-url="{{path('newsletter_editor_content',{'type':'closing','newsletterId':newsletterId})}}" data-url="{{path('newsletter_save_editorcontent',{'from':'overwrite','wordType':'default'})}}"  class="btn green fg-name-template-save-<%-  item.id %>">{{'OK'|trans}}</i></a>
+                            </div>
+                          </div>
+                          <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    <div aria-hidden="true" role="basic" tabindex="-1" id="basic2-<%-  item.id %>" class="modal fade">
+                        <div class="modal-dialog modal-wide">
+                          <div class="modal-content fg-popup-wrap">
+                            <div class="modal-header fg-modal-header">
+                              <button aria-hidden="true" data-dismiss="modal" class="close" type="button"></button>
+                              <h4 class="modal-title">{% trans %}NL_DELETE_TEMPLATE{% endtrans %}</h4>
+                            </div>
+                            <div class="modal-body fg-modal-text">
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <div class="portlet-body form">
+                                    <!-- BEGIN FORM-->
+                                    <form novalidate="novalidate" skipDirtyCheck class="form-horizontal form-row-sepe" action="#">
+                                        <input type="hidden" id="closingDeleteText" class="ignore fg-dev-delete-text" value="{{'NL_DELETE_CLOSING_TEXT'|trans}}" />
+                                        <div class="form-body"><p class="fg-dev-confirm-text"></p> </div>                     
+                                    </form>
+                                    <!-- END FORM-->
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="modal-footer form-actions fg-modal-footer">
+                              <button data-dismiss="modal" class="btn default" type="button">{{'Cancel'|trans}}</button>
+                              <a href="#" data-redirect-url="{{path('newsletter_editor_content',{'type':'closing','newsletterId':newsletterId})}}" data-url="{{path('newsletter_delete_editorcontent',{'type':'closing'})}}"  class="btn green fg-remove-template-<%-  item.id %>">{{'OK'|trans}}</i></a>
+                            </div>
+                          </div>
+                          <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    
+                    </div>
+                
+                    <% } else if(item.type=='ARTICLE') { %>
+                    <div id="<%- item.id %>" class="row fg-border-line  sortables">
+                        <div class="fg-col-first-icon handle"><i class="fa fg-sort ui-draggable"></i><input type="hidden" value="<%- item.sortOrder %>" class="sort-val fg-dev-sortable" data-key="article.<%- item.id %>.sort" /> </div>
+                        <div class="col-md-12 fg-col-hack fg-tab-ckedit">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-5 col-sm-6" dataerror-group > <input required type="text" data-key="article.<%- item.id %>.title"  name="article_<%- item.id %>_title" placeholder="{% trans %}ARTICLE_TITLE{% endtrans %}" value="<%- item.title %>" class="form-control input-sm"> </div>
+                                <div class="col-lg-8 col-md-7 col-sm-6 pull-right">
+                                    <div class="col-sm-3 cktext fg-list-toggle-wrap" data-fn="editor.init" data-id="<%- item.id %>" data-target="#text-<%- item.id %>" data-toggle="collapse"> <i class="fa fg-plus-icon-log fa-plus-square-o"></i> {% trans %}NL_CONTENT_TEXT{% endtrans %} </div>
+                                    <div class="col-sm-3 cktext fg-list-toggle-wrap" data-fn="imageUploader.init" data-id="<%- item.id %>" data-target="#image-<%- item.id %>" data-toggle="collapse"> 
+                                        <i class="fa fg-plus-icon-log fa-plus-square-o"></i> {% trans %}NL_CONTENT_IMAGES{% endtrans %} 
+                                        <span class="badge badge-default"><%- _.size(item.media)  %> </span> 
+                                    </div>
+                                    <div class=" col-sm-3 cktext fg-list-toggle-wrap" data-val="newsletter_attachments" data-fn="imageUploader.init" data-id="<%- item.id %>" data-target="#attachment-<%- item.id %>-8" data-toggle="collapse"> 
+                                        <i class="fa fg-plus-icon-log fa-plus-square-o"></i> {% trans %}NL_CONTENT_ATTACHMENTS{% endtrans %} 
+                                        <span class="badge badge-default"><%- _.size(item.mediaAttachments)  %></span> 
+                                    </div>
+                                    <div class="col-sm-3 pull-right">
+                                        <label onclick="" class="switch-light switch-light-sm switchhwd">
+                                            <input type="checkbox" <% if (item.isActive==1) { %>checked<% } %> data-key="article.<%- item.id %>.isActive" class="make-switch" data-inactiveblock="changecolor">
+                                            <span> <span>{% trans %}ON{% endtrans %}</span><span>{% trans %}OFF{% endtrans %}</span></span> <a class="btn btn-primary"></a> 
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                        
+                        <div class="fg-col-last-icon">
+                            <div class="removeUpload ">
+                                <div class="closeico fg-row-close">
+                                    <input type="checkbox" name="article_<%- item.id %>_isDelete" data-inactiveblock="changecolor" data-parentid="<%- item.id %>" id="article_<%- item.id %>_isDelete" data-key="article.<%- item.id %>.isDelete" class="make-switch">
+                                    <label for="article_<%- item.id %>_isDelete"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="image-<%- item.id %>" class="form-body fg-ck-wrap collapse">
+                            <div class="form-group"><label class="fg-ck-caption-txt col-md-3 col-sm-3 col-xs-12">{% trans %}NL_IMAGE_POSITION{% endtrans %}</label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <div class="radio-list">
+                                      <label class="radio-inline">
+                                        <input type="radio" name="article_<%- item.id %>_imgPostion" <% if(item.imgPosition!='RIGHT') { %> checked<% } %> id="article_<%- item.id %>_imgPostion" value="left" data-key="article.<%- item.id %>.imgPostion" />
+                                                {% trans %}NL_IMAGE_LEFT{% endtrans %}</label>
+                                      <label class="radio-inline">
+                                        <input type="radio" name="article_<%- item.id %>_imgPostion" <% if(item.imgPosition=='RIGHT') { %> checked<% } %> id="article_<%- item.id %>_imgPostion" value="right" data-key="article.<%- item.id %>.imgPostion" />
+                                         {% trans %}NL_IMAGE_RIGHT{% endtrans %}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group last"><label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}NL_CONTENT_IMAGES{% endtrans %}</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                            <div class="fg-createmail-fileupload">
+                        
+                            <form  class=" fg-nl-form" novalidate="novalidate" skipDirtyCheck id="upload-<%- item.id %>" data-uploadtemplate="imageUploadArticle" data-name="article.<%- item.id %>.images" method="post" action="{{path('tmp_upload_file',{'type':'newsletter'})}}" enctype="multipart/form-data">
+                {#<button class="btn default fg-cal-browse-server" type="button">{% trans %}BROWSE_SERVER{% endtrans %}</button>#}
+                                <div class="drop btn default">
+                                    {% trans %}NL_IMAGE_UPLOAD_TEXT{% endtrans %}
+                                    <input type="file" class="ignore" name="upl" multiple />
+                                </div>
+                                <div class="btn default fg-add-existing-image" data-toggle="modal" data-target="#myModal-<%- item.id %>"> {% trans %}NL_IMAGE_ADD_EXISITNG{% endtrans %} </div>
+                                <span class="fg-image-allowed">{% trans %}NL_ARTICLE_IMAGE_ALLOWED_MESSAGE{% endtrans %}</span>
+                                <ul id="fg-image-area-container-<%- item.id %>" class="fg-image-area-container">
+                                <% _.each(item.media,function(media,key){ %>
+                                    <% if(media.type=='image') { %>
+                                        <li class="fg-image-area">
+                                            <div class="fg-media-sort">
+                                                <i class="fa fg-sort ui-draggable"></i>
+                                            </div>
+    
+                                            <div class="fg-image-thumb-wrap"><img src="<%- media.mediaPath %><%- media.media %>"></div>
+                                            <div class=""><div class="col-sm-6 fg-marg-btm-10">{% trans %}NL_IMAGE_DISCRIPTION{% endtrans %}</div><div class="col-sm-3 pull-right fg-replacewith-errormsg"><span class="fg-bytes"><%= media.size %></span></div> </div>
+                                            <textarea name="imageDescription" class="ignore" data-key="article.<%- item.id %>.images.<%- media.mediaId %>.description"><%- media.description%></textarea>
+                                            <input type="hidden" value="<%- key+1 %>" data-key="article.<%- item.id %>.images.<%- media.mediaId %>.imgorder" class="ignore image-order">
+                                            <div class="removeUpload">
+                                                <div class="closeico fg-row-close">
+                                                    <input type="checkbox" data-inactiveblock="changecolor" id="article_<%- item.id %>_images_<%- media.mediaId %>_isDeleted" name="article_<%- item.id %>_images_<%- media.mediaId %>_isDeleted" data-key="article.<%- item.id %>.images.<%- media.mediaId %>.isDeleted" class="make-switch ignore">
+                                                    <label for="article_<%- item.id %>_images_<%- media.mediaId %>_isDeleted"></label>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    <% } %>
+                                <% }); %>
+                                </ul>
+                            </form>
+                            </div>
+                            <div id="myModal-<%- item.id %>" class="fg-gallery-browser modal fade fg-gal-browse-model" role="dialog"></div>
+                            </div>
+                            </div>
+                        </div>
+                {#XXXXXXXX on existing article attachment#}
+                        <div id="attachment-<%- item.id %>-8" class="form-body fg-ck-wrap collapse ">                    
+                            <div class="form-group last"><label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}NL_CONTENT_ATTACHMENTS{% endtrans %}</label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <div class="fg-createmail-fileupload fg-nl-attachment">
+                                        <form class=" fg-nl-form" novalidate="novalidate" skipDirtyCheck id="uploadattachments-<%- item.id %>" data-uploadtemplate="imageUploadArticle" data-name="article.<%- item.id %>.attachments" method="post" action="{{path('tmp_upload_file',{'type':'newsletterattachments'})}}" enctype="multipart/form-data">
+                                            <div class="drop btn default">
+                                                     {% trans %}NL_ATTACHMENTS_UPLOAD_TEXT{% endtrans %}
+                                                <input type="file" class="ignore" name="upl" multiple />
+                                            </div>
+                                            <button class="btn default fg-cal-browse-server nl-attachments" type="button">{% trans %}BROWSE_SERVER{% endtrans %}</button>
+                                            <ul>
+                                                <% 
+                                                 articleAttachments = _.sortBy(item.mediaAttachments, function (i) { return i.attachmentName.toLowerCase(); });
+                    console.log(articleAttachments);
+                                                _.each(articleAttachments,function(media,key){ %>
+                                                    <% if(media.type=='attachments') { %>                                                  
+                                                        <li class="col-md-12">
+                                                                <div class="row">
+                                                                    <div class="col-sm-9">
+                                                                        <a target="_blank" href="<%- media.virtualFilePath %>"><%- media.attachmentName %></a>
+                                                                    </div>
+                                                                    <div class="col-sm-3">
+                                                                        <span class="fg-bytes"><%= media.size %></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="removeUpload">
+                                                                    <div class="closeico fg-row-close">
+                                                                        <input type="checkbox" data-inactiveblock="changecolor" id="article_<%- item.id %>_attachments_<%- media.mediaId %>_isDeleted" name="article_<%- item.id %>_attachments_<%- media.mediaId %>_isDeleted" data-key="article.<%- item.id %>.attachments.<%- media.mediaId %>.isDeleted" class="make-switch ignore">
+                                                                        <label  for="article_<%- item.id %>_attachments_<%- media.mediaId %>_isDeleted"></label>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                    <% } %>
+                                                <% }); %>
+                                            </ul>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                {#XXXXXXXXX#}
+                        <div id="text-<%- item.id %>" class="form-body fg-ck-wrap collapse">
+                            <div class="form-group last"><label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}NL_TEASER_TEXT{% endtrans %}</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12"><textarea class="form-control teaser-<%- item.id %>" rows="2" name="article_<%- item.id %>_teasertext" data-key="article.<%- item.id %>.teasertext"><%- item.teaserText %></textarea><span class="fg-text-limit">160 {% trans %}NL_TEASER_TEXT_LIMIT{% endtrans %}</span></div></div>
+                            <div class="form-group last">
+                                <label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}NL_CONTENT_TEXT{% endtrans %}<span class="required"> * </span></label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <textarea  class="ckeditor form-control basic" data-required="1" name="editor-<%- item.id %>" rows="6" id="editor-<%- item.id %>" data-key="article.<%- item.id %>.text"><%- item.text %></textarea>
+                                    <div class="fg-smaple-editor fg-editor-<%- item.id %>">
+                                        <a href="#" class="fg-advanced-editor">
+                                            <i class="fa fa-caret-square-o-down"></i><span>{% trans %}NL_ADVANCED_EDITER{% endtrans %}</span>
+                                        </a>
+                                        <a href="#" class="fg-simple-editor">
+                                            <i class="fa fa-caret-square-o-up"></i><span>{% trans %}NL_SIMPLE_EDITOR{% endtrans %}</span>
+                                        </a>
+                                    </div>
+                                <span for="editor-<%- item.id %>" style="display:none" class="help-block">{% trans %}VALIDATION_THIS_FIELD_REQUIRED{% endtrans %}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <% } else if(item.type=='EXISTING_ARTICLE') { %>
+                 
+                         <div id="<%- item.id %>" class="row fg-border-line  sortables">
+                        <div class="fg-col-first-icon handle"><i class="fa fg-sort ui-draggable"></i>
+             
+                             <input  type="hidden"  value="<%- item.article_id%>" id="cms_article_hidden_<%- item.id %>" data-key="cms_article.<%- item.id %>.id"   name="cms_article_<%- item.id %>_id" >
+                             <input  type="hidden" value="<%- item.article_lang%>" id="cms_article_lang_hidden_<%- item.id %>" data-key="cms_article.<%- item.id %>.lang"   name="cms_article_<%- item.id %>_lang" >                                          
+                            <input type="hidden" value="<%- item.sortOrder %>" class="sort-val fg-dev-sortable" data-key="cms_article.<%- item.id %>.sort" /> 
+                            <input type="hidden" value="<%- item.selected %>"  id="cms_article_<%- item.id %>_selected" />
+                            </div>
+                        <div class="col-md-12 fg-col-hack fg-tab-ckedit">
+                            <div class="row">
+                                  <div class="col-lg-3 col-md-5 col-sm-6" dataerror-group > 
+                                        <div> 
+                                            <input  type="text" placeholder="{{ 'CN_EXIST_ARTICLE'|trans }}" id="cms_article_<%- item.id %>_title"  name="article_<%- item.id %>_title"  value="" class="form-control cms-article-autofill" > 
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8 col-md-7 col-sm-6 pull-right">
+                                    <div class="col-sm-3 cktext fg-list-toggle-wrap" data-fn="editor.init" data-id="<%- item.id %>" data-target="#text-<%- item.id %>" data-toggle="collapse"> <i class="fa fg-plus-icon-log fa-plus-square-o"></i> {% trans %}NL_CONTENT_TEXT{% endtrans %} </div>
+                                    <div class="col-sm-3 cktext fg-list-toggle-wrap" data-fn="imageUploader.init" data-id="<%- item.id %>" data-target="#image-<%- item.id %>" data-toggle="collapse"> 
+                                        <i class="fa fg-plus-icon-log fa-plus-square-o"></i> {% trans %}NL_CONTENT_IMAGES{% endtrans %} 
+                                        <span id="span_image-<%- item.id %>"  class="badge badge-default"><%- item.imageCount  %> </span> 
+                                         <span id="hide_span_image-<%- item.id %>"  class="badge hide badge-default"><%- item.imageCount  %> </span> 
+                                    </div>
+                                    <div class=" col-sm-3 cktext fg-list-toggle-wrap" data-val="newsletter_attachments" data-fn="imageUploader.init" data-id="<%- item.id %>" data-target="#attachment-<%- item.id %>-8" data-toggle="collapse"> 
+                                        <i class="fa fg-plus-icon-log fa-plus-square-o"></i> {% trans %}NL_CONTENT_ATTACHMENTS{% endtrans %} 
+                                        <span  id="span_attachment-<%- item.id %>" class="badge badge-default"><%- item.attachmentCount  %></span> 
+                                        <span  id="hide_span_attachment-<%- item.id %>" class="hide badge badge-default"><%- item.attachmentCount  %></span> 
+                                    </div>
+                                    <div class="col-sm-3 pull-right">
+                                        <label onclick="" class="switch-light switch-light-sm switchhwd">
+                                            <input type="checkbox" <% if (item.isActive==1) { %>checked<% } %> data-key="cms_article.<%- item.id %>.isActive"   id="cms_article_active_<%- item.id %>"  class="make-switch" data-inactiveblock="changecolor">
+                                            <span> <span>{% trans %}ON{% endtrans %}</span><span>{% trans %}OFF{% endtrans %}</span></span> <a class="btn btn-primary"></a> 
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                    
+                         <div class="fg-col-last-icon">
+                            <div class="removeUpload ">
+                                <div class="closeico fg-row-close">
+                                    <input type="checkbox" name="cms_article_<%- item.id %>_isDelete" data-inactiveblock="changecolor" data-parentid="<%- item.id %>" id="article_<%- item.id %>_isDelete" data-key="cms_article.<%- item.id %>.isDelete" class="make-switch">
+                                    <label for="article_<%- item.id %>_isDelete"></label>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div id="image-<%- item.id %>" class="form-body fg-ck-wrap collapse fg-pad-0">
+                            <div class="fg-pad-top-20 fg-pad-btm-20">
+                                <div class="form-group"><label class="fg-ck-caption-txt col-md-3 col-sm-3 col-xs-12">{% trans %}NL_IMAGE_POSITION{% endtrans %}</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <div class="radio-list">
+                                          <label class="radio-inline">
+                                            <input type="radio" class="article_img_position"  name="cms_article_<%- item.id %>_imgPostion"  <% if(item.imgPosition!='RIGHT') { %> checked<% } %> id="cms_article_L_<%- item.id %>_imgPostion" value="left" data-key="cms_article.<%- item.id %>.imgPostion" />
+                    {% trans %}NL_IMAGE_LEFT{% endtrans %}</label>
+                                          <label class="radio-inline">
+                                            <input type="radio" class="article_img_position" name="cms_article_<%- item.id %>_imgPostion" <% if(item.imgPosition=='RIGHT') { %> checked<% } %> id="cms_article_R_<%- item.id %>_imgPostion" value="right" data-key="cms_article.<%- item.id %>.imgPostion" />
+                    {% trans %}NL_IMAGE_RIGHT{% endtrans %}</label>
+                        <label class="radio-inline">
+                                         <input type="radio"  class="article_img_position" name="cms_article_<%- item.id %>_imgPostion" <% if(item.imgPosition=='NONE') { %> checked<% } %> id="cms_article_N_<%- item.id %>_imgPostion" value="none" data-key="cms_article.<%- item.id %>.imgPostion" />
+                    {% trans %}NL_IMAGE_NONE{% endtrans %}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                       
+                        </div>
+                {#XXXXXXXX on existing article attachment#}
+                        <div id="attachment-<%- item.id %>-8" class="form-body fg-ck-wrap collapse  fg-pad-0">
+                            <div class="fg-pad-top-20 fg-pad-btm-20">
+                                <div class="form-group last"><label class="col-md-3 col-sm-3 col-xs-6 fg-ck-caption-txt">{% trans %}NL_CONTENT_ATTACHMENTS_TAKEOVER{% endtrans %}</label>
+                                    <div class="col-xs-5 col-sm-2 fg-marg-top-2">
+
+                                        <label onclick="" class="switch-light switch-light-sm switchhwd">
+                                                <input id="cms_article_takeover_<%- item.id %>" type="checkbox" <% if (item.isTakeover==1) { %>checked<% } %> data-key="cms_article.<%- item.id %>.isTakeOver" class="make-switch article_attach_on" data-inactiveblock="changecolor">
+                                                <span> <span>{% trans %}ON{% endtrans %}</span><span>{% trans %}OFF{% endtrans %}</span></span> <a class="btn btn-primary"></a> 
+                                        </label>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                {#XXXXXXXXX#}
+                        <div id="text-<%- item.id %>" class="form-body fg-ck-wrap collapse fg-pad-0">
+                            <div class="fg-pad-top-20 fg-pad-btm-20">
+                                <div class="form-group last"><label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}NL_TEASER_TEXT{% endtrans %}</label>
+                                <div class="col-md-9 col-sm-9 col-xs-12"><textarea readonly class="form-control teaser-<%- item.id %>" rows="2" name="cms_article_<%- item.id %>_teasertext" id="cms_article_<%- item.id %>_teasertext" ><%- item.teaserText %></textarea><span class="fg-text-limit">160 {% trans %}NL_TEASER_TEXT_LIMIT{% endtrans %}</span></div></div>
+                                <div class="form-group last">
+                                    <label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}NL_CONTENT_TEXT{% endtrans %}<span class="required"> * </span></label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <div class="fg-dev-existing-article fg-disabled-div" id="cms_article_text_<%- item.id %>" ><%= item.text %></div>                                
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 
+                 
+                    <% } else if (item.type == 'SPONSOR' || item.type == 'SPONSOR ABOVE' || item.type == 'SPONSOR BOTTOM') { %>
+                        <div id="<%- item.id %>" class="row fg-border-line <%- (item.type == 'SPONSOR') ? 'sortables' : 'fg-dev-non-draggable' %>">                    
+                            <div class="fg-col-first-icon <%- (item.type == 'SPONSOR') ? 'handle' : '' %>"><% if (item.type == 'SPONSOR') { %><i class="fa fg-sort ui-draggable"></i><input type="hidden" value="<%- item.sortOrder %>" class="sort-val fg-dev-sortable" data-key="sponsor.<%- item.id %>.sort" /><% } else { %><i class="fa fa-lock"></i><input type="hidden" value="<%- item.sortOrder %>" class="sort-val fg-dev-sortable" data-key="<%- item.contentType %>.<%- item.id %>.sort" /><% } %></div>
+                            <div class="col-md-12 fg-col-hack fg-tab-ckedit">
+                                <div class="row">
+                                <div class="col-lg-3 col-md-5 col-sm-6" dataerror-group> <input required type="text" data-key="<%- item.contentType %>.<%- item.id %>.title" id="<%- item.contentType %>_<%- item.id %>_title" name="<%- item.contentType %>_<%- item.id %>_title" placeholder="{% trans %}NL_SPONSORS{% endtrans %}" value="<%- item.title %>" class="input-sm form-control"> </div>
+                                    <div class="col-lg-8 col-md-7 col-sm-6 pull-right">
+                                        <div class=" col-md-4  col-sm-3  col-xs-12 fg-list-toggle-wrap fg-sponsor-settings opened"  data-id="<%- item.id %>" data-target="#settings-<%- item.id %>" data-toggle="collapse"> <i class="fa fg-plus-icon-log fa-plus-square-o"></i>{% trans %}NL_CONTENT_SETTINGS{% endtrans %} </div>                               
+                                        <div class="col-sm-3 pull-right">
+                                            <label onclick="" class="switch-light switch-light-sm switchhwd">
+                                            <input type="checkbox" <% if (item.isActive==1) { %>checked<% } %> data-key="<%- item.contentType %>.<%- item.id %>.isActive" class="make-switch" data-inactiveblock="changecolor">
+                                                <span> <span>{% trans %}ON{% endtrans %}</span><span>{% trans %}OFF{% endtrans %}</span></span> <a class="btn btn-primary"></a> 
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                        
+                            <div class="fg-col-last-icon">
+                                <% if (item.type == 'SPONSOR') { %>
+                                    <div class="removeUpload ">
+                                        <div class="closeico fg-row-close">                               
+                                            <input type="checkbox" class="make-switch" data-key="sponsor.<%- item.id %>.isDelete" id="sponsor_<%- item.id %>_isDelete" data-parentid="<%- item.id %>" data-inactiveblock="changecolor" name="sponsor_<%- item.id %>_isDelete">
+                                            <label for="sponsor_<%- item.id %>_isDelete"></label>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            </div>
+
+                            <div id="settings-<%- item.id %>" class="form-body fg-ck-wrap collapse fg-pad-0">
+                                <div class="fg-pad-top-20 fg-pad-btm-20">
+                                    <div class="form-group last">
+                                        <label class="col-md-3 fg-ck-caption-txt">{% trans %}NL_SPONSOR_SERVICES{% endtrans %}<span class="required"> * </span></label>
+                                        <div class="col-md-9 col-sm-9 col-xs-12">                            
+                                        <select class="form-control selectpicker select-for-preview" required row-id="<%- item.id %>" name="selected-services<%- item.id %>[]" id="selected-services<%- item.id %>" data-key="<%- item.contentType %>.<%- item.id %>.services"  multiple> 
+                    {% for service in sponsorServices %}
+                                                    <option value="{{ service['serviceId'] }}" 
+                                                <% _.each(item.services, function(service) { if(service == {{ service['serviceId'] }} ) { %>
+                                                    selected
+                                               <% } }) ;%>  >{{ service['serviceTitle'] }}</option>
+                    {% endfor %}
+                                            </select>                             
+                                            <span class="help-block" for="selected-services<%- item.id %>"></span>
+                                        </div>
+                                    </div>
+                {% if not sponsorAdAreas is empty  %}
+                                    <div class="form-group last">
+                                        <label class="col-md-3 fg-ck-caption-txt">{% trans %}NL_SPONSOR_AREA{% endtrans %}<span class="required"> * </span></label>
+                                        <div class="col-md-9 col-sm-9 col-xs-12">                            
+                                        <select class="form-control select2 select-for-preview" row-id="<%- item.id %>" required name="selected-adareas<%- item.id %>" id="selected-adareas<%- item.id %>" data-key="<%- item.contentType %>.<%- item.id %>.areas">                         
+                                                <option value="all" >{{'ALL'|trans}} </option>
+                        {% for adArea in sponsorAdAreas %}
+                                                    <option value="{{ adArea['adId'] }}" <% if (item.sponsorAdArea == '{{ adArea['adId'] }}') { %>selected<% } %> >{{ adArea['adTitle'] }}</option>
+                        {% endfor %}
+                                            </select>   
+                                        </div>
+                                    </div> 
+                {% endif %}
+                                    <div class="form-group last">
+                                        <label class="col-md-3 fg-ck-caption-txt">{% trans %}NL_SPONSOR_MAX_WIDTH{% endtrans %}<span class="required"> * </span></label>
+                                        <div class="col-md-9 col-sm-9 col-xs-12">                            
+                                        <select class="form-control select2 select-for-preview" row-id="<%- item.id %>" required name="selected-width<%- item.id %>" id="selected-width<%- item.id %>" data-key="<%- item.contentType %>.<%- item.id %>.width" >                         
+                                                <option value="" >{{'SELECT_DROPDOWN'|trans}} </option>                        
+                                                <option value="120" <% if (item.sponsorAdWidth == 120 ) { %>selected<% } %> >120 {{'PIXELS'|trans}}</option>
+                                                <option value="150" <% if (item.sponsorAdWidth == 150 ) { %>selected<% } %> >150 {{'PIXELS'|trans}}</option>
+                                                <option value="200" <% if (item.sponsorAdWidth == 200 ) { %>selected<% } %> >200 {{'PIXELS'|trans}}</option>
+                                                <option value="500" <% if (item.sponsorAdWidth == 500 ) { %>selected<% } %> >500 {{'PIXELS'|trans}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group last">
+                                        <label class="col-md-3 fg-ck-caption-txt">{% trans %}NL_SPONSOR_PREVIEW{% endtrans %}</label>
+                                        <div class="col-md-9 col-sm-9 col-xs-12 " id="div-sponsor-ad-preview<%- item.id %>">  
+                                            <div class="fg-ad-preview-block">
+                                            <%  if (item.sponsorAds != "" && item.sponsorAds != null ) { %>
+                                                <%  if (item.sponsorAds.length > 0) { %>
+                                                    <% _.each(item.sponsorAds, function(sponsorAd) { %>
+                                                        <% if(sponsorAd.isDefault == 1) { %> 
+                                                            <% if(sponsorAd.contactDetails.website) { %>
+                                                                <a href="<%-sponsorAd.contactDetails.website%>" class="fg-ad-preview-wrap" target="_blank"> 
+                                                            <% } else { %>  
+                                                                <span class="fg-ad-preview-wrap">
+                                                            <% } %>
+                                                                    <% if(sponsorAd.contactDetails.Iscompany == 1) { %>                                                        
+                                                                        <% if(sponsorAd.contactDetails.companyLogo == null || sponsorAd.contactDetails.companyLogo == "") { %>
+                                                                            <div class="fg-ad-preview-<%- sponsorAd.width %>">
+                                                                                <span><%- sponsorAd.contactDetails.contactname %></span>
+                                                                            </div>
+                                                                        <% } else { %>
+                                                                            <div class="fg-ad-preview-<%- sponsorAd.width %> fg-thumb">
+                                                                                <img src="<%- sponsorAd.contactDetails.companyLogo %>"  alt="" />
+                                                                            </div>
+                                                                        <% } %>
+                                                                    <% } else { %>
+                                                                        <div class="fg-ad-preview-<%- sponsorAd.width %>">
+                                                                            <span><%- sponsorAd.contactDetails.contactname %></span>
+                                                                        </div>
+                                                                    <% } %>                                                    
+                                                            <% if(sponsorAd.contactDetails.website) { %>
+                                                                </a> 
+                                                            <% } else { %>  
+                                                                </span>
+                                                            <% }%>
+                                                        <% } else { %>
+                                                            <% if(sponsorAd.url) { %>
+                                                                <a href="<%- sponsorAd.url %>" class="fg-ad-preview-wrap" target="_blank">
+                                                            <% } else { %>  
+                                                                <span class="fg-ad-preview-wrap">
+                                                            <% } %>                                                
+                                                                <div class="fg-ad-preview-<%- sponsorAd.width %> fg-thumb" > 
+                                                                    <img src="<%- sponsorAd.image %>"  alt="" />
+                                                                </div>                                                
+                                                            <% if(sponsorAd.url) { %>
+                                                                </a>
+                                                            <% } else { %>  
+                                                                </span>
+                                                            <% }%>  
+                                                        <% } %>
+                                                    <% }) ;%> 
+                                                <% } else { %> 
+                                                             {{ 'NL_NO_PREVIEWS'|trans }}
+                                                <% }%> 
+                                            <% } else { %> 
+                                                                          {{ 'NL_NO_PREVIEWS'|trans }}
+                                            <% }%> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% } else if(item.type=='IMAGE') { %>
+                        <div id="<%- item.id %>" class="row fg-border-line  sortables">
+                        <div class="fg-col-first-icon handle"><i class="fa fg-sort ui-draggable"></i></i><input type="hidden" value="<%- item.sortOrder %>" class="sort-val fg-dev-sortable" data-key="image.<%- item.id %>.sort" /></div>
+                        <div class="col-md-12 fg-col-hack fg-tab-ckedit">
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-5 col-xs-6 ck-first-text"> {% trans %}NL_IMAGE_FULLWIDTH{% endtrans %} </div>
+                                <div class="col-lg-8 col-md-7 col-sm-6 pull-right">
+                                    <div class="col-sm-3 cktext fg-list-toggle-wrap"></div>
+                                    <div class="col-md-4  col-sm-4  col-xs-12 cktext fg-list-toggle-wrap" data-fn="imageUploader.init" data-id="<%- item.id %>" data-target="#data-<%- item.id %>" data-toggle="collapse">
+                                        <i class="fa fg-plus-icon-log fa-plus-square-o"></i> {% trans %}NL_CONTENT_SETTINGS{% endtrans %}  
+                                    </div>
+                                    <div class="col-sm-3 pull-right">
+                                        <label onClick="" class="switch-light switch-light-sm switchhwd">
+                                            <input type="checkbox" data-key="image.<%- item.id %>.isActive" name="image_<%- item.id %>_isActive" id="image_<%- item.id %>_isActive" <% if (item.isActive==1) { %>checked<% } %> class="make-switch">
+                                            <span> 
+                                                <span>{% trans %}ON{% endtrans %}</span>
+                                                <span>{% trans %}OFF{% endtrans %}</span>
+                                            </span> 
+                                            <a class="btn btn-primary"></a> 
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                        
+                        <div class="fg-col-last-icon">
+                            <div class="removeUpload ">
+                                <div class="closeico fg-row-close">
+                                    <input data-key="image.<%- item.id %>.isDelete" data-inactiveblock="changecolor" data-parentid="<%- item.id %>" name="image_<%- item.id %>_isDelete" id="image_<%- item.id %>_isDelete" type="checkbox" class="make-switch">
+                                    <label for="image_<%- item.id %>_isDelete"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="data-<%- item.id %>" class="form-body fg-ck-wrap collapse fg-pad-0">
+                            <div class="fg-pad-top-20 fg-pad-btm-20">
+                                <div class="form-group" dataerror-group>
+                                    <label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}NL_LINK_URL{% endtrans %}</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12"><input type="url" data-key="image.<%- item.id %>.linkURL" value="<%- item.imageLink %>" class="form-control fg-urlmask" name="url"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}NL_IMAGE{% endtrans %}<span class="required"> * </span></label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                   
+                                        <div class="fg-createmail-fileupload "><input data-filename type="hidden" value="old" id="image_<%- item.id %>_images_filename" name="image_<%- item.id %>_images_filename" data-key="image.<%- item.id %>.images.filename" />
+
+                                        <form class=" fg-nl-form" novalidate="novalidate" skipDirtyCheck limit="1" data-updateglobal="image_<%- item.id %>_images_filename" id="upload-<%- item.id %>" data-uploadtemplate="imageUploadFull" data-name="image.<%- item.id %>.images" method="post" action="{{path('tmp_upload_file',{'type':'newsletter'})}}" enctype="multipart/form-data">
+                                                     {#<button class="btn default fg-cal-browse-server" type="button">{% trans %}BROWSE_SERVER{% endtrans %}</button>#}
+                                           
+                                            <div class="drop btn default">{% trans %}NL_IMAGE_UPLOAD_TEXT{% endtrans %}
+                                                <input class="ignore" type="file" id="upl<%- item.id %>" name="upl" />
+                                            </div>
+                                              <div class="btn default fg-add-existing-image" data-toggle="modal" data-target="#myModal-<%- item.id %>"> {% trans %}NL_IMAGE_ADD_EXISITNG{% endtrans %} </div>
+                                            <span for="image_<%- item.id %>_images_filename" class="help-block"></span>
+                                            <span class="fg-image-allowed">{% trans %}NL_IMAGE_ALLOWED_MESSAGE{% endtrans %}</span>
+                                            <ul>
+                                            <% if(!_.isEmpty(item.image)) { %>
+                                                <li class="fg-image-area">
+                                                    <div class="fg-image-thumb-wrap"><img src="<%- item.path %><%- item.image %>"></div>
+                                                    <p><span class="fg-bytes"> <%= item.size %></span></p>
+                                                </li>
+                                            <% } %>
+                                            </ul>
+                                        </form>
+                                        </div>
+                                         <div id="myModal-<%- item.id %>" class="fg-gallery-browser fg-nl-fullwidth-image-gallery modal fade fg-gal-browse-model" role="dialog"></div>
+            
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+            
+                
+                <%  }); %> 
+            </script>      
+        </div>
+        <div data-list-wrap class="fg-newsletter-content-div"></div>
+
+        <script type="text/template" id="newsletterContent">
+            <% _.each(data,function(item,key){ %>
+            <div id="<%- item.id %>" class="row fg-border-line  sortables">
+            <div class="fg-col-first-icon handle"><i class="fa fg-sort ui-draggable"></i><input type="hidden" class="sort-val" data-key="article.<%- item.id %>.sort" /></div>
+            <div class="col-md-12 fg-col-hack fg-tab-ckedit">
+            <div class="row">
+            <div class="col-lg-3 col-md-5 col-sm-6" dataerror-group> <input required type="text" data-key="article.<%- item.id %>.title" id="article_<%- item.id %>_title" name="article_<%- item.id %>_title" placeholder="{% trans %}ARTICLE_TITLE{% endtrans %}" class="input-sm form-control"> </div>
+            <div class="col-lg-8 col-md-7 col-sm-6 pull-right">
+            <div class=" col-sm-3 cktext fg-list-toggle-wrap" data-fn="editor.init" data-id="<%- item.id %>" data-target="#text-<%- item.id %>" data-toggle="collapse"> <i class="fa fg-plus-icon-log fa-plus-square-o"></i>{% trans %}NL_CONTENT_TEXT{% endtrans %} </div>
+            <div class=" col-sm-3 cktext fg-list-toggle-wrap" data-fn="imageUploader.init" data-id="<%- item.id %>" data-target="#image-<%- item.id %>-8" data-toggle="collapse"> 
+            <i class="fa fg-plus-icon-log fa-plus-square-o"></i> {% trans %}NL_CONTENT_IMAGES{% endtrans %} 
+            <span class="badge badge-default">0 </span> 
+            </div>
+            <div class=" col-sm-3 cktext fg-list-toggle-wrap" data-val="newsletter_attachments" data-fn="imageUploader.init" data-id="<%- item.id %>" data-target="#attachment-<%- item.id %>-8" data-toggle="collapse"> 
+            <i class="fa fg-plus-icon-log fa-plus-square-o"></i> {% trans %}NL_CONTENT_ATTACHMENTS{% endtrans %} 
+            <span class="badge badge-default">0 </span> 
+            </div>
+            <div class="col-sm-3 pull-right">
+            <label onclick="" class="switch-light switch-light-sm switchhwd">
+            <input type="checkbox" checked="" data-key="article.<%- item.id %>.isActive" class="make-switch" data-inactiveblock="changecolor">
+            <span> <span>{% trans %}ON{% endtrans %}</span><span>{% trans %}OFF{% endtrans %}</span></span> <a class="btn btn-primary"></a> 
+            </label>
+            </div>
+            </div>
+            </div>
+            </div>                        
+            <div class="fg-col-last-icon">
+            <div class="removeUpload ">
+            <div class="closeico fg-row-close">
+            <input type="checkbox"  class="make-switch">
+            <label for="select4"></label>
+            </div>
+            </div>
+            </div>
+            <div id="image-<%- item.id %>-8" class="form-body fg-ck-wrap collapse">
+            <div class="form-group"><label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}NL_IMAGE_POSITION{% endtrans %}</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+            <div class="radio-list">
+            <label class="radio-inline">
+            <input type="radio" name="article_<%- item.id %>_imgPostion" checked id="article_<%- item.id %>_imgPostion" value="left" data-key="article.<%- item.id %>.imgPostion" />
+            {% trans %}NL_IMAGE_LEFT{% endtrans %}</label>
+            <label class="radio-inline">
+            <input type="radio" name="article_<%- item.id %>_imgPostion" id="article_<%- item.id %>_imgPostion" value="right" data-key="article.<%- item.id %>.imgPostion" />
+            {% trans %}NL_IMAGE_RIGHT{% endtrans %}</label>
+            </div>
+            </div>
+            </div>
+            <div class="form-group last"><label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}NL_CONTENT_IMAGES{% endtrans %}</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+            <div class="fg-createmail-fileupload ">
+                <form class=" fg-nl-form" novalidate="novalidate" skipDirtyCheck id="upload-<%- item.id %>" data-uploadtemplate="imageUploadArticle" data-name="article.<%- item.id %>.images" method="post" action="{{path('tmp_upload_file',{'type':'newsletter'})}}" enctype="multipart/form-data">
+                    {#<button class="btn default fg-cal-browse-server" type="button">{% trans %}BROWSE_SERVER{% endtrans %}</button>#}
+                    <div class="drop btn default">
+                    {% trans %}NL_IMAGE_UPLOAD_TEXT{% endtrans %}
+                    <input type="file" class="ignore" name="upl" multiple />
+                    </div>
+                     <div class="btn default fg-add-existing-image " data-toggle="modal" data-target="#myModal-<%- item.id %>"> {% trans %}NL_IMAGE_ADD_EXISITNG{% endtrans %} </div>
+                    <span class="fg-image-allowed">{% trans %}NL_ARTICLE_IMAGE_ALLOWED_MESSAGE{% endtrans %}</span>
+                    <ul>
+                    <!-- The file uploads will be shown here -->
+                    </ul>
+                </form>
+            </div>
+    
+    
+            <div id="myModal-<%- item.id %>" class="fg-gallery-browser modal fade" role="dialog"></div>
+            </div>
+            </div>
+            </div>
+            {#XXXXXXXX on new article attachment#}
+            <div id="attachment-<%- item.id %>-8" class="form-body fg-ck-wrap collapse ">                    
+            <div class="form-group last"><label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}NL_CONTENT_ATTACHMENTS{% endtrans %}</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+            <div class="fg-createmail-fileupload">
+            <form class="fg-nl-form" novalidate="novalidate" skipDirtyCheck id="uploadattachments-<%- item.id %>" data-uploadtemplate="imageUploadArticle" data-name="article.<%- item.id %>.attachments" method="post" action="{{path('tmp_upload_file',{'type':'newsletterattachments'})}}" enctype="multipart/form-data">
+            <div class="drop btn default">
+            {% trans %}NL_IMAGE_UPLOAD_TEXT{% endtrans %}
+            <input type="file" class="ignore" name="upl" multiple />
+            </div>
+            <button class="btn default fg-cal-browse-server nl-attachments" type="button">{% trans %}BROWSE_SERVER{% endtrans %}</button>
+            <ul>
+            <!-- The file uploads will be shown here -->
+            </ul>
+            </form>
+            </div>
+            </div>
+            </div>
+            </div>
+            {#XXXXXXXXX#}
+            <div id="text-<%- item.id %>" class="form-body fg-ck-wrap collapse">
+            <div class="form-group last"><label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}NL_TEASER_TEXT{% endtrans %}</label>
+            <div class="col-md-9 col-sm-9 col-xs-12"><textarea class="form-control teaser-<%- item.id %>" rows="2" name="tease-<%- item.id %>" data-key="article.<%- item.id %>.teasertext"></textarea><span class="fg-text-limit">160 {% trans %}NL_TEASER_TEXT_LIMIT{% endtrans %}</span></div></div>
+            <div class="form-group last">
+            <label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}NL_CONTENT_TEXT{% endtrans %}<span class="required"> * </span></label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+            <textarea class="ckeditor form-control basic " data-required="1" name="editor-<%- item.id %>" rows="6" id="editor-<%- item.id %>" data-key="article.<%- item.id %>.text"></textarea>
+            <div class="fg-smaple-editor fg-editor-<%- item.id %>">
+            <a href="#" class="fg-advanced-editor"><i class="fa fa-caret-square-o-down"></i><span>{% trans %}NL_ADVANCED_EDITER{% endtrans %}</span>
+            </a>
+            <a href="#" class="fg-simple-editor"><i class="fa fa-caret-square-o-up"></i><span>{% trans %}NL_SIMPLE_EDITOR{% endtrans %}</span>
+            </a>
+            </div>
+            <span for="editor-<%- item.id %>" style="display:none" class="help-block">{% trans %}VALIDATION_THIS_FIELD_REQUIRED{% endtrans %}</span>    
+            </div>
+            </div>
+            </div>
+            </div>
+            <%  }); %>
+        </script>    
+        <script type="text/template" id="imagefullwidth">
+            <% _.each(data,function(item,key){ %>
+            <div id="<%- item.id %>" class="row fg-border-line  sortables">
+            <div class="fg-col-first-icon handle"><i class="fa fg-sort ui-draggable"></i><input type="hidden" class="sort-val ignore" data-key="image.<%- item.id %>.sort" /></div>
+            <div class="col-md-12 fg-col-hack fg-tab-ckedit">
+            <div class="row">
+                <div class="col-lg-3 col-sm-5 col-xs-6 ck-first-text"> {% trans %}NL_IMAGE_FULLWIDTH{% endtrans %} </div>
+                    <div class="col-lg-8 col-md-7 col-sm-6 pull-right">
+                        <div class="col-sm-3 cktext fg-list-toggle-wrap" data-fn="imageUploader.init" data-type="imagefullwidth" data-id="<%- item.id %>" data-target="#data-<%- item.id %>" data-toggle="collapse">
+                            <i class="fa fg-plus-icon-log fa-plus-square-o"></i> {% trans %}NL_CONTENT_SETTINGS{% endtrans %}  
+                        </div>
+                        <div class="col-sm-3 pull-right">
+                            <label onClick="" class="switch-light switch-light-sm switchhwd">
+                                <input type="checkbox" data-key="image.<%- item.id %>.isActive" name="image_<%- item.id %>_isActive" checked="" class="make-switch">
+                                    <span> 
+                                        <span>{% trans %}ON{% endtrans %}</span>
+                                        <span>{% trans %}OFF{% endtrans %}</span>
+                                    </span> 
+                                <a class="btn btn-primary"></a> 
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>                        
+            <div class="fg-col-last-icon">
+                <div class="removeUpload">
+                    <div class="closeico fg-row-close">
+                     <input type="checkbox" class="make-switch">
+                        <label for="select4"></label>
+                    </div>
+                </div>
+            </div>
+            <div id="data-<%- item.id %>" class="form-body fg-ck-wrap collapse">
+            <div class="form-group" dataerror-group>
+                <label class="col-md-3 fg-ck-caption-txt">{% trans %}NL_LINK_URL{% endtrans %}</label>
+                <div class="col-md-9 col-sm-9 col-xs-12"><input type="url"  data-key="image.<%- item.id %>.linkURL" name="image_<%- item.id %>_linkURL" id="image_<%- item.id %>_linkURL" class="form-control fg-urlmask" ></div>
+            </div>
+            <div class="form-group">
+            <label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}NL_IMAGE{% endtrans %}<span class="required"> * </span></label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+            <div class="fg-createmail-fileupload"><input data-filename type="hidden" value="" required class="hidden_fullwidth_image" id="image_<%- item.id %>_images_filename" name="image_<%- item.id %>_images_filename" data-key="image.<%- item.id %>.images.filename" />
+
+            <form class=" fg-nl-form" novalidate="novalidate" skipDirtyCheck limit="1" data-updateglobal="image_<%- item.id %>_images_filename" data-uploadtemplate="imageUploadFull" id="upload-<%- item.id %>" data-name="image.<%- item.id %>.images" method="post" action="{{path('tmp_upload_file',{'type':'newsletter'})}}" enctype="multipart/form-data">
+            {#<button class="btn default fg-cal-browse-server" type="button">{% trans %}BROWSE_SERVER{% endtrans %}</button>#}
+            <div class="drop btn default">{% trans %}NL_IMAGE_UPLOAD_TEXT{% endtrans %}
+            <input type="file" class="ignore" id="upl<%- item.id %>" name="upl" />
+            </div>
+            <div class="btn default fg-add-existing-image" data-toggle="modal" data-target="#myModal-<%- item.id %>"> {% trans %}NL_IMAGE_ADD_EXISITNG{% endtrans %} </div>
+            <span for="image_<%- item.id %>_images_filename" class="help-block"></span>
+            <span class="fg-image-allowed">{% trans %}NL_IMAGE_ALLOWED_MESSAGE{% endtrans %}</span>
+            <ul>
+
+            </ul>
+            </form>
+            </div>
+            <div id="myModal-<%- item.id %>" class="fg-gallery-browser fg-nl-fullwidth-image-gallery modal fade fg-gal-browse-model" role="dialog"></div>
+            </div>
+            </div>
+            </div>
+            </div>
+            <%  }); %>
+        </script>    
+        <script type="text/template" id="imageUploadFull">
+            <li id="<%- id %>" class="working fg-image-area newImage">
+            <div class="fg-replacewith-errormsg">
+            <div class="col-sm-3">
+            <div class="fg-image-thumb-wrap"><img src="<%- URL %>"/></div>
+            </div>
+            <div class="col-sm-3 ">
+            <span class="fg-bytes"></span>
+            </div>
+            <div class="col-sm-6">
+            <div class="fg-status-bar fg-PS fg-clear-marg">
+            <div class="progress progress-striped">
+            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            </li>
+        </script>
+        <script type="text/template" id="imageUploadArticle">
+            <li id="<%- id %>" class="working fg-image-area newImage">
+            <div class="fg-replacewith-errormsg">
+            <div class="fg-image-thumb-wrap"><img src="<%- URL %>"/></div>
+            <div class=""><div class="col-sm-6 fg-marg-btm-10">{% trans %}NL_IMAGE_DISCRIPTION{% endtrans %}</div><div class="col-sm-3 pull-right fg-replacewith-errormsg"><span class="fg-bytes"></span></div> </div>
+            <div class="fg-status-bar">
+            <div class="progress progress-striped">
+            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            </div>
+            </div>
+            </div>
+            <input type="hidden" value="<%- data.name %>" data-key="<%- dataKey %>.filename" class="ignore hid-article-image" />
+            <input type="hidden" value="<%- sortOrder %>" data-key="<%- dataKey %>.imgorder" class="ignore" />
+            <textarea data-key="<%- dataKey %>.description" class="ignore" name="imageDescription" ></textarea>
+            </div>
+            <div class="removeUpload">
+            <div class="closeico">
+            <input type="checkbox" class="make-switch ignore">
+            <label for="isDeleted"></label>
+            </div>
+            </div>
+            </li>
+        </script>
+        <script type="text/template" id="fileUploadError">
+            <div class="fg-clear">
+            <div class="col-sm-9"> <%- name %>  </div>
+            <div class="col-sm-3">
+            <p><span class="fg-help-block">
+            <% if (error == 0) { %> {{'FILEMANAGER_UPLOAD_FILETYPE_ERROR'|trans}} 
+            <% } else if (error == 1) { %> {{'FILEMANAGER_UPLOAD_VIRUS_ERROR'|trans}} 
+            <% } else if (error == 2) { %> {{'VIRUS_FILE_CONTACT'|trans}} 
+            <% } else { %> <%- error %> <% } %></span></p>
+            </div>
+        </script> 
+        <script type="text/template" id="fileUploadErrorAttachment">
+            <p><span class="fg-help-block">
+            <% if (error == 0) { %> {{'FILEMANAGER_UPLOAD_FILETYPE_ERROR'|trans}} 
+            <% } else if (error == 1) { %> {{'FILEMANAGER_UPLOAD_VIRUS_ERROR'|trans}} 
+            <% } else if (error == 2) { %> {{'VIRUS_FILE_CONTACT'|trans}} 
+            <% } else { %> <%- error %> <% } %></span></p>
+        </script> 
+        <script type="text/template" id="sponsor-area">  
+        <% _.each(data,function(item,key){ %>
+                <div id="<%- item.id %>" class="row fg-border-line  sortables">
+                    <div class="fg-col-first-icon handle"><i class="fa fg-sort ui-draggable"></i><input type="hidden" class="sort-val" data-key="sponsor.<%- item.id %>.sort" /></div>
+                    <div class="col-md-12 fg-col-hack fg-tab-ckedit">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-5 col-sm-6" dataerror-group> <input required type="text" data-key="sponsor.<%- item.id %>.title" id="sponsor_<%- item.id %>_title" name="sponsor_<%- item.id %>_title" placeholder="{% trans %}NL_SPONSORS{% endtrans %}" class="input-sm form-control"> </div>
+                            <div class="col-lg-8 col-md-7 col-sm-6 pull-right">
+                                <div class=" col-md-4  col-sm-3  col-xs-12 fg-sponsor-settings opened  fg-list-toggle-wrap in"  data-id="<%- item.id %>" data-target="#settings-<%- item.id %>" data-toggle="collapse"> <i class="fa fg-plus-icon-log fa-minus-square-o"></i>{% trans %}NL_CONTENT_SETTINGS{% endtrans %} </div>                                                        
+                                <div class="col-sm-3 pull-right">
+                                    <label onclick="" class="switch-light switch-light-sm switchhwd">
+                                        <input type="checkbox" checked="" data-key="sponsor.<%- item.id %>.isActive" class="make-switch" data-inactiveblock="changecolor">
+                                        <span> <span>{% trans %}ON{% endtrans %}</span><span>{% trans %}OFF{% endtrans %}</span></span> <a class="btn btn-primary"></a> 
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                        
+                    <div class="fg-col-last-icon">
+                        <div class=" removeUpload ">
+                            <div class="closeico fg-row-close">
+                                <input type="checkbox"  class="make-switch">
+                                <label for="select4"></label>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div id="settings-<%- item.id %>" class="form-body fg-ck-wrap collapse in">
+                        <div class="form-group last">
+                            <label class="col-md-3 fg-ck-caption-txt">{% trans %}NL_SPONSOR_SERVICES{% endtrans %}<span class="required"> * </span></label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">                            
+                                <select class="form-control selectpicker select-for-preview" required row-id="<%- item.id %>" name="selected-services<%- item.id %>[]" id="selected-services<%- item.id %>" data-key="sponsor.<%- item.id %>.services"  multiple>                       
+            {% for service in sponsorServices %}
+                                        <option value="{{ service['serviceId'] }}" >{{ service['serviceTitle'] }}</option>
+            {% endfor %}
+                                </select>
+                                <span class="help-block" for="selected-services<%- item.id %>"></span>
+                            </div>
+                        </div> 
+            {% if not sponsorAdAreas is empty  %}
+                            <div class="form-group last">
+                                <label class="col-md-3 fg-ck-caption-txt">{% trans %}NL_SPONSOR_AREA{% endtrans %}<span class="required"> * </span></label>
+                                <div class="col-md-9 col-sm-9 col-xs-12">                            
+                                    <select class="form-control select2 select-for-preview" required row-id="<%- item.id %>" name="selected-adareas<%- item.id %>" id="selected-adareas<%- item.id %>" data-key="sponsor.<%- item.id %>.areas">                         
+                                        <option value="" >{{'SELECT_DROPDOWN'|trans}} </option>
+                {% for adArea in sponsorAdAreas %}
+                                            <option value="{{ adArea['adId'] }}" >{{ adArea['adTitle'] }}</option>
+                {% endfor %}
+                                    </select>   
+                                </div>
+                            </div> 
+            {% endif %}
+                        <div class="form-group last">
+                            <label class="col-md-3 fg-ck-caption-txt">{% trans %}NL_SPONSOR_MAX_WIDTH{% endtrans %}<span class="required"> * </span></label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">                            
+                                <select class="form-control select2 select-for-preview" row-id="<%- item.id %>" required name="selected-width<%- item.id %>" id="selected-width<%- item.id %>" data-key="sponsor.<%- item.id %>.width" >                         
+                                    <option value="" >{{'SELECT_DROPDOWN'|trans}} </option>                        
+                                    <option value="120">120 {{'PIXELS'|trans}}</option>
+                                    <option value="150">150 {{'PIXELS'|trans}}</option>
+                                    <option value="200">200 {{'PIXELS'|trans}}</option>
+                                    <option value="500">500 {{'PIXELS'|trans}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group last">
+                            <label class="col-md-3 fg-ck-caption-txt">{% trans %}NL_SPONSOR_PREVIEW{% endtrans %}</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12" id="div-sponsor-ad-preview<%- item.id %>">                            
+                            
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+            <%  }); %>
+        </script>
+        <script type="text/template" id="exisiting-article">  
+       <% _.each(data,function(item,key){ %>
+             <div id="<%- item.id %>" class="row fg-border-line  sortables">
+                       <div class="fg-col-first-icon handle"><i class="fa fg-sort ui-draggable"></i>
+                                             <input type="hidden" value="<%- item.selected %>"  id="cms_article_<%- item.id %>_selected" />
+                                           <input type="hidden"  value="<%- item.sortOrder %>" class="sort-val fg-dev-sortable" data-key="cms_article.<%- item.id %>.sort" /> </div>
+                       <div class="col-md-12 fg-col-hack fg-tab-ckedit">
+                           <div class="row">
+                               <div class="col-lg-3 col-md-5 col-sm-6">
+                                       <div> 
+                                           <input  type="hidden" id="cms_article_hidden_<%- item.id %>" data-key="cms_article.<%- item.id %>.id"   name="cms_article_<%- item.id %>_id" >
+                                           <input  type="hidden" id="cms_article_lang_hidden_<%- item.id %>" data-key="cms_article.<%- item.id %>.lang"   name="cms_article_<%- item.id %>_lang" >
+                                           
+                                           <input  type="text" id="cms_article_<%- item.id %>"  name="cms_article_<%- item.id %>_title" placeholder="{{ 'CN_EXIST_ARTICLE'|trans }}" value="" class="form-control  cms-article-autofill ">
+
+                                       </div>
+                                   
+                              </div>
+                            <div class="col-lg-8 col-md-7 col-sm-6 pull-right">
+                                   <div class="col-sm-3 cktext fg-list-toggle-wrap" data-fn="editor.init" data-id="<%- item.id %>" data-target="#text-<%- item.id %>" data-toggle="collapse"> <i class="fa fg-plus-icon-log fa-plus-square-o"></i> {% trans %}NL_CONTENT_TEXT{% endtrans %} </div>
+                                   <div class="col-sm-3 cktext fg-list-toggle-wrap" data-fn="imageUploader.init" data-id="<%- item.id %>" data-target="#image-<%- item.id %>" data-toggle="collapse"> 
+                                       <i class="fa fg-plus-icon-log fa-plus-square-o"></i> {% trans %}NL_CONTENT_IMAGES{% endtrans %} 
+                                       <span id="span_image-<%- item.id %>" class="badge badge-default"><%- _.size(item.media)  %> </span> 
+                                       <span id="hide_span_image-<%- item.id %>"  class="badge hide badge-default"> </span> 
+                                   </div>
+                                   <div class=" col-sm-3 cktext fg-list-toggle-wrap" data-val="newsletter_attachments" data-fn="imageUploader.init" data-id="<%- item.id %>" data-target="#attachment-<%- item.id %>-8" data-toggle="collapse"> 
+                                       <i class="fa fg-plus-icon-log fa-plus-square-o"></i> {% trans %}NL_CONTENT_ATTACHMENTS{% endtrans %} 
+                                       <span id="span_attachment-<%- item.id %>"  class="badge badge-default"><%- _.size(item.mediaAttachments)  %></span> 
+                                       <span  id="hide_span_attachment-<%- item.id %>" class="hide badge badge-default"><%- item.attachmentCount  %></span>
+                                   </div>
+                                   <div class="col-sm-3 pull-right">
+                                       <label onclick="" class="switch-light switch-light-sm switchhwd">
+                                           <input type="checkbox" checked  id="cms_article_active_<%- item.id %>" data-key="cms_article.<%- item.id %>.isActive" class="make-switch" data-inactiveblock="changecolor">
+                                           <span> <span>{% trans %}ON{% endtrans %}</span><span>{% trans %}OFF{% endtrans %}</span></span> <a class="btn btn-primary"></a> 
+                                       </label>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>                        
+                       <div class="fg-col-last-icon">
+                           <div class="removeUpload ">
+                               <div class="closeico fg-row-close">
+                                   <input type="checkbox" id="cms_article_del_<%- item.id %>"  name="cms_article_<%- item.id %>_isDelete" data-inactiveblock="changecolor" data-parentid="<%- item.id %>" id="cms_article_<%- item.id %>_isDelete" data-key="cms_article.<%- item.id %>.isDelete" class="make-switch">
+                                   <label for="article_<%- item.id %>_isDelete"></label>
+                               </div>
+                           </div>
+                       </div>
+                       <div id="image-<%- item.id %>" class="form-body fg-ck-wrap collapse fg-pad-0">
+                            <div class="fg-pad-top-20 fg-pad-btm-20">
+                                <div class="form-group"><label class="fg-ck-caption-txt col-md-3 col-sm-3 col-xs-12 fg-marg-top-4 fg-marg-btm-0">{% trans %}NL_IMAGE_POSITION{% endtrans %}</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <div class="radio-list">
+                                          <label class="radio-inline">
+                                            <input type="radio" class="article_img_position"  name="cms_article_<%- item.id %>_imgPostion" checked id="cms_article_L_<%- item.id %>_imgPostion" value="left" data-key="cms_article.<%- item.id %>.imgPostion" />
+                 {% trans %}NL_IMAGE_LEFT{% endtrans %}</label>
+                                          <label class="radio-inline">
+                                            <input type="radio" class="article_img_position"  name="cms_article_<%- item.id %>_imgPostion"  id="cms_article_R_<%- item.id %>_imgPostion" value="right" data-key="cms_article.<%- item.id %>.imgPostion" />
+                 {% trans %}NL_IMAGE_RIGHT{% endtrans %}</label>
+                                                                                <label class="radio-inline">
+                                            <input type="radio" class="article_img_position"  name="cms_article_<%- item.id %>_imgPostion" id="cms_article_N_<%- item.id %>_imgPostion" value="none" data-key="cms_article.<%- item.id %>.imgPostion" />
+                 {% trans %}NL_IMAGE_NONE{% endtrans %}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                       </div>
+            {#XXXXXXXX on existing article attachment#}
+                       <div id="attachment-<%- item.id %>-8" class="form-body fg-ck-wrap collapse fg-pad-0">    
+                            <div class="fg-pad-top-20 fg-pad-btm-20">
+                                <div class="form-group last">
+                                   <label class="col-md-3 col-sm-3 col-xs-6 fg-ck-caption-txt fg-marg-top-2 fg-marg-btm-0">{% trans %}NL_CONTENT_ATTACHMENTS_TAKEOVER{% endtrans %}</label>
+                                       <div class="col-xs-5 col-sm-2 fg-marg-top-2">
+                                           <label onclick="" class="switch-light switch-light-sm switchhwd">
+                                               <input id="cms_article_takeover_<%- item.id %>"  type="checkbox" checked data-key="cms_article.<%- item.id %>.isTakeOver" class="make-switch article_attach_on" data-inactiveblock="changecolor">
+                                                   <span> <span>{% trans %}ON{% endtrans %}</span><span>{% trans %}OFF{% endtrans %}</span></span> <a class="btn btn-primary"></a> 
+                                           </label>
+
+                                        </div>
+                               </div>
+			    </div>		
+                       </div>
+            {#XXXXXXXXX#}
+                       <div id="text-<%- item.id %>" class="form-body fg-ck-wrap collapse  fg-pad-0">
+                            <div class="fg-pad-top-20 fg-pad-btm-20">
+                                <div class="form-group last"><label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}NL_TEASER_TEXT{% endtrans %}</label>
+                                <div class="col-md-9 col-sm-9 col-xs-12"><textarea readonly class="form-control teaser-<%- item.id %>" rows="2" id="cms_article_<%- item.id %>_teasertext"  name="cms_article_text<%- item.id %>_teasertext" ><%- item.teaserText %></textarea><span class="fg-text-limit">160 {% trans %}NL_TEASER_TEXT_LIMIT{% endtrans %}</span></div></div>
+                                <div class="form-group last">
+                                    <label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}NL_CONTENT_TEXT{% endtrans %}<span class="required"> * </span></label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        <div  class="fg-disabled-div" id="cms_article_text_<%- item.id %>" ><%= item.text %></div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                       </div>
+                   </div>
+           <%  }); %>
+        </script>
+
+        <div id="divTemplates">
+            {% block underscoretemplate %}    
+                {% include 'InternalGalleryBundle:GalleryBrowser:templateGalleryBrowser.html.twig' %}
+            {% endblock %}
+        </div>
+        <div class="row">
+            <div class="col-md-12 fg-common-top clearfix">
+                <a href="#basic" class="addField">
+                    <i class="fa fa-plus-circle fa-2x pull-left "></i>
+                    <span class="fg-add-text">{% trans %}NL_CREATE_ARTICLE{% endtrans %}</span>
+                </a>
+                <a href="#basic" class="addCategory pull-left cat-3">
+                    <i class="fa fa-plus-circle fa-2x pull-left "></i>
+                    <span class="fg-add-text">{% trans %}NL_ADD_EXISITING_ARTICLE{% endtrans %}</span>
+                </a>
+                <a class="addCategory pull-left hide" href="#basic">
+                    <i class="fa fa-plus-circle fa-2x pull-left"></i> 
+                    <span class="fg-add-text">{% trans %}NL_ADD_EXISING_ARTICLE{% endtrans %}</span>
+                </a>
+                <a class="addCategory cat-1 pull-left" href="#basic">
+                    <i class="fa fa-plus-circle fa-2x pull-left"></i> 
+                    <span class="fg-add-text">{% trans %}NL_ADD_IMAGE_FULLWIDTH{% endtrans %}</span>
+                </a>
+                {% if 'sponsor' in bookedModule %}
+                    <a class="addCategory pull-left cat-2 " href="#basic">
+                        <i class="fa fa-plus-circle fa-2x pull-left"></i> 
+                        <span class="fg-add-text">{% trans %}NL_ADD_SPONSORS{% endtrans %}</span>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+{% endblock %}
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/global/css/global-style.css')}}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+{% block wizardscriptinit %}
+    <script>
+        var wizardStep = "{{wizardStep}}";
+        var newsletterType = 'newsletter';
+        var transTo = '{% trans %}NL_OF{% endtrans %}';
+        var sponsorPreviewPath = "{{ path('sponsor_ad_previews') }}";
+        var hasInternalRights = '{{hasInternalRights}}';
+        var galleryBrowserSettings = {
+            browserUrl: '{{ url('gallery_browser')}}',
+            galleryDataUrl: '{{ url('gallery_gallerydetails_ajax')}}',
+            coverImagePath: '/uploads/{{clubId}}/gallery/width_300/',
+            hasInternalArea: (hasInternalRights == '1') ? true : false,
+            addFromGalleryText: '{{'ADD_FROM_GALLERY'|trans}}'
+        };
+        var articlePath = "{{path('get_internal_article')}}";
+        var articleDetails = "{{path('get_internal_article_details',{'lang': '**LANG**', 'articleId': '**dummy**'})}}";
+        
+
+
+
+        FgUtility.changeColorAndHandleRequiredOnDelete();
+        $(document).ready(function () {
+            $('form').on('click', 'li input[data-inactiveblock=changecolor]', function () {
+                $(this).parents('li').toggleClass('inactiveblock');
+            });
+        });
+        var filemanagerImageBrowse = "{{path('filemanager_view', {'type' : 'image', 'module' : app.request.attributes.get('level1') } )}}";
+        var filemanagerDocumentBrowse = "{{path('filemanager_view', {'type' : 'document', 'module' : app.request.attributes.get('level1') } )}}";
+        var newsletterDespTrans = "{{'NL_IMAGE_DISCRIPTION'|trans}}";
+    </script>
+    <script src="{{ asset('fgassets/assets/global/plugins/ckeditor/ckeditor.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/jquery-fileupload/jquery.ui.widget.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/jquery-fileupload/jquery.iframe-transport.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/jquery-fileupload/jquery.fileupload.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/listRow.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/ckEditor-config.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/commonFilemanager/js/FgFileManagerUploader.js')}}" type="text/javascript"></script>  
+    <script src="{{ asset('fgcustom/js/page/newsletter-steps.js')}}" type="text/javascript"></script>  
+    <script src="{{ asset('fgassets/internal/js/page/FgGalleryBrowser.js')}}" type="text/javascript"></script>
+{% endblock %} 

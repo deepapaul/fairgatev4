@@ -1,0 +1,199 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = 'MANAGE_CALENDAR_CATEGORIES'|trans %}
+{% block pagecontent %}
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BREADCRUMB STARTS -->
+            <div class="row">
+                <div class="col-lg-12">
+                    {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+                </div>
+            </div>
+            <!-- END BREADCRUMB-->
+            <!-- START PAGE TITLE-->
+            <div class="fg-action-menu-wrapper">
+                {% include 'global/page-title-bar.html.twig' with {'pageTitle':  'CALENDAR_CATEGORIES_TITLE'|trans, 'tabs': {},'clubLanguages':clubLanguages, 'clubDefaultLang':clubDefaultLang} %}
+            </div>
+            <!-- END  PAGE TITLE-->
+            <div class="fg-theme-green fg-theme-panel">
+
+                <!-- BEGIN FORM-->
+                <form id="editCategory" class="form-horizontal" method="post" onsubmit="return false;" novalidate="novalidate">
+                    <div class="alert alert-danger display-hide">
+                        <button class="close" data-close="alert"></button>
+                        {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+                    </div>
+                    <div class="excludejs" id="calendar_category_sort">
+                        <!-- Category listing here -->
+                    </div>
+                    <div class="btn-group  fg-common-add-item">
+                        <a href="#basic" data-toggle="modal" class="add-membership" id="addcategory"><i class="fa fa-plus-circle fa-2x"></i><span class="fg-left-move"> {%trans%}ADD_CALENDAR_CATEGORY{%endtrans%}</span></a>
+                    </div>
+                    <div class="clearfix">  </div>
+                    {#{% include 'clubadmin/savebutton.html.twig' with {'backLink':backLink} %}#}
+                    {% include 'internal/savebutton.html.twig' with {'backLink':backLink} %}
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+    <!-- ADD ROW TEMPLATES STARTS -->
+    <!-- ADD ROW TEMPLATES ENDS -->
+    <!-- END PAGE CONTENT-->
+{% endblock %}
+{% block underscoretemplate %}
+    {% include 'InternalCalendarBundle:Category:templateAddCategory.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/fgtemplate.js') }}" type="text/javascript"></script>
+    <script type="text/javascript">
+
+                    var defaultLang = selectedLang = '{{clubDefaultLang}}';
+                            var clubLanguages = {{clubLanguages|json_encode|raw}};
+                            var result_data = {{result_data|json_encode|raw}};
+                            FgUtility.handleDelete();
+
+                    $(document).ready(function () {
+                        initPageFunctions();
+                        $(".fg-action-menu-wrapper").FgPageTitlebar({
+                            title: true,
+                            row2: true,
+                            languageSwitch: true
+                        });
+                    });
+
+
+                    $('form').on('click', '#addcategory', function () {
+                        var rand = $.now();
+                        var attributes = {title: '', appointmentCount: 0, isActive: 1, titleLang: '', sortOrder: ''};
+                        var jsonData = {catId: rand, clubLanguages: clubLanguages, isNew: true, catType: 'calendar', attributes: attributes};
+                        renderNewRow('template-calendarcategory-add', 'calendar_category_sort', jsonData);
+
+                    });
+
+                    $('body').on('click', '.fg-appointment-count', function () {
+
+                        var url = '{{ path('internal_calendar_view') }}';
+                        var seletectedItem = [];
+                        var dataId = $(this).attr('data-catid');
+                        seletectedItem.push({'id': dataId, 'type': 'CA'});
+                                localStorage.setItem('calenderfilter-'+{{clubId}}+'-' +{{contactId}} , JSON.stringify(seletectedItem));
+                                window.location = url;
+                    });
+
+                    $(document).off('click', 'button[data-elem-function=switch_lang]');
+
+                    /* function to show data in different languages on switching language */
+                    $(document).on('click', 'button[data-elem-function=switch_lang]', function () {
+                        selectedLang = $(this).attr('data-selected-lang');
+                        FgUtility.showTranslation(selectedLang);
+                    });
+
+                    function initDirtyField() {
+                        FgDirtyFields.init('editCategory', {
+                            discardChangesCallback: function () {
+                                initDirtyField();
+                            }
+                        });
+                    }
+
+                    function initPageFunctions() {
+                        createHtml(result_data);
+                        FgUtility.showTranslation(selectedLang);
+                        FgInternalDragAndDrop.sortWithOrderUpdation('#calendar_category_sort', false);
+
+                        // For resetting the sorting changes done in the page on 'discard_changes'
+                        var initialOrderArray = FgUtility.getOrderOfChildElements('#calendar_category_sort');
+                        var resetSections = {
+                            '0': {
+                                'parentElement': '#calendar_category_sort',
+                                'initialOrder': initialOrderArray,
+                                'addClass': true,
+                                'className': 'blkareadiv'
+                            }
+                        };
+                        FgInternalDragAndDrop.resetChanges(resetSections);
+                        FormValidation.init('editCategory', 'saveChanges', 'errorHandler');
+                        FgInputTextValidation.init();
+                        initDirtyField();
+                        Pagetitle.switchActive();
+                        FgLanguageSwitch.checkMissingTranslation(defaultLang);
+                    }
+
+                    function createHtml(result_data) {
+                        $('#calendar_category_sort').html('');
+                        var catCount = Object.keys(result_data).length;
+                        if (catCount > 0) {
+                            var resultData = FgInternal.groupByMulti(result_data, ['sortOrder']);
+                            _.each(resultData, function (cat_data, catSortOrder) {
+                                _.each(cat_data, function (catData, catVal) {
+                                    var jsonData = {catId: catData.id, clubLanguages: clubLanguages, isNew: false, catType: 'calendar', attributes: catData};
+                                    renderNewRow('template-calendarcategory-add', 'calendar_category_sort', jsonData);
+                                });
+                            });
+                        }
+                    }
+                    /* save function */
+                    function saveChanges() {
+                        var objectGraph = {};
+                        //parse the all form field value as json array and assign that value to the array
+                        objectGraph = FgInternalParseFormField.fieldParse();
+                        var catArr = JSON.stringify(objectGraph);
+
+                        FgXmlHttp.post("{{ path('internal_calendar_addcategory') }}", {'catArr': catArr}, false, callback);
+                    }
+
+                    function callback() {
+                        initPageFunctions();
+                        FgInternal.breadcrumb(FgInternal.extraBreadcrumbTitle);
+                    }
+                    /* function to remove newly added row on clicking delete button */
+                    $('form').on('click', 'div.addednew input[data-inactiveblock=changecolor]', function () {
+                        $('#' + $(this).attr('data-parentid')).remove();
+                        FgInternal.resetSortOrder($('#calendar_category_sort'));
+                        FgDirtyFields.init('editCategory');
+                    });
+
+                    /* error handler function */
+                    function errorHandler() {
+                        FgUtility.showTranslation(defaultLang);
+                        makeactiveLang(defaultLang);
+                    }
+
+                    function renderNewRow(templateScriptId, parentDivId, jsonData) {
+
+                        var htmlFinal = FGTemplate.bind(templateScriptId, jsonData);
+                        $('#' + parentDivId).append(htmlFinal);
+                        if (jsonData.isNew) {
+                            FgDirtyFields.updateFormState();
+                        }
+
+                        $('#' + parentDivId).find('.addednew').slideDown('250', 'easeInQuart');
+                        FgInternalDragAndDrop.sortWithOrderUpdation('#calendar_category_sort', false);
+                        FgInternal.resetSortOrder($('#calendar_category_sort'));
+                        FgUtility.showTranslation(selectedLang);
+
+                    }
+
+                    var Pagetitle = {
+                        switchActive: function () {
+                            $('body').on('click', '.btlang', function () {
+                                var attr = $(this).attr('data-selected-lang');
+                                $('.btlang').removeClass('active');
+                                $(this).addClass('active');
+
+                            });
+                        }
+                    }
+                    function makeactiveLang(defaultLang) {
+
+                        var selectLang = $('.active').attr('id');
+                        if (selectLang != defaultLang) {
+                            $('.btlang').removeClass('active');
+                            $("#" + defaultLang).addClass('active');
+
+                        }
+                    }
+    </script>
+{% endblock %}

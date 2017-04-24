@@ -1,0 +1,154 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::website/layout.html.twig' %}
+{#{% set pageTitle = 'CALENDAR_DETAIL_VIEW_BROWSER_PAGE_TITLE'|trans %}#}
+{% block pagecontent %}
+
+    {% block websiteContentArea %} 
+    {% endblock %}
+    {% block websiteCustomContentArea %}
+        <div class="fg-calendar-detail-wrapper">
+            <div class="col-sm-4">
+                <ul class="no-style fg-calendar-meta-details-block">
+                    <li>
+                        <div class="fg-left">{{ 'WEBSITE_DATE'|trans }}</div>                  
+                        <div class="fg-right">
+                            {% if(dateDetails.startDate is defined) %} 
+                                {% set arrayStartDateArr = dateDetails.startDate|split(',') %}
+                                {% set arrayStartDate = arrayStartDateArr[0]|split(' ') %}
+                                {% set weekNameStart = arrayStartDate[0]|date('Y-m-d H:i:s')|localizeddate('none', 'none', clubLocale, null, clubDateFormat)~", " %}
+                                {% set dateTimeStart = dateDetails.startDate %}
+                                {% if(dateDetails.endDate is defined) %}
+                                    {% set dateTimeStart = dateTimeStart|replace({' ':', '}) %}
+                                {% endif %}
+                                {{weekNameStart~dateTimeStart}} 
+                            {% endif %} 
+                            {% if(dateDetails.endDate is defined) %}
+                                {% set arrayEndDateArr = dateDetails.endDate|split(',') %} 
+                                {% set arrayEndDate = arrayEndDateArr[0]|split(' ') %}
+                                {% set weekNameEnd = arrayEndDate[0]|date('Y-m-d H:i:s')|localizeddate('none', 'none', clubLocale, null, clubDateFormat)~", " %}
+                                - 
+                                {% set dateTimeEnd = dateDetails.endDate|replace({' ':', '}) %}
+                                {{weekNameEnd~dateTimeEnd}} 
+                            {% endif %}
+                        </div>
+                    </li>
+                    {% if (eventData.isClubAreaSelected >= 1 or (eventData.clubId == currentClubId and (roleNames|length > 0 )) ) %}
+                        <li>
+                            <div class="fg-left">{{ 'WEBSITE_AREAS'|trans }}</div>
+                            <div class="fg-right">
+                                <div class="fg-area-tags">{% if (eventData.isClubAreaSelected >= 1) %} <span style="background-color: {{ eventData.clubColorCode }}" > {{clubDetails[eventData.clubId]['title']}} </span>{% endif %} 
+                                    {% if (eventData.clubId == currentClubId) %} 
+                                        {% for roleName in roleNames %}
+                                            <span style="background-color: {{ (roleName.color is defined ) ? roleName.color : eventData.clubColorCode }}"> {{roleName.name}} </span>
+                                        {% endfor %}
+                                    {% endif %}</div>
+                            </div>
+                        </li>
+                    {% endif %}
+                    {% if categoryNames|length > 0 %}
+                        <li>
+                            <div class="fg-left">{{ 'WEBSITE_CATEGORIES'|trans }}</div>
+                            <div class="fg-right">
+                                <div class="fg-cat-tags">
+                                    {% for categoryName in categoryNames %}
+                                        <span> {{categoryName.name}} </span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </li>
+                    {% endif %}
+                    {% if eventAttachments|length > 0 %}
+                        <li>
+                            <div class="fg-left">{{ 'WEBSITE_ATTACHMENTS'|trans }}</div>
+                            <div class="fg-right">
+                                <ul class="no-style fg-attachments">                        
+                                    {% for attachments in eventAttachments %}
+                                        <li><a class="fg-calender-attachment" data-clubId="{{eventData.clubId}}" data-encrypted="{{attachments.encryptedFilename}}" data-filename="{{attachments.filename}}" href="javascript:void(0)">{{attachments.filename}}</a><span class="fg-size"> ({{fgclub.formatNumber((attachments.size/1024)|round)}} {{'CALENDAR_DETAILS_ATTACHMENT_SIZE'|trans}})</span></li>
+                                            {% endfor %}
+
+                                </ul>
+                            </div>
+                        </li>
+                    {% endif %}
+                    {% if (eventData.url) %}
+                        <li>
+                            <div class="fg-left">{{ 'WEBSITE_WEBLINK'|trans }}</div>
+                            <div class="fg-right"><a href="{{eventData.url}}" target="_blank">{{eventData.url}}</a></div>                       
+                        </li>
+                    {% endif %}
+                    {% if (eventData.location) %} 
+                        <li>
+                            <div class="fg-left">{{ 'WEBSITE_LOCATION'|trans }}</div>
+                            <div class="fg-right">{{eventData.location}}</div>
+                        </li>
+                    {% endif %}
+
+                </ul>
+            </div>
+            {% set class = 'no-description' %}
+            {% if description|length > 0 %}
+                {% set class = '' %}
+            {% endif %}
+            <div class="col-md-8 fg-article-contents {{class}}">
+                <div class="fg-description">
+                     {{ description|raw}} 
+                </div>
+                <div class="col-sm-12 fg-marg-btm-15 fg-caledar-event-dtls-map-wrapper hide">
+                    <div id="googleMap" class="col-sm-12">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+
+    {% endblock  %}
+{% endblock %}
+
+
+{% block underscoretemplate %}
+    {% include 'WebsiteCMSBundle:Website:displayContentUnderscore.html.twig' %}  
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('fgassets/internal/js/FgFullCalendar.js') }}" type="text/javascript"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqoymXav-_Go1zYa9UOlPf5_UsC58Jmi0" type="text/javascript"></script>
+    <script type="text/javascript" src="{{ asset('fgassets/website/js/FgCalendarDetailView.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('fgassets/global/js/flaviusmatis-simplePagination/jquery.simplePagination.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('fgassets/website/js/fg-cms-frontend-portrait.js')}}"></script> 
+    <script>
+        var options = {
+            titleBar: true,
+            title: '{{ pagecontentData.page.page.title }}',
+            backButton: true,
+            backButtonTop:true,
+            backButtonData: '{{ path('website_public_page_menus', { 'menu': navIdentifier, 'view':view}) }}',
+        };
+        var FgWebsitePageTitleBarObj = new FgWebsitePageTitleBar('fg-dev-pagetitle-container', options);
+
+        var currentClubId = '{{currentClubId}}';
+        var contactId = '{{contactId}}';
+        var deleteAppPath = "{{ path('calendar_appointment_delete') }}";
+        var calendarPath = "{{path('internal_calendar_view')}}";
+        var calendarviewStoragename = 'calenderview-' + currentClubId + '-' + contactId;
+        var event_latitude = '{{eventData.location_latitude}}';
+        var event_longitude = '{{eventData.location_longitude}}';
+        var event_location = '{{eventData.location}}';
+        var event_location_flag = '{{eventData.is_show_in_googlemap}}';
+        var downloadPath = "{{path('website_calendar_appointment_details_download_attachments')}}";
+
+        calendarDetailView = new FgCalendarDetailView();
+        calendarDetailView.initSettings();
+        var portraitElementSettings = {{ pagecontentData.portraitElementSettings|json_encode()|raw }};
+        
+        if(typeof portraitElementSettings == 'object') {
+            var portContactNameTmplte = _.template($('#templateContactName').html());
+            var portEmailTmplte = _.template($('#templateEmail').html());
+            var portImageUpldTmplte = _.template($('#porttemplateImage').html());
+            var portDefaultTmplte = _.template($('#defaultTemplate').html());
+            var portFileUploadTemplate = _.template($('#portFileUploadTemplate').html());
+            var portProfilepicTemplate = _.template($('#portProfilepicTemplate').html());
+        }
+    </script>
+
+{% endblock %}

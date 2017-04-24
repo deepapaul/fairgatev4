@@ -1,0 +1,27 @@
+<script type="text/template" id="newAssignmentClassification"> 
+  
+<div class="row fg-border-line fg-list-group-inline-form new_asgn_blk">
+    <div class="col-md-4 col-sm-4 fg-left-right-move " data-name="fg-dev-classification-dp">
+        <select insert-flag="0" class="bs-select form-control fg-select-font classificationDropDown">
+            <option value="" option-text-classification="1">{%trans%}ASSIGNMENT_CLASSIFICATION_SELECT_DROPDOWN{%endtrans%}</option>
+                 <%     
+                var previousClassificationId='';
+                _.each(normalArray,function(normalArrayValue,normalArrayKey){
+                    if(normalArrayValue['classificationId'] != undefined ) { 
+                        if(previousClassificationId != normalArrayValue['classificationId']) { 
+                            previousClassificationId=normalArrayValue['classificationId']; %>
+                            <option name="<%- normalArrayValue['classificationId'] %>" id="<%- normalArrayValue['classificationId'] %>" data-key="<%- normalArrayValue['classificationId'] %>" insert-flag="0"  value="<%- normalArrayValue['classificationId'] %>"><%- normalArrayValue['classificationTitle'] %></option>
+                        <% } 
+                    }
+                }); %>
+        </select>
+    </div>
+    <input type="hidden" data-type="key_element" />
+    <div class="fg-last-icon new_assig_rmv" data-name="fg-dev-lasticon">
+        <div class="closeico">
+            <input type="checkbox" class="make-switch" id="select">
+            <label for="select"></label>
+        </div>
+    </div>
+</div>
+</script>

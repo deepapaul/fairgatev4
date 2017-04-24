@@ -1,0 +1,333 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout-sidebar.html.twig' %}
+{% set pageTitle = 'DOCUMENT'|trans %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTAINER -->
+    <!-- BEGIN BREADCRUMB-->
+    <div class="row">
+        <div class="col-lg-12">
+            {% include 'internal/breadcrumb.html.twig' %}
+        </div>
+    </div>
+    <!-- END BREADCRUMB-->
+    <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+    {% include 'global/page-title-bar.html.twig' with {'pageTitle': 'ALL_DOCUMENTS'|trans, 'tabs': tabs, 'roleCount' : teamCount , 'type':type, 'url' : url, 'showCountBadge' : false, 'showNewBadge' : true, 'countBadgeId' : 'fg-role-document-count-', 'newBadgeId' : 'fg-role-document-new-', 'moreClass' : 'fg-more-multi-badge' } %}
+        <div class="fg-page-title-block-2 fg-dis-none">      
+            <div class="fg-page-title-link fg-dis-none">
+                    <a href="#" class="link fg-dev-markall" data_url="{{urlArray.url}}"><i class="fa fa-check-circle"></i> {{urlArray.title}}</a>                            
+            </div>
+        </div>     
+    {% if(type == 'team' or type == 'workgroup') %}
+        {% include 'InternalTeamBundle:Documents:upload.html.twig' %}
+    {% endif %}
+    
+    <!-- BEGIN CONTENT -->
+    <div class="row">
+        <div class="portlet-body new-table-height fg-datatable-wrapper" id="tableWrapper">
+            <table class="dataTable
+                   table
+                   table-bordered
+                   table-hover
+                   table-condensed
+                   dataTable-dragable"
+                   id="datatable-club-document" dataTable-popover="true" dataTable-hover="true">
+            </table>
+        </div>
+    </div>
+    <!-- END CONTENT -->                
+    <!--  Custom pop over html -->
+    <div class="custom-popup">
+        <div class="popover bottom">
+            <div class="arrow"></div>
+            <div class="popover-content"></div>
+        </div>
+    </div>
+    <input type="hidden" id="selectedIds" name="selectedIds" value="" />
+    
+    <!-- Connection Popup -->
+    <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-content fg-popup-wrap" id="popup_contents" >
+            </div>
+        </div>
+    </div>
+    <!-- END Connection pop up  area -->
+    <!-- dummy content of pop up -->
+    <div id="dummyPopupcontent" class="hidden">
+        <div class="modal-header fg-modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <div class="fg-popup-text" id="header_text">
+                <div class='fg-dev-singleSelectionText fg-modal-header-div hide' > {{'MOVE_SINGLE_DOC'|trans}}</div>   
+                <div class='fg-dev-multipleSelectionText fg-modal-header-div hide' > {{'MOVE_MULTIPLE_DOC'|trans}}</div>
+            </div>
+            <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body fg-modal-text">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet-body form">
+                        <!-- BEGIN FORM-->
+                        <form action="#" class="form-horizontal form-row-sepe" id="movedocs">
+                            <div class="form-body">
+                                <div id="block_0">
+                                    <!-- CATEGORY SECTION STARTS -->
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-3 col-md-3">{{'DM_CATEGORY'|trans}}</label>
+                                        <div class="col-lg-9 col-md-8">
+                                            <select class="form-control " data-placeholder="Club fields" id="category_dropdown">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- CATEGORY SECTION ENDS -->
+
+                                    <!-- SUBCATEGORY SECTION STARTS -->
+                                    <div class="form-group hide" data-id="show_class_section">
+                                        <label id="fg-dev-class-label" class="control-label col-lg-3 col-md-3">{{'DM_SUBCATEGORY'|trans}}</label>
+                                        <div class="col-lg-9 col-md-8">
+                                            <select class="form-control" data-placeholder="Club fields" id="subcategory_dropdown">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- END FORM-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer form-actions fg-modal-footer">
+            <button type="button" class="btn default" id="cancel" data-dismiss="modal" data-function="cancel">{{'CANCEL'|trans}}</button>
+            <button type="button" class="btn green fg-dev-move" id="save" data-function="save">{{'DM_MOVE'|trans}}</button>
+        </div>
+    </div>
+    {% block underscoretemplate %}  
+        <script type="text/template" id="internal_display_dropdown">
+            <% if (Object.keys(options).length > 0) { %>
+                <option value="">{{'SELECT_DROPDOWN'|trans}}</option>
+                <% _.each(options, function(option) { %>
+                    <option value="<%- option['id'] %>" <% if (option['id'] == selectedId) { %> selected <% } %>><%- option['title'] %></option>
+                <% }); %>
+            <% } %>
+        </script>
+    {% endblock %}
+    
+{% endblock %}
+
+{% block javascripts %}
+    
+    <script src="{{ asset('/fgassets/internal/js/fg_tab_selection_process.js')}}" type="text/javascript" ></script>
+    <script src="{{ asset('fgassets/internal/js/page/fgDocumentUploader.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.ui.widget.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.iframe-transport.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.fileupload.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/FgFileUpload.js')}}" type="text/javascript"></script>
+    <script src="/fgcustom/js/custom-fileupload.js" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/internal/js/page/fgDocumentCount.js')}}" type="text/javascript" ></script>
+    <script>
+        // column settings
+        var docSettings = {                
+            titleTranslate: function (title) {
+                switch(title){
+                    case 'SIZE':return '{{'DC_DOCUMENT_SIZE'|trans}}';break;
+                    case 'DESCRIPTION':return '{{'DC_DOCUMENT_DESCRIPTION'|trans}}';break;
+                    case 'VISIBLE_TO':return '{{'DC_DOCUMENT_VISIBLE_TO'|trans}}';break ;
+                    case 'ISPUBLIC':return '{{'DM_PUBLIC_VISIBILITY'|trans}}';break ;   
+                    case 'CATEGORY':return '{{'DM_CATEGORY'|trans}}';break;
+                    case 'DEPOSITED_WITH':return '{{'DM_DEPOSITED_WITH'|trans}}';break; 
+                    case 'UPLOADED':return '{{'DM_UPLOADED'|trans}}';break; 
+                    case 'LAST_UPDATED':return '{{'DC_DOCUMENT_LAST_UPDATE'|trans}}';break;
+                    case 'UPLOADED_BY':return '{{'DM_UPLOADED_BY'|trans}}';break; 
+                    case 'AUTHOR':return '{{'DM_AUTHOR'|trans}}';break; 
+                    case 'UPDATED_BY':return '{{'DM_UPDATED_BY'|trans}}';break; 
+
+                }
+            }
+        };
+        var transON = '{{'ON'|trans}}';
+        var transOFF = '{{'OFF'|trans}}';
+        
+        var pathDeleteDocumentConfirmationPopup = '{{ path('documents_remove_popup') }}'; 
+        var pathDeleteMember = '{{ path('documents_remove') }}';
+        var teamTerminology = '{{ fgtwig.getTerminolgyName('Team',plural )}}';
+        teamAdmin ='{{'DM_TEAM_ADMINS'|trans({'%team%':fgtwig.getTerminolgyName('Team',plural)}) }}';
+        //Global object, used in frondenddatatable.js
+        visibleTo={
+            team:'{{'DM_WHOLE_TEAMS'|trans({'%team%':fgtwig.getTerminolgyName('Team',singular,'UCF')}) }}',
+            team_functions:'{{'DM_FUNCTIONS'|trans }}',
+            team_admin:'{{'DM_TEAM_ADMINS'|trans({'%team%':fgtwig.getTerminolgyName('Team',singular,'UCF')}) }}',
+            workgroup:'{{'DM_WORKGROUP_CONTACTS_AND_ADMIN'|trans }}',
+            workgroup_admin:'{{'DM_WORKGROUP_ADMIN'|trans }}'
+        }
+        
+
+        roleType =('{{type}}'=='team')?teamTerminology:'{{ 'WORKGROUPS'|trans}}'; // roleType is global variable, and using in frondenddatatable.js 
+        mb ='{{'DC_MB'|trans}}';                                    // mb is global variable, and using in frondendDatatable.js 
+        var FgDocListColumnHeading = {
+            getColumnNames: function (tableSettingValue) {
+                tableColumnTitle = [];
+                tableColumnTitle.push({"sTitle": "<div class='fg-th-wrap'><i class='chk_cnt' ></i>&nbsp;&nbsp;<input type='checkbox' name='check_all' id='check_all' class='dataTable_checkall fg-dev-avoidicon-behaviour'></div>&nbsp;", "data": "edit", "bSortable": false,'sClass':'fg-checkbox-th'});
+                tableColumnTitle.push({"sTitle": '&nbsp;&nbsp;{{'DC_DOCUMENT_NAME'|trans}}', "data": "documentName", "bSortable": true});
+
+                $.each(tableSettingValue, function (keys, values) {  
+                    if(values['id']==='SIZE'){
+                        tableColumnTitle.push({"sTitle": docSettings.titleTranslate(values['id']) , "type":"less-symbol", "data": values['name']});
+                    }else if(values['id']==='LAST_UPDATED'){
+                        tableColumnTitle.push({
+                            "sTitle": docSettings.titleTranslate(values['id']) ,
+                            "data":null,  render:{ "_": 'lastUpdatedOrg', "display": values['name'], "sort" :'lastUpdatedOrg'}
+                    });
+                    }else if(values['id']==='UPLOADED'){
+                        tableColumnTitle.push({
+                            "sTitle": docSettings.titleTranslate(values['id']) ,
+                            "data":null,  render:{ "_": 'uploadedOnOrg', "display": values['name'], "sort" :'uploadedOnOrg'}
+                    });
+                    }else if(values['id']==='ISPUBLIC'){
+                      tableColumnTitle.push({
+                            "sTitle": docSettings.titleTranslate(values['id']) ,
+                            "data":null,  render:{ "_": 'isPublicOrg', "display": values['name'], "sort" :'isPublicOrg'}
+                        });
+                    }
+                    else{
+                        tableColumnTitle.push({"sTitle": docSettings.titleTranslate(values['id']) , "type":"null-last", "data": values['name']});
+                    }
+                });
+                return tableColumnTitle;
+
+            }
+        }
+
+        var clubId = {{clubData['clubId']}};
+        var contactId = {{clubData['contactId']}};
+        var memberType = '{{type}}';
+        tableColumnTitleStorage = 'InternaltableColumnValue_{{type}}'+clubId+'-'+contactId;
+        tableSettingValueStorage = 'documentInternaltableSettingValue_{{type}}'+clubId+'-'+contactId;
+        tabStorageName = (memberType ==='team')?'team_'+clubId+'_'+contactId:'workgroup_'+clubId+'_'+contactId
+        tableSettingValue = '{{defaultColumnSetting|json_encode()|raw}}'; 
+
+        if ( localStorage.getItem( tableSettingValueStorage ) !== null ) {
+            tableSettingValue = ( localStorage.getItem(tableSettingValueStorage) );
+        }
+       
+        localStorage.setItem( tableColumnTitleStorage, JSON.stringify(FgDocListColumnHeading.getColumnNames($.parseJSON(tableSettingValue))));
+
+        $(function () {
+            scope = angular.element($("#BaseController")).scope();
+            var tabCondition = {{ (tabs|length > 1) ? 'true' : 'false' }};
+            FgPageTitlebar =  $(".fg-action-menu-wrapper").FgPageTitlebar({
+                title: true,
+                search: true,
+                filter: false,
+                actionMenu: true,
+                tabType:'client',
+                tab: tabCondition,
+                link: true,
+                counter: true,
+                row2: true
+            });
+  
+        var option = { pageType:'documentlist',
+                        grouptype:'{{type}}',
+                        contactId: contactId,
+                        localStorageName: tabStorageName,
+                        tabheadingArray:{{tabs|json_encode()|raw}}
+        } 
+            Fgtabselectionprocess.initialize(option);
+            FgActionmenuhandler.init();
+            setTimeout(function(){ 
+               FgPageTitlebar.setMoreTab();
+            }, 3000);
+            
+        });
+
+        // Populate sidebar
+        var type = '{{ type }}';
+        var documentSidebarCountPath = '{{ path('document_update_sidebar_count') }}';   
+        var docCategoryDropdownPath = '{{path('category_docs_dropdown', {'typeval': type})}}'; 
+        var documentCategoryPath = (type == "team") ? '{{path('get_team_document_sidebar')}}' : '{{path('get_workgroup_document_sidebar')}}';
+        var movePath = '{{path('internal_document_move_data')}}';        
+        var docType = type.toUpperCase();
+        var path = "{{path('document_download',{'docId':'|documentId|','versionId':'|versionId|'})}}";     
+        var docEditPath = "{{ (type == 'team') ? path('edit_team_document', {"documentId" : "|documentId|"}) : path('edit_workgroup_document', {"documentId" : "|documentId|"}) }}"
+    </script>
+    
+        {% if(type == 'team' or type == 'workgroup') %}
+    <script src="{{ asset('fgassets/internal/js/page/FgTeamDocuments.js')}}" type="text/javascript"></script>
+    <script>    
+        var documentUploadSaveurl = '{{path(saveurl)}}';
+        var formerrormessage = '{{'VALIDATION_THIS_FIELD_REQUIRED'|trans}}';
+        var tempUrl = '/uploads/temp/';
+
+        var documentData = {};
+        documentData.form = {};
+        documentData.form.doccat = {{subCategories|json_encode|raw}};
+        documentData.form.functions = {{functions|json_encode|raw}};
+        documentData.form.deposited = {{deposited|json_encode|raw}};
+        documentData.form.selectedentities = {{selectedentities|json_encode|raw}};
+        documentData.form.selectedcategory = {{selectedcategory|default(0)}};
+        documentData.form.currentuser = '{{currentuser}}';
+        
+        var documentUploaderOptions = { 
+                                wrapperContainer: '#uploader-container-template',
+                                dropZoneElement: '#fg-wrapper',
+                                fileListTemplate: 'doc-type-team',
+                                fileListTemplateContainer: '#document_uploader_form-content',
+                                progressBarContainer: '.fg-upload-progress',
+                                progressBarElement: '.progress-bar',
+                                removeElement: '.removeUploadedFile',
+                                uploadUrl : '{{path('internal_document_upload',{'type':'document'})}}',
+                                extraDataToTemplate : documentData,
+                                onFileListAdd : 'fgDocumentUploader.initElements',
+                                onFileUploadSuccess : 'fgDocumentUploader.setFileIcon',
+                                errorContainer: '#document-upload-error-container',                                
+                                errorListTemplate: 'document-uploader-errorlist-template',
+                                validations: {
+                                                fileType : 'image,doc,pdf,excel,power,archive,audio,video,web,text'
+                                }
+        };
+
+        $(document).ready(function() {
+            FgDocumentCount.settings.dataUrl = '{{ path('get_role_documents_count', {'type' : type|upper}) }}';
+            FgDocumentCount.initRoleDocumentsCount();
+        
+            fgDocumentUploader.init();
+            fgDocumentUploader.handleSaveButton();
+            fgDocumentUploader.initUploader(documentUploaderOptions);
+        });
+
+        //for  document  mark all as seen.
+        $(document).on('click',".fg-dev-markall",function(event){
+           event.preventDefault();
+           var role =JSON.parse(localStorage.getItem(tabStorageName));
+           var data_url= $(this).attr('data_url');
+           var path_url =  data_url.replace("|type|", role.type);
+           path_url = path_url.replace("|roleId|", role.id);
+           localStorage.removeItem(FgSidebar.activeMenuVar);
+           localStorage.removeItem(FgSidebar.activeSubMenuVar);		   
+           FgXmlHttp.post(path_url);     
+        });
+        
+        //for document download ,mark as seen
+        $(document).on('click', ".fg-dev-read", function (event) {
+            event.preventDefault();
+            var data_url = $(this).attr('data_url');
+            if ($(this).hasClass('fg-strong')) {
+                var activeSubMenu = localStorage.getItem(FgSidebar.activeSubMenuVar);
+                var docId = $(this).attr('data-id');
+                FgDocumentCount.updateRoleDocumentsCount('download', docId);
+                if (activeSubMenu == 'MYDOCS_li_NEW') {
+                    var objs = _.filter(jsonData['aaData'], function(ret){ 
+                        if (ret.documentId != docId) { return ret; }
+                    });
+                    listTable.clear().draw();
+                    listTable.rows.add(objs); // Add new data
+                    listTable.columns.adjust().draw(); // Redraw the DataTable
+                    jsonData['aaData'] = objs;
+                }
+                $(this).removeClass('fg-strong');
+            }
+            window.open(data_url, '_blank');
+        });
+        </script>
+    {% endif %}
+{% endblock %}

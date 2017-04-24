@@ -1,0 +1,179 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = clubName %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet-body fg-theme-yellow">
+                        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                        {% include 'clubadmin/breadcrumb.html.twig' with {'breadCrumb':{'back': path('club_homepage') }} %}
+                       {# {% include 'ClubadminClubBundle:ClubList:panel-tabs.html.twig' with {'clubName':clubName,'clubId':clubId,'active':'loglisting', 'documentsCount':documentsCount,'asgmntsCount':asgmntsCount,'notesCount':notesCount} %}
+                        #}    
+                       <div class="row">
+                       {% set page_settings = { 'pagetitle':'true','tabs':'true'}  %}
+                       {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': clubName ,'page_settings': page_settings, 'tabs': tabs, 'type':'overview', 'hrefLink' : true, 'url':"#"} %}                   
+                       </div>
+                       <!-- END PAGE TITLE & BREADCRUMB-->
+                        <div class="row fg-common-top fg-contact-data">
+                            <div class="col-md-12">
+                                <div class="portlet-body">
+                                    <div class="tabbable-custom ">
+                                        <ul  class="nav nav-tabs data-more-tab" id="data-tabs">
+                                            {% for key,logTab in logTabs %}
+                                                {% set active = (key == activeTab) ? 'active': '' %}
+                                                <li id="data_li_{{ key }}" class="{{ active }}">
+                                                    <a data-toggle="tab" data-datatableId="log_display_{{ clubId }}_{{ key }}" href="#log-table_{{ clubId }}_{{ key }}">{{ transKindFields[logTab]|trans|capitalize }}<i class="fa fa-exclamation-triangle fg-data-error"></i></a>
+                                                </li> 
+                                            {% endfor %}  
+                                            {#more tab#}
+                                            <li class="datahideshow dropdown" ><a href="#"  id="fg-contact-more-tab" class="dropdown-toggle" data-toggle="dropdown">{{ 'MORE'|trans }}<i class="fa fa-exclamation-triangle fg-data-error"></i><i class="fa fa-angle-down"></i></a>
+                                                <ul class="dropdown-menu">
+                                                    {% for key,logTab in logTabs %}
+                                                        {% set active = (key == activeTab) ? 'active': '' %}
+                                                        <li id="data_li_{{ key }}" class="{{ active }}">
+                                                            <a data-toggle="tab" data-datatableId="log_display_{{ clubId }}_{{ key }}" href="#log-table_{{ clubId }}_{{ key }}">{{ transKindFields[logTab]|trans|capitalize }}<i class="fa fa-exclamation-triangle fg-data-error"></i></a>
+                                                        </li> 
+                                                    {% endfor %}                                                       
+                                                </ul>
+                                            </li>
+                                            {# more tab ends #}
+                                        </ul>
+                                        <div class="col-xs-12 col-md-5 col-sm-6 fg-contact-log-filter-box fg-has-filter">
+                                            <div class="fg-filter-check-icon fg-has-no-search"><input type="checkbox" autocomplete="off" id="fg_contact_log_date_filter_flag" name="fg_contact_log_date_filter_flag"></div>
+                                            <div class="btn-group pull-right">
+                                                <button class="btn tableactionright" data-toggle="dropdown"> <i class="fa fa-table fa-2x"></i> </button>
+                                                <ul class="dropdown-menu pull-right fg-drpmenu-new dropdown-menu-form padinten hold-on-click">
+                                                    <li><div id="fg_contact_log_row_change" ></div></li>                                                        
+                                                </ul>
+                                            </div>
+                                        </div>
+{#                                        <div class="fg-log-filter"><button id="fgContactLog" data-toggle="dropdown" class="btn tableaction"><i class="fa fa-filter fa-2x"></i></button></div>#}
+                                        <div class="fg-clear"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="data-tabs-content" class="tab-content">   
+                            {% for key,logTab in logTabs %} 
+                                {% set active = (key == activeTab) ? 'active': '' %}
+                                <div class="portlet-body tab-pane new-table-height logTabs {{ active }}" id="log-table_{{ clubId }}_{{ key }}">
+                                    {% include 'ClubadminClubBundle:Log:logListing.html.twig' with {'activeTab' : logTab, 'typeId' : key } %}
+                                </div>
+                            {% endfor %}  
+                        </div>
+                        
+                        {#to show notes popup#}
+                        <div id="notes-popup" class="hide">
+                            <div class="modal-header fg-modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                <h4 class="modal-title" id="note-modal-title"></h4>
+                            </div>
+                            <div class="modal-body fg-modal-text">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p id="notes_content"></p>
+                                    </div>
+                                </div>
+                            </div>
+                               
+                        </div>
+                        <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+                            <div class="modal-dialog modal-wide">
+                                <div class="modal-content fg-popup-wrap" id="popup_contents">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+ 
+<script src="{{ asset('fgcustom/js/fg_custom_dataTable.js') }}" type="text/javascript"></script>    
+<script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>    
+<script type="text/javascript">
+         
+       $(document).ready(function() {
+            FgPageTitlebar.init({
+                title       : true,
+                tab       : true,
+                search     :false,
+                actionMenu  : false,
+                tabType  :'server'
+               
+            }); 
+       });
+    var noteModalTitle = "{{'NOTES_CONTENT'|trans }}";
+    
+    $(document).ready(function(){
+        $('.filter-log-input').val('');
+        $('div.date input:enabled').parent().datepicker(FgApp.dateFormat);
+        var logTabsLength = 3;
+        for (var i=1;i<=logTabsLength;i++) {
+            if (!$.isEmptyObject($('#log_display_{{ clubId }}_'+i).dataTable())) {
+                $('#log_display_{{clubId}}_'+i).dataTable().fnDestroy();
+                FgTable.initid('log_display_{{ clubId }}_'+i);
+            } else {
+                FgTable.initid('log_display_{{ clubId }}_'+i);
+            }
+            logDateFilterSubmit("date_filter_{{ clubId }}_"+i);
+            if (i == 1) {
+                $("#log_display_{{ clubId }}_"+i+"_length").detach().prependTo("#fg_contact_log_row_change");
+                //add our own classes to the selectbox
+                $("#log_display_{{ clubId }}_"+i+"_length").find('select').addClass('form-control cl-bs-select');
+                $("#log_display_{{ clubId }}_"+i+"_length").find('select').select2();
+            } else {
+                $("#log_display_{{ clubId }}_"+i+"_length").detach();
+            }
+        }
+        FgMoreMenu.initClientSideWithNoError('data-tabs', 'data-tabs-content');
+        
+        $('#data-tabs li a[data-toggle="tab"]').on('shown.bs.tab', function() {
+            var curDataTableId = $(this).attr('data-datatableid');
+            $('#'+curDataTableId).dataTable().api().draw();
+        });
+        
+{#        $('#fgContactLog').on('click',function(){
+            $('.log-area').toggleClass('show');
+            $('table.table').toggleClass('fg-common-top');
+            $('div.fg-log-filter').toggleClass('fg-active-btn');
+        });  #}
+        
+        $('#fg_contact_log_date_filter_flag').on('click', function(){
+            if ($(this).is(':checked')) {
+               $('#fg_contact_log_date_filter_flag').attr('checked', true);
+               //update the property of the checkbox of jquery uniform plugin
+               $.uniform.update('#fg_contact_log_date_filter_flag');
+           } else {
+               $('#fg_contact_log_date_filter_flag').attr('checked', false);
+               //update the property of the checkbox of jquery uniform plugin
+               $.uniform.update('#fg_contact_log_date_filter_flag');
+           }
+           $('.log-area').toggleClass('show');
+           $('table.table').toggleClass('fg-common-top');
+        });
+
+        $('#log_display_{{ clubId }}_1').on( 'length.dt', function ( e, settings, len ) {
+            $("#log_display_{{ clubId }}_2").dataTable().api().page.len(len).draw();
+            $("#log_display_{{ clubId }}_3").dataTable().api().page.len(len).draw();
+        });
+    });
+</script>
+<script type="text/javascript">
+        function popUpNotes(_this,date){
+            var data1 = $(_this).attr('content').replace(/#~#/g,'&quot;').replace(/#~~#/g,'&lt;'); 
+            noteModalTitle1 = noteModalTitle.replace('%date%',date);
+            $('#note-modal-title').text(noteModalTitle1);
+            $('#notes_content').html(data1);
+            $('#popup_contents').html($('#notes-popup').html()); 
+            $('#popup').modal('show');
+        }
+        </script>
+
+{% endblock %}    

@@ -1,0 +1,85 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title fg-modal-title">{{title}}</h4>
+    </div>
+     <div id="failcallbackClientSide" class="alert alert-danger" style="display:none;">
+               <button class="close" data-close="alert"></button>
+               <span>{{'CMS_ELEMENT_FORM_ERROR'|trans}}</span>
+     </div>
+    <div class="modal-body fg-cms-special-page-modal">
+        <div class="form-group fg-clear">
+            <label class="control-label text-right fg-label-valign col-lg-3 col-md-3">{{'CMS_PAGE_NAME'|trans}}</label>
+            <div class="col-lg-9 col-md-8 fg-error-add-required">
+                <input type="text" name="cmsCreatePageTitle" id="cmsCreatePageTitle" class="form-control input-md" required>
+                <div id="cmsCreatePageTitle-formgroup-error" class="fg-label-error hide">{{ 'FIELD_REQUIRED_MESSAGE'|trans }}</div>
+            </div>
+        </div>
+        {% if pageType == 'gallery' %}
+            <div class="form-group fg-clear">
+                <label class="control-label text-right fg-label-valign col-lg-3 col-md-3">{{'CMS_GALLERIES'|trans}}</label>
+                <div class="col-lg-9 col-md-8 fg-error-add-required">
+                    <select class="form-control selectpicker" multiple required name="cmsCreateGalleryRoles" id="cmsCreateGalleryRoles">
+                        <option class="single fg-arrow-all" value="ALL_GALLERIES">{{'CMS_ALL_GALLERIES'|trans}}</option>
+                        {% for key, data in allGallery %}
+                            <option class="multiple" value="{{key}}">{{data}}</option>
+                        {% endfor %}
+                    </select>
+                    <div id="cmsCreateGalleryRoles-formgroup-error" class="fg-label-error hide">{{ 'FIELD_REQUIRED_MESSAGE'|trans }}</div>
+                </div>
+            </div>
+       {% else %}
+          {% include 'WebsiteCMSBundle:SpecialPages:cmsArticleandCalendarSpecialPagesAreas.html.twig' %}
+          {% include 'WebsiteCMSBundle:SpecialPages:cmsArticleandCalendarSpecialPagesCategories.html.twig' %}
+          {% include 'WebsiteCMSBundle:SpecialPages:cmsArticleAndCalendarSpecialPagesSharedCheckboxes.html.twig' %}
+       {% endif %}    
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn default" data-dismiss="modal">{{ 'CANCEL'|trans }}</button>
+        <button type="button" class="btn green" id="addSpecialPageBtn">{{ 'CREATE'|trans }}</button>
+    </div>
+</div>
+<script>
+    var pageType = '{{pageType}}';
+    var saveGallerySpecialPage = (pageType == 'gallery') ? '{{path('website_cms_create_gallery_save')}}' : '{{path('website_cms_article_n_calendar_special_page_save')}}';
+    var fedId = '{{fedId|default('')}}';
+    var subFedId = '{{subFedId|default('')}}';
+    $(function () {
+        $('.selectpicker').selectpicker();
+        $('select.selectpicker').selectpicker({noneSelectedText: '{{'SELECT_DEFAULT'|trans}}'});
+        $('select.selectpicker').selectpicker('render');
+        FgUtility.handleSelectPicker();
+        FgFormTools.handleUniform();
+        
+        $(document).off('click', '#addSpecialPageBtn');
+        $(document).on('click', '#addSpecialPageBtn', function () {
+            var isValid = CmsSpecialPage.validateGalleryForm(pageType);
+             var data = {};
+            if(isValid){
+                data['title'] = $('#cmsCreatePageTitle').val();
+                data['navId'] = $('#hidNavId').val();
+                data['type'] = pageType;
+                if(pageType != 'gallery')
+                {
+                  data['areas'] = $('[name=specialPageArea]').val();
+                  data['categories'] = $('[name=specialPageCategory]').val();
+                  data['fedIdVal'] = ($("#fedShared").is(':checked')) ? fedId : '';
+                  data['subFedIdVal'] = ($("#subFedShared").is(':checked')) ? subFedId  : '';  
+                  data['isAllArea'] = ( data['areas'] == 'ALL_AREAS') ?  1 : '';
+                  data['isAllCat'] = (data['categories'] == 'ALL_CATS') ? 1 : '';
+                  
+                }else{
+                  data['galleryRoleArray'] = $('#cmsCreateGalleryRoles').selectpicker('val'); 
+                }    
+                
+               var callBack = (pageType == 'gallery') ? CmsSpecialPage.gallerySaveCallback : CmsSpecialPage.specialPageSaveCallback;
+               
+               FgXmlHttp.post(saveGallerySpecialPage, data, false, callBack);
+            }
+
+        });
+
+
+
+    });
+</script>

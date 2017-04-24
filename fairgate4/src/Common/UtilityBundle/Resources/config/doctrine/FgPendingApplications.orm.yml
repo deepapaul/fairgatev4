@@ -1,0 +1,51 @@
+Common\UtilityBundle\Entity\FgPendingApplications:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgPendingApplicationsRepository
+    type: entity
+    table: fg_pending_applications
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        uniqueId:
+            type: string
+            length: 100
+            fixed: false
+            nullable: true
+            column: unique_id
+        type:
+            type: string
+            length: 100
+            fixed: false
+            nullable: false
+        jsonData:
+            type: text
+            nullable: true
+            column: json_data
+        createdAt:
+            type: datetime
+            nullable: false
+            column: created_at
+    manyToOne:
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

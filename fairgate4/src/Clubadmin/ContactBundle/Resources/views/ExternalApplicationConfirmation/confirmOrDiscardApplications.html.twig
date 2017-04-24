@@ -1,0 +1,102 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close"  data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">
+        {% if action == 'discard' %}
+            {{ selActionType=='selected'? 'DISCARD_SELECTED_APPLICATION_TITLE'|trans : 'DISCARD_ALL_APPLICATION_TITLE'|trans }}
+        {% else %}
+            {{ selActionType=='selected'? 'CONFIRM_SELECTED_APPLICATION_TITLE'|trans:'CONFIRM_ALL_APPLICATION_TITLE'|trans }}
+        {% endif %}
+    </h4>
+</div>
+
+<div class="modal-body fg-modal-text row">
+    <div class="col-md-12">
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <form action="{{ path("do_confirm_or_discard_external_application") }}" class="form-horizontal form-row-sepe" id="confirmdiscard">
+                    <div class="clearfix">
+                        <p style='padding-bottom: 2%'>
+                            {% if action == 'discard' %}
+                                {{ selActionType=='selected'? 'DISCARD_SELECTED_APPLICATION'|trans:'DISCARD_ALL_APPLICATION'|trans }}
+                            {% else %}
+                                {{ selActionType=='selected'? 'CONFIRM_SELECTED_APPLICATION'|trans:'CONFIRM_ALL_APPLICATION'|trans }}
+                            {% endif %}
+                        </p>
+                    </div>
+                <input type="hidden" name="selectedId" id="selectedId" value="" />
+                <!--input type="hidden" name="action" id="action" value="{{ action }}" /-->
+            </form>
+            <!-- END FORM-->
+        </div>
+    </div>
+</div>
+{% include 'clubadmin/savebuttonpopup.html.twig' with {'save_button_id':'external_ap_save' ,'save_button_val': ((action == 'confirm') ? 'BUTTON_CONFIRM'|trans : 'BUTTON_DISCARD'|trans)}  %}
+
+<script type="text/javascript">
+    var reactivateOverviewPath = "{{path('get_all_external_application_confirm')}}";
+    $(document).off('click', '#external_ap_save');
+    $(document).on('click', '#external_ap_save', function () {
+        var buttonId = this.id;
+        if($(this).hasClass('disabled'))
+            return;
+        $(this).addClass('disabled');
+        
+        if (buttonId == 'external_ap_save') {
+            var action = '{{ action }}';
+            var path = "{{path('update_membership_assignments')}}";
+            var type = '{{selActionType}}';
+            if (action == 'confirm') {
+                var selConfirmIds = [];
+                var selectionClass = ('{{ selActionType }}' == 'selected') ? 'dataClass:checked' : 'dataClass';
+                $("input." + selectionClass).each(function () {
+                    var confirmId = $(this).attr('id');
+                    if ($.inArray(confirmId, selConfirmIds) == -1) {
+                        selConfirmIds.push(confirmId);
+                    }
+                });
+                var selcontactIds = JSON.stringify(selConfirmIds)
+                assignmentJsonAr = {'selcontactIds': selcontactIds, 'contactType': 'confirm'};
+                $.get(reactivateOverviewPath, {'archivedData': assignmentJsonAr}, function (response) {
+                    if (response.mergeable) {
+                        if (selcontactIds.split(",").length > 1)
+                            FgMultipleMergePopup.handleMergerablePopup(response);
+                        else
+                            FgMergePopup.handleMergerablePopup(response);
+                    } else {
+                        if (response.status == 'FAILURE') {
+                            FgUtility.showToastr(response.flash, 'warning');
+                        } else {
+                            FgUtility.showToastr(response.flash, 'success');
+                        }
+                        document.location = document.location.href;
+                    }
+                });
+            }
+            else {
+                confirmOrDiscardChanges();
+            }
+        }
+    });
+
+    function confirmOrDiscardChanges() {
+        var selConfirmIds = [];
+        var selectionClass = ('{{ selActionType }}' == 'selected') ? 'dataClass:checked' : 'dataClass';
+        $("input." + selectionClass).each(function () {
+            var confirmId = $(this).attr('id');
+            if ($.inArray(confirmId, selConfirmIds) == -1) {
+                selConfirmIds.push(confirmId);
+            }
+        });
+        data = {}
+        data.selectedId = JSON.stringify(selConfirmIds);
+        data.action = '{{ action }}';
+        if ($('#contact_assign_membership_list').length > 0) {
+            data.membership = $('#contact_assign_membership_list').val();
+        }
+        $('#popup').modal('hide');
+        FgXmlHttp.post('{{ path("update_external_applications") }}', data, '', function (data) {
+            FgFormTools.handleUniform();
+            confirmOrDiscardCallbackApplication(data.topcount)
+        });
+    }
+</script>

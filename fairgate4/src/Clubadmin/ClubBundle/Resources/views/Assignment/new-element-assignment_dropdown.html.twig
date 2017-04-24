@@ -1,0 +1,12 @@
+<script type="text/template" id="newAssignmentClass">
+        <% arrayClassName = FgUtility.groupByMulti(normalArray, ['clsId']);  %>
+        <div class="col-md-4 col-sm-4 fg-left-zro fg-right-zro classDp" data-name="fg-dev-class-dp">
+            <select insert-flag="0" class="bs-select form-control fg-select-font ">
+                <option value="" >{%trans%}ASSIGNMENT_CLASS_SELECT_DROPDOWN{%endtrans%}</option>
+                    <% _.each(filterArray,function(filterArrayValue,filterArrayKey){  %>
+                    <option name="<%- arrayClassName[filterArrayKey][0]['classificationId'] %>_class_<%- arrayClassName[filterArrayKey][0]['classId'] %>" id="<%- arrayClassName[filterArrayKey][0]['classificationId'] %>_class_<%- arrayClassName[filterArrayKey][0]['classId'] %>" data-key="<%- clubId %>.<%- arrayClassName[filterArrayKey][0]['classificationId'] %>.class.<%- arrayClassName[filterArrayKey][0]['classId'] %>"  value="<%- arrayClassName[filterArrayKey][0]['classId'] %>"><%- arrayClassName[filterArrayKey][0]['classTitle'] %></option>
+                    <% }); %>
+            </select>
+        </div>
+   
+</script>

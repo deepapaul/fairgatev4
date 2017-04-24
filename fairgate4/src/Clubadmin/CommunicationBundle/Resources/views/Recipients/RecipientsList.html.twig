@@ -1,0 +1,116 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'RECIPIENTS_LISTS'|trans %}
+{% block pagecontent %}
+    {% include 'clubadmin/breadcrumb.html.twig' %}
+    <!-- BEGIN PAGE CONTENT -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet-body fg-theme-red">
+                        <form id="receiverslist" skipDirtyCheck class="form-horizontal" action="receiverslist" onSubmit="return false;">
+                            {#<div class="col-md-4 fg-left-zero">
+                                <div class="btn-group pull-left">
+                                    <h3 class="page-title fg-page-title fg-left-zero">{{'RECIPIENTS_LISTS'|trans}}</h3>
+                                </div>
+                            </div>#}
+                            <div class="row">
+                              {% set page_settings = { 'pagetitle':'true' }  %}
+                              {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': 'RECIPIENTS_LISTS'|trans, 'page_settings': page_settings } %}
+                            </div>
+                              <div class="fg-clear"></div>
+                            <!-- FORM ERROR DISPLAY STARTS-->
+                            <div class="alert alert-danger display-hide">
+                                <button class="close" data-close="alert"></button>
+                                <span>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+                            </div>
+                            <!-- FORM ERROR DISPLAY ENDS -->
+                            <div class="fg-clear"></div>
+                            <div class="row">
+                                <div data-list-wrap class="col-md-12 fg-common-top dragndrop excludejs" id="recipients_list">
+                                    <!-- RECIPIENTS LISTING HERE -->
+                                </div>
+                            </div>
+
+                            <!-- ADD RECEIVER LIST - STARTS -->
+                            <div class="row">
+                                <div class="col-md-5 fg-common-top fg-common-btm pull-left">
+                                    <a id="addrow" href="#basic" data-toggle="modal" data-parentdiv-id="recipients_list">
+                                        <i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text">{{'ADD_RECEIVER_LIST'|trans}}</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- ADD RECEIVER LIST - ENDS -->
+
+                            {% include 'clubadmin/savebutton.html.twig' with {'settings':'settings'} %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE CONTENT -->
+
+    <!-- UNDERSCORE TEMPLATES -->
+    {% include 'ClubadminCommunicationBundle:Recipients:RecipientRowTemplate.html.twig' %}
+    {% include 'ClubadminCommunicationBundle:Recipients:addRecipientRowTemplate.html.twig' %}
+
+{% endblock %}
+
+{% block customstylesheets %}  
+    <link href="{{ asset('fgcustom/css/jquery-ui.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('fgcustom/css/fbautocomplete.css')}}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block javascripts %}
+    {% if not (app.request.xmlHttpRequest) %}
+        <script src="{{ asset('fgcustom/js/page/filter-settings.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/fbautocomplete/fbautocomplete.js')}}" type="text/javascript"></script>
+    {% endif %}
+	<script src="{{ asset('fgcustom/js/dirtyfields/jquery.dirtyFields.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('fgcustom/js/fg_dirtyfields.js') }}" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        FgPopOver.init(".fg-dev-Popovers", true);
+        var pathRecipients ='{{path('get_recipents')}}';
+        var pathRecipientCounts ='{{path('get_recipent_counts')}}';
+        var saveAction = "{{path('update_recipientslist')}}";
+        var pathFilterData = "{{path('filter_contact_data')}}";
+        var pathcontactSearch = "{{path('nl_collect_contactname')}}";
+        pathcontactSearch = pathcontactSearch.replace('replaceTerm', '');
+        var pathUpdateNow = "{{path('update_recipient_contacts', {'recipientId': 'recipientId'})}}";
+        var translationTerms = {'contacts': '{{'Contacts'|trans}}', 'mandatory': '{{'MANDATORY'|trans}}', 'nonMandatory': '{{'NON-MANDATORY'|trans}}', 'selectTitle': '{{'CM_SELECT_TYPE'|trans}}', 'criteria': '{{'CM_CRITERIA'|trans}}'};
+        var recipientListIds = [];
+        var filterData = {};
+        var contactNames = {};
+        var listType = '{{listType}}';
+        var emailFields = JSON.parse('{{emailFields|json_encode|raw}}');
+        emailFields.push({'id': 'parent_email', 'title': '{{'CONNECTED_PARENT_EMAIL'|trans}}'});
+        FgUtility.changeColorOnDelete();
+        var none = "{{'NONE'|trans}}";
+        var all = "{{'ALL'|trans}}";
+        var exceptionsData = {};
+        var pathExceptionConts = "{{path('get_exception_contact_names')}}";
+        var exceptionContactIds = "";
+        var jsonTokenData = {};
+        var filterCondition = FgFilter.getCondition('{{'CM_AND'|trans}}', '{{'CM_OR'|trans}}', '{{'CM_IS'|trans}}', '{{'CM_ISNOT'|trans}}', '{{'CM_IS_BETWEEN'|trans}}', '{{'CM_IS_NOTBETWEEN'|trans}}', '{{'CM_CONTAINS'|trans}}', '{{'CM_NOTCONTAINS'|trans}}', '{{'CM_BEGINSWITH'|trans}}' , '{{'CM_NOTBEGINSWITH'|trans}}', '{{'CM_ENDWITH'|trans}}', '{{'CM_NOTENDWITH'|trans}}');
+        var currRlId = '';
+        var autoCompletePath = "{{path('nl_collect_contactname')}}";
+        var removestring = "{{'NL_AUTOCOMPLETE_REMOVE'|trans}} %s";
+        /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                    
+                     title: true
+                    
+
+             });
+    </script>
+    {% if not (app.request.xmlHttpRequest) %}
+        <script src="{{ asset('fgcustom/js/search-filter.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/listRow.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/fg_filter_validate.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/page/recipients-list.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/tokenfield/js/bootstrap-tokenfield.js') }}" type="text/javascript"></script>
+    {% endif %}
+{% endblock %}
+

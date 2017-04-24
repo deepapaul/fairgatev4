@@ -1,0 +1,39 @@
+Common\UtilityBundle\Entity\FgMessageData:
+    repositoryClass: Common\UtilityBundle\Repository\Message\FgMessageDataRepository
+    type: entity
+    table: fg_message_data
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        message:
+            type: text
+            nullable: true
+        updatedAt:
+            type: datetime
+            nullable: true
+            column: updated_at
+    manyToOne:
+        message2:
+            targetEntity: FgMessage
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                message_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        sender:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                sender_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,84 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">{{ 'SPONSOR_ADD_EXISTING_TITLE'|trans }}</h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="portlet-body form">                      
+          <div class="form-body">
+              <div class="form-group">                            
+                <div class="col-lg-12 col-md-12 col-xs-12">
+                  <div class="fg-sponsor-add" id="sponsor-search-div"><i id="fg-sponsor-search" class="fa fa-search fg-autocomplete-search"></i> <input type="text" id="input_addsponsors" class="fg-sponsor-add-exist" /> </div>
+                </div>
+              </div>                       
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="modal-footer form-actions fg-modal-footer">
+    <button type="button" class="btn green pull-left" id="create" onclick="location.href='{{ path('create_prospect') }}'" >{{'CREATE_NEW_PROSPECT'|trans}}</button>    
+    <button type="button" class="btn default" id="cancel" data-dismiss="modal" data-function="cancel">{{'CANCEL'|trans}}</button> 
+    <button type="button" class="btn green" id="save" data-function="save">{{'POPUP_SAVE'|trans}}</button>        
+</div> 
+
+<script type="text/javascript">
+$('#save').click( function() {
+    contactIds = new Array();
+    var strContactIds = "";
+    var cnt = 0;
+    $('.ids-fbautocomplete').each(function() {
+        contactIds.push($(this).val());
+    });
+    if(contactIds.length > 0) {
+        cnt = contactIds.length;
+        strContactIds = (contactIds.join(","));
+    }
+    if(strContactIds !== "") {
+        addSponsorPath = "{{ path('sponsor_addexist_ajax') }}";
+        params = { "contactIds" : strContactIds };            
+        $.ajax({
+            type: 'POST',
+            url: addSponsorPath,
+            data: params,
+            success: function( data ) {  
+                $( "#cancel" ).trigger( "click" ); 
+                FgUtility.showToastr(data.flash); 
+                FgCountUpdate.updateTopNav("add", "sponsor", "active", cnt);
+                FgCountUpdate.updateSidebarAllactive("add", cnt);
+                var updateArr = {"0":{'categoryId':'',"subCatId":"prospect",'dataType':"prospect",'sidebarCount':cnt,"action":"add"}};
+                FgCountUpdate.updateSidebar(updateArr);
+                sponsorTable.api().draw();
+            },
+            async:false
+        });
+    }   
+});
+
+autocompleteContactPath = "{{ path('sponsor_addexist_autocomplete') }}";
+$('#input_addsponsors').fbautocomplete({
+    url: autocompleteContactPath, // which url will provide json!
+    maxItems: 10, 
+    useCache: false,
+    formName: "contacts",    
+    onItemSelected: function(obj, itemId, selected) { 
+        hideSearch(selected.length)   ;     
+    },
+    onItemRemoved: function(obj, itemId) {
+        hideSearch($(".ids-fbautocomplete").length);
+    }
+});
+
+hideSearch = function(length) {
+    if(length > 0) {
+        $('#fg-sponsor-search').css({"display":"none"});
+        $('#sponsor-search-div').removeClass("fg-sponsor-add");
+        $('#input_addsponsors').removeClass("fg-sponsor-add-exist");
+    } else {
+        $('#fg-sponsor-search').css({"display":""});
+        $('#sponsor-search-div').addClass("fg-sponsor-add");
+        $('#input_addsponsors').addClass("fg-sponsor-add-exist");
+    }    
+}
+</script>

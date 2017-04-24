@@ -1,0 +1,187 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = pageTitle %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+
+ <form name="fg_cms_background_add" id="fg_cms_background_add" method="post" data-validation="true">
+    <!-- BEGIN BREADCRUMB-->
+    <div class="row">
+        <div class="col-lg-12">
+                   {% include 'internal/breadcrumb.html.twig' %}
+
+        </div>
+    </div>
+    <!-- END BREADCRUMB-->
+    <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+    {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'pageTitleConfig': true, 'configId':configId, 'contactId': '', 'tabs': tabs,'url':'','type':'','clubLanguages':'', 'clubDefaultLang': '','hrefLink':true} %}
+
+    <!-- BEGIN CONTAINER -->
+    
+    <div class="fg-theme-config-wrapper fg-marg-btm-20">
+
+                        <div class="fg-internal-data-tab">
+                            <ul class="nav nav-tabs data-more-tab fg-visibility-hidden fg-dev-bg-tabs" id="data-tabs" style="visibility: visible;">
+
+                                <li id="data_li_1" data-type="1" class="show active">
+                                    <a data-toggle="tab" href="#tab1" aria-expanded="false">{{'THEME_BACKGROUND_FULLSCREEN'|trans}}<i class="fa fa-exclamation-triangle fg-data-error hide"></i></a>
+                                </li>
+                                <li id="data_li_2" data-type="2" class="show">
+                                    <a data-toggle="tab" href="#tab2">{{'THEME_BACKGROUND_ORIGINAL_SIZE'|trans}}<i class="fa fa-exclamation-triangle fg-data-error hide"></i></a>
+                                </li>
+
+                            </ul>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-body col-md-12 fg-marg-top-20 form-horizontal fg-set-background-form-wrapper">
+                            <div class="tab-content">
+                                 {# INCLUDE TAB1 CONTENT#}
+                                
+                                 <fieldset class="form-horizontal tab-pane active" id="tab1"></fieldset> 
+                                
+                                {#INCLUDE TAB2 CONTENT#}
+                                <fieldset class="form-horizontal tab-pane" id="tab2"> </fieldset>
+                            
+                                 
+                            </div>
+                        </div>
+                    </div>
+                                 <div class="clearfix"></div>
+    <!-- END CONTAINER -->
+    
+    {% include 'internal/savebutton.html.twig' with {'backLink' : path('website_theme_configuration_list') } %}
+  {#    <div class="internal-sticky-area portlet-body form ">
+                            <div class="form-actions fluid">
+                                <div class="col-md-offset-0  col-md-12 col-sm-12 col-xs-12 ">
+                                    <button id="fg_save_changes" type="submit" class="btn green">{{'THEME_BACKGROUND_SAVECHANGES'|trans}}</button>
+                                    <button id="save_bac" type="button" class="btn default">{{'THEME_BACKGROUND_DISCARDCHANGES'|trans}}</button>
+                                 </div>
+                            </div>
+                        </div>#}
+     </form>
+     {#for page title edit#}
+     {% include 'WebsiteCMSBundle:UpdateConfiguration:configTitleChangePopup.html.twig' %}
+        {% endblock %}
+        
+      {% block underscoretemplate %}
+    {#gallery browser#}
+    {% include 'InternalGalleryBundle:GalleryBrowser:templateGalleryBrowser.html.twig' with {'hasAddVideoLink':0}%}
+
+      {% include 'WebsiteCMSBundle:UpdateConfiguration:backgroundImageCreate.html.twig' %}
+      
+{% endblock %}  
+        
+        
+        
+         {% block customstylesheets %}
+        <link href="{{ asset('fgassets/website/css/style-cms.css')}}" type="text/css" rel="stylesheet" />
+    {% endblock %}
+    
+    
+    
+    
+        {% block javascripts %}
+       <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.fileupload.js')}}" type="text/javascript"></script>
+       <script src="{{ asset('fgassets/global/js/FgFileUpload.js')}}" type="text/javascript"></script>
+       <script src="{{ asset('fgassets/website/js/Fg_cms_theme_background_list.js')}}" type="text/javascript"></script>
+       <script src="{{ asset('fgassets/internal/js/page/FgGalleryBrowser.js')}}" type="text/javascript"></script>
+       
+    <script>
+        var fgthemeBackground = new FgCmsThemeBackgroundList();
+        var backgroundDetails = {{backgroundDetails|json_encode()|raw}}
+        var clubId = {{clubId}};
+        var uploadDir ='{{uploadDir}}';
+        var configId = "{{configId}}";
+        var backgroundImageSave = "{{path("website_cms_background_image_save")}}";
+        var changePageTitlePath = '{{path('website_theme_configuration_title_edit')}}';
+        fgthemeBackground.renderTabContent('templateFullscreen',backgroundDetails, '#tab1');
+        var validationMessage = "{{'CMS_THEME_BG_VALIDATION'|trans}}";
+        var timevalidationMessage = "{{'CMS_THEME_DISPLAYTIME_VALIDATION'|trans}}";
+        var backgroundFullImgUploaderOptions = {
+            fileListTemplate: 'theme-backgroundimages-upload',
+            dropZoneElement: '#tab1',
+            fileListTemplateContainer: '#tab1 .fg-files-uploaded-lists-wrapper',
+            progressBarContainer: '.fg-upload-progress',
+            progressBarElement: '.progress-bar',
+            removeElement: '.removeUploadedFile',
+            uploadUrl: '{{path('internal_gallery_upload',{'type':'gallery'})}}',
+            extraDataToTemplate: {},
+            onFileListAdd: 'fgthemeBackground.addImgCallback',
+            errorContainer: '#articleimg-upload-error-container',
+            errorListTemplate: 'attachments-uploader-errorlist-template',
+            fileListTemplatePlacement: 'append',
+            validationErrorTemplateId:'fileUploadError',
+            onFileUploadError:'Calendar.setErrorMessage',
+            validations: {
+                fileType: 'image',
+                forbiddenFiletypes: globalForbiddenfiles,
+            },
+        };
+
+        fgthemeBackground.initUpload(backgroundFullImgUploaderOptions,'#tab1');
+
+        var galleryBrowserSettings = {
+                selector: '.fg-gallery-browser',
+                browserUrl: '{{ url('internal_gallery_browser',{'hasAddVideoLink':0})}}',
+                galleryDataUrl: '{{ url('internal_gallery_gallerydetails_ajax')}}',
+                coverImagePath: '/uploads/{{clubId}}/gallery/width_300/',
+                hasInternalArea: true,
+                addFromGalleryText:'{{'ADD_FROM_GALLERY'|trans}}',
+                addedImagesTemplate: 'templateBackgroundImagesFromGallery',
+                templatePlacementDiv: '.fg-files-uploaded-lists-wrapper',
+                addTemplateCallBackFlag: true,
+                hasAddVideoLink:0,
+                addTemplateCallBack:  fgthemeBackground.addGalleryImgCallback              
+            };
+            fgthemeBackground.handleGalleryBrowser(galleryBrowserSettings,'#tab1');
+            fgthemeBackground.handleDeleteNewRow();
+            fgthemeBackground.saveBackgroundImageDetails();
+            fgthemeBackground.handleDeleteIconColor();
+            
+           //SECOND TAB RENDERING AREA 
+            fgthemeBackground.renderTabContent('templateOriginalSize',backgroundDetails, '#tab2');
+            
+            var backgroundOriginalImgUploaderOptions = {
+            fileListTemplate: 'theme-backgroundimages-originalsize-upload',
+            dropZoneElement: '#tab2',
+            fileListTemplateContainer: '#tab2 .fg-files-uploaded-lists-wrapper',
+            progressBarContainer: '.fg-upload-progress',
+            progressBarElement: '.progress-bar',
+            removeElement: '.removeUploadedFile',
+            uploadUrl: '{{path('internal_gallery_upload',{'type':'gallery'})}}',
+            extraDataToTemplate: {},
+            onFileListAdd: 'fgthemeBackground.addImgCallback',
+            errorContainer: '#articleimg-upload-error-container-original',
+            errorListTemplate: 'attachments-uploader-errorlist-template',
+            fileListTemplatePlacement: 'append',
+            validationErrorTemplateId:'fileUploadError',
+            onFileUploadError:'Calendar.setErrorMessage', 
+            validations: {
+                fileType: 'image',
+                forbiddenFiletypes: globalForbiddenfiles,
+            },
+        };
+
+       
+            var originalGalleryBrowserSettings = {
+                selector: '.fg-gallery-browser',
+                browserUrl: '{{ path('internal_gallery_browser',{'hasAddVideoLink':0})}}',
+                galleryDataUrl: '{{ url('internal_gallery_gallerydetails_ajax')}}',
+                coverImagePath: '/uploads/{{clubId}}/gallery/width_300/',
+                hasInternalArea: true,
+                addFromGalleryText:'{{'ADD_FROM_GALLERY'|trans}}',
+                addedImagesTemplate: 'templateBackgroundOriginalImagesFromGallery',
+                templatePlacementDiv: '.fg-files-uploaded-lists-wrapper',
+                addTemplateCallBackFlag: true,
+                hasAddVideoLink:0,
+                addTemplateCallBack:  fgthemeBackground.addGalleryImgCallback              
+            };
+            
+            
+            //initialize page
+        fgthemeBackground.bgtabInit();
+        
+                
+    </script>
+{% endblock %}
+ 
+        

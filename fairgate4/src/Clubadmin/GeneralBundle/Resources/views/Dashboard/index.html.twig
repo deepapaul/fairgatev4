@@ -1,0 +1,190 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'DASHBOARD'|trans %}
+{% block pagecontent %}
+ 
+<div class="fg-theme-green">
+    {#<div class="row">
+        <div class="col-md-12">
+        <h3 class="page-title"> {{'DASHBOARD_WELCOME'|trans}}, {{ contactName }}! </h3>
+        </div>
+    </div>#}
+    <div class="row">
+     {% set page_settings = { 'pagetitle':'true' }  %}
+     {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': 'DASHBOARD_WELCOME'|trans ~", "~contactName, 'page_settings': page_settings } %}    
+       </div> 
+     <div id='tooltip' class="tooltip"></div>
+    <div class="row">
+        <div class="col-md-12  fg-right-zero fg-left-zero">     
+            {% if (fgtwig.inArray(fgclub.get('id'), staticBoxEnabledClubs)) %}
+                <div class="col-md-6">
+                    <div class="portlet box fg-theme-head">
+                        <div class="portlet-title">
+                            <div class="caption"> <span class="step-title">{{'DASHBOARD_STATIC_BOX_TITLE'|trans}}</span> </div>
+                        </div>    
+                        <div class="portlet-body fg-dashboard-static-wrap">
+                            <div class="fg-dashboard-static-img"><img src="{{ asset('fgassets/global/img/overview/raiffeisen-backenddashboard.jpg') }}" /> </div>
+                            <div class="fg-dashboard-static-teaser">{{'DASHBOARD_STATIC_BOX_TEASERTEXT'|trans}}</div>
+                            <div class="clearfix"></div>
+                            <div class="fg-dashboard-static-maintext">{{'DASHBOARD_STATIC_BOX_MAINTEXT'|trans}} <a href="https://www.raiffeisen.ch/raiffeisen/internet/db_news.nsf/vAllNewsDocs/3CFA735DC24E132EC1257EEC00324F0E" target="_blank">Weitere Informationen</a></div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}        
+            <div class="col-md-6">
+                <div class="portlet box fg-theme-head">
+                <div class="portlet-title">
+                 <div class="caption"> <span class="step-title"> {{'DASHBOARD_MEMBERS'|trans}}</span> </div>
+                </div>
+                <div class="portlet-body fg-dashboard-wrap" >
+                    <div class="fg-member-block hidden" id="fg_dev_club_piechart_wrap">
+                        <div class="fg-member-block-graph-area" >  
+                            <div id="fg-dev-piechart-club-membership" class="fg-piechart"></div>
+                            <h4>{{'DASHBOARD_CLUB_MEMBERSHIP_TYPE'|trans}}</h4>
+                        </div>
+                    </div>
+                    <div class="fg-member-block">
+                        <div class="fg-member-block-graph-area" id="fg-dev-piechart-membership_wrap">  
+                            <div id="fg-dev-piechart-membership" class="fg-piechart"></div>
+                            <h4>{{'DASHBOARD_MEMBERSHIP_TYPE'|trans}}</h4>
+                        </div>
+                    </div>
+                    <div class="fg-member-block">
+                        <div class="fg-member-block-graph-area">
+                             <div id="fg-dev-piechart-gender" class="fg-piechart"></div>
+                             <h4>{{'DASHBOARD_GENDER'|trans}}</h4>
+                        </div>
+                    </div>
+                    <div class="fg-member-block">
+                        <div class="fg-member-block-graph-area">
+                            <div id="fg-dev-piechart-origin" class="fg-piechart"></div>
+                            <h4>{{'DASHBOARD_ORIGIN'|trans}}</h4>
+                        </div>
+                    </div>
+                    <div class="fg-graph-bottom-link">
+                        {% if (fgtwig.inArray('contact',fgclub.get('allowedRights')) or fgtwig.inArray('readonly_contact',fgclub.get('allowedRights'))) %}
+                            <a href="{{path('contact_index')}}"><i class="fa fa-arrow-circle-right"></i> {{'DASHBOARD_ACTIVE_CONTACTS'|trans}}...</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="portlet box fg-theme-head">
+                <div class="portlet-title">
+                    <div class="caption"> <span class="step-title">{{'FAIRGATE_NEWS'|trans}}</span> </div>
+                </div>    
+            {% include 'ClubadminGeneralBundle:Dashboard:rssFeeds.html.twig' %}
+            </div>
+        </div>            
+        <div class="col-md-6">
+            <div class="portlet box fg-theme-head">
+                <div class="portlet-title">
+                    <div class="caption"> <span class="step-title"> {{'DASHBOARD_YEAR_OF_BIRTH'|trans}}</span> </div>
+                </div>
+                <div class="portlet-body fg-dashboard-wrap">
+                    <div id="fg-dev-barchart" class="fg-bar-chart"></div>
+                </div>
+            </div>
+        </div>        
+        <div class="col-md-6">
+            <div class="portlet box fg-theme-head">
+                <div class="portlet-title">
+                     <div class="caption"> <span class="step-title">{{'DASHBOARD_NEXTBIRTHDAYS'|trans}}</span> </div>
+                </div>    
+                <div id="list-next-birthdays" class="portlet-body fg-dashboard-wrap">
+                    {% include 'ClubadminGeneralBundle:Dashboard:nextbirthdays.html.twig' %}
+                </div>
+            </div>
+        </div>
+        {% if('communication' in bookedModulesDet) %}
+        <div class="col-md-6">
+        <div class="portlet box fg-theme-head">
+            <div class="portlet-title">
+                 <div class="caption"> <span class="step-title">{{'DASHBOARD_SENTNEWSLETTERS'|trans}}</span> </div>
+            </div>
+            <div class="portlet-body fg-dashboard-wrap">
+                <div id="newsletter_bar_chart" class="fg-bar-chart"></div>
+                <div class="fg-graph-bottom-link">
+                 {% if "communication" in userRights %}
+                <a href="{{path('newsletter_mailings')}}"><i class="fa fa-arrow-circle-right"></i> {{'DASHBOARD_NEWSLETTERSMAILINGS'|trans}}...</a>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="col-md-6">
+            <div class="portlet box fg-theme-head">
+                <div class="portlet-title">
+                     <div class="caption"> <span class="step-title"> {{'DASHBOARD_SENTSIMPLEMAILS'|trans}}</span> </div>
+                </div>
+            <div class="portlet-body fg-dashboard-wrap">
+                <div id="simplemail_bar_chart" class="fg-bar-chart" ></div>
+                <div class="fg-graph-bottom-link">
+                    {% if "communication" in userRights %}
+                    <a href="{{path('newsletter_simplemailings')}}"><i class="fa fa-arrow-circle-right"></i> {{'DASHBOARD_SIMPLEMAILSMAILINGS'|trans}}...</a>
+                {% endif %}
+                </div>
+            </div>
+            </div>
+        </div>
+        {%  endif%}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %} 
+
+{% block javascripts %}
+<script src="{{ asset('fgcustom/js/charts/jquery.flot.min.js')}}" type="text/javascript"></script> 
+<script src="{{ asset('fgcustom/js/charts/jquery.flot.pie.min.js')}}" type="text/javascript"></script> 
+<script src="{{ asset('fgcustom/js/charts/jquery.flot.stack.min.js')}}" type="text/javascript"></script> 
+<script src="{{ asset('fgcustom/js/fg_custom_charts.js')}}" type="text/javascript"></script>
+<script src="{{ asset('fgcustom/js/dashboard.js')}}" type="text/javascript"></script>
+<script type = "text/javascript">   
+       
+        var Msg = "{{noDataMsg}}";    
+        var type = "{{fgclub.get('type')}}";
+        var membershipavailable = "{{fgclub.get('clubMembershipAvailable')}}";
+        var membershipPath = "{{path('membership_percentile')}}";
+        var clubmembershipPath = "{{path('clubmembership_percentile')}}";
+        var genderPath = "{{path('gender_percentile')}}";
+        var originPath = "{{path('origin_percentile')}}";
+        var yearOfBirthPath = "{{path('dashboard_year_of_birth')}}";
+        var rssFeedPath = "{{path('rss_feed_fairgatev4')}}";
+        var nextBirthdayPath = "{{path('dashboard_nextBirthdays')}}";
+        var newsletterPath = "{{path('dashboard_newsletter')}}";
+        var simplemailPath = "{{path('dashboard_simplemail')}}";
+        var persons = "{{persons}}";
+        var person = "{{person}}";
+        var userRights={{userRights}};
+       {% if "communication" in bookedModulesDet%}
+	FgDashboard.initStackedBarchart("#newsletter_bar_chart",newsletterPath,Msg);
+	FgDashboard.initStackedBarchart("#simplemail_bar_chart",simplemailPath,Msg);
+        {% endif%}
+        if ((membershipavailable==1)&&(( type == "sub_federation_club") || ( type == "federation_club" ) ||  (type == "standard_club")))
+        { 
+            if(type != "standard_club")
+                $("#fg_dev_club_piechart_wrap").parent('div').addClass('has-club-piechart');  
+            FgDashboard.initPiechart("#fg-dev-piechart-club-membership",clubmembershipPath,Msg,false);
+            $("#fg_dev_club_piechart_wrap").removeClass("hidden");
+        }
+        if(type != "standard_club")
+         FgDashboard.initPiechart("#fg-dev-piechart-membership",membershipPath,Msg,false);
+        else
+           $("#fg-dev-piechart-membership_wrap").addClass("hidden");  
+        FgDashboard.initPiechart("#fg-dev-piechart-gender",genderPath,Msg,true);
+        FgDashboard.initPiechart("#fg-dev-piechart-origin",originPath,Msg,false);
+        FgDashboard.initBarchart("#fg-dev-barchart",yearOfBirthPath);
+        FgDashboard.initRenderHtml("#data-list-wrap-design",rssFeedPath,"#rssFeeds");
+        FgDashboard.initRenderHtml("#list-next-birthdays",nextBirthdayPath,"#template-next-birthdays", "successCallBack");                      
+     /*-------------- Page title bar configuration --------*/ 
+                                    FgPageTitlebar.init({
+
+                                             title: true
+
+
+                                     });
+</script>
+    
+{% endblock %}       

@@ -1,0 +1,1066 @@
+/*
+*01 - Metronic Global elements
+	//01-A-buttons
+	//01-B-Portlet box
+	//01-C-breadcrumb
+	//01-D-Select box
+	//01-E-input icon
+	//01-F-Form sticky area
+	//01-G-Dropdown
+	//01-H-Autocomplete dropdown
+	//01-I-Popover design
+	//01-J-Modal design------------------------
+	//01-K Datepicker overide----------------
+	//01-L Drag drop global styles----------------
+*02 - Global Classes
+*03 - Data table override
+*04 - Sidebar override
+*05 - header override
+*06 - Plugins-override
+* 999 - Pages
+*/
+/* =============================================================================
+*01 - Metronic Global elements
+========================================================================== */
+body {
+  font-size: 13px;
+}
+
+body.page-header-fixed.page-full-width {
+  background: white;
+}
+
+p {
+  margin: 0 0 10px;
+}
+
+.login .present-by {
+  color: #999;
+  font-size: 13px;
+  width: 360px;
+  margin: 0 auto;
+  padding-top: 10px;
+  padding-bottom: 15px;
+  padding-right: 0px;
+}
+
+.form-control,
+.input-group-addon {
+  border-color: #e5e5e5;
+}
+
+.form-control[disabled] {
+  cursor: not-allowed;
+  background-color: #eeeeee;
+}
+
+.form-control[readonly] {
+  cursor: not-allowed;
+  background-color: #eeeeee;
+}
+
+fieldset[disabled] .form-control {
+  cursor: not-allowed;
+  background-color: #eeeeee;
+}
+
+label {
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.control-label .required,
+.form-group .required {
+  color: #333333;
+  font-size: 14px;
+}
+
+a.btn {
+  border-width: 0;
+}
+
+.green.btn {
+  color: white;
+  background-color: #35aa47;
+  border-color: "";
+}
+.green.btn:hover {
+  color: white;
+  background-color: #2e933d;
+}
+.green.btn:focus {
+  color: white;
+  background-color: #2e933d;
+}
+.green.btn:active {
+  color: white;
+  background-color: #2e933d;
+}
+.green.btn.active {
+  color: white;
+  background-color: #2e933d;
+}
+
+.btn.green.disabled:hover:not(.btn-outline),
+.btn.green.disabled:focus:not(.btn-outline),
+.btn.green.disabled.focus:not(.btn-outline),
+.btn.green[disabled]:hover:not(.btn-outline),
+.btn.green[disabled]:focus:not(.btn-outline),
+.btn.green.focus[disabled]:not(.btn-outline),
+.btn.green.focus:not(.btn-outline),
+fieldset[disabled] .btn.green:hover:not(.btn-outline),
+fieldset[disabled] .btn.green:focus:not(.btn-outline),
+fieldset[disabled] .btn.green.focus:not(.btn-outline),
+.btn.green:focus:not(.btn-outline),
+.btn.green.focus:not(.btn-outline) {
+  color: white;
+  background-color: #2e933d !important;
+  border-color: #35aa47 !important;
+}
+
+.btn.default {
+  color: #666666;
+  background-color: #e5e5e5;
+}
+.btn.default:not(.btn-outline) {
+  color: #666666;
+  background-color: #e5e5e5;
+  border: none;
+}
+.btn.default:not(.btn-outline):hover {
+  color: #333333;
+  background-color: lightgray;
+}
+.btn.default:hover, .btn.default:active, .btn.default.active {
+  color: #333333 !important;
+  background-color: lightgray !important;
+}
+
+.btn.green:not(.btn-outline) {
+  color: white !important;
+  background-color: #35aa47;
+  border-color: #2e933d;
+}
+.btn.green:not(.btn-outline):hover {
+  color: white !important;
+  background-color: #2e933d !important;
+  border-color: #35aa47 !important;
+}
+
+input[type="text"].fg-inline-override {
+  height: 31px;
+  text-indent: 3px !important;
+}
+
+.dataTable .editable-container .popover-content .editable-input input {
+  border: 1px solid #ddd;
+}
+
+.editable-buttons {
+  vertical-align: middle !important;
+  line-height: 31px;
+}
+.editable-buttons .btn {
+  border: none;
+  padding: 0;
+  font-size: 18px;
+}
+.editable-buttons .btn.default:not(.btn-outline) {
+  background: none;
+}
+.editable-buttons .btn.blue.editable-submit {
+  margin-right: 5px;
+  background: none !important;
+}
+.editable-buttons .btn.blue.editable-submit .fa {
+  color: #333333;
+}
+.editable-buttons .btn.blue.editable-submit:hover,
+.editable-buttons .btn.default.editable-cancel:hover {
+  background: none !important;
+}
+.editable-buttons .btn.blue.editable-submit:hover .fa-check,
+.editable-buttons .btn.default.editable-cancel:hover .fa-check {
+  color: #35aa47;
+}
+.editable-buttons .btn.blue.editable-submit:hover .fa-times,
+.editable-buttons .btn.default.editable-cancel:hover .fa-times {
+  color: #c70000;
+}
+
+.error .bootstrap-select .btn {
+  border: 1px solid #b94a48 !important;
+}
+
+.login .content .form-actions .btn#back-btn {
+  background-color: #DDDDDD;
+}
+
+@media only screen and (max-width: 480px) {
+  .form .form-actions .btn {
+    margin-bottom: 4px;
+  }
+}
+.form .form-actions.right .btn {
+  margin-left: 5px;
+}
+
+.portlet.box > .portlet-title {
+  margin-bottom: 0;
+  min-height: 31px;
+  padding: 10px 10px 4px 10px;
+}
+.portlet.box > .portlet-title > .caption {
+  margin: 0 0 6px;
+  line-height: 15px;
+  padding: 0;
+}
+
+.fg-box-style-01.portlet.box > .portlet-title > .caption {
+  line-height: 20px;
+}
+
+.breadcrumb > li + li:before {
+  display: none;
+}
+
+li.btn-group.backtop {
+  position: absolute;
+  left: auto;
+}
+
+.open .btn-default.dropdown-toggle,
+.open .btn-default.dropdown-toggle:hover {
+  background-color: #f0f0f0;
+}
+
+#contact_connections .fg-content-minarea.input-icon > i {
+  left: 7px;
+  top: 9px;
+}
+
+.page-footer-fixed .backend-sticy-area:not(.fg-sticky-block) {
+  margin-top: 10px;
+}
+
+.dropdown-menu li > a {
+  font-weight: normal;
+  color: #333333;
+}
+.dropdown-menu li > a:hover {
+  font-weight: normal;
+  color: #333333;
+}
+
+.dropdown > .dropdown-menu {
+  margin-top: 0;
+}
+.dropdown > .dropdown-menu.pull-right:before {
+  display: none !important;
+}
+.dropdown > .dropdown-menu.pull-right:after {
+  display: none !important;
+}
+
+.dropdown-toggle > .dropdown-menu {
+  margin-top: 0;
+}
+.dropdown-toggle > .dropdown-menu.pull-right:before {
+  display: none !important;
+}
+.dropdown-toggle > .dropdown-menu.pull-right:after {
+  display: none !important;
+}
+
+.btn-group > .dropdown-menu {
+  margin-top: 0;
+}
+.btn-group > .dropdown-menu.pull-right:before {
+  display: none !important;
+}
+.btn-group > .dropdown-menu.pull-right:after {
+  display: none !important;
+}
+
+.dropdown > .dropdown-menu.pull-left:before,
+.dropdown-toggle > .dropdown-menu.pull-left:before,
+.btn-group > .dropdown-menu.pull-left:before,
+.dropdown > .dropdown-menu.pull-left:after,
+.dropdown-toggle > .dropdown-menu.pull-left:after,
+.btn-group > .dropdown-menu.pull-left:after,
+.dropdown > .dropdown-menu:before,
+.dropdown-toggle > .dropdown-menu:before,
+.btn-group > .dropdown-menu:before,
+.dropdown > .dropdown-menu:after,
+.dropdown-toggle > .dropdown-menu:after,
+.btn-group > .dropdown-menu:after {
+  display: none !important;
+}
+
+div.radio input[type=radio],
+div.radio-inline input[type=radio] {
+  margin-left: -11px;
+  width: 22px;
+  height: 22px;
+  margin-top: -2px;
+}
+
+.popover.fa, .tooltip.fa {
+  font: normal normal normal 14px/1 FontAwesome;
+}
+
+.modal-body {
+  font-size: 14px;
+}
+
+.datepicker table td {
+  cursor: pointer;
+}
+
+.fg-sidebar-drag-active .DTFC_ScrollWrapper {
+  overflow: inherit;
+  top: 1px;
+}
+.fg-sidebar-drag-active .page-sidebar .page-sidebar-menu .fg-sidebar-hover a {
+  cursor: -moz-grabbing !important;
+  cursor: -webkit-grabbing !important;
+  cursor: grabbing !important;
+  cursor: url("../../internal/img/closedhand.cur.ico"), move !important;
+  /* for ie fix*/
+}
+.fg-sidebar-drag-active .page-sidebar .page-sidebar-menu .nav-item > a.non-dropable {
+  cursor: no-drop !important;
+}
+.fg-sidebar-drag-active .page-sidebar .page-sidebar-menu .sub-menu .nav-item:not(.active) > a.non-dropable {
+  color: #222222 !important;
+  background: none !important;
+}
+.fg-sidebar-drag-active .page-sidebar .page-sidebar-menu .sub-menu .nav-item:not(.active) > a.non-dropable:hover {
+  color: #222222 !important;
+  background: none !important;
+}
+.fg-sidebar-drag-active .page-sidebar .page-sidebar-menu .sub-menu .nav-item:not(.active) > a.non-dropable:hover .title, .fg-sidebar-drag-active .page-sidebar .page-sidebar-menu .sub-menu .nav-item:not(.active) > a.non-dropable:hover .arrow:before, .fg-sidebar-drag-active .page-sidebar .page-sidebar-menu .sub-menu .nav-item:not(.active) > a.non-dropable:hover i {
+  color: #222222 !important;
+}
+
+/* =============================================================================
+*02 - Global Classes
+========================================================================== */
+.text-yellow {
+  color: #ffe200;
+}
+
+.text-grey {
+  color: gray;
+}
+
+/* =============================================================================
+*03 - Data table override
+========================================================================== */
+table.dataTable {
+  margin-top: 0 !important;
+}
+table.dataTable td {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+table.dataTable td.sorting_1 {
+  background-color: white !important;
+}
+table.dataTable td.sorting_1.fg-remove-member {
+  background-color: #ffe6e6 !important;
+}
+table.dataTable td.sorting_2 {
+  background-color: white !important;
+}
+table.dataTable td.sorting_2.fg-remove-member {
+  background-color: #ffe6e6 !important;
+}
+table.dataTable td.sorting_3 {
+  background-color: white !important;
+}
+table.dataTable td.sorting_3.fg-remove-member {
+  background-color: #ffe6e6 !important;
+}
+table.dataTable td.fghover.fg-dev-td-hover {
+  background-color: whitesmoke !important;
+}
+table.dataTable td.fghover.fg-dev-td-hover.fg-remove-member {
+  background-color: #ffe6e6 !important;
+}
+table.dataTable td.fg-dev-checkedtr {
+  background-color: whitesmoke !important;
+}
+table.dataTable td.fg-dev-checkedtr.fg-remove-member {
+  background-color: #ffe6e6 !important;
+}
+table.dataTable td.fg-new-member {
+  background-color: #fefec3 !important;
+}
+table.dataTable td.fg-new-member.fg-remove-member {
+  background-color: #ffe6e6 !important;
+}
+table.dataTable th {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+table.dataTable th.sorting_1 {
+  background-color: white !important;
+}
+table.dataTable th.sorting_2 {
+  background-color: white !important;
+}
+table.dataTable th.sorting_3 {
+  background-color: white !important;
+}
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting:after {
+  display: none;
+}
+table.dataTable.table-condensed > thead > tr > th {
+  background-color: #fff;
+}
+table.table-bordered.dataTable tbody th {
+  border-bottom: 1px solid #dddddd;
+}
+table.table-bordered.dataTable tbody td {
+  border-bottom: 1px solid #dddddd;
+}
+table.table th {
+  font-size: 14px;
+}
+table.table td {
+  font-size: 13px;
+}
+table.table-bordered > tfoot > tr td, table.table-bordered > tfoot > tr th {
+  padding: 5px;
+}
+
+.table-bordered > tbody > tr > th {
+  border-bottom: 1px solid #dddddd;
+}
+.table-bordered > tbody > tr > td {
+  border-bottom: 1px solid #dddddd;
+}
+.table-bordered > tfoot > tr > th {
+  border-bottom: 1px solid #dddddd;
+}
+.table-bordered > tfoot > tr > td {
+  border-bottom: 1px solid #dddddd;
+}
+.table-bordered > thead > tr > td {
+  border-bottom: 1px solid #dddddd;
+}
+
+.table > tbody > tr.active > td {
+  background: none;
+}
+.table > tbody > tr.active > th {
+  background: none;
+}
+.table > tbody > tr > td.active {
+  background: none;
+}
+.table > tbody > tr > th.active {
+  background: none;
+}
+.table > tfoot > tr.active > td {
+  background: none;
+}
+.table > tfoot > tr.active > th {
+  background: none;
+}
+.table > tfoot > tr > td.active {
+  background: none;
+}
+.table > tfoot > tr > th.active {
+  background: none;
+}
+.table > thead > tr.active > td {
+  background: none;
+}
+.table > thead > tr.active > th {
+  background: none;
+}
+.table > thead > tr > td.active {
+  background: none;
+}
+.table > thead > tr > th {
+  border-bottom: 1px solid #e7ecf1;
+}
+.table > thead > tr > th.active {
+  background: none;
+}
+
+.DTFC_LeftBodyWrapper {
+  margin-top: -5px;
+}
+
+#tab2 .table-bordered > thead > tr > th {
+  border-bottom: 1px solid #dddddd;
+}
+
+.table-hover > tbody > tr:hover {
+  background: none;
+}
+.table-hover > tbody > tr:hover > td {
+  background-color: whitesmoke !important;
+}
+.table-hover > tbody > tr:hover > th {
+  background-color: whitesmoke !important;
+}
+
+div.DTFC_LeftBodyWrapper table {
+  margin: 0 !important;
+}
+div.DTFC_LeftBodyWrapper table tr td {
+  background: white !important;
+}
+div.DTFC_LeftBodyWrapper table tr td.fghover.fg-dev-td-hover {
+  background: whitesmoke !important;
+}
+div.DTFC_LeftBodyWrapper table tr td.fg-remove-member {
+  background-color: #ffe6e6 !important;
+}
+
+div.dataTables_paginate {
+  float: right;
+}
+
+.dataTables_scrollBody {
+  border-bottom: none !important;
+  position: static !important;
+}
+
+.dataTables_scrollHead {
+  border-bottom: 1px solid #dddddd !important;
+}
+
+.DTFC_LeftBodyWrapper table.table-bordered.dataTable {
+  border-top: none !important;
+}
+
+div.dataTables_wrapper div.dataTables_info {
+  margin-top: 8px;
+}
+
+/* =============================================================================
+*04 - Sidebar override
+========================================================================== */
+.page-sidebar:not(.fg-page-new-sidebar) .page-sidebar-menu li span.arrow.pull-left:before {
+  position: static;
+}
+.page-sidebar:not(.fg-page-new-sidebar) .page-sidebar-menu li > a > .bookmarkclick {
+  position: relative;
+  z-index: 1;
+}
+.page-sidebar:not(.fg-page-new-sidebar) .page-sidebar-menu li > a > .arrow {
+  width: 16px;
+  margin-right: 2px;
+  line-height: 19px;
+}
+.page-sidebar:not(.fg-page-new-sidebar) .page-sidebar-menu li > a > .arrow:before {
+  width: auto;
+}
+.page-sidebar:not(.fg-page-new-sidebar) .page-sidebar-menu li > a > .arrow.pull-left:before {
+  font-size: 18px;
+  margin-left: 0px !important;
+  display: block;
+  width: 16px;
+}
+.page-sidebar:not(.fg-page-new-sidebar) .page-sidebar-menu li > a > .arrow.open:before {
+  content: "\f107";
+}
+.page-sidebar:not(.fg-page-new-sidebar) .page-sidebar-menu li > a > .fg-empty {
+  margin-right: 0px;
+}
+.page-sidebar:not(.fg-page-new-sidebar) .page-sidebar-menu li .fg-filter-count {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.page-sidebar:not(.fg-page-new-sidebar) .page-sidebar-menu li ul {
+  overflow: inherit !important;
+}
+.page-sidebar:not(.fg-page-new-sidebar) .page-sidebar-menu .sub-menu li {
+  margin-top: 0 !important;
+}
+.page-sidebar:not(.fg-page-new-sidebar) .page-sidebar-menu .sub-menu li > .sub-menu > li > a {
+  font-weight: 500;
+  padding-left: 28px;
+}
+.page-sidebar:not(.fg-page-new-sidebar) .page-sidebar-menu .sub-menu li > .sub-menu > li > .sub-menu > li a {
+  padding-left: 38px;
+}
+.page-sidebar:not(.fg-page-new-sidebar) .page-sidebar-menu .sub-menu li.active > a {
+  background: none !important;
+}
+
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu li {
+  margin-top: 0 !important;
+}
+
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li {
+  position: relative;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li a .arrow {
+  margin-right: 5px;
+  line-height: 17px;
+  min-width: 10px;
+  display: inline-block;
+  vertical-align: top;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li a .arrow.nav-toggle {
+  width: 20px;
+  position: relative;
+  margin-left: -5px;
+  text-align: center;
+  z-index: 1;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li a .arrow:before {
+  position: static;
+  float: none;
+  content: "\f105";
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li a .arrow.open:before {
+  content: "\f107";
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li a .empty {
+  display: inline-block;
+  width: 15px;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li .title {
+  display: inline-block;
+  padding-right: 0;
+  max-width: 80%;
+  word-break: break-word;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li .fg-sidebar-menu-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li .fg-sidebar-menu-button .btn {
+  background: none;
+  color: #fff;
+  padding: 2px;
+  margin-right: -4px;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li .fg-sidebar-menu-button .btn .fa {
+  font-size: 18px;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li .fg-sidebar-icon-right {
+  position: absolute !important;
+  top: 10px;
+  right: 10px;
+  font-size: 19px !important;
+  width: auto !important;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li.open:not(.active):not(.fg-sidebar-hover) > a:not(.no-hover):not(.non-clickable) {
+  background: none !important;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li.open:not(.active):not(.fg-sidebar-hover) > a:not(.no-hover):not(.non-clickable):hover {
+  background: #c70000 !important;
+  color: #fff;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li.open:not(.active):not(.fg-sidebar-hover) > a:not(.no-hover):not(.non-clickable):hover .title, .fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li.open:not(.active):not(.fg-sidebar-hover) > a:not(.no-hover):not(.non-clickable):hover i {
+  color: #fff;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li.open:not(.active):not(.fg-sidebar-hover) > a:not(.no-hover):not(.non-clickable):hover .arrow:before {
+  color: #fff;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li.open:not(.active):not(.fg-sidebar-hover) > a.no-hover {
+  background: none !important;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li:hover > a {
+  background: none !important;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li.active > a, .fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li.fg-sidebar-hover > a {
+  background: #c70000 !important;
+  color: #fff;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li.active > a .title, .fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li.active > a i, .fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li.fg-sidebar-hover > a .title, .fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li.fg-sidebar-hover > a i {
+  color: #fff;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li.active > a .arrow:before, .fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li.fg-sidebar-hover > a .arrow:before {
+  color: #fff !important;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li > a:not(.non-clickable):hover {
+  background: #c70000 !important;
+  color: #fff;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li > a:not(.non-clickable):hover .title, .fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li > a:not(.non-clickable):hover i {
+  color: #fff;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu li ul:not(.dropdown-menu) li > a:not(.non-clickable):hover .arrow:before {
+  color: #fff;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu .sub-menu {
+  margin: 0 !important;
+  background: #dbdbdb;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu .sub-menu > li {
+  margin: 0 !important;
+  background-color: #dbdbdb;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu .sub-menu > li > a {
+  color: #222222;
+  padding: 6px 10px;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu .sub-menu > li > a i {
+  color: #444444;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu .sub-menu > li > a i.fa-warning {
+  color: #c70000;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu .sub-menu > li > a:hover i.fa-warning {
+  color: #fff;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu .sub-menu > li.active.show-toggled-menu:not(.open) > .sub-menu {
+  display: none;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu.sidebar-level1 > li {
+  border-bottom: 1px solid #4d4d4d;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu.sidebar-level1 > li > a {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: none;
+  padding: 10px;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu.sidebar-level1 > li > a > .arrow:before {
+  color: #fff;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu.sidebar-level1 .sidebar-level2 > li > a {
+  font-size: 14px;
+  font-weight: 500;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu.sidebar-level1 .sidebar-level2 > li > a.non-clickable {
+  background: none !important;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu.sidebar-level1 .sidebar-level3 > li > a {
+  font-size: 13px;
+  font-weight: 500;
+  padding-left: 26px;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu.sidebar-level1 .sidebar-level4 > li > a {
+  font-size: 13px;
+  font-weight: 500;
+  padding-left: 47px !important;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu .control-aranew {
+  display: block;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu .control-aranew .fg-sidebar-input {
+  width: 81%;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu .control-aranew .fa-check,
+.fg-page-sidebar .page-sidebar .page-sidebar-menu .control-aranew .fa-times {
+  color: #666;
+  font-size: 18px;
+  line-height: 29px;
+  padding-left: 2px;
+  width: 18px;
+  cursor: pointer;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu .control-aranew .fa-check:hover {
+  color: #35aa47;
+}
+.fg-page-sidebar .page-sidebar .page-sidebar-menu .control-aranew .fa-times:hover {
+  color: #c70000;
+}
+.fg-page-sidebar .page-sidebar .fg-sidebar-li-options {
+  padding: 5px 7px 5px 0;
+  border: 0 !important;
+}
+.fg-page-sidebar .page-sidebar .fg-sidebar-li-options .dropdown-toggle {
+  color: #ccc;
+  background: none;
+  outline: none !important;
+  border: 0;
+  padding: 0;
+}
+.fg-page-sidebar .page-sidebar .fg-sidebar-li-options .dropdown-menu li label {
+  padding: 2px 5px;
+}
+.fg-page-sidebar .page-sidebar .fg-sidebar-options label {
+  font-weight: 400;
+  font-size: 14px;
+}
+
+/* =============================================================================
+*05 - header override
+========================================================================== */
+.page-header.navbar .hor-menu .navbar-nav > li .dropdown-menu {
+  background: #333333;
+}
+.page-header.navbar .hor-menu .navbar-nav > li .dropdown-menu li > a:hover {
+  background-color: #c70000 !important;
+  color: white;
+}
+.page-header.navbar .hor-menu .navbar-nav > li .dropdown-menu li a {
+  font-weight: normal !important;
+  white-space: nowrap;
+}
+.page-header.navbar .hor-menu .navbar-nav > li > a {
+  padding: 13px 10px;
+  font-weight: normal !important;
+}
+.page-header.navbar .hor-menu .navbar-nav > li.mega-menu-dropdown > .dropdown-menu .mega-menu-content .mega-menu-submenu {
+  width: auto !important;
+  padding: 0 15px !important;
+  margin: 0 !important;
+}
+
+/* =============================================================================
+*06 - Plugins-override
+========================================================================== */
+/*
+01 - Select 2
+02 - Bootstrap select
+03 - Autocomplete
+04 -Bootstrap Datepicker
+05 - data tabs
+06 - Nestable list
+*/
+.select2.select2-container,
+.select2-container,
+.select2-container.form-control {
+  padding: 0;
+  height: auto !important;
+}
+.select2.select2-container .select2-choice,
+.select2-container .select2-choice,
+.select2-container.form-control .select2-choice {
+  margin: 0;
+  background: white;
+  border: none;
+  height: 30px !important;
+}
+.select2.select2-container .select2-choice:hover,
+.select2-container .select2-choice:hover,
+.select2-container.form-control .select2-choice:hover {
+  background-color: #f0f0f0;
+}
+.select2.select2-container .select2-choice:focus,
+.select2-container .select2-choice:focus,
+.select2-container.form-control .select2-choice:focus {
+  background-color: #f0f0f0;
+}
+.select2.select2-container .select2-choice:active,
+.select2-container .select2-choice:active,
+.select2-container.form-control .select2-choice:active {
+  background-color: #f0f0f0;
+}
+.select2.select2-container .select2-choice.active,
+.select2-container .select2-choice.active,
+.select2-container.form-control .select2-choice.active {
+  background-color: #f0f0f0;
+}
+.select2.select2-container .select2-choice .select2-arrow,
+.select2-container .select2-choice .select2-arrow,
+.select2-container.form-control .select2-choice .select2-arrow {
+  background: none !important;
+}
+.select2.select2-container .select2-choice .select2-arrow b,
+.select2-container .select2-choice .select2-arrow b,
+.select2-container.form-control .select2-choice .select2-arrow b {
+  background: none !important;
+}
+.select2.select2-container.select2-container-disabled .select2-choice,
+.select2-container.select2-container-disabled .select2-choice,
+.select2-container.form-control.select2-container-disabled .select2-choice {
+  background: #eeeeee;
+  cursor: not-allowed;
+}
+.select2.select2-container.select2-dropdown-open .select2-choice,
+.select2-container.select2-dropdown-open .select2-choice,
+.select2-container.form-control.select2-dropdown-open .select2-choice {
+  border: none !important;
+}
+
+.select2-drop .select2-search input {
+  border-color: #e5e5e5;
+  margin: 3px auto;
+}
+.select2-drop .select2-results .select2-highlighted {
+  color: #333333;
+}
+
+.select2-drop-active {
+  z-index: 999999;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  -ms-box-shadow: none;
+  box-shadow: none;
+}
+
+.select2-drop-mask {
+  z-index: 10051;
+}
+
+.bootstrap-select.show-tick ul li a {
+  padding-left: 30px !important;
+}
+
+.bootstrap-select .btn-default.selectpicker {
+  border-color: #e5e5e5;
+}
+.has-error .bootstrap-select .btn-default.selectpicker {
+  border-color: #e73d4a;
+}
+.has-error .no-error .bootstrap-select .btn-default.selectpicker {
+  border-color: #e5e5e5;
+}
+.bootstrap-select .btn-default.selectpicker.active {
+  background-color: #f0f0f0;
+}
+.bootstrap-select .btn-default.selectpicker:active {
+  background-color: #f0f0f0;
+}
+.bootstrap-select .btn-default.selectpicker:hover, .bootstrap-select .btn-default.selectpicker:focus {
+  background-color: #f0f0f0;
+}
+.bootstrap-select .btn-default.selectpicker:hover .caret, .bootstrap-select .btn-default.selectpicker:focus .caret {
+  background: none;
+}
+.bootstrap-select .btn-default.selectpicker .caret {
+  background: none;
+}
+.bootstrap-select .dropdown-menu > li:hover {
+  background-color: whitesmoke;
+}
+.bootstrap-select .dropdown-menu > li.selected a {
+  background-color: whitesmoke;
+}
+.bootstrap-select .dropdown-menu > li a {
+  color: #333333;
+  font-weight: normal;
+}
+.bootstrap-select .dropdown-menu > li a i.check-mark {
+  display: none;
+}
+.bootstrap-select.btn-group.show-tick .dropdown-menu li.selected a i.check-mark {
+  display: block;
+}
+.bootstrap-select.btn-group.show-tick .dropdown-menu li a span.text {
+  margin-left: 5px;
+  margin-right: 0;
+}
+.bootstrap-select.btn-group .dropdown-menu > li.dropdown-header > .text {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333333;
+}
+.bootstrap-select.btn-group .btn .caret {
+  background: none !important;
+}
+
+.open > .btn-default.dropdown-toggle {
+  background-color: #f0f0f0;
+}
+
+.bootstrap-select .dropdown-menu > li.selected a.fg-option-mandatory .check-mark:after {
+  display: none;
+}
+
+.bootstrap-select.btn-group.show-tick .dropdown-menu li.selected a span.check-mark {
+  right: auto;
+  left: 8px;
+  top: 5px;
+  margin-top: 2.5px;
+  width: auto;
+}
+
+/*-------------------------------------
+---03 - Autocomplete --------------------*/
+.ui-autocomplete .ui-state-hover,
+.ui-autocomplete .ui-widget-content .ui-state-hover,
+.ui-autocomplete .ui-widget-header .ui-state-hover,
+.ui-autocomplete .ui-state-focus,
+.ui-autocomplete .ui-widget-content .ui-state-focus,
+.ui-autocomplete .ui-widget-header .ui-state-focus {
+  border: none;
+  background: #fff;
+  font-weight: normal;
+  border-left: 1px solid #ebebeb;
+  border-right: 1px solid #ebebeb;
+  margin: 0;
+}
+
+.tt-dropdown-menu {
+  min-width: 160px;
+  margin-top: 2px;
+  padding: 5px 0;
+  background-color: white;
+  border: 1px solid lightgray;
+  background-clip: padding-box;
+  width: 100%;
+  overflow-y: auto;
+  max-height: 160px;
+  z-index: 99999 !important;
+}
+.tt-dropdown-menu h3 {
+  margin: 5px 0;
+  padding: 6px 12px;
+  font-size: 18px;
+  font-weight: 700;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.page-content div.fbautocomplete-main-div input[type="text"] {
+  outline: 0;
+}
+
+.page-content div.fbautocomplete-main-div span {
+  background-color: #ededed;
+  border: 1px solid #d9d9d9;
+  z-index: 5;
+  position: relative;
+}
+.page-content div.fbautocomplete-main-div span a {
+  font-weight: normal;
+  margin: 0 5px;
+}
+.page-content div.fbautocomplete-main-div span a:hover {
+  color: #767676;
+}
+
+ /*-------------------------------------
+---04 -Bootstrap Datepicker --------------------*/
+.datepicker.dropdown-menu:before,
+.datepicker.dropdown-menu:after {
+  display: none;
+}
+
+/*-------------------------------------
+---05 - data tabs --------------------*/
+.fg-tab-style-01 > .nav-tabs > li > a {
+  color: #428bca;
+}
+
+/*-------------------------------------
+---06 - Nestable list --------------------*/
+.fg-nestable > li.dd-item.row:first-child > .fg-nestable-row {
+  margin-top: 5px;
+}
+.fg-nestable > li.dd-item.row:last-child > .fg-nestable-row {
+  margin-bottom: 5px;
+}
+.fg-nestable > li.dd-item.row:last-child > .dd-list {
+  margin-top: -8px;
+}
+.fg-nestable > li.dd-item.row:last-child > .dd-list .dd-list {
+  margin-top: -5px;
+}
+
+/* =============================================================================
+* 999 - Pages
+========================================================================== */

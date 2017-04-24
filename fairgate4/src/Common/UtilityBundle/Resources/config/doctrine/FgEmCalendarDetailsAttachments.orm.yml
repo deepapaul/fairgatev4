@@ -1,0 +1,31 @@
+Common\UtilityBundle\Entity\FgEmCalendarDetailsAttachments:
+    type: entity
+    table: fg_em_calendar_details_attachments
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        fileManager:
+            targetEntity: FgFileManager
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                file_manager_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        calendarDetail:
+            targetEntity: FgEmCalendarDetails
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                calendar_detail_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

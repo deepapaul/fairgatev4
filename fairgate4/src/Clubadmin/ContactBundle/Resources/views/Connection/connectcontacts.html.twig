@@ -1,0 +1,167 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">{% trans with {'%cont1%': cont1DataArr.2, '%cont2%': cont2DataArr.2} %}CONNECT_%cont1%_WITH_%cont2%{% endtrans %}.</h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="#" class="form-horizontal form-row-sepe" id="connectionform">
+                    <div class="form-body">
+                        {% if (type == 'CC') %}
+                            <input type="hidden" name="connection_type" id="connection_type" value="othercompany" />
+                        {% else %}
+                            <div class="form-group">
+                                <label class="control-label col-md-3">{{'TYPE'|trans}}</label>
+                                {% if (type == 'SS') %}
+                                    <div class="col-md-4">
+                                        <label><input type="radio" name="connection_type" id="connection_type1" value="household" {% if ('household' in disableFields) %} disabled {% endif %} checked />{{'CM_HOUSEHOLD_CONTACT'|trans}}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label><input type="radio" name="connection_type" id="connection_type2" value="otherpersonal" {% if ('otherpersonal' in disableFields) %} disabled {% endif %} />{{'OTHER_CONTACT'|trans}}</label>
+                                    </div>
+                                {% elseif (type == 'SC') %}
+                                    <div class="col-md-4">
+                                        <label><input type="radio" name="connection_type" id="connection_type1" value="company" {% if ('company' in disableFields) %} disabled {% endif %} checked />{{'MAIN_CONTACT'|trans}}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label><input type="radio" name="connection_type" id="connection_type2" value="othercompanypersonal" {% if ('othercompanypersonal' in disableFields) %} disabled {% endif %} />{{'OTHER_CONTACT'|trans}}</label>
+                                    </div>
+                                {% elseif (type == 'CS') %}
+                                    <div class="col-md-4">
+                                        <label><input type="radio" name="connection_type" id="connection_type1" value="company" {% if ('company' in disableFields) %} disabled {% endif %} checked />{{'MAIN_CONTACT'|trans}}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label><input type="radio" name="connection_type" id="connection_type2" value="othercompany" {% if ('othercompany' in disableFields) %} disabled {% endif %} />{{'OTHER_CONTACT'|trans}}</label>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        {% if (type == 'SS') %}
+                            <div class="form-group">
+                                <label class="control-label col-md-3">{{'RELATION'|trans}}</label>
+                                <div class="col-md-9">
+                                    <select class="form-control select2me" name="relation" id="relation">
+                                    </select>
+                                    <div id="display_implications"></div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="form-group">
+                                <label class="control-label col-md-3">{% if (type == 'CC') %}{{'RELATION'|trans}}{% else %}{{'FUNCTION'|trans}}{% endif %}</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control input-sm" name="relation" id="relation" value="" />
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% set currHouseholdCntIdStr = householdContacts|join(',') %}
+                        {% set currHouseholdCntIds = (currHouseholdCntIdStr == '') ? (cont2DataArr.0) : (cont2DataArr.0 ~ ',' ~ currHouseholdCntIdStr) %}
+                        <input type="hidden" name="currHouseholdCntIds" id="currHouseholdCntIds" value="{{householdContacts|join(',')}}" />
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer form-actions fg-modal-footer">
+    <button type="button" class="btn default" data-dismiss="modal">{{'CANCEL'|trans}}</button>
+    <button type="button" class="btn green" id="saveconnection">{{'SAVE'|trans}}</button>
+</div>
+<!-- UNDERSCORE TEMPLATES STARTS -->
+<div id="divTemplates">
+    <script type="text/template" id="showImplications">
+        <p><%= content[0] %></p>
+        <p><%= content[1] %></p>
+        <% if(_.size(content) > 2) { %>
+        <% abc = _.last(content, _.size(content)-2); %>
+            <span data-content="<% _.each(abc, function(values) { %><%= values %><br/><% }); %>" data-container="body" data-placement="auto" data-html="true" data-original-title= ""  class="popovers">
+                <a href="#">{% trans with {'%count%': '<%= _.size(content)-2 %>'} %}AND_%count%_MORE_CONNECTIONS{% endtrans %}</a>
+            </span>
+        <% } %>
+    </script>
+</div>
+<!-- UNDERSCORE TEMPLATES ENDS -->
+<script src="{{ asset('fgcustom/js/fgtemplate.js')}}" type="text/javascript"></script>
+<script type="text/javascript">
+    {% if (type != 'CC') %}
+        if ($('#connection_type1').prop('disabled')) {
+            $('#connection_type2').attr('checked', 'true');
+        }
+        $('input[name=connection_type]').uniform(); //style for connection_type radio button
+    {% endif %}
+    displayRelationsDropdown();
+
+    $('form#connectionform').off('change', 'input[name=connection_type]');
+    $('form#connectionform').on('change', 'input[name=connection_type]', function() {
+        displayRelationsDropdown();
+    });
+    function displayRelationsDropdown() {
+        {% if (type == 'SS') %}
+            var connectionType = $('input[name=connection_type]:checked').val();
+            var selectedRelation = $('#relation').find(":selected").val();            
+            var relationsArr = (connectionType == 'household') ? {{relationsArray.household|json_encode|raw}} : {{relationsArray.other|json_encode|raw}};
+            var optionsHtml = '';
+            $.each(relationsArr, function(key, relation) {
+                if(relation.id == selectedRelation) {
+                    optionsHtml += '<option value="'+relation.id+'" selected >'+relation.name+'</option>';
+                } else {
+                    optionsHtml += '<option value="'+relation.id+'">'+relation.name+'</option>';
+                }
+            });
+            $('select#relation').html(optionsHtml).select2();
+            displayImplications();
+        {% endif %}
+    }
+    $('form#connectionform').off('change', 'select#relation');
+    $('form#connectionform').on('change', 'select#relation', function() {
+        displayImplications();
+    });
+    function displayImplications() {
+        var relationId = $('select#relation').val();
+        var relationType = $('input[name=connection_type]:checked').val();
+        $.getJSON('{{path('connection_implication',{'contact': cont2DataArr.0})}}', {'linked_contact_id': '{{cont1DataArr.0}}', 'relation_id': relationId, 'relation_type': relationType}, function(result) {
+            renderTemplateContent('showImplications', {content: result}, 'display_implications');
+           // jQuery('span.tooltips').tooltip();
+            jQuery('.popovers').popover({
+                        html: true,
+                        trigger: 'hover',
+                        container: $(this).attr('id'),
+                        placement: 'bottom',
+                        template:'<div class="fg-connection-popover-new popover"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
+
+            });
+        });
+    }
+    function renderTemplateContent(templateScriptId, jsonData, parentDivId) {
+        var htmlFinal = FGTemplate.bind(templateScriptId, jsonData);
+        $('#' + parentDivId).html(htmlFinal);
+        if(templateScriptId=='showImplications'){
+            $('.fg-connection-popover-new').remove();
+        }
+    }
+    //save connection
+    $(document).off('click', 'button#saveconnection');
+    $(document).on('click', 'button#saveconnection', function() {
+        var relation = $('#relation').val();
+        if (relation == '') {
+            $('#relation').parent().addClass('has-error');
+            $('span.help-block').remove();
+            $('<span class="help-block">{{'VALIDATION_THIS_FIELD_REQUIRED'|trans}}</span>').insertAfter('#relation');
+            return false;
+        } else {
+            var connectionType = ($('input[name=connection_type]').attr('type') == 'radio') ? $('input[name=connection_type]:checked').val() : $('input[name=connection_type]').val();
+            var currHouseholdCntIds = $('#currHouseholdCntIds').val();
+            relation = encodeURIComponent(relation);
+            var connArr = '{"'+connectionType+'":{"{{cont1DataArr.0}}":{"'+relation+'":{"is_new":"1"}}}}';
+            var passingdata = {'connArr': connArr, 'contactId': '{{cont2DataArr.0}}', 'isCompany': '{{cont2DataArr.1}}', 'currHouseholdCntIds': currHouseholdCntIds, 'redirectPage': false};
+            //console.log(passingdata);return false;
+            $('#popup').modal('hide');
+            FgXmlHttp.post('{{path("update_contact_connections")}}', passingdata, false, callBackFn);
+        }
+    });
+    function callBackFn() {
+        oTable.api().draw();
+    }
+</script>

@@ -1,0 +1,94 @@
+CREATE TABLE `fg_cms_form_element_options` (
+  `id` int(11) NOT NULL,
+  `element_id` int(11) NOT NULL,
+  `confirmation_email_sender` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `confirmation_email_subject` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `confirmation_email_content` text COLLATE utf8mb4_unicode_ci,
+  `notification_email_recipients` text COLLATE utf8mb4_unicode_ci,
+  `completion_prompt_success_message` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+ALTER TABLE `fg_cms_form_element_options`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_fg_cms_form_element_inquiry_mail_fg_cms_page_content_ele_idx` (`element_id`);
+
+ALTER TABLE `fg_cms_form_element_options`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+
+ALTER TABLE `fg_cms_form_element_options`
+  ADD CONSTRAINT `fk_fg_cms_form_element_inquiry_mail_fg_cms_page_content_eleme1` FOREIGN KEY (`element_id`) REFERENCES `fg_cms_page_content_element` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+CREATE TABLE `fg_cms_form_element_options_i18n` (
+  `id` int(11) NOT NULL,
+  `lang` char(2) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subject_lang` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mail_content_lang` text COLLATE utf8mb4_unicode_ci,
+  `success_message_lang` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE `fg_cms_form_element_options_i18n`
+  ADD PRIMARY KEY (`lang`,`id`),
+  ADD KEY `fk_fg_cms_page_content_element_form_field_options_i18n_fg_c_idx` (`id`);
+
+
+ALTER TABLE `fg_cms_form_element_options_i18n`
+  ADD CONSTRAINT `fk_fg_cms_page_content_element_form_field_options_i18n_fg_cms10` FOREIGN KEY (`id`) REFERENCES `fg_cms_form_element_options` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+  
+CREATE TABLE `fg_cms_page_content_element_form_inquiries` (
+ `id` int(11) NOT NULL,
+ `element_id` int(11) NOT NULL,
+ `contact_id` int(11) DEFAULT NULL,
+ `created_at` datetime DEFAULT NULL,
+ `form_data` mediumtext CHARACTER SET utf8mb4
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+ALTER TABLE `fg_cms_page_content_element_form_inquiries`
+ ADD PRIMARY KEY (`id`),
+ ADD KEY `element_id` (`element_id`),
+ ADD KEY `contact_id` (`contact_id`);
+
+ALTER TABLE `fg_cms_page_content_element_form_inquiries`
+ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+ALTER TABLE `fg_cms_page_content_element_form_inquiries`
+ ADD CONSTRAINT `fk_fg_cms_form_content_element_form_inquiries` FOREIGN KEY (`element_id`) REFERENCES `fg_cms_page_content_element` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+ ADD CONSTRAINT `fk_fg_cms_form_content_element_form_inquiries_2` FOREIGN KEY (`contact_id`) REFERENCES `fg_cm_contact` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
+==================================================================================================================================================================================================================
+ALTER TABLE `fg_cms_page_content_element_form_fields` ADD `deleted_at` DATETIME NULL AFTER `is_deleted`;
+
+ALTER TABLE `fg_tm_theme` ADD `is_active` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'active theme' AFTER `theme_options`;
+
+
+UPDATE `fg_tm_theme` SET `is_active` = '0' WHERE `fg_tm_theme`.`id` = 2;
+UPDATE `fg_tm_theme` SET `is_active` = '0' WHERE `fg_tm_theme`.`id` = 3;
+
+INSERT INTO `fg_cms_navigation` (`id`, `parent_id`, `title`, `page_id`, `is_active`, `sort_order`, `is_public`, `club_id`, `created_by`, `edited_by`, `created_at`, `edited_at`, `type`, `external_link`, `navigation_url`) 
+VALUES ('1', NULL, 'Parent nav', NULL, '1', NULL, '1', '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+UPDATE `fg_cms_navigation` SET parent_id = 1 WHERE parent_id IS NULL;
+
+ALTER TABLE `fg_cms_page_content_element` ADD `form_stage` ENUM('stage1','stage2','stage3') NULL DEFAULT 'stage1' AFTER `shared_club`;
+
+ALTER TABLE `fg_cms_page_content_element_form_fields` CHANGE `number_min_value` `number_min_value` DECIMAL(11,2) NULL DEFAULT NULL;
+ALTER TABLE `fg_cms_page_content_element_form_fields` CHANGE `number_max_value` `number_max_value` DECIMAL(11,2) NULL DEFAULT NULL;
+ALTER TABLE `fg_cms_page_content_element_form_fields` CHANGE `number_step_value` `number_step_value` DECIMAL(11,2) NULL DEFAULT NULL;
+
+Function updates - sublevelNavs
+
+ALTER TABLE `fg_tm_theme_fonts` CHANGE `font_strength` `font_strength` ENUM('regular','bold','lighter') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+=================================settings.php updates ============================================
+Added - $container->setParameter('caching_enabled', true);
+Removed - $container->setParameter('apc_cache', true);
+
+Verify path - base url , host (JInesh)
+
+
+Form inquiries
+========================================================================================================================================================================================================
+
+
+Sprint 50 Db change enum value modified:
+ALTER TABLE `fg_tm_theme_fonts` CHANGE `font_strength` `font_strength` ENUM('regular','bold','lighter') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;

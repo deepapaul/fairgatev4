@@ -1,0 +1,459 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% if templateid == 0 %}
+    {% set title = 'DESIGN_TEMPLATE_DEFAULT_NAME'|trans%}
+    {% set dirtyClass = 'dirtyClass' %}
+{%else%}
+    {% set title = editdetails.title%}
+    {% set dirtyClass = '' %}
+{% endif %}
+{% set pageTitle = title %}
+{% block customstylesheets %}
+  
+    <link href="{{ asset('fgcustom/bootstrap-colorpicker/css/colorpicker.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('fgassets/assets/global/plugins/jquery-minicolors/jquery.minicolors.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+{% block pagecontent %}
+    {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb%}
+    <!-- BEGIN PAGE CONTENT-->
+    <form id="form" novalidate="novalidate"  class="form-horizontal form-bordered fg-form-unborder fg-newsletter-template-form" skipDirtyCheck method="post">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- ERROR MESSAGE-->
+                <div class="alert alert-danger display-hide"> {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                </div>
+                <!-- END ERROR MESSAGE-->
+                
+                <div class="form-group">
+                    <div class="col-md-5 col-sm-5 col-sm-12 fg-pad-left-15">
+                        <input id="template_name" name="template_name" data-auto="template_name" data-key="template_name" type="text" class="form-control input-lg page-title {{ dirtyClass }}" value="{{editdetails.title|default('')}}" placeholder="{{ 'DESIGN_TEMPLATE_DEFAULT_NAME'|trans}}" required>
+                        <input type="hidden" name="id" id="id" value="{{templateid}}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row fg-theme-green">
+            <div class="col-md-12">
+                <div class="col-md-6 fg-pad-left-0">
+                    <div class="tabbable-line fg-tab-style-01">
+                        <ul class="nav nav-tabs ">
+                            <li class="{% if(errFilename is empty) %} active {% endif %}">
+                                <a href="#tab_15_1" data-toggle="tab" aria-expanded="{% if(errFilename is empty) %}true {% else %} false {% endif %}">{{ 'DESIGN_TEMPLATE_GENERAL_HEADING'|trans }}
+                                <i class="fa fa-exclamation-triangle fg-data-error hide"></i></a>
+                            </li>
+                            <li class="{% if(errFilename is not empty) %} has-error active {% endif %}">
+                                <a href="#tab_15_2" data-toggle="tab" aria-expanded="{% if(errFilename is empty) %}false {% else %} true {% endif %}">{{ 'TEMPLATE_DESIGN'|trans }}
+                                <i class="fa fa-exclamation-triangle fg-data-error {% if(errFilename is empty) %}hide{% endif %}"></i></a>
+                            </li>
+                            {% if fgtwig.inArray('sponsor', bookedModule) %}
+                            <li class="">
+                                <a href="#tab_15_3" data-toggle="tab" aria-expanded="false">{{ 'TEMPLATE_SPONSORS'|trans }} 
+                                <i class="fa fa-exclamation-triangle fg-data-error hide"></i></a>                                  
+                            </li>
+                            {% endif %} 
+                        </ul>
+                        <div class="clearfix"></div>
+                        <div class="tab-content">
+                            <div class="tab-pane  {% if(errFilename is empty) %} active {% endif %}" id="tab_15_1">
+                                <div class="row">
+                                    <div class="col-md-12">                                        
+                                        {% if fgtwig.inArray('frontend1', bookedModule) %}                                            
+                                            <div class="row form-group">
+                                                <label class="col-sm-4 text-right">{{'DESIGN_TEMPLATE_ARTICLE_DISPLAY'|trans}}</label>
+                                                <div class="col-sm-8">
+                                                    <div class="radio-inline"><label> <input class="{{ dirtyClass }}" data-auto="teaser" type="radio" data-key="displayType" name="displayType" id="displayType" value="teaser" {%if  templateid != 0%}{%if editdetails.articleDisplay=='teaser'%} checked {% endif %}{% elseif templateid == 0%}checked{% endif %}>  {{ 'DESIGN_TEMPLATE_TEASER'|trans}}</label> </div>
+                                                    <div class="radio-inline"><label>  <input class="{{ dirtyClass }}" data-auto="fulltext" type="radio" data-key="displayType" name="displayType" id="displayType" value="fulltext"{%if  templateid != 0%}{%if editdetails.articleDisplay=='fulltext'%} checked {% endif %}{% endif %}  >  {{ 'DESIGN_TEMPLATE_FULL_TEXT'|trans}}</label>  </div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <input type="hidden" class="{{ dirtyClass }}" name="displayType_name" data-key="displayType" data-notrequired="true" class="form-control {{ dirtyClass }}" value= "fulltext">                                                                                                 
+                                        {% endif %}    
+                                        <div class="row form-group">
+                                            <label class="control-label  col-sm-4 text-right">{{'TEMPLATE_DEFAULT_SENDERNAME'|trans}}</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="sender_name" data-key="sender_name" data-notrequired="true" class="form-control {{ dirtyClass }}" value= "{%if  templateid != 0%} {{ editdetails.senderName }} {%else%} {{ general.contactname }} {%endif%}">                                                                                                 
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="control-label  col-sm-4 text-right">{{'TEMPLATE_DEFAULT_SENDER_EMAIL'|trans}}</label>
+                                            <div class="col-sm-8">
+                                                <input type="email"  name="sender_emails" data-key="sender_emails" data-notrequired="true" class="form-control {{ dirtyClass }}" value="{%if  templateid != 0%} {{ editdetails.senderEmail }} {%else%} {{ general.senderEmail }} {%endif%}">
+                                                <input type="text"  class="hide {{ dirtyClass }}" name="sender_email" data-key="sender_email" data-notrequired="true"  value="{%if  templateid != 0%} {{ editdetails.senderEmail }} {%else%} {{ general.senderEmail }} {%endif%}">
+                                            </div>
+                                        </div>
+
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 text-right">{{'TEMPLATE_DEFAULT_SALUTATION'|trans}} </label>
+                                            <div class="col-sm-8">
+                                                <div class="radio-block"> <label><input type="radio" name="salutation_type" data-key="salutation_type" id="optionsRadios0" class="salutation-type-input {{ dirtyClass }}" value="INDIVIDUAL" {% if templateid != 0%} {%if editdetails.salutationType == 'INDIVIDUAL'%} checked {% endif %}{% elseif(templateid == 0) %}checked {% endif %}> {{'NL_SALUTATION_PERSONAL'|trans}}</label> </div>
+                                                <div class="radio-block"> <label> <input type="radio" name="salutation_type" data-key="salutation_type" id="general-radio" class="salutation-type-input {{ dirtyClass }}" value="SAME" {% if templateid != 0%} {% if editdetails.salutationType == 'SAME'%} checked {% endif %} {% endif %}>
+                        {{'NL_SALUTATION_GENERAL'|trans}}</label> 
+                                                    <span class="fg-inline-elements">
+                                                        <input  type="text" id="salutation-general-input" name="salutation" data-key="salutation" data-notrequired="true"  class="form-control {{ dirtyClass }}" value="{{editdetails.salutation|default('')}}"  {% if templateid != 0%} {% if editdetails.salutationType != 'SAME'%} disabled{% endif %}{% elseif(templateid == 0) %}disabled{% endif %}>
+                                                    </span>
+                                                </div>                  
+                                                <div class="radio-block"> <label> <input type="radio" name="salutation_type" data-key="salutation_type" id="optionsRadios2" class="salutation-type-input {{ dirtyClass }}" value="NONE" {% if templateid != 0 %}{%if editdetails.salutationType == 'NONE'%} checked {% endif %} {% endif %}>
+                        {{'NL_SALUTATION_NONE'|trans}}</label> </div>
+                                            </div>
+                                        </div>
+                                        {% if general.totallanguageCount > 1 %}
+                                        <div class="row form-group">
+                                            <label class="control-label  col-sm-4 text-right">{{'TEMPLATE_DEFAULT_LANGUAGE'|trans}}</label>
+                                            <div class="col-sm-8 fg-lang-select">
+                                                <select class="form-control bs-select fg-select-font selectpicker {{ dirtyClass }}"  multiple name="language[]" data-key="language">
+                                                    {% if general.totallanguageCount ==  editdetails.selectedlanguageCount|default(0) %}
+                                                        {%set allselectedoption='selected'%}
+                                                    {% else %} 
+                                                        {%set allselectedoption=''%}     
+                                                    {% endif %}    
+                                                    <option value= "selectall" {{allselectedoption}} class="selectall fg-arrow-all">{{'SELECT_ALL'|trans}}</option>
+                                                    {% for  key,value in general.languages %}
+                                                        {% if fgtwig.inArray(key, editdetails.language|default('')) %}
+                                                            {%set selectedoption='selected'%}
+                                                        {% else %} 
+                                                            {%set selectedoption=''%}     
+                                                        {% endif %}            
+                                                        <option value= "{{key}}" {{selectedoption}} class="opt multiple">{{value}}</option>              
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+
+
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="tab-pane {% if(errFilename is not empty) %} active {% endif %}" id="tab_15_2">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row form-group {% if(errFilename is not empty) %} has-error {% endif %}">
+                                            <label class="control-label col-sm-4 text-right">{{ 'DESIGN_TEMPLATE_HEADER_IMAGE'|trans}}  <span class="required">*</span></label>                                            
+                                            
+                                            <div class="drag_picture_88" id="88">
+                                                <div class="col-sm-8 fg-contact-data">
+                                                    <div class="fg-custom-dropzone-wrapper">
+                                                        <div data-auto="design_template_dropzone"  id="fg-files-uploaded-lists-wrapper" class="fg-dropzone-area mydropzonedata " data-fileId="88">
+                                                            <div class="fg-messages">
+                                                                <h3>{{'DROPZONE_DROP_IMAGE'|trans}}</h3>
+                                                                <p> ({{'DROPZONE_DROP_IMAGE_OR_CLICK'|trans}})</p>                                                
+                                                            </div>
+                                                            <button type="button" class="fg-invisible-button"  id="triggerFileUpload"></button>
+                                                            <input type="file" id="image-uploader" name="image-uploader" style="height:0px;width:0px;visibility: hidden" />
+                                                        </div>
+
+                                                        <div class="fg-dropzone-error" id="image-upload-error-container">
+                                                          
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="hide" id="image-error-noimg-container">
+                                                        <div class="alert alert-danger alert-dismissible">
+                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        {{'FILE_UPLOAD_ERROR'|trans}}
+                                                        </div>
+                                                    </div>
+                                                    <input type="text" class="hide  imagefile-changed"   id="newsletter-template-changed" value="0" name="newsletter-template-changed" />
+                                                    <input type="text" class="hide imagefield-req {{ dirtyClass }}" data-key="picture_88" id="picture_88" name="picture_88" value="{{editdetails.headerImage|default('')}}" required >
+                                                     <input type="hidden" id="deleteddragFiles" name="deleteddragFiles" value="">      
+                                                    <input type="text"  data-key="dropzone_file" class="hide imagefield-file" id="dropzone_file" name="dropzone_file" value="">       
+                                                    <div class="clearfix">
+                                                    </div>
+                                                    <p class="fg-marg-top-5">{{'DESIGN_TEMPLATE_IMAGE_RESCALE_MESSAGE'|trans}}</p>
+                                                    <span class="fg-dev-template-imageerror">{{errFilename}}</span>
+                                                </div>
+                                                    
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 text-right">{{'DESIGN_TEMPLATE_BACKGROUND'|trans}}</label>
+                                            <div class="col-sm-8">
+                                                    <input  data-auto="background" data-key="background" name="background" type="text" class="form-control colorpicker-input {{ dirtyClass }}" data-control="wheel" value="{{editdetails.colorBg|default('#cccccc')}}" >
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 text-right">{{'DESIGN_TEMPLATE_GENERAL_TEXT'|trans}}</label>
+                                            <div class="col-sm-8">
+                                                <input data-auto="general_text" data-key="general_text" name="general_text" type="text" class="form-control colorpicker-input {{ dirtyClass }}" data-control="wheel" value="{{editdetails.colorStdText|default('#000000')}}" >
+                                             </div>
+                                        </div>
+
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 text-right">{{'DESIGN_TEMPLATE_HEADING_TEXT'|trans}}</label>
+                                            <div class="col-sm-8">
+                                                <input data-auto="heading_text" data-key="heading_text" name="heading_text" type="text" class="form-control colorpicker-input {{ dirtyClass }}" data-control="wheel" value="{{editdetails.colorTitleText|default('#000000')}}" >
+                                            </div>
+                                        </div>
+
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 text-right">{{'DESIGN_TEMPLATE_BACKGROUND_TABLE'|trans}}</label>
+                                            <div class="col-sm-8">
+                                              <input data-auto="background_table" data-key="background_table" name="background_table" type="text" class="form-control colorpicker-input {{ dirtyClass }}" data-control="wheel" value="{{editdetails.colorTocBg|default('#0099cc')}}" >
+                                           </div>
+                                        </div>
+
+                                        <div class="row form-group">
+                                            <label class="col-sm-4 text-right">{{'DESIGN_TEMPLATE_TEXT_TABLE'|trans}}</label>
+                                            <div class="col-sm-8">
+                                               <input data-auto="text_table" data-key="text_table" type="text" class="form-control colorpicker-input {{ dirtyClass }}" data-control="wheel" value="{{editdetails.colorTocText|default('#000000')}}">                              
+                                            </div>
+                                        </div>
+                    
+
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="tab-pane" id="tab_15_3">
+                                <div class="row">
+                                    <div class="col-md-12 fg-newsletter-sponsor-wrapper fg-newsletter-content-wrapper">
+                                        
+                                        
+                                        <div class="excludejs ui-sortable" id="membershiplist_sort"></div>
+                                        <div data-list-wrap="" id="addContent" class="fg-newsletter-content-div" ></div>
+                                        <div class="row">
+                                            <div class="col-md-12 fg-common-top clearfix">            
+                                                <a class="addCategory pull-left cat-2" href="#basic">
+                                                    <i class="fa fa-plus-circle fa-2x pull-left"></i> 
+                                                    <span class="fg-add-text">{% trans %}TEMPLATE_ADD_SPONSORS{% endtrans %}</span>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>    
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                                            
+                    {% include 'clubadmin/savebutton.html.twig' with {'backLink': backLink} %}
+
+                </div>
+                <div class="col-md-6">
+                    <div class="fg-news-preview-wrapper">
+                        <iframe src= "{{ path('template_preview', {'templateid': templateid}) }}"  id="myiframe" frameborder="0"  scrolling="no" style="width:100%; height:100%"  >
+    </iframe>  
+                    </div>
+                </div>
+            </div>
+        </div>  
+        <!-- END PAGE CONTENT-->
+    </form> 
+    
+{% block underscoretemplate %}
+{% include 'ClubadminCommunicationBundle:Template:newsletterimage.html.twig'  %}
+{% endblock %}
+
+
+<script type="text/template" id="sponsorContentlistWrap">
+    <%  _.each(data,function(item,key){ %>        
+        <div id="<%- item.id %>" class="fg-border-line  sortables">
+            <div class="fg-col-first-icon handle"><i class="fa fg-sort ui-draggable"></i><input type="text" class="sort-val hide" data-key="sponsor.<%- item.id %>.sort_order" name="sponsor-<%- item.id %>-sort" value="<%- item.sortOrder %>" />
+            <input type="hidden" name="templateSponsors[]" id="templateSponsors-<%- item.id %>" value="<%- item.id %>" /></div>
+            <div class="fg-col-hack">
+                <div class="col-sm-5">
+                    <input type="text" data-key="sponsor.<%- item.id %>.title" data-notrequired="true" id="sponsor_<%- item.id %>_title" name="sponsor_<%- item.id %>_title" placeholder="{% trans %}NL_SPONSORS{% endtrans %}" class="input-sm form-control" value="<%- item.title %>">                                                               
+                </div>
+                <div class="col-sm-4">
+                    <select class="select2 form-control fg-select-font" data-key="sponsor.<%- item.id %>.position" id="sponsor_<%- item.id %>_position" name="sponsor_<%- item.id %>_position">
+                        <option value="ABOVE" <% if (item.position == 'ABOVE') { %>selected<% } %> >{{ 'TEMPLATE_SPONSOR_POSITION1'|trans }}</option>
+                        <option value="CONTENT" <% if (item.position == 'CONTENT') { %>selected<% } %> >{{ 'TEMPLATE_SPONSOR_POSITION2'|trans }}</option>
+                        <option value="BOTTOM" <% if (item.position == 'BOTTOM') { %>selected<% } %> >{{ 'TEMPLATE_SPONSOR_POSITION3'|trans }}</option>
+                    </select>
+                </div>
+                <div class="col-sm-3 fg-sponsor-settings opened" data-id="<%- item.id %>" data-target="#settings-<%- item.id %>" data-toggle="collapse"><i class="fa fg-plus-icon-log fa-plus-square-o"></i> {% trans %}NL_CONTENT_OPTIONS{% endtrans %}</div>                                                                
+            </div>                        
+            <div class="fg-col-last-icon">
+                <div class="col-md-2 pull-right deletediv ">
+                    <div class="closeico fg-row-close">                               
+                        <input type="checkbox" class="make-switch" data-key="sponsor.<%- item.id %>.isDelete" id="sponsor_<%- item.id %>_isDelete" data-parentid="<%- item.id %>" data-inactiveblock="changecolor" name="sponsor_<%- item.id %>_isDelete" value="1" >
+                        <label for="sponsor_<%- item.id %>_isDelete"></label>
+                    </div>
+                </div>
+            </div>
+            <div id="settings-<%- item.id %>" class="form-body fg-ck-wrap collapse">
+                <div class="form-group last">
+                    <label class="col-md-5 fg-ck-caption-txt">{% trans %}NL_SPONSOR_SERVICES{% endtrans %}<span class="required"> * </span></label>
+                    <div class="col-md-7">                            
+                        <select class="form-control selectpicker " row-id="<%- item.id %>" name="selected-services-<%- item.id %>[]" id="selected-services-<%- item.id %>" data-key="sponsor.<%- item.id %>.services" required  multiple>                       
+                            {% for service in sponsorServices %}
+                                <option value="{{ service['serviceId'] }}" 
+                                <% _.each(item.services, function(serviceId) { if(serviceId == {{ service['serviceId'] }} ) { %>
+                                selected
+                                <% } }) ;%> >{{ service['serviceTitle'] }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="help-block" for="selected-services-<%- item.id %>"></span>
+                    </div>
+                </div>   
+                {% if not sponsorAdAreas is empty  %}
+                <div class="form-group last">
+                    <label class="col-md-5 fg-ck-caption-txt">{% trans %}NL_SPONSOR_ADZONE{% endtrans %}<span class="required"> * </span></label>
+                    <div class="col-md-7 ">
+                        <select class="form-control select2 " row-id="<%- item.id %>" name="selected-adarea-<%- item.id %>" id="selected-adarea-<%- item.id %>" data-key="sponsor.<%- item.id %>.adarea" required >                         
+                            <option value="" >{{'SELECT_DROPDOWN'|trans}} </option>
+                            {% for adArea in sponsorAdAreas %}
+                                <option value="{{ adArea['adId'] }}" <% if (item.sponsorAdArea == '{{ adArea['adId'] }}') { %>selected<% } %> >{{ adArea['adTitle'] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>                               
+              {% endif %} 
+                <div class="form-group last">
+                    <label class="col-md-5 fg-ck-caption-txt">{% trans %}NL_SPONSOR_MAX_WIDTH{% endtrans %}<span class="required"> * </span></label>
+                    <div class="col-md-7">                            
+                        <select class="form-control select2 select-for-preview" row-id="<%- item.id %>" required name="selected-width-<%- item.id %>" id="selected-width-<%- item.id %>" data-key="sponsor.<%- item.id %>.width" >                         
+                            <option value="" >{{'SELECT_DROPDOWN'|trans}} </option>                        
+                            <option value="120" <% if (item.sponsorAdWidth == '120') { %>selected<% } %> >120 {{'PIXELS'|trans}}</option>
+                            <option value="150" <% if (item.sponsorAdWidth == '150') { %>selected<% } %> >150 {{'PIXELS'|trans}}</option>
+                            <option value="200" <% if (item.sponsorAdWidth == '200') { %>selected<% } %> >200 {{'PIXELS'|trans}}</option>
+                            <option value="500" <% if (item.sponsorAdWidth == '500') { %>selected<% } %> >500 {{'PIXELS'|trans}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>       
+    <%  }); %> 
+</script>      
+<script type="text/template" id="sponsor-area">  
+    <% _.each(data,function(item,key){ %>
+        <div id="<%- item.id %>" class="fg-border-line  sortables">
+            <div class="fg-col-first-icon handle"><i class="fa fg-sort ui-draggable"></i><input type="text" class="sort-val hide" data-key="sponsor.<%- item.id %>.sort_order" name="sponsor-<%- item.id %>-sort" />
+            <input type="hidden" name="templateSponsors[]" id="templateSponsors-<%- item.id %>" value="<%- item.id %>" /></div>
+            <div class="fg-col-hack">
+                <div class="col-sm-5">
+                    <input type="text" data-key="sponsor.<%- item.id %>.title" id="sponsor_<%- item.id %>_title" data-notrequired="true" name="sponsor_<%- item.id %>_title" placeholder="{% trans %}NL_SPONSORS{% endtrans %}" class="input-sm form-control">
+                </div>
+                <div class="col-sm-4">
+                    <select class="select2 form-control fg-select-font" data-key="sponsor.<%- item.id %>.position" id="sponsor_<%- item.id %>_position" name="sponsor_<%- item.id %>_position">
+                        <option value="ABOVE">{{ 'TEMPLATE_SPONSOR_POSITION1'|trans }}</option>
+                        <option value="CONTENT">{{ 'TEMPLATE_SPONSOR_POSITION2'|trans }}</option>
+                        <option value="BOTTOM">{{ 'TEMPLATE_SPONSOR_POSITION3'|trans }}</option>
+                    </select>
+                </div>
+                <div class="col-sm-3 fg-sponsor-settings opened in" data-id="<%- item.id %>" data-target="#settings-<%- item.id %>" data-toggle="collapse"><i class="fa fg-plus-icon-log fa-minus-square-o"></i> {% trans %}NL_CONTENT_OPTIONS{% endtrans %}</div>                                                                
+            </div>                        
+            <div class="fg-col-last-icon">
+                <div class="col-md-2 pull-right deletediv ">
+                    <div class="closeico fg-row-close">
+                        <input type="checkbox"  class="make-switch">
+                        <label for="select4"></label>
+                    </div>
+                </div>
+            </div>
+            <div id="settings-<%- item.id %>" class="form-body fg-ck-wrap collapse in">
+                <div class="form-group last">
+                    <label class="col-md-5 fg-ck-caption-txt">{% trans %}NL_SPONSOR_SERVICES{% endtrans %}<span class="required"> * </span></label>
+                    <div class="col-md-7 ">                            
+                        <select class="form-control selectpicker " row-id="<%- item.id %>" name="selected-services-<%- item.id %>[]" id="selected-services-<%- item.id %>" data-key="sponsor.<%- item.id %>.services" required  multiple>                       
+                            {% for service in sponsorServices %}
+                                <option value="{{ service['serviceId'] }}" >{{ service['serviceTitle'] }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="help-block" for="selected-services-<%- item.id %>"></span>
+                    </div>
+                </div>   
+                {% if not sponsorAdAreas is empty  %}
+                <div class="form-group last">
+                    <label class="col-md-5 fg-ck-caption-txt">{% trans %}NL_SPONSOR_ADZONE{% endtrans %}<span class="required"> * </span></label>
+                    <div class="col-md-7">
+                        <select class="form-control select2 " row-id="<%- item.id %>" name="selected-adarea-<%- item.id %>" id="selected-adarea-<%- item.id %>" data-key="sponsor.<%- item.id %>.adarea" required >                         
+                            <option value="" >{{'SELECT_DROPDOWN'|trans}} </option>
+                            {% for adArea in sponsorAdAreas %}
+                                <option value="{{ adArea['adId'] }}" >{{ adArea['adTitle'] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>                               
+              {% endif %} 
+                <div class="form-group last">
+                    <label class="col-md-5 fg-ck-caption-txt">{% trans %}NL_SPONSOR_MAX_WIDTH{% endtrans %}<span class="required"> * </span></label>
+                    <div class="col-md-7 ">                            
+                        <select class="form-control select2 select-for-preview" row-id="<%- item.id %>" required name="selected-width-<%- item.id %>" id="selected-width-<%- item.id %>" data-key="sponsor.<%- item.id %>.width" >                         
+                            <option value="" >{{'SELECT_DROPDOWN'|trans}} </option>                        
+                            <option value="120">120 {{'PIXELS'|trans}}</option>
+                            <option value="150">150 {{'PIXELS'|trans}}</option>
+                            <option value="200">200 {{'PIXELS'|trans}}</option>
+                            <option value="500">500 {{'PIXELS'|trans}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <%  }); %>        
+</script>    
+
+    <!-- END PAGE CONTENT-->
+
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/bootstrap-colorpicker/js/bootstrap-colorpicker.js') }}" type="text/javascript"></script>    
+   <script src="{{ asset('fgcustom/js/dirtyfields/jquery.dirtyFields.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_dirtyfields.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/listRow.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/assets/global/plugins/jquery-minicolors/jquery.minicolors.min.js') }}" type="text/javascript"></script>    
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.ui.widget.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.iframe-transport.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.fileupload.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/internal/js/thumbnail.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/FgFileUpload.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/imageUploader.js')}}" type="text/javascript"></script>
+    <script type="text/javascript">
+      var templateId = {{templateid}};
+      var errFilename = '{{errFilename}}'; 
+      var club_id = {{clubId}};
+      globalDefaultMessage = '{{'DATA_DROP_IMAGE'|trans}}';
+      globalClickMessage = '{{'DATA_DROP_IMAGE_CLICK'|trans}}';
+      globalRemoveFile = '{{'DATA_DROP_IMAGE_REMOVE'|trans}}';
+      globalInvalidFile = '{{'DATA_DROP_IMAGE_INVALID'|trans}}';
+      globaldictFileTooBig = '{{'DATA_DROP_IMAGE_FILESIZE_EXCEED'|trans}}';
+      var all = "{{'ALL'|trans}}";
+      var none = datatabletranslations.noneSelectedText;
+      var pathTemplateSponsorContent = "{{path('get_template_sponsor_content',{'templateId':templateid|default(0)})}}";
+      var pathTemplateCreate = "{{path('template_create')}}";
+      var pathTemplateIframe=  "{{ path('template_preview', {'templateid': '|TEMPLATEID|'}) }}";
+      var pathTemplateEdit = "{{ path('template_edit', {'id': templateid }) }}";
+      var  imageElementUploaderOptions = {
+            fileListTemplate: 'dropzone-img-upload',
+            dropZoneElement: '#fg-wrapper',
+            fileListTemplateContainer: '#fg-files-uploaded-lists-wrapper',
+            progressBarContainer: '.fg-upload-progress',
+            progressBarElement: '.progress-bar',
+            removeElement: '.removeUploadedFile',
+            uploadUrl: '{{path('backend_tmp_upload_file',{'type':'dropzone'})}}',
+            extraDataToTemplate: {},
+            
+            onFileUploadSuccess: 'ImagesUploader.setThumbnail',
+            onFileUploadError:'ImagesUploader.setErrorMessage',
+            onRemoveFileEvent:'ImagesUploader.removeFileUpdate',
+            errorContainer: '#image-upload-error-container',
+            errorListTemplate: 'image-uploader-errorlist-template',
+            fileListTemplatePlacement: 'append',
+            previewClass:'.fg-dropzone-preview',
+            removefileobj:'#deleteddragFiles',
+            singleFile:true,
+            updateFormstate:0,
+            callbacks :
+                {
+                 fileuploadadd: 'ImagesUploader.updateSingleView',
+                 fileuploadfailed:'ImagesUploader.setErrorMessage',
+         
+                },
+            validations: {
+                fileType: 'image',
+                forbiddenFiletypes: globalForbiddenfiles,
+            },
+        };
+
+      
+        ImagesUploader.deleteElement();
+        
+           
+    </script>
+    <script src="{{ asset('fgcustom/js/page/newsletterTemplate.js') }}" type="text/javascript"></script>      
+{% endblock %}
+

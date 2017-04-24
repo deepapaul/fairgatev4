@@ -1,0 +1,54 @@
+Common\UtilityBundle\Entity\FgClubTerminology:
+    repositoryClass: Common\UtilityBundle\Repository\FgClubTerminologyRepository
+    type: entity
+    table: fg_club_terminology
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        defaultSingularTerm:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: default_singular_term
+        defaultPluralTerm:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: default_plural_term
+        singular:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        plural:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sort_order
+        isFederation:
+            type: boolean
+            nullable: false
+            column: is_federation
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

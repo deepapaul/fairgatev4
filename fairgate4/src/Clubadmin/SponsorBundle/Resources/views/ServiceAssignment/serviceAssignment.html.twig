@@ -1,0 +1,208 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set fiscalYear= fgclub.getFiscalYear() %}
+{% set pageTitle = serviceTitle %}
+{% if (backTo) %}
+    {% set backvar=backTo|split('|') %}
+    {% set backLnk=path('services_listing',{'offset':backvar[1]|default(0),'contact':backvar[0]}) %}
+{% else %}
+    {% set backLnk=path('clubadmin_sponsor_homepage') %}
+{% endif %}
+{% block pagecontent %}
+    {% include 'clubadmin/breadcrumb.html.twig' with {'breadCrumb':{'back': backLnk }} %}
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet-body fg-theme-green">
+                        <form id="service_assignment" method="post" onsubmit="return false;" autocomplete="off" novalidate="novalidate">
+                        <div class="row">
+                            <div class="col-md-12 fg-modal-header">
+                                <h3 class="modal-title page-title fg-inner-title fg-service-assign-title">
+                                    {% if(contacts|length > 1)%}
+                                        <span class="fg-dev-contact-names"><a href="#" class="fg-plus-icon"></a><a href="#" class="fg-minus-icon"></a></span>
+                                    {% endif %}
+                                    {{serviceTitle}}
+                                    {% if(contacts|length > 1)%}
+                                    <div class="fg-arrow-sh">
+                                        <ul>
+                                            {% for contact in contacts %}
+                                            <li><a href="{{ path('render_sponsor_overview',{'offset':0,'sponsor':contact.id})}}" target="_blank" data-cont-id="{{contact.id}}">{{contact.contactname}}</a></li>
+                                            {% endfor %}
+                                            {% if(contacts|length < serviceAssigns.contacts|split(',')|length ) %}
+                                            <li>…</li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="fg-spon-assignment">
+                                    <dl>
+                                        <dt>{% trans %}SM_SERVICE_CATEGORY{% endtrans %} <span class="fg-mandatory">*</span></dt>
+                                        <dd dataerror-group>
+                                            <div class="fg-spon-width">
+                                                <select data-error-container="#category_error" required data-category name="category" id="category" data-key="category_id" class="form-control bs-select" >
+                                                    <option value="">{% trans %}SELECT_DEFAULT{% endtrans %}</option>
+                                                    {% for categorie in categories %}
+                                                        <option {{ serviceAssigns.categoryId|default('') == categorie.categoryId ? 'selected':'' }} value="{{categorie.categoryId}}">{{categorie.catTitle}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <span id="category_error" class="has-error"></span>
+                                            </div>
+                                        </dd>
+                                        <dt>{% trans %}SM_SERVICE{% endtrans %} <span class="fg-mandatory">*</span></dt>
+                                        <dd dataerror-group><div data-service-area="{{serviceAssigns.serviceId|default('')}}" class="fg-spon-width" >
+                                                <select data-error-container="#serviceId_error" required class="form-control bs-select" name="serviceId" id="serviceId" data-key="service_id">
+                                                    <option>{% trans %}SELECT_DEFAULT{% endtrans %}</option>
+                                                </select>
+                                                <span id="serviceId_error" class="has-error"></span>
+                                            </div>
+                                        </dd>
+                                        <dt>{% trans %}SM_START_DATE{% endtrans %} <span class="fg-mandatory">*</span></dt>
+                                        <dd dataerror-group> <div class="fg-spon-width"> <div id="fromDate" class="input-group date form_datetime">
+                                                    <input required value="{{bookings.beginDate|default('')|date(fgclub.get('phpdate')) }}" type="text" size="16" name="startDate" id="startDate" data-key="begin_date"  class="form-control">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                                                    </span>
+                                                </div></div></dd>
+                                        <dt>{% trans %}SM_END_DATE{% endtrans %} </dt>
+                                        <dd data-row="end-date"> <div class="fg-spon-width"> <div id="toDate" class="input-group date form_datetime">
+                                                    <input type="text" data-notrequired="true" value="{{bookings.endDate|default('') != ''? bookings.endDate|default('')|date(fgclub.get('phpdate')):'' }}" size="16" name="endDate" id="endDate" data-key="end_date" class="form-control">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                                                    </span>
+                                                </div></div>
+                                        </dd>
+                                        <dt>{% trans %}SM_PAYMENT_PLAN{% endtrans %}<span class="fg-mandatory">*</span></dt>
+                                        <dd dataerror-group> <div class="fg-spon-width"> 
+                                                <div class="switch-toggle switch-3 col-lg-12">
+                                                    <input {{bookings.paymentPlan|default('none')=='none' ? 'checked':''}} name="privacyContact" id="privacyContact_community"  type="radio" class="make-switch" value="none" data-key="payment_plan">
+                                                        <label for="privacyContact_community" onClick=""> {% trans %}SM_NONE{% endtrans %}</label>
+                                                    <input {{bookings.paymentPlan|default('none')=='regular' ? 'checked':''}} name="privacyContact" id="privacyContact_team" type="radio" class="make-switch" value="regular" data-key="payment_plan">
+                                                        <label for="privacyContact_team" onClick="">{% trans %}SM_REGULAR{% endtrans %}</label>
+                                                    <input {{bookings.paymentPlan|default('none')=='custom' ? 'checked':''}} name="privacyContact" id="privacyContact_private" type="radio" class="make-switch" value="custom" data-key="payment_plan">
+                                                        <label for="privacyContact_private" onClick="">{% trans %}SM_CUSTOM{% endtrans %}</label>
+                                                    <a class="btn btn-primary"></a>
+                                                </div>
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                    <dl id="custom-payment" data-payment="custom" {% if(bookings.paymentPlan|default('none') !='custom') %}style="display:none"{% endif %}>                
+                                        <dt>{% trans %}SM_PAYMENTS{% endtrans %} <span class="fg-mandatory">*</span></dt>
+                                        <dd>
+                                            <div data-custom="payment">
+                                                {% include 'ClubadminSponsorBundle:ServiceAssignment:serviceCustomPayment.html.twig' with {'payments':payments} %}  
+                                            </div>
+                                            <div class="fg-common-top">
+                                                <a data-toggle="modal" href="#basic" id="pencil" data-add="fg-dev-field">
+                                                    <i class="fa fa-plus-circle fa-2x pull-left "></i>
+                                                    <span class="fg-add-text">{% trans %}SM_ADD_PAYMENT{% endtrans %}</span>
+                                                </a>
+                                                <div class="pull-right">
+                                                    <span>{% trans %}SM_TOTAL{% endtrans %}: </span><span data-total></span>
+                                                    <span class="fg-doc-pannel-text">{% trans %}SM_CURRENT_FISCAL_YEAR{% endtrans %}: </span><span data-fiscal-total></span>
+                                                </div>
+                                            </div>
+                                                                
+                                        </dd>
+                                        
+                                            
+                                        
+                                    </dl>
+                                    <dl ld="regular-payment" data-payment="regular" {% if(bookings.paymentPlan|default('none') !='regular') %}style="display:none"{% endif %}>
+                                        <dt>{% trans %}SM_FIRST_PAYMENT_ON{% endtrans %} <span class="fg-mandatory">*</span></dt>
+                                        <dd dataerror-group> <div class="fg-spon-width"> 
+                                                <div id="firstOnDate" class="input-group date form_datetime">
+                                                    <input data-error-container="#firstPaymentOn" type="text" value="{{bookings.firstPaymentDate|default('')|date(fgclub.get('phpdate')) }}" size="16" required name="firstPayment" id="firstPayment" data-key="first_payment_date" class="form-control">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                                                    </span>
+                                                </div>
+                                                <span id="firstPaymentOn" class="has-error hide"><span  class="fg-error-warning">{% trans %}SM_PAYMENT_DATE_ERROR{% endtrans %}</span></span>
+                                            </div>
+                                        </dd>
+                                        <dt>{% trans %}SM_LAST_PAYMENT_BEFORE{% endtrans %}</dt>
+                                        <dd dataerror-group> <div class="fg-spon-width"> 
+                                                <div id="lastOnDate" class="input-group date form_datetime">
+                                                    <input data-error-container="#lastPaymentOn" data-notrequired="true" type="text" value="{{bookings.lastPaymentDate|default('') != ''? bookings.lastPaymentDate|default('')|date(fgclub.get('phpdate')):'' }}" name="lastpayment" id="lastpayment" data-key="last_payment_date" size="16"  class="form-control">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                                                    </span>
+                                                </div>
+                                                <span id="lastPaymentOn" class="has-error hide"><span class="fg-error-warning">{% trans %}SM_PAYMENT_DATE_ERROR{% endtrans %}</span></span>
+                                            </div>
+                                        </dd>
+                                        <dt>{% trans %}SM_REPETITION{% endtrans %} <span class="fg-mandatory">*</span></dt>
+                                        <dd dataerror-group> 
+                                            <div class="fg-spon-width"> 
+                                                <input type="text" value="{{bookings.repetitionMonths|default('') }}" size="16" min="0" max="500" required name="repetition" id="repetition" data-key="repetition_months" class="form-control numbermask">
+                                                <span class="fg-input-info">{% trans %}SM_INTERVAL_INFO{% endtrans %}</span>
+                                            </div>
+                                        </dd>
+                                        <dt>{% trans %}SM_AMOUNT{% endtrans %} ({{fgclub.get('clubCurrency')}}) <span class="fg-mandatory">*</span></dt>
+                                        <dd dataerror-group>
+                                            <div class="fg-spon-width"> 
+                                                <input data-discount-validate="regular" type="text" size="16" required value="{{bookings.amount|default('') }}" data-amount name="amount" id="ramount" data-key="amount" class="form-control numbermask">
+                                            </div>
+                                        </dd>
+                                        <dt>{% trans %}SM_DISCOUNT{% endtrans %} </dt>
+                                        <dd dataerror-group>
+                                            <div class="fg-spon-width fg-currency-inputs"> 
+                                                <input data-notrequired="true" data-error-container="#discount_error" type="text" min="0" max="{{bookings.discountType|default('P')=='P' ? '100' :bookings.amount|default('') }}" data-discount="regular" data-discount-validate="regular" value="{{bookings.discount|default('') }}" name="discount" id="discount" data-key="discount" class="hide fg-validate-inp">
+                                                <input type="text" data-discount-shown="regular" value="{{bookings.discount|default('') }}" name="discount_shown" id="discount_shown"  class="form-control numbermask ignore fg-spon-input-area">
+                                                <select data-discount-validate="regular" name="discountType" data-key="discount_type" id="discountType" class="bs-select form-control fg-spon-discount fg-spon-input-area" aria-invalid="false">
+                                                    <option {{bookings.discountType|default('')=='P' ? 'selected' :'' }} value="P">%</option>
+                                                    <option {{bookings.discountType|default('')=='A' ? 'selected' :'' }} value="A">{{fgclub.get('clubCurrency')}}</option>
+                                                </select> 
+                                                <span id="discount_error" class="has-error"></span>
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                                <input type="hidden" class="fg-dev-newfield" name="bookingId" id="bookingId" data-key="bookingId" value="{{bookings.bookingId|default('')}}"/>      
+                                <input type="hidden" class="fg-dev-newfield" name="contactIds" id="contactIds" data-key="contactIds" value="{{serviceAssigns.contacts|default('')}}"/> 
+                                {% include 'clubadmin/savebutton.html.twig' with {noBackLinkFlag:1,reset_button_type:'submit',reset_button_val:'CANCEL'|trans,reset_button_id:'cancel_button' } %}  
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END PAGE CONTENT-->
+    </div>
+    <!-- END CONTENT -->   
+  {% include 'ClubadminSponsorBundle:ServiceAssignment:serviceAssignmentTemplate.html.twig' %}  
+  <script type="text/template" id="newsletterContentlistWrap">
+     
+  </script>
+ {% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/listRow.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/fg_sponsor_assignment.js')}}" type="text/javascript"></script>
+    <script>
+        pathGetContent = "{{path('get_newsletter_content',{'newsletterId':newsletterId|default(0)})}}";
+        selectedContacts={{deposited.deposits|default('')|json_encode()|replace({'contactid':'id','contactNameYOB':'title'})|raw }}
+        var contactUrl = "{{path('sponsor_collect_contactname')}}";
+        var fiscalStart='{{fiscalYear.current.start}}';
+        var fiscalEnd='{{fiscalYear.current.end}}';
+        var removestring = "{{'NL_AUTOCOMPLETE_REMOVE'|trans}} %s";
+        var bookingId ={{bookings.bookingId|default('false')}};
+        var pathUpdate = "{{path('sponsor_save_booking')}}";
+        var backTo="{{backLnk}}";
+        var all = '{{'ALL'|trans}}';
+        var none = '{{'NONE'|trans}}';
+        formElements=$('form').html();
+        $(document).ready(function() {
+            FgSponsorAssignment.Init();
+            $(document).off('click', '.fg-dev-contact-names');
+            $(document).on('click', '.fg-dev-contact-names', function(e) {
+                $(this).parent().toggleClass('fg-arrowicon');
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,31 @@
+Common\UtilityBundle\Entity\FgDmTeamFunctions:
+    type: entity
+    table: fg_dm_team_functions
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        document:
+            targetEntity: FgDmDocuments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                document_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        function:
+            targetEntity: FgRmFunction
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                function_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

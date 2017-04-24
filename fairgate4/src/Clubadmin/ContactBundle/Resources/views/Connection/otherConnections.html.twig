@@ -1,0 +1,46 @@
+<!-- START OTHER-->
+{% set singleIds = [contactdetails.id] %}
+{% set companyIds = [contactdetails.id] %}
+<div class="row">
+    <div class="col-md-12 fg-common-top"><span class="fg-sub-caption">{%trans%}OTHER_CONNECTION{%endtrans%}</span></div>
+</div>
+<div class="row fg-common-top">
+    {% for other in otherContacts %}
+    {% if(other.is_company) %}
+        {% set companyIds = companyIds|merge([other.contact_id]) %} 
+        {% set delDataKey = 'othercompany.'~other.contact_id~'.lcId'~other.id~'.is_deleted' %}
+        {% set delDataName = 'othercompany_'~other.contact_id~'_lcId'~other.id~'_is_deleted' %}
+    {% else %}
+        {% set singleIds = singleIds|merge([other.contact_id]) %}
+        {% set delDataKey = contactDetails.is_company ? 'othercompanypersonal.'~other.contact_id~'.lcId'~other.id~'.is_deleted' : 'otherpersonal.'~other.contact_id~'.'~other.rId~'.is_deleted' %}
+        {% set delDataName = contactDetails.is_company ? 'othercompanypersonal_'~other.contact_id~'_lcId'~other.id~'_is_deleted' : 'otherpersonal_'~other.contact_id~'_'~other.rId~'_is_deleted' %}
+    {% endif %}
+     <div class="col-md-3 col-sm-6" data-cloumn>
+        <div class="portlet box fg-red-border">
+            <div class="portlet-title fg-theme-head">
+                <div class="caption"> {{ (other.is_company==0 and contactDetails.is_company==0 ) ? other.name: other.relation }} </div>
+                {% if(not readOnly) %}
+                <div class="closeico">
+                    <input type="checkbox" data-inactiveblock="changecolor" data-parentid="fg-content-minarea" class="make-switch" data-key="{{delDataKey}}" name="{{delDataName}}" id="{{delDataName}}"  />
+                    <label for="{{delDataName}}" class="fa fa-times-circle fa-2x fg-close-btn" ></label>
+                </div>
+               {% endif %} 
+            </div>
+            <div class="portlet-body fg-content-minarea"> 
+                <div class="fg-connection-img">{% include 'clubadmin/profile-image.html.twig' with {'clubId':other.club_id,'filename':other.profilbild,'contactType': other.is_company,'type':'other'} %}</div>
+                <div class="fg-contact-info"> <span class="fg-contact-name"><a href="{{path('contact_connection',{'contact': other.contact_id,'offset':offset})}}">{{other.contactName}}</a></span> </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% if(not readOnly) %}    
+        <div class="col-md-3 col-sm-6">
+            <div class="portlet box fg-red-border fg-disable-block">
+                <div class="fg-disable-link"> <a href="#" onclick="return false"  data-toggle="connection" data-type="{{contactDetails.is_company==0 ? 'osp':'ocp'}}" data-exclude="{{singleIds|join(',')}}" data-isCompany="0" id="pencil"><i class="fa fa-plus-circle fa-2x col-blue"></i><span class="fg-left-move">{%trans%}ADD_SINGLE_PERSON_CONNECTION{%endtrans%}</span></a>
+                    <a data-toggle="connection" href="#" onclick="return false"  data-type="ocy" data-exclude="{{companyIds|join(',')}}" data-isCompany="1" id="pencil"><i class="fa fa-plus-circle fa-2x col-blue"></i><span class="fg-left-move">{%trans%}ADD_COMPANY_CONNECTION{%endtrans%}</span></a>  
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+<!-- END OTHER-->

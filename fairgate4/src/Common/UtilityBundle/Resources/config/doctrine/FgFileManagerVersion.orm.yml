@@ -1,0 +1,62 @@
+Common\UtilityBundle\Entity\FgFileManagerVersion:
+    repositoryClass: Common\UtilityBundle\Repository\FgFileManagerVersionRepository
+    type: entity
+    table: fg_file_manager_version
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        filename:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        mimeType:
+            type: text
+            nullable: true
+            column: mime_type
+        size:
+            type: integer
+            unsigned: false
+            nullable: false
+        uploadedAt:
+            type: datetime
+            nullable: true
+            column: uploaded_at
+        updatedAt:
+            type: datetime
+            nullable: true
+            column: updated_at
+    manyToOne:
+        fileManager:
+            targetEntity: FgFileManager
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                file_manager_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        updatedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                updated_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        uploadedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                uploaded_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

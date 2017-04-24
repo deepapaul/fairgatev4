@@ -1,0 +1,77 @@
+<div class="modal-dialog modal-lg fg-gallery-modal">
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add existing images</h4>
+        </div>
+        <div class="modal-body">
+            <div class="fg-exisiting-gallery-wrapper-modal ">
+                <ul class="fg-gallery-breadcrumb list-inline"> {# BreadCrumb#}
+                     <li id="fg-breadcrum-level0" class="fg-gallery-breadcrumb-li fg-breadcrum-level0"><span><a href="#">{{'FG_GALLERY_IMAGE'|trans}} </a></span></li>
+                     <li id="fg-breadcrum-level1" data-type="" data-title="" class="fg-breadcrum-level1 fg-gallery-breadcrumb-li"><span><a id="" data-type="" data-title="" href="#" >FG_Gallery_Images2</a></span></li>
+                     <li id="fg-breadcrum-level2" data-type="" data-title=""  class="fg-breadcrum-level2 fg-gallery-breadcrumb-li"><span><a href="#">3</a></span></li>
+                     <li  id="fg-breadcrum-level3" data-type="" data-title="" class="fg-breadcrum-level3 fg-gallery-breadcrumb-li"><span><a href="#">4</a></span></li>
+                    
+                </ul>
+                <div class="fg-gallery-album-wrapper row fg-gal-parent1 form-group">
+                    {% if hasInternalAccess == 0 %}
+                        <div class="  select-gallery-role "> </div>
+                    {% else %}
+                        <div class="  select-gallery-role "> </div>
+                        {% if hasAddVideoLink == 1 %}
+                            
+                        {% endif %}
+                    {% endif %}
+                </div>
+
+               <div class="fg-gal-alb fg-album-gallery-list-first-content" ></div>    
+                <div class="fg-gal-alb fg-alb-gallery-scroller-content" ></div>                
+                <div class=" fg-gal-sub fg-sub-gallery-scroller-content" ></div>
+
+                
+                <div class="form-hidden-value">
+                    <input type="hidden" name="fg-gallery-sel-role"  class="hidden_gal_data" id="fg-gallery-sel-role" />
+                    <input type="hidden" name="fg-gallery-sel-role-name"  class="hidden_gal_data"  id="fg-gallery-sel-role-name" />
+                    <input type="hidden" name="fg-gallery-sel-role-id" id="fg-gallery-sel-role-id" />
+                    <input type="hidden" name="fg-gallery-sel-album"  class="hidden_gal_data"  id="fg-gallery-sel-album" />
+                    <input type="hidden" name="fg-gallery-sel-album-name" id="fg-gallery-sel-album-name" />
+                    <input type="hidden" name="fg-gallery-sel-album"   class="hidden_gal_data" id="fg-gallery-sel-level" />
+                    <input type="hidden" name="fg-gallery-sel-sub-album"  class="hidden_gal_data" id="fg-gallery-sel-sub-album" />
+                    <input type="hidden" name="fg-gallery-sel-sub-album-name"  class="hidden_gal_data" id="fg-gallery-sel-sub-album-name" />
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer ">
+         <div class="form-actions form-actions2   ">
+                    <div class="row">
+                        <div class="col-md-12">                                                         
+                            <a href="javascript:;" class="btn green button-save pull-right gallery_browser_save" > {{'NL_CONTENT_GB_ADD'|trans}} </a>  
+                            <a href="javascript:;" class="btn default button-submit pull-right gallery_browser_cancel" > {{'NL_CONTENT_GB_CANCEL'|trans}} </a> 
+
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+
+    </div>
+</div>
+
+</div>
+</div>
+
+
+
+{% block javascripts %}
+    <script>
+          var allAlbums = {{allAlbums|json_encode()|raw}};
+          var clubExecutive = {{clubExecutive}};
+          var executiveTitle = '{{executiveTitle}}';
+          
+        FgGalleryBrowser.renderRoleList();
+        showPopupCallback();
+       
+
+    </script>
+{% endblock %}

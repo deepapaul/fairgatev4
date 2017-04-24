@@ -1,0 +1,60 @@
+<script type="text/template" id="template-display-staticfields">  
+ <% var replaceArray = [{'otitle':'internalareaaccess','ntitle':'intranet_access'},{'otitle':'internalareainvisible','ntitle':'is_stealth_mode'},
+                    {'otitle':'nlsubscription','ntitle':'nl_subscriber'}];
+                
+                federationTerminology = '{{fgtwig.getTerminolgyName('Federation', singular, 'UCF')}}';
+                console.log(federationTerminology);
+                %> 
+    <%  _.each(systemFields, function(fixedFieldVal,index) { %>    
+        <% if (fixedFieldVal.category == 'FI') {
+                fieldType = 'FI';  
+                }
+            else if (fixedFieldVal.category == 'CN'){
+               fieldType = 'CN'; 
+            }   
+            else if (fixedFieldVal.category == 'CM') {
+            fieldType = 'CM'; 
+            }
+            else if (fixedFieldVal.category == 'FM'){
+                fieldType = 'FM' ; 
+            } else if (fixedFieldVal.category == 'CC'){
+                fieldType = 'CN' ; 
+            } 
+            else {
+             fieldType = 'G';
+            } %>
+                    <%  fixedField =fixedFieldVal.value.title  %>
+                        <div class="form-group">
+                        <h4 class="fg-cols-fsz"><%- fixedFieldVal.title  %></h4>
+
+                     <%  _.each(fixedFieldVal.value, function(ffValue,index) {
+                         var valueId = ffValue.id;
+                          var titleExist  = _.where(replaceArray, { otitle:ffValue.id });
+                          if(titleExist.length>0){
+                              ffValue.id = titleExist[0]['ntitle'] 
+                           }
+                         if (valueId.substr(0, 2) == fieldType)
+                                ffValue.id = valueId.substr(2);
+                          if(fieldType=='FM'){
+                              ntitle = ffValue.title;
+                              fedTerm = '('+federationTerminology+')';
+                              ffValue.title = ntitle.replace(fedTerm, ""); 
+                              
+                          }
+                            if(fieldType=='G'&&ffValue.id=='member_id'){
+                                ffValue.id = 'contact_id';
+                            }
+                           
+                          if (ffValue.hidecolumn  != 1) {  %>       
+                       <div class="checkbox-list">
+                           <label class="fg-col-settings-label">
+                               <i class="fa fg-plus-circle fa-2x pull-left selectitem" id="<%- ffValue.id %>" type="<%- fieldType %>" club_id="">
+                               <span class="fg-label-inner" data-label-id="<%- fieldType%><%- ffValue.id %>"><%- ffValue.title %> </span></i></label>
+                       </div>
+                       <% } %> 
+                    <% }); %>
+               </div>
+                                        
+                                        
+    <% }); %>
+</script> 

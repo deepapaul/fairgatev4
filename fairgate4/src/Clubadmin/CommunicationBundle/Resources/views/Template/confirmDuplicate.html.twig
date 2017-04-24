@@ -1,0 +1,66 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">{{templateTitle}}</h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="#" class="form-horizontal form-row-sepe" id="archivecontacts">
+                    <div class="form-body">
+                        
+                        <div id="block_0" class="fg-dev-archive-content">
+                            <p class="fg-dev-archive-status-txt">{{transDesc}}</p>
+                        </div>
+
+                    </div>
+                    
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+             {% include 'clubadmin/savebuttonpopup.html.twig'  %}
+
+<script type="text/javascript">
+    var clubId = '{{clubId}}';
+    var clubType = '{{clubType}}';
+    var actionType = '{{actionType}}';
+    var selActionType = '{{selActionType}}';
+    var selContIds = [];
+
+    if (selActionType == 'selected') {
+        $("input.dataClass:checked").each(function() {
+            var contactId = $(this).attr('id');
+            if ($.inArray(contactId, selContIds) == -1) {
+                selContIds.push(contactId);
+            }
+        });
+    }
+
+    
+    $(document).off('click', 'button[data-function=save], button[data-function=cancel]');
+    $(document).on('click', 'button[data-function=save], button[data-function=cancel]', function() {
+        var buttonId = this.id;
+        if (buttonId == 'save') {
+            duplicateTemplateFun();
+        }
+    });
+    function duplicateTemplateFun() {
+        var selectedId = JSON.stringify(selContIds);
+        $('#popup').modal('hide');
+        var passingData = {'selectedId':selectedId,'actionType': actionType,'fromPage': 'template_list'};
+        FgXmlHttp.post('{{path("save_duplicate_delete_template")}}', passingData, false, callBackFn);
+    }
+    function callBackFn(resultParms) {
+        if (!$.isEmptyObject(subscriberTable)) {
+            subscriberTable.draw();
+        } else {
+            FgTable.init();
+        }
+
+    }
+
+</script>

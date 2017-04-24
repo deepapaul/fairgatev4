@@ -1,0 +1,96 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'CONTACT_APPLICATION_FORMS'|trans %}
+{% block pagecontent %}
+    
+    <!-- BEGIN PAGE HEADER-->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BREADCRUMB STARTS -->
+                    {% include 'clubadmin/breadcrumb.html.twig' %}
+                    <!-- BREADCRUMB ENDS -->
+                </div>
+            </div>
+            <div class="row">
+                <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+                    {% set page_settings = { 'pagetitle':'true'  }  %}
+                    {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'page_settings': page_settings, 'hrefLink':'true','url':'#'} %}
+                    <!-- END PAGE TITLE AND PANEL TABS -->
+                <div class="col-md-12">
+                    <!-- BEGIN CONTENT -->
+                    <div class="fg-contact-app-form-list-wrapper">
+                        <ul class="fg-list-row-wrapper no-sorting">
+                    
+                    {% if applicationForms is defined %}
+                        {% for form in applicationForms%}
+                            <li class="row fg-border-line fg_form_list_li" id="Fg_form_list_li_{{form.id}}" data-formid="{{form.id}}">
+                                <div class="col-md-4 col-sm-5 col-xs-6 fg-config-name">
+                                    {% set tooltipText = form.contactFormType == 'single_person' ? 'FOR_SINGLE_PERSONS'|trans : (form.contactFormType == 'company_with_main_contact' ? 'FOR_COMPANY_WITH_MAIN_CONTACT'|trans : 'FOR_COMPANY_WITHOUT_MAIN_CONTACT'|trans)%}
+                                    {% if(form.contactFormType == 'single_person')%}
+                                        <i class="fa fa-user" data-toggle="tooltip" title="{{tooltipText}}"></i>   
+                                    {% else %}
+                                        <i class="fa fa-building-o" data-toggle="tooltip" title="{{tooltipText}}"></i>   
+                                    {% endif %}
+                                    <a href="{{path('contact_application_form_create',{'formId' : form.id })}}">{{form.title}}</a> 
+                                    
+                                        <a class="fg-app-form-link {% if(form.formStage != 'stage3' or form.isActive == 0) %} hide {% endif %}" target="_blank" href="{{path('external_contact_application',{'formId' : form.encId, 'type':'' })}}"><i class="fa fa-link"></i></a>
+                                    
+                                </div>
+                                <div class="col-sm-5 col-xs-6 text-right fg-form-name">
+                                    <span class="">{{'LAST_UPDATED'|trans}} {{form.lastUpdated}}, {%if(form.activeContactId == '')%}{{form.updatedBy}}{%else%}<a href="{{path('render_contact_overview',{'offset':'0', 'contact':form.activeContactId })}}">{{form.updatedBy}}</a>{%endif%}</span>
+                                </div>
+                                <div class="col-sm-2 fg-activate-wrapper">
+                                    <div class="text-right" id="isActive_{{form.id}}_container">
+                                        <label class="switch-light switch-light-sm switchhwd FR {%if(form.formStage != 'stage3')%} fg-disabled-link {% endif %}" onClick="">
+                                            <input type="checkbox" name="<%- data.formFieldId %>_isActive" {%if(form.isActive == '1')%} checked {% endif %} {%if(form.formStage != 'stage3')%} disabled {% endif %}  id="isActive_{{form.id}}" class="make-switch fg-dev-newfield fg_dev_form_activate" data-formid="{{form.id}}">
+                                            <span> 
+                                                <span>{{'ON'|trans}}</span>
+                                                <span>{{'OFF'|trans}}</span>                                                                    
+                                            </span>
+                                            <a class="btn btn-primary"></a>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1 fg-duplicate text-right fg-pad-right-15">
+                                    <i class="fa fa-2x fa-files-o fg_contact_app_form_copy fg-cursr-pointer fg-dev-form-duplicate" data-formId="{{form.id}}" data-toggle="tooltip" title='{{'CONTACT_APPLICATION_FORM_DUPLICATE'|trans}}'></i>
+                                </div>
+                                <div class="fg-col-last-icon fg_config_last_icon">
+                                    
+                                        <div class="deletediv">
+                                            <div class="closeico fg_app_form_delete_wrapper" data-toggle="tooltip" title='{{'DELETE'|trans}}'>
+                                                <input type="checkbox" name="contact_app_form_delete_{{form.id}}" id="contact_app_form_delete_{{form.id}}" value="{{form.id}}" class="make-switch fg_contact_app_form_delete">
+                                                <label for=""></label></div>
+                                        </div>
+                                </div>
+                            </li>
+                        {% endfor%}
+                    {% endif%}
+
+                </ul>
+                        <a  href="{{path('contact_application_form_createform')}}" class="fg-add-item"> <i style="margin-right:8px;" class="fa-plus-circle fa fa-2x"></i>{{'NEW_CONTACT_APPLICATION_FORM'|trans}}</a>   
+                    </div>
+
+                    <!-- END CONTENT -->
+                    {% block underscoretemplate %}
+                        {% include 'ClubadminContactBundle:ApplicationForm:ConfirmationPopup.html.twig' %}
+                    {% endblock %}
+
+                </div> 
+            </div>    
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/page/Fg_contact_application_form_list.js')}}" type="text/javascript"></script>
+    <script type="text/javascript">
+        var conatctAppFormList = new FgConatctApplicationFormList();
+        conatctAppFormList.appFormDuplicatePath = '{{ path('contact_application_duplicate') }}';
+        conatctAppFormList.appFormActivatePath = '{{ path('contact_application_form_activate') }}';
+        conatctAppFormList.appFormDeletePath = '{{ path('contact_application_form_delete') }}';
+        conatctAppFormList.init();
+        $(document).ready(function() {
+            FgPageTitlebar.init({
+                title       : true,
+                actionMenu  : false
+
+            });
+       });
+    </script>
+{% endblock %}

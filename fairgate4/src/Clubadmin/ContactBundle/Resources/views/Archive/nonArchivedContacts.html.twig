@@ -1,0 +1,167 @@
+<script type="text/template" id="nonArchivedTemp"> 
+    <% if(archiveButtonFlag==0) { 
+        var logArrayFlag=0;
+        var nonArrayFlag=0; 
+        if(selContIds.length > 0 && (selNonOwnMembers.length > 0 || selLoggedUser.length > 0 || serviceAssignContacts.length > 0 )) { %>
+            <table class="table table-bordered table-striped fg-common-top">                               
+                <thead class="fg-brdr-btm-1">
+                    <tr>
+                        <th>{{'ARCHIVE_CONTACT_HEAD_CONTACT'|trans}}</th>
+                        <% if(selNonOwnMembers.length > 0) { 
+                            nonArrayFlag=1; %>
+                            <th>
+                                <span class="fg-dev-archive-table-Popovers" data-content="{{'ARCHIVE_CONTACT_HEAD_POPOVER_EXTERNAL'|trans ({'%Club%' : fgtwig.getTerminolgyName('Club',singular,'LCF')})}}">{%trans%}ARCHIVE_CONTACT_TABLE_HEAD_EXTERNAL{%endtrans%}</span>
+                            </th>
+                        <% } 
+                        if(selLoggedUser.length > 0) { 
+                            logArrayFlag=1; %>
+                            <th>
+                                <span class="fg-dev-archive-table-Popovers" data-content="{%trans%}ARCHIVE_CONTACT_HEAD_POPOVER_YOURSELF{%endtrans%}">{%trans%}ARCHIVE_CONTACT_TABLE_HEAD_YOURSELF{%endtrans%}</span>
+                            </th>
+                        <% }
+                        if(serviceAssignContacts.length > 0) { 
+                            serviceAssignFlag=1; %>
+                            <th>
+                                <span class="fg-dev-archive-table-Popovers" data-content="{%trans%}ARCHIVE_CONTACT_HEAD_POPOVER_SPONSOR{%endtrans%}">{%trans%}ARCHIVE_CONTACT_TABLE_HEAD_SPONSOR{%endtrans%}</span>
+                            </th>
+                        <% } %>
+                    </tr>
+                </thead>
+                 <tbody>
+                    <% var overViewPath = '{{ path('render_contact_overview', {'offset' : 0, 'contact' : '**dummy**' }) }}'; %>
+                    <% _.each(selContNames,function(val,key){ 
+                        var nonMemberFlag=0;
+                        var logFlag=0;
+                        var trFlag=0;
+                        var serviceAssignFlag=0;
+                        if(selNonOwnMembers.length > 0 || selLoggedUser.length > 0 || serviceAssignContacts.length > 0) {
+                            if ($.inArray(val.id, selNonOwnMembers) != -1 || $.inArray(val.id, selLoggedUser) != -1 || $.inArray(val.id, serviceAssignContacts) != -1) {
+                                trFlag=1; %>
+                                <tr>
+                                    <%  var oPath = overViewPath.replace('**dummy**', val.id); %>
+                                    <td><a href="<%- oPath %>" target="_blank"><%- val.name %></a></td>
+                            <% }
+                            if ($.inArray(val.id, selNonOwnMembers) != -1) { 
+                                nonMemberFlag = 1; %>
+                                <td><i class="fa fa-check"></i></td>
+                            <% } 
+                            if ($.inArray(val.id, selLoggedUser) != -1) { 
+                                logFlag =1;
+                                if(nonMemberFlag==0 && selNonOwnMembers.length > 0) { 
+                                    nonMemberFlag = 1; %>
+                                    <td></td>
+                                <% } %>
+                                <td><i class="fa fa-check"></i></td>
+                            <% }
+                            if ($.inArray(val.id, serviceAssignContacts) != -1) { 
+                                serviceAssignFlag=1;
+                                if(nonMemberFlag==0 && selNonOwnMembers.length > 0) { %>
+                                    <td></td>
+                                <% } 
+                                if(logFlag==0 && selLoggedUser.length > 0) { 
+                                    logFlag =1; %>
+                                    <td></td>
+                                <% } %>
+                                <td><i class="fa fa-check"></i></td>
+                            <% } 
+                            if(logFlag==0 && selLoggedUser.length > 0 && trFlag==1) { %>
+                                <td></td>
+                            <% }
+                            if(serviceAssignFlag==0 && serviceAssignContacts.length > 0 && trFlag==1) { %>
+                                <td></td>
+                            <% } 
+                            if(trFlag==1) { %>
+                                </tr>  
+                            <% }
+                        }
+                    }); %>
+                </tbody>
+            </table>  
+        <% } 
+    } else if(archiveButtonFlag==1) { %> 
+        <div class="modal-footer form-actions fg-modal-footer">
+            <button type="button" class="btn default" id="cancel" data-dismiss="modal" data-function="cancel">{{'CANCEL'|trans}}</button>
+            <% if(nonToArchiveFlag!=1) {
+                if(allToArchiveFlag==1) { %>
+                    <button type="button" class="btn green" id="save" data-function="save">{{'ARCHIVE_BUTTON'|trans}}</button>
+                <% } else if(nonItemsInArchiveFlag==1) { %>
+                    <button type="button" class="btn green" id="save" data-function="save">{{'ARCHIVE_CONTINUE_BUTTON'|trans}}</button>
+                <% }
+            } else {
+                if(allToArchiveFlag==1) { %>
+                    <button type="button" class="btn green" id="save" data-function="save">{{'ARCHIVE_BUTTON'|trans}}</button>
+                <% } else if(nonItemsInArchiveFlag==1) { %>
+                    <button type="button" class="btn green" id="save" data-function="save">{{'ARCHIVE_CONTINUE_BUTTON'|trans}}</button>
+                <% }
+            } %>
+        </div> 
+    <% } %>
+</script>
+<script type="text/template" id="subscriberTemp"> 
+    <% 
+        var logArrayFlag=0;
+        var nonArrayFlag=0; 
+        if(selContIds.length > 0 && ( serviceAssignContacts.length > 0 )) { %>
+            <table id="subscriber_arch" class="table table-bordered table-striped fg-common-top">                               
+                <thead class="fg-brdr-btm-1">
+                    <tr>
+                    <th>   <input type="checkbox"  id="nomulti_check_all"  name="check_all"  class="fg-dev-selectsub" ></th>
+                        <th>{{'ARCHIVE_CONTACT_HEAD_CONTACT'|trans}}</th>
+                         <%   if(serviceAssignContacts.length > 0) {  
+                            serviceAssignFlag=1; %>
+                            <th>
+                                {%trans%}CONTACT_PROPERTIES_FIELDTYPE_EMAIL{%endtrans%}
+                            </th>
+                    <th></th>
+                        <% } %>
+                    </tr>
+                </thead>
+                 <tbody>
+                    <% var overViewPath = '{{ path('render_contact_overview', {'offset' : 0, 'contact' : '**dummy**' }) }}'; %>
+                    <% _.each(selContNames,function(val,key){ 
+                        var nonMemberFlag=0;
+                        var logFlag=0;
+                        var trFlag=0;
+                        var serviceAssignFlag=0;
+                        if( serviceAssignContacts.length > 0) {
+                            
+                            if ( $.inArray(val.id, serviceAssignContacts) != -1) {
+                                
+                                var emailData  =_.findWhere(subscribermail,{id:val.id,});
+                                trFlag=1; %>
+                                <tr>
+                                    <%  var oPath = overViewPath.replace('**dummy**', val.id); %>
+                                  <td>  <input type="checkbox" class="fg-dev-selectsub" id="selectSubscriber" value="<%- val.id %>" data-type="select_sub" data-classid="<%- val.id %>" /></td>
+                                   <td> <a href="<%- oPath %>" target="_blank"><%- val.name %></a> </td>
+                                    <td><span> <%- emailData.email %></span></td>
+                                    
+                            <% }
+                           
+                           
+                            if ($.inArray(val.id, serviceAssignContacts) != -1) { 
+                                serviceAssignFlag=1;
+                                if(nonMemberFlag==0 && selNonOwnMembers.length > 0) { %>
+                                    <td></td>
+                                <% } 
+                                if(logFlag==0 && selLoggedUser.length > 0) { 
+                                    logFlag =1; %>
+                                    <td></td>
+                                <% } %>
+                                <td></td>
+                            <% } 
+                           
+                            if(serviceAssignFlag==0 && serviceAssignContacts.length > 0 && trFlag==1) { %>
+                                <td></td>
+                            <% } 
+                            if(trFlag==1) { %>
+                                </tr>  
+                            <% }
+                        }
+                    }); %>
+                </tbody>
+            </table>  
+        <% } %>
+   
+       
+ 
+</script>

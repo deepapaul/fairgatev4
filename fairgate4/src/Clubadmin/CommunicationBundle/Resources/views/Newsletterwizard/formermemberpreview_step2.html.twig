@@ -1,0 +1,92 @@
+<table data-ajax-path="{{ path('nl_federation_list_preview')  }}"
+       class="table
+       table-bordered
+       table-hover
+       table-condensed
+       dataTable-scroll-y
+       dataTable-ajax
+       dataTable-rows
+       dataTable-scroll-x
+       dataTables_scrollBody
+       lastcolumn_sort dataTable-initialSort data-count"   xWidth="100" yHeight="300" data-table-name="dataTables" data_row_change="fgrowchange" id="federation-list" dataTable-popover="true" dataTable-hover="true" data-sort="0#asc"   data-column-def="true" data_table_type="nl_fedmember_revipient"  serverside_process="0" data-column-def-name='columndef1'>
+    <thead>
+        <tr>
+            <th>{%trans%}RL_EMAIL_ADDRESS{%endtrans%}</th>
+            <th>{%trans%}CONTACT{%endtrans%}</th>
+            <th>{%trans%}SL_SALUTATION{%endtrans%}</th>
+            <th>{%trans%}RL_FIELD_CORRES_LANG{%endtrans%}</th>
+                {% if(fgclub.get('type') == 'federation' or fgclub.get('type') == 'sub_federation') %}
+                <th>{{ fgtwig.getTerminolgyName('Club',singular)|capitalize }}</th>
+                {% endif %}
+                {% if(fgclub.get('type') == 'federation')%}
+                <th>{{ fgtwig.getTerminolgyName('Sub-federation',singular)|capitalize }}</th>
+                {% endif %} 
+        </tr>
+    </thead>
+</table>
+
+<script src="{{ asset('fgcustom/js/page/fg_communication_dataTable.js')}}" type="text/javascript"></script>
+<script>
+    var federationtable;
+    var filterId = '';
+    var hasSeperator = true;
+    var columnDefs1 = [
+        {"name": "Email", "targets": 0, data: function (row, type, val, meta) {
+                return  row['Email'];
+            }},
+        {"name": "contactname", "targets": 1, data: function (row, type, val, meta) {
+                return (row['contactname'] != '') ? FgCommon.splitContactname(row['contactname']) : '-';
+            }},
+        {"name": "salutation", "targets": 2, data: function (row, type, val, meta) {
+                var salutationJSON = $.parseJSON($("#salutaionDetail").val());
+                var salutaion = '';
+                if (salutationJSON["type"] == 'SAME') {
+                    salutaion = salutationJSON["salutaion"]
+                } else if (salutationJSON["type"] == 'NONE') {
+                    salutaion = '-';
+                } else {
+                    salutaion = (row['salutation'] == '' || row['salutation'] == null) ? '-' : row['salutation'];
+                }
+                return  salutaion;
+            }},
+        {"name": "515", "targets": 3, data: function (row, type, val, meta) {
+                return  row['CL_lang'];
+            }}
+    ];
+
+    if (clubType == 'federation') {
+        columnDefs1.push({"name": "clubTitle", "targets": 4, data: function (row, type, val, meta) {
+                return (row['clubTitle'] !== null && row['clubTitle'] !== "") ? row['clubTitle'] : '-';
+            }});
+        columnDefs1.push({"name": "subFedTitle", "targets": 5, data: function (row, type, val, meta) {
+                return (row['subFedTitle'] !== null && row['subFedTitle'] !== "") ? row['subFedTitle'] : '-';
+            }});
+
+    } else if (clubType == 'sub_federation') {
+        columnDefs1.push({"name": "club", "targets": 4, data: function (row, type, val, meta) {
+                return (row['clubTitle'] !== null && row['clubTitle'] !== "") ? row['clubTitle'] : '-';
+            }});
+    }
+
+    federationtable = FgCommunicationTable.initid('federation-list');
+    $("#searchbox").hide();
+    $("#searchbox1").hide();
+    $("#searchbox2").show();
+
+    $("#fgrowchange").show();
+    $("#nl_recipient_table_length").hide();
+    $("#subscriber-list_length").hide();
+    $("#federation-list_length").show();
+    $("#nl_recipient_remove_table_length").hide();
+    $("#searchbox2").on("keyup", function () {
+        var searchVal = this.value;
+        setDelay(function () {
+            federationtable.api().search(searchVal).draw();
+        }, 500);
+    });
+</script>
+
+
+
+
+

@@ -1,0 +1,39 @@
+<div class="fg-common-top">
+    <div class="row">
+        <div class="date-filter col-md-12 fg-doc-log" id="date_filter_{{ documentId }}">
+            <div class="pull-left">
+                <label for="filter_start_date" class="filter-log-from"><span>{{ 'LOG ENTRIES FROM'|trans }}</span></label>
+                <div class='input-group date'>
+                    <input type="date_range" name="filter_start_date" id="filter_start_date_{{ documentId }}" value="" class="form-control filter-log-input" data-event="{{ documentId }}"/>
+                    <span class="input-group-addon cal filter-log-date"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+            <div class="pull-left">
+                <label for="filter_end_date" class="filter-log-from"><span>{{ 'LOG_TO'|trans }}</span></label>
+                <div class='input-group date'>
+                    <input type="date_range" name="filter_end_date" id="filter_end_date_{{ documentId }}" value="" class="form-control filter-log-input" data-event="{{ documentId }}"/>
+                    <span class="input-group-addon cal filter-log-date"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+            <!-- Date filter error message-->        
+            <div class="col-sm-3 has-error fg-log-error">
+                <span class="help-block fg-error-hide" id="log_date_error_{{ documentId }}"></span>
+            </div>
+        </div>
+    </div>
+    <table data-ajax-path="{{ path('document_log_data', {'documentId': documentId}) }}"
+           class="table dataTable-document-log
+           table-bordered
+           table-hover
+           table-condensed" xWidth="100" yHeight="300" id="dataTable-document-log">
+        <thead>
+            <tr>
+                <th>{{ 'LOG_DATE'|trans }}</th>
+                <th>{{ 'LOG_OPTION'|trans }}</th>
+                <th>{{ 'LOG_BEFORE'|trans }}</th>
+                <th>{{ 'LOG_AFTER'|trans }}</th>
+                <th>{{ 'LOG_EDITED_BY'|trans }}</th>
+            </tr>
+        </thead>
+    </table>
+</div>

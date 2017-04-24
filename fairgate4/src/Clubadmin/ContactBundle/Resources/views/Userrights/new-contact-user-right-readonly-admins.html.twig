@@ -1,0 +1,53 @@
+<script type="text/template" id="fg-dev-add-new-contact-readonly-admins"> 
+    <div class="row fg-border-line sortables fg-dev-new-contact-div" >
+                        
+        <div class="col-md-5 col-sm-12 col-xs-12">
+            <div class="input-icon"> <i class="fa fa-search"></i>
+                <input id="include-contacts-readonly-admins-<%- randomNumber %>" name="include-contacts-readonly-admins-<%- randomNumber %>" type="text"  class="form-control input-sm dfExclude" />
+            </div>
+        </div>
+        <input class="fg-dev-auto-complete-val hide" type="text" name="new-include-contacts-readonly-admins-<%- randomNumber %>" id="new-include-contacts-readonly-admins-<%- randomNumber %>" value=""/>
+        <div class="col-md-6 col-sm-12 col-xs-12">
+            <div class="fg-adminstration-wrap">
+                <div class="fg-adminstration-area"><i class="fa fa-plus-square-o"></i><i class="fa fa-minus-square-o"></i></div>
+                <div class="fg-adminstration-area-icons">
+
+                    <% _.each(allGroups,function(allAdminsVal,allAdminsKey){ 
+                        if(allAdminsVal['module_type'] != 'contact' && allAdminsVal['is_readonly'] == 1) { 
+                            if(typeof(bookedModuleDetails) != "undefined" && bookedModuleDetails !== null) {
+                                if(bookedModuleDetails.hasOwnProperty(allAdminsVal['module_type'])) { %>
+                                    <a href="#"><i class="fa fg-fa-<%- allAdminsVal['module_type'] %> red"></i></a>
+                                <% } 
+                            }
+                        } else if(allAdminsVal['module_type'] == 'contact' && allAdminsVal['is_readonly'] == 1) { %>
+                            <a href="#"><i class="fa fg-fa-<%- allAdminsVal['module_type'] %> red"></i></a>
+                        <% }
+                    }); %>
+                </div>
+            </div>                    
+        </div>
+    <div class="clearfix"></div>
+        <div class="fg-adminstration-area-open fg-dev-chk-area "><div class="clearfix"></div>
+            <ul>
+                <% _.each(allGroups,function(allAdminsVal,allAdminsKey){
+                    if(allAdminsVal['module_type'] != 'contact' && allAdminsVal['is_readonly'] == 1) {
+                        if(typeof(bookedModuleDetails) != "undefined" && bookedModuleDetails !== null) {
+                            if(bookedModuleDetails.hasOwnProperty(allAdminsVal['module_type'])) { %>
+                                <li><input type="checkbox"  name="new_admin_group_<%- allAdminsVal.group_id %>_<%- randomNumber %>" id="new_admin_group_<%- allAdminsVal.group_id %>_<%- randomNumber %>"  /><%- transAdministration[allAdminsVal['module_type']] %></li>
+                            <% }
+                        }
+                    } else if(allAdminsVal['module_type'] == 'contact' && allAdminsVal['is_readonly'] == 1) { %>
+                            <li><input type="checkbox"  id="new_admin_group_<%- allAdminsVal.group_id %>_<%- randomNumber %>" name="new_admin_group_<%- allAdminsVal.group_id %>_<%- randomNumber %>" /><%- transAdministration[allAdminsVal['module_type']] %></li>
+                    <% }
+                }); %>
+            </ul>
+        </div>
+        
+        <div class="fg-last-icon new_contact_right_readonly_admins_rmv">
+            <div class="closeico">
+                <input type="checkbox" class="make-switch" id="select_<%- randomNumber %>" name="fg-dev-cls_<%- randomNumber %>">
+                <label for="select_<%- randomNumber %>"></label>
+            </div>
+        </div>
+    </div> 
+</script>

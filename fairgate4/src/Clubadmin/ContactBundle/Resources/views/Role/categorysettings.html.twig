@@ -1,0 +1,216 @@
+{# src/Clubadmin/ContactBundle/Resources/views/Role/categorysettings.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = result_data.title %}
+{% block pagecontent %}
+
+    <!-- BREADCRUMB STARTS -->
+    {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+    <!-- BREADCRUMB ENDS -->
+     <div class="fg-theme-blue fg-theme-panel">
+    <!-- BEGIN PAGE CONTENT-->
+    <form id="categorysettings" class="form-horizontal" action="categorysettings" skipDirtyCheck onSubmit="return false;">
+        <!-- CATEGORY DATA SECTION STARTS -->
+        <div class="row">
+           
+                 {% set page_settings = { 'input_language_switch':'true','languageswitch':'true' }  %}
+                 {% include 'clubadmin/page-title-bar.html.twig' with { 'page_settings': page_settings,'clubLanguages': clubLanguages, 'result_data':result_data,'clubDefaultLang':clubDefaultLang,'lang_switch_type':'cat_manageclass'  } %}    
+            {# {% include 'clubadmin/inputbox_language_swtich.html.twig' with {'clubLanguages': clubLanguages, 'result_data':result_data} %}#}
+           
+        </div>
+
+        <div class="alert alert-danger display-hide">
+            <button class="close" data-close="alert"></button>
+            <span>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+        </div>
+        {% set disableSettings = '' %}
+        {% set disableLblClass = '' %}
+        {% if (result_data.contactCount > 0) %}
+            {% set disableSettings = ' disabled="" ' %}
+            {% set disableLblClass = ' fg-label-inactive ' %}
+        {% endif %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel-primary panel-bg">
+                    <div class="panel-heading fg-theme-head paneldisplay">
+                        <h3 class="panel-title pull-left">{%trans%}PROPERTIES{%endtrans%}</h3>
+                        {% if ((result_data.isFedCategory) and ((clubType == 'federation') or (clubType == 'sub_federation'))) %}
+                            {% set fedTerminology = fgtwig.getTerminolgyName('Federation', singular) %}
+                            {% set fedTypeTerminology = (clubType == 'federation') ? fgtwig.getTerminolgyName('Federation', singular) : fgtwig.getTerminolgyName('Sub-federation', singular) %}
+                            <span class="fg-tooltip-icon"> <i class="fa fa-info-circle role-font-size popovers" data-trigger="hover" data-placement="auto" data-content="{%trans with {'%a%': fedTerminology, '%b%': fedTypeTerminology}%}ONLY_%a%_CONTACTS_CAN_BE_ASSIGNED_TO_%b%_ROLES{%endtrans%}" data-original-title="{{'NOTE'|trans}}:"></i></span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row fg-common-top">
+                    <div class="col-md-12">
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">{%trans%}MULTIPLE_ASSIGNMENT{%endtrans%}</label>
+                                <div class="col-md-10">
+                                    <div class="radio-list">
+                                        <label class="radio-inline {{disableLblClass}}"> <input type="radio" {{disableSettings}} data-auto="role_assign_multiple" data-key="{{result_data.id}}.role_assign" name="{{result_data.id}}_role_assign" id="{{result_data.id}}_role_assign1" value="multiple" {% if (result_data.roleAssign == 'multiple') %} checked {% endif %} > {%trans%}YES{%endtrans%} </label>
+                                        <label class="radio-inline {{disableLblClass}}"> <input type="radio" {{disableSettings}} data-auto="role_assign_single" data-key="{{result_data.id}}.role_assign" name="{{result_data.id}}_role_assign" id="{{result_data.id}}_role_assign2" value="single" {% if (result_data.roleAssign == 'single') %} checked {% endif %}> {%trans%}NO{%endtrans%} ({%trans%}ONLY_TO_ONE_ROLE{%endtrans%}) </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">{%trans%}FUNCTIONS{%endtrans%}</label>
+                                <div class="col-md-10">
+                                    <div class="radio-list">
+                                        {% if (result_data.functionAssign == 'none') %}
+                                            {% set disabled = '' %}
+                                            {% set disableLblCls = '' %}
+                                        {% else %}
+                                            {% set disabled = ' disabled="" ' %}
+                                            {% set disableLblCls = ' fg-label-inactive ' %}
+                                        {% endif %}
+                                        <label class="radio-inline {{disableLblClass}} {{disableLblCls}}"> <input type="radio" data-auto="function_assign_none" {{disabled}} {{disableSettings}} data-elem-function="switch_assignment" data-key="{{result_data.id}}.function_assign" name="{{result_data.id}}_function_assign" id="{{result_data.id}}_function_assign1" value="none" {% if (result_data.functionAssign == 'none') %} checked {% endif %} > {%trans%}ROLES_DONT_HAVE_ANY_FUNCTIONS{%endtrans%} </label>
+                                        <label class="radio-inline {{disableLblClass}} {{disableLblCls}}"> <input type="radio" data-auto="function_assign_same" {{disabled}} {{disableSettings}} data-elem-function="switch_assignment" data-key="{{result_data.id}}.function_assign" name="{{result_data.id}}_function_assign" id="{{result_data.id}}_function_assign2" value="same" {% if (result_data.functionAssign == 'same') %} checked {% endif %} > {%trans%}ROLES_HAVE_COMMON_FUNCTIONS{%endtrans%} </label>
+                                        <label class="radio-inline {{disableLblClass}} {{disableLblCls}}"> <input type="radio" data-auto="function_assign_individual"  {{disabled}} {{disableSettings}} data-elem-function="switch_assignment" data-key="{{result_data.id}}.function_assign" name="{{result_data.id}}_function_assign" id="{{result_data.id}}_function_assign3" value="individual" {% if (result_data.functionAssign == 'individual') %} checked {% endif %} > {%trans%}EACH_ROLE_HAS_ITS_OWN_FUNCTIONS{%endtrans%} </label>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if ((clubType != 'standard_club') and (result_data.isFedCategory)) %}
+                                {% if (clubType == 'federation' and fgclub.get('hasSubfederation')==1) %}
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">{%trans with {'%a%': fgtwig.getTerminolgyName('Sub-federation', singular, 'UCF')}%}%a%_LEVEL{%endtrans%}</label>
+                                        <div class="col-md-10">
+                                            <div class="radio-list">
+                                                <label class="radio-inline "> <input type="radio" data-auto="is_allowed_fedmember_subfed_no"  data-elem-function="check_allowed" data-key="{{result_data.id}}.is_allowed_fedmember_subfed" name="{{result_data.id}}_is_allowed_fedmember_subfed" id="{{result_data.id}}_is_allowed_fedmember_subfed1" value="0" {% if (result_data.isAllowedFedmemberSubfed == '0') %} checked {% endif %} > {%trans with {'%a%': fgtwig.getTerminolgyName('Federation member', plural)}%}NOT_ALLOWED_TO_ASSIGN_%a%_TO_ROLES{%endtrans%} </label>
+                                                <label class="radio-inline "> <input type="radio" data-auto="is_allowed_fedmember_subfed_yes"  data-elem-function="check_allowed" data-key="{{result_data.id}}.is_allowed_fedmember_subfed" name="{{result_data.id}}_is_allowed_fedmember_subfed" id="{{result_data.id}}_is_allowed_fedmember_subfed2" value="1" {% if (result_data.isAllowedFedmemberSubfed == '1') %} checked {% endif %} > {%trans with {'%a%': fgtwig.getTerminolgyName('Federation member', plural)}%}ALLOWED_TO_ASSIGN_%a%_TO_ROLES{%endtrans%} </label>
+                                                <label class="radio-inline labelmrgn" data-id="{{result_data.id}}_is_required_fedmember_subfed_lbl"> <input type="checkbox" data-auto="is_required_fedmember_subfed"  data-key="{{result_data.id}}.is_required_fedmember_subfed" name="{{result_data.id}}_is_required_fedmember_subfed" id="{{result_data.id}}_is_required_fedmember_subfed" value="{{ (result_data.isRequiredFedmemberSubfed == '1') ? '1' : '0' }}" {% if (result_data.isRequiredFedmemberSubfed == '1') %} checked {% endif %} > {%trans with {'%a%': fgtwig.getTerminolgyName('Federation', singular, 'UCF')}%}REQUIRED_ASSIGNMENT_%a%_CONTACTS_HAVE_TO_BE_ASSIGNED{%endtrans%} </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">{%trans with {'%a%': fgtwig.getTerminolgyName('Club', singular, 'UCF')}%}%a%_LEVEL{%endtrans%}</label>
+                                    <div class="col-md-10">
+                                        <div class="radio-list">
+                                            <label class="radio-inline "> <input type="radio" data-auto="is_allowed_fedmember_club_no"  data-elem-function="check_allowed" data-key="{{result_data.id}}.is_allowed_fedmember_club" name="{{result_data.id}}_is_allowed_fedmember_club" id="{{result_data.id}}_is_allowed_fedmember_club1" value="0" {% if (result_data.isAllowedFedmemberClub == '0') %} checked {% endif %} > {%trans with {'%a%': fgtwig.getTerminolgyName('Federation member', plural)}%}NOT_ALLOWED_TO_ASSIGN_%a%_TO_ROLES{%endtrans%} </label>
+                                            <label class="radio-inline "> <input type="radio" data-auto="is_allowed_fedmember_club_yes"  data-elem-function="check_allowed" data-key="{{result_data.id}}.is_allowed_fedmember_club" name="{{result_data.id}}_is_allowed_fedmember_club" id="{{result_data.id}}_is_allowed_fedmember_club2" value="1" {% if (result_data.isAllowedFedmemberClub == '1') %} checked {% endif %} > {%trans with {'%a%': fgtwig.getTerminolgyName('Federation member', plural)}%}ALLOWED_TO_ASSIGN_%a%_TO_ROLES{%endtrans%} </label>
+                                            <label class="radio-inline labelmrgn" data-id="{{result_data.id}}_is_required_fedmember_club_lbl"> <input type="checkbox" data-auto="is_required_fedmember_club"  data-key="{{result_data.id}}.is_required_fedmember_club" name="{{result_data.id}}_is_required_fedmember_club" id="{{result_data.id}}_is_required_fedmember_club" value="{{ (result_data.isRequiredFedmemberClub == '1') ? '1' : '0' }}" {% if (result_data.isRequiredFedmemberClub == '1') %} checked {% endif %} > {%trans with {'%a%': fgtwig.getTerminolgyName('Federation', singular,'UCF')}%}REQUIRED_ASSIGNMENT_%a%_CONTACTS_HAVE_TO_BE_ASSIGNED{%endtrans%} </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- CATEGORY DATA SECTION ENDS -->
+
+        <!-- ROLE SECTION STARTS -->
+        <div id="role_settings">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary panel-bg">
+                        <div class="panel-heading fg-theme-head paneldisplay">
+                            <h3 class="panel-title pull-left">{%trans%}ROLES{%endtrans%}</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                            <div class="col-md-12">
+                            <div class="fg-settings-block dragndropwithchild hide" id="sortrole">
+                                <!-- ROLES LISTING -->
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5 fg-common-top fg-common-btm pull-left">
+                                    <a id="addrow" href="#basic" data-toggle="modal" data-parentdiv-id="sortrole" data-add-type="role">
+                                        <i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i>
+                                        <span class="fg-add-text"> {%trans%}ADD_ROLE{%endtrans%}</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ROLE SECTION ENDS -->
+
+        <!-- FUNCTION SECTION STARTS -->
+        <div id="function_settings">
+            <div id="child_sortrole">
+                <!-- FUNCTIONS LISTING -->
+            </div>
+        </div>
+        <!-- FUNCTION SECTION ENDS -->
+
+        <!-- ADD ROW TEMPLATES STARTS -->
+        <div id="divTemplates">
+
+            {# template for adding new role #}
+            {% include 'ClubadminContactBundle:Role:addrole.html.twig' with {'contactId': contactId} %}
+
+            {# template for adding new function #}
+            {% include 'ClubadminContactBundle:Role:addfunction.html.twig' %}
+
+            {# template for adding new function section #}
+            {% include 'ClubadminContactBundle:Role:addfunctionsection.html.twig' %}
+
+            {# template for listing the log for role and function #}
+            {% include 'ClubadminContactBundle:Role:logdisplay.html.twig' %}
+        </div>
+        <!-- ADD ROW TEMPLATES ENDS -->
+
+        <div class="row">
+            <div class="col-md-12">
+
+              <!--  Partial twig for savebutton-->
+             {% include 'clubadmin/savebutton.html.twig' with {'backLink': backLink} %}
+
+            </div>
+        </div>
+
+    </form>
+    <!-- END PAGE CONTENT-->
+   </div>
+{% endblock %}
+
+{% block javascripts %}
+{% if not (app.request.xmlHttpRequest) %}
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/dirtyfields/jquery.dirtyFields.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_dirtyfields.js') }}" type="text/javascript"></script>
+{% endif %}
+<script type="text/javascript">
+    var defaultLang = '{{clubDefaultLang}}';
+    var pageVars = {
+        clubType: '{{clubType}}',
+        role_section: 'role',
+        catId: {{result_data.id}},
+        selectedLang: '{{clubDefaultLang}}',
+        function_assign: '{{result_data.functionAssign}}',
+        clubLanguages: {{clubLanguages|json_encode|raw}},
+        saveAction: "{{path('update_role_function')}}",
+        formerror: '{{'FORM_ERROR_DISPLAY'|trans}}',
+        nofunctionerror: '{{'NO_FUNCTION_ERROR'|trans}}',
+        contCount: {{result_data.contactCount}},
+        isFedCat: '{{result_data.isFedCategory}}',
+        roleDataPath: '{{path('role_function_data',{'club_id': clubIdentifier, 'cat_id': result_data.id})}}',
+        initialHtml: ''
+    };
+    var rowFunctionVariables = {
+        logDataPath: '{{path('log_data',{})}}'
+    };
+    var breadCrumbTit="BREADCRUMB_TITLE_FED_ROLECATEGORY";
+    if(pageVars.pageTitle=='subfed_cat')
+        breadCrumbTit = 'BREADCRUMB_TITLE_SUBFED_ROLECATEGORY';
+    var extraBreadcrumbTitle = (pageVars.isFedCat != 1) ? {text:'{{'BREADCRUMB_TITLE_ROLECATEGORY'|trans}}', link:'{{path('edit_role_category', {'cat_type': 'club'})}}'}: {text:'{{pageTitleCat}}', link:'{{path('edit_role_category', {'cat_type': 'fed_cat'})}}'};
+    
+    FgUtility.showTranslation(pageVars.selectedLang);
+    FgUtility.changeColorOnDelete();
+    FgUtility.startPageLoading();
+    /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                     title: true,
+                     languageSettings: true
+
+             }); 
+</script>
+<script src="{{ asset('fgassets/backend/js/page/row-functions.js') }}" type="text/javascript"></script>
+<script src="{{ asset('fgassets/backend/js/page/rolesettings.js') }}" type="text/javascript"></script>
+<script src="{{ asset('fgcustom/js/fgrole.js') }}" type="text/javascript"></script>
+<script src="{{ asset('fgcustom/js/sidebarfilter.js') }}" type="text/javascript"></script>
+{% endblock %}

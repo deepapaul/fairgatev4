@@ -1,0 +1,528 @@
+ALTER TABLE `fg_rm_role` ADD `visible_for_all` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Visible for group foreign contacts' AFTER `calendar_color_code`;
+
+DELETE FROM `fg_rm_role` WHERE `fg_rm_role`.`id` = 1;
+DELETE FROM `fg_rm_role` WHERE `fg_rm_role`.`id` = 2;
+DELETE FROM `fg_rm_role` WHERE `fg_rm_role`.`id` = 3;
+
+
+ALTER TABLE `fg_cms_page_content_element` ADD `area_club` INT(11) NULL AFTER `is_all_area`, ADD `shared_club` VARCHAR(50) NULL AFTER `area_club`;
+ALTER TABLE `fg_cms_page_content_element` ADD CONSTRAINT `fg_cms_page_content_element_ibfk_4` FOREIGN KEY (`area_club`) REFERENCES `fg_club`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+==============================================================================================================================================================
+-- -----------------------------------------------------
+-- Table `fg_cms_page`
+-- -----------------------------------------------------
+ALTER  TABLE `fg_cms_page` 
+
+  CHANGE `type` `type` ENUM('page','footer','sidebar','article','gallery','calendar') NOT NULL ,
+  
+  ADD `is_all_area` TINYINT(1) NULL DEFAULT 0,
+
+  ADD `is_all_category` TINYINT(1) NULL DEFAULT 0,
+
+  ADD `is_all_galleries` TINYINT(1) NULL DEFAULT 0
+;
+-- -----------------------------------------------------
+
+-- Table `fg_cms_page_areas`
+
+-- -----------------------------------------------------
+CREATE TABLE `fg_cms_page_areas` (
+  `id` int(11) NOT NULL,
+  `role_id` int(11) DEFAULT NULL,
+  `page_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `fg_cms_page_areas`
+--
+ALTER TABLE `fg_cms_page_areas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_fg_cms_special_page_areas_fg_cms_special_page1_idx` (`page_id`),
+  ADD KEY `role_id` (`role_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `fg_cms_page_areas`
+--
+ALTER TABLE `fg_cms_page_areas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `fg_cms_page_areas`
+--
+ALTER TABLE `fg_cms_page_areas`
+  ADD CONSTRAINT `fk_fg_cms_special_page_areas_fg_cms_special_page1` FOREIGN KEY (`page_id`) REFERENCES `fg_cms_page` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_fg_cms_special_page_areas_fg_cms_special_page22` FOREIGN KEY (`role_id`) REFERENCES `fg_rm_role` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+-- -----------------------------------------------------
+
+-- Table `fg_cms_page_categories`
+
+-- -----------------------------------------------------
+
+CREATE TABLE `fg_cms_page_categories` (
+  `id` int(11) NOT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `page_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `fg_cms_page_categories`
+--
+ALTER TABLE `fg_cms_page_categories`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_fg_cms_special_page_categories_fg_cms_special_page1_idx` (`page_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `fg_cms_page_categories`
+--
+ALTER TABLE `fg_cms_page_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `fg_cms_page_categories`
+--
+ALTER TABLE `fg_cms_page_categories`
+  ADD CONSTRAINT `fk_fg_cms_special_page_categories_fg_cms_special_page1` FOREIGN KEY (`page_id`) REFERENCES `fg_cms_page` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+
+-- -----------------------------------------------------
+
+-- Table `fg_cms_page_gallery`
+
+-- -----------------------------------------------------
+CREATE TABLE `fg_cms_page_gallery` (
+  `id` int(11) NOT NULL,
+  `page_id` int(11) NOT NULL,
+  `gallery_type` enum('CLUB','ROLE') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gallery_role_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `fg_cms_page_gallery`
+--
+ALTER TABLE `fg_cms_page_gallery`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_fg_cms_page_gallery_fg_cms_page1_idx` (`page_id`),
+  ADD KEY `fk_fg_cms_page_gallery_fg_rm_role1_idx` (`gallery_role_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `fg_cms_page_gallery`
+--
+ALTER TABLE `fg_cms_page_gallery`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `fg_cms_page_gallery`
+--
+ALTER TABLE `fg_cms_page_gallery`
+  ADD CONSTRAINT `fk_fg_cms_page_gallery_fg_cms_page1` FOREIGN KEY (`page_id`) REFERENCES `fg_cms_page` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_fg_cms_page_gallery_fg_rm_role1` FOREIGN KEY (`gallery_role_id`) REFERENCES `fg_rm_role` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+==============================================================================================================================================================
+
+-- -----------------------------------------------------
+
+-- Table `fg_tm_theme`
+
+-- -----------------------------------------------------
+
+CREATE  TABLE IF NOT EXISTS `fg_tm_theme` (
+
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+
+  `title` VARCHAR(255) NULL DEFAULT NULL ,
+
+  `sort_order` INT(3) NULL ,
+
+  `theme_options` TEXT NOT NULL ,
+
+  PRIMARY KEY (`id`) )
+
+ENGINE = InnoDB;
+
+
+
+-- -----------------------------------------------------
+
+-- Table `fg_tm_theme_color_scheme`
+
+-- -----------------------------------------------------
+
+CREATE  TABLE IF NOT EXISTS `fg_tm_theme_color_scheme` (
+
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+
+  `theme_id` INT(11) NOT NULL ,
+
+  `color_schemes` TEXT NOT NULL ,
+
+  `is_default` TINYINT(1) NULL DEFAULT 0 ,
+
+  `club_id` INT(11) NULL ,
+
+  PRIMARY KEY (`id`) ,
+
+  INDEX `fk_fg_tm_theme_color_scheme_fg_tm_theme1_idx` (`theme_id` ASC) ,
+
+  INDEX `fk_fg_tm_theme_color_scheme_fg_club1_idx` (`club_id` ASC) ,
+
+  CONSTRAINT `fk_fg_tm_theme_color_scheme_fg_tm_theme1`
+
+    FOREIGN KEY (`theme_id` )
+
+    REFERENCES `fg_tm_theme` (`id` )
+
+    ON DELETE CASCADE
+
+    ON UPDATE NO ACTION,
+
+  CONSTRAINT `fk_fg_tm_theme_color_scheme_fg_club1`
+
+    FOREIGN KEY (`club_id` )
+
+    REFERENCES `fg_club` (`id` )
+
+    ON DELETE CASCADE
+
+    ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+
+
+
+
+-- -----------------------------------------------------
+
+-- Table `fg_tm_theme_configuration`
+
+-- -----------------------------------------------------
+
+CREATE TABLE `fg_tm_theme_configuration` (
+  `id` int(11) NOT NULL,
+  `club_id` int(11) NOT NULL,
+  `theme_id` int(11) NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `header_scrolling` tinyint(1) DEFAULT '0',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT '1',
+  `is_default` tinyint(1) DEFAULT '0',
+  `custom_css` text COLLATE utf8mb4_unicode_ci,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `bg_image_selection` enum('random','default_start_image','random_start_image') COLLATE utf8mb4_unicode_ci DEFAULT 'random',
+  `bg_slider_time` int(3) DEFAULT NULL,
+  `color_scheme_id` int(11) NOT NULL,
+  `is_deleted` tinyint(1) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `fg_tm_theme_configuration`
+--
+ALTER TABLE `fg_tm_theme_configuration`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_fg_tm_theme_settings_fg_tm_theme1_idx` (`theme_id`),
+  ADD KEY `fk_fg_tm_theme_settings_fg_club1_idx` (`club_id`),
+  ADD KEY `fk_fg_tm_theme_settings_fg_cm_contact1_idx` (`created_by`),
+  ADD KEY `fk_fg_tm_theme_settings_fg_cm_contact2_idx` (`updated_by`),
+  ADD KEY `fk_fg_tm_theme_configuration_fg_tm_theme_color_scheme1_idx` (`color_scheme_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `fg_tm_theme_configuration`
+--
+ALTER TABLE `fg_tm_theme_configuration`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `fg_tm_theme_configuration`
+--
+ALTER TABLE `fg_tm_theme_configuration`
+  ADD CONSTRAINT `fk_fg_tm_theme_configuration_fg_tm_theme_color_scheme1_idx` FOREIGN KEY (`color_scheme_id`) REFERENCES `fg_tm_theme_color_scheme` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_fg_tm_theme_settings_fg_club1` FOREIGN KEY (`club_id`) REFERENCES `fg_club` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_fg_tm_theme_settings_fg_cm_contact1` FOREIGN KEY (`created_by`) REFERENCES `fg_cm_contact` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_fg_tm_theme_settings_fg_cm_contact2` FOREIGN KEY (`updated_by`) REFERENCES `fg_cm_contact` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_fg_tm_theme_settings_fg_tm_theme1` FOREIGN KEY (`theme_id`) REFERENCES `fg_tm_theme` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+-- -----------------------------------------------------
+
+-- Table `fg_tm_theme_bg_images`
+
+-- -----------------------------------------------------
+
+CREATE TABLE `fg_tm_theme_bg_images` (
+  `id` int(11) NOT NULL,
+  `bg_type` enum('full_screen','original_size') COLLATE utf8mb4_unicode_ci DEFAULT 'full_screen',
+  `gallery_item_id` int(11) DEFAULT NULL,
+  `configuration_id` int(11) NOT NULL,
+  `sort_order` int(3) DEFAULT NULL,
+  `position_horizontal` enum('left','center','right') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `position_vertical` enum('top','middle','bottom') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bg_repeat` enum('none','horizontal','vertical') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_scrollable` tinyint(1) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `fg_tm_theme_bg_images`
+--
+ALTER TABLE `fg_tm_theme_bg_images`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_fg_tm_theme_bg_fg_tm_theme_settings1_idx` (`configuration_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `fg_tm_theme_bg_images`
+--
+ALTER TABLE `fg_tm_theme_bg_images`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `fg_tm_theme_bg_images`
+--
+ALTER TABLE `fg_tm_theme_bg_images`
+  ADD CONSTRAINT `fk_fg_tm_theme_bg_fg_tm_theme_settings1` FOREIGN KEY (`configuration_id`) REFERENCES `fg_tm_theme_configuration` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+-- -----------------------------------------------------
+
+-- Table `fg_tm_theme_fonts`
+
+-- -----------------------------------------------------
+
+CREATE  TABLE IF NOT EXISTS `fg_tm_theme_fonts` (
+
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+
+  `font_label` VARCHAR(255) NOT NULL ,
+
+  `configuration_id` INT(11) NOT NULL ,
+
+  `font_name` VARCHAR(255) NULL ,
+
+  `font_strength` ENUM('regular','bold','light') NULL ,
+
+  `is_italic` TINYINT(1) NULL ,
+
+  `is_uppercase` TINYINT(1) NULL ,
+
+  PRIMARY KEY (`id`) ,
+
+  INDEX `fk_fg_tm_theme_fonts_fg_tm_theme_settings1_idx` (`configuration_id` ASC) ,
+
+  CONSTRAINT `fk_fg_tm_theme_fonts_fg_tm_theme_settings1`
+
+    FOREIGN KEY (`configuration_id` )
+
+    REFERENCES `fg_tm_theme_configuration` (`id` )
+
+    ON DELETE CASCADE
+
+    ON UPDATE NO ACTION)
+
+ENGINE = InnoDB;
+
+
+
+-- -----------------------------------------------------
+
+-- Table `fg_tm_theme_headers`
+
+-- -----------------------------------------------------
+
+CREATE TABLE `fg_tm_theme_headers` (
+  `id` int(11) NOT NULL,
+  `header_label` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `file_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `configuration_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+ALTER TABLE `fg_tm_theme_headers`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_fg_tm_theme_headers_fg_tm_theme_configuration1_idx` (`configuration_id`);
+
+
+ALTER TABLE `fg_tm_theme_headers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `fg_tm_theme_headers`
+  ADD CONSTRAINT `fk_fg_tm_theme_headers_fg_tm_theme_configuration1` FOREIGN KEY (`configuration_id`) REFERENCES `fg_tm_theme_configuration` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `fg_cms_page_article_categories`
+--
+
+CREATE TABLE `fg_cms_page_article_categories` (
+  `id` int(11) NOT NULL,
+  `page_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `fg_cms_page_article_categories`
+--
+ALTER TABLE `fg_cms_page_article_categories`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_fg_cms_special_page_categories_fg_cms_special_page2_idx` (`page_id`),
+  ADD KEY `fk_fg_cms_page_article_categories_fg_cms_article_category2_idx` (`category_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `fg_cms_page_article_categories`
+--
+ALTER TABLE `fg_cms_page_article_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `fg_cms_page_article_categories`
+--
+ALTER TABLE `fg_cms_page_article_categories`
+  ADD CONSTRAINT `fk_fg_cms_page_article_categories_fg_cms_article_category2` FOREIGN KEY (`category_id`) REFERENCES `fg_cms_article_category` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_fg_cms_special_page_categories_fg_cms_special_page2` FOREIGN KEY (`page_id`) REFERENCES `fg_cms_page` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+  
+  
+  
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `fg_cms_page_calendar_categories`
+--
+
+CREATE TABLE `fg_cms_page_calendar_categories` (
+  `id` int(11) NOT NULL,
+  `page_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `fg_cms_page_calendar_categories`
+--
+ALTER TABLE `fg_cms_page_calendar_categories`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_fg_cms_special_page_categories_fg_cms_special_page1_idx` (`page_id`),
+  ADD KEY `fk_fg_cms_page_calendar_categories_fg_em_calendar_category1_idx` (`category_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `fg_cms_page_calendar_categories`
+--
+ALTER TABLE `fg_cms_page_calendar_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `fg_cms_page_calendar_categories`
+--
+ALTER TABLE `fg_cms_page_calendar_categories`
+  ADD CONSTRAINT `fk_fg_cms_page_calendar_categories_fg_em_calendar_category1` FOREIGN KEY (`category_id`) REFERENCES `fg_em_calendar_category` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_fg_cms_special_page_categories_fg_cms_special_page10` FOREIGN KEY (`page_id`) REFERENCES `fg_cms_page` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+
+=================================================================================
+procedure update - V4createClub - update
+
+
+Default Theme:
+------------------------------------
+INSERT INTO `fg_tm_theme` (`id`, `title`, `sort_order`, `theme_options`) VALUES
+(1, 'Theme 1', 1, '{"themePreviewImage":"theme1.jpg","noOfColorsPerScheme":5,"noOfPresetSchemes":4,"colorLabels":["TM_BACKGROUND_COLOR","TM_INVERSE_COLOR","TM_ACCENT_COLOR","TM_LINKSBUTTONS_COLOR","TM_HIGHLIGHTING_COLOR"],"noOfHeaderImages":3,"headerImageLabels":["TM_DEFAULT_LOGO","TM_SHRINKED_LOGO","TM_MOBILE_SCREEN_LOGO"],"noOfFonts":3,"font_label":{"TM_MAIN_TEXT":{"font_name":"Roboto Condensed","font_strength":"light","is_italic":1,"is_uppercase":0},"TM_HEADINGS":{"font_name":"Roboto Condensed","font_strength":"bold","is_italic":0,"is_uppercase":1},"TM_NAVIGATION":{"font_name":"Roboto Condensed","font_strength":"regular","is_italic":1,"is_uppercase":1}}}'),
+(2, 'Theme 2', 2, '{"themePreviewImage":"theme2.jpg","noOfColorsPerScheme":4,"noOfPresetSchemes":3,"colorLabels":["TM_BACKGROUND_COLOR","TM_LINKSBUTTONS_COLOR","TM_HIGHLIGHTING_COLOR","TM_SIDEBAR_COLOR"],"noOfHeaderImages":3,"headerImageLabels":["TM_DEFAULT_LOGO","TM_SHRINKED_LOGO","TM_MOBILE_SCREEN_LOGO"],"noOfFonts":2,"font_label":{"TM_MAIN_TEXT":{"font_name":"Roboto Condensed","font_strength":"light","is_italic":1,"is_uppercase":0},"TM_HEADINGS":{"font_name":"Oswald","font_strength":"bold","is_italic":0,"is_uppercase":1}}}'),
+(3, 'Theme 3', 3, '{"themePreviewImage":"theme3.jpg","noOfColorsPerScheme":2,"noOfPresetSchemes":3,"colorLabels":["TM_BACKGROUND_COLOR","TM_BUTTON_COLOR"],"noOfHeaderImages":2,"headerImageLabels":["TM_DEFAULT_LOGO","TM_MOBILE_SCREEN_LOGO"],"noOfFonts":3,"font_label":{"TM_MAIN_TEXT":{"font_name":"Roboto Condensed","font_strength":"light","is_italic":1,"is_uppercase":0},"TM_HEADINGS":{"font_name":"Oswald","font_strength":"bold","is_italic":0,"is_uppercase":1},"TM_NAVIGATION":{"font_name":"Roboto Condensed","font_strength":"regular","is_italic":1,"is_uppercase":1}}}');
+
+Default Color schemes :
+------------------------------------
+INSERT INTO `fg_tm_theme_color_scheme` (`id`, `theme_id`, `color_schemes`, `is_default`, `club_id`) VALUES
+(1, 1, '{"colorPreviewImage":"color-scheme1.jpg","TM_BACKGROUND_COLOR":"rgba(255, 255, 255, 1)","TM_INVERSE_COLOR":"rgba(63, 68, 74, 1)","TM_ACCENT_COLOR":"rgba(50, 197, 210, 1)","TM_LINKSBUTTONS_COLOR":"rgba(50, 197, 210, 1)","TM_HIGHLIGHTING_COLOR":"rgba(43, 172, 184, 1)"}', 1, 1),
+(2, 1, '{"colorPreviewImage":"color-scheme2.jpg","TM_BACKGROUND_COLOR":"rgba(232, 235, 237, 1)","TM_INVERSE_COLOR":"rgba(44, 62, 80, 1)","TM_ACCENT_COLOR":"rgba(252, 67, 73, 1)","TM_LINKSBUTTONS_COLOR":"rgba(109, 188, 219, 1)","TM_HIGHLIGHTING_COLOR":"rgba(44, 62, 80, 1)"}', 1, 1),
+(3, 1, '{"colorPreviewImage":"color-scheme3.jpg","TM_BACKGROUND_COLOR":"rgba(255, 255, 255, 1)","TM_INVERSE_COLOR":"rgba(33, 43, 64, 1)","TM_ACCENT_COLOR":"rgba(194, 224, 120, 1)","TM_LINKSBUTTONS_COLOR":"rgba(84, 123, 151, 1)","TM_HIGHLIGHTING_COLOR":"rgba(186, 220, 221, 1)"}', 1, 1),
+(4, 1, '{"colorPreviewImage":"color-scheme4.jpg","TM_BACKGROUND_COLOR":"rgba(92, 104, 115, 1)","TM_INVERSE_COLOR":"rgba(255, 255, 255, 1)","TM_ACCENT_COLOR":"rgba(249, 147, 33, 1)","TM_LINKSBUTTONS_COLOR":"rgba(8, 148, 66, 1)","TM_HIGHLIGHTING_COLOR":"rgba(205, 212, 57, 1)"}', 1, 1),
+(5, 2, '{"colorPreviewImage":"color-scheme5.jpg","TM_BACKGROUND_COLOR":"rgba(44, 62, 80, 1)","TM_LINKSBUTTONS_COLOR":"rgba(44, 62, 80, 1)","TM_HIGHLIGHTING_COLOR":"rgba(109, 188, 219, 1)","TM_SIDEBAR_COLOR":"rgba(252, 67, 73, 1)"}', 1, 1),
+(6, 2, '{"colorPreviewImage":"color-scheme6.jpg","TM_BACKGROUND_COLOR":"rgba(255, 255, 255, 1)","TM_LINKSBUTTONS_COLOR":"rgba(33, 43, 64, 1)","TM_HIGHLIGHTING_COLOR":"rgba(255, 255, 255, 1)","TM_SIDEBAR_COLOR":"rgba(84, 123, 151, 1)"}', 1, 1),
+(7, 2, '{"colorPreviewImage":"color-scheme7.jpg","TM_BACKGROUND_COLOR":"rgba(255, 255, 255, 1)","TM_LINKSBUTTONS_COLOR":"rgba(84, 123, 151, 1)","TM_HIGHLIGHTING_COLOR":"rgba(194, 224, 120, 1)","TM_SIDEBAR_COLOR":"rgba(186, 220, 221, 1)"}', 1, 1),
+(8, 3, '{"colorPreviewImage":"color-scheme8.jpg","TM_BACKGROUND_COLOR":"rgba(255, 255, 255, 1)","TM_BUTTON_COLOR":"rgba(33, 43, 64, 1)"}', 1, 1),
+(9, 3, '{"colorPreviewImage":"color-scheme9.jpg","TM_BACKGROUND_COLOR":"rgba(252, 67, 73, 1)","TM_BUTTON_COLOR":"rgba(33, 43, 64, 1)"}', 1, 1),
+(10, 3, '{"colorPreviewImage":"color-scheme10.jpg","TM_BACKGROUND_COLOR":"rgba(255, 255, 255, 1)","TM_BUTTON_COLOR":"rgba(84, 123, 151, 1)"}', 1, 1);
+
+Migration script for default theme configuration for all existing clubs
+------------------------------------------------------------------------------------
+INSERT INTO `fg_tm_theme_configuration` (`club_id`, `theme_id`, `title`, `header_scrolling`, `created_at`, `updated_at`, `is_active`, `is_default`, `custom_css`, `created_by`, `updated_by`, `bg_image_selection`, `bg_slider_time`, `color_scheme_id`) 
+ SELECT id, 1, 'Die Standard-Konfiguration', 0, NULL, NULL, 1, 1, NULL, 1, NULL, 'random', NULL, 1 FROM fg_club
+==================================================================================================================================================================
+ALTER TABLE `fg_cms_page` ADD `shared_club` VARCHAR(50) NULL AFTER `is_all_galleries`;
+ALTER TABLE  `fg_cms_page` ADD  `area_club` TINYINT( 1 ) NULL DEFAULT NULL ;
+
+ALTER TABLE `fg_cms_navigation` CHANGE `type` `type` ENUM('page','external','article','gallery','calendar') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+====================================================================================================================================================================

@@ -1,0 +1,32 @@
+Common\UtilityBundle\Entity\FgMbModule:
+    type: entity
+    table: fg_mb_module
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        moduleKey:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: module_key
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sort_order
+        isVisible:
+            type: boolean
+            nullable: false
+            column: is_visible
+    lifecycleCallbacks: {  }

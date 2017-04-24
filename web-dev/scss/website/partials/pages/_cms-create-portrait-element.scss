@@ -1,0 +1,129 @@
+//-Portrait element create area
+.fg-cms-portrait-element-create-wrapper{
+	.fg-sortable-list{
+		.list-group-item{
+			padding-right: 20px;
+			.fg-delete-row{
+				right:10px;
+			}
+		}
+	}
+	.fg-grid-col-1{
+		background: #ccc;
+		.list-group-item{
+
+			[class^='col-sm'], [class*=' col-sm']{
+				width:100%;
+				margin-bottom: 5px;
+			}
+			.control-label{
+				text-align: left;
+				margin-bottom: 10px;
+			}
+		}
+	}
+}
+.fg-portraite-main-container{
+
+	&.fg-cms-page-elements-container {
+		
+		.fg-sortable-list-item-wrapper{
+
+		}
+		.fg-cms-elements-row-option {
+			.fg-dev-delete{
+				width: 25px;
+				text-align: center;
+
+				.fg-delete-row{
+					position: static;
+				}
+			}
+		}
+		.fg-portrait-column{
+			position: relative;
+			.fg-add-label,.fg-dev-category,.fg-toggle-link{
+				display: block;
+				white-space: nowrap; 
+				overflow: hidden;
+				text-overflow: ellipsis; 
+			}
+			.fg-add-label{
+				position: relative;
+				top: 2px;
+			}
+			&.fg-grid-col-1 {
+				.fg-sortable-list-item-wrapper{
+					>.col-sm-4{
+						width:100%;
+						margin-bottom: 10px;
+						float: none;
+					}
+				}
+				.fg-collapsed-content-wrapper{
+					[class^='col-sm'], [class*=' col-sm']{
+						width:100%;
+						margin-bottom: 5px;
+					}
+					.control-label{
+						text-align: left;
+					}
+
+					div.dropdown-menu{
+						min-width: auto;
+					}
+					.btn-group.bootstrap-select{
+						max-width: 100%;
+					}
+				}
+			}
+		}
+		.fg-dev-upload-image-details,.fg-dev-profile-pic{
+			clear: both;
+			margin:10px auto;
+			position: relative;
+			&:empty{
+				display: none;
+			}
+			label{
+				margin: 0 5px 0 0;
+				display: inline-block;
+
+			}
+			.removeUploadedPic,.fg-dev-upload-image-details{
+				label{
+
+					word-break: break-all;
+					display: inline;
+				}
+				.fg-delete-row {
+
+					display: inline;
+					top: 1px;
+					.close{
+						float: none;
+					}
+				}
+			}
+			.fg-delete-row{
+				display: inline-block;
+				position: relative;
+				right: 0;
+				top: 3px;
+				 input[type=checkbox] + label:before{
+				 	font-size: 18px;
+				 }
+			}
+		}
+	}
+}
+.fg-cms-portrait-element-create-preview-wrapper{
+	.fg-portrait-row{
+		.fg-portrait-col{
+			float: left;
+			padding-left: 15px;
+			padding-right: 15px;
+			pointer-events: none;
+		}
+	}
+}

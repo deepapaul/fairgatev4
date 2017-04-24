@@ -1,0 +1,7 @@
+#!/bin/bash
+#CRON JOBS RUNNING EVERY 15 MINUTES
+
+#EVERY 15 MINUTES CRON
+cd /var/www/html/fairgate_fedv2_qa/fairgate4
+php bin/console bouncemail:update >> /var/www/html/fairgate_fedv2_qa/cronjob.log
+date >> /var/www/html/fairgate_fedv2_qa/cronjob.log

@@ -1,0 +1,84 @@
+
+<script type="text/template" id="templateArticleLinkAndAttachments">
+
+     <% var commentAllowFlag = (isGuestContact) ? ((ArticleData.commentActive == 2) ? 1 : 0) : ((ArticleData.commentActive == 1 || ArticleData.commentActive == 2) ? 1 : 0); %>
+     <div class="fg-article-details-block">
+
+     <% if(ArticleData.article.settings.author){ %>
+        <p>{{'WEBSITE_ARTICLE_BY_TEXT'|trans}}   <%- ArticleData.article.settings.author %></p>
+     <% } %>
+
+    <% if(ArticleData.article.settings.publicationdate){ %>
+          <p>{{'WEBSITE_ARTICLE_ON_TEXT'|trans}} <%- ArticleData.article.settings.publicationdate %></p>
+     <% } %>
+
+
+       <% if(commentCount !== '' && commentCount !== 0 && ArticleData.commentActive == 1){ %>
+            <p class="fg-comments-count"><span id="fg-link-comments-count"> <strong><%-commentCount %></strong> </span> <span id="fg-article-comment-text"><strong> <% if( commentCount > 1 ){ %>{{'ARTICLE_COMMENT_MULTIPLE'|trans}}<% } else { %>{{'ARTICLE_COMMENT_SINGLE'|trans}}<% } %> </strong></span></p>
+       <% } %>
+        <div class="fg-cat-tags">
+         <% if( ArticleData.article.settings.areaTitles != null ){ %>
+             <% if(ArticleData.article.club !== clubId) { %>
+                     <span class="fg-club-tag"><%- ArticleData.article.clubTitle %></span>
+                <% } else { %>
+             <% var areas = ArticleData.article.settings.areaTitles.split(','); %>
+             <% _.each(areas, function(area){ %>
+
+                 <span class="fg-club-tag"> <%- (area == 'Club') ? '{{fgtwig.getTerminolgyName('Club',singular,'UCF')}}' : area %></span>
+            <%  });%>
+              <% } %>
+         <% } %>
+
+            <br>
+        <% if( ArticleData.article.settings.categoryTitlesDef != null ){ %>
+           <% if(ArticleData.article.club !== clubId) { %>
+               <span class="fg-cat-tag"><%- ArticleData.article.clubTitle %></span>
+           <% } else { %>
+              <% var categories = (ArticleData.article.settings.categoryTitles) ? ArticleData.article.settings.categoryTitles.split(',') : {}; %>      
+                 <% _.each(categories, function(category){ %>   
+                     <span class="fg-cat-tag"><%- category %></span>
+                    <%  });%>
+                 <% } %>
+       <% } %>
+
+        </div>
+
+
+    </div>
+
+   <% if(typeof ArticleData.article.attachment !== 'undefined'){ %>
+
+         <div class="fg-article-details-block">
+        <h5 class="fg-title">ATTACHMENTS</h5>
+        <ul class="no-style fg-attachments">
+                 <% if( _.size(ArticleData.article.attachment) > 0 ){
+                    articleAttachments = _.sortBy(ArticleData.article.attachment, function (i) { return i.attachmentName.toLowerCase(); });
+                    $.each(articleAttachments, function(i, v){
+                    var fileSize = FgClubSettings.formatNumber(v.attachmentSize/1024);
+            %>
+            <li><a class="fg-article-attachment" data-clubId="<%= ArticleData.article.club %>" data-filemanagerId="<%= v.filemanagerId %>" href="#"><%= v.attachmentName %></a><span class="fg-size">(<%- fileSize %> {{'CALENDAR_DETAILS_ATTACHMENT_SIZE'|trans}})</span></li>
+            <%
+                });
+            %>
+        <% } %>
+        </ul>
+    </div>
+
+    <% } %>
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+

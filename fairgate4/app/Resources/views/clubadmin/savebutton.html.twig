@@ -1,0 +1,26 @@
+<div class="backend-sticy-area portlet-body form">
+    <div class="form-actions fluid">
+        {% if oneMore.inputId is defined %}
+            <div class="form-group col-md-5">
+                <div class="checkbox-list col-md-8">
+                    <label class="checkbox-inline ">
+                        <input type="checkbox" id="{{oneMore.inputId}}" value="1" name="oneMore">
+                        {{oneMore.label}}
+                    </label>                           
+                </div>
+            </div>
+        {% endif %}
+        <div class="col-md-offset-0  col-md-12 col-sm-12 col-xs-12">
+            <input type="submit" class="btn green" value="{% if (save_button_val is defined) %} {{save_button_val}} {% else %} {%trans%}SAVE_CHANGES{%endtrans%} {% endif %}" {% if (save_button_id is defined) %} id="{{save_button_id}}" {% else %} id="save_changes" {% endif %}  {% if (button_attr_type is defined) %} {{ button_attr_type}} ="{{button_attr_val}}" {% endif %}/>
+            <input type="{{reset_button_type|default('reset')}}" class="btn default" {% if (reset_button_id is defined) %} id="{{reset_button_id}}" {% else %} id="reset_changes" {% endif %} value="{% if (reset_button_val is defined) %} {{reset_button_val}} {% else %} {%trans%}DISCARD_CHANGES{%endtrans%} {% endif %}" />
+            {% if noBackLinkFlag is not defined %}
+                <div class="btn-group pull-right">                
+                    {% if (settings is not defined) %}
+                    <button type="button" class="btn default-ash bckid" data-auto="back_button_bottom" data-url="{% if (backLink is defined) %} {{backLink}} {% else %} {{path('contact_index')}} {% endif %}"><i class="fa fg-chevron-left"></i>{%trans%}BACK{%endtrans%}</button>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>  
+    </div>
+</div>
+<span class="fg-bottom-fixed-height"></span>

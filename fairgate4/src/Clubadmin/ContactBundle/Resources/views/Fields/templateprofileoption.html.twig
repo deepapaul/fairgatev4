@@ -1,0 +1,121 @@
+<script type="template" id="template_contact_option_category">
+<div class="row fg-formfield-block" id="fields_cat_<%-catId%>">
+    <div class="col-md-12">
+        <div class="panel panel-primary bordernon panel-bg">
+            <div class="panel-heading fg-theme-head">
+               <div class="fg-heading-editable">
+                    <h3 class="panel-title pull-left"><%-categoryName%> </h3>
+                    
+                    <% if( catId == 1) { %>    
+                        <span class="txticonnew"> 
+                            {%trans%}CONTACT_FIELDS_ONLY_FOR{%endtrans%} 
+                            <i class="fa fa-user fg-contact-Popovers" data-content="{%trans%}FOR_SINGLE_PERSONS{%endtrans%}"></i>
+                        </span>
+                        <h3 class="panel-title txtsub"> {%trans%}CF_MAIN_CONTACT_MANUAL{%endtrans%}</h3> 
+                    <% } %>    
+                        
+                    <% if (catId==1 || catId==3) { %> 
+                        <span class="txticonnew"> {%trans%}CONTACT_FIELDS_ONLY_FOR{%endtrans%}
+                            <i class="fa fa-building-o fg-contact-Popovers" data-content="{%trans%}FOR_COMPANIES{%endtrans%}"></i> 
+                        </span>
+                    <% } %> 
+                </div>  
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="fg-formfield-innerblock">
+        
+    </div>
+</div>
+</script>
+
+<script type="template" id="template_contact_option_field">
+<div id="fields_<%-attributeId%>">
+    <div class="col-md-12">
+        <div class="panel panel-secondary ">
+             <div class="fg-panel-bg">
+                 <h3 class="panel-title pull-left"><%-fieldName%></h3>
+             </div>
+              <div class="clearfix"></div>
+         </div>
+     </div>
+    <div class="col-md-12">
+        <div class="row form-group fg-dev-availibility-contact">
+            <label class="col-sm-3 control-label text-right fg-marg-top-5">{{'CONTACTFIELDS_SETT_CONTACTAVAILIBILITY'|trans}}</label>
+            <div class="col-sm-4">
+                <div class="switch-toggle switch-3  switch-multi-color">
+                    <input type="radio" class="make-switch" value="changable" <%-(availabilityContact == 'changable' || availabilityContact == '')?checkedHtml:''%> name="available_contact_<%-categoryId%>_<%-attributeId%>" 
+                            id="available_contact_changable_<%-categoryId%>_<%-attributeId%>" data-key="<%-categoryId%>.fields.<%-attributeId%>.availabilityContact">
+                    <label title="{{'CONTACTFIELDS_SETT_CHANGABLE_OPTION'|trans}}" onclick="" for="available_contact_changable_<%-categoryId%>_<%-attributeId%>"><div>{{'CONTACTFIELDS_SETT_CHANGABLE_OPTION'|trans}}</div></label>
+                    <input type="radio" class="make-switch" value="visible" <%-(availabilityContact == 'visible')?checkedHtml:''%> name="available_contact_<%-categoryId%>_<%-attributeId%>" 
+                            id="available_contact_available_<%-categoryId%>_<%-attributeId%>" data-key="<%-categoryId%>.fields.<%-attributeId%>.availabilityContact">
+                    <label title="{{'CONTACTFIELDS_SETT_VISIBLE_OPTION'|trans}}"  onclick="" for="available_contact_available_<%-categoryId%>_<%-attributeId%>"><div>{{'CONTACTFIELDS_SETT_VISIBLE_OPTION'|trans}}</div></label>
+                    <input type="radio" class="make-switch" value="not_available" <%-(availabilityContact == 'not_available')?checkedHtml:''%> name="available_contact_<%-categoryId%>_<%-attributeId%>" 
+                            id="available_contact_notavailable_<%-categoryId%>_<%-attributeId%>" data-key="<%-categoryId%>.fields.<%-attributeId%>.availabilityContact">
+                    <label title="{{'CONTACTFIELDS_SETT_NOTAVAILABLE_OPTION'|trans}}" onclick="" for="available_contact_notavailable_<%-categoryId%>_<%-attributeId%>"><div>{{'CONTACTFIELDS_SETT_NOTAVAILABLE_OPTION'|trans}}</div></label>
+                    <a class="btn btn-primary"></a> 
+                </div>
+            </div>
+            <div class="col-sm-4  fg-marg-top-5 fg-dev-confirmcheck-wrapper">
+                <label class="checkbox-inline fg-pad-left-0">
+                  <input type="checkbox" name="is_confirm_contact_<%-categoryId%>_<%-attributeId%>" value="1" <%-(isConfirmContact == 1)?checkedHtml:''%>
+                        id="is_confirm_contact_<%-categoryId%>_<%-attributeId%>" data-key="<%-categoryId%>.fields.<%-attributeId%>.isConfirmContact" class="fg-dev-confirmation">
+                  {{'CONTACTFIELDS_SETT_NEEDCONFIRM_OPTION'|trans}}
+                </label>
+            </div>
+        </div>
+        <div class="row form-group fg-dev-availibility-groupadmin">
+             <label class="col-sm-3 control-label text-right fg-marg-top-5">{{'CONTACTFIELDS_SETT_ADMINAVAILIBILITY'|trans}}</label>
+             <div class="col-sm-4">
+                 <div class="switch-toggle switch-3  switch-multi-color">
+                      <input type="radio" class="make-switch" value="changable" <%-(availabilityGroupadmin == 'changable' || availabilityContact == '')?checkedHtml:''%> name="available_group_<%-categoryId%>_<%-attributeId%>" 
+                            id="available_group_changable_<%-categoryId%>_<%-attributeId%>" data-key="<%-categoryId%>.fields.<%-attributeId%>.availabilityGroupadmin">
+                     <label title="{{'CONTACTFIELDS_SETT_CHANGABLE_OPTION'|trans}}" onclick="" for="available_group_changable_<%-categoryId%>_<%-attributeId%>"><div>{{'CONTACTFIELDS_SETT_CHANGABLE_OPTION'|trans}}</div></label>
+                     <input type="radio" class="make-switch" value="visible" <%-(availabilityGroupadmin == 'visible')?checkedHtml:''%> name="available_group_<%-categoryId%>_<%-attributeId%>" 
+                            id="available_group_available_<%-categoryId%>_<%-attributeId%>" data-key="<%-categoryId%>.fields.<%-attributeId%>.availabilityGroupadmin">
+                     <label title="{{'CONTACTFIELDS_SETT_VISIBLE_OPTION'|trans}}" onclick="" for="available_group_available_<%-categoryId%>_<%-attributeId%>"><div>{{'CONTACTFIELDS_SETT_VISIBLE_OPTION'|trans}}</div></label>
+                     <input type="radio" class="make-switch" value="not_available" <%-(availabilityGroupadmin == 'not_available')?checkedHtml:''%> name="available_group_<%-categoryId%>_<%-attributeId%>" 
+                            id="available_group_notavailable_<%-categoryId%>_<%-attributeId%>" data-key="<%-categoryId%>.fields.<%-attributeId%>.availabilityGroupadmin">
+                     <label title="{{'CONTACTFIELDS_SETT_NOTAVAILABLE_OPTION'|trans}}" onclick="" for="available_group_notavailable_<%-categoryId%>_<%-attributeId%>"><div>{{'CONTACTFIELDS_SETT_NOTAVAILABLE_OPTION'|trans}}</div></label>
+                     <a class="btn btn-primary"></a> 
+                 </div>
+             </div>
+
+             <div class="col-sm-4  fg-marg-top-5 fg-dev-confirmcheck-wrapper">
+                 <label class="checkbox-inline fg-pad-left-0">
+                    <input type="checkbox" name="is_confirm_teamadmin_<%-categoryId%>_<%-attributeId%>" value="1"  <%-(isConfirmTeamadmin == 1)?checkedHtml:''%>
+                            id="is_confirm_teamadmin_<%-categoryId%>_<%-attributeId%>"  data-key="<%-categoryId%>.fields.<%-attributeId%>.isConfirmTeamadmin" class="fg-dev-confirmation">
+                   {{'CONTACTFIELDS_SETT_NEEDCONFIRM_OPTION'|trans}}
+                 </label>
+             </div>
+         </div>
+        <div class="row form-group fg-dev-visibility-contact">
+            <label class="col-sm-3 control-label text-right fg-marg-top-5">{{'CONTACTFIELDS_SETT_CONTACTVISIBILITY'|trans}}</label>
+            <div class="col-sm-4">
+                <div class="switch-toggle switch-3  switch-multi-color">
+                    <input type="radio" class="make-switch" value="community" <%-(privacyContact == 'community' || availabilityContact == '')?checkedHtml:''%> name="visible_other_<%-categoryId%>_<%-attributeId%>" 
+                            id="visible_other_community_<%-categoryId%>_<%-attributeId%>" data-key="<%-categoryId%>.fields.<%-attributeId%>.privacyContact">
+                    <label title="{{'CONTACTFIELDS_SETT_ALLCONTACT_OPTION'|trans}}" onclick="" for="visible_other_community_<%-categoryId%>_<%-attributeId%>"><div>{{'CONTACTFIELDS_SETT_ALLCONTACT_OPTION'|trans}}</div></label>
+                    <input type="radio" class="make-switch" value="team" <%-(privacyContact == 'team')?checkedHtml:''%> name="visible_other_<%-categoryId%>_<%-attributeId%>" 
+                            id="visible_other_team_<%-categoryId%>_<%-attributeId%>" data-key="<%-categoryId%>.fields.<%-attributeId%>.privacyContact">
+                    <label title="{{'CONTACTFIELDS_SETT_GROUPMEM_OPTION'|trans}}" onclick="" for="visible_other_team_<%-categoryId%>_<%-attributeId%>"><div>{{'CONTACTFIELDS_SETT_GROUPMEM_OPTION'|trans}}</div></label>
+                    <input type="radio" class="make-switch" value="private" <%-(privacyContact == 'private')?checkedHtml:''%> name="visible_other_<%-categoryId%>_<%-attributeId%>" 
+                            id="visible_other_private_<%-categoryId%>_<%-attributeId%>" data-key="<%-categoryId%>.fields.<%-attributeId%>.privacyContact">
+                    <label title="{{'CONTACTFIELDS_SETT_NOCONTACT_OPTION'|trans}}" onclick="" for="visible_other_private_<%-categoryId%>_<%-attributeId%>"><div>{{'CONTACTFIELDS_SETT_NOCONTACT_OPTION'|trans}}</div></label>
+                    <a class="btn btn-primary"></a> 
+                </div>
+            </div>
+
+            <div class="col-sm-4  fg-marg-top-5 fg-dev-confirmcheck-wrapper" <%-isSetPrivacyItself%>>
+                <label class="checkbox-inline fg-pad-left-0">
+                  <input type="checkbox" name="is_set_privacy_itself_<%-categoryId%>_<%-attributeId%>" value="1" <%-(isSetPrivacyItself == 1)?checkedHtml:''%>
+                            id="is_set_privacy_itself_<%-categoryId%>_<%-attributeId%>" data-key="<%-categoryId%>.fields.<%-attributeId%>.isSetPrivacyItself" class="fg-dev-confirmation">
+                  {{'CONTACTFIELDS_SETT_CONTACTSELF'|trans}}
+                </label>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>    
+ </div>
+</script>

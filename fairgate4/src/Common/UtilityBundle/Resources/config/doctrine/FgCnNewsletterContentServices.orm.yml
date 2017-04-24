@@ -1,0 +1,32 @@
+Common\UtilityBundle\Entity\FgCnNewsletterContentServices:
+    repositoryClass: Common\UtilityBundle\Repository\FgCnNewsletterContentServicesRepository
+    type: entity
+    table: fg_cn_newsletter_content_services
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        content:
+            targetEntity: FgCnNewsletterContent
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                content_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        service:
+            targetEntity: FgSmServices
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                service_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

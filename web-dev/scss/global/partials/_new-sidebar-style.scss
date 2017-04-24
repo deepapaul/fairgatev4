@@ -1,0 +1,275 @@
+.fg-page-sidebar{
+	.page-sidebar{
+		.page-sidebar-menu{
+			//common styles
+			li{
+				position: relative;
+				a{
+					.arrow{
+
+						margin-right: 5px;
+						line-height: 17px;
+						min-width: 10px;
+						display: inline-block;
+						vertical-align: top;
+
+						&.nav-toggle{
+												
+							width: 20px;
+							position: relative;
+							margin-left: -5px;
+							text-align: center;
+							z-index: 1;
+						}
+						&:before{
+							position: static;
+							float: none;
+							content: "\f105";
+						}
+						&.open{
+
+							&:before{
+							    content: "\f107";
+							}
+						}
+					}
+					.empty{
+						display: inline-block;
+						width: 15px;
+					}
+				}
+				.title{
+					display: inline-block;
+					padding-right: 0;
+					max-width: 80%;
+					word-break: break-word;
+				}
+				//sidebar option menu button
+				.fg-sidebar-menu-button{
+					@include position(absolute,10px,10px);
+					.btn{
+						background: none;
+						color: #fff;
+						padding: 2px;
+						margin-right: -4px;
+						.fa{
+							font-size: 18px;
+						}
+					}
+				}
+				
+				.fg-sidebar-icon-right{
+					@include position(absolute !important,10px,10px); //- Remove important after removing fg-overide sidebar styles
+					font-size: 19px !important;
+				    width: auto !important;
+				}
+
+
+				//common for second and other
+				ul:not(.dropdown-menu){
+					li{
+						&.open:not(.active):not(.fg-sidebar-hover){
+							>a:not(.no-hover):not(.non-clickable){
+								background: none !important;
+								&:hover{
+
+									background: #c70000 !important;
+									color: #fff;
+									.title,i{
+										color: #fff;
+									}
+									.arrow:before{
+										color: #fff;
+									}
+								}
+							}
+							>a.no-hover{
+								background: none !important;
+							}
+						}
+						&:hover{
+							>a{
+								background: none !important;
+							}					
+						}
+						&.active,
+						&.fg-sidebar-hover{
+							>a{
+
+								background: #c70000 !important;
+								color: #fff;
+								.title,i{
+									color: #fff;
+								}
+								.arrow:before{
+									color: #fff !important;
+								}
+							}
+						}
+						>a{
+
+							&:not(.non-clickable):hover{
+
+								background: #c70000 !important;
+								color: #fff;
+								.title,i{
+									color: #fff;
+								}
+								.arrow:before{
+									color: #fff;
+								}
+							}
+						}
+						
+					}
+				}
+			}
+			.sub-menu{
+			    margin: 0 !important;
+				background: #dbdbdb;
+
+    			>li{
+    				margin: 0 !important;
+					background-color: #dbdbdb;
+    				>a{
+    					color: #222222;
+					    padding: 6px 10px;
+					    i{
+					    	color: #444444;
+					    	&.fa-warning{
+					    		color:#c70000;
+					    	}
+					    }
+					    &:hover{
+
+						    i{
+						    	&.fa-warning{
+						    		color:#fff;
+						    	}
+						    }
+					    }
+    				}
+
+    				&.active{
+    					&.show-toggled-menu{
+    						&:not(.open){
+    							>.sub-menu{
+    								display: none;
+    							}
+    						}
+    					}
+    				}
+    			}
+			}
+			//level based styles
+			&.sidebar-level1{
+				>li{
+			    	border-bottom: 1px solid #4d4d4d;
+					> a{
+						font-size: 14px;
+						font-weight: 600; 
+						color: #fff;
+						background: none;
+					    padding: 10px;
+						>.arrow{
+							&:before{
+								color: #fff;
+							}
+						}
+					}
+				}
+				.sidebar-level2{
+					>li{
+							
+						> a{
+							font-size: 14px;
+							font-weight: 500; 
+
+							&.non-clickable{
+								background: none !important;
+							}
+						}
+					}
+				}
+				.sidebar-level3{
+					>li{
+							
+						> a{
+							font-size: 13px;
+							font-weight: 500; 
+						    padding-left: 26px;
+						}
+					}
+				}
+				.sidebar-level4{
+					>li{
+							
+						> a{
+							font-size: 13px;
+							font-weight: 500; 
+							padding-left: 47px !important;
+						}
+					}
+				}
+			}
+			.control-aranew{
+
+				display: block;
+				padding-left: 10px;
+				padding-bottom: 10px;
+				padding-top: 10px;
+
+				.fg-sidebar-input{
+					width: 81%;
+				}
+				.fa-check,
+				.fa-times{
+
+					color: #666;
+					font-size: 18px;
+					line-height: 29px;
+					padding-left: 2px;
+					width: 18px;
+					cursor: pointer;
+				}
+				.fa-check{
+					&:hover{
+						color: #35aa47;
+					}
+				}
+				.fa-times{
+					&:hover{
+						color: #c70000;
+					}
+				}
+			}
+		}
+		.fg-sidebar-li-options{
+			padding:5px 7px 5px 0;
+		    border: 0 !important;
+			.dropdown-toggle{
+				color:#ccc;
+				background: none;
+				outline: none !important;
+				border:0;
+				padding: 0;
+			}
+			.dropdown-menu{
+				li{
+					label{
+						padding: 2px 5px;
+					}
+				}
+			}
+		}
+
+		.fg-sidebar-options{
+			label{
+
+				font-weight: 400;
+				font-size: 14px;
+			}
+		}
+	}
+}
+

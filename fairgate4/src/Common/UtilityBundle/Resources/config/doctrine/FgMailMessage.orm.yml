@@ -1,0 +1,50 @@
+Common\UtilityBundle\Entity\FgMailMessage:
+    repositoryClass: Common\UtilityBundle\Repository\Message\FgMailMessageRepository
+    type: entity
+    table: fg_mail_message
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        email:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        salutation:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        cronInstance:
+            type: boolean
+            nullable: false
+            column: cron_instance
+        priority:
+            type: integer
+            unsigned: false
+            nullable: false
+    manyToOne:
+        newsletter:
+            targetEntity: FgCnNewsletter
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                newsletter_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        receiverLog:
+            targetEntity: FgCnNewsletterReceiverLog
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                receiver_log_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

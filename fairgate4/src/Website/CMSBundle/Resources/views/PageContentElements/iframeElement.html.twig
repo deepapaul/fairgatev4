@@ -1,0 +1,193 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = (elementId > 0)?'CMS_EDIT_IFRAME_ELEMENT'|trans :'CMS_ADD_IFRAME_ELEMENT'|trans %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTAINER -->
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN BREADCRUMB-->
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <!-- END BREADCRUMB-->
+            <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+            {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'contactId': '', 'tabs': tabs, 'roleCount' : '' , 'type':'', 'url' : '', 'clubLanguages':clubLanguageArr, 'clubDefaultLang':defaultClubLang} %}
+            <!-- END PAGE TITLE AND PANEL TABS -->
+            <div class="row fg-cms-elements-head-edit-wrapper" id="cmsAddElementIframeEdit">
+                <form id="addIframeElementForm" class="" method="post" data-validation="true" onsubmit="return false;" novalidate="novalidate">
+                    <div class="alert alert-danger display-none">
+                        <button class="close" data-dismiss="alert"></button>
+                        <span data-error>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+                    </div>
+                    <div class="form-body">
+                        <div class="form-group required fg-clear" >
+                                    <div class="col-md-6 col-sm-8 col-lg-5 col-md-offset-3 col-sm-offset-4">                                        
+                                        <button type="button" class="btn btn-default"  data-toggle="modal"  data-target="#modalIframeElement">{{'CMS_IMPORT_EXISTING_IFRAME_CODE'|trans}}</button> <span class="fg-marg-left-10">{{'OPTIONAL'|trans}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group required fg-clear" >
+                                    <label class="col-md-3 col-sm-4 control-label text-right" for="cmsIframeElementUrl">{{'CMS_URL'|trans}}</label>  
+                                    <div class="col-md-6 col-sm-8 col-lg-5 ">
+                                        <input id="cmsIframeElementUrl" name="cmsIframeElementUrl" type="text" class="form-control" {% if elementDetails.iframeUrl is defined %}value="{{ elementDetails.iframeUrl}}"{%else%}value="http://"{%endif%}> 
+                                    </div>
+                                </div>
+                                <div class="form-group required fg-clear" >
+                                    <label class="col-md-3 col-sm-4 col-xs-auto control-label text-right" for="cmsIframeElementHeight"  max="20">{{'CMS_HEIGHT_IN_PIXEL'|trans}}</label>  
+                                    <div class="col-md-2 col-sm-3 col-xs-auto col-lg-1 ">
+                                        <input id="cmsIframeElementHeight" name="cmsIframeElementHeight" type="text" class="form-control" {% if elementDetails.iframeHeight is defined %}value="{{ elementDetails.iframeHeight}}"{%else%}value="300"{%endif%}> 
+                                    </div>
+                                </div>
+                    </div>
+                    <input type="hidden" name="hiddenPageId" id="hiddenPageId" value="{{pageId}}"/>            
+                    <input type="hidden" name="hiddenBoxId" id="hiddenBoxId" value="{{boxId}}"/>            
+                    <input type="hidden" name="hiddenElementId" id="hiddenElementId" value="{{elementId}}"/>            
+                    <input type="hidden" name="hiddenSortOrder" id="hiddenSortOrder" value="{{sortOrder}}"/>
+                    
+                    {%if(elementId>0)%}
+                        {% include 'internal/savebutton.html.twig' with {'save_button_val':'CMS_ELEMENT_SAVE_BUTTON'|trans, 'second_btn_val':'CMS_ELEMENT_SAVE_AND_BACK_BUTTON'|trans, 'second_button_id':'save_bac', 'discard_button_val':'CMS_ELEMENT_DISCARD_BUTTON'|trans, 'backLink': path('website_cms_page_edit',{'pageId': pageId}) } %}
+                    {%else%}
+                        {% include 'internal/savebutton.html.twig' with { 'save_button_id':'save_bac', 'save_button_val':'ADD'|trans, 'second_btn_val':'CANCEL'|trans, noDiscardChange:'1', 'backLink': path('website_cms_page_edit',{'pageId': pageId}) } %}
+                    {%endif%}
+                    
+                </form>
+            </div>
+                
+            <div class="fg-cms-elements-head-log-wrapper fg-dis-none" id="cmsAddElementIframeLog">
+                <div class="portlet-body new-table-height fg-datatable-wrapper row" id="tableWrapper">
+                    <table class="dataTable
+                           table
+                           table-bordered
+                           table-hover
+                           table-condensed
+                           dataTable-dragable"
+                           id="datatable-element-log-list" dataTable-popover="true" dataTable-hover="true">
+                        <thead>
+                            <tr>
+                                <th> &nbsp;&nbsp;{{'CMS_LOG_DATE'|trans}} </th>
+                                <th> {{'CMS_LOG_OPTION'|trans}} </th>                               
+                                <th> {{'CMS_LOG_VALUE_BEFORE'|trans}} </th>
+                                <th> {{'CMS_LOG_VALUE_AFTER'|trans}} </th>
+                                <th> {{'CMS_EDITED_BY'|trans}} </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>        
+            </div>
+                            
+        </div> 
+    </div>
+    <!--Begin popup content-->
+    <div class="modal fade" id="modalIframeElement" tabindex="-1" role="modalIframeElement" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title fg-modal-title">{{'CMS_IMPORT_EXISTING_IFRAME_CODE'|trans}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger fg-marg-top-0 hide">
+                        <button class="close" data-dismiss="alert"></button>
+                        <span data-error>{{'CMS_ENTER_VALID_IFRAME_CODE'|trans}}</span>
+                    </div>
+                    <div class="form-group fg-clear">
+                        <label class="control-label text-right fg-label-valign col-sm-4">{{'CMS_IFRAME_CODE'|trans}}</label>
+                        <div class="col-sm-8">
+                           <textarea class="form-control no-resize" id="cmsIframeCodeText" rows="4"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn default" data-dismiss="modal">{{'CANCEL'|trans}}</button>
+                    <button type="button" id="cmsIframeImportBtn" class="btn green">{{'Import'|trans}}</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!--End popup content-->
+                            
+    {% endblock %}
+    {% block javascripts %}
+        <script src="{{ asset('fgassets/internal/js/fg_tab_selection_process.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/website/js/fg-cms-element.js') }}" type="text/javascript"></script>
+        <script>
+                    var saveElementPath = '{{path('website_cms_save_iframe_element')}}';
+                    var contentEditPagePath = '{{path('website_cms_page_edit',{'pageId': pageId})}}';
+                    var profilePath = "{{ path('internal_community_profile', {'contactId': "**placeholder**" }) }}";
+                    var elementLogDetailsPath = "{{path('website_cms_element_log_data')}}";
+                    var contactId = '{{contactId}}';
+                    var clubId = '{{clubId}}';
+                    var elementId = '{{elementId}}';
+                    var type = 'iframeElement';
+                    var defaultlanguage = '{{defaultlang}}';
+                    var required = '{{'REQUIRED_FIELD'|trans}}';
+                    var tabheadingArray = {{ tabs|json_encode()|raw }};
+                    var elementTrans = {
+                                'added': "{{ 'LOG_FLAG_ADDED'|trans }}",
+                                'changed': "{{ 'LOG_FLAG_CHANGED'|trans }}",
+                                'removed': "{{ 'LOG_FLAG_REMOVED'|trans }}",
+                                'element' : "{{ 'CMS_ELEMENT'|trans }}",
+                                'page_assignment' :"{{ 'CMS_PAGE_ASSIGNMENT'|trans }}",
+                                'error_valid_iframe_url' :"{{ 'CMS_ENTER_VALID_IFRAME_URL'|trans }}",
+                            };
+                    $(document).ready(function () {
+                        scope = angular.element($("#BaseController")).scope();
+                        FgPageTitlebar = $(".fg-action-menu-wrapper").FgPageTitlebar({
+                            title: true,
+                            tab: true,
+                            tabType: 'client'     
+                        });
+                        var option = {
+                            pageType: 'cmsAddElement',
+                            contactId: contactId,
+                            currentClubId: clubId,
+                            localStorageName: type + '_' + clubId + '_' + contactId,
+                            tabheadingArray: tabheadingArray
+                        };
+                        Fgtabselectionprocess.initialize(option);
+                        FgDirtyFields.init('addIframeElementForm', {saveChangeSelector: "#save_changes, #save_bac"});
+                        var iframeOption = {
+                            contentEditPagePath : contentEditPagePath,
+                            elementId           : elementId,
+                            jstranslations      : jstranslations
+                        };
+                        var CmsIframe = new FgCmsIframe(iframeOption);
+                        CmsIframe.renderContent();
+                        //Import iframe code
+                        $(document).on('click','#cmsIframeImportBtn',function(){
+                            CmsIframe.importIframeCode();
+                           
+                        });
+                        $('#modalIframeElement').on('hidden.bs.modal', function() {
+                           CmsIframe.popupFormError(false);
+                        });
+                        //Svae iframe element
+                        $(document).on('click','#save_changes, #save_bac',function(){
+                            
+                            if($(this).hasClass('disabled')){
+                                return false;
+                            }
+                            
+                             var validate = CmsIframe.validateIframeForm();
+                            if(validate){
+                                var data = {};
+                                data['saveType'] = ($(this).attr('id') === 'save_changes') ? 'save' : 'saveAndBack';
+                                data['pageId'] = $('#hiddenPageId').val();
+                                data['boxId'] = $('#hiddenBoxId').val();
+                                data['elementId'] = $('#hiddenElementId').val();
+                                data['sortOrder'] = $('#hiddenSortOrder').val();
+
+                                data['iframeCode'] = $('#cmsIframeCodeText').val();
+                                data['iframeUrl'] = CmsIframe.appendHttp($('#cmsIframeElementUrl').val());
+                                data['iframeHeight'] = $('#cmsIframeElementHeight').val();
+                                FgDirtyFields.removeAllDirtyInstances();
+                               FgXmlHttp.post(saveElementPath, data, false, CmsIframe.saveElementCallback); 
+                           }   
+                        });
+                        $('body').on('click', '#preview', function (e) {
+                           window.location.href = contentEditPagePath;
+                        });
+                        FgInternal.restrictEnterKeyOnPage('addIframeElementForm');
+                    });        
+        </script>
+    {% endblock %}    

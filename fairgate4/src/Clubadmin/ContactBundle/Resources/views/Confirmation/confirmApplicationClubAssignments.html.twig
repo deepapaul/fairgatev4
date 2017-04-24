@@ -1,0 +1,272 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = title %}
+{% block pagecontent %}
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BREADCRUMB STARTS -->
+            {% include 'clubadmin/breadcrumb.html.twig' %}
+            <!-- BREADCRUMB ENDS -->
+        </div>
+    </div>
+    <div class="row">
+      {% set page_settings = { 'pagetitle':'true','actionmenu':'true','tabs':'true' }  %}
+      {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': title|trans, 'page_settings': page_settings,'tabs':tabs ,'type':page,'hrefLink':'true','url':'#'} %}
+    </div>
+      <div id="data-tabs-content" class="tab-content">
+        {% for key,logTab in logTabs %} 
+            {% set active = (key == activeTab) ? 'active': '' %}
+            <div class="tab-pane {{ active }}" id="confirmations-{{ logTab }}-table-div">
+                {% include 'ClubadminContactBundle:Confirmation:confirmApplicationClubAssignmentList.html.twig' with { 'activeTab' : logTab, 'typeId' : key,'clubType': clubType } %}
+            </div>
+        {% endfor %}  
+    </div>
+       
+    <div id="callPopupFunction"></div>
+    <!-- Connection Popup -->
+    <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-content fg-popup-wrap" id="popup_contents">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/sidebar.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg-nullsort-handle-dataTable.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/fg_existing_fed_confirmation.js')}}" type="text/javascript"></script>
+    <script type="text/javascript">
+        var clubType = '{{clubType}}';
+        var clubTitles = '{{ clubTitles|json_encode()|raw }}';
+        clubTitles1 = JSON.parse(clubTitles);
+        var actionMenuFlag = (clubType=='federation') ? true : false;
+        $(document).ready(function() {
+            FgPageTitlebar.init({
+                title       : true,
+                tab       : true,
+                search     :false,
+                actionMenu  : actionMenuFlag,
+                tabType  :'client'
+               
+            }); 
+       });
+        FgConfirmations.activeTabName = '{{ (activeTab == '1')  ? 'list' : 'log' }}';
+        var currentDateFormat = FgLocaleSettingsData.momentDateTimeFormat;
+        
+        if (FgConfirmations.activeTabName == 'list') {
+            var actionMenuNoneSelectedText = {
+                'confirmConfirmations'   : {'title' : "{{ 'CONFIRMATION_CONFIRM'|trans }}", 'dataUrl': '{{ path('confirm_or_discard_clubapplication', {'action' : 'confirm'}) }}', 'visibleAlways' : false},
+                'discardConfirmations'   : {'title' : "{{ 'CONFIRMATION_DISCARD'|trans }}", 'dataUrl': '{{ path('confirm_or_discard_clubapplication', {'action' : 'discard'}) }}', 'visibleAlways' : false}
+            };
+            var actionMenuSingleSelectedText = {
+                'confirmConfirmations'   : {'title' : "{{ 'CONFIRMATION_CONFIRM'|trans }}", 'dataUrl': '{{ path('confirm_or_discard_clubapplication', {'action' : 'confirm'}) }}', 'visibleAlways' : true},
+                'discardConfirmations'   : {'title' : "{{ 'CONFIRMATION_DISCARD'|trans }}", 'dataUrl': '{{ path('confirm_or_discard_clubapplication', {'action' : 'discard'}) }}', 'visibleAlways' : true}
+            };
+            var actionMenuMultipleSelectedText = {
+                'confirmConfirmations'   : {'title' : "{{ 'CONFIRMATION_CONFIRM'|trans }}", 'dataUrl': '{{ path('confirm_or_discard_clubapplication', {'action' : 'confirm'}) }}', 'visibleAlways' : true},
+                'discardConfirmations'   : {'title' : "{{ 'CONFIRMATION_DISCARD'|trans }}", 'dataUrl': '{{ path('confirm_or_discard_clubapplication', {'action' : 'discard'}) }}', 'visibleAlways' : true}
+            };
+        }
+        var contactUrl = '{{ path('render_contact_overview', {'offset' : 0, 'contact' : 'dummy'}) }}';
+        var contactDetailUrl = '{{ path('new_contact_detail', {'contact' : 'dummy'}) }}';
+        
+        colCount = 0;
+        var columnDefs1;
+        if(clubType=='federation') {
+            columnDefs1=[
+                        { type: "checkbox", orderable: false, "width" : "5%", targets: colCount++, data:function(row, type, val, meta){
+                            return "<input type='checkbox' class='dataClass fg-dev-avoidicon-behaviour' id='"+row['confirmId']+"' name='check'>";
+                        }},{ "name": "modified_date", "width" : "15%",   "targets": colCount++ , data:function(row, type, val, meta){
+                                                               
+                                return row;
+                            }, render: {"_": 'modifiedDate1', "display": 'modifiedDate', 'filter': 'modifiedDate'}
+                        },
+                        { "name": "contact", "width" : "20%",  "targets": colCount++, data:function(row, type, val, meta){
+                            var icon = getContactIcon(row['gender'], row['isCompany']);
+                            var popupLink = icon + ' <a href="#" data-contact-id="'+row['contactId']+'" data-url = "{{path('contact_profile_preview_existing_fed_popup')}}" data-type= "contactProfilePreviewPopup" class="fa-access-edit fg-marg-left-5">'+row['contactName']+'</a>';
+                            return  (row['contactName'] == '' || row['contactName'] == null) ? '-' : ( row['isActiveContact']==null? popupLink : icon+ ' <a class="fg-marg-left-5" href="'+contactUrl.replace('dummy', row['isActiveContact'])+'">'+row['contactName']+'</a>' ) ;
+                        }}];
+        }        
+        if(clubType=='federation_club' || clubType=='sub_federation_club') {
+            columnDefs1 = [
+                        { "name": "modified_date", "width" : "15%", "targets": colCount++ , data:function(row, type, val, meta){
+                                return row;
+                            }, render: {"_": 'modifiedDate1', "display": 'modifiedDate', 'filter': 'modifiedDate'}
+                        },
+                        { "name": "contact", "width" : "20%",  "targets": colCount++, data:function(row, type, val, meta){
+                            var icon = getContactIcon(row['gender'], row['isCompany']);     
+                            var popupLink = icon+ ' <a href="#" data-contact-id="'+row['contactId']+'" data-url = "{{path('contact_profile_preview_existing_fed_popup')}}" data-type= "contactProfilePreviewPopup" class="fa-access-edit fg-marg-left-5">'+row['contactName']+'</a>';    
+                            var overviewLink = icon+  ' <a class="fg-marg-left-5" href="'+contactUrl.replace('dummy', row['isActiveContact'])+'">'+row['contactName']+'</a>';
+                            return  ((row['contactName'] == '' || row['contactName'] == null) ? '-': (row['isActiveContact'] == null ? popupLink : overviewLink)  );
+                        }}];
+        }
+        columnDefs1.push(
+                        { "name": "fedMembership", "width" : "20%",  "targets": colCount++, data:function(row, type, val, meta){
+                            return  (row['fedMembership'] == '' || row['fedMembership'] == null) ? '-' : row['fedMembership'];
+                        }},
+                        { "name": "existing_clubs", "width" : "20%", "targets": colCount++, data:function(row, type, val, meta){
+                             var flag = true;
+                            if(row['existingClubs'] == '' || row['existingClubs'] == null) { 
+                                return '-'; 
+                            }else{
+                              var myarr = row['existingClubs'].split(", ");
+                              for(var loc = 0; loc < myarr.length; loc++){
+                                  if(myarr.length != 1 && row['mainClub'] == myarr[loc] && flag){
+                                       flag = false;
+                                        var vclubid = parseInt(myarr[loc]);
+                                        clubName = _.where(clubTitles1, {id: vclubid}); 
+                                       if(typeof clubName[0] !== 'undefined' ){
+                                            titleLen = 0;
+                                            if(clubName[0]['titleLang'] != null)
+                                                titleLen = parseInt(clubName[0]['titleLang'].length);
+                                            if(titleLen!=0){
+                                                 myarr[loc] =  clubName[0]['titleLang'];  
+                                            }else if(clubName[0]['title']!== ''){
+
+                                               myarr[loc] =  clubName[0]['title'];
+                                          } 
+                                        }
+                                        myarr[loc] = myarr[loc]+' <i class="fa  fa-star text-yellow"></i>';
+                                  }else{
+                                            var vclubid = parseInt(myarr[loc]);
+                                            clubName = _.where(clubTitles1, {id: vclubid}); 
+                                            if(typeof clubName[0] !== 'undefined' ){
+                                                titleLen = 0;
+                                                if(clubName[0]['titleLang'] != null)
+                                                    titleLen = parseInt(clubName[0]['titleLang'].length);
+                                                if(titleLen!=0){
+                                                      myarr[loc] =  clubName[0]['titleLang'];  
+                                                }else if(clubName[0]['title']!== ''){
+
+                                                   myarr[loc] =  clubName[0]['title'];
+                                                } 
+                                            }
+                                            
+                                        }
+                                    
+                              }
+                              row['existingClubs'] = myarr.join(", ");
+                              return row['existingClubs'];
+                            }
+                            
+                        }},
+                        { "name": "new_club", "width" : "20%", "targets": colCount++, data:function(row, type, val, meta){
+                            return (row['newClub'] == '' || row['newClub']) == null ? '-' : row['newClub'];
+                        }},
+                        { "name": "modified_by", "width" : "20%", "targets": colCount++, data:function(row, type, val, meta){
+                            var extra = (row['isActiveModifiedContact'] == null && row['modifiedById'] != 1) ?' ('+row['clubChangedBy']+')':'';
+                            return  (row['modifiedBy'] == '' || row['modifiedBy'] == null) ? '-' : (row['modifiedById'] == 1 || row['isActiveModifiedContact']==null ? row['modifiedBy'] +extra: '<a href="'+contactUrl.replace('dummy', row['isActiveModifiedContact'])+'">'+row['modifiedBy']+'</a>'+extra);
+                        }}
+                    );
+                    
+    var columnDefs2=[
+            { "name": "decision", "width" : "5%",   "targets": 0 , data:function(row, type, val, meta){
+                return row['status'] == 'CONFIRMED' ? '<span class="label label-sm fg-color-added">'+'{{ 'APPLICATION_CONFIRMED'|trans }}'+'</span>' : row['status'] == 'PENDING' ? '<span class="label label-sm fg-color-removed">'+'{{ 'APPLICATION_PENDING'|trans }}'+'</span>' : '<span class="label label-sm fg-color-removed">'+'{{ 'APPLICATION_DISCARD'|trans }}'+'</span>';
+            }},
+            { "name": "decision_date", "width" : "10%","targets": 1, data:function(row, type, val, meta){
+                    return row;
+                }, render: {"_": 'decidedDate1', "display": 'decidedDate', 'filter': 'decidedDate'}
+            },
+            { "name": "decided_by", "width" : "15%", "targets": 2, data:function(row, type, val, meta){
+                var extra = (row['isActiveDecidedBy'] == null && row['decidedById'] != 1) ?' ('+row['clubDecidedBy']+')':'';
+                return  (row['decidedBy'] == '' || row['decidedBy'] == null) ? '-' : (row['decidedById'] == 1 ||row['isActiveDecidedBy']==null ? row['decidedBy']+extra : '<a href="'+contactUrl.replace('dummy', row['decidedById'])+'">'+row['decidedBy']+'</a>'+extra);
+            }},
+            { "name": "modified_date", "width" : "10%",  "targets": 3 , data:function(row, type, val, meta){
+                    return row;
+                }, render: {"_": 'modifiedDate1', "display": 'modifiedDate', 'filter': 'modifiedDate'}
+            },
+            { "name": "contact", "width" : "15%", "targets": 4, data:function(row, type, val, meta){
+                var icon = getContactIcon(row['gender'], row['isCompany']);   
+                var popupLink = icon + '<a href="#" data-contact-id="'+row['contactId']+'" data-url = "{{path('contact_profile_preview_existing_fed_popup')}}" data-type= "contactProfilePreviewPopup" class="fa-access-edit fg-marg-left-5">'+row['contactName']+'</a>';
+                return  (row['contactName'] == '' || row['contactName'] == null) ? '-' : ((row['contactId'] == 1 || row['isActiveContact']==null) ? popupLink : (row['status'] == 'DECLINED' && clubType !=='federation') ? popupLink : icon+ ' <a class="fg-marg-left-5" href="'+contactUrl.replace('dummy', row['isActiveContact'])+'">'+row['contactName']+'</a>');
+            }},
+            { "name": "fedMembership", "width" : "10%",  "targets": 5, data:function(row, type, val, meta){
+                            return  (row['fedMembership'] == '' || row['fedMembership'] == null) ? '-' : row['fedMembership'];
+            }},    
+            { "name": "existing_clubs", "width" : "15%", "targets": 6, data:function(row, type, val, meta){
+                var flag = true;
+                if(row['existingClubs'] == '' || row['existingClubs'] == null) { 
+                    return '-'; 
+                }else{
+                  var myarr = row['existingClubs'].split(", ");
+                  for(var loc = 0; loc < myarr.length; loc++){
+                      if(myarr.length != 1 && row['mainClub'] == myarr[loc] && flag){
+                          flag = false;
+                            var vclubid = parseInt(myarr[loc]);
+                            clubName = _.where(clubTitles1, {id: vclubid}); 
+                            if(typeof clubName[0] !== 'undefined' ){
+                                titleLen = 0;
+                               if(clubName[0]['titleLang'] != null)
+                                  titleLen = parseInt(clubName[0]['titleLang'].length);
+                                if(titleLen!=0){
+
+                                   myarr[loc] =  clubName[0]['titleLang'];  
+                                }else if(clubName[0]['title']!== ''){
+
+                                   myarr[loc] =  clubName[0]['title'];
+                              } 
+                            }
+                          myarr[loc] = myarr[loc]+' <i class="fa  fa-star text-yellow"></i>';
+                      }else{
+                                 var vclubid = parseInt(myarr[loc]);
+                                clubName = _.where(clubTitles1, {id: vclubid});
+                               if(typeof clubName[0] !== 'undefined' ){
+                                   titleLen = 0;
+                                    if(clubName[0]['titleLang'] != null)
+                                        titleLen = parseInt(clubName[0]['titleLang'].length);
+                                    if(titleLen!=0){
+                                       myarr[loc] =  clubName[0]['titleLang']; 
+                                        
+                                    }else if(clubName[0]['title']!== ''){
+                                        myarr[loc] =  clubName[0]['title'];
+                                    } 
+                                }
+                                
+                                
+                            }
+                        
+                  }
+                  row['existingClubs'] = myarr.join(", ");
+                  return row['existingClubs'];
+                }
+
+            }},
+            { "name": "new_club", "width" : "5%", "targets": 7, data:function(row, type, val, meta){
+                return (row['newClub'] == '' || row['newClub']) == null ? '-' : row['newClub'];
+            }},
+            { "name": "modified_by", "width" : "15%", "targets": 8, data:function(row, type, val, meta){
+                 var extra = (row['isActiveModifiedContact'] == null && row['modifiedById'] != 1) ?' ('+row['clubChangedBy']+')':'';
+                return  (row['modifiedBy'] == '' || row['modifiedBy'] == null) ? '-' : (row['modifiedById'] == 1 || row['isActiveModifiedContact']==null ? row['modifiedBy']+extra : '<a href="'+contactUrl.replace('dummy', row['isActiveModifiedContact'])+'">'+row['modifiedBy']+'</a>'+extra);
+            }}
+        ];
+                      
+                      
+        // method to handle pop up click in contact overview page
+    var profilePreviewPopup = function(){
+        $("body").off('click', "a.fa-access-edit") ;
+        $("body").on('click', "a.fa-access-edit", function(event) { 
+            event.preventDefault();
+            var contactId= $(this).attr("data-contact-id");
+            var path = $(this).attr("data-url"); 
+            var type = $(this).attr("data-type");
+            var module = $(this).attr("data-module");
+            
+            showPopup(type,{'path': path,'type':type,'contactId':contactId});
+        });
+    }();
+    
+    function getContactIcon(gender, isCompany) 
+    {
+        var contactIcon = '';
+        if (isCompany == 1) {
+            contactIcon = '<i class="fa fa-building-o inactive"></i>';  
+        } else {  
+            contactIcon =  (gender == 'Male') ? '<i class="fa fa-male fg-male inactive"></i>' : '<i class="fa fa-female fg-female inactive"></i>';
+        }
+            return contactIcon   ;
+    }
+    </script>
+
+{% endblock %}

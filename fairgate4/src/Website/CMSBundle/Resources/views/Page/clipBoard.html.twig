@@ -1,0 +1,72 @@
+<script type="text/template" id="globalClipboard">
+    <div class="fg-clipboard-nav text-center">
+        <div class="fg-title"><i class="fa fa-angle-double-up fa-2x"></i>{{ 'CMS_CLIPBOARD'|trans}}</div>
+        <div class="fg-count badge fg-badge-blue badge-round badge-important "><%- _.size(clipBoardData) %></div>
+    </div>
+    <div class="fg-clipboard-element-wrapper col-md-12">
+        <%  if(_.size(clipBoardData) > 0) { %>
+            <% _.each(clipBoardData,function(clipboardDetail,clipboardKey){ %>
+                <div class="col-sm-2">                                  
+                    <div class="fg-clipboard-item" element-id="<%- clipboardDetail.elementId %>" action-from='clipboard' element-type="<%- clipboardDetail.elementType %>" >                                        
+                        <i class="fa fg-icon <%- clipboardDetail.logo  %>"></i>
+                        <div class="fg-item-details">
+                        <%
+                        var translation = '';
+                           switch(clipboardDetail.elementType) {
+                                            case 'text':
+                                                translation ="{{'CMS_HEADER_TEXT'|trans}}";
+                                                        break;
+                                             case 'image':
+                                                translation ="{{'CMS_IMAGE_VIDEO'|trans}}";
+                                                        break;
+                                             case 'articles':
+                                                 translation ="{{'CMS_ARTICLES'|trans}}";
+                                                        break;
+                                             case 'calendar':
+                                                 translation ="{{'CMS_CALENDAR'|trans}}";
+                                                        break;
+                                                 
+                                             case 'login':
+                                                 translation ="{{'CMS_LOGIN'|trans}}";
+                                                        break;
+                                             case 'map':
+                                                 translation ="{{'CMS_MAP'|trans}}";
+                                                       break;
+                                             case 'iframe':
+                                                 translation ="{{'CMS_IFRAME'|trans}}";
+                                                        break;
+                                            case 'supplementary-menu':
+                                                 translation ="{{'CMS_SUPPLEMENTARY_MENU'|trans}}";
+                                                        break;
+                                            case 'sponsor-ads':
+                                                 translation ="{{'CMS_SPONSOR_ADS'|trans}}";
+                                                        break;      
+                                            case 'contacts-table':
+                                                 translation ="{{'CMS_CONTACTS_TABLE'|trans}}";
+                                                        break; 
+                                            case 'portrait-element':
+                                                 translation ="{{'CMS_PORTRAIT-ELEMENT'|trans}}";
+                                                        break; 
+                                            case 'newsletter-subscription':
+                                                 translation ="{{'CMS_NEWSLETTER_SUBSCRIPTION'|trans}}";
+                                                        break; 
+                                            case 'newsletter-archive':
+                                                 translation ="{{'CMS_NEWSLETTER_ARCHIVE'|trans}}";
+                                                        break;
+                                            case 'twitter':
+                                                 translation ="{{'CMS_TWITTER'|trans}}";
+                                                        break;
+                                            default:
+                                                    translation = clipboardDetail.elementTitle;
+                                                    break;
+}%>
+            
+                            <div class="fg-title"><%- translation %></div>
+                            <div class="fg-date"><%- clipboardDetail.deletedAt %>&nbsp;</div>
+                        </div>
+                    </div>
+                </div>
+            <% })
+        } %>
+    </div>
+</script>

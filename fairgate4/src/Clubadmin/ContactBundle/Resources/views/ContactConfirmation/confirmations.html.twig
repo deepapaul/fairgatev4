@@ -1,0 +1,160 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+
+{% block pagecontent %}
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BREADCRUMB STARTS -->
+            {% include 'clubadmin/breadcrumb.html.twig' %}
+            <!-- BREADCRUMB ENDS -->
+        </div>
+    </div>
+    <div class="row">
+        {% set page_settings = { 'pagetitle':'true','actionmenu':'true','tabs':'true' }  %}
+        {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': title|trans, 'page_settings': page_settings,'tabs':tabs ,'type':page,'hrefLink':'true','url':'#'} %}
+    </div>
+    <div id="data-tabs-content" class="tab-content">
+        {% for key,logTab in logTabs %}
+            {% set active = (key == activeTab) ? 'active': '' %}
+            <div class="tab-pane {{ active }}" id="confirmations-{{ logTab }}-table-div">
+                {% include 'ClubadminContactBundle:ContactConfirmation:confirmationsList.html.twig' with { 'activeTab' : logTab, 'typeId' : key } %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div id="callPopupFunction"></div>
+    <!-- Connection Popup -->
+    <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-content fg-popup-wrap" id="popup_contents">
+            </div>
+        </div>
+    </div>
+    {% include 'ClubadminContactBundle:Archive:mergeContact.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/sidebar.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg-nullsort-handle-dataTable.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/fgConfirmations.js')}}" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            FgPageTitlebar.init({
+                title: true,
+                tab: true,
+                search: false,
+                actionMenu: true,
+                tabType: 'client'
+
+            });
+        });
+        var contactType = 'draft';
+        var reactivateSavePath = "{{ path('save_app_confirmation_contact')}}";
+        var failureFlash = "{{ 'CREATIONS_NOT_SUCCESS'|trans }}";
+        FgConfirmations.activeTabName = '{{ (activeTab == '1')  ? 'list' : 'log' }}';
+        var currentDateFormat = FgLocaleSettingsData.momentDateTimeFormat;
+        var clubType = "{{clubType}}";
+        var formFieldEditPath = "{{path('contact_application_form_create',{'formId' : 'dummy'})}}";
+        if (FgConfirmations.activeTabName == 'list') {
+            var actionMenuNoneSelectedText = {
+                'confirmConfirmations': {'title': "{{ 'CONFIRMATION_CONFIRM'|trans }}", 'dataUrl': '{{ path('confirm_discard_app_confirmations', {'action' : 'confirm', 'page' : page}) }}', 'visibleAlways': false},
+                'discardConfirmations': {'title': "{{ 'CONFIRMATION_DISCARD'|trans }}", 'dataUrl': '{{ path('confirm_discard_app_confirmations', {'action' : 'discard', 'page' : page}) }}', 'visibleAlways': false}
+            };
+            var actionMenuSingleSelectedText = actionMenuNoneSelectedText;
+            var actionMenuMultipleSelectedText = actionMenuNoneSelectedText;
+        }
+        var contactUrl = '{{ path('render_contact_overview', {'offset' : 0, 'contact' : 'dummy'}) }}';
+        var contactDetailUrl = '{{ path('new_contact_detail', {'contact' : 'dummy'}) }}';
+        var formDetailUrl = "{{path('contact_application_preview',{'id' : 'dummy'})}}";
+        var columnDefs1 = [{type: "checkbox", orderable: false, "width": "5%", targets: 0, data: function (row, type, val, meta) {
+                    return "<input type='checkbox' class='dataClass fg-dev-avoidicon-behaviour' id='" + row['confirmId'] + "' name='check'>";
+                }},
+            {"name": "createdAt", "width": "20%", "targets": 1, data: function (row, type, val, meta) {
+                    var createdAt = ((row['createdAt'] === '') || (row['createdAt'] === null)) ? '' : row['createdAt'];
+                    row.sortData = row['createdAt'];
+                    row.displayData = createdAt;
+                    return row;
+                }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}
+            },
+            {"name": "contact", "width": "40%", "targets": 2, data: function (row, type, val, meta) {
+                    if (row['gender'] == '' || row['gender'] == null) {
+                        return '-';
+                    } else {
+                        if(row['contactFormType'] == 'single_person'){
+                            var singletype = (row['gender'].toLowerCase() == 'male') ? ' fa fa-male fg-male' : (row['gender'].toLowerCase() == 'female' ? ' fa fa-female fg-female' : '');
+                        }else if (row['clubmembershipType'] > 0) {
+                            var singletype = 'fa fa-building-o fg-marg-left-5';
+                        }else{ 
+                            var singletype =  'fa fa-building fg-marg-left-5';
+                        }
+                        var activeClass = (row['clubmembershipType'] > 0) ? ' active' : ' inactive';
+                        var icon = '<i class="'+singletype+activeClass+' fg-marg-right-5"></i>';
+                        return  (row['contactName'] == '' || row['contactName'] == null) ? '-' : icon +' <a class="fg-creations-new-contact" href="#" data-url="' + formDetailUrl.replace('dummy', row['appId']) + '">' + row['contactName'] + '</a>';
+                    }
+                }},
+            {"name": "title", "width": "35%", "targets": 3, data: function (row, type, val, meta) {
+                    var title = (row['title'] == '' || row['title'] == null) ? '-' : (row['formDeleted']?row['title']: '<a href="'+formFieldEditPath.replace('dummy',row['formId'])+'">'+row['title']+'</a>');
+                    return title ;
+                }}
+        ];
+        var columnDefs2 = [{"name": "decision", "width": "10%", "targets": 0, data: function (row, type, val, meta) {
+                    return row['status'] == 'CONFIRMED' ? '<span class="label label-sm fg-color-added">' + '{{ 'CONFIRM_CONFIRMED'|trans }}' + '</span>' : '<span class="label label-sm fg-color-removed">' + '{{ 'CONFIRM_DISCARDED'|trans }}' + '</span>';
+                }},
+            {"name": "decision_date", "width": "10%", "targets": 1, data: function (row, type, val, meta) {
+                    var decisionDate = ((row['decisionDate'] === '') || (row['decisionDate'] === null)) ? '' : row['decisionDate'];
+                    row.sortData = row['decisionDate'];
+                    row.displayData = decisionDate;
+                    return row;
+                }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}
+            },
+            {"name": "decided_by", "width": "20%", "targets": 2, data: function (row, type, val, meta) {
+                    if (row['activeContactDecided'] != null) {
+                        overViewPath = '{{path('render_contact_overview', {'offset': '0', 'contact': '**dummy**'})}}';
+                        var oPath = overViewPath.replace('**dummy**', row['activeContactDecided']);
+                        row['decidedBy'] = '<a href="' + oPath + '" target="_blank" data-cont-id="' + row['activeContactDecided'] + '">' + row['decidedBy'] + '</a>';
+                    }
+                    var extra = (row['activeContactDecided'] == null && row['decidedById'] != 1) ? ' (' + row['clubDecidedBy'] + ')' : "";
+                    return  (row['decidedBy'] == '' || row['decidedBy'] == null) ? '-' : row['decidedBy'];
+                }},
+            {"name": "created_at", "width": "15%", "targets": 3, data: function (row, type, val, meta) {
+                    var createdAt = ((row['createdAt'] === '') || (row['createdAt'] === null)) ? '' : row['createdAt'];
+                    row.sortData = row['createdAt'];
+                    row.displayData = createdAt;
+                    return row;
+                }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}
+            },
+            {"name": "application", "width": "5%", "targets": 4, data: function (row, type, val, meta) {
+                    return '<a class="fg-creations-new-contact" href="#" data-url="' + formDetailUrl.replace('dummy', row['appId']) + '"><span class="fa fa-file-text-o"></span></a>';
+                }},
+            {"name": "contact", "width": "20%", "targets": 5, data: function (row, type, val, meta) {
+                      if (row['status'] == 'CONFIRMED') {
+                        if(row['contactFormType'] == 'single_person'){
+                            var singletype = (row['gender'].toLowerCase() == 'male') ? ' fa fa-male fg-male' : (row['gender'].toLowerCase() == 'female' ? ' fa fa-female fg-female' : '');
+                        }else if (row['clubmembershipType'] > 0) {
+                            var singletype = 'fa fa-building-o fg-marg-left-5';
+                        }else{ 
+                            var singletype =  'fa fa-building fg-marg-left-5';
+                        }
+                        var activeClass = (row['clubmembershipType'] > 0) ? ' active' : ' inactive';
+                        var icon = '<i class="'+singletype+activeClass+' fg-marg-right-5"></i>';
+                   
+                        return  (row['contactName'] == '' || row['contactName'] == null) ? '-' : ((row['contactId'] == 1) ?icon+" "+ row['contactName'] :icon+" "+ '<a href="' + contactUrl.replace('dummy', row['appContact']) + '">' + row['contactName'] + '</a>');
+                    } else {
+                        row['gender'] = JSON.parse(row['formData']);
+                        var genClass = (row['gender']['contact']['72'].toLowerCase() == 'male') ? ' fa fa-male fg-male' : (row['gender']['contact']['72'].toLowerCase() == 'female' ? ' fa fa-female fg-female' : '');
+                        var activeClass = (row['clubmembershipType'] > 0) ? ' active' : ' inactive';
+                        var singletype = (row['contactFormType'] == 'single_person') ? genClass : ((row['clubmembershipType'] > 0) ?'fa fa-building-o fg-marg-left-5':'fa fa-building fg-marg-left-5');
+                        var icon = '<i class="'+singletype+activeClass+' fg-marg-right-5"></i>';
+                   
+                        return  (row['name'] == '' || row['name'] == null) ? '-' : icon+" "+row['name'];
+                    }
+                }},
+            {"name": "title", "width": "20%", "targets": 6, data: function (row, type, val, meta) {
+                    var title = (row['title'] == '' || row['title'] == null) ? '-' : (row['formDeleted']?row['title']: '<a href="'+formFieldEditPath.replace('dummy',row['formId'])+'">'+row['title']+'</a>');
+                    return title;
+                }}
+        ];
+    </script>
+
+{% endblock %}

@@ -1,0 +1,94 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = contactName %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+    {% set federationTerminology = fgtwig.getTerminolgyName('Federation',singular)%}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet-body fg-theme-blue">
+                        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                        {% include 'clubadmin/breadcrumb.html.twig' with {'breadCrumb':{'back': path('contact_index') }} %}
+                        {% if missingReqAssgment > 0 and isReadOnlyContact == 0 %}
+                            <div id="MissingReqAssgmtError" class="alert alert-warning alert-dismissable ">
+                                <button class="close" data-close="alert"></button>
+                                <strong>{{'ATTENTION'|trans}}! </strong><span>{% trans with {'%fedmember%':  federationTerminology,'%a%':"<a href='"~path('contact_assignments',{'offset':offset,'contact':contactId})~"'>",'%b%':"</a>"} %}REQ_FED_SUBFED_ROLE_MISSING_ASSIGNMT_CONTACT{% endtrans %} </span>
+                            </div>
+                        {% endif %}
+                      {#  {% include 'clubadmin/panel-tabs.html.twig' with {'contactName':displayedUserName,'contactId':contactId,'active':'assignments','documentsCount':documentsCount} %}
+      #}
+                      <div class="row">
+                        {% set page_settings = { 'pagetitle':'true','tabs':'true'}  %} 
+                        {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': displayedUserName ,'page_settings': page_settings, 'tabs': tabs, 'type':'overview', 'hrefLink' : true, 'url':"#"} %} 
+                      </div>
+                        <!-- END PAGE TITLE & BREADCRUMB-->
+                        <!-- ERROR MESSAGE-->
+                        
+                        <form id="assignmentForm" method="post" onsubmit="return false;" novalidate="novalidate">
+                            <div id="failcallback" class="alert alert-danger fg-clear" style="display:none;">
+                                <button class="close" data-close="alert"></button>
+                                <span>{{'FORM_ERROR_DISPLAY'|trans}}</span>
+                            </div> 
+                            <div id="failcallbackServerSide" class="alert alert-danger" style="display:none;">
+                                <button class="close" data-close="alert"></button>
+                                <span>{{'FORM_ERROR_DISPLAY'|trans}}</span>
+                            </div>
+                            <div id="assignmentListingDiv" style="display:none;">
+                                {% include 'ClubadminContactBundle:Assignment:listAllAssignments.html.twig' %}
+                            </div>                            
+                        
+                            {% include 'clubadmin/savebutton.html.twig' %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'ClubadminContactBundle:Assignment:pending-assignment_fed.html.twig' %}
+    {% include 'ClubadminContactBundle:Assignment:pending-assignment_subfed.html.twig' %}
+    {% include 'ClubadminContactBundle:Assignment:new-element-assignment.html.twig' %}
+    {% include 'ClubadminContactBundle:Assignment:new-element-assignment_dropdown.html.twig' %}
+    {% include 'ClubadminContactBundle:Assignment:new-element-assignment_function_dropdown.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/sidebarfilter.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/assignment.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js')}}" type="text/javascript"></script>
+    <script>        
+      $(document).ready(function() {      
+            var tabCondition = {{ (tabs|length > 0) ? 'true' : 'false' }};
+            FgPageTitlebar.init({
+                title       : true,
+                tab       : true,
+                search     :false,
+                actionMenu  : false,
+                tabType  :'server'
+               
+            }); 
+       });
+        var assignmentDpDn='{{path("get_all_assignment_dropdown")}}'; // Path to get all dropdown values
+        FgAssignment.init(assignmentDpDn); // Calling function to get dropdown values
+        var contactId={{contactId}}; // Current contact id
+        var loggedContactId={{loggedContactId}} // Logged contact id
+        var missingReqAssgnments= {{ missingReqAssgnments|raw }}; // Missing required assignments array
+        var pendingAssignments;
+        FgPopOver.customPophover('.fg-dev-user-right-Popovers');
+        FgPopOver.customPophover('.fg-dev-tabicon-right-Popovers');
+
+        //Runs after assignment success
+        function assignmentSuccess(){
+            FgMainAssignment.mainAssignmentSuccess('{{path("list_all_assignments")}}', '{{ isReadOnlyContact }}'); // Calling function for listing assignments
+            FgPageTitlebar.setMoreTab();
+        }
+        // Calling init function to load all basic functionalities
+        FgMainAssignment.init();
+
+        /* save function */
+        function saveChanges() {
+            FgMainAssignment.assignmentSaveChanges('{{path("update_contact_assignments")}}',contactId); 
+        }
+    </script>
+{% endblock %} 

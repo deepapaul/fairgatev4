@@ -1,0 +1,1 @@
+UPDATE `fg_cm_membership` SET title='Aktivmitglied' WHERE title='Vereinsmitglied';

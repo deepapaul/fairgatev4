@@ -1,0 +1,37 @@
+Common\UtilityBundle\Entity\FgCmsArticleAttachments:
+    repositoryClass: Common\UtilityBundle\Repository\Article\FgCmsArticleAttachmentsRepository
+    type: entity
+    table: fg_cms_article_attachments
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sort_order
+    manyToOne:
+        article:
+            targetEntity: FgCmsArticle
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                article_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        filemanager:
+            targetEntity: FgFileManager
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                filemanager_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

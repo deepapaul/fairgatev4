@@ -1,0 +1,53 @@
+<script type="text/javascript" src="{{ asset('fgassets/global/js/flaviusmatis-simplePagination/jquery.simplePagination.js')}}"></script>
+<script src="{{ asset('fgassets/website/js/Fg_website_gallery.js') }}" type="text/javascript"></script>
+<script type="text/javascript" src="{{ asset('fgassets/website/js/fg-cms-frontend-portrait.js')}}"></script>
+<script>
+    var galleryUploadPath = '{{galleryUploadPath}}';
+    var pageTitle1 = '{{currTitle}}';
+    var noAlbumTrans = '{{'WEBSITE_GALLERY_NO_ALBUM_TEXT'|trans}}';
+    var contactTableListUrl = '{{path('website_list_contacts',{'contactType':'dummyType'})}}';
+    var option = {
+        galleryDetailUrl: '{{path('website_special_page_gallery_details')}}',
+        galleryUploadPath: galleryUploadPath,
+        pageId: '{{pageId}}'
+    };
+
+    var WebsiteGallery = new FgWebsiteGallery(option);
+    var hashCount = WebsiteGallery.splitHash();
+
+    var pageTitleBarOptions = {
+        titleBar: true,
+        title: pageTitle1,
+        hideNextPreviousOnSmallDevices: true,
+        nextPrevious: (hashCount.length > 0) ? true : false,
+        nextPreviousLinks: ['javascript:void(0)', 'javascript:void(0)'],
+        backButton: (hashCount.length > 0) ? true : false,
+        hideBackOnSmallDevices: true,
+        backButtonData: 'javascript:void(0)',
+    };
+
+    var portraitElementSettings = {{ pagecontentData.portraitElementSettings|json_encode()|raw }};        
+    if(typeof portraitElementSettings == 'object') {
+        var portContactNameTmplte = _.template($('#templateContactName').html());
+        var portEmailTmplte = _.template($('#templateEmail').html());
+        var portImageUpldTmplte = _.template($('#porttemplateImage').html());
+        var portDefaultTmplte = _.template($('#defaultTemplate').html());
+        var portFileUploadTemplate = _.template($('#portFileUploadTemplate').html());
+        var portProfilepicTemplate = _.template($('#portProfilepicTemplate').html());
+    }
+    var contactLang ='{{contactLang}}';
+    var portUploadPath = {{uploadPath|json_encode()|raw }};
+    var notApplicable =  '{{'PORTRAIT_NOT_APPLICABLE_VALUE'|trans}}'
+
+    var galleryNavigationTranslation = {
+        'WEBSITE_GALLERY_PREV_SUBALBUM' : '{{'WEBSITE_GALLERY_PREV_SUBALBUM'|trans}}',
+        'WEBSITE_GALLERY_NEXT_SUBALBUM' : '{{'WEBSITE_GALLERY_NEXT_SUBALBUM'|trans}}',
+        'WEBSITE_GALLERY_BACK_ALBUM' 	: '{{'WEBSITE_GALLERY_BACK_ALBUM'|trans}}',
+        'WEBSITE_GALLERY_PREV_ALBUM' 	: '{{'WEBSITE_GALLERY_PREV_ALBUM'|trans}}',
+        'WEBSITE_GALLERY_NEXT_ALBUM' 	: '{{'WEBSITE_GALLERY_NEXT_ALBUM'|trans}}',
+        'WEBSITE_GALLERY_BACK_GALLERY' 	: '{{'WEBSITE_GALLERY_BACK_GALLERY'|trans}}',
+        'WEBSITE_GALLERY_PREV_GALLERY' 	: '{{'WEBSITE_GALLERY_PREV_GALLERY'|trans}}',
+        'WEBSITE_GALLERY_NEXT_GALLERY' 	: '{{'WEBSITE_GALLERY_NEXT_GALLERY'|trans}}',
+        'WEBSITE_GALLERY_BACK_OVERVIEW' : '{{'WEBSITE_GALLERY_BACK_OVERVIEW'|trans}}'
+    };
+</script>

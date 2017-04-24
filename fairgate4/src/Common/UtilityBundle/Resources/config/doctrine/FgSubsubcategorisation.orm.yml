@@ -1,0 +1,28 @@
+Common\UtilityBundle\Entity\FgSubsubcategorisation:
+    type: entity
+    table: fg_subsubcategorisation
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        subsubcategoryName:
+            type: string
+            length: 45
+            fixed: false
+            nullable: true
+            column: subsubcategory_name
+    manyToOne:
+        fgSubcategorisation:
+            targetEntity: FgSubcategorisation
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                fg_subcategorisation_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,66 @@
+Common\UtilityBundle\Entity\FgCmsArticleLog:
+    repositoryClass: Common\UtilityBundle\Repository\Article\FgCmsArticleLogRepository
+    type: entity
+    table: fg_cms_article_log
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        date:
+            type: datetime
+            nullable: true
+        field:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        kind:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+        valueAfter:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: value_after
+        valueBefore:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: value_before
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        changedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                changed_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        article:
+            targetEntity: FgCmsArticle
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                article_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

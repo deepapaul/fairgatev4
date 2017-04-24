@@ -1,0 +1,108 @@
+<% 
+_.each(subMenu.input,function(subLevel,key){
+            var categoryId = '';
+            var staticFilter = '';
+            var functionType = '';
+            if (typeof subLevel.staticFilter!== "undefined"){
+                staticFilter = subLevel.staticFilter;
+            }
+            if (typeof subMenu.filterCountUrl!== "undefined"){
+                filterCountUrl = subMenu.filterCountUrl;
+            }
+            if (typeof subMenu.filterCountUrl!== "undefined"){
+                filterDataUrl = subMenu.filterDataUrl;
+            }
+            if(typeof subLevel.functionAssign!== "undefined"){
+                functionType = subLevel.functionAssign;
+            }
+            rowFilterCountUrl ='';
+            rowFilterDataUrl = '';
+            if(subLevel.itemType =='filter'){
+                rowFilterCountUrl = filterCountUrl.replace("|id|", subLevel.id);
+                rowFilterDataUrl = filterDataUrl.replace("|id|", subLevel.id);
+            }
+            if(subMenu.menuType !='bookmark'){
+                subLevel.menuItemId = subMenu.parentMenuId + '_' + subLevel.id;
+                if(subLevel.bookMarkId=='' || subLevel.bookMarkId==null){
+                    subLevel.bookMarkClass = 'fa-bookmark-o';
+                }else{
+                    subLevel.bookMarkClass = 'fa-bookmark';
+                }
+            }else{
+                subLevel.bookMarkClass ='bookmarked';
+                subLevel.menuItemId = subMenu.parentMenuId + '_' +subLevel.itemType+'_li' + (parseInt(subLevel.categoryId) > 0 ? '_' + subLevel.categoryId : '')+'_'+ subLevel.id;
+            }
+
+            if (typeof subLevel.categoryId!== "undefined"){
+                categoryId = subLevel.categoryId;
+            }
+            subLevel.draggableClass = '';
+            if (typeof subLevel.draggable!== "undefined" && parseInt(subLevel.draggable) == 1){
+                subLevel.draggableClass = 'fg-dev-draggable';
+            } else {
+                subLevel.draggableClass = 'fg-dev-non-draggable';
+            }
+
+        %>
+            <% if (typeof subLevel.isAllActive !== "undefined"){ %>
+                    <li id="allActive" name="allActive" class="subclass fg-without-arrow fg-dev-non-draggable">
+                        <a href="javascript:void(0)"  class="sidebabar-link" data-type="allActive" data-categoryId="" data-id="" >
+                            <i class="fa"></i>
+                            <% if (subMenu.showLoading) { %>
+                                <span class="fg-sidebar-loading fa-spin"></span>
+                            <% } else {  %>
+                                <span class="badge badge-round badge-important">   <% if(subLevel.count > 0){  %><%- subLevel.count %>  <%  }else { %> 0  <%  } %> </span>
+                            <% } %>
+                            <span class="title"><%- subLevel.title %> </span>
+                        </a>
+                    </li>
+            <% } else if(typeof subLevel.isOverview !== "undefined"){ %>
+            
+             <li id="li_<%- subLevel.id %>" name="<%- subLevel.id %>" class="subclass fg-without-arrow fg-dev-non-draggable">
+                 <a href="javascript:void(0)"  class="sidebabar-link" data-type="<%- subLevel.itemType %>" data-categoryId="" data-id="<%- subLevel.id %>" >
+                            <i class="fa"></i>
+                            <% if (subMenu.showLoading) { %>
+                                <span class="fg-sidebar-loading fa-spin"></span>
+                            <% } else {  %>
+                                <span class="badge badge-round badge-important">   <% if(subLevel.count > 0){  %><%- subLevel.count %>  <%  }else { %> 0  <%  } %> </span>
+                            <% } %>
+                            <span class="title"><%- subLevel.title %> </span>
+                        </a>
+                    </li>
+            
+           <% } else { %>
+                <li id="<%- subLevel.menuItemId %>" class="subclass <%- subLevel.draggableClass %>">
+                    <% if(subMenu.menuType !='bookmark' && typeof subLevel.bookMarkId== "undefined"){ %>
+                        <span class="noAnchr"></span>
+                    <% }else{ %>
+                        <a href="#" class="pull-left side-right-zro"><i class="fa fa-bookmark  bookmarkclick <%- subLevel.bookMarkClass %>" data_type="<%- subLevel.itemType %>" id="bk_<%- subLevel.menuItemId %>" data-bookmark-id="<%- subLevel.menuItemId %>" data-id="<%- subLevel.id %>"></i> </a>
+                    <% } %>
+                    <a href="javascript:void(0)" data-url="<% if(subLevel.itemType == 'filter'){ %><%- rowFilterDataUrl %><% } %>" data-type="<%- subLevel.itemType %>" data-categoryId="<%- categoryId %>" data-id="<%- subLevel.id %>" data-fntype="<%- functionType %>" class="sidebabar-link">
+                        <% if(subLevel.itemType != 'filter' || (subLevel.itemType == 'filter' && staticFilter == '1')){ %>
+                        <% if (subMenu.showLoading) { %>
+                                <span class="fg-sidebar-loading fa-spin"></span>
+                            <% } else {  %>
+                                <span class="badge badge-round badge-important">
+                                <% if (typeof subLevel.count !== "undefined") { %><%- subLevel.count %><% } else { %>0<% } %>
+                                </span>
+                            <% } %>
+                        <% } %>
+                        <span class="title"><%- subLevel.title %><%if (typeof subLevel.image !=="undefined"){ %> <%= subLevel.image %> <% } %><% if (typeof subLevel.isRequired !== "undefined" && subLevel.isRequired==1) { %><i class="fa fg-asterisk"></i><% } %> 
+                        <% if (( subLevel.itemType == 'TEAM') && subLevel.isRoleActive == 0) { %>                      
+                          <i class="fa fa-eye-slash fg-dev-sidebar-popover  fg-team-siebar-invisible" data-content="{{'TEAM_SIDEBAR_POPOVER_INVISIBILE'|trans}}"></i>                  
+                    <%  }%>
+                     <% if ((subLevel.itemType == 'WORKGROUP') && subLevel.isRoleActive == 0) { %>                      
+                          <i class="fa fa-eye-slash fg-dev-sidebar-popover  fg-team-siebar-invisible" data-content="{{'WORKGROUP_SIDEBAR_POPOVER_INVISIBILE'|trans}}"></i>                  
+                    <%  }%>
+                    </span>
+                    </a>
+                    <% if(subLevel.itemType == 'filter' && staticFilter != '1'){ %>
+                        <% if(typeof subLevel.isBroken !== "undefined" && subLevel.isBroken==1){  %>
+                            <a href="#" class="fg-sub-menu-ico fg-filter-count" ><i class="fa fa-warning fg-warning" ></i></a>
+                        <% }else { %>
+                            <a href="#" class="filterCount fg-sub-menu-ico fg-filter-count  filterId_<%- subLevel.id %>" filter_id="<%- subLevel.id %>" id="bookmark_filterId_<%- subLevel.id %>" url="<%- rowFilterCountUrl %>"><i class="fa fa-refresh" ></i></a>
+                        <% } %>
+                    <% } %>            
+                </li>
+            <% } %>
+        <% });%>

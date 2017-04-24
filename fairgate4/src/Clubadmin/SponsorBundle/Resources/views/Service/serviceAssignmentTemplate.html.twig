@@ -1,0 +1,70 @@
+<script type="text/template" id="serviceDropdownTemplate">
+    <select data-services required name="serviceId" id="service" data-key="service"  class="form-control bs-select" aria-invalid="false">
+        <option value="">{% trans %}SELECT_DEFAULT{% endtrans %}</option>
+        {% for categorie in categories %}
+            <% if('{{categorie.categoryId}}'==catId) { %>
+                {% for services in categorie.services %}
+                    <option data-serviceType="{{services.serviceType}}" {{ services.servicesId==services.servicesId ? 'selected' : ''}} value="{{services.servicesId}}">{{services.serviceTitle}}</option>
+                {% endfor %}
+            <% } %>
+        {% endfor %}
+    </select>
+</script>
+<script type="text/template" id="serviceDepositedWithTemplate">
+    <dt data-deposited-row>{% trans %}DM_DEPOSITED_WITH{% endtrans %} </dt>
+    <dd data-deposited-row>
+        <div class="fg-spon-width">
+        <% if(serviceType=='team') { %>
+            <select required name="depositedWith" id="depositedWith" data-key="depositedWith" data-deposited class="form-control bs-select " aria-invalid="false">
+                <option>{% trans %}SELECT_DEFAULT{% endtrans %}</option>
+                {% for key, role in teams.roles %}
+                    <option value="{{key}}">{{role}}</option>
+                {% endfor %}
+            </select> 
+        <% } else { %>
+                <div>
+                    <input type="text" id="depositedWithAuto" placeholder="{{ 'DM_ADD_CONTACT'|trans }}" data-contactlist name="depositedWithAuto" value="" class="form-control" />
+                </div>
+                <input type="hidden" id="depositedWithAutoSelection" data-club="contact" name="depositedWithSelection" value="" data-key="depositedWithSelection" />
+                        
+        <% } %>
+        </div>
+    </dd>
+</script>
+<script type="text/template" id="servicePaymentsTemplate">
+    <div class="row fg-border-line fg-custom-payments  sortables">
+        <div class="col-md-12 fg-col-hack fg-left-zero">
+            <div class="row">
+                <div dataerror-group class="col-lg-3 col-sm-12 col-xs-12 fg-spon-sm"> 
+                    <div class="fg-spon-content-area">{%trans%}SM_PAYMENT_ON{% endtrans %} <span class="fg-mandatory">*</span></div>
+                    <div class="input-group date datepicker form_datetime">
+                        <input required type="text" size="16" name="paymentOn" id="paymentOn" data-key="paymentOn" class="form-control">
+                        <span class="input-group-btn">
+                            <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                    </div>
+                </div>
+                <div dataerror-group class="col-lg-4 col-sm-12 col-xs-12 fg-spon-sm">
+                    <div class="fg-spon-content-area">{%trans%}SM_WITH_VALUE_OF_CURR{% endtrans %} {{fgclub.get('clubCurrency')}} <span class="fg-mandatory">*</span></div>
+                    <input required type="text" name="amount" id="amount" data-key="amount" class="form-control numbermask fg-spon-input-area">
+                </div>
+                <div class="col-lg-5 col-sm-12 col-xs-12 fg-spon-sm">
+                    <div class="fg-spon-content-area">{%trans%}SM_AND_WITH_DISCOUNT_OF{% endtrans %}</div> 
+                    <input type="text" name="discount" id="discount" class="form-control numbermask fg-spon-input-area">
+                    <select class="bs-select form-control fg-spon-input-area" name="discount" data-key="discount" aria-invalid="false">
+                        <option value="P">%</option>
+                        <option value="A">{{fgclub.get('clubCurrency')}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>                        
+        <div class="fg-col-last-icon">
+            <div class="col-md-2 pull-right deletediv ">
+                <div class="closeico">
+                    <input name="isDeleted" id="isDeleted" data-key="isDeleted" type="checkbox" class="make-switch">
+                    <label for="select4"></label>
+                </div>
+            </div>
+        </div>                         
+    </div>
+</script>

@@ -1,0 +1,241 @@
+//! text,border and bg colors used in Fairgate
+
+$clrPrimaryBlack: #333333;  //black
+$clrLinkBlue: #428bca;  //blue
+$clrDisableGrey: #ccc;  //blue
+$clrbrdrDflt: #ddd;  //grey
+$clrLightGreen: #bfedc6;  //light green
+$clrGreen: #35aa47;  // green  / btn bg 
+$clrDarkGreen: #2e933d; //Dark Green
+$clrBluishGreen: #32c5d2; // Bluish green
+$clrRed: #c70000;  // Red  /sidebar hover
+$clrWhite: #ffffff;  // White
+$clrLightGrey: #f0f0f0;  // Light dark
+$clrLightGrey1: #f2f2f2;  // Light dark
+$clrGrey1: #555555;  // Grey dark blacky
+$clrGrey2: #666666;  // Grey Dark
+$clrcommonGrey: #808080;  // Grey Dark
+$clrGreyBtnBg: #E5E5E5;  // light Grey
+$clrGreyBtnBgHvr: #D3D3D3;  // hover darkGrey
+$clrDarkWhite: #eeeeee; // Dark White
+$clrSandWhite: #f5f5f5; // Dark White
+$clrLightYellow: #FFE200; // light yellow for star
+$clrNewMembrYellow: #fefec3; // light yellow for star
+$clrDarkYellow: #dbb233; // dark yellow for switch
+$clrDarkRed: #c23f44; // dark red for switch
+$borderblue : #0071bc;
+$widgetFont : 'Roboto', sans-serif; // Widget font
+//fonts
+$font_O: Open Sans;
+
+
+//! ----------Mixins statements index----------
+//-@include border-radius(0);
+//! usage  @include bxsz-brdrbx;
+//! usage  @include bxsz-cntnbx;
+//! usage  @include break-hyphens;
+//! usage  @include box-shadow(none);
+//! usage  @include position(fixed,auto,0,-143px,0);
+//! usage  @include transition(color .3s ease);
+//! usage  @include transform(rotate(7deg));
+//! usage  @include transform-orgin();
+//! usage  @extend %clearfix;
+//! usage  @extend %box-shadow-common;
+//! usage  @include bp('min-wdith :768px') {} 
+//! @include bpMin('768px')
+//! @include bpMax('768px')
+//! @include bpMinMax('768px','768px')
+//! @include aspect-ratio(16, 9);
+
+
+
+//! ----------Mixins statements----------
+//-@include border-radius(0);
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+          border-radius: $radius;
+}
+@mixin bxsz-brdrbx {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+//! usage  @include bxsz-cntnbx
+@mixin bxsz-cntnbx {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+//! usage  @include break-hyphens
+@mixin break-hyphens {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+}
+//! usage  @include box-shadow(none)
+@mixin box-shadow($radius){
+    -webkit-box-shadow: $radius;
+    -moz-box-shadow: $radius;
+    box-shadow: $radius;
+}
+@mixin border-bottom-1{
+	border-bottom: 1px solid $clrbrdrDflt;
+}
+@mixin text-dec-ul{
+	text-decoration: underline;
+}
+
+//! Position
+//! usage  @include position(fixed,auto,0,-143px,0);
+@mixin position($position, $top: null, $right: null, $bottom: null, $left: null) {
+  position: $position;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
+
+//! 
+//! Transitions
+//! usage  @include transition(color .3s ease);
+//!
+//!
+@mixin transition($args...) {
+  -webkit-transition: $args;
+  -moz-transition: $args;
+  -ms-transition: $args;
+  -o-transition: $args;
+  transition: $args;
+}
+
+//! Transform
+//! usage  @include transform(rotate(7deg));
+//!
+//!
+
+@mixin transform($transforms) {
+     -moz-transform: $transforms;
+       -o-transform: $transforms;
+      -ms-transform: $transforms;
+  -webkit-transform: $transforms;
+          transform: $transforms;
+}
+
+//! Transform
+//! usage  @include transform-orgin();
+//!
+//!
+
+@mixin transform-orgin($trans-orgin) {
+     -moz-transform-origin: $trans-orgin;
+       -o-transform-origin: $trans-orgin;
+      -ms-transform-origin: $trans-orgin;
+  -webkit-transform-origin: $trans-orgin;
+          transform-origin: $trans-orgin;
+}
+
+//! 
+//! Clearfix
+//! usage  @extend %clearfix;
+//!
+//!
+
+%clearfix {
+  *zoom: 1;
+  &:before, &:after {
+    content: " ";
+    display: table;
+    height: 0;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+//! 
+//! Box shadow
+//! usage  @extend %box-shadow-common;
+//!
+//!
+%box-shadow-common{
+    -webkit-box-shadow: 5px 5px rgba(57, 57, 57, 0.2);
+    -moz-box-shadow: 5px 5px rgba(57, 57, 57, 0.2);
+    box-shadow: 5px 5px rgba(57, 57, 57, 0.2);
+}
+
+//! 
+//! Flexible bottom
+//! usage  @extend %clearfix;
+//!
+//!
+@mixin flexible-top($elementHeight) {
+    top: ($elementHeight / (-2));
+}
+
+//! ----------Mixins breakpoints----------
+//!  
+//! 
+//! usage  @include bp('min-wdith :768px') {} 
+//! 
+//! 
+@mixin bp($point) {
+  @media only screen and ($point) {
+    @content;
+  }
+}
+//! @include bpMin('768px')
+@mixin bpMin($point) {
+  @media only screen and (min-width : $point) {
+    @content;
+  }
+}
+//! @include bpMax('768px')
+@mixin bpMax($point) {
+  @media only screen and (max-width : $point) {
+    @content;
+  }
+}
+//! @include bpMinMax('768px','768px')
+@mixin bpMinMax($point1,$point2) {
+  @media only screen and (min-width :$point1) and (max-width :$point2){
+    @content;
+  }
+}
+
+@mixin bp-medium {
+  @media only screen and (max-width: 40em) {
+    @content;
+  }
+}
+
+@mixin bp-small {
+  @media only screen and (max-width: 30em) {
+    @content;
+  }
+}
+
+//! Maintain aspect ratio
+//! @include aspect-ratio(16, 9);
+
+@mixin aspect-ratio($width, $height) {
+  position: relative;
+  &:before {
+    display: block;
+    content: "";
+    width: 100%;
+    padding-top: ($height / $width) * 100%;
+  }
+  > .fg-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}

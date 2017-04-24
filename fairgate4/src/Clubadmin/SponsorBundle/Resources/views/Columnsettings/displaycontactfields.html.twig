@@ -1,0 +1,46 @@
+<script type="text/template" id="template-display-contactfields">
+    <%  //contactField FILTERED BY SELECT GRP 
+    %>
+    <% prevSelectGrp = '' %>
+    <% _.each(contactFields, function(contactField) { %>
+        <% if (contactField.selectgroup != prevSelectGrp) { %>
+            <% if (prevSelectGrp != '') { %>
+                    </div>
+                </div>
+            <% } %>
+            <div class="form-group">
+                <h4 class="fg-cols-fsz"><%- contactField.selectgroup %></h4>
+                <div class="checkbox-list">
+        <% } %>
+     <% if (contactField.catId == corrAddrCatId) { %>
+            <% corrAddrField.push(contactField.id); %>
+        <% } else if (contactField.catId == invAddrCatId) { %>
+            <% invAddrField.push(contactField.id); %>
+        <% } %>
+        <label class="fg-col-settings-label">
+            <i class="fa fg-plus-circle fa-2x pull-left selectitem" id="<%- contactField.id %>" type="CF" club_id="<%- clubId %>" >
+            <span class="fg-label-inner" data-label-id="CF<%- contactField.id %>"><%- contactField.title %></span></label></i>
+        <% prevSelectGrp = contactField.selectgroup %>
+    <% }); %>
+    <% _.each(profPicFields, function(profPicField) { %>
+        <% if (profPicField.selectgroup != prevSelectGrp) { %>
+            <% if (prevSelectGrp != '') { %>
+                    </div>
+                </div>
+            <% } %>
+            <div class="form-group">
+                <h4 class="fg-cols-fsz"><%- profPicField.selectgroup %></h4>
+                <div class="checkbox-list">
+        <% } %>
+     <% if (profPicField.catId == corrAddrCatId) { %>
+            <% corrAddrField.push(profPicField.id); %>
+        <% } else if (profPicField.catId == invAddrCatId) { %>
+            <% invAddrField.push(profPicField.id); %>
+        <% } %>
+        <label class="fg-col-settings-label">
+            <i class="fa fg-plus-circle fa-2x pull-left selectitem" id="<%- profPicField.id %>" type="G" club_id="<%- clubId %>" >
+            <span class="fg-label-inner" data-label-id="G<%- profPicField.id %>"><%- profPicField.title %></span></label></i>
+        <% prevSelectGrp = profPicField.selectgroup %>
+    <% }); %>
+</script>
+

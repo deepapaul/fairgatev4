@@ -1,0 +1,44 @@
+Common\UtilityBundle\Entity\FgClubTableSettings:
+    repositoryClass: Common\UtilityBundle\Repository\FgClubTableSettingsRepository
+    type: entity
+    table: fg_club_table_settings
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        attributes:
+            type: text
+            nullable: true
+        isTemp:
+            type: boolean
+            nullable: false
+            column: is_temp
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

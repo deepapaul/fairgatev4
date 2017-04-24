@@ -1,0 +1,48 @@
+<script type="text/template" id="form_field_templates_mandatory_select">   
+    
+    <div class="fg-collapsed-content-wrapper">
+
+        <div class="form-group">
+            <label class="col-md-3 col-sm-4 control-label" for="<%- data.formId %>.<%- data.formFieldId %>_isRequired">{{'CMS_FORM_REQUIRED'|trans}}</label>
+            <div class="col-sm-4">
+                <label for="<%- data.formId %>.<%- data.formFieldId %>_isRequired" class="fg-checkbox fg-marg-top-5">
+                    <input type="checkbox" class="fg-dev-newfield has-needed" id="<%- data.formFieldId %>_isRequired" data-key="<%- data.formId %>.<%- data.formFieldId %>.isRequired" name="<%- data.formFieldId %>_isRequired"  checked  disabled='disabled'/>
+               <input type="text" class="fg-dev-newfield fg-dev-attributeId hide attributeId" data-key="<%- data.formId %>.<%- data.formFieldId %>.attributeId" 
+                id="attributeId_<%- data.formFieldId %>" name="attributeId_<%- data.formFieldId %>" value="<%- data.elementId %>">
+            </label>
+            </div>
+        </div>
+                <div class="form-group fg-dev-form-group">
+            <label class="col-md-3 col-sm-4 control-label" for="checkboxes">{{'APPLICATION_FORM_HIDE_ELEMENT'|trans}}</label>
+            <div class="col-sm-4">
+                <div class="FL fg-marg-top-5">
+                    <input type="checkbox" class="fg-dev-hide-field has-needed" id="<%- data.formFieldId %>_isFieldHiddenWithDefaultValue" data-key="<%- data.formId %>.<%- data.formFieldId %>.isFieldHiddenWithDefaultValue" name="<%- data.formFieldId %>_isFieldHiddenWithDefaultValue" <%= (($.trim(data.isFieldHiddenWithDefaultValue) == '1' || data.isFieldHiddenWithDefaultValue === true) ? 'checked' :'') %>/>
+                    
+                </div>
+                <div class="FL col-xs-6">
+                <select name="<%- data.formFieldId %>_hidetype"   id="mandatoryhide_<%- data.formFieldId %>" class="form-control fg-selection-hide fg-dev-hide-mandatory-selction form_field_type" data-key="<%- data.formId %>.<%- data.formFieldId %>.predefined" <%= (($.trim(data.isFieldHiddenWithDefaultValue) == '1' || data.isFieldHiddenWithDefaultValue === true) ? '' :'disabled=disabled') %>>
+                         <option value="default_select">{{'STATISTICS_SELECT'|trans}}</option>
+                      <% _.each(data.options, function(valueArray,key) { %>                     
+                             <option value="<%= valueArray %>" <%- (valueArray == data.predefinedValue)?'selected="selected"':'' %>><%= valueArray %></option>
+                         <% }); %>
+                     </select>
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-md-3 col-sm-4 control-label" for="textarea">{{'CMS_FORM_FIELD_TOOLTIP'|trans}}</label>
+            <div class="col-sm-4"> 
+            <% _.each(data.clubLanguages, function(clubLang) { %>
+                <textarea maxlength="160" class="form-control fg-textarea fg-dev-newfield <%- clubLang != data.clubDefaultLanguage ? 'hide':''  %>" data-key="<%- data.formId %>.<%- data.formFieldId %>.tooltip.<%- clubLang %>" 
+                        <% var placeholderDefaultValue = (_.contains(_.keys(data.tooltip),data.clubDefaultLanguage)) ? data.tooltip[data.clubDefaultLanguage]:'' %>
+                        placeholder="<%- (clubLang != data.clubDefaultLanguage)?placeholderDefaultValue:'' %>"
+                        data-lang="<%- clubLang %>" name="<%- data.formFieldId %>_tooltip_<%- clubLang %>"  id="<%- data.formFieldId %>_tooltip_<%- clubLang %>"><%= (_.contains(_.keys(data.tooltip),clubLang)) ? $.trim(data.tooltip[clubLang]):'' %></textarea>
+            <% }); %>
+            </div>
+        </div>
+
+    </div>
+    
+</script>

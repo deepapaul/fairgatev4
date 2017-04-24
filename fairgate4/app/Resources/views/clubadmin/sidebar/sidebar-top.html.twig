@@ -1,0 +1,37 @@
+<script type="text/template" id="template_sidebar_top">
+    <%
+        if(data.count > 0){
+    %>
+        <a href="javascript:;"> 
+    <%
+        }else{
+    %>
+        <div class="fg-no-data-sidebar">
+    <%
+        }
+    %>
+    
+    <span class="<% if(data.count > 0){ %> arrow pull-left <% } else{ %> fg-without-arrow <% } %>"></span>
+    <span class="title">
+    <%= data.title %>
+    <%
+        if (typeof data.logo!== "undefined"){
+    %>
+        <img class='fg-global-fed-icon' src="<%- data.logo %>">
+    <%
+        }
+    %>
+    </span>
+    <%
+        if(data.count > 0){
+    %>
+        </a>
+    <%
+        }else{
+    %>
+        </div>
+    <%
+        }
+    %>
+    
+</script>

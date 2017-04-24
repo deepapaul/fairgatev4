@@ -1,0 +1,50 @@
+<script type="text/template" id="templateArticleDetailText">    
+    <div class="row  fg-common-top fg-news-editorial-article-wrapper">
+        <div class="col-md-12  fg-common-btm">
+            <div class="fg-internal-data-tab">
+                <ul class="nav nav-tabs data-more-tab fg-visibility-hidden" id="data-tabs" style="visibility: visible;">
+
+                    <li id="data_li_1" data-type="1" class="show active">
+                        <a data-toggle="tab" href="#fg_field_category_1" class="text-toggle" data-tab="article-section-text" aria-expanded="false">{{'ARTICLE_CURRENT'|trans}}<i class="fa fa-exclamation-triangle fg-data-error hide"></i></a>
+                    </li>
+                    <li id="data_li_2" data-type="2" class="show">
+                        <a data-toggle="tab" href="#fg_field_category_2" class="text-toggle" data-tab="article-section-history" >{{'ARTICLE_HISTORY'|trans}}<i class="fa fa-exclamation-triangle fg-data-error hide"></i></a>
+                    </li>
+                    <li class="datahideshow dropdown hidden"><a href="#" id="fg-contact-more-tab" class="dropdown-toggle" data-toggle="dropdown">More <i class="fa fa-angle-down"></i><i class="fa fa-exclamation-triangle fg-data-error"></i> </a>
+                        <ul class="dropdown-menu">
+                            <li id="data_li_1" data-type="1" class="active hidden">
+                                <a data-toggle="tab" href="#fg_field_category_1" aria-expanded="true">
+                                    Personal  <i class="fa fa-exclamation-triangle fg-data-error hide"></i></a>
+                            </li>
+                            <li id="data_li_2" data-type="2" class="hidden">
+                                <a data-toggle="tab" href="#fg_field_category_2">
+                                    Address  <i class="fa fa-exclamation-triangle fg-data-error hide"></i></a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </div>  
+        </div>
+        <div class="clearfix"></div>
+        <div class="article-section-text article-text">
+            <form id="fg-article-text-form" onsubmit="return false;" class="form form-horizontal"> 
+                <div id="failcallbackClientSide" class="alert alert-danger" style="display:none;">
+                    <button class="close" data-close="alert"></button>
+                    <span>{% trans %}FORM_ERROR_DISPLAY{% endtrans %}</span>
+                </div>
+                <section class="fg-clear  ">
+                    {% include 'InternalArticleBundle:Editorial:templateArticleCreateText.html.twig' %}  
+                </section> 
+            {% include 'internal/savebutton.html.twig' with {'noBackLinkFlag':true,'save_button_val':'SAVE_CHANGES'|trans,'discard_button_val':'DISCARD_CHANGES'|trans} %}
+            </form>
+        </div>
+        <div class="article-section-history article-text hide" id="div-article-history">
+            <section class="fg-clear  ">
+
+            </section> 
+        </div>
+    </div>    
+</script>
+
+

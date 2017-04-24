@@ -1,0 +1,128 @@
+Common\UtilityBundle\Entity\FgSmBookings:
+    repositoryClass: Common\UtilityBundle\Repository\FgSmBookingsRepository
+    type: entity
+    table: fg_sm_bookings
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        beginDate:
+            type: datetime
+            nullable: true
+            column: begin_date
+        endDate:
+            type: datetime
+            nullable: true
+            column: end_date
+        paymentPlan:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: payment_plan
+        firstPaymentDate:
+            type: datetime
+            nullable: true
+            column: first_payment_date
+        lastPaymentDate:
+            type: datetime
+            nullable: true
+            column: last_payment_date
+        repetitionMonths:
+            type: smallint
+            nullable: true
+            column: repetition_months
+        amount:
+            type: decimal
+            nullable: true
+        discountType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: discount_type
+        discount:
+            type: decimal
+            nullable: true
+        createdAt:
+            type: date
+            nullable: true
+            column: created_at
+        updatedAt:
+            type: date
+            nullable: true
+            column: updated_at
+        timestamp:
+            type: string
+            length: 15
+            fixed: false
+            nullable: true
+        isDeleted:
+            type: boolean
+            nullable: false
+            column: is_deleted
+        isSkipped:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: is_skipped
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        service:
+            targetEntity: FgSmServices
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                service_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        updatedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                updated_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        category:
+            targetEntity: FgSmCategory
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                category_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,114 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = contactName %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet-body fg-theme-yellow">
+                        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                        
+                        {% include 'clubadmin/breadcrumb.html.twig' with {'breadCrumb':{'back': path('subscriber_contact_list',{'subscriber':'contact'}) }} %}
+                        <div class="row">
+                            {#<div class="col-md-12 col-sm-12">
+                                <h3 class="page-title fg-inner-title">{{'COMMUNICATION_LOG_OF_SUBSCRIBER' |trans ({'%subscriber%': contactName})}}</h3>
+                            </div>#}
+                        {% set page_settings = { 'pagetitle':'true'}  %}
+                        {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': 'COMMUNICATION_LOG_OF_SUBSCRIBER' |trans ({'%subscriber%': contactName}) , 'page_settings': page_settings  } %}     
+                        </div>
+
+                        <!-- END PAGE TITLE & BREADCRUMB-->
+                        <div class="row  fg-contact-data">
+                            <div class="col-md-12">
+                                <div class="portlet-body">
+                                    <div class="tabbable-custom ">
+                                        <ul  class="nav nav-tabs data-more-tab" id="data-tabs">
+                                            {% for key,logTab in logTabs %}
+                                                {% set active = (key == activeTab) ? 'active': '' %}
+                                                <li id="data_li_{{ key }}" class="{{ active }}">
+                                                    <a data-toggle="tab" data-datatableId="log_display_{{ contactId }}_{{ key }}" href="#log-table_{{ contactId }}_{{ key }}">{{ transKindFields[logTab]|trans|capitalize }}<i class="fa fa-exclamation-triangle fg-data-error"></i></a>
+                                                </li> 
+                                            {% endfor %}  
+                                            {#more tab#}
+                                            <li class="datahideshow dropdown" ><a href="#"  id="fg-contact-more-tab" class="dropdown-toggle" data-toggle="dropdown">{{ 'MORE'|trans }}<i class="fa fa-exclamation-triangle fg-data-error"></i><i class="fa fa-angle-down"></i></a>
+                                                <ul class="dropdown-menu">
+                                                    {% for key,logTab in logTabs %}
+                                                        {% set active = (key == activeTab) ? 'active': '' %}
+                                                        <li id="data_li_{{ key }}" class="{{ active }}">
+                                                            <a data-toggle="tab" data-datatableId="log_display_{{ contactId }}_{{ key }}" href="#log-table_{{ contactId }}_{{ key }}">{{ transKindFields[logTab]|trans|capitalize }}<i class="fa fa-exclamation-triangle fg-data-error"></i></a>
+                                                        </li> 
+                                                    {% endfor %}                                                       
+                                                </ul>
+                                            </li>
+                                            {# more tab ends #}
+                                        </ul>
+                                        <div class="fg-log-filter"><button id="fgContactLog" data-toggle="dropdown" class="btn tableaction"><i class="fa fa-filter fa-2x"></i></button></div>
+                                        <div class="fg-clear"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="data-tabs-content" class="tab-content">   
+                            {% for key,logTab in logTabs %} 
+                                {% set active = (key == activeTab) ? 'active': '' %}
+                                <div class="portlet-body tab-pane new-table-height logTabs {{ active }}" id="log-table_{{ contactId }}_{{ key }}">
+                                    {% include 'ClubadminCommunicationBundle:Subscriberlog:ownlogListing.html.twig' with {'logEntries': logEntries, 'transKindFields':  transKindFields, 'activeTab' : logTab, 'typeId' : key } %}
+                                </div>
+                            {% endfor %}  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Connection Popup -->
+        <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+            <div class="modal-dialog modal-wide">
+                <div class="modal-content fg-popup-wrap" id="popup_contents">
+                </div>
+            </div>
+        </div>
+    {% include 'ClubadminContactBundle:Archive:mergeContact.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+<script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>    
+<script type="text/javascript">
+    $(document).ready(function(){
+        FgUtility.moreTab();
+        $('div.date input:enabled').parent().datepicker(FgApp.dateFormat);
+        var logTabsLength = 6;
+        for (var i=1;i<=logTabsLength;i++) {
+            if (!$.isEmptyObject($('#log_display_{{contactId}}_'+i).dataTable())) {
+                $('#log_display_{{contactId}}_'+i).dataTable().fnDestroy();
+                FgTable.initid('log_display_{{contactId}}_'+i);
+            } else {
+                FgTable.initid('log_display_{{contactId}}_'+i);
+            }
+            logDateFilterSubmit("date_filter_{{contactId}}_"+i);
+        }
+        FgMoreMenu.initClientSideWithNoError('data-tabs', 'data-tabs-content');
+        $('#data-tabs li a[data-toggle="tab"]').on('shown.bs.tab', function() {
+            var curDataTableId = $(this).attr('data-datatableid');
+            $('#'+curDataTableId).dataTable().api().draw();
+        });
+        
+        $('#fgContactLog').on('click',function(){
+            $('.log-area').toggleClass('show');
+            $('table.table').toggleClass('fg-common-top');
+            $('div.fg-log-filter').toggleClass('fg-active-btn');
+        });  
+        
+        //handle  reactivate click 
+        reactivateOverviewPath = "{{path('get_all_contactids_reactivate')}}";
+        reactivateOverviewPopup = "{{path('get_reactivate_popup')}}";
+        reactivateSavePath = "{{ path('save_reactivate_contact')}}";
+        reactivateOerviewContactId = {{contactId}};
+    });
+     /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                     title: true
+             }); 
+</script>
+{% endblock %}    

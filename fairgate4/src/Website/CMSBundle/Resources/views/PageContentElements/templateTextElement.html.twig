@@ -1,0 +1,56 @@
+{%  if(textelement.text|length > 0) %}
+    <section class="fg-text-widget-wrapper {% if(textelement.media.position == 'rightColumn') %}fg-text-right-img {% else %}fg-text-left-img {% endif%}">
+        {% if(textelement.media|length > 1) %}
+            {% if(textelement.media.position == 'rightColumn' or textelement.media.position == 'leftColumn')%}
+                <div class="{{ (columnWidth >= 3) ? 'col-sm-4':'col-sm-2' }} fg-thumb">
+                    {% for key, data in textelement.media %}
+                        {% if(data.imgsrc is defined) %}
+                            <figure>
+                                <img src="{{data.imgsrc}} " alt=""/>
+                                <figcaption>{{data.description.default|raw|escape('html')}}</figcaption>
+                            </figure>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {{textelement.text.default.text|raw}}
+            {% elseif(textelement.media.position == 'topSlider')%}
+                <div class="col-md-12 fg-pad-0 fg-content">
+                    <div class="fg-slider fg-marg-btm-20">
+                        <div id="gallery-textelement-{{elementId}}" class="" style="display:none;">
+                            {% for key, data in textelement.media %}
+                                {% if(data.imgsrc is defined) %}
+                                <img alt="{{data.description.default|raw|escape('html')}}"  src="{{data.imgsrc}}" data-image="{{data.imgsrc}}"
+                                    data-description="{{data.description.default|raw|escape('html')}}" style="display:none;" >
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {{textelement.text.default.text|raw}}
+                </div>
+              {% elseif(textelement.media.position == 'bottomSlider')%}   
+                <div class="col-md-12 fg-pad-0 fg-content">
+                      {{textelement.text.default.text|raw}}
+                      <div class="fg-slider">
+                        <div id="gallery-textelement-{{elementId}}" class="" style="display:none;">
+                            {% for key, data in textelement.media %}
+                                {% if(data.imgsrc is defined) %}
+                                <img alt="{{data.description.default|raw|escape('html')}}"  src="{{data.imgsrc}}" data-image="{{data.imgsrc}}"
+                                    data-description="{{data.description.default|raw|escape('html')}}" style="display:none;" >
+                                
+                                {% endif %}
+                            {% endfor %}
+                            
+
+                        </div>
+                    </div>
+                </div>
+            {% endif%}
+        {% else %}
+            {{textelement.text.default.text|raw}}
+        {% endif %}               
+        <div class="clearfix"></div>
+
+    </section>
+            
+       
+{% endif %}

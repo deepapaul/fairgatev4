@@ -1,0 +1,66 @@
+Common\UtilityBundle\Entity\FgCmsPageContentElementLog:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPageContentElementLogRepository
+    type: entity
+    table: fg_cms_page_content_element_log
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        type:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        action:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        valueBefore:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: value_before
+        valueAfter:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: value_after
+        date:
+            type: datetime
+            nullable: false
+    manyToOne:
+        element:
+            targetEntity: FgCmsPageContentElement
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                element_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        changedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                changed_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        page:
+            targetEntity: FgCmsPage
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                page_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

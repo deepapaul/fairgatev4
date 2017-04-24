@@ -1,0 +1,33 @@
+Common\UtilityBundle\Entity\FgCnNewsletterExcludeContacts:
+    repositoryClass: Common\UtilityBundle\Repository\FgCnNewsletterExcludeContactsRepository
+    type: entity
+    table: fg_cn_newsletter_exclude_contacts
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        email:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        salutation:
+            type: string
+            length: 250
+            fixed: false
+            nullable: false
+    manyToOne:
+        newsletter:
+            targetEntity: FgCnNewsletter
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                newsletter_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

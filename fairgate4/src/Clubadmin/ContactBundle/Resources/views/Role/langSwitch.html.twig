@@ -1,0 +1,30 @@
+<script type="text/template" id="lang_switch">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-5">
+                        <% _.each(clubLanguages, function(clubLang) { %>
+                           <% teamTitleLang = ''; %>
+                           <% if (titleLang[clubLang]) { %>
+                                <% teamTitleLang = titleLang[clubLang] %>
+                           <% } else { %>
+                                <% teamTitleLang = title %>
+                           <% } %>
+                           <input type="text" data-key="<%- catId %>.i18n.<%- clubLang %>.title" name="<%- catId %>_i18n_<%- clubLang %>_title" id="<%- catId %>_i18n_<%- clubLang %>_title" data-lang="<%- clubLang %>" class="form-control input-lg page-title fg-inner-title" placeholder="{{placeholder|default('TEAM_CATEGORY_PLACEHOLDER')|trans}}" value="<%- teamTitleLang %>" required="true">
+                        <% }); %>
+                </div>
+                <div class="col-md-6">
+                   <div class="btn-toolbar fg-lang-tab">
+                     <div class="btn-group fg-br-lang-bar">
+                      <% if (clubLanguages.length > 1) { %>
+                        <% _.each(clubLanguages, function(clubLang) { %>
+                            <button type="button" class="btn"<%- (clubLang == defaultLang) ? "adminbtn-ash" : "fg-lang-switch-btn" %> data-selected-lang="<%- clubLang %>" data-elem-function="switch_lang"><%- clubLang.toUpperCase() %></button>
+                        <% }); %>
+                      <% } %>
+                     </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

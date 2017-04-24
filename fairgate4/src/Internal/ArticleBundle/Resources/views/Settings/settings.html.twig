@@ -1,0 +1,71 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = (settingsType == "comments") ? 'ARTICLE_SETTINGS_COMMENTS_PAGE_TITLE'|trans : 'ARTICLE_SETTINGS_LANGUAGE_PAGE_TITLE'|trans %}
+{% block pagecontent %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body fg-theme-green">
+                {% include 'internal/breadcrumb.html.twig'%}
+
+                {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle,'tabs':{}} %}
+                <form id="articleSettings" class="form-horizontal fg-default-subscriber" method="post" data-validation="true" onsubmit="return false;" novalidate="novalidate">
+                    <div class="alert alert-danger display-none">
+                        <button class="close" data-dismiss="alert"></button>
+                        <span data-error>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="portlet-body form">
+                                <!-- BEGIN FORM-->
+                                <div class="form-body">
+                                    <div class="form-group fg-subscibers-list currency-list fg-salutation-clear dataerror-group">
+                                        <label class="col-md-2 text-right col-xs-8 col-sm-3">{% if(settingsType == "comments") %}{{'ARTICLE_SETTINGS_COMMENTS_PAGE_TEXT'|trans}} {% else %}{{'ARTICLE_SETTINGS_LANGUAGE_PAGE_TEXT'|trans}}{% endif %}</label>
+                                        <div class="col-md-5 text-right col-xs-4">
+                                            <div class="FL">
+                                                <label class="switch-light switch-light-sm" onclick="">
+                                                    <input id="currentSettings" name="currentSettings" {% if (currentSettings == 1) %} checked {% endif %} type="checkbox"  class="make-switch">
+                                                    <span>
+                                                        <span>{% if(settingsType == "comments") %} {{'ON'|trans}} {% else %} {{'ARTICLE_SETTINGS_LANGUAGE_YES_BUTTON'|trans}} {% endif %}</span>
+                                                        <span>{% if(settingsType == "comments")%} {{'OFF'|trans}} {% else %} {{'ARTICLE_SETTINGS_LANGUAGE_NO_BUTTON'|trans}} {% endif %}</span>
+                                                    </span>
+                                                    <a class="btn btn-primary"></a>
+                                                </label>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!-- END FORM-->
+                            </div>
+                        </div>
+                    </div>
+                    {% include 'internal/savebutton.html.twig' with {'noBackLinkFlag':true}%}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+
+    <script>
+        $(".fg-action-menu-wrapper").FgPageTitlebar({
+            title: true
+        });
+        var savePath = '{{path('internal_article_settings_save')}}';
+        var settingsType = '{{settingsType}}';
+        FgDirtyFields.init('articleSettings', {});
+
+        $(document).off('click', '#save_changes');
+        $(document).on('click', '#save_changes', function () {
+            var settingsVal = (($('#currentSettings').is(':checked'))) ? 1 : 0;
+            FgXmlHttp.post(savePath, {'settingsVal': settingsVal, 'settingsType': settingsType}, false, callback);
+        });
+
+        function callback()
+        {
+            FgInternal.breadcrumb(FgInternal.extraBreadcrumbTitle);
+        }
+    </script>
+
+{% endblock %}

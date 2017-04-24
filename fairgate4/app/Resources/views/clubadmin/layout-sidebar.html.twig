@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js">
+<!--<![endif]-->
+    <!-- BEGIN HEAD -->
+    <head>
+        {{ include('::clubadmin/meta.html.twig', {'title' : pageTitle}) }}
+        {% block stylesheets %}
+            <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
+            {{ include('::clubadmin/fgStyles.html.twig') }}            
+            <link href="{{ asset('fgassets/assets/global/plugins/jquery-ui/jquery-ui.min.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/global/js/fbautocomplete/fbautocomplete.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/global/plugins/colorbox-master/example5/colorbox.css') }}" rel="stylesheet" type="text/css"/>
+            <!-- PLEASE MAKE SURE FAIRGATE STYLE SHOULD BE LOADED AT THE END -->
+            <!-- BEGIN FAIRGATE CUSTOM STYLES -->
+             <link href="{{ asset('fgassets/global/css/global-style.css') }}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgcustom/css/style-fairgate.css') }}" type="text/css" rel="stylesheet"/>
+            <link href="{{ asset('fgcustom/css/fg-david.css') }}" type="text/css" rel="stylesheet"/>         
+            <link href="{{ asset('fgcustom/css/pagetitlebar.css') }}" type="text/css" rel="stylesheet"/>   
+            <link href="{{ asset('fgassets/global/css/metronic-overrides.css') }}" rel="stylesheet" type="text/css"/>
+            <!-- END FAIRGATE CUSTOM STYLES -->
+            <!-- BEGIN PAGE LEVEL STYLES -->
+            <!-- STYLE SHEETS FROM EACH PAGE WILL BE INCLUDED WITHIN THIS BLOCK -->
+            {% block customstylesheets %}
+            {% endblock %}
+            <!-- END PAGE LEVEL STYLES -->
+        {% endblock %}
+        <link rel="shortcut icon" href="{{ asset('fgcustom/img/favicon.ico') }}"/>
+        {{ include('::global/google-analytic.html.twig') }}
+    </head>
+    <!-- END HEAD -->
+    <!-- BEGIN BODY -->
+    <body class="page-header-fixed page-sidebar-fixed page-footer-fixed {% if (fgclub.get('module') == 'sponsor') %} fg-sponsor-module-blk {% endif %} {% if (fgclub.get('module') == 'contact') %} fg-contact-module-blk {% endif %} {% if (not fgtwig.inArray('contact',fgclub.get('allowedRights')) and fgtwig.inArray('contact',fgclub.get('bookedModulesDet'))) %} fg-readonly-contact {% endif %} {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %} fg-readonly-sponsor {% endif %}">
+        <!-- BEGIN HEADER -->        
+{#        {{ include('::clubadmin/header.html.twig') }}#}        
+        <!-- END HEADER -->
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container">     
+{#            {{ include('::clubadmin/header-menu.html.twig') }}#}
+            <!-- BEGIN SIDEBAR -->
+            {{ include('::clubadmin/sidebar.html.twig') }}
+            <!-- END SIDEBAR -->
+             
+            <!-- BEGIN CONTENT -->
+            <div class="page-content-wrapper">
+                <div id="fg-wrapper" class="page-content">
+                    <div class="page-content-body">
+                        <!-- BEGIN PAGE CONTENT-->
+                        {% set moduleName = fgclub.get('module') %} 
+                        {% set moduleMenu = fgclub.get('moduleMenu') %} 
+                        {% block pagecontent %}
+                            <!-- PAGE LEVEL CONTENT WILL BE DISPLAYED HERE -->
+                        {% endblock %}
+                        <!-- END PAGE CONTENT-->
+                    </div>
+                </div>
+            </div>
+            <!-- END CONTENT -->
+
+            <!-- LOAD SIDEBAR TEMPLATE -->
+            {{ include('::clubadmin/sidebartemplates.html.twig') }}
+            <!-- END SIDEBAR TEMPLATE LOADING -->
+            
+            <!-- LOAD SIDEBAR CONTEXT MENU -->
+            {{ include('::clubadmin/sidebarcontextmenu.html.twig') }}
+            <!-- END SIDEBAR CONTEXT MENU -->
+            <!--  Custom pop over html -->
+            <div class="custom-popup">
+                <div class="popover bottom">
+                    <div class="arrow"></div>
+                    <div class="popover-content"></div>
+                </div>
+            </div>
+            <!-- End area -->
+        </div>    
+        <!-- END CONTAINER -->
+
+        <!-- BEGIN FOOTER -->
+        {{ include('::clubadmin/footer.html.twig') }}
+        <!-- END FOOTER -->
+        
+        <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+        {% block scripts %}
+            <!-- BEGIN CORE PLUGINS -->
+            <!--[if lt IE 9]>
+               <script src="{{ asset('fgassets/assets/global/plugins/respond.min.js') }}"></script>
+               <script src="{{ asset('fgassets/assets/global/plugins/excanvas.min.js') }}"></script>
+            <![endif]-->
+            {{ include('::clubadmin/fgScripts.html.twig', {'include' : 'jqueryAndUi'}) }}
+            <script src="{{ asset('fgassets/assets/global/plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('fgassets/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js') }}" type="text/javascript"></script>
+            {{ include('::clubadmin/fgScripts.html.twig', {'include' : 'metronicAndLayout'}) }}
+            <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-toastr/toastr.min.js') }}" type="text/javascript"></script>
+            {{ include('::clubadmin/fgScripts.html.twig', {'include' : 'jqueryElements2'}) }}
+            
+            
+            <!-- END CORE PLUGINS -->
+            
+            <!-- BEGIN FG JQUERY ELEMENT SPECIFIC SCRIPTS -->
+            <script src="{{ asset('fgassets/assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js')}}" type="text/javascript"></script>
+            <script src="{{ asset('fgassets/global/js/dirtyform/jquery.are-you-sure.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('fgassets/global/js/jquery.form.min.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('fgassets/global/js/underscore-min.js') }}"></script>
+            <script src="{{ asset('fgassets/assets/global/plugins/colorbox-master/jquery.colorbox-min.js')}}" type="text/javascript"></script>
+            <!-- END FG JQUERY ELEMENT SPECIFIC SCRIPTS -->
+            
+            <!-- BEGIN FAIRGATE SCRIPTS -->
+            <script src="{{ path('javascript_variables_handler', { 'contactId' : fgclub.get('contactId'), 'version': asset_version(), 'updated': random(5000)}) }}" type="text/javascript"></script>
+            <script src="{{ asset('fgassets/global/js/fg_global.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('fgassets/global/js/fg_tooltip.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('fgcustom/js/backend.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('fgcustom/js/fgapp.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('fgcustom/js/fgtemplate.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('fgcustom/js/sidebar.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('fgcustom/js/common.js') }}"></script>       
+            <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-contextmenu/bootstrap-contextmenu.js') }}"></script>
+            <script src="{{ asset('fgcustom/js/count-update.js') }}" type="text/javascript"></script>     
+            {% if (fgclub.get('module') =='club') %}
+                <script src="{{ asset('fgcustom/js/fg_fixedcolumn_dataTable.js')}}"></script>
+            {% else %}               
+                <script src="{{ asset('fgcustom/js/fg_custom_dataTable.js')}}"></script>                
+            {% endif %}
+            <script src="{{ asset('fgcustom/js/fg_checkbox.js')}}"></script>
+            <script src="{{ asset('fgassets/global/js/fbautocomplete/fbautocomplete.js')}}" type="text/javascript"></script>
+            <script src="{{ asset('fgcustom/js/pagetitlebar.js')}}" type="text/javascript"></script>
+            {#            <script src="{{ asset('fgcustom/js/pagetitlebar.js')}}" type="text/javascript"></script>#}
+            <!-- END FAIRGATE SCRIPTS -->
+            
+            <script type="text/javascript">
+                var index_url = "{{path('show_dashboard')}}";
+                var currentModule = '{{moduleName}}';
+                var extraBreadcrumbTitle = '';
+                jQuery(document).ready(function() {
+                    var headerData = {
+                        'module': '{{moduleName ? moduleName : 'null'}}',
+                        'level1': '{{app.request.attributes.get('level1') ? app.request.attributes.get('level1') : 'null'}}',
+                        'level2': '{{app.request.attributes.get('level2') ? app.request.attributes.get('level2') : 'null'}}',
+                        'moduleMenu': '{{moduleMenu ? moduleMenu : 'null'}}'
+                    };
+                    FgHeader.init("{{ path('display_header') }}", headerData);
+                    Metronic.init(); // init metronic core components
+                    Layout.init();
+                });
+               
+               //To initiate tooltip
+               jQuery( window ).load(function() {
+                   FgTooltip.init();
+                   Layout.fixContentHeight();
+                   Layout.initSidebar();
+               });
+            </script>
+            
+            <!-- BEGIN PAGE LEVEL SCRIPTS -->
+            <!-- JAVASCRIPTS FROM EACH PAGE WILL BE INCLUDED WITHIN THIS BLOCK -->
+            {% block javascripts %}
+            <link href="{{ asset('fgcustom/css/pagetitlebar.css') }}" type="text/css" rel="stylesheet"/>
+            {% endblock %}   
+            <!-- END PAGE LEVEL SCRIPTS -->
+            
+        {% endblock %}
+        <!-- END JAVASCRIPTS -->
+        
+         <!-- BEGIN QUICKSTART WINDOW -->
+        {{ render(path('help_quickstart_resource')) }}
+        <!-- End QUICKSTART WINDOW -->
+        
+    </body>
+    <!-- END BODY -->
+</html>

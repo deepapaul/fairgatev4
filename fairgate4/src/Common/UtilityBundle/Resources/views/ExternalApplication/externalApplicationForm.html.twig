@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js">
+    <!--<![endif]-->
+    <!-- BEGIN HEAD -->
+    <head>
+        <meta charset="utf-8"/>
+        <title>{{'EXTERNAL_APPLICATION_FORM_PAGE_TITLE'|trans}} | {{clubTitle}} | Fairgate Adminstration</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+        <meta content="" name="description"/>
+        <meta content="" name="author"/>
+        <meta name="MobileOptimized" content="320">
+
+        <!-- BEGIN GLOBAL MANDATORY STYLES -->
+        <link href="{{ asset('fgassets/assets/global/plugins/simple-line-icons/simple-line-icons.min.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset('fgassets/assets/global/plugins/font-awesome/css/font-awesome.min.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset('fgassets/assets/global/plugins/bootstrap/css/bootstrap.min.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset('fgassets/assets/global/plugins/uniform/css/uniform.default.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset('fgassets/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.css')}}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('internal/css/animate.min.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset('fgassets/assets/global/plugins/bootstrap-toastr/toastr.min.css') }}" rel="stylesheet" type="text/css"/>
+        <!-- END GLOBAL MANDATORY STYLES -->
+
+        <!-- BEGIN PAGELEVEL -->
+        <link href="{{asset('fgassets/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet" type="text/css"/>
+        <link href="{{asset('fgassets/assets/global/plugins/bootstrap-select/bootstrap-select.min.css')}}" rel="stylesheet" type="text/css"/>
+        <link href="{{asset('fgassets/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css')}}" rel="stylesheet" type="text/css"/>
+        <!-- END DYMANICLY LOADED CSS FILES -->
+
+        <!-- BEGIN THEME STYLES -->
+        <link href="{{ asset('fgassets/assets/global/css/plugins.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset('fgassets/assets/layouts/layout/css/layout.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset('fgassets/assets/layouts/layout/css/themes/default.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset('fgassets/assets/global/css/components.css') }}" type="text/css" rel="stylesheet" />
+
+        <!-- END THEME STYLES -->
+
+
+        <!-- BEGIN CUSTOM STYLES -->
+        <link href="{{ asset('fgassets/internal/css/internal-style.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset('fgassets/internal/css/fg-david.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset('fgassets/global/css/global-style.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset('fgassets/global/css/metronic-overrides.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset('fgassets/internal/css/fg-media.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset('fgassets/internal/css/fg-override.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset('fgassets/website/css/public-pages.css') }}" type="text/css" rel="stylesheet" />
+
+        <!-- END CUSTOM STYLES -->
+        <!-- PLEASE MAKE SURE FAIRGATE STYLE SHOULD BE LOADED AT THE END -->
+        <link rel="shortcut icon" href="{{ asset('fgcustom/img/favicon.ico') }}" />
+    </head>
+    <!-- BEGIN BODY -->
+    <body class="page-header-fixed page-full-width page-footer-fixed  bg-dark-grey no-navbar">
+        
+        <div class="clearfix"> </div>
+        <!-- BEGIN CONTAINER -->
+
+        <div class="page-container fg-page-container" >
+            <div class="page-content-wrapper">
+                <div class="page-content fg-theme-green bg-dark-grey">
+                    <!-- BEGIN CONTENT -->
+                    <div class="row  fg-marg-top-20">
+                        <div class="col-sm-10 col-sm-offset-1 col-xs-12 fg-sample-external-page-middle-wrapper">
+                            <div class="fg-external-page-logo-wrapper">
+                                <div class="fg-logo">
+                                    <img src="{{clubLogoUrl}}" alt="">
+                                </div>
+                                <div class="fg-logo-text">
+                                  {{'EXTERNAL_APPLICATION_FORM_PAGE_TITLE'|trans}}
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="fg-sample-form-wrapper fg-clear">
+                                <div class="fg-action-menu-wrapper">
+                                    <div class="fg-page-title-block-1 fg-active-IB">
+                                        <div class="fg-title-first-block fg-test-block  fg-action-title fg-active-IB">
+                                            <h3 class="page-title "><span class="page-title-text">{{clubTitle}}</span> </h3>
+                                        </div>
+
+
+
+                                    </div>    
+                                    <div class="clearfix"></div>
+                                </div>
+                                <form class="form-horizontal margin-top-30" id="externalApplication" method="post" onsubmit="return false;" novalidate="novalidate">
+                                    <fieldset class="col-md-12">
+
+                                        <!-- Form Name -->
+
+                                        <!-- Text input-->
+                                        <div class="form-group required ">
+                                            <label class="col-md-4 col-sm-5  control-label" for="FirstName">{{contactFields.firstName}}</label>
+                                            <div class="col-md-8 col-sm-7">
+                                                <input id="FirstName" name="FirstName" type="text" placeholder="" class="form-control input-md" required="">
+
+                                            </div>
+                                        </div>
+
+                                        <!-- Text input-->
+                                        <div class="form-group required ">
+                                            <label class="col-md-4 col-sm-5  control-label" for="LastName">{{contactFields.lastName}} </label>
+                                            <div class="col-md-8 col-sm-7">
+                                                <input id="LastName" name="LastName" type="text" placeholder="" class="form-control input-md" required="">
+
+                                            </div>
+                                        </div>
+
+                                        <!-- Multiple Radios (inline) -->
+                                        <div class="form-group required ">
+                                            <label class="col-md-4 col-sm-5 fg-pad-top-2 control-label" for="Gender">{{contactFields.gender}} </label>
+                                            <div class="col-md-8 col-sm-7 fg-pad-left-0">
+                                                <label class="radio-inline" for="Male">
+                                                    <input type="radio" class="uniform" name="Gender" id="Male" value="Male" checked="checked">
+                                                     {{'EXTERNAL_APPLICATION_FORM_MALE'|trans}}
+                                                </label>
+                                                <label class="radio-inline" for="Female">
+                                                    <input type="radio" name="Gender" id="Female" class="uniform"  value="Female">
+                                                     {{'EXTERNAL_APPLICATION_FORM_FEMALE'|trans}}
+                                                </label>
+                                            </div>
+                                        </div>
+
+
+                                        <!-- Text input-->
+                                        <div class="form-group required ">
+                                            <label class="col-md-4 col-sm-5  control-label" for="Dob">{{contactFields.dob}} </label>
+                                            <div class="col-md-8 col-sm-7">
+                                                <div class="input-group date fg-date fg-active-IB" data-provide="datepicker">
+                                                    <input  name="Dob" type="text"  class="form-control" required="">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Text input-->
+                                        <div class="form-group required fg-ext-email-error">
+                                            <label class="col-md-4 col-sm-5  control-label" for="Email">{{contactFields.email}} </label>
+                                            <div class="col-md-8 col-sm-7">
+                                                <input id="Email" name="Email" type="email" placeholder="" class="form-control input-md fg-ext-email-input" required="">
+
+                                            </div>
+                                        </div>
+
+                                        <!-- Text input-->
+                                        <div class="form-group required ">
+                                            <label class="col-md-4 col-sm-5  control-label" for="street">{{contactFields.street}} </label>
+                                            <div class="col-md-8 col-sm-7">
+                                                <textarea class="form-control" id="street" name="street" required=""></textarea>
+
+                                            </div>
+                                        </div>
+
+                                        <!-- Text input-->
+                                        <div class="form-group required ">
+                                            <label class="col-md-4 col-sm-5  control-label" for="zipcode">{{contactFields.zipcode}} </label>
+                                            <div class="col-md-8 col-sm-7">
+                                                <input id="Zipcode" name="zipcode" type="text" placeholder="" class="form-control input-md" required="" >
+
+                                            </div>
+                                        </div>
+
+                                        <!-- Text input-->
+                                        <div class="form-group required ">
+                                            <label class="col-md-4 col-sm-5  control-label" for="location">{{contactFields.location}} </label>
+                                            <div class="col-md-8 col-sm-7">
+                                                <input id="location" name="location" type="text" placeholder="" class="form-control input-md" required="" >
+
+                                            </div>
+                                        </div>
+
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <label class="col-md-4 col-sm-5  control-label" for="telM">{{contactFields.mobile}} </label>
+                                            <div class="col-md-8 col-sm-7">
+                                                <input id="telM" name="telM" type="text" placeholder="" class="form-control input-md">
+
+                                            </div>
+                                        </div>
+
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <label class="col-md-4 col-sm-5  control-label" for="telG">{{contactFields.telg}}  </label>
+                                            <div class="col-md-8 col-sm-7">
+                                                <input id="telG" name="telG" type="text" placeholder="" class="form-control input-md">
+
+                                            </div>
+                                        </div>
+
+                                        <!-- Text input-->
+                                        <div class="form-group">
+                                            <label class="col-md-4 col-sm-5  control-label" for="relatives"> {{'EXTERNAL_APPLICATION_RELATIVES'|trans}}</label>
+                                            <div class="col-md-8 col-sm-7">
+                                                <input id="relatives" name="relatives" type="text" placeholder="" class="form-control input-md">
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group required fg-marg-btm-5">
+                                            <label class="col-md-4 col-sm-5  control-label" for="employer">{{contactFields.employer}}</label>
+                                            <div class="col-md-8 col-sm-7">
+                                                <div class="row fg-ext-employer-block">
+                                                    
+                                                    <label class="col-lg-5 col-md-5 col-sm-5 fg-pad-right-5" for="employer">
+                                                        <input type="radio" class="uniform" name="employer-radio" id="employer" value="{{'EXTERNAL_APPLICATION_FORM_EMPLOYER_RADIO_TEXT'|trans}}" checked="checked">
+                                                        {{'EXTERNAL_APPLICATION_FORM_EMPLOYER_RADIO_TEXT'|trans}}
+                                                    </label>
+                                                    <div  class="col-lg-7 col-md-7 col-sm-7 fg-pad-left-5 fg-pad-left-xs-15">
+                                                        <input id="employer-number-text" name="employer-number-text" maxlength="8"  pattern="[0-9]{8}" type="text" placeholder="{{'EXTERNAL_APPLICATION_FORM_EMPLOYER_NUMBER'|trans}}" class="form-control input-md">
+                                                        <div id='employValidation' class='help-block'></div>
+                                                    </div>
+                                                    
+                                                </div>                                                                                          
+                                            </div>
+                                        </div>
+                                                    
+                                        <div class="form-group required ">
+                                           <div class="col-md-8 col-sm-7 col-md-offset-4 col-sm-offset-5">
+                                               <div class="row fg-ext-employer-other-block ">                                                    
+                                                   <label for="other" class="col-lg-5 col-md-5 col-sm-5 fg-pad-right-5">
+                                                       <input type="radio"  class="uniform" name="employer-radio" id="other" value="other" >
+                                                       {{'EXTERNAL_APPLICATION_FORM_EMPLOYER_OTHER_TEXT'|trans}}
+                                                   </label>
+                                                   <div  class="col-lg-7 col-md-7 col-sm-7 fg-pad-left-5  fg-pad-left-xs-15">
+                                                       <input id="employer-other-text" name="employer-other-text" type="text"  placeholder="{{'EXTERNAL_APPLICATION_FORM_EMPLOYER_OTHER'|trans}}" class="form-control input-md">
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>     
+                                
+                                        <!-- Select Basic -->
+                                        <div class="form-group required fg-ext-membership-block">
+                                            <label class="col-md-4 col-sm-5  control-label" for="FedMembership">{{ fgtwig.getTerminolgyName('Fed membership',singular,'UCF')}}</label>
+                                            <div class="col-md-8 col-sm-7 fg-ext-membership-select">
+                                                <select id="Fedmembership" name="FedMembership" class="form-control selectpicker" required>
+                                                    <option value="">{{'EXTERNAL_APPLICATION_FORM_MEMBERSHIP_SELECT'|trans}}</option>
+                                                    {% for id, name in membershipNames %}
+                                                        <option value="{{id}}">{{name}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!-- Multiple Checkboxes -->
+                                        <div class="form-group required ">
+                                            <label class="col-md-4 col-sm-5  control-label fg-pad-top-0" for="clubs">{{'EXTERNAL_APPLICATION_FORM_CLUB_CHOICE'|trans}}</label>
+                                            <div class="col-sm-7">
+
+                                                {% for club in clubNames %}
+                                                    <div class="checkbox half-col">
+                                                        <label for="clubs-{{club.clubId}}">
+                                                            <input type="checkbox" name="clubs[]" required= "" class="uniform" id="clubs-{{club.clubId}}" value="{{club.clubId}}">
+                                                            {{club.title}}
+                                                        </label>
+                                                    </div>
+                                                {% endfor %}
+
+
+                                            </div>
+                                        </div>
+
+                                        <!-- Textarea -->
+                                        <div class="form-group">
+                                            <label class="col-md-4 col-sm-5  control-label" for="comment">{{'EXTERNAL_APPLICATION_COMMENT'|trans}}</label>
+                                            <div class="col-md-8 col-sm-7">
+                                                <textarea class="form-control fg-comment" id="comment" name="comment"></textarea>
+                                            </div>
+                                        </div>
+                                            
+                                        <div class="form-group">
+                                            <div class="col-md-12 text-right">
+                                                <input type="submit" class="btn green" value="{{'EXTERNAL_APPLICATION_FORM_SUBMIT_TEXT'|trans}}" id="save_changes" >
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END CONTENT-->
+                </div>
+            </div>
+            <!-- END CONTENT -->
+        </div>
+
+
+        <!-- END CONTAINER -->
+       
+        <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+        <!-- BEGIN CORE PLUGINS -->
+        <!-- BEGIN CORE JQUERY PLUGINS -->
+        <script src="{{ asset('fgassets/assets/global/plugins/jquery-1.11.0.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/jquery-ui/jquery-ui.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/uniform/jquery.uniform.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-toastr/toastr.min.js')}}" type="text/javascript"></script>
+
+        <!-- BEGIN APP LEVEL JQUERY SCRIPTS -->
+        <script src="{{ path('internal_variables', { 'contactId' : fgclub.get('contactId'), 'updated': fgclub.get('settingsUpdated'), 'version': asset_version(1) }) }}" type="text/javascript"></script>
+        <script src="{{asset('fgassets/internal/js/fgmetronic.js')}}" type="text/javascript" ></script>
+        <script src="{{asset('fgassets/assets/global/plugins/jquery-validation/js/jquery.validate.min.js')}}" type="text/javascript" ></script>
+        <script src="{{asset('fgassets/global/js/custom-form-validation.js')}}" type="text/javascript" ></script>
+        <script src="{{asset('fgassets/assets/global/plugins/jquery-validation/js/additional-methods.min.js')}}" type="text/javascript" ></script>
+       
+        <script src="{{asset('fgassets/assets/global/plugins/select2/select2.js')}}" type="text/javascript" ></script>
+        <script src="{{asset('fgassets/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}}" type="text/javascript" ></script>
+        <script src="{{asset('fgassets/assets/global/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.de.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/jquery.form.min.js') }}" type="text/javascript"></script>
+        <script src="{{asset('fgassets/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js')}}" type="text/javascript" ></script>
+        <script src="{{asset('fgassets/assets/global/plugins/bootstrap-select/bootstrap-select.min.js')}}" type="text/javascript" ></script>
+        
+        <!-- END APP LEVEL JQUERY SCRIPTS -->
+        <!-- BEGIN FAIRGATE SCRIPTS -->
+
+        <script src="{{asset('fgassets/internal/js/FgExternalApplication.js')}}" type="text/javascript" ></script>
+        <script>
+
+        $(document).ready(function () {
+            $('.selectpicker').selectpicker();
+            $(".uniform").uniform();
+            FormValidation.init('externalApplication', 'saveChanges', 'errorHandler');
+            $("#employer-number-text").prop('required', true);    
+            dateFormat = {
+                todayHighlight: true, 
+                autoclose: true, 
+                language: 'de', 
+                format: FgLocaleSettingsData.jqueryDateFormat, 
+                weekStart: 1, 
+                clearBtn: true
+            };
+            FgExternalAppl.handleDatepicker(dateFormat);
+
+        });
+
+        function saveChanges()
+        {
+            var applSavePath = '{{path('external_application_save')}}';
+            var dataArray = $('#externalApplication').serializeArray();
+            FgXmlHttp.post(applSavePath, dataArray, false, false, failcallBack, 2);
+        }
+
+        /* error handler function */
+        function errorHandler()
+        {
+            var employerText = jQuery.trim($("#employer-other").val());
+            var requiredText = jstranslations.VALIDATION_THIS_FIELD_REQUIRED;
+            if (($("#other").is(':checked')) && (employerText.length == 0))
+            {
+                $("#employer-other-text").attr('required', 'required');
+                
+            }
+        }
+
+        function failcallBack()
+        {
+            var emailValidText = '{{'EXTERNAL_APPLICATION_EMAIL_EXISTS'|trans}}';
+            $(".fg-ext-email-error").addClass('has-error');
+            $('<span id="email-exist-error" class="help-block">' + emailValidText + '</span>').insertAfter($('.fg-ext-email-input'));
+            FormValidation.init('externalApplication', 'saveChanges', 'errorHandler');
+        }
+        </script>
+    </body>
+    <!-- END BODY -->
+</html>

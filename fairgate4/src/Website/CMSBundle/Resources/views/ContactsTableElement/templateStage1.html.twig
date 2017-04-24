@@ -1,0 +1,74 @@
+<script type="text/template" id="contacts_table_stage1_template">   
+    <form class="form-horizontal" id="contacts_table_element_stage1">
+        <div class="form-group required">
+            <label class="col-sm-4 control-label">{{ 'CONTACTS_TABLE_SAVED_FILTER'|trans }}</label>
+            <div class="col-sm-8 fg-right-col-1">
+                <div class="radio-block">
+                    <input type="radio" required="required" name="saved_filter_type" class="filter_type" value="contact" <%- ((_.has(data, 'filterType') && data['filterType'] == 'contact') ? 'checked="checked"' : '') %> id="filter_type_radios-0" data-key="<%- tableId %>.filterType">
+                    <div class="fg-dis-IB  fg-width-200  fg-marg-left-10">
+                        <select name="contactFilter" id="contactFilter" class="form-control selectpicker" data-key="<%- tableId %>.filterId" data-error-container=".fg-right-col-1">
+                            <option value="">{{ 'CONTACTS_TABLE_SELECT_CONTACTS_FILTER'|trans }}</option>
+                            <% _.each(data.contactFilters, function(contactFilter) { %>
+                                <option value="<%- contactFilter.filterId %>" <%- ((_.has(data, 'filterId') && contactFilter.filterId == data.filterId) ? 'selected="selected"' : '') %>><%- contactFilter.filterName %></option>
+                            <% }); %>   
+                        </select>  
+                    </div>
+                    <% if (data.hasContactModuleRights) { %>
+                        <div class="fg-dis-IB fg-marg-left-10">
+                            <a href="#" id="contactFilterRefresh" data-filterType="contact"><i class="fa fa-refresh"></i></a>
+                        </div>
+                        <div class="fg-dis-IB fg-marg-left-10">
+                            <a href="{{ path('saved_filter_settings') }}" target="_blank">{{ 'CONTACTS_TABLE_MANAGE_CONTACT_FILTER'|trans }}</a>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>   
+        <% if (data.hasSponsorModule == 1) { %>
+            <div class="form-group required">
+                <div class="col-sm-8 col-sm-offset-4 fg-right-col-2">
+                    <div class="radio-block">
+                        <input type="radio" name="saved_filter_type"  class="filter_type" value="sponsor" <%- ((_.has(data, 'filterType') && data['filterType'] == 'sponsor') ? 'checked="checked"' : '') %> id="filter_type_radios-1" data-key="<%- tableId %>.filterType">
+                        <div class="fg-dis-IB fg-width-200 fg-marg-left-10">
+                            <select name="sponsorFilter" id="sponsorFilter" class="form-control selectpicker" data-key="<%- tableId %>.filterId"  data-error-container=".fg-right-col-2">
+                                <option value="">{{ 'CONTACTS_TABLE_SELECT_SPONSOR_FILTER'|trans }}</option>
+                                <% _.each(data.sponsorFilters, function(sponsorFilter) { %>
+                                    <option value="<%- sponsorFilter.filterId %>" <%- ((_.has(data, 'filterId') && sponsorFilter.filterId == data.filterId) ? 'selected="selected"' : '') %>><%- sponsorFilter.filterName %></option>
+                                <% }); %>    
+                            </select>  
+                        </div>
+                        <% if (data.hasSponsorModuleRights) { %>
+                            <div class="fg-dis-IB fg-marg-left-10">
+                                <a href="#" id="sponsorFilterRefresh" data-filterType="sponsor"><i class="fa fa-refresh"></i></a>
+                            </div>
+                            <div class="fg-dis-IB fg-marg-left-10">
+                                <a href="{{ path('sponsor_saved_filter_settings') }}" target="_blank">{{ 'CONTACTS_TABLE_MANAGE_SPONSOR_FILTER'|trans }}</a>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>   
+            </div> 
+        <% } %>
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">{{ 'CONTACTS_TABLE_INCLUDE_CONTACTS'|trans }}</label>
+            <div class="col-sm-6 fg-autocomplete-parent">
+                <div>
+                    <input type="text" placeholder="{{ 'CONTACTS_TABLE_ADD_CONTACTS'|trans }}" name="contacts_table_included_contacts" class="form-control" id="contacts_table_included_contacts"></input>
+                    <input type="text" name="contacts_table_included_contacts_data" class="form-control hide fg-dev-newfield" id="contacts_table_included_contacts_data" value="<%- ((_.has(data, 'includedContacts')) ? data['includedContacts'] : '') %>" data-key="<%- tableId %>.includedContacts"></input>
+                </div>
+            </div>   
+        </div>   
+        <div class="clearfix"></div>    
+        <div class="form-group">
+            <label class="col-sm-4 control-label">{{ 'CONTACTS_TABLE_EXCLUDE_CONTACTS'|trans }}</label>
+            <div class="col-sm-6 fg-autocomplete-parent">
+                <div>
+                    <input type="text" placeholder="{{ 'CONTACTS_TABLE_ADD_CONTACTS'|trans }}" name="contacts_table_excluded_contacts" class="form-control" id="contacts_table_excluded_contacts"></input>
+                    <input type="text" name="contacts_table_excluded_contacts_data" class="form-control hide fg-dev-newfield" id="contacts_table_excluded_contacts_data" value="<%- ((_.has(data, 'excludedContacts')) ? data['excludedContacts'] : '') %>" data-key="<%- tableId %>.excludedContacts"></input>
+                </div>
+            </div>    
+        </div>    
+        <div class="clearfix"></div>
+    </form>
+</script>

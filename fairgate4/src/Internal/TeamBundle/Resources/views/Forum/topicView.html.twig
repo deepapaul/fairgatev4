@@ -1,0 +1,112 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = 'FORUM_TOPIC_VIEW'|trans %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+            <!-- BREADCRUMB STARTS -->
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <!-- BREADCRUMB ENDS -->
+            
+            <!-- BEGIN CONTENT -->
+            <div class="row">
+                <div class="col-md-12 fg-forum-topic-wrapper ">
+                    <!-- BEGIN PAGE TITLE -->
+                    {% include 'InternalTeamBundle:Forum:topicViewPageTitleBar.html.twig' with {'settings': settings} %}
+                    <div class="clearfix"></div> 
+                    <div id="topicViewContent">                        
+                    </div>
+                    <form id="forum-reply" name="forum-reply"  class="" skipDirtyCheck method="post">
+                    <div id="topicReply" class="hide">                         
+                            <div class="form-body fg-forum-topic-reply-wrapper">
+                                <div class="panel panel-primary fg-bordernon">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-form-title">
+                                            <label  class="fg-label-wrap">{{ 'FORUM_REPLY'|trans }}</label>
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="fg-forum-topic-content-wrapper">
+                                    <div class="col-sm-2 fg-forum-profile">
+                                        <p class="fg-forum-profile-name"> {{ currentContact }} </p> 
+                                        <div class="fg-forum-avatar">               
+                                        {% if( contactIsCompany != 1 or contactImage == '')  %}
+                                            <div class="fg-profile-img-blk100 {{ (( contactIsCompany != 1) ) ? 'fg-round-img' : '' }} " style="background-image:url('{{ (contactImage == '') ? '' : contactImage }}')" >                        
+                                            </div>
+                                        {% else %}
+                                            <div class="fg-profile-img-blk-C100 " >
+                                                <img src="{{ contactImage }}" alt="">
+                                            </div>
+                                        {% endif %}
+                                        
+                                    </div>
+                                    </div>
+                                    <div class="col-sm-10 fg-forum-reply-editor">
+                                        <textarea rows="6"  name="forum-post"  id="forum-post" data-key="forum-post" class="form-control dFExclude hidden" style="" ></textarea>
+                                        <textarea rows="6"  name="forum-post-text"  data-key="forum-post-text" id="forum-post-text" class="form-control hidden"></textarea>                                        
+                                        <span class="help-block fg-dev-errorblock hide">{{ 'VALIDATION_THIS_FIELD_REQUIRED'|trans }}</span>
+                                    </div>  
+                                    <div class="col-sm-10 hide fg-forum-preview-txt" id='preview-text'>                                        
+                                    </div>  
+                                </div>
+                            </div>    
+                        {% include 'internal/savebutton.html.twig' with {'save_button_val':save_button_val,'discard_button_val':preview_button_val, 'is_right_aligned':'true' } %}
+                    </div>                    
+                    </form>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+{% endblock %}
+{% block underscoretemplate %}
+        {% include 'InternalTeamBundle:Forum:templateTopicView.html.twig' %}
+{% endblock %} 
+{% block javascripts %}
+    <script src="{{ asset('fgassets/assets/global/plugins/ckeditor/ckeditor.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/ckEditor-config.js')}}" type="text/javascript"></script>    
+    <script src="{{ asset('fgassets/internal/js/page/ForumCkEditorBBCodeConfig.js')}}" type="text/javascript"></script>
+    <script>
+
+        var advancedToolsArr = ckEditorConfig.forumSimple;
+        var textareaName = 'forum-post-text';  
+        var page = {{ page|default(1) }};
+        var topicDetails = {{ data|escape('js')|json_encode()|raw }};
+        var totalCnt = {{ totalCnt|default(0) }};
+        var contactId = {{ contactId }};
+        var isAdmin = {{ isAdmin }};
+        var dpp = {{ dpp }};
+        var isClosed = {{ isClosed }};
+        var isImportant = {{ isImportant }};
+        var isFollower = {{ isFollower }};
+        var isRepliesAllowed = {{ isRepliesAllowed }};
+        var isDeactivated = {{ isDeactivated }};
+        var roleType = "{{ roleType }}";
+        var delRedirectPath = (roleType == 'T') ? "{{ path('team_forum_views') }}" : "{{ path('workgroup_forum_views') }}";
+        var roleId = '{{ roleId }}';        
+        var module = '{{ module }}';
+        var previewText = '{{ preview_button_val }}';
+        var editText = '{{ 'EDIT'|trans() }}';
+        var editedByText =  '{{ 'FORUM_POST_EDITED_BY'|trans }}';
+        var editedOnText =  '{{ 'FORUM_POST_EDITED_ON'|trans }}';
+        var locale = "{{ locale }}";
+        var topicId = "{{ topicId }}";
+        var pathSaveTopicReply = "{{ path('save_forum_topic_reply') }}";
+        var dataUrl = "{{ path('get_topic_posts', {'roleId' : roleId, 'topicId' : topicId, 'page' : '|page|'}) }}";
+        var profileUrl = "{{ path('internal_community_profile', {'contactId' : '|contactId|'}) }}";
+        var pathEditTopicReply = "{{ path('edit_forum_topic_reply') }}";
+        var isRepliesAllowed = '{{ settings.isRepliesAllowed }}';
+        var imgPath = '{{ '/uploads/|clubId|/contact/|folder|/|imageName|' }}';
+        var delTopicPath = "{{ path('topic_content_delete_confirmation', {'topicContentId' : '|topicContentId|', 'type' : '|type|'}) }}"
+        var settingsMenuChkPath = "{{ path('forum_setting', {'topicId' : '|topicId|', 'checkedVal' : '|checkedVal|', 'chkType' : '|chkType|'}) }}";
+        var followUnFollowPath = "{{ path('topic_update_follower', {'roleType' : module, 'roleId' : roleId , 'topicId' : '|topicId|', 'followVal' : '|followVal|' }) }}";        
+        var repliesPath = "{{ path('replies_setting_change', {'topicId' : topicId, 'repliesData' : '|repliesData|'}) }}";
+        var wroteOnText = '{{ 'FORUM_POST_WROTE_ON'|trans }}';
+        var unfollow = '{{ unfollow }}'; //if it is set show toaster
+        var UnfollowText = '{{ 'FORUM_UNFOLLOW_EDIT_SUCCESS'|trans }}';
+        var clubType = "{{clubType}}";
+    </script>
+    <script src="{{ asset('fgassets/internal/js/page/FgForumTopicView.js')}}" type="text/javascript"></script> 
+{% endblock %}

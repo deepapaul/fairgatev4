@@ -1,0 +1,103 @@
+{% extends app.request.xmlHttpRequest ? '::layout-ajax.html.twig' : '::internal/layout.html.twig' %}
+{% form_theme form  'CommonUtilityBundle:Form:contact.html.twig' %}
+{% if (type == 'team') %}
+    {% if (contact|default('') != '') %}
+        {% set pageTitle = 'INTERNAL_EDIT_TEAMMEMBER_IN_TEAM'|trans({'%a%' : fgtwig.getTerminolgyName('Team member',singular), '%b%' : roleName}) %}
+    {% else %}
+        {% set pageTitle = 'INTERNAL_CREATE_TEAMMEMBER_IN_TEAM'|trans({'%a%' : fgtwig.getTerminolgyName('Team member',singular), '%b%' : roleName}) %}
+    {% endif %}
+{% else %}
+    {% set pageTitle = (contact|default('') != '') ? 'INTERNAL_EDIT_WORKGROUP_MEMBER_IN_WORKGROUP'|trans({'%a%' : roleName}) : 'INTERNAL_CREATE_WORKGROUP_MEMBER_IN_WORKGROUP'|trans({'%a%' : roleName}) %}
+{% endif %}
+{% block pagecontent %}
+    <div id="update_member">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN BREADCRUMB-->
+                {% include 'internal/breadcrumb.html.twig' with {'breadCrumb':{'back': (type == 'team') ? path('team_detail_overview') : path('workgroup_detail_overview') }} %}
+                <!-- END BREADCRUMB-->
+                <!-- PAGE TITLE -->
+                <div class="row"><div class="col-lg-12"><h3 class="page-title">{{pageTitle}}</h3></div></div>
+                <!-- END PAGE TITLE -->
+                <!-- ERROR MESSAGE-->
+                <div class="alert alert-danger {{ isError|default(0) ? '':'display-hide' }}"> {{'FORM_TAB_ERROR_DISPLAY'|trans}}
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                </div>
+                <!-- END ERROR MESSAGE-->
+                <!-- BEGIN CREATE TEAM MEMBER FORM -->
+                {{ form_start(form, { 'attr': {'name': 'updateMember', 'id': 'updateMember' ,'enctype': 'multipart/form-data', 'class': (type == 'team') ?'form-horizontal ':'form-horizontal fg-wg-member-update ', 'action': 'metronic_form_submit', 'autocomplete': 'off', 'novalidate': 'novalidate', 'onSubmit': 'return false;', 'data-scrollToFirstError': 'true'} }) }}
+                {{ form_rest(form) }}
+                <input type="hidden" name="mainContactId" id="mainContactId" value="{{mainContactId}}" />
+                <input type="hidden" name="deletedFiles" id="deletedFiles" value="" />
+                <input type="hidden" name="duplicateFileAttrs" id="duplicateFileAttrs" value="" />
+
+                <div class="portlet-body form fg-sticky-block">
+                    <div class="form-actions fluid">
+                        {% if (contact|default('0') == '0') %}
+                            <div class="form-group col-md-5">
+                                <div class="checkbox-list col-md-8">
+                                    <label class="checkbox-inline ">
+                                        <input type="checkbox" id="oneMore" value="1" name="oneMore">
+                                        {% if (type == 'team') %}
+                                            {{ 'CREATE_ANOTHER_TEAMMEMBER'|trans({'{#Team member#}' : fgtwig.getTerminolgyName('Team member',singular)}) }}
+                                        {% else %}
+                                            {{ 'CREATE_ANOTHER_WORKGROUP_MEMBER'|trans }}
+                                        {% endif %}
+                                    </label>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="col-md-offset-0  col-md-12 col-sm-12 col-xs-12">
+                            <button id="save_changes" type="submit" class="btn green">{%trans%}SAVE_CHANGES{%endtrans%}</button>
+                            <button id="cancel" type="button" class="btn default">{%trans%}CANCEL{%endtrans%}</button>
+                            <div class="btn-group pull-right"> 
+                                <button type="button" class="btn default bckid fg-backbtn-btm" data-auto="back_button_bottom" data-url="{{ (type == 'team') ? path('team_detail_overview') : path('workgroup_detail_overview') }}"><i class="fa fg-chevron-left"></i>{%trans%}BACK{%endtrans%}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{ form(form) }}
+                <!-- END CREATE TEAM MEMBER FORM -->
+            </div>
+        </div>
+    </div>
+    <!-- END CONTENT -->
+    <!-- END PAGE LEVEL STYLES -->
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    var memberVars = {
+        saveDataPath: "{{ path('save_member', {'type': type, 'roleId': roleId, 'contact': (contact ? contact : '0')}) }}",
+        currClubId: '{{clubId}}',
+        currContactId: '{{loggedContactId}}',
+        roleType: '{{type}}',
+        memberlistPath: "{{ (type == 'team') ? path('team_detail_overview') : path('workgroup_detail_overview') }}",
+        oneMorePath: "{{ path('create_'~type~'member', {'type': type, 'roleId': roleId}) }}",
+        flashMsg: "{{(type == 'team') ? 'TEAM_MEMBER_SAVED_SUCCESSFULLY'|trans({'{#Team member#}' : fgtwig.getTerminolgyName('Team member',singular)}) : 'WORKGROUP_MEMBER_SAVED_SUCCESSFULLY'|trans}}",
+        createOneMore: false
+    };
+</script>
+<script src="{{ asset('fgcustom/js/jquery-inputmask/jquery.inputmask.bundle.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('fgassets/internal/js/page/updateTeamMember.js')}}" type="text/javascript"></script>
+<script type="text/javascript">
+    var editContactId = {{contact|default('0')}};
+    var contactUrl = "{{path('frontend_search_contactname')}}";
+    var removestring = "{{ 'NL_AUTOCOMPLETE_REMOVE'|trans }}";
+    var contacttype = '{{contactType}}';
+    var isSwitchable = {{isSwitchable|default('1') ? 1 : 0}};
+    var path = "{{ (contact|default('0') != '0') ? path('edit_'~type~'member',{'type': type, 'roleId': roleId, 'contact': contact}) : path('create_'~type~'member',{'type': type, 'roleId': roleId}) }}";
+    jQuery(function() {
+        {% if contact and not(ownClub) %}
+            updateMember.handleOtherClubContact();
+        {% endif %}
+        updateMember.initPageFunctions();
+        
+        //Workaround to make the checkbox and radio button disabled on confirmation
+        var disabledRadioLists = $('div.radio-list[disabled=true]');
+        disabledRadioLists.find('label').addClass('fg-label-inactive');
+        disabledRadioLists.find('.checker').addClass('disabled');
+        disabledRadioLists.find('input').attr('disabled','disabled');
+    });
+</script>
+{% endblock %}

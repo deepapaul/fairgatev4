@@ -1,0 +1,14 @@
+<div class="row">                  
+    <div class="col-sm-12">
+        <h3 class="page-title pull-left fg-inner-title"> {{title|trans}} </h3>   
+        <div class="btn-toolbar fg-lang-tab">
+            <div class="btn-group  fg-language-left">
+                {% if (clubLanguages|length > 1) %}
+                    {% for clubLanguage in clubLanguages %}
+                        <button type="button" id="{{clubLanguage}}"  lang="{{clubLanguage}}" class=" {% if(clubLanguage == clubDefaultLang) %} adminbtn-ash {% else %} fg-lang-switch-btn {% endif %}  btn  btlang" data-elem-function="switch_lang" data-selected-lang="{{clubLanguage}}">{{clubLanguage|upper}}</button>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>                        
+</div> 

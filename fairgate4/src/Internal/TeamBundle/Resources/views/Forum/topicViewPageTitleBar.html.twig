@@ -1,0 +1,55 @@
+<div class="fg-action-menu-wrapper">
+    <div class="fg-page-title-block-2 fg-dis-none">
+        <div class="fg-width-P fg-active-IB">
+            <div class="fg-active-IB vcenter fg-badge-closed">
+                <span class="label label-closed">{{ 'FORUM_CLOSED_BADGE'|trans }}</span>
+            </div>
+            <div class="fg-active-IB vcenter fg-badge-important">
+                <span class="label label-important">{{ 'FORUM_IMPORTANT_BADGE'|trans }}</span>
+            </div>
+            <div class="fg-active-IB fg-page-title-bar-2">
+                <h3 class="page-title"> {{ settings.title|default('') }} </h3>
+            </div>
+            <div class="fg-active-IB fg-forum-no-reply">
+                <i class="fa fa-lock"></i>
+            </div>
+            <div class="fg-active-IB fg-btn-grey-icon ">
+                <span class="fg-post-delete" data-type="forum" data-id="{{ settings.topicId }}">
+                    <i class="fa fa-times-circle fa-2x"></i> {{ 'FORUM_DELETE_TOPIC'|trans }} 
+                </span>
+            </div>
+            <div class="fg-active-IB fg-btn-grey-icon fg-post-addnew-reply">
+                <span class="">
+                    <i class="fa-2x"></i> {{ 'FORUM_ADDNEW_REPLY_TOPIC'|trans }} 
+                </span>
+            </div>
+            {% if (settings.rightBlock|default(false)) %}
+                <div class="FR fg-active-IB">
+                    <div class="fg-active-IB fg-btn-grey-icon follow-unfollow-block">
+                        <span>
+                            <div class="fg-follow"><i class="fa fa-bell-o fa-2x"></i> {{ 'FORUM_FOLLOW_TOPIC'|trans }}</div>
+                            <div class="fg-unfollow"><i class="fa fa-bell-slash-o fa-2x"></i> {{ 'FORUM_UNFOLLOW_TOPIC'|trans }}</div>
+                        </span>
+                    </div>
+                    {% if (settings.topicSettingsMenu|default(false)) %}    
+                        <div class="fg-active-IB fg-btn-grey-icon">
+                            <button class="btn tableactionright pull-left" data-toggle="dropdown">
+                                <i class="fa fa-cog fa-2x"></i>
+                            </button>
+                            <ul class="dropdown-menu pull-right drpmenu-new dropdown-menu-form padinten">
+                                <li>
+                                    <select class="select2 fg-settings-menu">
+                                        <option value='not_allowed'>{{ 'FORUM_REPLIES_NOT_ALLOWED'|trans }}</option>
+                                        <option value='allowed'>{{ 'FORUM_REPLIES_ALLOWED'|trans }}</option>
+                                    </select>
+                                </li>
+                                <li><label><input type="checkbox" class= "fg-topic-imp" />{{ 'FORUM_MARK_AS_IMPORTANT'|trans }}</label></li>
+                                <li><label><input type="checkbox" class="fg-topic-clo" />{{ 'FORUM_CLOSE_TOPIC'|trans }}</label></li>
+                            </ul>
+                        </div>
+                    {% endif %}  
+                </div>
+            {% endif %} 
+        </div>       
+    </div>
+</div>

@@ -1,0 +1,34 @@
+Common\UtilityBundle\Entity\FgCmsPageContentElementI18n:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPageContentElementI18nRepository
+    type: entity
+    table: fg_cms_page_content_element_i18n
+    fields:
+        lang:
+            id: true
+            type: string
+            length: 2
+            fixed: true
+            nullable: false
+        titleLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: title_lang
+        twitterAccountnameLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: twitter_accountname_lang
+    oneToOne:
+        id:
+            targetEntity: FgCmsPageContentElement
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,90 @@
+<form id="form-tab4" method="post" data-url="{{ actionPath }}" onsubmit="return false;" autocomplete="off" novalidate="novalidate" class="form-horizontal">
+    {% if duplicates|length > 0 or subscriber_duplicates|length > 0 %}                     
+        <div class="form-body">
+            <div class="form-group">
+                <p>{{'SUBSCRIBER_IMPORT_DUPLICATES_TEXT'|trans}}</p>
+                <!-- Table -->
+                <div class="fg-table-wrap">
+                    <table class="table fg-import-table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    {{'IMPORT_IMPORTING'|trans}}
+                                </th>
+                                <th>
+                                    {{'SUBSCRIBER_IMPORT_EXISTING'|trans}}
+                                </th>
+                                            
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for rowDup in duplicates %}
+
+                                <tr>
+                                    <td>
+                                        {% if rowDup.tmpSurname!='' and rowDup.tmpForename!='' %}
+                                            {{rowDup.tmpSurname~' '~rowDup.tmpForename}} ({{rowDup.tmpEmail}}) 
+                                        {% elseif(rowDup.tmpSurname!='') %} 
+                                            {{rowDup.tmpSurname}} ({{rowDup.tmpEmail}}) 
+                                        {% elseif(rowDup.tmpForename!='') %}
+                                            {{rowDup.tmpForename}} ({{rowDup.tmpEmail}}) 
+                                        {% else %} 
+                                            {{rowDup.tmpEmail}} 
+                                        {% endif %}
+                                    </td>                    
+                                    <td>
+                                        {% if rowDup.clubId ==clubId %}
+                                            <a href="{{ path('render_contact_overview', {'offset': '0', 'contact': rowDup.contactId}) }}">
+                                        {% endif %}
+                                        {% if(rowDup.isCompany != 1) %}
+                                            {{rowDup.lname~' '~rowDup.fname}}
+                                        {% else %}
+                                            {{ rowDup.hasMC==1 ? rowDup.company~' ('~rowDup.lname~' '~rowDup.fname~')':rowDup.company }}
+                                        {% endif %}               
+                                        {% if rowDup.clubId ==clubId %}
+                                            </a>    
+                                        {% endif %}
+                                        ({{'SUBSCRIBER_ACTIVE_CONTACT'|trans}}) 
+                                    </td>  
+                                    <input type="hidden" name="duplcates[]" value="{{rowDup.row_id}}" />
+                                </tr>                                
+                            {% endfor %}
+                            {% for subs in subscriber_duplicates %}
+
+                                <tr>
+                                    <td>
+                                        {% if subs.tmpSurname!='' and subs.tmpForename!='' %}{{subs.tmpSurname~' '~subs.tmpForename}} ({{subs.tmpEmail}}) {% elseif(subs.tmpSurname!='') %} {{subs.tmpSurname}} ({{subs.tmpEmail}}) {% elseif(subs.tmpForename!='') %}{{subs.tmpForename}} ({{subs.tmpEmail}}) {% else %} {{subs.tmpEmail}} {% endif %}
+                                    </td>                    
+                                    <td>
+                                        {% if subs.last_name!='' and subs.first_name!='' %}{{subs.last_name~' '~subs.first_name}} {% elseif(subs.last_name!='') %} {{subs.last_name}} {% elseif(subs.first_name!='') %}{{subs.first_name}} {% else %} {{subs.tmpEmail}} {% endif %}
+                                        ({{'SUBSCRIBER_CONTACT'|trans}})
+                                    </td> 
+                                    <input type="hidden" name="duplcates_subs[]" value="{{subs.row_id}}" />
+                                </tr>                                
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- End Table -->
+            </div>
+        </div>
+    {% else %}                                
+        <h3 class="block">{{'IMPORT_NO_DUPLICATES'|trans}}</h3>
+    {% endif %}                             
+    <input type="hidden" id="step" name="step" value="duplicate" />
+</form>
+<script type="text/javascript">
+//select and deselect
+ $(".check-all").click(function () {
+        $('.check').prop('checked', this.checked);
+        jQuery.uniform.update('#form-tab4 :checkbox');
+    });
+
+//If one item deselect then button CheckAll is UnCheck
+    $(".check").click(function () {
+        if (!$(this).is(':checked')){
+            $(".check-all").prop('checked', false);
+        }
+        jQuery.uniform.update('#form-tab4 :checkbox');
+    });    
+</script>    

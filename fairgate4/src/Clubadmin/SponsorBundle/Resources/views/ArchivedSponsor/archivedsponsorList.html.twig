@@ -1,0 +1,201 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' :  '::clubadmin/layout.html.twig' %}               
+{% set title= 'TOPNAV_ARCHIVED_SPONSOR'|trans %}
+{% set pageTitle = title %}
+{% block pagecontent %}
+    <!-- BEGIN PAGE CONTENT-->
+
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+            {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+        </div>
+    </div>
+    <div class="row fg-common-btm">
+          <form method="POST" action= "" id="hiddenform">
+            <input type="hidden" name="selcontacthidden" value="" id="selcontacthidden" search-value="" />
+            <input type="hidden" name="searchhidden" value="" id="searchhidden" search-value="" />
+            <input type="hidden" name="counthidden" value="" id="counthidden" search-value="" />
+        </form>
+        {% set columnsUrl = path('sponsor_columnsettings', {'settings_id': 0,'contacttype':contacttype}) %}
+           {% set defaultSettings_name = 'LOAD_COLUMN'|trans %}
+           {% set page_settings = { 'columnsettings':'true','pagetitle':'true','counter':'true','searchbox':'true','filter':'true','actionmenu':'true' }  %}
+           {% include 'clubadmin/page-title-bar.html.twig' with {'page_settings': page_settings,'pageTitle': title|trans, 'columnsUrl': columnsUrl,'defaultSettings':defaultSettings,'defaultSettings_name':defaultSettings_name,'allTableSettings':allTableSettings,'counter':1,'searchbox_id':'searchbox'} %} 
+
+        <!-- END PAGE TITLE & BREADCRUMB-->
+        <input type="hidden" name="defaultColumnStting" id="fg-dev-defaultcolumnsetting" value="{{defaultSettings}}"/>
+    </div>
+    <div class="alert alert-danger display-hide">
+        <button class="close" data-close="alert"></button>
+        {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+    </div>
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN FILTER AREA-->
+    <div class="filter-alert alert-block fade in space">
+        <button  class="close fg_filter_hide" type="button" ></button>
+        <div class="row filter-pad">
+            <div id="target">
+            </div>
+        </div>
+        <div class="clearfix filter-pad addandsave fg-common-top-btm">
+            <a data-toggle="modal" href="#basic" id="addCriteria"><i class="fa fa-plus-circle fa-2x"></i><span class="fg-left-move"> {%trans%}SAVED_FILTER_ADD_CRITERION{%endtrans%}</span> </a>
+
+            <div id="filternameText" class="editable editable-click fg-filter-name btn-group"> </div>
+        </div>
+        <div class="portlet-body form">
+            <div class="form-actions fluid">
+                <div class="col-md-offset-0 col-md-10">
+                    <button type="submit" id="search" class="btn blue">{%trans%}CONTACT_FILTER_SEARCH{%endtrans%}</button>
+                    <button type="button" class="btn default remove-filter">{%trans%}CONTACT_FILTER_CLEAR{%endtrans%}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+
+        <div class="portlet-body new-table-height" id="tableWrapper">
+            <table data-ajax-path="{{ path('list_sponsor',{'contactType': contacttype})  }}"
+                   class="sponsordataTable 
+                   archive-border-remove
+                   fg-dev-sort-disable
+                   table
+                   table-bordered
+                   table-hover
+                   table-condensed
+                   dataTable-scroll-y
+                   dataTable-ajax
+                   dataTable-ajaxHeader
+                   dataTable-fixed
+                   dataTable-rows
+                   dataTable-scroll-x
+                   dataTables_scrollBody
+                   lastcolumn_sort dataTable-initialSort data-count dataTable-widthResize data-filter-count" xWidth="100" yHeight="300" data-table-name="sponsordataTable"  data_row_change="fgrowchange" data-sort="2#asc" dataTable-popover="true" dataTable-hover="true"  document-parameter="true" data_serversideProcess="true" id="sponsordataTable" >
+            </table>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+    <div id="callPopupFunction"></div>
+    <!-- Connection Popup -->
+    <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-content fg-popup-wrap" id="popup_contents">
+            </div>
+        </div>
+    </div>
+
+    <!-- End Connection Popup -->
+    <!-- END PAGE CONTENT-->
+
+
+    <!-- END CONTENT -->
+    <!-- END PAGE CONTENT-->
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/sidebar.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/filter-settings.js')}}" type="text/javascript"></script>
+    <script>       
+                var filter;
+                var fedclubId={{fedClubId}};
+                var fedmemConfirmTootipMsg  ="{{'CONTACT_FED_MEMBER_TOOLTIP'|trans}}"
+                var filterdata = 'contact';
+                var filterStorage = 'sponsorfilter-{{contacttype}}{{clubId}}-{{contactId}}';
+                var filterName = 'sponsor_filter';
+                var totalCount = '';
+                var isFilterBroken = 0;
+                var jsonData = '';
+                var tableSettingValue = '';
+                var tableColumnTitle = [];
+                var clubId = '{{clubId}}';
+                var contactId = '{{contactId}}';
+                var contactType = '{{contacttype}}';
+                var tableSettingValueStorage = 'tableSettingValue_{{contacttype}}{{clubId}}-{{contactId}}';
+                var tableColumnTitleStorage = 'tableColumnTitle_{{contacttype}}{{clubId}}-{{contactId}}';
+                var filterDisplayFlagStorage = 'filterdisplayflag_{{contacttype}}{{clubId}}-{{contactId}}';
+                var functionType = '';
+                var tableSettingIdStorage = 'SponsorSettingId_{{contacttype}}{{clubId}}-{{contactId}}';
+                var clubType = '{{clubType}}';
+                var selectTitileTrans = "{{'CM_SELECT_TYPE'|trans}}";
+                var criteriTitle = "{{'CM_CRITERIA'|trans}}";
+                var filterCondition = FgFilterSettings.FgSponsorCondition;
+                var ActiveMenuDetVar = fgLocalStorageNames.sponsor.active.ActiveMenuDetVar;
+                var module = '{{fgclub.get('module')}}';
+                var jsonDataPath = '{{path('sponsor_filter_data',{'contacttype': contacttype})}}';
+                var listType = 'serviceList'; //'sponsorlist';
+                var sponsorHomeLink = "{{path('view_archived_sponsors')}}";
+                var sponsorEditLink = '{{path('edit_sponsor', {'contact':'CONTACT'} )}}';
+                var permanentDeletePath = '{{path('permanent_delete_archive')}}';
+                var actionMenuNoneSelectedText = {
+        {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                    'export': {'title': "{{'SM_EXPORT_ACTION_MENU'|trans}}", 'dataUrl': '{{path('sponsor_export_file', {'contactType':contacttype} )}}'}
+                    {% else %}  'reactivate': {'title': "{{'REACTIVATE_SELECTED'|trans}}", 'dataUrl': '', 'htmlCreatePath': '', 'visibleAlways': false},
+                            'editSponsor': {'title': "{{'EDIT_SELECTED'|trans}}", 'dataUrl': '', 'visibleAlways': false, 'hrefLink': '', 'divider': '1'},
+                            'export': {'title': "{{'SM_EXPORT_ACTION_MENU'|trans}}", 'dataUrl': '{{path('sponsor_export_file', {'contactType':contacttype} )}}'}
+                           
+        {% endif %}
+                    };
+                    var actionMenuSingleSelectedText = {
+        {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                    'export': {'title': "{{'SM_EXPORT_ACTION_MENU'|trans}}", 'dataUrl': '{{path('sponsor_export_file', {'contactType':contacttype} )}}'}
+        {% else %}
+                    'reactivate': {'title': "{{'REACTIVATE_SELECTED'|trans}}", 'dataUrl': '{{path('get_all_contactids_reactivate')}}', 'htmlCreatePath': '{{path('get_reactivate_popup')}}'},
+                            'editSponsor': {'title': "{{'EDIT_SELECTED'|trans}}", 'dataUrl': sponsorEditLink , 'visibleAlways': true, 'hrefLink': ''},
+                            'export': {'title': "{{'SM_EXPORT_ACTION_MENU'|trans}}", 'dataUrl': '{{path('sponsor_export_file', {'contactType':contacttype} )}}', 'divider': '1'}
+                          
+        {% endif %}
+                    };
+                    var actionMenuMultipleSelectedText = {
+        {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                    'export': {'title': "{{'SM_EXPORT_ACTION_MENU'|trans}}", 'dataUrl': '{{path('sponsor_export_file', {'contactType':contacttype} )}}'}
+        {% else %}
+                    'reactivate': {'title': "{{'REACTIVATE_SELECTED'|trans}}", 'dataUrl': '{{path('get_all_contactids_reactivate')}}', 'htmlCreatePath': '{{path('get_reactivate_popup')}}'},
+                            'editSponsor': {'title': "{{'EDIT_SELECTED'|trans}}", 'dataUrl': '', 'visibleAlways': false, 'hrefLink': ''},
+                            'export': {'title': "{{'SM_EXPORT_ACTION_MENU'|trans}}", 'dataUrl': '{{path('sponsor_export_file', {'contactType':contacttype} )}}', 'divider': '1'}
+                           
+        {% endif %}
+                    };
+                    var actionMenuText = {'active': {'none': actionMenuNoneSelectedText, 'single': actionMenuSingleSelectedText, 'multiple': actionMenuMultipleSelectedText}};
+                    FgSidebar.dynamicMenus.push({actionmenu: actionMenuText});
+                    /* table title for general data */
+                    var general_table_title_array = {contact_id: "{{'CONTACT_ID'|trans}}",
+                            profile_company_pic: "{{'CM_PROFILE_IMG_SHORTNAME'|trans}}",
+                            membership_category: "{{'CM_MEMBERSHIP'|trans}}",
+                            age: "{{'AGE'|trans}}",
+                            birth_year: "{{'YEAR_OF_BIRTH'|trans}}",
+                            salutation_text: "{{'SALUTATION_TEXT'|trans}}",
+                            no_of_logins: "{{'CONTACT_OVERVIEW_SETTINGS_NUMBER_OF_LOGIN'|trans}}",
+                            members_years: "{{'MEMBERS_YEARS'|trans}}"
+                            
+                    };
+                    var corrAddrFieldIds = {{corrAddrFieldIds|json_encode|raw}};
+                    var invAddrFieldIds = {{invAddrFieldIds|json_encode|raw}};
+                     /*-------------- Page title bar configuration --------*/ 
+                                            FgPageTitlebar.init({
+                                                     actionMenu: true,
+                                                     title: true,
+                                                     counter: true,
+                                                     searchFilter: true,
+                                                     search: true,
+                                                     colSetting: true
+
+                                             });
+                    var sponsorPageVars = {
+                        filterSave: "{{url('update_filter_data')}}",
+                        filterValidation: '{{'VALIDATION_THIS_FIELD_REQUIRED'|trans}}',
+                        filterSaveMsg: "{%trans%}CM_CONTACT_FILTER_SAVE_SUCCESS{%endtrans%}",
+                        filterTitle: '{{'SIDEBAR_FILTER'|trans}}',
+                        filterSettingsTitle: '{{'SIDEBAR_SAVEDFILTER_SETTINGS'|trans}}',
+                        filterSettingsUrl: '{{ url('sponsor_saved_filter_settings') }}',
+                        filterCountUrl: '{{path('update_sponsor_filter_count')}}',
+                        filterDataUrl: '{{path('contact_saved_filter_data', {'filterId': '|id|'})}}',
+                        bookemarkUpdateUrl: '{{url('create_delete_sponsor_bookmark')}}'
+                    };
+                    </script>
+    <script src="{{ asset('fgcustom/js/search-filter.js')}}" type="text/javascript"></script>    
+    <script src="{{ asset('fgcustom/js/page/fg_sponsor_list.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_sponsor_datatable.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/fg_sponsor.js')}}" type="text/javascript"></script>
+
+{% endblock %}

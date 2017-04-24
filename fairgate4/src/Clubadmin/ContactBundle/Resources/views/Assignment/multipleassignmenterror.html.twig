@@ -1,0 +1,23 @@
+<script type="text/template" id="template-multiple-asgmnt-error">
+    <p><strong>{{'ERROR'|trans}}: </strong> {{'MULTIPLE_ASSIGNMENT_RESTRICTION_ERROR'|trans}}.
+    </p>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>{{'CONTACT'|trans}}</th>
+                <th>{{'CONFLICTING_ROLE_ASSIGNMENT'|trans}}</th>
+                <th><input type="checkbox" id="nomulti_check_all">{{'REMOVE'|trans}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% _.each(selContNames, function(selContact) { %>
+                <% if ($.inArray(selContact.id, assignedContacts) != -1) { %>
+                    <tr><td><div class="fg-popup-td-text"><%- selContact.name %></div></td>
+                        <td><%- roleNames[assignments[selContact.id]['roleid']] %></td>
+                        <td><input type="checkbox" value="<%- selContact.id %>" data-type="select_contact" data-roleid="<%- assignments[selContact.id]['roleid'] %>" data-functionids="<%- assignments[selContact.id]['functionids'].join() %>" /></td>
+                    </tr>
+                <% } %>
+            <% }); %>
+        </tbody>
+    </table>
+</script>

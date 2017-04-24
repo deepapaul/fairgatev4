@@ -1,0 +1,44 @@
+Common\UtilityBundle\Entity\FgCmRelationSecondLevel:
+    type: entity
+    table: fg_cm_relation_second_level
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        isSystem:
+            type: boolean
+            nullable: false
+            column: is_system
+    manyToOne:
+        relation:
+            targetEntity: FgCmRelation
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                relation_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        firstLevelRelation:
+            targetEntity: FgCmRelation
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                first_level_relation_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        secondLevelRelation:
+            targetEntity: FgCmRelation
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                second_level_relation_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

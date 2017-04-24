@@ -1,0 +1,32 @@
+Common\UtilityBundle\Entity\FgCnSmsNumberVerification:
+    type: entity
+    table: fg_cn_sms_number_verification
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        phoneNumber:
+            type: string
+            length: 25
+            fixed: false
+            nullable: true
+            column: phone_number
+        verficationCode:
+            type: string
+            length: 45
+            fixed: false
+            nullable: true
+            column: verfication_code
+        contactId:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: contact_id
+        status:
+            type: boolean
+            nullable: true
+    lifecycleCallbacks: {  }

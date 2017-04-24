@@ -1,0 +1,90 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">{{ titleText }}</h4>
+</div>
+<div class="modal-body fg-modal-text">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="portlet-body form">                      
+                    <!-- BEGIN FORM-->
+                    <p class="fg-popup-paragraph">{{ titleDesc }}</p>
+                    <div class="alert alert-danger fg-alert-popup hide">
+                        <button data-close="alert" class="close"></button>
+                        {{ 'FORM_ERROR_DISPLAY'|trans }}
+                    </div>
+                    <form action="#" class="form-horizontal form-row-sepe">
+                      <div class="form-body">                        
+                        <div class="form-group">                          
+                          <label class="control-label col-lg-4 col-md-2 col-sm-3 col-xs-3">{{ 'DOCUMENT_CATEGORY'|trans }}
+                          <span aria-required="true" class="required"> *</span></label>
+                          <div class="col-lg-8 col-md-9 col-xs-9">
+                             <input type="text" placeholder="" id="input_category" name="input_category" class="form-control input-sm">
+                             <span class="help-block hide">{{ 'DOCUMENT_REQUIRED'|trans }}</span>
+                          </div>
+                         </div>
+                        <div class="form-group">  
+                          <label class="control-label col-lg-4 col-md-2 col-sm-3 col-xs-3">{{ 'DOCUMENT_SUBCATEGORY'|trans }}
+                          <span aria-required="true" class="required"> *</span></label>
+                          <div class="col-lg-8 col-md-9 col-xs-9">
+                             <input type="text" placeholder="" id="input_subcategory" name="input_subcategory" class="form-control input-sm">
+                             <span class="help-block hide">{{ 'DOCUMENT_REQUIRED'|trans }}</span>
+                          </div>
+                        </div>                       
+                      </div>
+                    </form>
+                    <!-- END FORM-->
+                  </div>
+                </div>
+              </div>
+            </div>
+<div class="modal-footer form-actions fg-modal-footer">
+    <button type="button" class="btn default" id="cancel" data-dismiss="modal" data-function="cancel">{{'CANCEL'|trans}}</button> 
+    <button type="button" class="btn green" id="save" data-function="save">{{'POPUP_SAVE'|trans}}</button>        
+</div> 
+
+<script type="text/javascript">
+$(document).on('click', 'button[data-function=save], button[data-function=cancel]', function() {
+    var buttonId = this.id;
+    if (buttonId == 'save') {
+        $('.form-group').removeClass('has-error');
+        $(".fg-alert-popup").css({"display":"none"});
+        $(".help-block").addClass('hide');
+                
+        category = $('#input_category').val();
+        subcategory = $('#input_subcategory').val();  
+        error = "";
+        if($.trim(category) == "") {
+            $('#input_category').parents('.form-group').addClass('has-error');
+            $('#input_category').parents('.form-group').find('.help-block').removeClass('hide');
+            error += " category, ";
+        }
+        if($.trim(subcategory) == "") {
+            $('#input_subcategory').parents('.form-group').addClass('has-error');
+            $('#input_subcategory').parents('.form-group').find('.help-block').removeClass('hide');
+            error += " subcategory, ";
+        }
+        if(error != "") {
+            $(".fg-alert-popup").removeClass('hide');
+            $(".fg-alert-popup").css({"display":"block"});
+        } else {
+            createCategory();
+        }                           
+    }
+});
+
+function createCategory() {
+    type = '{{ type }}';
+    category = $('#input_category').val();
+    subcategory = $('#input_subcategory').val();
+    url = '{{path('document_add_category',{'type': type } )}}';
+    params = { 'category': category , 'subcategory': subcategory };   
+    
+    $.post( url, params)
+    .done(function( data ) {   
+        $( "#cancel" ).trigger( "click" ); 
+        FgUtility.showToastr(data.flash);       
+        FgSidebar.enableDocUpload(); // to enable upload functionality       
+        FgSidebar.addNewCategoryAndSubCategory(data.items, data.parentId, data.parentMenuId); // to add levels in sidebar
+    }); 
+}
+</script>

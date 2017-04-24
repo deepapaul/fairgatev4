@@ -1,0 +1,109 @@
+<script type="text/template" id="overviewBox">
+        <div class="portlet box fg-portlet-ash-green fg-box-style-01">
+                <div class="portlet-title">
+                        <div class="caption"> <%- title %> </div>
+                </div>
+                <div class="portlet-body <%- additionalClass %>">
+                        <%= content %>
+                </div>
+        </div>
+</script>
+
+{% if (page == 'personalOverview') %}  
+    <script type="text/template" id="overviewProfileBox">
+        <div class="fg-profile-blk">
+                <% if( contactData.imagePath != '') { %>  
+                    <% if( contactData.isCompanyContact != 1) { %>
+                        <div class="fg-profile-img-blk150 fg-round-img" style="background-image:url('<%- contactData.imagePath %>')">
+                           <!-- <img class = "<% if( contactData.isCompanyContact != 1) { %> fg-round-img <%} %>"  src="<%- contactData.imagePath %>" alt=""/>  -->
+                        </div>
+                    <% } else { %>
+                        <div class="fg-profile-img-blk-C150 " >
+                            <img src="<%- contactData.imagePath %>" alt="">
+                        </div>
+                    <% } %>
+                <%} %>
+                <div class="fg-proflie-title-blk fg-profile-personal">
+                        <% if (!_.isEmpty(contactData.street)) { %><span> <%- contactData.street %>  </span><%} %>
+                        <% if (!_.isEmpty(contactData.zipcode)) { %><span> <%- contactData.zipcode %> </span><%} %>   <% if (!_.isEmpty(contactData.location)) { %><span> <%- contactData.location %> </span><%} %>
+                        <% if (!_.isEmpty(contactData.primaryEmail)) { %><span class="fg-break-all"><%- contactData.primaryEmail %></span><%} %>
+                        <% if (!_.isEmpty(contactData.mobile)) { %><span>  <%- contactData.mobile %> </span><%} %>
+                </div>
+                <div class="fg-profile-link-blk fg-margin-btm-0">                       
+                    <ul class="fg-profile-link-blk-list">
+                         <li class="fg-profile-link-overview"><i class="fa fa-home"></i><span>{{ 'INTERNAL_OVERVIEW_TAB_TITLE'|trans }}</span></li>
+                         <% if( contactData.isSuperAdmin == 0) { %>
+                             <li><a href="{{ path('internal_mydata') }}"><i class="fa fa-user"></i><span>{{ 'INTERNAL_DATA_TAB_TITLE'|trans }}</span></a></li>
+                             <li><a href="{{ path('internal_privacy_settings')}}"><i class="fa fa-cog"></i><span>{{ 'INTERNAL_SETTINGS_TAB_TITLE'|trans }}</span></a></li>  
+                         <% } %>                          
+                         <li><a id="fg-top-nav-change-password" href="#"><i class="fa fa-key"></i><span>{{'DASHBOARD_CHANGE_PASSWORD'|trans}}</span></a></li>
+                         <li><a href="http://handbuch.fairgate.ch" target="_blank"><i class="fa fa-info-circle"></i><span>{{'DASHBOARD_HELP'|trans}}</span></a></li>
+                         {% for key, club in accessibleClubs %}
+                             <li><a href="{{ club.url }}" target="_blank"><i class="fa fa-sign-in"></i><span>{{ club.title }}...</span></a></li>
+                         {% endfor %}
+                     </ul> 
+                </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="overviewGroupsBox">     
+    <% 
+      groupedTeamArray = FgInternal.groupByMulti(teamandgroupsData, ['rmCatId','roleId','functionId']);
+    %>   
+    <div class="row">
+        <div class="col-lg-12">  
+            <% _.each(groupedTeamArray,function(groupVal,groupKey){ 
+                _.each(groupVal,function(roleVal,roleKey){ var roleTitleFlag=0; %>
+                    <div class="fg-profile-team-blk">
+                        <% _.each(roleVal,function(functionVal,functionKey){
+                            if(roleTitleFlag==0) { %>
+                               <a href="#" data-url=<%- functionVal[0]['Url'] %> data-contactid=<%- functionVal[0]['contactId'] %> data-id=<%- functionVal[0]['roleId'] %> data-clubid=<%- functionVal[0]['clubId'] %> data-type=<%- functionVal[0]['is_team'] %> class="fg-group-link"> <% if(functionVal[0]['roleTitle'] == 'Executive Board'){ %>{{fgtwig.getTerminolgyName('Executive Board', singular, 'UCF')}}<% }else{ %><%- functionVal[0]['roleTitle'] %> <% } %> </a>
+                                <% roleTitleFlag=1;
+                            }
+                        });
+                        var functionString='';
+                        _.each(roleVal,function(functionVal,functionKey){ 
+                            functionString = functionString+', '+functionVal[0]['functionTitle'];
+                        }); 
+                        functionString = functionString.replace(', ',''); %>
+                        <span> <%- functionString %></span>
+                    </div>
+                <% }); %>
+            <% }); %>
+        </div>
+    </div>
+</div>
+                       
+    </script>
+{% endif %}
+
+{% if (page == 'personalOverview') %}
+   {% include 'InternalProfileBundle:Overview:templateMessages.html.twig' %}
+{% endif %}
+
+{% if (page == 'roleOverview') %}
+   {% include 'InternalProfileBundle:Overview:templateMembers.html.twig' %}
+{% endif %}
+
+{% if ((page == 'personalOverview') or (page == 'roleOverview')) %}
+   {% include 'InternalProfileBundle:Overview:templateBirthdays.html.twig' %}
+{% endif %}
+
+{% if ((page == 'personalOverview') or (page == 'roleOverview')) %}
+   {% include 'InternalProfileBundle:Overview:templateForumPosts.html.twig' %}
+{% endif %}
+
+{% if ((page == 'personalOverview') or (page == 'roleOverview')) %}
+   {% include 'InternalProfileBundle:Overview:templateArticles.html.twig' %}
+{% endif %}
+
+{% if ((page == 'personalOverview') or (page == 'roleOverview')) %}
+   {% include 'InternalProfileBundle:Overview:templateDocuments.html.twig' %}
+{% endif %}
+
+{% if (page == 'personalOverview') %}
+   {% include 'InternalProfileBundle:Overview:templateConnections.html.twig' %}
+{% endif %}
+{% if ((page == 'personalOverview') or (page == 'roleOverview')) %}
+{% include 'InternalProfileBundle:Overview:templateCalendar.html.twig' %}
+{% endif %}

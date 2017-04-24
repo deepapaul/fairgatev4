@@ -1,0 +1,20 @@
+<script type="text/template" id="sidebarOptionsTemplate">   
+    <li id="li_OPTIONS" class="fg-sidebar-li-options">
+        <div class="btn-group dropup pull-right fg-sidebar-options">
+            <button type="button" data-toggle="dropdown" class="btn dropdown-toggle"><i class="fa fa-cog fa-2x"></i></button>
+            <div role="menu" class="dropdown-menu hold-on-click dropdown-checkboxes">
+                <% var a = 0; %>
+                <%  _.each(levelData,function(row,key) { %>
+                    <% a++; %>
+                    <% if (a > 1) { %>
+                        <label>
+                            <% var id = "li_" + row.id; %>
+                            <input class="fg-dev-sidebar-options" type="checkbox" value="<%- id %>" class="<%- id %>_checker" <% if (!_.contains(inactiveOptions, id)) { %> checked <% } %>>
+                            <%- row.title %>
+                        </label>
+                    <% } %>
+                <% }); %>
+            </div>
+        </div>
+    </li>
+</script>  

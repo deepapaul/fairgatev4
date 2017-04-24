@@ -1,0 +1,72 @@
+<script type="template" id="fg-dropzone-underscore">
+    
+     <div class="form-group required fg-clear" id="theme1Options">
+                <label class="col-md-3 fg-pad-top-0 control-label text-right" >{{'TM_DEFINE_STYLE'|trans}}  </label>  
+                <div class="col-md-9 col-lg-9 ">
+                      <% var checkedsticky = 'checked=checked' %> 
+                     <% var checkedscroll = '' %>    
+                     <% if(typeof configDetails.headerScrolling!='undefined') { %> 
+                         <% if(configDetails.headerScrolling==1) { %> 
+                             <% var checkedscroll = 'checked=checked'%> 
+                             <% var checkedsticky = ''%> 
+                         <%  } %> 
+                    <% } %>   
+                    <label class="radio-inline fg-pad-left-0" for="radios-0"  >
+                       <input type="radio" name="fg-theme-conf-style" id="radios-0" value="0" <%- checkedsticky %>  >
+                        <span data-toggle="tooltip" data-original-title="{{ 'TM_HEADER_STICKY_TOOLTIP' |trans}}" class="fg-dotted-br"> {{'TM_HEADER_STICKY'|trans}}   </span>
+                    </label> 
+                    <label class="radio-inline" for="radios-1" >
+                        <input type="radio" name="fg-theme-conf-style" id="radios-1" value="1" <%-checkedscroll%>>
+                        <span data-toggle="tooltip" data-original-title="{{ 'TM_HEADER_SCROLL_TOOLTIP'|trans }}" class="fg-dotted-br">{{'TM_HEADER_SCROLL'|trans}} </span>
+                    </label> 
+
+                </div>
+
+            </div>
+    
+ <% _.each(data, function(datas,id) { %>   
+     
+ <div class="form-group col-md-12 fg-clear" >
+    <label class="col-md-3 control-label text-right" for="attachments" ><span class="fg-dotted-br" data-toggle="tooltip" data-original-title= <% if(id == 0) { %>"{{ 'TM_DEFAULT_LOGO_TOOLTIP' |trans}}" <% }else if(id == 1){ %>"{{ 'TM_SHRINKED_LOGO_TOOLTIP' |trans}}" <% }else{ %>"{{ 'TM_MOBILE_SCREEN_LOGO_TOOLTIP' |trans}}" <%  } %>><%- selThemeLabels[id] %></span></label>  
+ <div class="col-md-9 col-lg-9 fg-header-logos">
+    <div class="fg-custom-dropzone-wrapper">
+        <div data-auto="design_template_dropzone"  id="fg-files-uploaded-lists-wrapper<%- id %>" class="fg-dropzone-area mydropzonedata " data-fileId="">
+            <div class="fg-messages">
+                <h3> {%trans%}DROPZONE_IMAGE{%endtrans%}</h3>
+                <p> ({%trans%}DROPZONE_CLICK{%endtrans%})</p>
+            </div>
+            <button type="button" class="fg-invisible-button"  id="triggerFileUpload<%- id %>"></button>
+            <input type="file" id="image-uploader<%- id %>" name="image-uploader" style="height:0px;width:0px;visibility: hidden" />
+            
+        </div>
+        <div class="fg-dropzone-error " id="image-upload-error-container">
+        </div>
+    </div>
+    <div class="hide" id="image-error-noimg-container">
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            {{'FILE_UPLOAD_ERROR'|trans}}
+        </div>
+    </div>
+     <input type="hidden" id="header-type<%- id %>" value="<%- datas %>" name="header-type" />
+     <input type="hidden" class=" hide imagefile-req"  id="cms_header_file<%- id %>" name="cms_header_file<%- id %>" value=""  >
+     <input type="text" class="hide imagefile-changed"   id="cms_header_changed<%- id %>" value="0" name="header-changed" />
+     <input type="hidden" class=" imagefile-id"  id="cms_header_id<%- id %>" name="cms_header_id<%- id %>" value=""  >
+     <input type="text" class="hide imagefile-delete"  id="cms_header_removed<%- id %>" name="cms_header_removed<%- id %>" value="0"  >
+     <input type="text" class="hide imagefield-req" data-key="cms_header<%- id %>" id="cms_header<%- id %>" name="cms_header<%- id %>" value=""  >
+      <input type="text" class="hide theme-req" data-key="cms_theme-header-id" id="cms_theme-header-id" name="cms_theme-header-id" value="1"  >
+     
+     
+     <div class="clearfix"></div>
+    {#<span class="fg-dev-template-imageerror"></span>#}
+</div>
+</div>
+ <% }) %>
+</script>
+<script type="text/template" id="fileUploadError">
+   <p><span class="help-block">
+       <% if (error == 0) { %> {{'FILEMANAGER_UPLOAD_FILETYPE_ERROR'|trans}}
+       <% } else if (error == 1) { %> {{'FILEMANAGER_UPLOAD_VIRUS_ERROR'|trans}}
+       <% } else if (error == 2) { %> {{'VIRUS_FILE_CONTACT'|trans}}
+       <% } else { %> <%- error %> <% } %></span></p>
+</script>

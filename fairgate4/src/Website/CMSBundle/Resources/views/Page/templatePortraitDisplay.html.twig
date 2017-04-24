@@ -1,0 +1,335 @@
+<script id="templateContactPortraitElementFrontendContainer" type="text/template">
+    <div class="fg-portrait-header fg-clear">
+    <div class="FL fg-filter-wrapper"></div>
+    <div class="FR fg-search-wrapper"></div>
+    <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+    <div class="fg-portrait-body">
+    <div class="fg-portrait-row row"></div>
+    </div>
+    <div class="clear"></div>
+    <div class="fg-portrait-footer">
+    <div class="pagination fg-pagination"></div>
+    </div>
+</script>
+<script id="templateContactName" type="text/template">
+<% var cName = (cData[data['dataId']]) ? cData[data['dataId']] : (data['emptyValueDisplay'] == 'skip_line') ? '' : (data['emptyValueDisplay'] == 'em_dash') ? '-' : notApplicable %>
+<% var linkUrl = (cData[data['dataId']+'_linkUrl']) ? cData[data['dataId']+'_linkUrl'] : '' %>
+ <%= getLinebreakForFields(data,cName)%>
+    <% if(cName){ %>
+        <span class="fg-items" dataId="<%-data['dataId']%>">
+         <%= getLabelForFields(data['label'])%>
+    <% } %>
+        <% if (data['selectedField'] && linkUrl ) { %>
+              <a href="<%= linkUrl %>" target="_blank">
+         <% } %>
+           <strong><%= cName %></strong>
+        <% if (data['selectedField'] && linkUrl ) { %>
+            </a>
+        <% } %>
+   <% if(cName){ %>
+        </span>
+    <% } %>
+
+</script>
+<script id="templateEmail" type="text/template">
+ <% var emailVal = (cData[data['dataId']]) ? cData[data['dataId']] : (data['emptyValueDisplay'] == 'skip_line') ? '' : (data['emptyValueDisplay'] == 'em_dash') ? '-' : notApplicable %>
+ <% var icon = (data['fieldType'] == 'url') ? '<i class="fa fa-globe fg-marg-right-5"></i>' : '<i class="fa fa-envelope fg-marg-right-5"></i>' %>
+ <% var dispEmail = (data['fieldDisplayType'] == 'icon') ? icon : (data['fieldDisplayType'] == 'icon_and_value') ? icon+cData[data['dataId']] : (data['fieldDisplayType'] == 'value') ? emailVal :'linkedLabel'  %>
+ <% var hrefLink = (data['fieldType'] == 'url') ? emailVal : 'mailto:'+emailVal %>
+ <%= getLinebreakForFields(data,emailVal)%>
+
+    <% if(dispEmail == 'linkedLabel') { %>
+    <% if ((typeof (data['label'][contactLang]) != 'undefined') && (data['label'][contactLang]) && cData[data['dataId']]) { %>
+          <span class="fg-items">
+             <label class="fg-label">
+                    <a href="<%- hrefLink %>" class="fg-items" dataId="<%=data['dataId']%>">
+                        <%=data['label'][contactLang] %>
+                    </a>
+             </label>
+          </span>
+    <% }} else if(dispEmail == 'icon_and_value'){ %>
+        <% if(emailVal){ %>
+            <span class="fg-items">
+                 <%= getLabelForFields(data['label'])%>
+        <% } %>
+            <% if(cData[data['dataId']]){ %>
+                    <a href="<%- hrefLink %>" class="fg-items" dataId="<%=data['dataId']%>"><i class="fa fa-envelope fg-marg-right-5"></i><%= emailVal %></a>
+            <% }else{ %>
+                    <%=emailVal%>
+            <% } %>
+        <% if(emailVal){ %>
+                </span>
+          <% } %>
+    <% }else{ %>  
+        <% if(emailVal){ %>
+             <span class="fg-items">
+                 <%= getLabelForFields(data['label'])%>
+        <% } %>
+            <% if(cData[data['dataId']]){ %>
+                    <a href="<%- hrefLink %>" class="fg-items" dataId="<%=data['dataId']%>"><%= dispEmail %></a>
+            <%}else{ %>
+                <%=emailVal%>
+            <% } %>
+        <% if(emailVal){ %>
+                </span>
+        <% } %>
+    <% } %>  
+
+</script>
+<script id="defaultTemplate" type="text/template">
+   <% var val='';%>
+   <% if (typeof (cData[data['dataId']+'_type']) != 'undefined' && (cData[data['dataId']])){ %>
+            <%  val= getTypeFormat(cData,data);%>
+    <% }else if(cData[data['dataId']]){ %>
+            <% val = cData[data['dataId']]; %>
+    <% } %>
+ <% var cValue = (val) ? val : (data['emptyValueDisplay'] == 'skip_line') ? '' : (data['emptyValueDisplay'] == 'em_dash') ? '-' : notApplicable %>
+ <%= getLinebreakForFields(data,cValue)%>
+
+<% if(cValue){ %>
+     <span class="fg-items" dataId="<%-data['dataId']%>">
+        <%= getLabelForFields(data['label'])%>       
+ <% } %>       
+        <%= cValue %>
+  <% if(cValue){ %>
+    </span>
+ <% }%>
+</script>
+<script id="portProfilepicTemplate" type="text/template">
+    <% 
+  
+    
+            var portImage  = portUploadPath.placeholderImage;
+  
+  if(pwidth == 1){ 
+    portImageTemp = portImage.replace('website_portrait','website_portrait_300');
+  }else if(pwidth > 1){ 
+      portImageTemp= portImage.replace('website_portrait','website_portrait_580');
+   } %>
+   <% var companyPath = portUploadPath.companyLogo.replace('**clubId**',cData['contactclubid']);%>
+   <% var profilePath = portUploadPath.profilePic.replace('**clubId**', cData['contactclubid'] );%>
+   <% var placeholderPath = portUploadPath.placeholderImage.replace('**clubId**', cData['contactclubid'] );%>
+   <%
+if(parseInt(cData['Iscompany']) == 1){  
+    if(pwidth == 1){
+             cData['Gprofile_company_pic'] = cData['Gprofile_company_pic'].replace('width_65','width_300');
+         }else{
+            cData['Gprofile_company_pic'] = cData['Gprofile_company_pic'].replace('width_65','width_580'); 
+         }
+         %> 
+         <% var profilePic= (cData[data['dataId']]) ? cData['Gprofile_company_pic'] : (data['placeholderImage']) ? placeholderPath+'/'+data['placeholderImage'] : '' %>
+  <% }else{ 
+        if(pwidth == 1){
+             cData['Gprofile_company_pic'] = cData['Gprofile_company_pic'].replace('width_150','width_300');
+         }else{
+            cData['Gprofile_company_pic'] = cData['Gprofile_company_pic'].replace('width_150','width_580'); 
+         }
+         %>     
+         <% var profilePic= (cData[data['dataId']]) ? cData['Gprofile_company_pic']: (data['placeholderImage']) ? placeholderPath+'/'+data['placeholderImage'] : '' %>
+<%}%>
+
+  <% var linkUrl = (cData[data['dataId']+'_linkUrl']) ? cData[data['dataId']+'_linkUrl'] : '' %> 
+
+        <% if(profilePic){ %>
+                 <figure class="fg-items" dataId="<%-data['dataId']%>">
+                        <% if (data['selectedField'] && linkUrl) { %>
+                             <a href="<%= linkUrl %>" target="_blank">
+                        <%}%>
+                            <img src="<%-profilePic%>" dataId="<%-data['dataId']%>"/>
+                        <% if (data['selectedField'] && linkUrl) { %>
+                            </a>
+                       <%}%>
+                 </figure>
+         <% } else { %>
+                <figure class="fg-items" dataId="<%-data['dataId']%>">
+                    <% if (data['selectedField'] && linkUrl) { %>
+                                 <a href="<%= linkUrl %>" target="_blank">SSSS
+                     <%}%>
+                        <i class="fa fa-user-circle fg-avatar-placeholder" aria-hidden="true"></i>
+                    <% if (data['selectedField'] && linkUrl) { %>
+                          </a>
+                     <%}%>
+                </figure>
+         <% } %>
+     
+    
+</script>
+<script id="porttemplateImage" type="text/template">
+    <% var imagePath =  portUploadPath.imageuploadPath.replace('**clubId**', cData[data['dataId']+'_clubid'] ); %>
+    <% var imageValue = (cData[data['dataId']]) ? cData[data['dataId']] : (data['emptyValueDisplay'] == 'skip_line') ? '' : (data['emptyValueDisplay'] == 'em_dash') ? '-' : notApplicable %>
+        <% if(data['fieldDisplayType'] == 'icon'){ %>
+            <%= getLinebreakForFields(data,imageValue)%>
+            <% if(imageValue) { %>
+                    <%= getLabelForFields(data['label'])%>
+            <% } %>
+            <% if(cData[data['dataId']]){ %>
+             <a href="/<%-imagePath %>/<%-cData[data['dataId']]%>"  target="_blank" ><i class="fa fa-picture-o fg-marg-right-5"></i>
+                <% }else{ %>
+                     <%= imageValue %>
+                <% } %>
+                    </a>
+        <% } else if(data['fieldDisplayType'] == 'image'){ %>
+                <% if(cData[data['dataId']]){ %>
+                        <figure class="fg-items"><img src="/<%-imagePath %>/<%-cData[data['dataId']]%>" dataId="<%-data['dataId']%>"/></figure>
+                <% }else{ %> 
+                        <%= imageValue %>
+        <% }}else{ %>
+                <%= getLinebreakForFields(data,imageValue)%>
+                <% if(imageValue) { %>
+                        <%= getLabelForFields(data['label'])%>
+                <% } %>
+                <% if(cData[data['dataId']]){ 
+                    var imgPath = "/"+imagePath +"/" + cData[data['dataId']];
+                    %>
+                   <a href="/<%-imagePath %>/<%-cData[data['dataId']]%>" target="_blank">
+                   <i class="fg-custom-popovers fa fa-picture-o" data-trigger="hover" data-placement="bottom" 
+                    data-content="<img src='<%- imgPath %>'>" data-original-title=""></i>
+                <%}else{ %>
+                        <%= imageValue %>
+                <% } %>
+            <% if(cData[data['dataId']]){ %>
+                </a>
+            <% }%>
+        <% } %>
+
+</script>
+<script id="portFileUploadTemplate" type="text/template">
+    <% var filePath =  portUploadPath.fileuploadPath.replace('**clubId**', cData[data['dataId']+'_clubid'] ); %>
+    <% var fileValue = (cData[data['dataId']]) ? cData[data['dataId']] : (data['emptyValueDisplay'] == 'skip_line') ? '' : (data['emptyValueDisplay'] == 'em_dash') ? '-' : notApplicable %>
+    <%= getLinebreakForFields(data,fileValue)%>
+        <% if(fileValue) { %>
+            <span class="fg-items" dataId="<%-data['dataId']%>">
+                <%= getLabelForFields(data['label'])%>
+        <% } %>
+            <% if(cData[data['dataId']]){ %>
+                 <a href="/<%-filePath %>/<%-cData[data['dataId']]%>" dataId="<%-data['dataId']%>" class="fg-items" target="_blank"><%= cData[data['dataId']] %></a>
+            <% }else{ %>
+                <%=fileValue %>
+            <% } %>
+         <% if(fileValue) { %>
+             </span>
+        <% } %>
+</script>
+{% if portraitElementSettings is not empty %}
+    {% for key,portTemp in portraitElementSettings %}
+    <script id="templateContactPortraitElement-{{key}}" type="text/template">
+     <% var columnSize_{{key}} =  $('#elementbox-{{key}}').parent().parent().attr('column-size'); %>
+     <% var portraitPerRow_{{key}} = {{portraitElementSettings[key]['data']['portraitElement']['portraitPerRow']}} %>
+     <% var quotient_{{key}} = columnSize_{{key}}/portraitPerRow_{{key}} %>
+     <% var remainder_{{key}} = columnSize_{{key}}%portraitPerRow_{{key}} %>
+     <% if(contactsData.length > 0){ %>
+        <div class="fg-portrait-row fg-clear">
+        <%  _.each(contactsData, function(cData,k) { %>
+            {{portTemp.template|raw }}
+            <% if( ((k+1)%portraitPerRow_{{key}} == 0) && remainder_{{key}} > 0) { %> 
+                <div class="fg-portrait-empty-col visible-md visible-lg fg-col-<%-remainder_{{key}}%>"></div> 
+            <% } %> 
+        <% }); %> 
+        </div>
+     <% }else{ %>
+                <p>{{ 'PORTRAIT_NOCONTACTS_MESSAGE'|trans }}</p>
+        <% }%>
+    </script>
+    {% endfor %}
+{% endif%}
+<script id="templateContactPortraitElementFilter" type="text/template">
+<%  _.each(filterData, function(data,key) { %>
+        <div class="fg-dis-IB">
+            <% if (typeof data.input != 'undefined' && _.size(data.input) > 0) { %> 
+                <select class="selectpicker fg-contact-portrait-filter-selectbox" id="<%= data.id %>" title="<%- data.title %>" multiple="multiple" placeholder="<%- data.title %>" data-id="<%- data.id %>"  data-type="<%- data.type %>" name="">
+                    <%  _.each(data.input, function(option,key) { %>
+                        <% if(option.id != 'any' && option.id != '' ){ %>
+                            <option value="<%= option.id %>"><%= option.title %></option>
+                        <% } %>
+                    <% }); %>   
+
+                </select>
+            <% } %>  
+        </div>
+<% }); %>
+</script>
+
+<script id="templateContactPortraitElementSearch" type="text/template">
+    <div class="fg-dis-IB">
+        <input type="text" placeholder="{{ 'WEBSITE_SEARCH_PLACEHOLDER'|trans }}" class="form-control fg-contact-portrait-search-box">
+    </div>
+</script>
+
+<script id="templateContactPortraitElementPagination" type="text/template">
+	<% var selector = paginationData.selector.replace('#',''); %>
+    <div id="<%=selector %>">
+    </div>
+</script>
+<script>
+    // function to get data field labels
+    function getLabelForFields(labels) {
+        if ((typeof (labels[contactLang]) != 'undefined') && (labels[contactLang])) {
+            var label = '';
+            label = '<label>' + labels[contactLang] + '</label>'
+            return label;
+        }
+    }
+   // function to get data field line break
+    function getLinebreakForFields(data,value) {
+        if(value){
+          return (data['lineBreakBefore'] == 1) ? '</br>' : (data['lineBreakBefore'] == 2) ? '</br></br>' : '' ;
+       }else {
+           return (data['lineBreakBefore'] == 2) ? '</br>' : '';
+       }
+    }
+    // function to format the data of fields
+    function getTypeFormat(cData,data) {
+        
+        switch (cData[data['dataId']+'_type']) { 
+                case 'date': 
+                 return moment(cData[data['dataId']], 'YYYY-MM-DD').isValid() ? moment(cData[data['dataId']], 'YYYY-MM-DD').format(FgLocaleSettingsData.momentDateFormat) : '';
+                        break;
+                case 'number': 
+                  return ((data['columnSubType'] == 'member_years') || (data['columnSubType'] == 'fed_member_years')) ? FgClubSettings.formatNumber(cData[data['dataId']], '', 1) : FgClubSettings.formatNumber(cData[data['dataId']]);
+                        break;
+                case 'FI': 
+                        var starIcon = ' <i class="fa fa-star"></i>';
+                           var result = cData[data['dataId']] ? ((cData[data['dataId']]).split(',').length > 1
+                                ? cData[data['dataId']].replace('#mainclub#', starIcon)
+                                : cData[data['dataId']].replace('#mainclub#', ''))
+                                : '';
+                    return result;
+                        break;   
+                case 'checkbox': 
+                    return cData[data['dataId']] ? cData[data['dataId']].replace(/;/g, ', ') : '';
+                        break;
+                case 'multiline': 
+                    return this.nl2br(cData[data['dataId']], true);
+                        break;
+                default:
+                    switch(cData[data['dataId']+'_fieldId']) { 
+                        case '72':
+                            if(cData[data['dataId']] == "Male"){
+                                resultFieldOutput = '{{ 'CM_MALE'|trans }}';
+                            }else if(cData[data['dataId']] == "Female"){
+                                resultFieldOutput = '{{ 'CM_FEMALE'|trans }}';
+                            }
+                            return resultFieldOutput;
+                            break;
+                        case '1':
+                            if(cData[data['dataId']] == "Formal"){
+                                resultFieldOutput = '{{ 'CM_FORMAL'|trans }}';
+                            }else if(cData[data['dataId']] == "Informal"){
+                                resultFieldOutput = '{{ 'CM_INFORMAL'|trans }}';
+                            }
+                            return resultFieldOutput;
+                            break;
+                        default:
+                            return cData[data['dataId']];
+                            break;
+                    }     
+        }
+    }
+    // function to put multiline break for data
+    function nl2br(str, is_xhtml) {
+        var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+        return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+    };
+</script>

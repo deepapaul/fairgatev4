@@ -1,0 +1,23 @@
+
+<div class="fg-sidebar-content-wrapper">
+    <header class="fg-sidebar-header">
+        <h3 class="fg-title"> {{'CMS_GLOBAL_SIDECOLUMN'|trans}}</h3>
+    </header>
+    <div class="fg-sidebar-content">
+       {% if( hasSidebar==1) %} 
+        <ul class="fg-sidebar-link">
+         {%   if(sidebarType=='wide') %}
+                {% set sidebarId = globalSidebar.0.id %} 
+              {% else %}
+               {% set sidebarId = globalSidebar.1.id %} 
+         {% endif %}         
+        
+            <li><a class="fg-add-box" href="{{ path('website_cms_content_sidebar_edit', {'pageId': sidebarId} ) }}" id="fg-cms-edit-sidebar" ><i class="fa fa-pencil"> </i>{{'CMS_EDIT_SIDEBAR'|trans}}</a></li>
+        
+            <li><a href="#" class="fg-add-box"  id="fg-cms-remove-sidebar" data-pageid="{{pagecontentData.page.id}}" data-value="exclude"><i class="fa fa-times-circle"></i>{{'CMS_EXCLUDE_SIDEBAR'|trans}}</a></li>
+        </ul>
+        {% endif %}
+    </div>
+
+</div>
+                      

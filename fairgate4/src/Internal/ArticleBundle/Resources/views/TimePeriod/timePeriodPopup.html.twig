@@ -1,0 +1,89 @@
+
+<div class="modal-content fg-popup-wrap" id="popup_contents"><div class="modal-header fg-modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">{{'ARTICLE_TIME_PERIOD_MANAGE_TEXT'|trans}}</h4>
+    </div>
+    <div class="modal-body fg-news-modal-timeperiods-wrapper">
+        <div class="formgroup fg-clear">
+            <div class="col-md-12 form-inline">
+                <div class="form-group fg-form-title">
+                    <label>{{'ARTICLE_TIME_PERIOD_SET_PERIOD'|trans}}</label>
+                </div>
+                <div class="form-group">
+                    <label for="time-day">{{'ARTICLE_TIME_PERIOD_DAY'|trans}}</label>
+                    <input type="text" class="form-control fg-day"  maxlength="2" id="time-day" name="time-day" onkeyup="return validDate(event)" value="{{ clubSettings.timeperiodStartDay }}">
+                    <label for="time-month">{{'ARTICLE_TIME_PERIOD_MONTH'|trans}}</label>
+                    <input type="text" class="form-control fg-month"  maxlength="2" id="time-month" name="time-month" onkeyup="return validDate(event)" value="{{ clubSettings.timeperiodStartMonth }}" >
+                </div>
+            </div>
+        </div>
+        <p class="fg-error-label text-center fg-marg-top-5 time-period-error hide">{{'ARTICLE_TIME_PERIOD_VALID_TIMEPERIOD'|trans}}</p>
+        <div class="fg-modal-preview hide">
+            <strong>{{'ARTICLE_TIME_PERIOD_PREVIEW_TEXT'|trans}}</strong>
+            <ul class="preview-timeperiod"></ul>
+        </div>
+    </div>
+    {% include 'internal/savebuttonPopup.html.twig' with {'button_val':'ARTICLE_TIME_PERIOD_APPLY_TEXT'|trans} %}
+</div>
+
+<script type="text/javascript">
+    var timePeriodSavePath = '{{path('internal_article_editorial_timeperiod_save')}}';
+    $(document).off('click', '#savePopup');
+    $(document).on('click', '#savePopup', function () {
+        FgArticleTimePeriod.timePeriodSave();
+    });
+
+    function validDate(e) {
+
+        var day = $("#time-day").val();
+        var month = $("#time-month").val();
+        if ((!isNaN(day)) && (!isNaN(month)) && (day.indexOf('.') != 0) && (month.indexOf('.') != 0)) {
+
+            var year = (new Date).getFullYear();
+            var dateFormat = "DD/MM/YYYY";
+            var date = day + '/' + month + '/' + year;
+            var isValid = moment(date, dateFormat).isValid();
+            if (isValid) {
+                var preview = getpreviewData(day, month, year);
+                $('ul.preview-timeperiod').html(preview);
+                $(".fg-modal-preview").removeClass('hide');
+                $('.time-period-error').addClass('hide');
+            } else {
+                $(".fg-modal-preview").addClass('hide');
+                if (day != '' && month != '') {
+                    $('.time-period-error').removeClass('hide');
+                }
+            }
+        } else {
+            if (day != '' && month != '') {
+                $('.time-period-error').removeClass('hide');
+            }
+            $(".fg-modal-preview").addClass('hide');
+        }
+
+    }
+
+    function  getpreviewData(day, month, year) {
+
+        var previewHtml = '';
+        if ((day == '1' || day == '01') && (month == '1' || month == '01')) {
+            for (var i = 1; i <= 3; i++) {
+                previewHtml += '<li>' + year + '</li>';
+                year--;
+            }
+
+        } else {
+            for (var i = 1; i <= 3; i++) {
+                var yearSubString = parseInt(year.toString().substr(2, 2));
+                var yearStr = year + '/' + (yearSubString + 1);
+                previewHtml += '<li>' + yearStr + '</li>';
+                year--;
+
+            }
+        }
+        previewHtml += '<li>...</li>';
+        return previewHtml;
+
+    }
+
+</script>

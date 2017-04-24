@@ -1,0 +1,219 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/website/css/style-cms.css') }}" type="text/css" rel="stylesheet" />
+    <link href="{{ asset('fgassets/global/css/fbautocomplete.css')}}" type="text/css" rel="stylesheet" />
+{% endblock %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTAINER -->
+    <div class="row fg-theme-green fg-dev-portrait">
+        <div class="col-md-12">
+            <!-- BEGIN BREADCRUMB-->
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <!-- END BREADCRUMB-->
+            <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+            {% if event == 'create' %}
+                {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'contactId': '', 'tabs': false, 'hrefLink':'1', 'roleCount' : '' , 'type':'', 'url' : '', 'clubLanguages':clubLanguages, 'clubDefaultLang':clubDefaultLang} %}
+            {% else %}
+                {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'contactId': '', 'tabs': tabs, 'activeTab': 1, 'hrefLink':'1', 'roleCount' : '' , 'type':'', 'url' : '', 'clubLanguages':clubLanguages, 'clubDefaultLang':clubDefaultLang} %}
+            {% endif %}
+            <!-- END PAGE TITLE AND PANEL TABS -->
+
+            <!-- BEGIN CONTENT -->
+            <div class="clearfix"></div>
+            <div class="alert alert-danger hide">
+                <button class="close" data-close="alert"></button>
+                <span>{{ 'FORM_ERROR_DISPLAY'|trans }}</span>
+            </div>
+            <div class="fg-cms-form-element-create-container fg-marg-btm-20">
+                <div class="portlet box fg-theme-head" id="contact_table_wizard">
+                    <div class="portlet-title">
+                        <div class="caption"> <span class="step-title"> </span> </div>
+                    </div>
+                    <div class="portlet-body form fg-cms-form-element-create-wrapper">
+                        <div class="form-wizard fg-wizard-tabs">
+                            <div class="form-body">
+                                <ul class="nav nav-pills nav-justified steps">
+                                    <li class="active" data-target="wizard-stage1"> <a href="#contacts-table-element-stage1" data-toggle="tab" class="step"> <span class="number"> 1 </span> <span class="desc"> <i class="fa fa-check"></i> {{ 'CONTACT_PORTRAITS_ELEMENT_SELECT_CONTACTS'|trans }}</span> </a> </li>
+                                    <li class="{{ (wizardStage == 'stage2' or wizardStage == 'stage3' or wizardStage == 'stage4') ? 'done' : (event == 'create') ? 'disabled' : '' }}" data-target="wizard-stage2"> <a href="#contacts-portrait-element-stage2" data-toggle="tab" class="step"> <span class="number"> 2 </span> <span class="desc"> <i class="fa fa-check"></i> {{ 'CONTACT_PORTRAITS_ELEMENT_ELEMENT_DISPLAY'|trans }}</span> </a> </li>
+                                    <li class="{{ (wizardStage == 'stage3' or wizardStage == 'stage4') ? 'done' : (wizardStage == 'stage2') ? '' : 'disabled' }}" data-target="wizard-stage3"> <a href="#contacts-portrait-element-stage3" data-toggle="tab" class="step"> <span class="number"> 3 </span> <span class="desc"> <i class="fa fa-check"></i> {{ 'CONTACT_PORTRAITS_ELEMENT_PORTRAIT_DISPLAY'|trans }}</span> </a> </li>
+                                    <li class="{{ (wizardStage == 'stage4') ? 'done' : (wizardStage == 'stage3' or wizardStage == 'stage2') ? '' : 'disabled' }}" data-target="wizard-stage4"> <a href="#contacts-portrait-element-stage4" data-toggle="tab" class="step"> <span class="number"> 4 </span> <span class="desc"> <i class="fa fa-check"></i> {{ 'CONTACT_PORTRAITS_ELEMENT_SELECT_FILTERS'|trans }}</span> </a> </li>
+                                </ul> 
+                                <div id="form-stage-progressbar" class="progress progress-striped" role="progressbar">
+                                    <div class="progress-bar progress-bar-warning" style="width: 20%;"> </div>
+                                </div>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="contacts-table-element-stage1">
+
+                                    </div>
+                                    <div class="tab-pane" id="contacts-portrait-element-stage2">
+
+                                    </div>
+                                    <div class="tab-pane" id="contacts-portrait-element-stage3">
+
+                                    </div>                                    
+                                    <div class="tab-pane" id="contacts-portrait-element-stage4">
+                                        <form class="form-horizontal" id="contacts_table_element_stage4">
+                                            <div class="excludejs" id="saved-contactlist-filter">
+
+                                            </div>
+                                        </form>
+                                        <div class="btn-group  fg-common-add-item">
+                                            <a href="javascript:void(0)" data-toggle="modal" class="add-album" id="fg-dev-addNewFilterColumn"><i class="fa fa-plus-circle fa-2x fg-marg-right-5"></i><span class="fg-left-move">{{'CONTACT_LIST_ADD_NEW_FILTER_COLUMN'|trans}}</span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions fg-big-buttons right">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="hidden" value="{{ event }}" id="contacts_table_element_event" name="contacts_table_wizard_event" />
+                                        <input type="hidden" value="{{ tableId }}" id="contacts_table_element_tableId" name="contacts_table_wizard_tableId" />
+                                        <input type="hidden" value="portrait" id="contacts_table_elementType" name="contacts_table_wizard_elementType" />
+                                        {% if event == 'create' %}
+                                            <input type="hidden" value="{{ pageId }}" id="contacts_table_element_pageId" name="contacts_table_wizard_pageId"/> 
+                                            <input type="hidden" value="{{ boxId }}" id="contacts_table_element_boxId" name="contacts_table_wizard_boxId"/> 
+                                            <input type="hidden" value="{{ sortOrder }}" id="contacts_table_element_sortOrder" name="contacts_table_wizard_sortOrder"/> 
+                                            <input type="hidden" value="{{ elementId }}" id="contacts_table_elementId" name="contacts_table_elementId"/> 
+                                        {% endif %}
+                                        {% if wizardStage != 'stage4' %}
+                                            <a href="javascript:;" data-href="{{ breadCrumb.back }}" class="btn green pull-right hide" id="contacts_table_element_finish">{{ 'CONTACTS_TABLE_ELEMENT_FINISH'|trans }} </a>
+                                        {% endif %}
+
+                                        <a href="javascript:;" class="btn green  pull-right hide" {{ (event == 'edit') ? 'disabled="disabled"' : '' }} id="contacts_table_element_save_and_next"> {{ 'SAVE_AND_NEXT'|trans }} <i class="fa fa-chevron-right"></i> </a>  
+                                        <a href="javascript:;" class="btn green  pull-right hide" {{ (event == 'edit') ? 'disabled="disabled"' : '' }} id="contacts_table_element_save"> {{ 'SAVE'|trans }} </a>   
+                                        <a href="{{ breadCrumb.back }}" class="btn default pull-right hide" id="contacts_table_element_cancel"><i class="fa fa-chevron-left"></i> {{ 'CANCEL'|trans }} </a> 
+                                        <a href="javascript:;" class="btn default pull-right hide" disabled="disabled" id="contacts_table_element_discard">{{'DISCARD_CHANGES'|trans}} </a>
+                                        <a href="javascript:;" class="btn default pull-right hide" id="contacts_table_element_back"><i class="fa fa-chevron-left"></i> {{ 'BACK'|trans }} </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>   
+                    <!-- Preview starts -->                
+            <div class="portlet box fg-theme-head fg-clear-marg fg-pad-10 hide " id="contacts-portrait-element-stage3-preview">
+
+            </div>                       
+                    <!-- Preview ends -->                           
+        </div>
+    </div>
+
+    <div class="modal fade" id="contactListAddFilterPopup" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content fg-modal-contact-list-filter-content">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block underscoretemplate %}
+    {% include 'WebsiteCMSBundle:ContactsTableElement:templateStage1.html.twig' %}
+    {% include 'WebsiteCMSBundle:ContactPortraitsElement:templateStage2.html.twig' %}
+    {% include 'WebsiteCMSBundle:ContactPortraitsElement:templateStage3.html.twig' %}
+    {% include 'WebsiteCMSBundle:ContactPortraitsElement:templateSecondDpColumnPopup.html.twig' %}
+    {% include 'WebsiteCMSBundle:ContactsTableElement:templateContactlistFilterRows.html.twig' %}
+    {% include 'WebsiteCMSBundle:ContactsTableElement:templateCreateNewFilterPopup.html.twig' %}
+    {% include 'WebsiteCMSBundle:ContactPortraitsElement:templatePortraitElementData.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgassets/website/js/fg_plusminus_input.js')}}" type="text/javascript"></script> 
+    <script src="{{ asset('fgassets/website/js/fg-cms-frontend-portrait.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/website/js/fg-cms-contact-portraits.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.ui.widget.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.iframe-transport.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.fileupload.js')}}" type="text/javascript"></script>    
+    <script src="{{ asset('fgassets/global/js/FgFileUpload.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/imageUploader.js')}}" type="text/javascript"></script>
+    <script>
+        var error = "{{ 'FORM_ERROR_DISPLAY'|trans }}";
+        var clubLanguages = {{clubLanguages|json_encode|raw}};
+        var trans = {{trans|json_encode|raw}};
+        var defaultLang = selectedLang = '{{clubDefaultLang}}';
+        var clubDefaultLang = '{{contactLang}}';
+        var systemLang = '{{systemLang}}';
+        var clubLangDetails = {{clubLangDetails|json_encode|raw}};
+        var contactListFilterJson = {{filterData|json_encode|raw}};
+        var colSize = '{{ colSize }}';
+        var translationMsg = {'clipboardMovement':"{{'CMS_MENU_OPTION_MOVE_CLIPBOARD'|trans}}",
+                'deleteElement' :"{{'CMS_MENU_OPTION_DELETE_ELEMNT'|trans}}",
+                'editBox' :"{{'CMS_MENU_OPTION_EDIT_BOX'|trans}}",
+                'containerDeleteMsgWithElement':"{{'CMS_CONTAINER_DELETE_WITH_ELEMENT_MESSAGE'|trans}}",
+                'containerDeleteMsgWithOutElement':"{{'CMS_CONTAINER_DELETE_WITHOUT_ELEMENT_MESSAGE'|trans}}",
+                'deleteBoxHeader':"{{'CMS_BOX_DELETE_POPUP_HEADER'|trans}}",
+                'deleteElementHeader':"{{'CMS_ELEMENT_DELETE_POPUP_HEADER'|trans}}",
+                'deleteContainerHeader':"{{'CMS_CONTAINER_DELETE_POPUP_HEADER'|trans}}",
+                'deleteBoxMsg':"{{'CMS_BOX_DELETE_MESSAGE'|trans}}",
+                'deleteElementMsg':"{{'CMS_ELEMENT_DELETE_MESSAGE'|trans}}",
+                'createContainerHeader':"{{'CMS_CREATE_CONTAINER_HEADER'|trans}}",
+                'editContainerHeader'  :"{{'CMS_EDIT_CONTAINER_HEADER'|trans}}",
+                'deleteBoxwithoutElement'  :"{{'CMS_DELETE_BOX_WITHOUT_ELEMENT'|trans}}",
+                'dragBoxTitle'             :"{{'CMS_DRAG_BOX_TITLE'|trans}}",
+                'profilepictrans'          :"{{'CMS_PORTRAIT_ELEMENT_PROFILE_PIC'|trans}}",
+                'addLabelText' : "{{'CMS_PORTRAIT_LABEL'|trans}}"
+        }
+        var notApplicable =  '{{'PORTRAIT_NOT_APPLICABLE_VALUE'|trans}}';
+        var portUploadPath = {{uploadPath|json_encode()|raw }};
+        var portContactNameTmplte = _.template($('#templateContactName').html());
+        var portEmailTmplte = _.template($('#templateEmail').html());
+        var portImageUpldTmplte = _.template($('#porttemplateImage').html());
+        var portDefaultTmplte = _.template($('#defaultTemplate').html());
+        var portFileUploadTemplate = _.template($('#portFileUploadTemplate').html());
+        var portProfilepicTemplate = _.template($('#portProfilepicTemplate').html());
+        var placeholderImageOption = {
+                fileListTemplate: 'dropzone-html-upload',
+                fileListTemplateContainer: '.fg-dev-profile-pic',
+                removeElement: '.removeUploadedFile',
+                uploadUrl: '{{path('internal_article_tmp_upload_file',{'type':'dropzone'})}}',
+                extraDataToTemplate: {},
+                validationErrorTemplateId: 'DomainVerificationUploadError',
+                onFileUploadSuccess: '',
+                errorContainer: '#html-upload-error-container',
+                fileListTemplatePlacement: 'edit',
+                singleFile:true,
+                updateFormstate:0,
+                removeElementdirty:1,
+                validations: {
+                    fileType: 'image'
+                },
+        };
+      
+        var options = {
+                tableId: '{{ tableId }}',
+                elementId: {{ elementId }},
+                stage1savepath: "{{ path('website_cms_save_contacts_table_step1') }}",
+                stage2savepath: "{{ path('website_cms_save_portrait_element_step2') }}",
+                stage3savepath: "{{ path('website_cms_save_portrait_element_step3') }}",
+                stage4savepath: "{{ path('website_cms_save_contacts_portrait_step4') }}",
+                event: "{{ event }}",
+                log: "{{ log }}",
+                currentStage: "stage1",
+                columnSize : '{{ colSize }}',
+                stepTrans: "{{ 'CONTACTS_TABLE_ELEMENT_STEP_LABEL'|trans }}",
+                getFilterPath: "{{ path('website_cms_get_contact_filters') }}",
+                stage1DataPath: "{{ path('website_cms_get_contact_table_data_stage1') }}",
+                stage2DataPath: "{{ path('website_cms_get_portrait_data_stage2') }}",
+                stage3DataPath: "{{ path('website_cms_get_portrait_data_stage3') }}",
+                stage4DataPath: "{{ path('website_cms_get_contact_table_data_stage3') }}",
+                stage3PreviewPath: "{{ path('website_cms_preview_portrait_element_step3') }}",
+                translations:translationMsg,
+        };
+        var contactListColumnJson = {{columnData|json_encode|raw}};
+        var contactFieldDetails = {{contactFieldDetails|json_encode|raw}};
+        var portraitsPerRowMsg = {
+                1: '{{ 'PORTRAITS_PER_ROW_MSG'|trans({'%smaller%':1,'%mobile%':1})|raw }}',
+                2: '{{ 'PORTRAITS_PER_ROW_MSG'|trans({'%smaller%':1,'%mobile%':1})|raw }}',
+                3: '{{ 'PORTRAITS_PER_ROW_MSG'|trans({'%smaller%':1,'%mobile%':1})|raw }}',
+                4: '{{ 'PORTRAITS_PER_ROW_MSG'|trans({'%smaller%':2,'%mobile%':1})|raw }}',
+                5: '{{ 'PORTRAITS_PER_ROW_MSG'|trans({'%smaller%':2,'%mobile%':1})|raw }}',
+                6: '{{ 'PORTRAITS_PER_ROW_MSG'|trans({'%smaller%':3,'%mobile%':1})|raw }}',
+        };
+        var FgCmsContactPortraitsObj = new FgCmsContactPortraits(options);
+        $(function () {
+            var stage1Data = {{ data|json_encode|raw }};
+            FgCmsContactPortraitsObj.loadWizardStage1(stage1Data);
+        });
+        var selectTrans = trans['CMS_CONTACT_TABLE_FILTER_CONTACTFIELD_SELECT_PLACEHOLDER'];
+    </script>
+
+{% endblock %}

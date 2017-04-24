@@ -1,0 +1,261 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = (pagecontentData.page.title =='footer') ? 'TOP_NAV_CMS_FOOTER'|trans : (pagecontentData.page.title =='sidebar' ? 'CMS_SIDEBAR'|trans : pagecontentData.page.title) %}
+{% set navUrl = (navUrl is defined) ? navUrl : 0  %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+
+
+    <!-- BEGIN BREADCRUMB-->
+    <div class="row">
+        <div class="col-lg-12">
+            {% if (pagecontentData.page.pageType=="sidebar" ) %}
+              {% include 'internal/breadcrumb.html.twig' with {'breadCrumb':{'back':referer}} %}   
+                {% else %}
+                   {% include 'internal/breadcrumb.html.twig' %}
+             {% endif %}
+        </div>
+    </div>
+    <!-- END BREADCRUMB-->
+    <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+    {% include 'global/page-title-bar.html.twig' with {'pageTitleStatus' :pageTitleStatus,'pageTitle': pageTitle, 'contactId': '', 'tabs': tabs,'url':'','type':'', 'clubDefaultLang': clubDefaultLang,'hrefLink':true} %}
+
+    <!-- BEGIN CONTAINER -->
+
+    <div class="row fg-cms-page-canvas-wrapper">
+
+
+
+        
+            {#HEADER INCLUDE AREA START#}             
+            {% include 'WebsiteCMSBundle:Page:cmsHeader.html.twig' with {'headerDetails':headerDetails} %}
+            {#HEADER AREA END#}
+            <form method="post" name="elementcreationForm" id="elementcreationForm" action="{{ (pagecontentData.page.pageType == "footer") ? path('website_cms_add_new_element_footer') : path('website_cms_add_new_element') }}">
+                <input type="hidden" name="elementType" id="elementType" value="header"/>
+                <input type="hidden" name="pageId"  value="{{pagecontentData.page.id}}" id="droppedpageId"/>
+                <input type="hidden" name="boxId" value="0" id="droppedboxId" />
+                <input type="hidden" name="elementId" value="0" id="elementId" />
+                <input type="hidden" name="sortOrder" value="0" id="droppedboxSortorder" />
+                <input type="hidden" name="formId" value="" id="formElementId" />
+                <input type="hidden" name="contactFormElementId" value="{{initialForm}}" id="contactFormElementId" />
+                <input type="hidden" name="colSize" value="" id="colSize" />
+            </form>
+            <form id="boxCreationForm">
+                <input type="hidden" name="boxId" value="0" id="createBox" data-key="page.{{pagecontentData.page.id}}"/>                 
+            </form>
+            <div class="fg-cms-page-elements-outer-wrapper {% if pagecontentData.sidebar.type == 'wide' %} fg-sidebar-layout-2  {% elseif pagecontentData.sidebar.type == 'small' %} fg-sidebar-layout-1  {% endif %}   {% if pagecontentData.sidebar.side == 'left' %} fg-cms-page-sidebar-left {% elseif pagecontentData.sidebar.side == 'right' %} fg-cms-page-sidebar-right {% endif %} row-eq-height">
+            {#CONTENT DISPLAY AREA START#}
+            {% if (pagecontentData.page.pageType=="page" and pagecontentData.sidebar.side =="left")  %}
+                <section class="{% if pagecontentData.sidebar.type == 'wide' %}col-sm-4 fg-cms-page-sidebar {% else %} col-sm-2 fg-cms-page-sidebar {% endif %}" >
+                    {% include 'WebsiteCMSBundle:Page:sidebarContent.html.twig' with {'sidebarType':pagecontentData.sidebar.type,'globalSidebar':globalSidebar} %} 
+                </section>
+            {% endif %}
+
+            {#CONTENT DISPLAY AREA START#}
+            <section class=" {% if pagecontentData.sidebar.type == 'wide' and pagecontentData.page.pageType!="sidebar" %}col-sm-8 fg-cms-page-elements-container contentBox  {% elseif pagecontentData.sidebar.type == 'small' %}col-sm-10 fg-cms-page-elements-container contentBox  {% else %} col-sm-12 fg-cms-page-elements-container contentBox {% endif %}" id="contentBox">
+                {#Container details put here#}
+            </section>
+            {#sidebar DISPLAY AREA START RIGHT#}
+            {% if (pagecontentData.page.pageType=="page" and pagecontentData.sidebar.side =="right") %}
+                <section class="{% if pagecontentData.sidebar.type == 'wide' %}col-sm-4 fg-cms-page-sidebar {% else %} col-sm-2 fg-cms-page-sidebar {% endif %}">
+                    {% include 'WebsiteCMSBundle:Page:sidebarContent.html.twig' with {'sidebarType':pagecontentData.sidebar.type,'globalSidebar':globalSidebar} %} 
+                </section>
+            {% endif %}  
+            {#sidebar DISPLAY AREA RIGHT END#}
+            </div>
+            
+             <section class="fg-clear fg-cms-page-add-container-sidebar-wrapper">
+                 {% if(pagecontentData.page.pageType=="page" and ( pagecontentData.sidebar.side ==""  or pagecontentData.sidebar.side ==null  ) ) %}
+                    <div class="col-md-12 fg-marg-top-20 ">
+                         
+                        <span class="fg-add-container editContainerpopup margin-right-10" container-id="page-0" container-page-id={{pagecontentData.page.id}} container-type="containerAdd"><a href="javascript:void(0)" class="fg-add-box"><i class="fa-plus-circle fa fa-2x"></i>{{'CMS_ADD_CONTAINER'|trans}}</a></span>  
+                        
+                       {% if( hasSidebar==1) %} <span class=" "><a href="#" class="fg-add-box"  id="fg-cms-show-sidebar" data-value="include"><i class="fa-plus-circle fa fa-2x"></i>{{'CMS_INCLUDE_SIDEBAR'|trans}}</a></span>  {% endif %} 
+                       
+                    </div>
+                
+                 {% elseif(pagecontentData.page.pageType=="page" and pagecontentData.sidebar.side =="left" and pagecontentData.sidebar.type =="small") %}
+                 
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="fg-marg-top-20 fg-add-container editContainerpopup" container-id="page-0" container-page-id={{pagecontentData.page.id}} container-type="containerAdd"><a href="javascript:void(0)" class="fg-add-box"><i class="fa-plus-circle fa fa-2x"></i>{{'CMS_ADD_CONTAINER'|trans}}</a></div>  
+                </div>
+                
+                  {% elseif(pagecontentData.page.pageType=="page"  and pagecontentData.sidebar.side =="left" and pagecontentData.sidebar.type =="wide") %}
+                <div class="col-md-8  col-md-offset-4">
+                    <div class="fg-marg-top-20 fg-add-container editContainerpopup" container-id="page-0" container-page-id={{pagecontentData.page.id}} container-type="containerAdd"><a href="javascript:void(0)" class="fg-add-box"><i class="fa-plus-circle fa fa-2x"></i>{{'CMS_ADD_CONTAINER'|trans}}</a></div>  
+                </div>
+               
+                 {% else %}
+                <div class="col-md-8">
+                    <div class="fg-marg-top-20 fg-add-container editContainerpopup" container-id="page-0" container-page-id={{pagecontentData.page.id}} container-type="containerAdd"><a href="javascript:void(0)" class="fg-add-box"><i class="fa-plus-circle fa fa-2x"></i>{{'CMS_ADD_CONTAINER'|trans}}</a></div>  
+                </div>
+                {% endif %}
+            </section>
+              
+            
+            {#CONTENT DISPLAY AREA END#}
+            {#CLIPBOARD DISLAY AREA START#}
+            <section class="fg-cms-page-clipboard-wrapper fg-clear" id="fg-clipBoard-section"></section>
+
+            {#CLIPBOARD DISPALY AREA END#}
+    </div>
+            
+        {#form element popup#}
+        {% include 'WebsiteCMSBundle:PageContentElements:selectExistingFormPopup.html.twig' %}
+        {#sidebar POPUP  BEGIN #}
+        {% if (pagecontentData.sidebar.side =="") %}
+            <!-- BEGIN POPUP CONTENT -->
+            {% include 'WebsiteCMSBundle:Page:sidebarPopup.html.twig' %} 
+            <!-- END POPUP CONTENT -->
+        {% endif %}
+        {#sidebar POPUP  END #}
+        {% if (pagecontentData.page.pageType=="sidebar" ) %}
+          {% include 'WebsiteCMSBundle:Page:backlink.html.twig' with {'backLink':referer} %} 
+    {% endif %} 
+    {% endblock %}
+    {% block underscoretemplate %}
+        {% include 'WebsiteCMSBundle:Page:editPageContentUnderscore.html.twig' %}
+        {% include 'WebsiteCMSBundle:Page:clipBoard.html.twig' %}
+        {% include 'WebsiteCMSBundle:PageContentElements:templateFormPopupData.html.twig' %}
+        {% include 'WebsiteCMSBundle:Page:templatePortraitDisplay.html.twig' %}
+    {% endblock %}
+
+    {% block customstylesheets %}
+        <link href="{{ asset('fgassets/website/css/style-cms.css')}}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset('fgassets/global/js/unitegallery-master/package/unitegallery/css/unite-gallery.css')}}" rel="stylesheet" type="text/css"/>
+        {% if (contactTableElementCount|default(0) > 0) %}
+            <link href="{{ asset('fgassets/global/css/datatable/jquery.dataTables.min.css') }}" type="text/css" rel="stylesheet" />
+            <link href="{{ asset('fgassets/global/css/datatable/responsive.dataTables.min.css') }}" type="text/css" rel="stylesheet" />
+        {% endif %}
+        {% if (newsletterArchiveElementCount|default(0) > 0) %}
+            <link href="{{ asset('fgassets/global/css/datatable/jquery.dataTables.min.css') }}" type="text/css" rel="stylesheet" />
+            <link href="{{ asset('fgassets/global/css/datatable/responsive.dataTables.min.css') }}" type="text/css" rel="stylesheet" />
+        {% endif %}
+        <link href="{{ asset('fgassets/global/css/datatable/jquery.dataTables.min.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset('fgassets/global/css/datatable/responsive.dataTables.min.css') }}" type="text/css" rel="stylesheet" />
+    {% endblock %}
+    {% block javascripts %}
+        <script src="{{ asset('fgassets/website/js/Fg_cms_page.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/website/js/fg_plusminus_input.js')}}" type="text/javascript"></script>           
+        <script src="{{ asset('fgassets/global/js/unitegallery-master/package/unitegallery/js/unitegallery.min.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/global/js/unitegallery-master/package/unitegallery/themes/tiles/ug-theme-tiles.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/global/js/unitegallery-master/package/unitegallery/themes/slider/ug-theme-slider.js')}}" type='text/javascript'></script>
+        <script src="{{ asset('fgassets/global/js/bootstrap-filestyle/src/bootstrap-filestyle.min.js')}}" type='text/javascript'></script>
+        <script src="{{ asset('fgassets/global/js/fg-fader.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/global/js/datatable/jquery.dataTables-1.10.12.min.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/global/js/datatable/dataTables.responsive.min.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/website/js/fg-website-datatable.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/website/js/fg-cms-newsletter-archive-element.js')}}" type="text/javascript"></script>
+        <script type="text/javascript" src="{{ asset('fgassets/global/js/flaviusmatis-simplePagination/jquery.simplePagination.js')}}"></script>
+        <script type="text/javascript" src="{{ asset('fgassets/website/js/fg-cms-frontend-portrait.js')}}"></script>
+        {% if (pagecontentData.isFormElement|default(1) == 1) %}
+            <script src='https://www.google.com/recaptcha/api.js?hl={{ fgclub.get('default_system_lang') }}&onload=formCaptcha&render=explicit&data-size=compact'></script>      
+        {% endif %}
+        {% if (contactTableElementCount|default(0) > 0) %}
+            <script>
+                var contactTableListUrl = '{{path('website_list_contacts',{'contactType':'dummyType'})}}';
+                var fileDownloadPath = "{{url('filemanager_download_files', {'module':'contact','source':'**source**', 'name':'**name**'})}}";
+                var uploadPath = '/uploads/**clubId**/';
+            </script>
+            <script src="{{ asset('fgassets/website/js/fg_popover.js')}}" type="text/javascript"></script>
+            <script src="{{ asset('fgassets/global/js/datatable/buttons/buttons.html5.min.js')}}" type="text/javascript"></script>
+            <script src="{{ asset('fgassets/global/js/datatable/buttons/dataTables.buttons.js')}}" type="text/javascript"></script>
+            <script src="{{ asset('fgassets/website/js/fg-cms-contct-table-element.js')}}" type="text/javascript"></script>
+        {% endif %}
+
+        <script>
+            var iconSettingsType = "backend";
+            var newsletterPreview = '{{path('website_public_page_newsletter_archive_preview',{'newsletterid': "dummynewsletter" })}}';
+            var newsletterArchiveListUrl = '{{path('newsletterarchive_list')}}';
+            var jsonData = {{pagecontentData | json_encode() | raw}};
+            var navUrl = {{navUrl}};
+            var sitekeys = '{{ pagecontentData.googleCaptchaSitekey }}';
+            var mainPageId = {{mainPageId}};
+            var sidebarPagePath = '{{ path('website_cms_content_sidebar')}}';
+            var FgPageTitlebar;
+            var editPagetitlePopupPath = '{{path('website_cms_edit_pagetitle_popup')}}';
+            var addElementPagePath = '{{ (pagecontentData.page.pageType == "footer") ? path('website_cms_add_new_element_footer') : path('website_cms_add_new_element') }}';
+            var pagetype = (jsonData.page.pageType == 'sidebar') ? 'sidebar' : 'content';
+            var pageDetails = jsonData.page;
+            var pageDetailSavePath = "{{path('website_cms_content_save')}}"; 
+            var pageBoxDeletePath = "{{path('website_cms_content_delete_box')}}";  
+            var pageJsonSavePath = "{{path('website_cms_save_content_json')}}";
+            var supplementaryMenuSavePath = "{{path('website_cms_save_supplementary_element')}}";
+            var editTitleFlag = ('{{isFooter is defined and isFooter == '1' }}' || (pagetype=='sidebar' ) ) ? false :true;
+            var clipBoarDetails = {{clipboardDetails | json_encode() | raw}};            
+            if (pagetype == 'sidebar') {
+                var pagetabActive = {{isActveTab}};
+            } 
+            var twitterElementCount = '{{twitterElementCount}}';
+            var pageTitleStatus = {{pageTitleStatus}};
+            var pageTitleUpdatePath = "{{path('website_update_page_title')}}";
+            var supplymenteryDataUrl = "{{ path('website_cms_get_supplementary_element_data',{'pageId':mainPageId })}}";
+            var required = '{{'REQUIRED'|trans}}';
+            var formElementCreatePath = "{{path('website_cms_form_element_create')}}";
+            var contactTableElementPath = "{{ path('website_cms_contacts_table_element_create') }}";
+            var portraitElementPath = "{{ path('website_cms_portrait_element_create') }}";
+            var formElementEditPath = "{{path('website_cms_form_element_edit',{'formId':'##FORM_ID##' })}}";
+            var hasContactModuleRights = {{hasContactRights}};
+            var hasAdminRights = {{ hasAdminRights }};
+            var translationMsg ={'clipboardMovement':"{{'CMS_MENU_OPTION_MOVE_CLIPBOARD'|trans}}",
+                         'deleteElement' :"{{'CMS_MENU_OPTION_DELETE_ELEMNT'|trans}}",
+                         'editBox' :"{{'CMS_MENU_OPTION_EDIT_BOX'|trans}}",
+                         'containerDeleteMsgWithElement':"{{'CMS_CONTAINER_DELETE_WITH_ELEMENT_MESSAGE'|trans}}",
+                         'containerDeleteMsgWithOutElement':"{{'CMS_CONTAINER_DELETE_WITHOUT_ELEMENT_MESSAGE'|trans}}",
+                         'deleteBoxHeader':"{{'CMS_BOX_DELETE_POPUP_HEADER'|trans}}",
+                         'deleteElementHeader':"{{'CMS_ELEMENT_DELETE_POPUP_HEADER'|trans}}",
+                         'deleteContainerHeader':"{{'CMS_CONTAINER_DELETE_POPUP_HEADER'|trans}}",
+                         'deleteBoxMsg':"{{'CMS_BOX_DELETE_MESSAGE'|trans}}",
+                         'deleteElementMsg':"{{'CMS_ELEMENT_DELETE_MESSAGE'|trans}}",
+                         'createContainerHeader':"{{'CMS_CREATE_CONTAINER_HEADER'|trans}}",
+                         'editContainerHeader'  :"{{'CMS_EDIT_CONTAINER_HEADER'|trans}}",
+                         'deleteBoxwithoutElement'  :"{{'CMS_DELETE_BOX_WITHOUT_ELEMENT'|trans}}",
+                         'dragBoxTitle'             :"{{'CMS_DRAG_BOX_TITLE'|trans}}"
+
+
+                         }
+            var portraitElementSettings = {{ portraitElementSettings|json_encode()|raw }};
+            var contactLang = '{{contactLang}}';
+            var notApplicable =  '{{'PORTRAIT_NOT_APPLICABLE_VALUE'|trans}}';
+            var portContactNameTmplte = _.template($('#templateContactName').html());
+            var portEmailTmplte = _.template($('#templateEmail').html());
+            var portImageUpldTmplte = _.template($('#porttemplateImage').html());
+            var portDefaultTmplte = _.template($('#defaultTemplate').html());
+            var portFileUploadTemplate = _.template($('#portFileUploadTemplate').html());
+            var portProfilepicTemplate = _.template($('#portProfilepicTemplate').html());              
+            var portUploadPath = {{portUploadPath|json_encode()|raw }};
+            
+
+            // Function to reload the page content details
+            //Page creation javascript init
+            var cmspage;
+            cmspage = new Fgcmspage();            
+            cmspage.pagedocInit();
+            
+            var options = {
+                data: jsonData,
+                translations:translationMsg,
+                containerType: pagetype,
+                mainContainer: '#contentBox',
+                pageInitCallback: function() {
+                    //hide inc/dec icon
+                    $(".fg-left").hide();
+                    $(".fg-right").hide(); 
+                    cmspage.pageCallBackFunction();
+                    FgTooltip.init();
+   
+        }
+            };
+
+       if(navUrl==1){
+           sessionStorage.setItem("pageId", mainPageId);
+       }
+
+            
+        </script>
+        {% if (mapElementCount > 0) %}
+          <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqoymXav-_Go1zYa9UOlPf5_UsC58Jmi0" type="text/javascript"></script>
+        {% endif %}
+        {% if (twitterElementCount > 0) %}
+         <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        {% endif %}
+        {% endblock %}

@@ -1,0 +1,637 @@
+contact_index:
+    path:  /contact/list
+    defaults: { _controller: ClubadminContactBundle:Contact:viewcontact}
+edit_role_category:
+    path: /contact/editcategory/{cat_type}
+    defaults: { _controller: ClubadminContactBundle:Role:editcategory , level1: activecontact}
+update_role_category:
+    path: /contact/updatecategory
+    defaults: { _controller: ClubadminContactBundle:Role:updatecategory }
+role_category_settings:
+    path: /contact/categorysettings/{cat_id}
+    defaults: { _controller: ClubadminContactBundle:Role:categorysettings , level1: activecontact}
+role_function_data:
+    path: /contact/rolefunctiondata
+    defaults: { _controller: ClubadminContactBundle:Role:rolefunctiondata }
+update_role_function:
+    path: contact/role/saverolefunction
+    defaults: { _controller: ClubadminContactBundle:Role:saverolefunction }
+membership_list:
+    path: /contact/membership
+    defaults: { _controller: ClubadminContactBundle:MembershipList:membershiplist , level1: activecontact}
+update_membership_list:
+    path: /contact/updatemembership
+    defaults: { _controller: ClubadminContactBundle:MembershipList:updatemembership }
+list_all_contact_fields:
+    path:  /contact/contactfields
+    defaults: { _controller: ClubadminContactBundle:Fields:Index , level1: contactfields}
+contact_profile_popup:
+    path:  /contact/profile
+    defaults: { _controller: ClubadminContactBundle:Fields:contactProfile }
+field_update:
+    path: /contact/contact-fields/update
+    defaults: { _controller: ClubadminContactBundle:Fields:update }
+bookmark_list:
+    path: /contact/bookmark
+    defaults: { _controller: ClubadminContactBundle:Bookmark:bookmarkList , level1: activecontact}
+update_bookmark:
+    path: /contact/bookmark/updatebookmark
+    defaults: { _controller: ClubadminContactBundle:Bookmark:updatebookmark }
+create_delete_bookmark:
+    path: /contact/bookmark/createdeletebookmark
+    defaults: { _controller: ClubadminContactBundle:Bookmark:createdeletebookmark }
+execboardfunction_settings:
+    path: /contact/execboardfunctionsettings
+    defaults: { _controller: ClubadminContactBundle:Role:execboardfunctionsettings , level1: activecontact}
+workgroupsettings:
+    path: /contact/workgroupsettings/{wgId}/{exbdId}
+    defaults: { _controller: ClubadminContactBundle:Role:workgroupsettings , level1: activecontact, wgId:1, exbdId:1}
+workgroupdetails:
+    path: /contact/workgroupdetails
+    defaults: { _controller: ClubadminContactBundle:Role:workgroupdetails }
+create_contact:
+    path:  /contact/createcontact
+    defaults: { _controller: ClubadminContactBundle:Default:createContact , level1: activecontact, module: contact}
+view_contact_list:
+    path:  /contact/viewcontact
+    defaults: { _controller: ClubadminContactBundle:Contact:viewcontact}
+list_contact:
+    path:  /contact/listcontact/{contactType}
+    defaults: { _controller: ClubadminContactBundle:Contact:listcontact }
+show_header:
+    path:  /contact/showheader
+    defaults: { _controller: ClubadminContactBundle:Contact:viewheader }
+team_category_settings:
+    path: /contact/teamcategorysettings/{cat_id}
+    defaults: { _controller: ClubadminContactBundle:Role:teamcategorysettings , level1: activecontact}
+team_function_data:
+    path: /contact/teamfunctiondata
+    defaults: { _controller: ClubadminContactBundle:Role:teamfunctiondata }
+contact_search:
+    path: /contact/search/{term}
+    defaults: { _controller: ClubadminContactBundle:Default:search }
+log_data:
+    path: /contact/logdata
+    defaults: { _controller: ClubadminContactBundle:Role:logdata }
+edit_contact:
+    path:  /contact/editcontact/{contact}
+    defaults: { _controller: ClubadminContactBundle:Default:createContact, module: contact }
+update_contact_assignments:
+    path:  /contact/updatecontactassignments
+    defaults: { _controller: ClubadminContactBundle:Assignment:updateContactAssignments }
+contact_sidebar_filter:
+    path:  /contact/sidebar/filter
+    defaults: { _controller: ClubadminContactBundle:Contact:sidebarFilter }
+filter_contact_data:
+    path:  /contact/filter/data
+    defaults: { _controller: ClubadminContactBundle:Filter:getData }
+saved_filter_settings:
+    path:  /contact/filter/settings
+    defaults: { _controller: ClubadminContactBundle:Contact:savedfilter }
+contact_connection:
+    path:  /contact/connection/{offset}/{contact}
+    defaults: { _controller: ClubadminContactBundle:Connection:index, module: contact }
+contact_name_search:
+    path: /contact/contactnames/{term}
+    defaults: { _controller: ClubadminContactBundle:Connection:contactNames }
+connection_implication:
+    path: /contact/implications/{contact}
+    defaults: { _controller: ClubadminContactBundle:Connection:getImplications }
+update_filter_count:
+    path:  /contact/filter/count
+    defaults: { _controller: ClubadminContactBundle:Contact:sidebarFilterCount }
+update_filter_data:
+    path:  /contact/filter/save
+    defaults: { _controller: ClubadminContactBundle:Filter:saveFilter }
+filter_contact_data_single:
+    path:  /contact/filter/single/data
+    defaults: { _controller: ClubadminContactBundle:Filter:sidebarSingleFilter }
+contact_saved_filter_data:
+    path:  /contact/filter/getsaveddata
+    defaults: { _controller: ClubadminContactBundle:Filter:getSavedData }
+update_contact_connections:
+    path:  /contact/updateconnections
+    defaults: { _controller: ClubadminContactBundle:Connection:updateConnections }
+update_filter_settings:
+    path:  /contact/filter/update
+    defaults: { _controller: ClubadminContactBundle:Filter:upadteSavedFilter }
+filter_update_broken:
+    path:  /contact/filter/broken
+    defaults: { _controller: ClubadminContactBundle:Filter:updateBrokenFilter }
+columnsettings:
+    path:  /contact/columnsettings/{settings_id}/{contacttype}
+    defaults: { _controller: ClubadminContactBundle:Columnsettings:index }
+update_columnsettings:
+    path:  /contact/updatecolumnsettings
+    defaults: { _controller: ClubadminContactBundle:Columnsettings:updateColumnsettings }
+delete_columnsettings:
+    path:  /contact/deleteColumnsettings
+    defaults: { _controller: ClubadminContactBundle:Columnsettings:deleteColumnsettings }
+get_tablesetting_fields:
+    path:  /contact/getTableSettingFields
+    defaults: { _controller: ClubadminContactBundle:Columnsettings:getTableSettingFields }
+import_file:
+    path:  /contact/import
+    defaults: { _controller: ClubadminContactBundle:Import:index, module: contact }
+import_data_assignment:
+    path:  /contact/importdata
+    defaults: { _controller: ClubadminContactBundle:Import:importFileSubmit, module: contact }
+import_update_file:
+    path:  /contact/import/{type}
+    defaults: { _controller: ClubadminContactBundle:Import:index, module: contact }
+import_file_correction:
+    path:  /contact/importcorrection
+    defaults: { _controller: ClubadminContactBundle:Import:importFileCorrection, module: contact }
+contact_data:
+    path:  /contact/data/{offset}/{contact}
+    defaults: { _controller: ClubadminContactBundle:ContactOverview:contactData }
+import_duplcate:
+    path:  /contact/importduplicate
+    defaults: { _controller: ClubadminContactBundle:Import:importDuplicate, module: contact }
+import_assignment:
+    path:  /contact/importassignment
+    defaults: { _controller: ClubadminContactBundle:Import:importAssignment, module: contact }
+import_assignment_submit:
+    path:  /contact/importSubmit
+    defaults: { _controller: ClubadminContactBundle:Import:importAssignmentSubmit, module: contact }
+export_file:
+    path:  /contact/export/{contactType}
+    defaults: { _controller: ClubadminContactBundle:Export:index }
+export_file_data:
+    path:  /contact/exportdata
+    defaults: { _controller: ClubadminContactBundle:Export:export }
+
+connect_contacts:
+    path:  /contact/connectcontacts
+    defaults: { _controller: ClubadminContactBundle:Connection:connectcontacts }
+update_assignments:
+    path:  /contact/updateassignments
+    defaults: { _controller: ClubadminContactBundle:Assignment:updateassignments }
+get_assignments:
+    path:  /contact/getassignments
+    defaults: { _controller: ClubadminContactBundle:Assignment:getAssignments }
+validate_assignments:
+    path:  /contact/validateassignments
+    defaults: { _controller: ClubadminContactBundle:Assignment:validateassignments }
+get_assigned_function:
+    path:  /contact/getassignedfunction
+    defaults: { _controller: ClubadminContactBundle:Assignment:getassignedfunction }
+filter_role_settings:
+    path: /contact/filterrolesettings/{cat_id}
+    defaults: { _controller: ClubadminContactBundle:Role:filterrolesettings }
+filter_role_data:
+    path: /contact/filterroledata
+    defaults: { _controller: ClubadminContactBundle:Role:filterroledata }
+filter_exception_contacts:
+    path: /contact/roleexceptioncontact
+    defaults: { _controller: ClubadminContactBundle:Role:roleexceptioncontact }
+filter_contact_search:
+    path: /contact/search/{term}
+    defaults: { _controller: ClubadminContactBundle:Default:search }
+save_filter_role:
+    path: /contact/savefilterrole
+    defaults: { _controller: ClubadminContactBundle:Role:savefilterrole }
+get_all_contactids_assignment:
+    path:  /contact/getallcontactidsassignment
+    defaults: { _controller: ClubadminContactBundle:Assignment:getAllAssignmentHandler }
+archive_index:
+    path:  /contact/contactarchive
+    defaults: { _controller: ClubadminContactBundle:Contact:viewArchivecontact , level1: contactarchive}
+getAllassignmentsForEdit:
+    path: /contact/getassignmentsedit
+    defaults: { _controller: ClubadminContactBundle:Assignment:allAssignments }
+getAssignmentPopup:
+    path:  /contact/renderAssignpopup
+    defaults: { _controller: ClubadminContactBundle:Default:renderAssignmentPopup }
+move_to_archive:
+    path:  /contact/movetoarchive
+    defaults: { _controller: ClubadminContactBundle:Archive:movetoarchive }
+save_archive_contacts:
+    path:  /contact/savearchive
+    defaults: { _controller: ClubadminContactBundle:Archive:saveArchiveContacts }
+log_listing:
+    path: /contact/logListing/{offset}/{contact}
+    defaults: { _controller: ClubadminContactBundle:Log:index }
+get_all_contactids_reactivate:
+    path:  /contact/getallcontactidreactivate
+    defaults: { _controller: ClubadminContactBundle:Archive:getSelectedArchiveContact }
+save_reactivate_contact:
+    path:  /contact/savereactivatecontact
+    defaults: { _controller: ClubadminContactBundle:Archive:saveReactivateContact }
+importAssignmentValidation:
+    path:  /contact/importassignvalidation
+    defaults: { _controller: ClubadminContactBundle:Import:validateImportAssignments }
+log_membership_categories:
+    path: /contact/membershiplog
+    defaults: { _controller: ClubadminContactBundle:MembershipList:logData }
+permanent_delete_archive:
+    path:  /contact/permanentdeletearchive
+    defaults: { _controller: ClubadminContactBundle:Archive:permanentdeletearchive }
+save_permanent_deleted_archive:
+    path:  /contact/savepermanentdeletedarchive
+    defaults: { _controller: ClubadminContactBundle:Archive:savepermanentdeletedarchive }
+get_reactivate_popup:
+    path:  /contact/reactivatepopup
+    defaults: { _controller: ClubadminContactBundle:Archive:getreactivatepopup }
+reactivate_single_contact:
+    path:  /contact/reactivatesinglecontact
+    defaults: { _controller: ClubadminContactBundle:Archive:reactivateSingleContact }
+get_all_contactids_archive:
+    path:  /contact/getallcontactidsarchive
+    defaults: { _controller: ClubadminContactBundle:Archive:getAllContactArchiveHandler }
+former_federation_member_index:
+    path:  /contact/formerfederationmember
+    defaults: { _controller: ClubadminContactBundle:Contact:viewformerfederationMember , level1: formerfederationmember}
+checked_former_federation_member:
+    path:  /contact/selectedformerfederationmemberpopup
+    defaults: { _controller: ClubadminContactBundle:Archive:getformerfederationMemberpopup}
+delete_former_federation_member:
+    path:  /contact/deleteformerfederationmember
+    defaults: { _controller: ClubadminContactBundle:Archive:deleteformerFederationMember}
+inlineedit_contact:
+    path:  /contact/savecontact
+    defaults: { _controller: ClubadminContactBundle:Default:saveContact}
+membership_delete:
+    path:  /contact/deletemembershiplog
+    defaults: { _controller: ClubadminContactBundle:Log:membershipLogDelete}
+get_all_contact_names:
+    path: /contact/allcontactnames
+    defaults: { _controller: ClubadminContactBundle:Connection:getAllContactNames }
+membership_log_add:
+    path:  /contact/addmembershiplog
+    defaults: { _controller: ClubadminContactBundle:Log:membershipLogAdd}
+inlineedit_membership:
+    path:  /contact/editmembershiplog/{contact}
+    defaults: { _controller: ClubadminContactBundle:Log:editMembershipLog}    
+contact_field_properties:
+    path:  /contact/properties
+    defaults: { _controller: ClubadminContactBundle:Fields:contactproperties } 
+    
+fed_club_permission:
+    path:  /contact/fedLevelPermission
+    defaults: { _controller: ClubadminContactBundle:Fields:fedLevelPermission }    
+    
+contact_field_test:
+    path:  /contact/test
+    defaults: { _controller: ClubadminContactBundle:Fields:test }  
+    
+new_element_sidebar:
+    path:  /contact/newelementsidebar
+    defaults: { _controller: ClubadminContactBundle:MembershipList:newElementFromSidebar }
+    
+contact_assignments:
+    path: /contact/assignments/{offset}/{contact}
+    defaults: { _controller: ClubadminContactBundle:Assignment:index }
+    
+list_all_assignments:
+    path: /contact/listallAssignments
+    defaults: { _controller: ClubadminContactBundle:Assignment:listAllAssignments }
+    
+get_all_assignment_dropdown:
+    path: /contact/getassignmentselectvalues
+    defaults: { _controller: ClubadminContactBundle:Assignment:getDropdownValues }
+    
+render_contact_overview:
+    path: /contact/overviewcontact/{offset}/{contact}
+    defaults: { _controller: ClubadminContactBundle:ContactOverview:displayContactOverview , level1: activecontact}
+    
+render_icon_tab:
+    path: /contact/tabicondisplay/{contact}
+    defaults: { _controller: CommonUtilityBundle:Fg:getTabIconInfo }
+    
+user_rights_page_listing:
+    path: /contact/userrightsListing
+    defaults: { _controller: ClubadminContactBundle:Userrights:userrightsUnderscore }
+    
+user_rights_save:
+    path: /contact/saveUserRights
+    defaults: { _controller: ClubadminContactBundle:Userrights:saveUserRights }
+    
+contact_user_rights:
+    path: /contact/userrights/{offset}/{contact}
+    defaults: { _controller: ClubadminContactBundle:Userrights:displayRights }
+    
+display_user_rights_save:
+    path: /contact/saveDisplayedUserRights
+    defaults: { _controller: ClubadminContactBundle:Userrights:saveDisplayedUserRights }
+
+save_overview_settings:
+    path: /contact/saveoverviewsettings
+    defaults: { _controller: ClubadminContactBundle:ContactOverview:saveOverviewSettings }
+    
+contact_overview_settings:
+    path: /contact/contactoverview
+    defaults: { _controller: ClubadminContactBundle:ContactOverview:index , level1: contactoverview}
+    
+render_overview_content:
+    path: /contact/overviewcontent
+    defaults: { _controller: ClubadminContactBundle:ContactOverview:renderOverviewContent }
+    
+contact_documents:
+    path: /contact/documents/{offset}/{contact}
+    defaults: { _controller: ClubadminContactBundle:Document:index, module: contact }
+    
+contact_documents_ajax:
+    path: /contact/documents/{offset}/{contact}/ajax
+    defaults: { _controller: ClubadminContactBundle:Document:documentListingAjax }
+contact_documents_ajax_add:
+    path: /contact/documents/{offset}/{contact}/ajaxAddDocument
+    defaults: { _controller: ClubadminContactBundle:Document:documentAddAjax }   
+contact_documents_ajax_remove:
+    path: /contact/documents/{offset}/{contact}/ajaxShowDeletePopup
+    defaults: { _controller: ClubadminContactBundle:Document:documentShowDeletePopup, module: contact }
+contact_documents_otherdocs_ajax:    
+    path: /contact/documents/{offset}/{contact}/ajaxGetOtherExistingDocs
+    defaults: { _controller: ClubadminContactBundle:Document:getOtherExistingDocsAjax }
+contact_documents_remove:
+    path: /contact/documents/{offset}/{contact}/ajaxRemoveDocument
+    defaults: { _controller: ClubadminContactBundle:Document:documentRemoveAjax }    
+userrightscontact_name_search:
+    path: /settings/contactnames/{term}
+    defaults: { _controller: ClubadminContactBundle:Userrights:contactNames }
+search_contactname:
+    path: /contact/search
+    defaults: { _controller: ClubadminContactBundle:Default:search }
+contact_sidebar_count:
+    path: /contact/sidebarCounts
+    defaults: { _controller: ClubadminContactBundle:Contact:getAlLSidebarCount }
+sidebar_missing_assignments:
+    path:  /contact/sidebar/missingassignments
+    defaults: { _controller: ClubadminContactBundle:Assignment:sidebarMissingAssignments }
+log_contact_datas:
+    path: /contact/contactlogdatas/{contact}
+    defaults: { _controller: ClubadminContactBundle:Log:logDatas}
+team_sponsors_listing:
+    path: /contact/team/sponsoredby
+    defaults: { _controller: ClubadminContactBundle:Role:teamsponsoredby }   
+confirmation_changes:
+    path:  /contact/confirmationchanges/{type}
+    defaults: { _controller: ClubadminContactBundle:Confirmation:confirmationChanges, level1: confirmchanges}
+list_changes_to_confirm:
+    path:  /contact/listchangestoconfirm
+    defaults: { _controller: ClubadminContactBundle:Confirmation:listChangesToConfirm}
+list_confirmation_log:
+    path:  /contact/listconfirmationlog
+    defaults: { _controller: ClubadminContactBundle:Confirmation:listConfirmationLog}
+confirm_or_discard_changes:
+    path:  /contact/confirmordiscardchanges/{action}
+    defaults: { _controller: ClubadminContactBundle:Confirmation:confirmOrDiscardChanges}
+do_confirm_or_discard:
+    path:  /contact/doconfirmordiscard
+    defaults: { _controller: ClubadminContactBundle:Confirmation:doConfirmOrDiscard}
+group_userrights_team:
+    path: settings/userrights/groups
+    defaults: { _controller: ClubadminContactBundle:Userrights:groupsUserrights,  level1: userrightsettings}
+save_group_user_rights:
+    path: settings/userrights/groups/save
+    defaults: { _controller: ClubadminContactBundle:Userrights:saveGroupUserRights}
+confirmations_mutations:
+    path:  /contact/mutations
+    defaults: { _controller: ClubadminContactBundle:Confirmation:mutationsList, level1: confirmmutations}
+confirmations_creations:
+    path:  /contact/creations
+    defaults: { _controller: ClubadminContactBundle:Confirmation:creationsList, level1: confirmcreations}
+mutations_list:
+    path:  /contact/getMutations/{type}
+    defaults: { _controller: ClubadminContactBundle:Confirmation:getMutations}
+creations_list:
+    path:  /contact/getCreations/{type}
+    defaults: { _controller: ClubadminContactBundle:Confirmation:getCreations}
+confirm_or_discard_confirmations:
+    path:  /contact/confirmordiscardconfirmations/{page}/{action}
+    defaults: { _controller: ClubadminContactBundle:Confirmation:confirmOrDiscardConfirmationPopup}
+update_confirmations:
+    path:  /contact/updateconfirmations
+    defaults: { _controller: ClubadminContactBundle:Confirmation:updateConfirmations}
+new_contact_detail:
+    path:  /contact/contactdetail/{contact}
+    defaults: { _controller: ClubadminContactBundle:Confirmation:contactDetail}
+role_userrights:
+    path: /role/userrights
+    defaults: { _controller: ClubadminContactBundle:Role:roleUserrights}
+role_userrights_count:
+    path: /role/rights/count
+    defaults: { _controller: ClubadminContactBundle:Role:calcuRightsCount}
+get_membership_data:
+    path: /contact/membershipdata
+    defaults: { _controller: ClubadminContactBundle:MembershipList:getMembershipData}
+get_membership_catcount:
+    path: /contact/membershipcatcount
+    defaults: { _controller: ClubadminContactBundle:MembershipList:getMembershipCatCount}
+contact_profile_settings_popup:
+    path:  /contact/profile/settings
+    defaults: { _controller: ClubadminContactBundle:ContactOverview:editSettingsPopup }
+contact_field_profile:
+    path:  /contact/profilefield
+    defaults: { _controller: ClubadminContactBundle:Fields:profile, level1: contactprofilefield } 
+country_list:
+    path:  /country/list
+    defaults: { _controller: ClubadminContactBundle:ContactOverview:getCountryListArray } 
+update_membership_assignments:
+    path:  /contact/dragdropmembershipassignments
+    defaults: { _controller: ClubadminContactBundle:Assignment:dragDropMembershipAssignments }
+save_membership_assignments:
+    path:  /contact/savemembershipassignments
+    defaults: { _controller: ClubadminContactBundle:Assignment:saveMembershipAssignments }
+
+contact_profile_settings_save:
+    path:  /contact/profile/saveData
+    defaults: { _controller: ClubadminContactBundle:ContactOverview:saveContactProfileData }
+    
+contact_profile_settings_data:
+    path:  /contact/overviewcontact/getData/{contact}/{module}
+    defaults: { _controller: ClubadminContactBundle:ContactOverview:getDetailsForProfileBlock }
+internal_userrights: 
+    path: settings/userrights/internal
+    defaults: { _controller: ClubadminContactBundle:Userrights:internalAreaUserrights }
+save_internal_userrights: 
+    path: settings/userrights/internal/save
+    defaults: { _controller: ClubadminContactBundle:Userrights:saveInternalUserRights }
+contact_fields_administration_option:
+    path:  /contact/contactfields/option
+    defaults: { _controller: ClubadminContactBundle:Fields:Option , level1: contactfieldsoption}
+inlineedit_clubAssignment:
+    path:  /contact/editinlineclubassignment/{contact}
+    defaults: { _controller: ClubadminContactBundle:ContactOverview:editClubAssignmentDate}  
+confirmation_application_fedmembership:
+    path:     /contact/confirmapplicationfed
+    defaults: { _controller: ClubadminContactBundle:Confirmation:applicationConfirmation, level1: confirmfedmembership }
+confirmation_application_getData:
+    path:     /contact/getApplications/{type}/{page}
+    defaults: { _controller: ClubadminContactBundle:Confirmation:getApplications}
+confirm_or_discard_application:
+    path:  /contact/confirmordiscardapplication/{action}
+    defaults: { _controller: ClubadminContactBundle:Confirmation:confirmOrDiscardApplicationPopup}
+update_applications:
+    path:  /contact/updateapplications
+    defaults: { _controller: ClubadminContactBundle:Confirmation:updateApplication}
+add_existing_fed_member:
+    path: /contact/addexistingfedmember
+    defaults: { _controller: ClubadminContactBundle:Confirmation:addExistingFedMember}
+contact_addexistfedmember_autocomplete:
+    path: /contact/addexistingfedmemberautocomplete
+    defaults: { _controller: ClubadminContactBundle:Confirmation:addExistingFedMemberAutocomplete}
+save_add_existing_fedmember:
+    path: /contact/saveAddExistingFedMember
+    defaults: { _controller: ClubadminContactBundle:Confirmation:saveAddExistingFedMember}
+confirm_application_club_assignments:
+    path: /contact/confirmapplicationclubassignments
+    defaults: { _controller: ClubadminContactBundle:Confirmation:confirmApplicationClubAssignments, level1: confirmappclubassignment} 
+get_application_club_assignments_data:
+    path: /contact/getclubassignmentconfirmationdata/{type}
+    defaults: { _controller: ClubadminContactBundle:Confirmation:getClubAssignmentConfirmationData}    
+confirm_or_discard_clubapplication:
+    path:  /contact/confirmordiscardclubapplication/{action}
+    defaults: { _controller: ClubadminContactBundle:Confirmation:confirmOrDiscardClubAssignmentApplicationPopup}
+update_confirm_club_assignment_applications:
+    path:  /contact/updateconfirmclubassignmentapplications
+    defaults: { _controller: ClubadminContactBundle:Confirmation:updateConfirmClubAssignmentApplication}
+contact_profile_preview_existing_fed_popup:
+    path:     /contact/profilePreviewExistingFed
+    defaults: { _controller: ClubadminContactBundle:Confirmation:contactProfilePreviewExistingFed} 
+quit_membership:
+    path: /contact/quitmembership
+    defaults: { _controller: ClubadminContactBundle:Assignment:quitMembership }
+save_quit_membership:
+    path: /contact/savequitmembership
+    defaults: { _controller: ClubadminContactBundle:Assignment:saveQuitMembership }
+quit_fed_membership:
+    path: /contact/quitfedmembership
+    defaults: { _controller: ClubadminContactBundle:Assignment:quitfedMembership }
+update_club_membership_assignments:
+    path:  /contact/clubmembershipassignments
+    defaults: { _controller: ClubadminContactBundle:Assignment:saveClubMembership }
+validate_transfer_membership:
+    path: /contact/validatetransfermembership
+    defaults: { _controller: ClubadminContactBundle:Assignment:validateTransferDate }
+validate_joining_membership:
+    path: /contact/validatejoiningmembership
+    defaults: { _controller: ClubadminContactBundle:Assignment:validateJoiningDate }
+validate_email_for_fedmembership:
+    path: /contact/validateemailfedmembership
+    defaults: { _controller: ClubadminContactBundle:Assignment:validateEmailFedmembership }
+save_confirmation_contact:
+    path:  /contact/saveconfirmationcontact
+    defaults: { _controller: ClubadminContactBundle:Confirmation:saveConfirmationContact }
+save_fedmembership:
+    path: /contact/savefedmembership
+    defaults: { _controller: ClubadminContactBundle:Assignment:saveFedmembershipContact }
+contact_fedname_search:
+    path: /settings/contactfednames/{term}
+    defaults: { _controller: ClubadminContactBundle:Userrights:contactNamesForFedadmin }   
+validate_first_joining_membership:
+    path: /contact/getfirstjoiningdate
+    defaults: { _controller: ClubadminContactBundle:Assignment:getFirstJoining }  
+website_userrights: 
+    path: settings/userrights/website
+    defaults: { _controller: ClubadminContactBundle:Userrights:displayCmsUserright }
+    
+external_application_confirmation: 
+    path:  /contact/externalapplicationconfirmation
+    defaults: { _controller: ClubadminContactBundle:ExternalApplicationConfirmation:externalApplicationConfirmation, level1: externalapplications }
+external_application_confirmation_data: 
+    path:  /contact/externalapplicationconfirmationdata/{type}
+    defaults: { _controller: ClubadminContactBundle:ExternalApplicationConfirmation:getExternalApplicationsData }
+external_application_form_data_for_popup: 
+    path:  /contact/externalapplicationconfirmationpopup/{extId}
+    defaults: { _controller: ClubadminContactBundle:ExternalApplicationConfirmation:getExternalFormDataForPopup }
+get_external_app:
+    path: /contact/testap
+    defaults: { _controller: ClubadminContactBundle:Default:testAp}
+confirm_or_discard_external_application:
+    path:  /contact/confirmordiscardexternalapplication/{action}
+    defaults: { _controller: ClubadminContactBundle:ExternalApplicationConfirmation:getConfirmPopup}
+do_confirm_or_discard_external_application:
+    path:  /contact/doconfirmordiscardexternalapplication
+    defaults: { _controller: ClubadminContactBundle:ExternalApplicationConfirmation:doConfirmExternalApplication}
+update_external_applications:
+    path:  /contact/updateexternalapplications
+    defaults: { _controller: ClubadminContactBundle:ExternalApplicationConfirmation:updateApplication}
+show_fed_membership:
+    path:  /contact/showfedmemberpopup
+    defaults: { _controller: ClubadminContactBundle:ExternalApplicationConfirmation:showFedmembershipPopup }
+get_all_external_application_confirm:
+    path:  /contact/getexternalapconfirm
+    defaults: { _controller: ClubadminContactBundle:ExternalApplicationConfirmation:getSelectedExternalApplication }
+save_external_application_contact:
+    path:  /contact/saveexternalcontact
+    defaults: { _controller: ClubadminContactBundle:ExternalApplicationConfirmation:saveExternalContact }
+confirm_merge_application:
+    path:     /contact/confirmmergeapplication
+    defaults: { _controller: ClubadminContactBundle:Confirmation:applicationConfirmation, level1: confirmmergeapplication, type: mergeList }
+import_merge_file:
+    path:  /contact/importshare
+    defaults: { _controller: ClubadminContactBundle:ImportShare:index, module: contact }
+import_share_data_assignment:
+    path:  /contact/importsharedata
+    defaults: { _controller: ClubadminContactBundle:ImportShare:importFileSubmit, module: contact }
+import_share_file_correction:
+    path:  /contact/importsharecorrection
+    defaults: { _controller: ClubadminContactBundle:ImportShare:importFileCorrection, module: contact }
+import_share_duplcate:
+    path:  /contact/importshareduplicate
+    defaults: { _controller: ClubadminContactBundle:ImportShare:importDuplicate, module: contact }
+import_share_submit:
+    path:  /contact/importshareconfirm
+    defaults: { _controller: ClubadminContactBundle:ImportShare:importConfirmSubmit, module: contact }
+temp_migration_profile_pic:
+    path:  /contact/migration
+    defaults: { _controller: ClubadminContactBundle:TempMoveProfilePic:moveToFolder  }
+contact_application_form_create:
+    path:     /contact/applicationform/createfields/{formId}
+    defaults: { _controller: ClubadminContactBundle:ApplicationForm:createApplicationFormField, module: contact, level1: applicationform }
+contact_application_form_list:
+    path:  /contact/applicationform
+    defaults: { _controller: ClubadminContactBundle:ApplicationForm:list, module: contact, level1: applicationform }
+contact_application_form_activate:
+    path:  /contact/applicationform/activate
+    defaults: { _controller: ClubadminContactBundle:ApplicationForm:activateForm }
+contact_application_form_delete:
+    path:  /contact/applicationform/delete
+    defaults: { _controller: ClubadminContactBundle:ApplicationForm:deleteForm }
+confirmations_creations_appform:
+    path:  /contact/appformcreations
+    defaults: { _controller: ClubadminContactBundle:ContactConfirmation:creationsList, level1: confirmcreationsappform}
+appform_creations_list:
+    path:  /contact/getappformcreations/{type}
+    defaults: { _controller: ClubadminContactBundle:ContactConfirmation:getCreations}
+confirm_discard_app_confirmations:
+    path:  /contact/confirmdiscardappconfirmations/{page}/{action}
+    defaults: { _controller: ClubadminContactBundle:ContactConfirmation:confirmOrDiscardConfirmationPopup}
+update_app_confirmations:
+    path:  /contact/updateappconfirmations
+    defaults: { _controller: ClubadminContactBundle:ContactConfirmation:updateConfirmations}
+save_contact_application_form:
+    path:  /contact/applicationform/save
+    defaults: { _controller: ClubadminContactBundle:ApplicationForm:saveContactFormWizard }  
+save_app_confirmation_contact:
+    path:  /contact/saveappconfirmcontact
+    defaults: { _controller: ClubadminContactBundle:ContactConfirmation:saveConfirmationContact }    
+contact_application_form_createform:
+    path:     /contact/applicationform/createform
+    defaults: { _controller: ClubadminContactBundle:ApplicationForm:createContactapplicationForm, module: contact, level1: applicationform }
+contact_application_form_save:
+    path:     /contact/applicationform/contactformSave
+    defaults: { _controller: ClubadminContactBundle:ApplicationForm:ContactFormsave, module: contact, level1: applicationform }    
+contact_application_form_recepients:
+    path:     /contact/applicationform/getContacts
+    defaults: { _controller: ClubadminContactBundle:ApplicationForm:searchContacts }
+contact_application_form_Edit:
+    path:     /contact/applicationform/contactformedit
+    defaults: { _controller: ClubadminContactBundle:ApplicationForm:getApplicationFormData, module: contact, level1: applicationform }   
+contact_application_preview:
+    path:     /contact/applicationform/preview
+    defaults: { _controller: ClubadminContactBundle:ContactConfirmation:contactAppFormPreview }     
+contact_application_duplicate:
+    path:     /contact/applicationform/duplicate
+    defaults: { _controller: ClubadminContactBundle:ApplicationForm:duplicateForm } 
+save_quit_fedmembership:
+    path: /contact/savequitfedmembership
+    defaults: { _controller: ClubadminContactBundle:Assignment:saveQuitFedMembership }
+check_subcriber_list:
+    path:  /contact/checksubscriber
+    defaults: { _controller: ClubadminContactBundle:Archive:checkSubscriber }
+get_exception_filter_contact_names:
+    path: /contact/getexceptioncontactnames
+    defaults: { _controller: ClubadminCommunicationBundle:Recipients:getExceptionContactNames}    
+ 

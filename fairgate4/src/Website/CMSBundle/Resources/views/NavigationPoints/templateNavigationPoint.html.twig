@@ -1,0 +1,115 @@
+<script type="text/template" id="navPointTemplate">
+        <% dataKey = (item.isNew == 1) ? 'new_' + item.id : item.id; %>
+
+        <div class="fg-nestable-row fg-clear" id="<%- dataKey %>">
+            <div class="fg-col-first-icon fg-nestable-sort-drag dd-handle "><i class="fa fa-ellipsis-v"></i></div>
+            <div class="col-md-12 fg-col-hack ">
+                <div class="row">
+                    <div class="col-sm-3 col-xs-12 fg-nav-name">
+                        <div class="form-group fg-clear-marg fg-pad-0 ">
+                            <% _.each(clubLanguages, function(clubLang) { %>
+                                <input type="text" placeholder="<%- item.title %>" class="form-control input-sm" data-key="<%- dataKey %>.title.<%- clubLang %>" id="<%- dataKey %>_title_<%- clubLang %>_titleLang" name="<%- dataKey %>_title_<%- clubLang %>_titleLang" data-lang="<%- clubLang %>" value="<%- (_.isUndefined(item.titleLang)) ? '' : item.titleLang[clubLang] %>" <% if (clubLang == defaultLang) { %> required="true" <% } %>>  
+                            <% }); %>    
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                         <% if (!_.isEmpty(item.pageTitle)) { %>
+                                 <a class="fg-marg-top-5 show"  target="_blank" href="<%- item.baseUrl %>/<%- item.navigationUrl %>" ><span nav-url-id="<%- item.id %>" page-url-id="<%- item.pageId %>"><span>/<%- item.navigationUrl %></span></span></a>   
+                         <% } %>                         
+                     </div>
+                    <input id="<%- dataKey %>_unAssign" name="<%- dataKey %>_unAssign" data-key="<%- dataKey %>.unAssign" type="checkbox" class="fg-dev-unassign-<%- item.id %> hide" >                                
+                    <div class="text-right fg-pagetitle fg-dev-pagetitle col-xs-3">
+                        <% if (!_.isEmpty(item.pageTitle)) { 
+                            var pageAssignmentIcons = {article : 'fa-newspaper-o', gallery : 'fa-picture-o', calendar : 'fa-calendar'}; %>
+                            <a   href="javascript:void(0)" ><span nav-url-id="<%- item.id %>"   page-url-id="<%- item.pageId %>" class="fg-badge-blue3 fg-badge"><% if (!_.isEmpty(pageAssignmentIcons[item.pageType])) { %> <i class="fg-cms-page-url-nav fa <%- pageAssignmentIcons[item.pageType] %>"></i> <% } %> <span class="fg-cms-page-url-nav"><%- item.pageTitle %></span><i class="fa fa-times-circle fg-marg-left-5 fg-dev-remove"></i></span></a>
+                        <% } %>
+                        <% if (!_.isEmpty(item.externalLink)) { %>
+                            <a target="_blank" href="<%- item.externalLink %>"><%- item.externalLink %></a>
+                        <% } %>
+                    </div>
+                    <div class="col-md-2 col-sm-3 text-right fg-lock-switch fg-switch col-xs-6">
+                        <div class="">
+                            <label class="fg-switch-popovers switch-light switch-light-sm" data-content-check="{{'CMS_NAVIGATION_TOOLTIP_VISIBLE_UNLOCK'|trans}}" data-content-uncheck="{{'CMS_NAVIGATION_TOOLTIP_VISIBLE_LOCK'|trans}}" onClick="">
+                                <input id="<%- dataKey %>_isPublic" name="<%- dataKey %>_isPublic" data-key="<%- dataKey %>.isPublic" type="checkbox" class="make-switch" <%- (item.isPublic == 1) ? 'checked' : '' %>>
+                                <span> 
+                                    <span class="fa fa-2x fa-unlock"></span>
+                                    <span class="fa fa-2x fa-lock"></span>                                                                    
+                                </span>
+                                <a class="btn btn-primary"></a>
+                            </label>
+                        </div>                                                                                            
+                    </div>
+                    <div class="col-md-2 col-sm-3 text-right col-xs-6 fg-switch pull-right">
+                        <div class="">
+                            <label class="fg-switch-popovers switch-light switch-light-sm" data-content-check="{{'CMS_NAVIGATION_TOOLTIP_ACTIVATED_CHECK'|trans}}" data-content-uncheck="{{'CMS_NAVIGATION_TOOLTIP_ACTIVATED_UNCHEK'|trans}}" onClick="">
+                                <input id="<%- dataKey %>_isActive" name="<%- dataKey %>_isActive" data-key="<%- dataKey %>.isActive" type="checkbox" class="make-switch" <%- (item.isActive == 1) ? 'checked' : '' %>>
+                                <span> 
+                                    <span>{{ 'ON'|trans }}</span>
+                                    <span>{{ 'OFF'|trans }}</span>                                                                    
+                                </span>
+                                <a class="btn btn-primary"></a>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="fg-col-last-icon" name="fg-dev-close-icon">
+                <div class="pull-right deletediv">
+                    <% if (item.subMenuCount > 0) { %>
+                      <i class="fa fa-lock fa-2x ash" data-toggle="tooltip" title="{{ 'TOOLTIP_DISABLED_DELETE_MENU_ICON'|trans({}, 'tooltip') }}"></i>
+                    <% } else { %>
+                        <div class="closeico">
+                          <input type="checkbox" class="make-switch" data-inactiveblock="changecolor" data-parentid="<%- dataKey %>" data-key="<%- dataKey %>.is_deleted" name="<%- dataKey %>_is_deleted"  id="<%- dataKey %>_is_deleted"/>
+                          <label for="<%- dataKey %>_is_deleted"></label>
+                       </div>
+                    <% } %>
+                </div>
+            </div> 
+            <input class="hide" id="<%- dataKey %>_sortOrder" name="<%- dataKey %>_sortOrder" data-key="<%- dataKey %>.sortOrder" type="text" value="<%- item.sortOrder %>">
+            <input class="hide" id="<%- dataKey %>_parentId" name="<%- dataKey %>_parentId" data-key="<%- dataKey %>.parentId" type="text" value="<%- item.parentId %>">
+        </div>
+</script>
+
+
+<script type="text/template" id="navPointsListingTemplate">
+    <% var navPointTmpl = _.template($('#navPointTemplate').html()); %>
+    <% var mainMenus = _.filter(data, function(row) { return (row.parentId == 1); }); %> 
+    <% mainMenus = _.sortBy(mainMenus, 'sortOrder'); %> 
+    <% var subData = _.difference(data, mainMenus); %>
+    <% _.each(mainMenus, function(item, key){ %> 
+        <li class="dd-item row" data-id= "<%- item.id %>">
+            <%= navPointTmpl({ item: item }) %>
+            <% var subMenus = _.filter(subData, function(subRow) { return (subRow.parentId == item.id) }); %>
+            <% subMenus = _.sortBy(subMenus, 'sortOrder'); %> 
+            <% var subSubData = _.difference(subData, subMenus); %>
+            <% if (_.size(subMenus) > 0) { %>
+                <ol class="dd-list">
+                    <% _.each(subMenus, function(subItem, subKey){ %> 
+                        <li class="dd-item row" data-id= "<%- subItem.id %>">
+                            <%= navPointTmpl({ item: subItem }) %>
+                            <% var subSubMenus = _.filter(subSubData, function(subSubRow) { return (subSubRow.parentId == subItem.id) }); %> 
+                            <% subSubMenus = _.sortBy(subSubMenus, 'sortOrder'); %> 
+                            <% if (_.size(subSubMenus) > 0) { %>
+                                <ol class="dd-list">
+                                    <% _.each(subSubMenus, function(subSubItem, subSubKey){ %> 
+                                        <li class="dd-item row" data-id= "<%- subSubItem.id %>">
+                                            <%= navPointTmpl({ item: subSubItem }) %>
+                                        </li>
+                                    <% }); %>  
+                                </ol>
+                            <% } %> 
+                        </li>
+                    <% }); %>  
+                </ol>
+            <% } %>
+        </li>
+    <% }); %> 
+</script>
+
+<script type="text/template" id="navigationPointTemplate">
+    <% var navPointTmpl = _.template($('#navPointTemplate').html()); %>
+    <li class="dd-item row" data-id= "<%- 'new_' + data[0].id %>">
+        <%= navPointTmpl({ item: data[0] }) %>
+    </li>
+</script>

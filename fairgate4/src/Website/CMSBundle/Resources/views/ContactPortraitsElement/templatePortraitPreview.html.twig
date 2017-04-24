@@ -1,0 +1,23 @@
+<div class="portlet-body fg-cms-portrait-element-create-preview-wrapper fg-clear">
+    <div class="col-sm-12">
+        <div class="fg-portrait-widget fg-widget-block">
+            <% var columnSize_{{elementId}} =  {{ columnSize }} %>
+            <% var portraitPerRow_{{elementId}} = {{ portraitElemSettings[elementId]['data']['portraitElement']['portraitPerRow']}} %>
+            <% var quotient_{{elementId}} = columnSize_{{elementId}}/portraitPerRow_{{elementId}} %>
+            <% var remainder_{{elementId}} = columnSize_{{elementId}}%portraitPerRow_{{elementId}} %>
+            <% if(contactsData.length > 0){ %>
+                <div class="fg-portrait-row fg-clear">
+                    <%  _.each(contactsData, function(cData,k) { %>
+                        {{ portraitElemSettings[elementId]['template']|raw }}
+                        <% if( ((k+1)%portraitPerRow_{{elementId}} == 0) && remainder_{{elementId}} > 0) { %> 
+                           <div class="fg-portrait-empty-col visible-md visible-lg fg-col-<%-remainder_{{elementId}}%>"></div> 
+                        <% } %> 
+                    <% }); %> 
+                </div>
+            <% } else { %>
+                <p>{{ 'PORTRAIT_NOCONTACTS_MESSAGE'|trans }}</p>
+            <% }%>
+        </div> 
+    </div>  
+</div>  
+<div class="clearfix"></div> 

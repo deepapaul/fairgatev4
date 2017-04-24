@@ -1,0 +1,32 @@
+Common\UtilityBundle\Entity\FgCmsPageAreas:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPageAreasRepository
+    type: entity
+    table: fg_cms_page_areas
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        page:
+            targetEntity: FgCmsPage
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                page_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        role:
+            targetEntity: FgRmRole
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                role_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

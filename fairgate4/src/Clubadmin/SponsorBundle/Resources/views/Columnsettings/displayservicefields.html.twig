@@ -1,0 +1,61 @@
+<script type="text/template" id="template-display-servicefields">
+        <% //SYSTEM FIELDS 
+    %>
+    <h4 class="fg-cols-fsz"> <%- sponserAnalysis['title'] %></h4>
+    <% _.each(sponserAnalysis.entry, function(sponsorField) { %>
+        <div class="form-group">                
+            <div class="checkbox-list">       
+                <label class="fg-col-settings-label">
+                    <i class="fa fg-plus-circle fa-2x pull-left selectitem" id="<%- sponsorField.id %>" type="SA" club_id="<%- clubId %>" >
+                    <span class="fg-label-inner" data-label-id="SA<%- sponsorField.id %>"><%- sponsorField.title %></span></i>
+                </label>           
+            </div>
+    <% }); %>
+        </div>
+{% if(contacttype !='archivedsponsor') %}
+    <% if( showFilter == 1 ){ %>
+        
+     <h4 class="fg-cols-fsz"> {{'SPONSOR_SERVICES'|trans}} </h4>
+     <% prevCategoryId = '' %>
+        <% _.each(assignmentFields,function(assignmentField){ %> 
+            <% if(!( _.isEmpty(assignmentField.input))){ %>
+                <% categoryId = assignmentField.id %>
+                <% categoryName = assignmentField.title %>
+               <div class="fg-clear"></div>
+               <div class="col-md-12">
+                   <% //Category %>   
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="checkbox-list">
+                            <label class="fg-col-settings-label">
+                                <i class="fa fg-plus-circle fa-2x pull-left selectitem disabled" id="<%- categoryId %>" data-clasftnid="<%- categoryId %>" type="SS" club_id="<%- clubId %>" >      
+                                <span data-clasftnid="<%- categoryId %>" data-label-id="SS<%- categoryId %>" class="fg-label-inner"><%- categoryName %></span></i>  
+                            </label>
+                        </div>
+                    </div>
+            
+                    <% //service   %>
+                    <div class="col-md-4 col-sm-4 col-xs-12 fg-dropdown-blue"> 
+                        <select multiple class="bs-select form-control fg-select-font selectpicker"  data-clasftnid="<%- categoryId %>">{{'SELECT_DEFAULT'|trans}}
+                           <option value="all" class="single fg-arrow-all">{{'SM_ALL_SERVICES'|trans}}</option>
+                      <% //chk condition: no service%>
+                            <option value="selectall" class="selectall fg-arrow-all">{{'SM_SELECT_ALL'|trans}}</option>
+                            <optgroup label="">
+                                <% _.each(assignmentField.input,function(assignment){ %> 
+                                    <% seviceId = assignment.id %>
+                                    <% seviceName = assignment.title %> 
+                                    <option value="<%-seviceId %>" class="multiple" ><%- seviceName %></option>
+                                <% }) %>
+                             </optgroup>
+                         </select>
+                        </div>
+                    </div>
+            <% }  %>
+       <% });  %>
+    <% } %>
+{% endif %}
+</script>
+
+
+
+
+

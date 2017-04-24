@@ -1,0 +1,49 @@
+<script type="text/template" id="form_field_templates_email">
+
+    <div class="fg-collapsed-content-wrapper">
+
+        <div class="form-group">
+            <label class="col-md-3 col-sm-4 control-label" for="<%- data.formId %>.<%- data.formFieldId %>_isRequired">{{'CMS_FORM_REQUIRED'|trans}}</label>
+            <div class="col-sm-4">
+                <label for="<%- data.formId %>.<%- data.formFieldId %>_isRequired" class="fg-checkbox">
+                    <input type="checkbox" class="fg-dev-newfield" id="<%- data.formFieldId %>_isRequired" data-key="<%- data.formId %>.<%- data.formFieldId %>.isRequired" name="<%- data.formFieldId %>_isRequired" <%= (($.trim(data.isRequired) == '1' || data.isRequired === true) ? 'checked' :'') %>/>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-3 col-sm-4 control-label" for="<%- data.formId %>.<%- data.formFieldId %>_useMailForNotification">{{'CMS_FORM_USEMAILFORNOTIFICATION'|trans}}</label>
+            <div class="col-sm-4">
+                <label for="<%- data.formId %>.<%- data.formFieldId %>_useMailForNotification" class="fg-checkbox">
+                    <input type="checkbox" class="fg-dev-newfield" id="<%- data.formFieldId %>_useMailForNotification" data-key="<%- data.formId %>.<%- data.formFieldId %>.useMailForNotification" name="<%- data.formFieldId %>_useMailForNotification" <%= (($.trim(data.useMailForNotification) == '1' || data.useMailForNotification === true || data.attributeId == '{{primaryEmailField}}') ? 'checked' :'') %>/>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-3 col-sm-4 control-label ">{{'CMS_FORM_PLACEHOLDER'|trans}}</label>
+            <div class="col-sm-4">
+            <% _.each(data.clubLanguages, function(clubLang) { %>
+                <input type="text" class="form-control fg-dev-newfield <%- clubLang != data.clubDefaultLanguage ? 'hide':''  %>" id="<%- data.formFieldId %>_placeholder_<%- clubLang %>" 
+                        <% var placeholderDefaultValue = (_.contains(_.keys(data.placeholder),data.clubDefaultLanguage)) ? data.placeholder[data.clubDefaultLanguage]:'' %>
+                        placeholder="<%- (clubLang != data.clubDefaultLanguage)?placeholderDefaultValue:'' %>"
+                        data-lang="<%- clubLang %>" data-key="<%- data.formId %>.<%- data.formFieldId %>.placeholder.<%- clubLang %>" value="<%- (_.contains(_.keys(data.placeholder),clubLang)) ? data.placeholder[clubLang]:'' %>" name="<%- data.formFieldId %>_placeholder_<%- clubLang %>"/>
+            <% }); %>
+             </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-3 col-sm-4 control-label" for="textarea">{{'CMS_FORM_FIELD_TOOLTIP'|trans}}</label>
+            <div class="col-sm-4">
+            <% _.each(data.clubLanguages, function(clubLang) { %>
+                <textarea maxlength="160" class="form-control fg-textarea fg-dev-newfield <%- clubLang != data.clubDefaultLanguage ? 'hide':''  %>" data-key="<%- data.formId %>.<%- data.formFieldId %>.tooltip.<%- clubLang %>" 
+                        <% var placeholderDefaultValue = (_.contains(_.keys(data.tooltip),data.clubDefaultLanguage)) ? data.tooltip[data.clubDefaultLanguage]:'' %>
+                        placeholder="<%- (clubLang != data.clubDefaultLanguage)?placeholderDefaultValue:'' %>"
+                        data-lang="<%- clubLang %>" name="<%- data.formFieldId %>_tooltip_<%- clubLang %>"  id="<%- data.formFieldId %>_tooltip_<%- clubLang %>"><%= (_.contains(_.keys(data.tooltip),clubLang)) ? $.trim(data.tooltip[clubLang]):'' %></textarea>
+            <% }); %>
+            </div>
+        </div>
+
+    </div>
+
+</script>

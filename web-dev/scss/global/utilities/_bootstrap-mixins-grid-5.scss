@@ -1,0 +1,54 @@
+//- Bootstrap grid system change mixins
+
+$grid-breakpoints: (
+  // Extra small screen / phone
+  xs: 0,
+  // Small screen / phone
+  sm: 544px,
+  // Medium screen / tablet
+  md: 768px,
+  // Large screen / desktop
+  lg: 992px,
+  // Extra large screen / wide desktop
+  xl: 1200px
+);
+
+
+$grid-columns: 5;
+$grid-gutter-width: 1.875rem;
+
+
+
+
+// Creates a wrapper for a series of columns
+@mixin make-row($gutter: $grid-gutter-width) {
+  margin-left:  ($gutter / -2);
+  margin-right: ($gutter / -2);
+  @include clearfix();
+}
+
+// Make the element grid-ready (applying everything but the width)
+@mixin make-col($gutter: $grid-gutter-width) {
+  position: relative;
+  float: left;
+  min-height: 1px;
+  padding-left:  ($gutter / 2);
+  padding-right: ($gutter / 2);
+}
+
+// Set a width (to be used in or out of media queries)
+// @include make-col-span(1)
+@mixin make-col-span($columns, $gridColumn:$grid-columns) {
+  width: percentage(($columns / $gridColumn));
+}
+
+// Get fancy by offsetting, or changing the sort order
+@mixin make-col-offset($columns) {
+  margin-left: percentage(($columns / $grid-columns));
+}
+@mixin make-col-push($columns) {
+  left: percentage(($columns / $grid-columns));
+}
+@mixin make-col-pull($columns) {
+  right: percentage(($columns / $grid-columns));
+}

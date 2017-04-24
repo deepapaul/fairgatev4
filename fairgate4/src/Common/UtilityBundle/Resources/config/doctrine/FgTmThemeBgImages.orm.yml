@@ -1,0 +1,65 @@
+Common\UtilityBundle\Entity\FgTmThemeBgImages:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgTmThemeBgImagesRepository
+    type: entity
+    table: fg_tm_theme_bg_images
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        bgType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: bg_type
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: sort_order
+        positionHorizontal:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: position_horizontal
+        positionVertical:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: position_vertical
+        bgRepeat:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: bg_repeat
+        isScrollable:
+            type: boolean
+            nullable: true
+            column: is_scrollable
+    manyToOne:
+        galleryItem:
+            targetEntity: FgGmItems
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                gallery_item_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        configuration:
+            targetEntity: FgTmThemeConfiguration
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                configuration_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

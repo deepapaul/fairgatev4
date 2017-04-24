@@ -1,0 +1,20 @@
+<script type="text/template" id="overviewArticleBox">
+    <ul>
+        <% _.each(settings.article,function(entry,key){  %>   
+            <li>
+                <span class="fg-forum-blk">
+                    <a href="<%=entry.articleLink%>">
+                      <%= entry.title %></a>    
+              <% if(!settings.role) { %>
+                  <% _.each(entry.roles,function(roleTitle,key){  %>  
+                            <span class="fg-note-block"><%= roleTitle %></span>
+                <% });%> 
+                    <% } %>
+                </span>
+                <div class="fg-doc-right-blk text-right">
+                      <%= entry.PUBLICATION_DATE %>
+                </div>
+            </li>
+        <% });%>                
+    </ul>
+</script>

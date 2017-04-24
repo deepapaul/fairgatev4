@@ -1,0 +1,32 @@
+Common\UtilityBundle\Entity\FgCnNewsletterTemplateServices:    
+    repositoryClass: Common\UtilityBundle\Repository\FgCnNewsletterTemplateServicesRepository
+    type: entity
+    table: fg_cn_newsletter_template_services
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        templateSponsor:
+            targetEntity: FgCnNewsletterTemplateSponsor
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                template_sponsor_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        services:
+            targetEntity: FgSmServices
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                services_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

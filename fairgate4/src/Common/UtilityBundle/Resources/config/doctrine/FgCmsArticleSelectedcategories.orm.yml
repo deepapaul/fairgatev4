@@ -1,0 +1,32 @@
+Common\UtilityBundle\Entity\FgCmsArticleSelectedcategories:
+    repositoryClass: Common\UtilityBundle\Repository\Article\FgCmsArticleSelectedcategoriesRepository
+    type: entity
+    table: fg_cms_article_selectedcategories
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        article:
+            targetEntity: FgCmsArticle
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                article_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        category:
+            targetEntity: FgCmsArticleCategory
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                category_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

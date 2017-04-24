@@ -1,0 +1,283 @@
+extends _helpers/theme-02/layout.jade
+
+block vars
+  - var bodyClass = 'fg-web-theme-02 fg-header-sticky';  
+  - var bodyStyles = 'background:url("https://www.clipartsgram.com/image/1702162501-background-debut-webdesign-web-sujet-website.jpg") no-repeat; background-size:cover; ';  
+  - var headerClass = 'header-bg-full-width ';
+block title
+    title Article Title
+
+block page-level-library-css      
+      link(href='https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css', rel='stylesheet', media='screen')
+      link(href='https://cdn.datatables.net/responsive/2.1.0/css/responsive.dataTables.min.css', rel='stylesheet', media='screen')
+block page-level-header
+      link(href='../../css/fg-web-theme-02.css', rel='stylesheet', media='screen')
+      link(href='../theme-based-styles/theme-02-color-schemes.css', rel='stylesheet', media='screen')
+      link(href='../theme-based-styles/theme-02-config.css', rel='stylesheet', media='screen')
+block header
+    .row.fg-web-top-nav-wrapper
+        .container
+            .FR
+                ul.fg-web-top-nav-links.list-inline
+                    li
+                        a(href='#') FAQ
+                    li
+                        a(href='#') Contact
+                    li
+                        a(href='#') Map
+                .fg-web-top-nav-languages
+                    .fg-current-language 
+                        a(href="#" data-toggle='dropdown', role='navigation', aria-expanded='false') EN
+                    ul.dropdown-menu.pull-right.fg-web-language-list
+                        li.active 
+                          a(href="javascript:void(0)") EN
+                        li
+                          a(href="javascript:void(0)") RU
+                        li
+                          a(href="javascript:void(0)") DE
+                        li
+                          a(href="javascript:void(0)") CH
+
+    .row.fg-web-header-content
+        figure.fg-header-bg
+          img(src="http://www.romantic-escapes.co.uk/wp-content/uploads/2015/02/city-breaks-slider.jpg").fg-width-P
+        .fg-logo-wrapper.fg-logo-center
+            
+            a(href='#').fg-logo
+              img(src="http://www.fauchard.org/system/ckeditor_assets/pictures/101/content_pfa_portrait_logo-300print.jpg")
+        .container
+            .clearfix
+            .fg-navbar-container
+                .fg-web-nav-icon
+                    span
+
+                nav.navbar.navbar-default.fg-web-main-nav
+                    ul.nav.navbar-nav
+                        li.active                                    
+                            a(href='#') Home     
+                        li
+                            a(href='#') Club
+                        li
+                            a(href='#') Teams
+                        li
+                            a(href='#') News
+                        li.dropdown
+                            a(href='#')
+                                | Photos 
+                            span.fg-dropdown-toggle.material-icons(data-toggle='dropdown', role='navigation', aria-expanded='false') keyboard_arrow_right
+                            ul.dropdown-menu
+                                li
+                                    a(href='#') Second level menu
+                                li
+                                    a(href='#') Second level menu
+                                li.dropdown
+                                    a(href='#')
+                                        | Second level Dropdown Second level Dropdown 
+                                    span.material-icons.fg-dropdown-toggle(data-toggle='dropdown', role='navigation', aria-expanded='false') keyboard_arrow_right
+                                    ul.dropdown-menu.fg-web-open-right
+                                        li
+                                            a(href='#') Third level menu
+                                        li
+                                            a(href='#') Third level menu
+
+                                        li.dropdown
+                                            a(href='#')
+                                                | Third level Dropdown 
+                                            span.material-icons.fg-dropdown-toggle(data-toggle='dropdown', role='navigation', aria-expanded='false') keyboard_arrow_right
+                                            ul.dropdown-menu.fg-web-open-left
+                                                li
+                                                    a(href='#') Fourth level menu
+                                                li
+                                                    a(href='#') Fourth level menu
+                                                li
+                                                    a(href='#') Fourth level menu
+                                                li
+                                                    a(href='#') Fourth level menu
+                                        li
+                                            a(href='#') Third level menu
+                                li
+                                    a(href='#') Second level menu
+                                li
+                                    a(href='#') Second level menu
+                  
+                        li
+                            a(href='#') Contact
+                .fg-additional-nav
+                    .fg-web-top-nav-languages
+                        .fg-current-language 
+                            a(href="javascript:void(0)" data-toggle='dropdown', role='navigation', aria-expanded='false') EN
+                        ul.dropdown-menu.fg-web-language-list
+                            li.active 
+                              a(href="javascript:void(0)") EN
+                            li
+                              a(href="javascript:void(0)") RU
+                            li
+                              a(href="javascript:void(0)") DE
+                            li
+                              a(href="javascript:void(0)") CH
+                    .fg-web-top-nav-links.active
+                        a(href="javascript:void(0)" data-toggle='dropdown', role='navigation', aria-expanded='false') 
+                            i.material-icons more_vert
+                        ul.dropdown-menu
+                          li
+                              a(href='#') FAQ
+                          li
+                              a(href='#') Contact
+                          li
+                              a(href='#') Map
+                    
+block content
+
+        .fg-web-page-title-bar.row.has-close-btn.has-breadcrumbs
+            .container
+              .fg-web-titlebar-left-col.pull-left.has-breadcrumb
+                .fg-web-page-title-block.fg-breadcrumb-block
+                  ul.fg-breadcrumbs
+                    li#fg-cms-ws-bc-1
+                      a#fg-cms-ws-bc-anchor-1(href='javascript:void(0);') Gallery 01
+                    li#fg-cms-ws-bc-2
+                      a#fg-cms-ws-bc-anchor-2(href='javascript:void(0);') Club
+                .fg-titlebar-block.fg-web-page-title-block
+                  h1.fg-web-page-title Events
+
+              .fg-web-titlebar-right-col.pull-right
+                .fg-titlebar-block.fg-icon-bg.fg-page-prev.hidden-xs.fg-disabled-link
+                  a.fg-page-prev-link(href='javascript:void(0)')
+                    i.fg-icon
+                .fg-titlebar-block.fg-icon-bg.fg-page-close
+                  a.fg-page-close-link(href='/sebin/article')
+                    i.fg-icon
+                .fg-titlebar-block.fg-icon-bg.fg-page-next.hidden-xs.fg-disabled-link
+                  a.fg-page-next-link(href='javascript:void(0)')
+                    i.fg-icon
+              .fg-web-titlebar-right-col.pull-right.fg-web-title-filter-wrapper
+              .clearfix
+
+
+        
+        .container
+            .row.fg-web-page-container
+                .fg-calendar-special-contents-wrapper
+                  section.col-sm-12.fg-calendar-month-block
+                    h2.fg-page-subtitle February
+                    .fg-content.fg-border-rows
+                      .row.fg-rows
+                        .col-md-4.fg-event-duration Monday, 20.05.2015 - Tuesday, 20.06.2015
+                        .col-md-2.fg-event-title
+                          strong Annual Gathering
+                        .col-md-2.col-md-offset-2
+                          .fg-event-teams
+                            span.fg-team(style='background: #4f8050;color: #fff;') Team A
+                            span.fg-team(style='background: #7c78ce;color: #fff;') Team B
+                            span.fg-team(style='background: #32c5d2;color: #fff;') Workgroup A
+                        .col-md-2
+                          .fg-event-cats
+                            span.fg-cat Gathering
+                            span.fg-cat Public
+                      .row.fg-rows
+                        .col-md-4.fg-event-duration Monday, 20.05.2015 - Tuesday, 20.06.2015
+                        .col-md-2.fg-event-title
+                          strong Annual Gathering
+                        .col-md-2.col-md-offset-2
+                          .fg-event-teams
+                            span.fg-team(style='background: #d73be1;color: #fff;') Team A
+                            span.fg-team(style='background: #f0d061;color: #fff;') Team B
+                        .col-md-2
+                          .fg-event-cats
+                            span.fg-cat Gathering
+                            span.fg-cat Public
+                      .row.fg-rows
+                        .col-md-4.fg-event-duration Monday, 20.05.2015 - Tuesday, 20.06.2015
+                        .col-md-2.fg-event-title
+                          strong Annual Gathering
+                        .col-md-2.col-md-offset-2
+                          .fg-event-teams
+                            span.fg-team(style='background: #e23338;color: #fff;') Team A
+                            span.fg-team(style='background: #e27d33;color: #fff;') Team B
+                        .col-md-2
+                          .fg-event-cats
+                            span.fg-cat Gathering
+                            span.fg-cat Public
+                  section.col-sm-12.fg-calendar-month-block
+                    h2.fg-page-subtitle March
+                    .fg-content.fg-border-rows
+                      .row.fg-rows
+                        .col-md-4.fg-event-duration Monday, 20.05.2015 - Tuesday, 20.06.2015
+                        .col-md-2.fg-event-title
+                          strong Annual Gathering
+                        .col-md-2.col-md-offset-2
+                          .fg-event-teams
+                            span.fg-team(style='background: #ccc;color: #fff;') Team A
+                            span.fg-team(style='background: gold;color: #fff;') Team B
+                        .col-md-2
+                          .fg-event-cats
+                            span.fg-cat Gathering
+                            span.fg-cat Public
+                      .row.fg-rows
+                        .col-md-4.fg-event-duration Monday, 20.05.2015 - Tuesday, 20.06.2015
+                        .col-md-2.fg-event-title
+                          strong Annual Gathering
+                        .col-md-2.col-md-offset-2
+                          .fg-event-teams
+                            span.fg-team(style='background: red;color: #fff;') Team A
+                            span.fg-team(style='background: cyan;color: #fff;') Team B
+                        .col-md-2
+                          .fg-event-cats
+                            span.fg-cat Gathering
+                            span.fg-cat Public
+                      .row.fg-rows
+                        .col-md-4.fg-event-duration Monday, 20.05.2015 - Tuesday, 20.06.2015
+                        .col-md-2.fg-event-title
+                          strong Annual Gathering
+                        .col-md-2.col-md-offset-2
+                          .fg-event-teams
+                            span.fg-team(style='background: orange;color: #fff;') Team A
+                            span.fg-team(style='background: aqua;color: #fff;') Team B
+                        .col-md-2
+                          .fg-event-cats
+                            span.fg-cat Gathering
+                            span.fg-cat Public
+    
+block page-level-footer
+    script(src='https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js')
+    script(src='https://cdn.datatables.net/responsive/2.1.0/js/dataTables.responsive.min.js')
+    script(src='.././../js/fg-website-02.js')
+    script.
+      jQuery(document).ready(function () {
+            $("select").selectpicker();
+            window.DT=  $('#example').DataTable({
+                  dom: "<'col-md-12't><'col-md-12'p>",
+                  "autoWidth": false,
+                  scrollX: true,
+                  language: {
+                      paginate: {
+                          "next": '<i class="fa fa-angle-right"></i>',
+                          "previous": '<i class="fa fa-angle-left"></i>'
+                      }
+                  },
+                  
+            });
+
+            $('.dataTable tbody').on( 'mouseover', 'tr', function () {
+                $(this).addClass('fg-hover');
+            } );
+
+            $('.dataTable tbody').on( 'mouseout', 'tr', function () {
+                $(this).removeClass('fg-hover');
+            } );
+            $(window).resize(function(){
+                DT.columns.adjust().draw();
+            });
+            /*------------------------------------------------
+            Navigation actions
+            -------------------------------------------------*/
+            $('.fg-web-nav-icon').on('click',function(){
+                var $this = $(this)
+                var $navIcon =  $this;
+                var $navContainer = $navIcon.siblings('.fg-web-main-nav');
+                $navIcon.toggleClass('active');
+                $navContainer.toggleClass('active');
+            });
+            fgwebsite = 'ss';
+            FgWebsiteThemeObj = new FgWebsiteTheme();
+      });

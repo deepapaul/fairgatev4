@@ -1,0 +1,156 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title"></h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="#" class="form-horizontal form-row-sepe" id="archivecontacts">
+                    <div class="form-body">
+                        
+                        <div id="block_0" class="fg-dev-archive-content">
+                            <p class="fg-dev-archive-status-txt"></p>
+                        </div>
+
+                    </div>
+                    
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    {% include 'clubadmin/savebuttonpopup.html.twig'  %}
+
+<script type="text/javascript">
+    var clubId = '{{clubId}}';
+    var clubType = '{{clubType}}';
+    var actionType = '{{actionType}}';
+    var selActionType = '{{selActionType}}';
+    var selContIds = [];
+     var selectedContactNames = [];
+
+    if (selActionType == 'selected') {
+        $("input.dataClass:checked").each(function() {
+            var contactId = $(this).attr('id');
+            var parentTd = $(this).parents('td').next();
+            var email = $(parentTd).text();
+            var ftname= $(parentTd).next().text();
+            var ltname= $(parentTd).next().next().text();
+            var subscriberT = " ";
+            if(ftname != "-"||ltname != "-"){
+                if(ftname != "-"){
+                 subscriberT = ftname;
+                }
+                if(ltname != "-"){
+                    subscriberT+= "  "+ltname;
+                }
+                if(email != "-"){
+                    subscriberT+= " ("+email+")";
+                }
+            }
+            else{
+                subscriberT = email+" ";
+            }
+            selectedContactNames.push({'id': contactId, 'name': subscriberT});
+            if ($.inArray(contactId, selContIds) == -1) {
+                selContIds.push(contactId);
+            }
+        });
+    }
+    FgFormTools.handleUniform();
+    displayTitle();
+    $(document).off('click', 'button[data-function=save], button[data-function=cancel]');
+    $(document).on('click', 'button[data-function=save], button[data-function=cancel]', function() {
+        var buttonId = this.id;
+        if (buttonId == 'save') {
+            deleteSubscriberFun();
+        }
+    });
+    
+    
+    function deleteSubscriberFun() {
+        var selectedId = JSON.stringify(selContIds);
+        $('#popup').modal('hide');
+        var passingData = {'selectedId':selectedId,'actionType': actionType,'fromPage': 'subscriber_list'};
+        FgXmlHttp.post('{{path("save_delete_subscribers")}}', passingData, false, callBackFn);
+    }
+    function callBackFn(resultParms) {
+        
+        if (!$.isEmptyObject(subscriberTable)) {
+            var subscriberCount = resultParms.subscriberCount;
+            var ownContactCount = resultParms.ownContactCount;
+            var totalCount = resultParms.totalCount;
+           
+            subscriberTable.draw();
+            $('#fg-subscriber-count').html(subscriberCount);
+            $('#fg-own-contact-count').html(ownContactCount);
+            $('#fg-total-subscriber-count').html(totalCount);
+            $('#fg-dev-subscriber-count').html(totalCount);
+        } else {
+            FgTable.init();
+        }
+
+    }
+    function displayTitle() {
+   
+    var multipleHeadTxt = '{{'CONFIRM_SUBSCRIBER_DELETE_TITLE_%subscriber%'|trans}}';
+       
+        $('h4.modal-title').html('<div class="fg-popup-text" id="popup_head_text"></div>');
+        //delete all not in requirement so - selContIds.length not corrected
+        if(selContIds.length>1){
+            var desp ='{{'CONFIRM_SUBSCRIBER_DELETE_DESC'|trans}}';
+             $('div#popup_head_text').text(multipleHeadTxt.replace('%subscriber%',selContIds.length ));
+             var contectNamesHt = '';
+               
+                var i = 0;
+                $.each(selectedContactNames, function(key, selContactName) {
+                    i++;
+                    if (i == 11) {
+                        contectNamesHt += '<li>&hellip;</li>';
+                        return false;
+                    } else {
+                        
+                        contectNamesHt += '<li>'+selContactName.name+'</li>';
+                    }
+                });
+                $('h4.modal-title').html('<span class="fg-dev-club-names"><a href="#" class="fg-plus-icon"></a><a href="#" class="fg-minus-icon"></a></span><div class="fg-popup-text" id="popup_head_text"></div>\n\
+                    <div class="fg-arrow-sh"><ul>' + contectNamesHt + '</ul></div>');
+                 $('div#popup_head_text').text(multipleHeadTxt.replace('%subscriber%',selContIds.length ));
+             $('.fg-dev-archive-status-txt').text(desp);
+        }else if(selContIds.length == 1){
+            var desp ='{{'CONFIRM_SUBSCRIBER_DELETE_DESC_ONE'|trans}}';
+            var subscriberTitle=" ";
+            var email=$('td.fg-dev-checkedtr:eq(1)').text();
+            var fname= $('td.fg-dev-checkedtr:eq(2)').text();
+            var lname= $('td.fg-dev-checkedtr:eq(3)').text();
+            if(fname != "-"||lname != "-"){
+                if(fname != "-"){
+                 subscriberTitle=fname;
+            }
+            if(lname != "-"){
+                subscriberTitle+=" "+lname;
+            }
+            if(email != "-"){
+                subscriberTitle+="("+email+")";
+            }
+            }
+            else{
+                subscriberTitle=email+" ";
+            }
+             var singleHeadTxt = '{{'CONFIRM_SUBSCRIBER_DELETE_%subscriber%'|trans}}';
+             $('.fg-dev-archive-status-txt').text(desp);
+             $('div#popup_head_text').text(singleHeadTxt.replace('%subscriber%',subscriberTitle ));
+        }
+        
+    }
+ $(document).off('click', '.modal-title .fg-dev-club-names');
+    $(document).on('click', '.modal-title .fg-dev-club-names', function() {
+        //toggle class to showhide the selected clubs
+        $(this).parent().toggleClass('fg-arrowicon');
+    });
+</script>

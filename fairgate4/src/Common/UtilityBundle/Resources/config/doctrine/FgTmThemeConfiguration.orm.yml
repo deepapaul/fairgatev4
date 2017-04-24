@@ -1,0 +1,121 @@
+Common\UtilityBundle\Entity\FgTmThemeConfiguration:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgTmThemeConfigurationRepository
+    type: entity
+    table: fg_tm_theme_configuration
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        headerScrolling:
+            type: boolean
+            nullable: true
+            column: header_scrolling
+        createdAt:
+            type: datetime
+            nullable: true
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: true
+            column: updated_at
+        isActive:
+            type: boolean
+            nullable: true
+            column: is_active
+        isDefault:
+            type: boolean
+            nullable: true
+            column: is_default
+        customCss:
+            type: text
+            nullable: true
+            column: custom_css
+        bgImageSelection:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: bg_image_selection
+        bgSliderTime:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: bg_slider_time
+        isDeleted:
+            type: boolean
+            nullable: true
+            column: is_deleted
+        cssFilename:
+            type: string
+            length: 50
+            fixed: false
+            nullable: true
+            column: css_filename
+        headerPosition:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: header_position
+        headerLogoPosition:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: header_logo_position
+    manyToOne:
+        colorScheme:
+            targetEntity: FgTmThemeColorScheme
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                color_scheme_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        updatedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                updated_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        theme:
+            targetEntity: FgTmTheme
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                theme_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,159 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% if type=='team' %}
+    {% set pageTitle = fgtwig.getTerminolgyName('Team member',plural) %}
+{% else %}
+   {% set pageTitle = 'WORK_GROUP_MEMBER'|trans %}
+{% endif %}
+
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTAINER -->
+                <!-- BEGIN BREADCRUMB-->
+                <div class="row">
+                    <div class="col-lg-12">
+                        {% include 'internal/breadcrumb.html.twig' %}
+                    </div>
+                </div>
+                <!-- END BREADCRUMB-->
+                <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+                 {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'contactId': contactId, 'tabs': tabs, 'roleCount' : teamCount , 'type':type, 'url' : url,'columnsUrl':columnsUrl} %}
+                
+                <!-- BEGIN CONTENT -->
+                <div class="row">
+                   <div class="portlet-body new-table-height fg-datatable-wrapper" id="tableWrapper">
+                                                                                        <table class="dataTable
+                                                                                               table
+                                                                                               table-bordered
+                                                                                               table-hover
+                                                                                               table-condensed" id="memberlisttable">
+                                                                                        </table>
+                                                                                    </div>
+                </div>
+                  
+        
+{% endblock %}
+{#{% block underscoretemplate %}
+        {% include 'InternalGeneralBundle:Dashboard:templateTeamOverview.html.twig' %} 
+{% endblock %}#}
+
+{% block javascripts %}
+     <!--  Custom pop over html -->
+                                        <div class="custom-popup">
+                                            <div class="popover bottom">
+                                                <div class="arrow"></div>
+                                                <div class="popover-content"></div>
+                                            </div>
+                                        </div>
+    <!--  End Custom pop over html -->  
+   <script src="{{ asset('fgassets/internal/js/memberlistColumn.js') }}" type="text/javascript"></script>
+   <script src="{{ asset('fgassets/internal/js/fg_tab_selection_process.js') }}" type="text/javascript"></script>
+     <script src="{{ asset('fgcustom/js/fbautocomplete/fbautocomplete.js')}}" type="text/javascript"></script>
+     <script>
+        var contactId='{{contactId}}';
+        var teamId='{{clubteamId}}';
+        var clubId = '{{clubId}}';
+        var workgroupId ='{{clubworkgroupId}}';
+        var jsonData = '';
+        var membersList={{tabs|json_encode()|raw}};
+        var memberType='{{type}}';
+        var tableSettingValueStorage= (memberType ==='team')?'teamtableSettingValue_{{clubId}}_{{contactId}}':'workgrouptableSettingValue_{{clubId}}_{{contactId}}';
+        var tableColumnTitleStorage =(memberType ==='team')? 'teamtableTitle_{{clubId}}_{{contactId}}' :'workgrouptableTitle_{{clubId}}_{{contactId}}' ;
+        var tableColumnTitleStorageExport =(memberType ==='team')? 'teamtableTitle_{{clubId}}_{{contactId}}_Export' :'workgrouptableTitle_{{clubId}}_{{contactId}}_Export' ;
+        var defaultSettings =  '{{defaultSetting|json_encode()|raw}}';
+        var corrAddrFieldIds = {{corrAddrFieldIds|json_encode|raw}};
+        var invAddrFieldIds = {{invAddrFieldIds|json_encode|raw}};
+        var pathRemoveMemberConfirmationPopup = '{{ path('member_confirmation_popup') }}';
+        var pathDeleteMember = '{{ path('team_member_delete') }}';
+        var general_table_title_array = {contact_id: "{{'CONTACT_ID'|trans}}",            
+                                                                                membership_category: "{{'CM_MEMBERSHIP'|trans}}",
+                                                                                fedmembership_category:"{{fgtwig.getTerminolgyName('Fed membership',plural)}}",
+                                                                                intranet_access: "{{ 'INTRANET_ACCESS'|trans}}",
+                                                                                age: "{{'AGE'|trans}}",
+                                                                                birth_year: "{{'YEAR_OF_BIRTH'|trans}}",
+                                                                                salutation_text: "{{'SALUTATION_TEXT'|trans}}",
+                                                                                club: "{{fgtwig.getTerminolgyName('Club',plural)}}",
+                                                                                club_executive_board_function: "{{'CM_CLUB_EXECUTIVE_BOARD_FUNCTION'|trans({'%club%':fgtwig.getTerminolgyName('Club',plural),'%executive_board%':fgtwig.getTerminolgyName('Executive Board',plural)})}}",
+                                                                                                };
+        $(document).ready(function() {
+            var tabCondition = {{ (tabs|length > 1) ? 'true' : 'false' }};
+            $( ".fg-action-menu-wrapper" ).FgPageTitlebar({
+                title       : true,
+                tab       : tabCondition,
+                search     :true,
+                actionMenu  : true,
+                tabType  :'client'
+                
+            });
+      //action menu init area
+      scope = angular.element($("#BaseController")).scope(); 
+      
+      //action menu click event int area
+     FgActionmenuhandler.init();
+     
+     
+     
+      $.getJSON("{{url('contact_field_data')}}", function(data) {
+          jsonData = data;
+          
+          //collect the column setting value from the localstorage  
+            var tblSettingValue = localStorage.getItem(tableSettingValueStorage); 
+            if (tblSettingValue ==null) {
+                tblSettingValue = defaultSettings; 
+            }
+            var tableSettingValues = $.parseJSON(tblSettingValue);
+            tableSettingValues = FgMemberList.deletecheck(tableSettingValues, jsonData, teamId, workgroupId);
+            var settingValue = tableSettingValues;
+            localStorage.setItem(tableSettingValueStorage, JSON.stringify(tableSettingValues));
+            var tableColumnTitles = FgMemberColumnHeading.getColumnNames(settingValue, teamId, workgroupId, general_table_title_array, false);  
+            localStorage.setItem(tableColumnTitleStorage, JSON.stringify(tableColumnTitles));
+            var tableColumnTitlesExport = FgMemberColumnHeading.getColumnNames(settingValue, teamId, workgroupId, general_table_title_array, true);  
+            localStorage.setItem(tableColumnTitleStorageExport, JSON.stringify(tableColumnTitlesExport));
+            
+            tablocalstorageName = (memberType ==='team')?'team_'+clubId+'_'+contactId:'workgroup_'+clubId+'_'+contactId
+            //initial setting of tabs      
+          var  option={ pageType:'memberlist',
+                        grouptype:'{{type}}',
+                        contactId:contactId,
+                        localStorageName:tablocalstorageName,
+                        tabheadingArray:{{tabs|json_encode()|raw}},
+                       } 
+            Fgtabselectionprocess.initialize(option);
+            FgDatatable.datatableSearch();
+            updateEditUrl(); // Set role id to contact edit url.
+        });
+
+ });
+        // Set currently selected team/workgroup id in contact edit url.
+        var updateEditUrl = function(){
+            var setEditUrl = setInterval(function(){
+                var currRole = JSON.parse(localStorage.getItem(memberType + '_' + clubId + '_' + contactId));
+                var hasEditElem = false;
+                $('a.fg-edit-contact-ico').each(function(){
+                    var editUrl = $(this).attr('href').replace('roleId', currRole.id);
+                    $(this).attr('href', editUrl);
+                    hasEditElem = true;
+                });
+                if (hasEditElem) {
+                    clearInterval(setEditUrl);
+                }
+            }, 100);
+        };
+        
+       
+        $('body').on('click', '.dataClass', function() { 
+         if ($(this).hasClass('class-no-edit')) {
+          
+             
+            scope.$apply(function () {
+            
+                 scope.menuContent.active.single.memberEdit.isActive='false'; 
+          });
+        } else{
+            scope.menuContent.active.single.memberEdit.isActive='true'; 
+        }
+     }); 
+        
+{#    var result_template = FGTemplate.bind('fg-internal-team-overview-underscore', {fieldDetails: 'fieldDetails'});
+    $('.profileContents').html(result_template); // Appending the listing template using underscore.js#}
+    </script>
+{% endblock %}

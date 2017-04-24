@@ -1,0 +1,47 @@
+<script type="text/template" id="templateThemeConfigDuplicate">
+    <li class="row fg-border-line fg_theme_list_li" id="Fg_theme_config_li_<%- data.id %>" data-configid="<%- data.id %>">
+        <div class="col-md-4 col-sm-5 col-xs-6 fg-config-name fg-pad-left-0">
+            <a href="<%- configEditUrl %>"><%- data.title%></a> 
+    <%  urlForPreview =  pagePreviewUrl.replace('CONFIGREPLACE',data.id);
+       
+    %>
+            <a target="_blank" href="<%- urlForPreview %>"><i class="fa fa-2x fa-search fg-preview fg-theme-config-preview"></i></a>
+        </div>
+        <div class="col-sm-2 col-md-offset-3 col-sm-offset-2 col-xs-6 text-right fg-theme-name">
+            <span class=""><%= data.themeTitle%></span>
+        </div>
+        <div class="col-sm-2  col-xs-12 fg-activate-wrapper">
+            <a href="javascript:void(0)" class="fg-deactivated fg_theme_config_activate" data-configid="<%- data.id %>"><i class="fa fa-2x fa-check-square-o"></i>{{'Activate'|trans}}</a>
+        </div>
+        <div class="col-sm-1 fg-duplicate text-right fg-pad-right-15">
+            <i class="fa fa-2x fa-files-o fg_theme_copy_config fg-cursr-pointer" data-configid="<%- data.id %>" title='{{'CONFIG_DUPLICATE'|trans}}'></i>
+        </div>
+        <div class="fg-col-last-icon  fg_config_last_icon">
+            <div class="deletediv">
+                <div class="closeico fg_theme_config_delete_wrapper" title='{{'CONFIG_DELETE'|trans}}'>
+                    <input type="checkbox" name="theme_config_delete_<%- data.id %>" id="theme_config_delete_<%- data.id %>" value="<%- data.id %>" class="make-switch fg_theme_config_delete">
+                    <label for=""></label></div>
+            </div>
+        </div>
+    </li>
+</script>
+<script type="text/template" id="templateThemeConfigStatusElement">
+    <% if(data.isActive == '1'){ %>
+        <span class="fg-activated">{{'CONFIG_ON'|trans}}</span>
+    <% } else { %>
+        <a  href="javascript:void(0)" class="fg-deactivated fg_theme_config_activate" data-configid="<%- data.configId %>"><i class="fa fa-2x fa-check-square-o"></i> {{'Activate'|trans}}</a>
+    <% } %>
+</script>
+<script type="text/template" id="templateThemeConfigDeleteElement">
+    <% if(data.isActive == '1'){ %>
+        <div class="lockdiv">
+            <i class="fa fa-lock fa-2x ash" data-toggle="tooltip" title=""></i>
+        </div>    
+    <% } else { %>
+        <div class="deletediv">
+            <div class="closeico fg_theme_config_delete_wrapper">
+                <input type="checkbox" name="theme_config_delete_<%- data.configId %>" id="theme_config_delete_<%- data.configId %>" value="<%- data.configId %>" class="make-switch fg_theme_config_delete">
+                <label for=""></label></div> 
+        </div>        
+    <% } %>
+</script>

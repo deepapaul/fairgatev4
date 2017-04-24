@@ -1,0 +1,80 @@
+Common\UtilityBundle\Entity\FgForumTopic:
+    repositoryClass: Common\UtilityBundle\Repository\Forum\FgForumTopicRepository
+    type: entity
+    table: fg_forum_topic
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        replies:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+        isImportant:
+            type: boolean
+            nullable: true
+            column: is_important
+        isClosed:
+            type: boolean
+            nullable: true
+            column: is_closed
+        views:
+            type: integer
+            unsigned: false
+            nullable: false
+        createdAt:
+            type: datetime
+            nullable: true
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: true
+            column: updated_at
+    manyToOne:
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        updatedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                updated_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        group:
+            targetEntity: FgRmRole
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                group_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,159 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+
+{% block pagecontent %}
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BREADCRUMB STARTS -->
+            {% include 'clubadmin/breadcrumb.html.twig' %}
+            <!-- BREADCRUMB ENDS -->
+        </div>
+    </div>
+    {#<div class="row">
+        <div class="col-md-12 col-sm-12  col-xs-12 fg-right-zero fg-dev-dynamic-menu fg-confirmations-nav-tabs" id="fg-dev-dynamic-menu">
+            {% include 'clubadmin/dynamicmenu.html.twig' with {'title' : title|trans, 'listType' : page, 'confirmationsCount': confirmationsCount} %}
+        </div>
+    </div>#}
+    <div class="row">
+      {% set page_settings = { 'pagetitle':'true','actionmenu':'true','tabs':'true' }  %}
+      {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': title|trans, 'page_settings': page_settings,'tabs':tabs ,'type':page,'hrefLink':'true','url':'#'} %}
+    </div>
+      <div id="data-tabs-content" class="tab-content">
+        {% for key,logTab in logTabs %} 
+            {% set active = (key == activeTab) ? 'active': '' %}
+            <div class="tab-pane {{ active }}" id="confirmations-{{ logTab }}-table-div">
+                {% include 'ClubadminContactBundle:Confirmation:confirmationsList.html.twig' with { 'activeTab' : logTab, 'typeId' : key } %}
+            </div>
+        {% endfor %}  
+    </div>
+       
+    <div id="callPopupFunction"></div>
+    <!-- Connection Popup -->
+    <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-content fg-popup-wrap" id="popup_contents">
+            </div>
+        </div>
+    </div>
+    {% include 'ClubadminContactBundle:Archive:mergeContact.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/sidebar.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg-nullsort-handle-dataTable.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/fgConfirmations.js')}}" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            FgPageTitlebar.init({
+                title       : true,
+                tab       : true,
+                search     :false,
+                actionMenu  : true,
+                tabType  :'client'
+               
+            }); 
+       });
+       var contactType = 'draft';
+       var reactivateSavePath = "{{ path('save_confirmation_contact')}}";
+       var failureFlash = "{{ 'CREATIONS_NOT_SUCCESS'|trans }}";
+        FgConfirmations.activeTabName = '{{ (activeTab == '1')  ? 'list' : 'log' }}';
+        var currentDateFormat = FgLocaleSettingsData.momentDateTimeFormat;
+        var clubType = "{{clubType}}";
+        if (FgConfirmations.activeTabName == 'list') {
+            var actionMenuNoneSelectedText = {
+                'confirmConfirmations'   : {'title' : "{{ 'CONFIRMATION_CONFIRM'|trans }}", 'dataUrl': '{{ path('confirm_or_discard_confirmations', {'action' : 'confirm', 'page' : page}) }}', 'visibleAlways' : false},
+                'discardConfirmations'   : {'title' : "{{ 'CONFIRMATION_DISCARD'|trans }}", 'dataUrl': '{{ path('confirm_or_discard_confirmations', {'action' : 'discard', 'page' : page}) }}', 'visibleAlways' : false}
+            };
+            var actionMenuSingleSelectedText = actionMenuNoneSelectedText;
+            var actionMenuMultipleSelectedText = actionMenuNoneSelectedText;
+        }
+        var contactUrl = '{{ path('render_contact_overview', {'offset' : 0, 'contact' : 'dummy'}) }}';
+        var contactDetailUrl = '{{ path('new_contact_detail', {'contact' : 'dummy'}) }}';
+        var columnDefs1=[{ type: "checkbox", orderable: false, "width" : "5%", targets: 0, data:function(row, type, val, meta){
+                            return "<input type='checkbox' class='dataClass fg-dev-avoidicon-behaviour' id='"+row['confirmId']+"' name='check'>";
+                        }},
+                        { "name": "change_date", "width" : "15%", "targets": 1 , data:function(row, type, val, meta){
+                                var changeDate = ((row['changeDate'] === '') || (row['changeDate'] === null)) ? '': FgLocaleSettings.formatDate(row['changeDate'], 'date', 'YYYY-MM-DD');
+                                row.sortData = row['changeDate'];
+                                row.displayData = changeDate;
+                                return row;
+                            }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}
+                        },
+                        { "name": "contact", "width" : "20%",  "targets": 2, data:function(row, type, val, meta){
+                            return  (row['contactName'] == '' || row['contactName'] == null) ? '-' : ((row['contactId'] == 1) ? row['contactName'] : ('{{ page }}' == 'creations') ? '<a class="fg-creations-new-contact" href="#" data-url="'+contactDetailUrl.replace('dummy', row['contactId'])+'">'+row['contactName']+'</a>' : '<a href="'+contactUrl.replace('dummy', row['contactId'])+'">'+row['contactName']+'</a>');
+                        }},
+                        { "name": "team", "width" : "20%", "targets": 3, data:function(row, type, val, meta){
+                            var roleTitle = (row['roleTitle'] == '' || row['roleTitle'] == null) ? '-' : row['roleTitle'];
+                            var flag = (row['actionFlag'] == 'ADDED') ? '<span class="label label-sm fg-color-added">'+'{{ 'MUTATION_ADDED'|trans }}'+'</span>' : '<span class="label label-sm fg-color-removed">'+'{{ 'MUTATION_REMOVED'|trans }}'+'</span>';
+                            return roleTitle + flag;
+                        }},
+                        { "name": "functions", "width" : "20%", "targets": 4, data:function(row, type, val, meta){
+                            return (row['functionTitle'] == '' || row['functionTitle']) == null ? '-' : row['functionTitle'];
+                        }},
+                        { "name": "changed_by", "width" : "20%", "targets": 5, data:function(row, type, val, meta){
+                           if(row['changedBy'] == '' || row['changedBy'] == null) {
+                                return '-' ;
+                            }else{
+                                 var extra = (row['activeContact'] == null && row['changedById'] != 1) ?' ('+row['clubChangedBy']+')':'';
+                                if(row['activeContact'] == null) {
+                                    return row['changedBy'] +extra;
+                                }else{
+                                    return '<a href="'+contactUrl.replace('dummy', row['activeContact'])+'">'+row['changedBy']+'</a>'+extra;
+                                }
+                            }
+                        }}
+                    ];                    
+        var columnDefs2=[{ "name": "decision", "width" : "10%",   "targets": 0 , data:function(row, type, val, meta){
+                            return row['confirmStatus'] == 'CONFIRMED' ? '<span class="label label-sm fg-color-added">'+'{{ 'CONFIRM_CONFIRMED'|trans }}'+'</span>' : '<span class="label label-sm fg-color-removed">'+'{{ 'CONFIRM_DISCARDED'|trans }}'+'</span>';
+                        }},
+                        { "name": "decision_date", "width" : "10%",  "targets": 1, data:function(row, type, val, meta){
+                                var decisionDate = ((row['decisionDate'] === '') || (row['decisionDate'] === null)) ? '': FgLocaleSettings.formatDate(row['decisionDate'], 'date', 'YYYY-MM-DD');
+                                row.sortData = row['decisionDate'];
+                                row.displayData = decisionDate;
+                                return row;
+                            }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}
+                        },
+                        { "name": "decided_by", "width" : "10%", "targets": 2, data:function(row, type, val, meta){
+                                if(row['activeContactDecided']!= null){
+                                    overViewPath = '{{path('render_contact_overview', {'offset': '0', 'contact': '**dummy**'})}}';
+                                    var oPath = overViewPath.replace('**dummy**', row['activeContactDecided']);
+                                    row['decidedBy'] ='<a href="'+oPath+'" target="_blank" data-cont-id="'+ row['activeContactDecided']+'">'+row['decidedBy']+'</a>';
+                                 }
+                                var extra = (row['activeContactDecided'] == null && row['decidedById'] != 1) ?' ('+row['clubDecidedBy']+')':"";
+                            return  (row['decidedBy'] == '' || row['decidedBy'] == null) ? '-' : row['decidedBy'] ;
+                        }},
+                        { "name": "change_date", "width" : "10%", "targets": 3, data:function(row, type, val, meta){
+                                var changeDate = ((row['changeDate'] === '') || (row['changeDate'] === null)) ? '': FgLocaleSettings.formatDate(row['changeDate'], 'date', 'YYYY-MM-DD');
+                                row.sortData = row['changeDate'];
+                                row.displayData = changeDate;
+                                return row;
+                            }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}
+                        },
+                        { "name": "contact", "width" : "10%", "targets": 4, data:function(row, type, val, meta){
+                            return  (row['contactName'] == '' || row['contactName'] == null) ? '-' : ((row['contactId'] == 1) ? row['contactName'] : ('{{ page }}' == 'creations' && row['confirmStatus'] != 'CONFIRMED') ? '<a class="fg-creations-new-contact" href="#" data-url="'+contactDetailUrl.replace('dummy', row['contactId'])+'">'+row['contactName']+'</a>' : '<a href="'+contactUrl.replace('dummy', row['contactId'])+'">'+row['contactName']+'</a>');
+                        }},
+                        { "name": "team", "width" : "20%", "targets": 5, data:function(row, type, val, meta){
+                            var roleTitle = (row['roleTitle'] == '' || row['roleTitle'] == null) ? '-' : row['roleTitle'];
+                            var flag = (row['actionFlag'] == 'ADDED') ? '<span class="label label-sm fg-color-added">'+'{{ 'MUTATION_ADDED'|trans }}'+'</span>' : '<span class="label label-sm fg-color-removed">'+'{{ 'MUTATION_REMOVED'|trans }}'+'</span>';
+                            return roleTitle + flag;
+                        }},
+                        { "name": "functions", "width" : "20%", "targets": 6, data:function(row, type, val, meta){
+                            return (row['functionTitle'] == '' || row['functionTitle']) == null ? '-' : row['functionTitle'];
+                        }},
+                        { "name": "changed_by", "width" : "10%", "targets": 7, data:function(row, type, val, meta){
+                           if(row['changedBy'] == '' || row['changedBy'] == null) {
+                                return '-' ;
+                            }else{
+                                var extra = (row['activeContact'] == null && row['changedById'] != 1) ?' ('+row['clubChangedBy']+')':'';
+                                if(row['activeContact'] == null) {
+                                    return row['changedBy']+extra; 
+                                }else{
+                                    return '<a href="'+contactUrl.replace('dummy', row['activeContact'])+'">'+row['changedBy']+'</a>'+extra;
+                                }
+                            }
+                        }}
+                    ];                    
+    </script>
+
+{% endblock %}

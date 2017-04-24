@@ -1,0 +1,173 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% block pagecontent %}
+<!-- BEGIN PAGE CONTENT-->
+<div class="row" id="contactnoteid">
+    <div class="col-md-12">
+         <!-- BREADCRUMB STARTS -->
+    {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+    <!-- BREADCRUMB ENDS -->
+    
+    
+     <div class="col-md-2 page-main-head">
+                <h3 class="page-title brmmrgn"> Nafzger Tobias </h3>
+              </div>
+              <ul class="nav nav-tabs">
+                <li class=""> <a href="#tab_1_1" data-toggle="tab">Overview</a> </li>
+                <li class=""> <a href="#tab_1_2" data-toggle="tab">Data</a> </li>
+                <li class=""> <a href="#tab_1_2" data-toggle="tab">Connections</a> </li>
+                <li class=""> <a href="#tab_1_2" data-toggle="tab">Assignments</a> </li>
+                <li class="dropdown active"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Notes <i class="fa fa-angle-down"></i></a>
+                  <ul class="dropdown-menu  hold-on-click" role="menu">
+                    <li> <a href="#tab_1_3" tabindex="-1" data-toggle="tab">Option 1</a> </li>
+                    <li> <a href="#tab_1_4" tabindex="-1" data-toggle="tab">Option 2</a> </li>
+                    <li> <a href="#tab_1_3" tabindex="-1" data-toggle="tab">Option 3</a> </li>
+                    <li> <a href="#tab_1_4" tabindex="-1" data-toggle="tab">Option 4</a> </li>
+                  </ul>
+                </li>
+                <li class="pull-right overviewwidth">
+                  <div class="fav-iconsnew"><a href="#"><i class="fa fa-certificate"></i></a><a href="#"><i class="fa fa-money"></i></a><a href="#"><i class="fa fa-envelope"></i></a><a href="#"><i class="fa fa-sign-in"></i></a></div>
+                  <div class="avatar-img"><img src="{{asset('fgcustom/img/avatar1_small.jpg')}}" alt=""></div>
+                  <div class="avatar-img"><img src="{{asset('fgcustom/img/avatar1_small.jpg')}}" alt=""></div>
+                </li>
+              </ul>
+  
+    <form id="form1" class="form-horizontal" onsubmit="return false;" autocomplete="off">
+      <!-- BEGIN PAGE CONTENT-->
+    <div class="row contactnote">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="portlet-body">
+              <div class="row margntop20">
+                <div class="col-md-12">
+                  <div class="tab-content">
+                    <div class="tab-pane fade active in" id="tab_1_1">
+                      <!-- BEGIN PAGE CONTENT-->
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="col-md-3"></div>
+                          <div class="col-md-9 col-blue margin-bottom-20 paddingzero"><a data-toggle="modal" href="#basic" id="pencil" class="addField"><i class="fa fa-plus-circle fa-2x col-blue"></i> Add note</a></div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <ul class="timeline ulcls">
+                                {%for  details in notesDetails%}
+   
+
+                            <li class="timeline-purple">
+                              <div class="timeline-time"> <span class="date"> {{ (details.edate=="") ? details.ctdate : details.edate }} </span> <span class="time"> {{ (details.etime=="") ? details.cttime : details.etime }} </span> <span class="time"> David Herzon</span> </div>
+                              <div class="timeline-icon"> </div>
+                              <div class="timeline-body">
+                                <div class=""> {{form_widget(form[details.id])}}</div>
+                                <div class="tools timeline-close-btn"> <a href="javascript:;" class="remove"> <i class="fa fa-times-circle fa-2x"></i> </a> </div>
+                                <div class="timeline-footer"> Last edited on 06.02.2014, 14:13 by Tobias Nafzger </div>
+                              </div>
+                            </li>
+                            {% endfor %}
+                           
+                          </ul>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="timeline-show-text pull-left">Showing 1 to 10 of 25 entries</div>
+                              <div class="pull-right timeline-page">
+                                <ul class="pagination bootpag">
+                                  <li> <a href="#"> <i class="fa fa-angle-double-left"></i> </a> </li>
+                                  <li> <a href="#"> <i class="fa fa-angle-left"></i> </a> </li>
+                                  <li> <a href="#"> 1 </a> </li>
+                                  <li> <a href="#"> 2 </a> </li>
+                                  <li> <a href="#"> 3 </a> </li>
+                                  <li> <a href="#"> 4 </a> </li>
+                                  <li> <a href="#"> 5 </a> </li>
+                                  <li> <a href="#"> 6 </a> </li>
+                                  <li> <a href="#"> <i class="fa fa-angle-right"></i> </a> </li>
+                                  <li> <a href="#"> <i class="fa fa-angle-double-right"></i> </a> </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- END PAGE CONTENT-->
+                    </div>
+                    <div class="tab-pane fade in" id="tab_1_2"> test </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="portlet-body form">
+          <div class="form-actions fluid">
+            <div class="col-md-offset-0 pull-left">
+              <input type="submit" name="save_changes" class="btn green" id="save_changes" value="{%trans%}SAVE_CHANGES{%endtrans%}" />
+                                    <input type="reset" name="discard_changes" class="btn default" id="reset_changes" value="{%trans%}DISCARD_CHANGES{%endtrans%}" />
+            </div>
+            <div class="btn-group pull-right">
+              <button  class="btn default-ash"><i class="fa fg-chevron-left"></i> Back</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END PAGE CONTENT-->
+    </form>
+    
+    
+    
+    </div>
+        </div>
+  <div id="divTemplates">
+  {% include 'TerminologyBundle:contactnote:addnewcontactnote.html.twig' %}
+  </div> 
+{% endblock %}
+ {% block javascripts %}
+<script>
+$(document).ready(function() {
+FgTextAreaAuto.init(); 
+$("#save_changes").click(function(){
+  //FormValidation.init('form1', 'saveChanges');
+  saveChanges();
+  return false;
+});
+});
+ 
+
+    function saveChanges() {
+        alert("oijj");
+    
+        var objectGraph = {};
+        $("form :input").each(function() {
+            if ($(this).hasClass("fairgatedirty")) {
+               
+            
+                var inputVal = ''
+                inputVal = $(this).val();
+                if (inputVal !== '') {
+                    if (typeof $(this).attr('data-key') !== 'undefined') {
+                        //alert("jhbhbj");
+                    
+                        converttojson(objectGraph, $(this).attr('data-key'), inputVal);
+                    }
+                }
+            }
+        });
+        var attributes = JSON.stringify(objectGraph);
+        console.log(attributes);
+        FgXmlHttp.post("{{path('contactnote_update')}}", {'attributes': attributes}, false);
+        
+    }
+    
+     $('.contactnote').on('click', '.addField', function() {
+                              
+                          addFieldCount = 'new_' + $.now();
+                          
+                           var result_data = FGTemplate.bind('newContactnote', {content: {'addCount': addFieldCount}});
+                          
+                                $('.col-md-12').find('.ulcls li:eq(0)').before(result_data);
+                            });
+    
+    
+</script>
+ {% endblock %} 

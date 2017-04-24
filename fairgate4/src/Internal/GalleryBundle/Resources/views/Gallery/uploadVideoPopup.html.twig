@@ -1,0 +1,118 @@
+<div class="modal-content">
+        <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title fg-clear fg-modal-has-languagebar"><span class="fg-modal-title">{{title}}</span><div class="fg-modal-language-switch">
+                    <div class="btn-toolbar fg-lang-tab ">
+                        <div class="btn-group">
+                            {% if (clubLanguages|length > 1) %}
+                                {% for clubLanguage in clubLanguages %}
+                                    <button type="button" id="{{clubLanguage}}"  lang="{{clubLanguage}}" class="btn  btlang {% if(clubLanguage == clubDefaultLang) %} active {% endif %}" data-elem-function="switch_lang" data-selected-lang="{{clubLanguage}}">{{clubLanguage|upper}}</button>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div></h4>
+        </div>
+        <div class="modal-body">
+            <form id="video_upload_form">
+                <div  data-always-visible="1" data-rail-visible1="1">
+
+                    <!-- Text input-->
+                    <div class="row form-group fg-videoUrl">
+                      <label class="col-sm-4 control-label text-right" for="videoUrl">{{'GM_VIDEO_URL'|trans}}</label>  
+                      <div class="col-sm-7">
+                      <input id="videoUrl" name="uploadedImages[]" type="text" placeholder="https://" class="form-control input-md">
+                      <span class="help-block fg-marg-top-5 text-grey">{{'GM_VIDEO_URL_DESC'|trans}}</span>
+                      </div>
+                    </div>
+
+                    <!-- Textarea -->
+                    <div class="row form-group">
+                      <label class="col-sm-4 control-label text-right" for="Description">{{'GM_IMAGE_DESC'|trans}}</label>
+                      <div class="col-sm-7">                     
+                        {% for clubLanguage in clubLanguages %}
+                            <textarea class="form-control fg-video-desc {% if(clubDefaultLang!=clubLanguage) %} hide {% endif %}" id="desc_{{clubLanguage}}" data-lang="{{clubLanguage}}" name="imgDesc[{{clubLanguage}}][]"></textarea>
+                        {% endfor %}
+                      </div>
+                    </div>
+
+                    <!-- Multiple Radios (inline) -->
+                    <div class="row form-group">
+                      <label class="col-sm-4  control-label text-right" for="radios">{{'GM_IMAGE_SCOPE'|trans}}</label>
+                      <div class="col-sm-7 "> 
+                        <label class="radio-inline fg-pad-left-0" for="radios-0">
+                          <input type="radio" name="gm_video_scope" id="radios-0" value="PUBLIC">
+                          {{'GM_IMAGE_PUBLIC'|trans}}
+                        </label> 
+                        <label class="radio-inline" for="radios-1">
+                          <input type="radio" name="gm_video_scope" id="radios-1" value="INTERNAL">
+                          {{'GM_IMAGE_INTERNAL'|trans}}
+                        </label>
+                      </div>
+                    </div>
+                    <input type="hidden" name="type" id="imgCount" value="VIDEO"/>
+                    <input type="hidden" name="albumId" id="albumIdVideo" value=""/>
+                    <input type="hidden" name="videoThumb" id="videoThumb" value=""/>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn default">{{'CANCEL'|trans}}</button>
+                <button type="button" class="btn green" id="saveVideoPopup">{{'SAVE'|trans}}</button>
+        </div>
+</div>
+<script type="text/javascript"> 
+    $('input[type=radio][value=PUBLIC]').attr('checked',true);
+    $('[name=gm_video_scope]').uniform();
+    $(document).off('click', '#saveVideoPopup');
+    $(document).on('click', '#saveVideoPopup', function() {
+        $('span.required').remove();
+        $('.fg-videoUrl').removeClass('has-error');
+        var urlVal = $("#videoUrl").val();
+        if (!urlVal.match(/^[a-zA-Z]+:\/\//)) {
+            urlVal = 'https://' + urlVal;
+            $("#videoUrl").val(urlVal);
+        }
+        if(!(/^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(urlVal))){
+            $('#videoUrl').parent('div').append('<span class=required>'+'{{'INVALID_URL'|trans}}'+'</span>');
+            $('.fg-videoUrl').addClass('has-error');
+            return false;
+        }
+        var getVideoId = FgVideoThumbnail.getVideoId(urlVal);
+        if (getVideoId['type'] == 'y') {
+            videoThumb =  FgVideoThumbnail.getYouTubeThumb(getVideoId);
+            //Save
+            $('#videoThumb').val(videoThumb);
+            callSave();
+        } else if (getVideoId['type'] == 'v') {
+            $('#saveVideoPopup').attr('disabled',true);
+            $.ajax({
+                url: 'http://vimeo.com/api/v2/video/' + getVideoId['id'] + '.json',
+                dataType: 'jsonp',
+                success: function (data) {
+                   //Save
+                   //modified medium image to large
+                   $('#videoThumb').val(data[0]['thumbnail_large']);
+                   callSave();
+                },
+                error: function () {
+                    $('#saveVideoPopup').attr('disabled',false);
+                }
+            });
+        }
+        
+        function callSave() {
+            var albumId = localStorage.getItem(FgLocalStorageNames.gallery.selectedAlbum);
+            var albumid = (albumId != null || albumId !='') ? albumId : '';
+            $('#albumIdVideo').val(albumid);
+            var paramObj = {};
+            paramObj.form = $('#video_upload_form');
+            paramObj.url = galleryUploadPath;
+            paramObj.successCallback = function(){
+                                                    FgGalleryView.loadGallery();
+                                                };
+            FgModelbox.hidePopup();
+            FgXmlHttp.formPost(paramObj);
+        }
+    });
+</script>

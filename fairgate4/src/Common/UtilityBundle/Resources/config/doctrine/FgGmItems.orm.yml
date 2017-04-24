@@ -1,0 +1,103 @@
+Common\UtilityBundle\Entity\FgGmItems:
+    repositoryClass: Common\UtilityBundle\Repository\Gallery\FgGmItemsRepository
+    type: entity
+    table: fg_gm_items
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        scope:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        type:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        filepath:
+            type: string
+            length: 140
+            fixed: false
+            nullable: false
+        description:
+            type: string
+            length: 145
+            fixed: false
+            nullable: true
+        videoThumbUrl:
+            type: string
+            length: 140
+            fixed: false
+            nullable: true
+            column: video_thumb_url
+        fileName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: file_name
+        mimeType:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: mime_type
+        fileSize:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: file_size
+        createdOn:
+            type: datetime
+            nullable: true
+            column: created_on
+        updatedOn:
+            type: datetime
+            nullable: true
+            column: updated_on
+        cronExecuted:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: cron_executed
+        source:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+    manyToOne:
+        updatedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                updated_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,376 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title"></h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="#" class="form-horizontal form-row-sepe" id="archivecontacts">
+                    <div class="form-body">
+                        
+                        <div id="block_0" class="fg-dev-archive-content">
+                            <p style="display:none;" class="fg-dev-archive-status-txt"></p>
+                            <div class="fg-dev-archive-date" style="display:none;">
+                                <p class="fg-txt-leaving">{%trans%}ARCHIVE_CONTACT_INPUT_SET_LEAVING_TEXT{%endtrans%}</p>
+                                <div id="fg-dev-leaving-date" class='input-group date'>
+                                    <input type="date_range" name="leaving_date" id="leaving_date" value="" class="form-control filter-log-input"/>
+                                    <span class="input-group-addon cal filter-log-date"><span class="glyphicon glyphicon-calendar"></span></span>
+                                </div>
+                                <div class="col-md-12 col-sm-12 col-xs-12 has-error fg-log-error">
+                                    <span class="help-block fg-error-hide" id="fg-dev-leavingdateError">{%trans%}ARCHIVE_CONTACT_INPUT_SET_LEAVING_DATE{%endtrans%}</span>
+                                </div>
+                            
+                            </div>
+                            
+                            
+                        </div>
+
+                    </div>
+                    
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="fg-dev-archive-button"></div>
+
+{% include 'ClubadminContactBundle:Archive:nonArchivedContacts.html.twig' %}
+
+<script type="text/javascript">
+    var clubId = '{{clubId}}';
+    var clubType = '{{clubType}}';
+    var actionType = '{{actionType}}';
+    var selActionType = '{{selActionType}}';
+    var loggedContactId = '{{loggedContactId}}';
+    var joiningDate = '{{joiningDate}}';
+    var serviceAssignArray = {{serviceAssignArray|raw}};
+    var communicationModule = '{{communicationModule}}';
+    var selContIds = [];
+    var selOwnMembers = [];
+    var selNonOwnMembers = [];
+    var serviceAssignContacts = [];
+    var subscriberContacts = [];
+    var subscriberArray = [];
+    var selNonFedMembers = [];
+    var selLoggedUser = [];
+    var selContNames = [];
+    var selOwnMembersContNames = [];
+    var nonToArchiveFlag=0;
+    var allToArchiveFlag=0;
+    var nonItemsInArchiveFlag=0;
+    var sponsorCount = 0;
+    var memberCount='{{memberCount}}';
+    var dateToday='{{dateToday}}';
+    $('#leaving_date').val(dateToday);
+    if ((selActionType == 'all') || (selActionType == 'single-select')) {
+        var allContactsData = $.parseJSON($('#selcontacthidden').val());
+
+        $.each(allContactsData, function(cdKey, contactData) {
+            var contactId = contactData.id;
+
+            if ($.inArray(contactId, selContIds) == -1) {
+                selContIds.push(contactId);
+                if (contactData.clubId != clubId) {
+                    selNonOwnMembers.push(contactId);
+                } else if(loggedContactId == contactId) {
+                    selLoggedUser.push(contactId);
+                } else {
+                    if ($.inArray(contactId, serviceAssignArray) == -1) {                        
+                        selOwnMembers.push(contactId);
+                        selOwnMembersContNames.push({'id': contactId, 'name': $(this).parents('tr').find('.fg-dev-contactname').text()});
+                    }
+                }
+                if($.inArray(contactId, serviceAssignArray) != -1) {
+                    serviceAssignContacts.push(contactId);                
+                } else {
+                    if (($.inArray(contactId, selOwnMembers) == -1) && (contactData.clubId == clubId) && (loggedContactId != contactId) ) {                        
+                        selOwnMembers.push(contactId);
+                        selOwnMembersContNames.push({'id': contactId, 'name': $(this).parents('tr').find('.fg-dev-contactname').text()});
+                    }
+                }
+                selContNames.push({'id': contactId, 'name': contactData.contactname});
+            }
+        });
+    } else {
+        var selectedIdsElement = ($(".dataTables_wrapper div").hasClass('DTFC_LeftBodyWrapper')) ? ".DTFC_LeftBodyWrapper input.dataClass:checked" : "input.dataClass:checked";
+        $(selectedIdsElement).each(function() {
+            var contactId = $(this).attr('id');
+            if ($.inArray(contactId, selContIds) == -1) {
+                selContIds.push(contactId);
+                if (($(this).attr('data-contactclub') != clubId) &&  (clubType != 'sub_federation_club') && (clubType != 'federation_club')) {
+                    selNonOwnMembers.push(contactId);
+                } else if(loggedContactId == contactId) {
+                    selLoggedUser.push(contactId);
+                } else {
+                    if ($.inArray(contactId, serviceAssignArray) == -1) {                        
+                        selOwnMembers.push(contactId);
+                        selOwnMembersContNames.push({'id': contactId, 'name': $(this).parents('tr').find('.fg-dev-contactname').text()});
+                    }
+                }
+                if($.inArray(contactId, serviceAssignArray) != -1) {
+                    serviceAssignContacts.push(contactId);               
+                } else {
+                    if (($.inArray(contactId, selOwnMembers) == -1) && ($(this).attr('data-contactclub') == clubId) && (loggedContactId != contactId)) {
+                        selOwnMembers.push(contactId);
+                        selOwnMembersContNames.push({'id': contactId, 'name': $(this).parents('tr').find('.fg-dev-contactname').text()});
+                        
+                    }
+                }
+                selContNames.push({'id': contactId, 'name': $(this).parents('tr').find('.fg-dev-contactname').text()});
+            }
+        });
+    }
+    $.each(serviceAssignContacts, function(memKey, memData) {
+        if ($.inArray(memData, selNonOwnMembers) == -1) {
+            sponsorCount++;
+        }
+        if ($.inArray(memData, selLoggedUser) != -1) {
+            sponsorCount--;
+        }
+    });
+    displayPopupHeading();
+    archiveStatusText();
+    FgApp.dateFormat.endDate = '+0d';
+    $('#fg-dev-leaving-date').datepicker(FgApp.dateFormat);
+
+    function archiveStatusText() {
+        
+        var notAbleToArchive = '{{'ARCHIVE_NOT_ABLE_TO_ARCHIVE'|trans}}';
+        var notAbleToArchiveMulti = '{{'ARCHIVE_NOT_ABLE_TO_ARCHIVE_MULTIPLE'|trans}}';
+        var allToArchive = '{{'ARCHIVE_ALL_TO_ARCHIVE'|trans}}';
+        var oneToArchive = '{{'ARCHIVE_ONE_TO_ARCHIVE'|trans}}';
+        var mixedContactsToArchive = '{{'ARCHIVE_MIXED_CONTACTS'|trans}}' + ' ';
+        
+        if(selContIds.length==(parseInt(selNonOwnMembers.length) + parseInt(selLoggedUser.length) + parseInt(sponsorCount))) {
+            if(selContIds.length==1) {
+                $('.fg-dev-archive-status-txt').text(notAbleToArchive);
+            } else {
+                $('.fg-dev-archive-status-txt').text(notAbleToArchiveMulti);
+            }
+            nonToArchiveFlag=1;
+        } else if(selContIds.length==1) {
+            if(selNonOwnMembers.length > 0 || selLoggedUser.length > 0 || serviceAssignContacts.length > 0) {
+                $('.fg-dev-archive-status-txt').text(notAbleToArchive);
+                nonToArchiveFlag=1;
+            } else {
+                $('.fg-dev-archive-status-txt').text(oneToArchive);
+                allToArchiveFlag=1;
+                if(memberCount > 0 ) {
+                    $('.fg-dev-archive-date').show();
+                }
+            }
+        } else if(selContIds.length > 1) {
+            if(selNonOwnMembers.length > 0 || selLoggedUser.length > 0 || serviceAssignContacts.length > 0) {
+                var nonMemCount= parseInt(selNonOwnMembers.length) + parseInt(selLoggedUser.length) + parseInt(sponsorCount);
+                statusTxt=mixedContactsToArchive.replace('%nonOwnMembers%', nonMemCount);
+                statusTxt=statusTxt.replace('%selContIds%', selContIds.length);
+                $('.fg-dev-archive-status-txt').text(statusTxt);
+                nonItemsInArchiveFlag=1;
+                if(memberCount > 0 ) {
+                    $('.fg-dev-archive-date').show();
+                }
+            } else {
+                $('.fg-dev-archive-status-txt').text(allToArchive);
+                allToArchiveFlag=1;
+                if(memberCount > 0 ) {
+                    $('.fg-dev-archive-date').show();
+                }
+            }
+            
+        }
+        $('.fg-dev-archive-status-txt').show();
+        archiveStatusTable();
+        archiveButton();
+    }
+    
+   
+    function archiveButton() {
+        
+        var template = $('#nonArchivedTemp').html();
+        var result_data = _.template(template, {selNonOwnMembers: selNonOwnMembers,selContNames:selContNames,nonToArchiveFlag:nonToArchiveFlag,allToArchiveFlag:allToArchiveFlag,nonItemsInArchiveFlag:nonItemsInArchiveFlag,archiveButtonFlag:1,selLoggedUser:selLoggedUser});
+        $('.fg-dev-archive-button').html(result_data);
+    }
+    function archiveStatusTable() {
+        if(selNonOwnMembers.length > 0) {
+            $('.modal-dialog').addClass('archive');
+        }
+        var template = $('#nonArchivedTemp').html();
+        var result_data = _.template(template, {selNonOwnMembers: selNonOwnMembers,selContNames:selContNames,nonToArchiveFlag:nonToArchiveFlag,allToArchiveFlag:allToArchiveFlag,nonItemsInArchiveFlag:nonItemsInArchiveFlag,archiveButtonFlag:0,selLoggedUser:selLoggedUser,serviceAssignContacts:serviceAssignContacts});
+        
+        $('.fg-dev-archive-content').append(result_data);
+        FgPopOver.customPophover('.fg-dev-archive-table-Popovers');
+    }
+    function displayPopupHeading() {
+        
+        var singleArchiveTxt = '{{'ARCHIVE_HEAD_WITH_CONTACTNAME'|trans}}' + ' ';
+        var multipleArchiveTxt = '{{'ARCHIVE_HEAD_WITH_CONTACT_COUNT'|trans}}' + ' ';
+
+
+        if (selContIds.length == 1) {
+            if (actionType == 'archive') {
+                popupHeadText = singleArchiveTxt.replace('%contname%', selContNames[0].name);
+            }
+            $('h4.modal-title').html('<div class="fg-popup-text" id="popup_head_text"></div>');
+            $('div#popup_head_text').text(popupHeadText);
+        } else {
+            if (actionType == 'archive') {
+                popupHeadText = multipleArchiveTxt.replace('%contcount%', selContIds.length);
+            }
+            if (selActionType == 'all') {
+                $('h4.modal-title').html('<div class="fg-popup-text" id="popup_head_text"></div>');
+                $('div#popup_head_text').text(popupHeadText);
+            } else {
+                var contNamesHtml = '';
+                var contactNameLinks = {};
+                var i = 0;
+                var overViewPath = '{{ path('render_contact_overview', {'offset' : 0, 'contact' : '**dummy**' }) }}';
+                $.each(selContNames, function(ckey, selContName) {
+                    i++;
+                    if (i == 11) {
+                        contNamesHtml += '<li>&hellip;</li>';
+                        return false;
+                    } else {
+                        contactNameLinks[selContName.id] = selContName.name;
+                        var oPath = overViewPath.replace('**dummy**', selContName.id);
+                        contNamesHtml += '<li><a href="'+oPath+'" target="_blank" data-cont-id="'+selContName.id+'"></a></li>';
+                    }
+                });
+                $('h4.modal-title').html('<span class="fg-dev-contact-names"><a href="#" class="fg-plus-icon"></a><a href="#" class="fg-minus-icon"></a></span><div class="fg-popup-text" id="popup_head_text"></div>\n\
+                    <div class="fg-arrow-sh"><ul>' + contNamesHtml + '</ul></div>');
+                $('div#popup_head_text').text(popupHeadText);
+                displayContactNames(contactNameLinks);
+            }
+        }
+    }
+    function displayContactNames(contactNameLinks) {
+        $.each(contactNameLinks, function(selContId, selContName) {
+            $('a[data-cont-id='+selContId+']').text(selContName);
+        });
+    }
+    $(document).off('click', '.modal-title .fg-dev-contact-names');
+    $(document).on('click', '.modal-title .fg-dev-contact-names', function(e) {
+        $(this).parent().toggleClass('fg-arrowicon');
+    });
+    function saveAssignments() {
+        if($("#leaving_date").val()!='') {
+            error = FgUtility.validateLeavingDate(joiningDate, $("#leaving_date").val(), 'fg-dev-leavingdateError');
+            if(!error) {
+                var archiveData = JSON.stringify(selOwnMembers);
+                var subscribers = JSON.stringify(subscriberArray);
+                
+                var passingData = {'archiveData':archiveData,'totalCount': selContIds.length, 'totalOwnMembers':selOwnMembers.length,'fromPage': 'contactlist', 'actionType': actionType, 'leavingDate':$("#leaving_date").val(),'subscriberData':subscribers};
+                $('#popup').modal('hide');
+                FgXmlHttp.post('{{path("save_archive_contacts")}}', passingData, false, callBackFn);
+            }
+        } else {
+            $('#fg-dev-leavingdateError').css('display', 'block');
+            $('#fg-dev-leavingdateError').html('{{'ARCHIVE_CONTACT_INVALID_LEAVING_DATE'|trans}}');
+        }
+    }
+    
+ 
+    
+    function callBackFn(resultParms) {
+        FgTable.init();
+    }
+     function sponsorStatusText() {
+         var mixedContactsToArchive = '{{'ARCHIVE_SUBSCRIBER_CONTACTS'|trans}}' + ' ';
+         var nonMemCount= subscriberContacts.length;
+        statusTxt=mixedContactsToArchive.replace('%nonOwnMembers%', nonMemCount);
+        statusTxt=statusTxt.replace('%selContIds%', selOwnMembers.length);
+        $('.fg-dev-archive-status-txt').text(statusTxt);
+        selContIds = selOwnMembers;
+        selContNames = selOwnMembersContNames;
+        displayPopupHeading() ;
+    }
+    
+    $(document).off('click', 'button[data-function=save], button[data-function=cancel]');
+    $(document).on('click', 'button[data-function=save], button[data-function=cancel]', function() {
+        var buttonId = this.id;
+        if (buttonId == 'save') {
+             if(communicationModule==1){
+             var archiveData = JSON.stringify(selOwnMembers);
+             var passingData = {'selContacts':archiveData,'totalCount': selContIds.length,};
+            
+              $.post('{{path("check_subcriber_list")}}', passingData, function(data) {  
+                  if(data.getSubscriber.length>0){
+                
+                    var template = $('#subscriberTemp').html();
+                    subscriberContacts = data.getSubscriber;
+                    var result_data = _.template(template, {serviceAssignContacts: data.getSubscriber,subscribermail:data.getSubscriberEmail,selContNames:selOwnMembersContNames,});
+                    if($('.fg-dev-archive-date')){
+                        $('.fg-dev-archive-date').hide();
+                    }
+                    if($('.fg-dev-archive-content table')){
+                        $('.fg-dev-archive-content table').remove();
+                    }
+                    $('#cancel').attr("id","sub_cancel");
+                    $('#save').attr("id","sub_save");
+                    $('#cancel').attr("id","sub_cancel");
+                    $('#sub_save').attr("data-function","sub_save");
+                    $('#sub_cancel').attr("data-function","sub_cancel");
+                    sponsorStatusText();
+                       
+                    $('.fg-dev-archive-content').append(result_data);
+                    FgPopOver.customPophover('.fg-dev-archive-table-Popovers');
+                    $('#nomulti_check_all').trigger('click');  
+                     $('.fg-dev-selectsub').uniform(); 
+                      
+                  }else{
+                      saveAssignments();
+                  }
+                             
+                });
+            }else{
+                saveAssignments();
+            }
+        }
+    });
+    
+    $(document).off('click', 'button[data-function=sub_save], button[data-function=sub_cancel]');
+    $(document).on('click', 'button[data-function=sub_save], button[data-function=sub_cancel]', function() {
+       if($(this).attr('id')=='sub_save'){
+           saveAssignments();
+       }
+          
+    });
+    
+    $(document).off('click', '#nomulti_check_all');
+    $(document).on('click', '#nomulti_check_all', function() {
+        $('#subscriber_arch input:checkbox').attr('checked', this.checked);
+       
+        if (this.checked) {
+            $.each($('table#subscriber_arch tbody input:checkbox'), function(key, obj) {
+               
+                subscriberArray.push($(obj).val());
+                
+            });
+        } else {
+            $.each($('table#subscriber_arch tbody input:checkbox'), function(key, obj) {
+              subscriberArray = _.without(subscriberArray, this.value);
+               
+            });
+        }
+        
+      
+    });
+    $(document).off('change', 'input[data-type=select_sub]');
+    $(document).on('change', 'input[data-type=select_sub]', function() {
+        
+        if (this.checked) {
+           subscriberArray.push(this.value);
+        } else {
+            
+             subscriberArray = _.without(subscriberArray, this.value);
+        }
+        if ($('table#subscriber_arch tbody input:checkbox').not(':checked').length == 0) {
+            $('#nomulti_check_all').attr('checked', true);
+        } else {
+            $('#nomulti_check_all').attr('checked', false);
+        }
+       
+    });
+</script>

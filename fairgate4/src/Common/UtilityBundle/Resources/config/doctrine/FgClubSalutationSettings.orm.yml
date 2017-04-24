@@ -1,0 +1,70 @@
+Common\UtilityBundle\Entity\FgClubSalutationSettings:
+    repositoryClass: Common\UtilityBundle\Repository\FgClubSalutationSettingsRepository
+    type: entity
+    table: fg_club_salutation_settings
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        femaleFormal:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: female_formal
+        femaleInformal:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: female_informal
+        maleFormal:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: male_formal
+        maleInformal:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: male_informal
+        familyFormal:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: family_formal
+        familyInformal:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: family_informal
+        companyNoMaincontact:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: company_no_maincontact
+        subscriber:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

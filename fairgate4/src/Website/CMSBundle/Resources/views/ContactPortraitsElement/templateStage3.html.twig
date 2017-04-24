@@ -1,0 +1,863 @@
+<script type="text/template" id="contacts_portrait_element_stage3_template">   
+    <form class="form-horizontal" id="contacts_portrait_element_stage3_form">
+    <div id="form-tab3" method="post" data-url="" class="form-horizontal form-group">
+
+    <div class="fg-tab-list fg-nl-lang-drop">
+    
+    <div class="clearfix"></div>
+    </div>
+    <section class="row fg-cms-page-elements-container fg-pad-10 fg-portraite-main-container">
+
+    {#RENDER CONTAINER TEMPLATE #}                            
+    <% 
+     var containerDatas = _.sortBy(containerDatas.container, 'sortOrder');     
+    _.each(containerDatas, function(containerData,id) { %>
+    <%=  FgCmsContactPortraitsObj.renderContainer(containerData)  %>
+    <% }); %> 
+    </section>
+    <section class="row fg-pad-10 fg-marg-top-20">
+    <div class="col-md-12">
+    <span class="fg-add-container editContainerpopup margin-right-10"  container-element-id="<%= portraitId %>" container-type="containerAdd" old_count="1"  new_count="1" >
+    
+    <a href="javascript:void(0)" class="fg-add-box"><i class="fa-plus-circle fa fa-2x fg-marg-right-5"></i>{{'CMS_ADD_CONTAINER'|trans}}</a>
+    </span> 
+    </div>
+    </section>
+    </div>
+
+    </form>
+</script>
+
+
+
+
+<script id="portrait_container_template" type="text/template">
+
+    <div class="fg-cms-page-elements-block-row fg-clear row-eq-height columnboxsortable fg-portrait-container"   portrait_elementId="<%= portraitId %>" id="pagecontainer-<%= columnDatas.containerId %>" container-width=1>
+         <input type="text" name='portraitContainer' class='hide form-control' data-key="<%- columnDatas.containerId %>.containerId" value="<%= columnDatas.containerId %>" />
+             <input type="text" name='portraitContainerSortOrder' class='fg-container-sort-order hide form-control' data-key="<%= columnDatas.containerId %>.sortOrder" value="<%= columnDatas.sortOrder %>" />
+             <input type="text" name='portraitContainerSize' class='hide form-control' data-key="<%= columnDatas.containerId %>.size" value="<%= columnDatas.columnSize %>" />                                                         
+           
+            <%                                         
+                                                           var className = (columnDatas.actionType =='add') ? 'fg-dev-delete fg-dev-temp-delete':'fg-dev-delete'; %>
+                                                                   <ul class="fg-cms-elements-row-option no-style">
+                                                                    <li><i class="fa fa-2x fa-ellipsis-v fg-container-sortable"></i> </li>
+                                                                    <%              
+            var oldCount = (_.size(columnDatas['columns'])) ? _.size(columnDatas['columns']) :1 
+                %>
+                                                                    <li><i class="fa fa-2x fa-columns editContainerpopup" data-toggle="modal" old_count=<%- oldCount %> container-element-id="<%= portraitId %>" container-type="containerEdit" new_count=<%- oldCount %> container-id="<%= columnDatas.containerId %>"></i> </li>                                                                   
+                                                                    
+            <li class="<%= className %>">
+             <div class=<% if(columnDatas.actionType =='add') { %>"fg-last-icon fg-delete-row" <% }else{ %> "fg-last-icon fg-delete-row fg-dev-container-delete"<% } %>> 
+                <div class="closeico">
+                   <input type="checkbox" class="make-switch fg-data-delete" data-key="<%= columnDatas.containerId %>.is_deleted" name="<%= columnDatas.containerId %>._is_deleted"  id="<%= columnDatas.containerId %>._is_deleted"  <% if(columnDatas.actionType != 'add') { %>  data-inactiveblock="changecolor"  data-parentid="pagecontainer-<%- columnDatas.containerId %>" <% } %>>
+                          <label for="<%= columnDatas.containerId %>._is_deleted"></label>
+               </div>
+            </div>   
+               
+            </li>
+                                                                </ul>
+                                                        
+    {#RENDER COLUMN TEMPLATE#}
+                                                                  <% 
+                                                                   var columnDatas = _.sortBy(columnDatas.columns, 'sortOrder'); 
+                                                                    _.each(columnDatas, function(columnData) {
+                            %>
+                                                                  <%= FgCmsContactPortraitsObj.renderColumn(columnData)  %>
+                                                                    <% }); %> 
+                                                                
+                                                            </div>
+</script>
+
+
+
+
+
+
+<script id="portrait_column_template" type="text/template">
+    <div class = "fg-portrait-column fg-page-elements-block-col fg-grid-col-<%= displayDatas.gridSize %> col-sm-<%=displayDatas.columnSize%>"   column_width_value="<%= displayDatas.gridSize %>" id="column-<%= displayDatas.columnId %>" column-id="<%= displayDatas.columnId %>">
+            <div>
+            
+                         <input type="text" name='portraitColumns_<%= displayDatas.columnId %>' class='hide form-control portraitColumns' data-key="<%= displayDatas.container %>.column.<%= displayDatas.columnId %>.id" value="<%= displayDatas.columnId %>" >
+                         <input type="text" name='portraitColumnSize_<%= displayDatas.columnId %>' class='hide form-control' data-key="<%= displayDatas.container %>.column.<%= displayDatas.columnId %>.columnSize" value="<%= displayDatas.gridSize %>" >
+                         <input type="text" name='portraitColumnSortOrder' class='fg-column-sort-order hide form-control' data-key="<%= displayDatas.container %>.column.<%= displayDatas.columnId %>.sortOrder" value="<%= displayDatas.sortOrder %>" >
+                         <input type="text" name='portraitColumnDelete_<%= displayDatas.columnId %>' class='fg-dev-column-delete hide form-control' data-key="<%= displayDatas.container %>.column.<%= displayDatas.columnId %>.is_column_delete" value="0" >
+            <ul class = "list-group fg-sortable-list portrait-data-sort" portrait_column_id="<%= displayDatas.columnId %>" container-id="<%= displayDatas.container %>" style="min-height:10px;">
+    {#RENDER DATA TEMPLATE#}
+        
+             <%  
+      
+             var displayDataOption = _.sortBy(displayDatas.data, 'sortOrder'); 
+            _.each(displayDataOption, function(displayData) { %>
+                     <%= FgCmsContactPortraitsObj.renderColumnData(displayData) %>
+             <% }); %>       
+                    </ul>
+            </div>
+            <a href = "#" class = "fg-add-box fg-dev-addNewData" column_id="<%= displayDatas.columnId %>" container_id="<%= displayDatas.container %>"> <i class = "fa-plus-circle fa fa-2x fg-marg-right-5" > </i>{{'CMS_PORTRAIT_ADD_DATA'|trans}}</a>
+            <div class = "fg-block-width-controls" >
+                    <a href = "javascript:void(0)" class = "fg-left fg-manage-columnwidth" data_column_id="column-<%= displayDatas.columnId %>" width-type='decrease'> <i class = "fa fa-2x fa-long-arrow-left" > </i></a>
+                    <a href = "javascript:void(0)" class = "fg-manage-columnwidth fg-right" data_column_id="column-<%= displayDatas.columnId %>" width-type='increase'> <i class = "fa fa-2x fa-long-arrow-right" > </i></a>
+            </div>
+            </div>
+
+
+
+</script>
+
+<script id="column_data_template" type="text/template">
+
+    <li class="list-group-item portrait-data-field" >
+   
+     <% dataKey = optionDatas.dataId 
+            %>
+    <% linkFlag = 0; %>
+                         <input type="text" name='portraitData<%= dataKey %>'  class='hide form-control' data-key="<%= optionDatas.containerId %>.column.<%- optionDatas.columnId %>.data.<%- optionDatas.selectedFieldType %>.<%- dataKey%>.id" value="<%= dataKey %>" />
+                         <input type="text" name='portraitDataSortOrder<%= dataKey %>' class='fg-data-sort hide form-control' data-key="<%= optionDatas.containerId %>.column.<%- optionDatas.columnId %>.data.<%- optionDatas.selectedFieldType %>.<%- dataKey%>.sortOrder" value="<%= optionDatas.sortOrder %>" />
+                         <input type="text" name='portraitDataLabel<%= dataKey %>' id="portraitDataLabel<%= dataKey %>" class='hide form-control' data-key="<%= optionDatas.containerId %>.column.<%- optionDatas.columnId %>.data.<%- optionDatas.selectedFieldType %>.<%- dataKey%>.label" value="<%- JSON.stringify(optionDatas.label) %>" />
+                         
+                         <input type="text" name='portraitDataColumn<%= dataKey %>' id="portraitDataColumn<%= dataKey %>" class='hide form-control portraitDataColumn' data-key="<%= optionDatas.containerId %>.column.<%- optionDatas.columnId %>.data.<%- optionDatas.selectedFieldType %>.<%- dataKey%>.columnId" value="<%- optionDatas.columnId %>" />
+                         <input type="text" class="hide" data-key="<%= optionDatas.containerId %>.column.<%- optionDatas.columnId %>.data.<%- optionDatas.selectedFieldType %>.<%- dataKey%>.attributeId" id="attributeId" data-key="<%= optionDatas.containerId %>.column.<%- optionDatas.columnId %>.data.<%- optionDatas.selectedFieldType %>.<%- dataKey%>.attributeId" value="<%- optionDatas.selectedField %>">
+   
+            
+            <i class="fa fa-2x fa-ellipsis-v fg-sort-row"></i> 
+
+    <div class=<% if(optionDatas.type == 'new') { %>"fg-last-icon  fg-new_row_rmv fg-delete-row" <% }else{ %> "fg-last-icon fg-dev-data-delete fg-delete-row"<% } %>> 
+         <div class="closeico">
+            <input type="checkbox" class="make-switch fg-data-delete" data-key="<%= optionDatas.containerId %>.column.<%- optionDatas.columnId %>.data.<%- optionDatas.selectedFieldType %>.<%- dataKey%>.is_deleted" name="<%- optionDatas.selectedFieldType %>_<%- dataKey %>_is_deleted"  id="<%- optionDatas.selectedFieldType %>_<%- dataKey %>_is_deleted"  <% if(optionDatas.type == 'edit') { %>  data-inactiveblock="changecolor" data-parentid="<%- dataKey %>" <% } %>>
+                   <label for="<%- optionDatas.selectedFieldType %>_<%- dataKey %>_is_deleted"></label>
+        </div>
+    </div>
+
+
+
+
+    <div class="fg-sortable-list-item-wrapper">
+        <div class="col-sm-4">
+        <label class="fg-marg-top-5 fg-dev-category">
+           <% if (optionDatas['lineBreakBefore']==2 && optionDatas['lineBreakBefore']!='') { %> <i class="fa fa-long-arrow-down fa-break-icon"></i> <% } 
+            else if(optionDatas['lineBreakBefore']==0 && optionDatas['lineBreakBefore']!='') { %>   <i class="fa fa-level-up fa-rotate-90 fa-break-icon"></i> <% } %> 
+  <%   
+  var selectedFieldLable ='dummy'; 
+  var required = 0;
+ switch(optionDatas.selectedFieldType) {
+       case 'CONTACT_NAME':
+              selectedFieldLable = contactListColumnJson[optionDatas.selectedFieldType]['fieldName'][defaultLang];
+                break;
+            case 'PROFILE_PIC':
+                  selectedFieldLable = "{{'CMS_PORTRAIT_ELEMENT_PROFILE_PIC'|trans}}";
+                break;
+            case 'TEAM_ASSIGNMENTS':
+                selectedFieldLable = contactListColumnJson[optionDatas.selectedFieldType]['fieldName'][defaultLang];           
+                break;
+            case 'CONTACT_FIELD':
+               _.each(contactListColumnJson[optionDatas.selectedFieldType]['fieldValue'], function(catDetails, catKey) {
+                    
+                    if (catDetails['catId'] == optionDatas.catId) {
+                        _.each(catDetails['attrDetails'], function(attrArray, attrKey) {
+                            if (attrArray['attrId'] == optionDatas.selectedField) {                          
+                                if (attrArray['isSystemField'] == 1) {                             
+                                    if ((attrArray['fieldNameLang'][clubLangDetails[defaultLang]['systemLang']] != '') && (attrArray['fieldNameLang'][clubLangDetails[defaultLang]['systemLang']] != undefined)) {
+                                        inputFieldNameDefault = attrArray['fieldNameLang'][clubLangDetails[defaultLang]['systemLang']];
+                                    } else {
+                                        inputFieldNameDefault = attrArray['fieldName'];
+                                    }
+                                } else {
+                                    if ((attrArray['fieldNameLang'][defaultLang] != '') && (attrArray['fieldNameLang'][defaultLang] != undefined)) {
+                                        inputFieldNameDefault = attrArray['fieldNameLang'][defaultLang];
+                                    } else {
+                                        inputFieldNameDefault = attrArray['fieldName'];
+                                    }                                   
+                                }
+                            }
+                        });
+                    }
+                });
+                          
+           var contactfieldLabelDetails = _.filter(contactFieldDetails, function(contactField){ return contactField['id'] == optionDatas.selectedField; });
+                
+              if(_.size(contactfieldLabelDetails) > 0){ 
+                selectedFieldLable=contactfieldLabelDetails[0]['shortName'];
+              } else {
+                selectedFieldLable = inputFieldNameDefault;  
+              }
+                       
+                break;
+            case 'MEMBERSHIP_INFO':
+            case 'ANALYSIS_FIELD':
+            case 'FED_MEMBERSHIP_INFO':
+            case 'FEDERATION_INFO':         
+                selectedFieldLable = contactListColumnJson[optionDatas.selectedFieldType]['fieldValue'][optionDatas.columnSubType]['attrName'];     
+                break;
+            case 'TEAM_FUNCTIONS':
+            case 'WORKGROUP_ASSIGNMENTS':
+            case 'FILTER_ROLE_ASSIGNMENTS':
+                selectedFieldLable = contactListColumnJson[optionDatas.selectedFieldType]['fieldName'][defaultLang];
+                break;
+            case 'ROLE_CATEGORY_ASSIGNMENTS':
+            case 'FED_ROLE_CATEGORY_ASSIGNMENTS':
+            case 'COMMON_ROLE_FUNCTIONS':
+            case 'COMMON_FED_ROLE_FUNCTIONS':
+            case 'SUB_FED_ROLE_CATEGORY_ASSIGNMENTS':
+            case 'COMMON_SUB_FED_ROLE_FUNCTIONS':
+                var inputFieldNameDefault='';
+                _.each(contactListColumnJson[optionDatas.selectedFieldType]['fieldValue'], function(catDetails, catKey) {
+                    if (catDetails['attrId'] == optionDatas.roleCategoryId) {              
+                        if ((catDetails['attrNameLang'][defaultLang] != '') && (catDetails['attrNameLang'][defaultLang] != undefined)) {
+                            inputFieldNameDefault = catDetails['attrNameLang'][defaultLang];
+                        } else {
+                            inputFieldNameDefault = catDetails['attrName'];
+                        }
+                    }
+                });
+                selectedFieldLable = inputFieldNameDefault;
+                break;
+            case 'INDIVIDUAL_ROLE_FUNCTIONS':
+            case 'INDIVIDUAL_FED_ROLE_FUNCTIONS':
+            case 'INDIVIDUAL_SUB_FED_ROLE_FUNCTIONS':
+            case 'WORKGROUP_FUNCTIONS':  
+                var inputFieldNameDefault='';
+                _.each(contactListColumnJson[optionDatas.selectedFieldType]['fieldValue'], function(catDetails, catKey) {     
+                    if (catDetails['attrId'] == optionDatas.roleId) {                   
+                        if ((catDetails['attrNameLang'][defaultLang] != '') && (catDetails['attrNameLang'][defaultLang] != undefined)) {
+                            inputFieldNameDefault = catDetails['attrNameLang'][defaultLang];
+                        } else {
+                            inputFieldNameDefault = catDetails['attrName'];
+                        }
+                    }
+                });
+                selectedFieldLable = inputFieldNameDefault;
+                break;
+        }
+      
+      
+       
+            
+  %>  
+    
+       <%- selectedFieldLable %></label>
+        </div>
+ <% if(optionDatas.selectedFieldType !='PROFILE_PIC') {    %>
+        <div class="col-sm-4">
+            <a class="fg-add-box fg-add-label" id="field-label-<%- dataKey %>" json-data="<%- JSON.stringify(optionDatas.label) %>" data-id="<%= dataKey %>"><%= (typeof optionDatas['label'][defaultLang]  !=='undefined' && optionDatas['label'][defaultLang] !='' && optionDatas['label'][defaultLang] !=null ) ?  '<span class="fg-badge fg-badge-blue3">'+optionDatas['label'][defaultLang]+'</span>' : '<i class="fa-plus-circle fa fa-2x"></i>{{'CMS_PORTRAIT_LABEL'|trans}}' %></a>
+        </div>
+ <% }  %>
+        <div class="col-sm-4">
+            <a href="#<%= dataKey %>" class="fg-toggle-link collapsed" data-toggle="collapse"><i class="fa fa-minus-square-o"></i> {{'CMS_PORTRAIT_OPTION'|trans}}</a>
+        </div>
+    </div>
+    <div id="<%= dataKey %>" class="collapse row fg-clear">
+
+        <div class="fg-collapsed-content-wrapper">
+
+            <% 
+
+            
+            if(optionDatas.selectedFieldType !='PROFILE_PIC') {               
+            
+            if(optionDatas.fieldType == 'multiple' ) { %>
+            <div class="form-group">
+                <label class="col-sm-5 control-label">{{'CMS_PORTRAIT_MULTI_ASSIGNMENT'|trans}}</label>
+                <div class="col-sm-7">
+ <% var separateListing = (optionDatas.separateListing) ? optionDatas.separateListing :0 %>
+                    <label for="chk-10" class="fg-checkbox">
+                        <input type="checkbox"  class="form-control fg-dev-multiple" name="<%- optionDatas.selectedFieldType %>_<%- dataKey %>_multiassignment"  value="<%= separateListing  %>" data-key="<%= optionDatas.containerId %>.column.<%- optionDatas.columnId %>.data.<%- optionDatas.selectedFieldType %>.<%- dataKey%>.multiassignment" <% if(separateListing==1) { %> checked="checked" <% } %>>
+    <span class="fg-dev-multiple-label fg-cursr-pointer">{{'CMS_PORTRAIT_SEPARATE_LINE'|trans}}<span>
+                    </label>
+                </div>
+            </div> 
+
+            <%   } %>
+        
+   
+                <% if(optionDatas.selectedFieldType == 'CONTACT_NAME') {
+                    if(linkContactFields.length > 0) { %>
+                          <div class="form-group">
+                            <label class="col-sm-5 control-label">{{'CONTACT_LIST_LINK_WITH_DP'|trans}}</label>
+                            <div class="col-sm-7">
+                                <select class="selectpicker bootstrap-select form-control" data-key="<%= optionDatas.containerId %>.column.<%- optionDatas.columnId %>.data.<%- optionDatas.selectedFieldType %>.<%- dataKey%>.linkUrl" id="<%- optionDatas.selectedFieldType %>_<%- dataKey %>_linkUrl" name="<%- optionDatas.selectedFieldType %>_<%- dataKey %>_linkUrl">
+                                    <option value="">{{'CONTACT_LIST_LINK_WITH_DP_DEFAULT'|trans}}</option>
+                                    <% _.each(linkContactFields, function(datas, catKey) { %>
+                                        <option <% if(optionDatas.selectedField == datas['attrId']){ %>selected="selected" <% } %> value="<%- datas['attrId'] %>"><%- (datas['isSystemField'] == 1) ? datas['fieldNameLang'][systemLang] : datas['fieldNameLang'][defaultLang] %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+                    <% }
+                } %>
+        
+                <% if(optionDatas.selectedFieldType == 'TEAM_ASSIGNMENTS') { %>
+                           
+                               <div class="form-group">
+                            <label class="col-sm-5 control-label">{{'CONTACT_LIST_TEAM_SHOW_ONLY'|trans}}</label>
+                            <div class="col-sm-7">
+                           <select multiple class="selectpicker bootstrap-select" data-key="<%= optionDatas.containerId %>.column.<%- optionDatas.columnId %>.data.<%- optionDatas.selectedFieldType %>.<%- dataKey%>.functions"  name="<%- optionDatas.selectedFieldType %>_<%- dataKey %>_functions">
+                                  
+                                   <% _.each(contactListColumnJson[optionDatas.selectedFieldType]['teamFunctions'], function(datas, catKey) { %>
+                                    <option <% if(_.contains(optionDatas.functionIds, datas['attrId'])) { %> selected="selected" <% } %> value="<%- datas['attrId'] %>"><%- datas['attrName'] %></option>
+                                <% }); %>
+                                </select>
+                            </div>
+                        </div>                       
+                           
+                           
+
+                <% } %>   
+                    
+                 <% if(optionDatas.selectedFieldType == 'FEDERATION_INFO'&&optionDatas.columnSubType == 'clubs') { %>
+                           <% 
+                           if(!_.isUndefined(optionDatas.functionIds) )  { 
+                            selectedFunction = optionDatas.functionIds;
+                             selectedFunction = selectedFunction.map(Number);
+                         }else{
+                             selectedFunction = [];
+                         }
+                              var selectedFieldType =  optionDatas.selectedFieldType ;
+                             var selectedClubs = contactListColumnJson[selectedFieldType]['fieldValue']['clubs']['clubExecValues'];
+                        %>
+                           <% if(!_.isUndefined(selectedClubs) )  {  %>   
+                          <div class="form-group">
+                            <label class="col-sm-5 control-label">{{'CONTACT_LIST_CLUB_SHOW_ONLY'|trans}}</label>
+                            <div class="col-sm-7">
+                             <select multiple class="selectpicker bootstrap-select" data-key="<%= optionDatas.containerId %>.column.<%- optionDatas.columnId %>.data.<%- optionDatas.selectedFieldType %>.<%- dataKey%>.functions"  name="<%- optionDatas.selectedFieldType %>_<%- dataKey %>_functions">
+                                   <% 
+                                      
+                                      
+                                           var langexist = 1; 
+                                            tempArr = _.where(selectedClubs, {fn_lang: defaultLang});
+                                            tempArr = _.uniq(tempArr, false, function(p){ return p.fn_id; });
+                                            if(tempArr.length==0){
+                                                tempArr = _.where(selectedClubs, {fn_lang: selectedClubs[0]['fn_lang']});
+                                                langexist = 0;
+                                            }
+                                        _.each(tempArr, function(datas, catKey) { 
+                                            if(langexist==1)
+                                            clubRoleTitle =  datas['fn_titleLang']; 
+                                            else 
+                                             clubRoleTitle =    datas['fn_title'] ;
+                                            %>
+                                    <option <% if(_.contains(selectedFunction, datas['fn_id'])) { %> selected="selected" <% } %> value="<%- datas['fn_id'] %>"><%- clubRoleTitle %></option>
+                                <% }); %>
+                                 </select>
+                            </div>
+                        </div>                       
+               
+                <% } %>   
+              <% } %> 
+                    
+        
+
+
+            <% if(optionDatas.fieldType == 'email' || optionDatas.fieldType == 'url' || optionDatas.fieldType == 'imageupload' || optionDatas.fieldType == 'login email'  ) { %>
+            <div class="form-group">
+                <label class="col-sm-5 control-label">{{'CMS_PORTRAIT_DISPLAY_TYPE'|trans}}</label>
+                <div class="col-sm-7">                                                                                                    
+                    <select name="<%- optionDatas.selectedFieldType %>_<%- dataKey %>_display_type"  class="fg-dev-display-type form-control selectpicker" data-key="<%= optionDatas.containerId %>.column.<%- optionDatas.columnId %>.data.<%- optionDatas.selectedFieldType %>.<%- dataKey%>.field_display_type">
+                        <% if(optionDatas.fieldType == 'email' || optionDatas.fieldType == 'url' || optionDatas.fieldType == 'login email')  { %>
+                        <option value="value" <% if(optionDatas['fieldDisplayType'] == 'value' ){ %> selected="selected" <% } %> >{{'CMS_PORTRAIT_DISPLAY_VALUE'|trans}} </option>
+                        <option value="icon" <% if(optionDatas['fieldDisplayType'] == 'icon' ){ %> selected="selected" <% } %> >{{'CMS_PORTRAIT_DISPLAY_ICON'|trans}}</option>
+                        <option value="icon_and_value" <% if(optionDatas['fieldDisplayType'] == 'icon_and_value' ){ %> selected="selected" <% } %> >{{'CMS_PORTRAIT_DISPLAY_ICON_AND_VALUE'|trans}}</option>
+                        <option value="linked_label" <% if(optionDatas['fieldDisplayType'] == 'linked_label' ){ %> selected="selected" <% } %> >{{'CMS_PORTRAIT_DISPLAY_LINKED_LABEL'|trans}}</option>
+                        <% }  else if(optionDatas.fieldType == 'imageupload' ) { %>
+
+                        <option value="Icon" <% if(optionDatas['fieldDisplayType'] == 'Icon' ){ %> selected="selected" <% } %>>{{'CMS_PORTRAIT_DISPLAY_ICON'|trans}}</option>
+                        <option value="icon_with_popover" <% if(optionDatas['fieldDisplayType'] == 'icon_with_popover' ){ %> selected="selected" <% } %> >{{'CMS_PORTRAIT_DISPLAY_ICON_WITH_POPOVER'|trans}}</option>
+                        <option value="image" <% if(optionDatas['fieldDisplayType'] == 'image' ){ %> selected="selected" <% } %> >{{'CMS_PORTRAIT_DISPLAY_IMAGE'|trans}}</option>
+                        <% } %>	
+                    </select>
+                </div>
+            </div>
+            <%  }                    
+                  var lineBreakClass = (optionDatas['fieldDisplayType'] == 'image') ? 'style=display:none' :'style=display:block';
+               %>
+            <div class="form-group fg-dev-line-break" <%- lineBreakClass %>>
+                <label class="col-sm-5 control-label">{{'CMS_PORTRAIT_LINE_BREAK'|trans}}</label>
+                <div class="col-sm-7">
+                    <div class="fg-input-plus-minus">
+                        <button class="left minus form-control FL selectButton btn-number" data-field="<%- optionDatas.selectedFieldType %>_<%- dataKey %>_columncount" data-type="minus" type="button">-</button>
+                         <% assignedValue = (optionDatas['lineBreakBefore'] !='') ? optionDatas['lineBreakBefore'] : 1;  %>
+                        <input type="text" disabled="" min="0" class="form-control FL number input-number" max="2" name="<%- optionDatas.selectedFieldType %>_<%- dataKey %>_columncount" value="<%- assignedValue %>"  oldcount="1" id="<%- optionDatas.selectedFieldType %>_<%- dataKey %>_columncount" data-key="<%= optionDatas.containerId %>.column.<%- optionDatas.columnId %>.data.<%- optionDatas.selectedFieldType %>.<%- dataKey%>.line_break_before">
+                        <button class="right plus form-control FL selectButton btn-number" data-field="<%- optionDatas.selectedFieldType %>_<%- dataKey %>_columncount" data-type="plus" type="button">+</button>
+                    </div>
+
+
+                </div>
+            </div>
+       
+            <div class="form-group">
+                <label class="col-sm-5 control-label fg-pad-top-5">{{'CMS_PORTRAIT_EMPTY_VALUE'|trans}}</label>
+                <div class="col-sm-7">
+                    <select name="repeat-type"  class="form-control selectpicker" data-key="<%= optionDatas.containerId %>.column.<%- optionDatas.columnId %>.data.<%- optionDatas.selectedFieldType %>.<%- dataKey%>.empty_value_display">
+                        <option value="skip_line" <% if(optionDatas['emptyValueDisplay'] == 'skip_line' ){ %> selected="selected" <% } %>>{{'CMS_PORTRAIT_EMPTY_SKIP_LINE'|trans}}</option>
+                        <option value="em_dash" <% if(optionDatas['emptyValueDisplay'] == 'em_dash' ){ %> selected="selected" <% } %> >–</option>
+                        <option value="n/v" <% if(optionDatas['emptyValueDisplay'] == 'n/v' ){ %> selected="selected" <% } %> >{{'PORTRAIT_NOT_APPLICABLE_VALUE'|trans}} </option>
+                    </select>
+                </div>
+            </div>
+        
+        <% } else { 
+        
+        if(linkContactFields.length > 0) { %>
+                          <div class="form-group">
+                            <label class="col-sm-5 control-label">{{'CONTACT_LIST_LINK_WITH_DP'|trans}}</label>
+                            <div class="col-sm-7">
+                                <select class="form-control selectpicker bootstrap-select" data-key="<%= optionDatas.containerId %>.column.<%- optionDatas.columnId %>.data.<%- optionDatas.selectedFieldType %>.<%- dataKey%>.linkUrl" id="<%- optionDatas.selectedFieldType %>_<%- dataKey %>_linkUrl" name="<%- optionDatas.selectedFieldType %>_<%- dataKey %>_linkUrl">
+                                    <option value="">{{'CONTACT_LIST_LINK_WITH_DP_DEFAULT'|trans}}</option>
+                                    <% _.each(linkContactFields, function(datas, catKey) { %>
+                                        <option <% if(parseInt(optionDatas.selectedField) == parseInt(datas['attrId'])){ %>selected="selected" <% } %> value="<%- datas['attrId'] %>"><%- (datas['isSystemField'] == 1) ? datas['fieldNameLang'][systemLang] : datas['fieldNameLang'][defaultLang] %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+                    <% } %>
+       
+               <div class="form-group fg-marg-btm-0">               
+                            <label class="col-sm-5 control-label">{{'CMS_PORTRAIT_PLACE_HOLDER_IMAGE'|trans}}</label>
+                            <div class="col-sm-7">
+                                <input type="text"  name="fg-dev-placeholder-image" class="hide fg-dev-placeholder-image" data-key="<%= optionDatas.containerId %>.column.<%- optionDatas.columnId %>.data.<%- optionDatas.selectedFieldType %>.<%- dataKey%>.filename" value="">
+                                 <input type="text"  name="fg-dev-placeholder-image" class="hide fg-dev-placeholder-image-temp" data-key="<%= optionDatas.containerId %>.column.<%- optionDatas.columnId %>.data.<%- optionDatas.selectedFieldType %>.<%- dataKey%>.tempfilename" value="">
+                                <div class="fg-button-wrapper fg-PR fg-dis-IB fg-v-middle">
+                                     <button type="button" class="btn default" id="triggerLogoUpload">{% trans %}CREATE_EVENT_FILEUPLOAD{% endtrans %}</button>
+                                     <input type="file" id="image-uploader" name="image-uploader" style="height:0px;width:0px;visibility: hidden;" >
+                                 </div>
+                  
+            <div class="fg-dev-profile-pic">
+            <% if(optionDatas.profileImage !='' ) { %>
+                            <div class="fg-dev-upload-image-details"> <label><%= optionDatas.profileImage %></label>
+                            
+                               <div class="fg-delete-row fg-placeholder-image"> 
+                               <a href="#" class="close fileinput-exists" data-dismiss="fileinput" data-fileid="73502"></a>
+                        <input type="checkbox" class="make-switch fg-upload-delete" data-key="<%= optionDatas.containerId %>.column.<%- optionDatas.columnId %>.data.<%- optionDatas.selectedFieldType %>.<%- dataKey%>.file_is_deleted" name="<%- optionDatas.selectedFieldType %>_<%- dataKey %>_file_is_deleted"  id="<%- optionDatas.selectedFieldType %>_<%- dataKey %>_file_is_deleted"  >
+
+    </div>
+  
+            </div>
+           <%  } %>   
+            </div>
+                           
+                            </div>
+                        </div> 
+        
+ <%  } %>
+        </div>
+
+    </div>
+</li>
+
+</script>
+
+
+
+<script type="text/template" id="editcontainerpopup">
+    <form id="editContainer" method="post" onsubmit="return false;" novalidate="novalidate">
+    <div class="modal-header fg-modal-has-languagebar">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title fg-modal-title"><%- headerTitle %></h4>                                     
+    </div>
+    <div class="modal-body">
+    <div class="form-group fg-clear">
+    <label class="control-label text-right fg-label-valign col-sm-4">{{'CMS_NUMBER_COLUMS'|trans}}</label>
+    <div class="col-sm-8">
+
+    <div class="fg-input-plus-minus">
+    <button class="left minus form-control FL selectButton btn-number" data-field='columnCount' data-type='minus'>-</button>
+    <input type="number" disabled min="1" class="form-control FL number input-number" max='<%- maxColumnCount %>' name='columnCount'  value="<%- defaultColumnCount%>" oldCount="<%- defaultColumnCount%>" id="columnCount" container-type="<%- containerType %>">
+    <input type="hidden" value="<%- defaultColumnCount %>" name='old_Count' id="oldColumnCount">
+    <input type="hidden" value="<%- containerId %>" name='containerId' id="clickedContainer">                            
+    <% if (containerType =='containerAdd') { %>  
+    <input type="hidden"  name="containerpopupType" id="containerpopupType" value="<%- containerType %>" data-key="">
+    <% } %>
+    <button class="right plus form-control FL selectButton btn-number" data-field='columnCount' data-type='plus'>+</button>
+    </div>
+
+    </div>
+    </div>
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn default" data-dismiss="modal">{{'CMS_CANCEL'|trans}}</button>
+    <input type="submit" class="btn green fg-dev-datasave" value="{{'CMS_SAVE'|trans}}" id="save_changes">
+    </div>
+    </form>
+</script>
+
+
+<script type="text/template" id="contactListNewColumnPopup">
+    <div class="modal-header fg-modal-has-languagebar">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title fg-modal-title">{{'CMS_PORTRAIT_ADD_DATA'|trans}}</h4>
+    </div>
+    <form id="fg-cms-contact-list-new-column">
+        <div class="modal-body fg-cms-contact-list-modal">
+            <div class="row">
+                <div class="col-sm-6 contact-column-type" data-name="fg-dev-contact-column-type-dp">
+                   <input type='hidden' name='selectedcolumnId' id="selectedcolumnId" value="<%= columnId %>" />
+                    <input type='hidden' name='selectedcontainerId' id="selectedcontainerId" value="<%= containerId %>" />
+                    
+                    <select name="contact-list-table-column-type" data-key="" class="selectpicker form-control contact-list-table-column-type">
+                        <option value="default">{{'CONTACT_LIST_COLUMN_TYPE_DP_DEFAULT_SELECT'|trans}}{{'CONTACT_LIST_COLUMN_TYPE_DP_DEFAULT'|trans}}</option>
+                       <option value="PROFILE_PIC">{{'CMS_PORTRAIT_ELEMENT_PROFILE_PIC'|trans}}</option>
+                        <% _.each(contactListColumnJson, function(columnType, columnKey) { 
+                            if(typeof columnType['fieldName'] == 'object') { %>
+                                <option value="<%- columnKey %>"><%- columnType['fieldName'][defaultLang] %></option>
+                            <% } else if(typeof columnType['fieldName'] == 'string') { %>
+                                <option value="<%- columnKey %>"><%- columnType['fieldName'] %></option>
+                            <% }
+                        }); %>
+                    </select>   
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn default" data-dismiss="modal" >{{ 'CANCEL'|trans }}</button>
+            <button type="button" class="btn green" id="saveContactListColumnPopup">{{ 'ADD'|trans }}</button>
+        </div>
+    </form>
+</script>
+
+
+
+
+
+<script type="text/template" id="portraitContentData">
+  <li class="list-group-item portrait-data-field">
+     <% dataKey = dataKey %>
+    <% linkFlag = 0; %>
+                         <input type="text" name='portraitData<%= dataKey %>'  class='hide form-control' data-key="<%= containerId %>.column.<%- columnId %>.data.<%- selectedFieldType %>.<%- dataKey%>.id" value="<%= dataKey %>" />
+                         <input type="text" name='portraitDataSortOrder<%= dataKey %>' class='fg-data-sort hide form-control' data-key="<%= containerId %>.column.<%- columnId %>.data.<%- selectedFieldType %>.<%- dataKey%>.sortOrder" value="<%= sortOrder %>" />
+                         <input type="text" name='portraitDataLabel<%= dataKey %>' id="portraitDataLabel<%= dataKey %>" class='hide form-control' data-key="<%= containerId %>.column.<%- columnId %>.data.<%- selectedFieldType %>.<%- dataKey%>.label" value="" />
+                         
+                         {#<input type="text" name='portraitDataColumn<%= dataKey %>' id="portraitDataColumn<%= dataKey %>" class='hide form-control portraitDataColumn' data-key="<%= containerId %>.column.<%- columnId %>.data.<%- selectedFieldType %>.<%- dataKey%>.columnId" value="<%- columnId %>" />#}
+                         <input type="text" class="hide" data-key="<%= containerId %>.column.<%- columnId %>.data.<%- selectedFieldType %>.<%- dataKey%>.attributeId" id="attributeId" data-key="<%= containerId %>.column.<%- columnId %>.data.<%- selectedFieldType %>.<%- dataKey%>.attributeId" value="<%- selectedField %>">
+   
+            
+            <i class="fa fa-2x fa-ellipsis-v fg-sort-row"></i> 
+
+    <div class=<% if(type == 'new') { %>"fg-last-icon  fg-new_row_rmv fg-delete-row" <% }else{ %> "fg-last-icon fg-delete-row"<% } %>> 
+         <div class="closeico">
+            <input type="checkbox" class="make-switch" data-key="<%= containerId %>.column.<%- columnId %>.data.<%- selectedFieldType %>.<%- dataKey%>.is_deleted" name="<%- selectedFieldType %>_<%- dataKey %>_is_deleted"  id="<%- selectedFieldType %>_<%- dataKey %>_is_deleted"  <% if(type == 'old') { %>  data-inactiveblock="changecolor" data-parentid="<%- dataKey %>" <% } %>>
+                   <label for="<%- selectedFieldType %>_<%- dataKey %>_is_deleted"></label>
+        </div>
+    </div>
+
+
+
+
+    <div class="fg-sortable-list-item-wrapper">
+        <div class="col-sm-4">
+            <label class="fg-marg-top-5 fg-dev-category"><%- selectedFieldLable %></label>
+        </div>
+ <% if(fieldType !='PROFILE_PIC') {    %>
+        <div class="col-sm-4">
+            <a class="fg-add-box fg-add-label" id="field-label-<%- dataKey %>" json-data="" data-id="<%= dataKey %>"><i class="fa-plus-circle fa fa-2x"></i> {{'CMS_PORTRAIT_LABEL'|trans}}</a>
+        </div>
+           
+             <% } %>  
+        <div class="col-sm-4">
+            <a href="#<%= dataKey %>" class="fg-toggle-link collapsed" data-toggle="collapse"><i class="fa fa-minus-square-o"></i> {{'CMS_PORTRAIT_OPTION'|trans}}</a>
+        </div>
+    </div>
+    <div id="<%= dataKey %>" class="collapse row fg-clear">
+
+        <div class="fg-collapsed-content-wrapper">
+
+            <%
+           
+            
+            if(fieldType !='PROFILE_PIC') {               
+            
+            if(fieldType == 'multiple' ) { %>
+            <div class="form-group">
+                <label class="col-sm-5 control-label">{{'CMS_PORTRAIT_MULTI_ASSIGNMENT'|trans}}</label>
+                <div class="col-sm-7">
+
+                    <label for="chk-10" class="fg-checkbox">
+                        <input type="checkbox"  class='fg-dev-multiple form-control' name="<%- selectedFieldType %>_<%- dataKey %>_multiassignment"  data-key="<%= containerId %>.column.<%- columnId %>.data.<%- selectedFieldType %>.<%- dataKey%>.multiassignment"  value="0">
+    <span class="fg-dev-multiple-label fg-cursr-pointer">{{'CMS_PORTRAIT_SEPARATE_LINE'|trans}}<span>
+                    </label>
+                </div>
+            </div> 
+
+            <%   } %>
+        
+   
+                <% if(selectedFieldType == 'CONTACT_NAME') {
+                    if(linkContactFields.length > 0) { %>
+                          <div class="form-group">
+                            <label class="col-sm-5 control-label">{{'CONTACT_LIST_LINK_WITH_DP'|trans}}</label>
+                            <div class="col-sm-7">
+                                <select class="selectpicker bootstrap-select form-control" data-key="<%= containerId %>.column.<%- columnId %>.data.<%- selectedFieldType %>.<%- dataKey%>.linkUrl" id="<%- selectedFieldType %>_<%- dataKey %>_linkUrl" name="<%- selectedFieldType %>_<%- dataKey %>_linkUrl">
+                                    <option value="">{{'CONTACT_LIST_LINK_WITH_DP_DEFAULT'|trans}}</option>
+                                    <% _.each(linkContactFields, function(datas, catKey) { %>
+                                        <option <% if(selectboxFlag == datas['attrId']){ %>selected="selected" <% } %> value="<%- datas['attrId'] %>"><%- (datas['isSystemField'] == 1) ? datas['fieldNameLang'][systemLang] : datas['fieldNameLang'][defaultLang] %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+                    <% }
+                } %>
+                  <%
+                 
+                    if(selectedFieldType == 'FEDERATION_INFO'&&selectedField=='clubs') {
+                          if(!_.isUndefined(selectedFunction) )  {  
+                                selectedFunction = selectedFunction.map(Number);
+                        }else{
+                            selectedFunction = [];
+                        }
+                        var selectedClubs = contactListColumnJson[selectedFieldType]['fieldValue']['clubs']['clubExecValues'];
+                        %>
+                          <% if(!_.isUndefined(selectedClubs) )  {   %>
+                               <div class="form-group">
+                            <label class="col-sm-5 control-label">{{'CONTACT_LIST_CLUB_SHOW_ONLY'|trans}}</label>
+                            <div class="col-sm-7">
+                                <select multiple class="selectpicker bootstrap-select" data-key="<%= containerId %>.column.<%- columnId %>.data.<%- selectedFieldType %>.<%- dataKey%>.functions"  name="<%- selectedFieldType %>_<%- dataKey %>_functions">
+                                  
+                                   <% 
+                                        var selectedClubs = contactListColumnJson[selectedFieldType]['fieldValue']['clubs']['clubExecValues'];
+                                            tempArr = _.where(selectedClubs, {fn_lang: defaultLang});
+                                            tempArr = _.uniq(tempArr, false, function(p){ return p.fn_id; });
+                                            var langexist = 1;
+                                            if(tempArr.length==0){
+                                                tempArr = _.where(selectedClubs, {fn_lang: selectedClubs[0]['fn_lang']});
+                                                langexist = 0;
+                                            }
+                                        _.each(tempArr, function(datas, catKey) { 
+                                            if(langexist==1)
+                                            clubRoleTitle =  datas['fn_titleLang']; 
+                                            else 
+                                             clubRoleTitle =    datas['fn_title'] ;
+                                            %>
+                                    <option <% if(_.contains(selectedFunction, datas['fn_id'])) { %> selected="selected" <% } %> value="<%- datas['fn_id'] %>"><%- clubRoleTitle %></option>
+                                <% }); %>
+                                </select>
+                            </div>
+                        </div>
+                        <% } %>
+                    <% } %>
+                    
+                    
+          <% if(selectedFieldType == 'TEAM_ASSIGNMENTS') { %>
+                           
+                               <div class="form-group">
+                            <label class="col-sm-5 control-label">{{'CONTACT_LIST_TEAM_SHOW_ONLY'|trans}}</label>
+                            <div class="col-sm-7">
+                                <select multiple class="selectpicker bootstrap-select" data-key="<%= containerId %>.column.<%- columnId %>.data.<%- selectedFieldType %>.<%- dataKey%>.functions"  name="<%- selectedFieldType %>_<%- dataKey %>_functions">
+                                  
+                                   <% _.each(teamFunctions, function(datas, catKey) { %>
+                                    <option <% if(_.contains(selectedFunction, datas['attrId'])) { %> selected="selected" <% } %> value="<%- datas['attrId'] %>"><%- datas['attrName'] %></option>
+                                <% }); %>
+                                </select>
+                            </div>
+                        </div>
+                           
+                           
+                           
+
+                <% } %>   
+                    
+        
+        
+        
+
+
+            <% if(fieldType == 'email' || fieldType == 'url' || fieldType == 'imageupload' || fieldType == 'login email'  ) { %>
+            <div class="form-group">
+                <label class="col-sm-5 control-label">{{'CMS_PORTRAIT_DISPLAY_TYPE'|trans}}</label>
+                <div class="col-sm-7">                                                                                                    
+                    <select name="<%- selectedFieldType %>_<%- dataKey %>_display_type"  class="fg-dev-display-type form-control selectpicker" data-key="<%= containerId %>.column.<%- columnId %>.data.<%- selectedFieldType %>.<%- dataKey%>.field_display_type">
+                        <% if(fieldType == 'email' || fieldType == 'url' || fieldType == 'login email')  { %>
+                        <option value="value">{{'CMS_PORTRAIT_DISPLAY_VALUE'|trans}} </option>
+                        <option value="icon">{{'CMS_PORTRAIT_DISPLAY_ICON'|trans}}</option>
+                        <option value="icon_and_value">{{'CMS_PORTRAIT_DISPLAY_ICON_AND_VALUE'|trans}}</option>
+                        <option value="linked_label">{{'CMS_PORTRAIT_DISPLAY_LINKED_LABEL'|trans}}</option>
+                        <% }  else if(fieldType == 'imageupload' ) { %>
+
+                        <option value="Icon">{{'CMS_PORTRAIT_DISPLAY_ICON'|trans}}</option>
+                        <option value="icon_with_popover">{{'CMS_PORTRAIT_DISPLAY_ICON_WITH_POPOVER'|trans}}</option>
+                        <option value="image">{{'CMS_PORTRAIT_DISPLAY_IMAGE'|trans}}</option>
+                        <% } %>	
+                    </select>
+                </div>
+            </div>
+            <% } %>
+        <% if(fieldType !='PROFILE_PIC') { %>   
+            <div class="form-group fg-dev-line-break">
+                <label class="col-sm-5 control-label">{{'CMS_PORTRAIT_LINE_BREAK'|trans}}</label>
+                <div class="col-sm-7">
+                    <div class="fg-input-plus-minus">
+                        <button class="left minus form-control FL selectButton btn-number" data-field="<%- selectedFieldType %>_<%- dataKey %>_columncount" data-type="minus" type="button">-</button>
+                        <input type="text" disabled="" min="0" class="form-control FL number input-number" max="2" name="<%- selectedFieldType %>_<%- dataKey %>_columncount" value=1 oldcount="1" id="<%- selectedFieldType %>_<%- dataKey %>_columncount" data-key="<%= containerId %>.column.<%- columnId %>.data.<%- selectedFieldType %>.<%- dataKey%>.line_break_before">
+                        <button class="right plus form-control FL selectButton btn-number" data-field="<%- selectedFieldType %>_<%- dataKey %>_columncount" data-type="plus" type="button">+</button>
+                    </div>
+
+
+                </div>
+            </div>
+    <%  }
+        %>  
+            <div class="form-group">
+                <label class="col-sm-5 control-label">{{'CMS_PORTRAIT_EMPTY_VALUE'|trans}}</label>
+                <div class="col-sm-7">
+                    <select name="repeat-type"  class="form-control selectpicker" data-key="<%= containerId %>.column.<%- columnId %>.data.<%- selectedFieldType %>.<%- dataKey%>.empty_value_display">
+                        <option value="skip_line">{{'CMS_PORTRAIT_EMPTY_SKIP_LINE'|trans}}</option>
+                        <option value="em_dash">–</option>
+                        <option value="n/v">{{'PORTRAIT_NOT_APPLICABLE_VALUE'|trans}}</option>
+                    </select>
+                </div>
+            </div>
+    
+        
+        <% } else { 
+        
+        if(linkContactFields.length > 0) { %>
+                          <div class="form-group">
+                            <label class="col-sm-5 control-label">{{'CONTACT_LIST_LINK_WITH_DP'|trans}}</label>
+                            <div class="col-sm-7">
+                                <select class="form-control selectpicker bootstrap-select" data-key="<%= containerId %>.column.<%- columnId %>.data.<%- selectedFieldType %>.<%- dataKey%>.linkUrl" id="<%- selectedFieldType %>_<%- dataKey %>_linkUrl" name="<%- selectedFieldType %>_<%- dataKey %>_linkUrl">
+                                    <option value="">{{'CONTACT_LIST_LINK_WITH_DP_DEFAULT'|trans}}</option>
+                                    <% _.each(linkContactFields, function(datas, catKey) { %>
+                                        <option <% if(selectboxFlag == datas['attrId']){ %>selected="selected" <% } %> value="<%- datas['attrId'] %>"><%- (datas['isSystemField'] == 1) ? datas['fieldNameLang'][systemLang] : datas['fieldNameLang'][defaultLang] %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+                    <% } %>
+        
+               <div class="form-group">
+               
+                            <label class="col-sm-5 control-label fg-pad-top-5">{{'CMS_PORTRAIT_PLACE_HOLDER_IMAGE'|trans}}</label>
+                            <div class="col-sm-7">
+                            
+                            <div class="fg-button-wrapper fg-PR fg-dis-IB fg-v-middle">
+                            <button type="button" class="btn default" id="triggerLogoUpload">{% trans %}CREATE_EVENT_FILEUPLOAD{% endtrans %}</button>
+                            <input type="file" id="image-uploader" name="image-uploader" style="height:0px;width:0px;visibility: hidden;display: none;" upload-attr="true">
+                        </div>
+                            
+                            
+                            
+                             
+             <input type="text"  name="fg-dev-placeholder-image" class="hide fg-dev-placeholder-image" data-key="<%= containerId %>.column.<%- columnId %>.data.<%- selectedFieldType %>.<%- dataKey%>.filename" value="">
+               <input type="text"  name="fg-dev-placeholder-image" class="hide fg-dev-placeholder-image-temp" data-key="<%= containerId %>.column.<%- columnId %>.data.<%- selectedFieldType %>.<%- dataKey%>.tempfilename" value="">
+                                 
+                  <div class="fg-dev-profile-pic"></div>
+                            <div id="fg-html-wrapper" class=" fg-dis-IB fg-v-middle fg-pad-10"></div>
+                    <div id="html-upload-error-container" class=" fg-dis-IB fg-v-middle fg-pad-10"></div>
+                            </div>
+                        </div> 
+        
+ <% } %>
+        </div>
+
+    </div>
+</li>
+    
+    
+    
+</script>
+
+
+
+<script type="text/template" id="portraitFieldDataLabel">
+
+    <div class="modal-content">
+    <div class="modal-header fg-modal-has-languagebar">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <% 
+     dataLabelId = parseInt(dataId);
+    if (_.isNaN(dataLabelId)){ %>
+    <h4 class="modal-title fg-modal-title">{{'CMS_PORTRAIT_ADD_LABEL'|trans}}</h4>
+    <% } else { %>
+    <h4 class="modal-title fg-modal-title">{{'CMS_PORTRAIT_EDIT_LABEL'|trans}}</h4>
+    <% }  %>
+    <div class="fg-modal-language-switch pageTitle-popup-lang-switch">
+    <div class="btn-toolbar fg-lang-tab ">
+    <div class="btn-group">
+    <% 
+    var jsonData = $.parseJSON(jsonData);
+    if (_.size(clubLanguages) > 1) { %>
+    <% _.each(clubLanguages, function(clubLanguage) { %>
+
+    <button type="button" id="<%-clubLanguage %>"  lang="<%- clubLanguage %>" class="btn  btlang <% if(clubLanguage == clubDefaultLang) { %> active <% } %>" data-elem-function="switch_lang" data-selected-lang="<%- clubLanguage %>"><%- clubLanguage.toUpperCase() %></button>
+    <% }); %>
+    <% } %>
+    </div>
+    </div>
+    </div>
+    </div>
+    <form id="fg-cms-edit-pagetitle-form">
+    <div class="modal-body fg-cms-edit-existing-modal">
+    <input type="hidden" value='<%- labelId %>' id='labelId' name='labelId'>
+     <input type="hidden" value='<%- dataId %>' id='dataId' name='dataId'>
+    <div class="form-group fg-clear fg-cms-edit-pagetitle-formgroup">
+    
+    <label class="control-label text-right fg-label-valign col-lg-3 col-md-3">{{'CMS_PORTRAIT_LABEL'|trans}}</label>
+    <div class="col-lg-9 col-md-8 fg-error-add-required">
+
+    <% 
+    var defailtValue = '';
+    _.each(clubLanguages, function(clubLanguage) { 
+    defailtValue = (_.size(jsonData)>=1) ? jsonData[clubLanguage]:'';
+    %>
+    <input type="text" data-key="fieldDataLabel.text.<%-clubLanguage %>.title" class="form-control input-md <% if(clubDefaultLang!=clubLanguage) { %> hide <% } %> cms-page-title-input" name="fieldlabel[<%-clubLanguage %>][]" id="fieldlabel_<%-clubLanguage %>" data-lang="<%- clubLanguage %>"  value="<%- defailtValue %>"     required>
+    <% }); %>
+    <div id="pagename-formgroup-error" class="fg-label-error"></div>
+    </div>
+    </div>
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn default" data-dismiss="modal" >{{ 'CANCEL'|trans }}</button>
+    <button type="button" class="btn green" id="editPageTitleBtn">
+    <% if (_.isNaN(dataLabelId)){ %>{{ 'ADD_LABEL'|trans }} <% } else { %>{{ 'SAVE_LABEL'|trans }}  <% } %> </button>
+    </div>
+    </form>
+    </div>
+
+
+
+
+</script>
+
+<script type='template' id='dropzone-html-upload'>
+    <div id="<%- id %>" class='removeUploadedPic'> 
+  
+      <input type="hidden" name="profile-pic-name" class="fg-dev-uploded-profile-pic" value="<%- name %>"/>
+      <input type="hidden" name="profile-pic-name-temp" class="fg-dev-uploded-profile-pic-temp" value="<%- value %>"/>
+      <label><%- name %></label>     
+       <span class="fg-replacewith-errormsg"></span> 
+   </div> 
+</script>
+
+
+<script type="text/template" id="DomainVerificationUploadError">
+    <span class="help-block">
+    <% if (error == 0) { %> {{'FILEMANAGER_UPLOAD_FILETYPE_ERROR'|trans}}
+    <% } %></span>
+</script>
+
+
+<script id="portrait_column_template_only" type="text/template">
+                                        
+   <% 
+            _.each(columnDatas['columnData'], function(displayDatas){   %>                                     
+    <div class = "fg-portrait-column fg-page-elements-block-col fg-grid-col-<%= displayDatas.gridSize %> col-sm-<%=displayDatas.columnSize%>"   column_width_value="<%= displayDatas.gridSize %>" id="column-<%= displayDatas.columnId %>" column-id="<%= displayDatas.columnId %>">
+            <div>
+            
+                         <input type="text" name='portraitColumns_<%= displayDatas.columnId %>' class='hide form-control portraitColumns' data-key="<%= displayDatas.container %>.column.<%= displayDatas.columnId %>.id" value="<%= displayDatas.columnId %>" >
+                         <input type="text" name='portraitColumnSize_<%= displayDatas.columnId %>' class='hide form-control' data-key="<%= displayDatas.container %>.column.<%= displayDatas.columnId %>.columnSize" value="<%= displayDatas.gridSize %>" >
+                         <input type="text" name='portraitColumnSortOrder' class='fg-column-sort-order hide form-control' data-key="<%= displayDatas.container %>.column.<%= displayDatas.columnId %>.sortOrder" value="<%= displayDatas.sortOrder %>" >
+                         <input type="text" name='portraitColumnDelete_<%= displayDatas.columnId %>' class='fg-dev-column-delete hide form-control' data-key="<%= displayDatas.container %>.column.<%= displayDatas.columnId %>.is_column_delete" value="0" >
+                         
+            <ul class ="list-group fg-sortable-list portrait-data-sort" portrait_column_id="<%= displayDatas.columnId %>" container-id="<%= displayDatas.container %>" style="min-height:10px;">
+    {#RENDER DATA TEMPLATE#}
+         
+             </ul>
+            </div>
+            <a href = "#" class = "fg-add-box fg-dev-addNewData" column_id="<%= displayDatas.columnId %>" container_id="<%= displayDatas.container %>"> <i class = "fa-plus-circle fa fa-2x  fg-marg-right-5" > </i>{{'CMS_PORTRAIT_ADD_DATA'|trans}}</a>
+            <div class = "fg-block-width-controls" >
+                    <a href = "javascript:void(0)" class = "fg-left fg-manage-columnwidth" data_column_id="column-<%= displayDatas.columnId %>" width-type='decrease'> <i class = "fa fa-2x fa-long-arrow-left" > </i></a>
+                    <a href = "javascript:void(0)" class = "fg-manage-columnwidth fg-right" data_column_id="column-<%= displayDatas.columnId %>" width-type='increase'> <i class = "fa fa-2x fa-long-arrow-right" > </i></a>
+            </div>
+            </div>
+
+<% }); %>
+
+</script>
+

@@ -1,0 +1,124 @@
+<script type="text/template" id="gallaryBrowserTemplate">
+    <% if( row == '1' ){ %>
+       <div class="fg-gallery-album-wrapper fg-gallery-items row first-row">
+        <% _.each(data, function(d) {  
+           
+            if(typeof(d)=='object'&& d!=null   ){ %>
+             <% var albumName =  d.detail.albumName; %> 
+              <%   
+                    if(albumName=='' || typeof albumName==='undefined'){
+                         var albumId1 =   parseInt(d.detail.albumId, 10);;
+                        var albumDet1 =_.findWhere(allAlbums,{id:albumId1});
+                       
+                       albumName = albumDet1.nameLang;
+                    }
+                %> 
+             <% var coverImage = FgGalleryBrowser.getCoverImage(d); %> 
+             <% if(coverImage == '') { coverImage = FgGalleryBrowser.getSubalbumCoverImage(d);  }%> 
+             
+                        <div class="fg-gallery-album col-md-2 col-sm-3 col-xs-4 fg-sub-gallery-items fg-gal-item">
+                            <div class="fg-image fg-gallery-album-name  fg-gallery-effect-1 fg-sub-gallery-item"  data-row="<%- row %>"  data-albumid="<%- d.detail.albumId %>" data-album-title="<%- albumName%>"   style="background-image:url('<%- coverImagePath+coverImage %>')">   <img src="<%- coverImagePath+coverImage %>"></div>
+                            <div class="fg-album-title"><%- albumName %></div>
+                        </div>
+                 <% } }); %>
+       
+      </div>
+<% } else { %>
+<% var rowClass = (row==='2') ? 'second-row' : 'third-row'; %>
+     <div class="fg-gallery-album-wrapper fg-gallery-items row <%- rowClass %>">
+        <% if(typeof data.subalbums !=='undefined'){
+            _.each(data.subalbums, function(d,i) { %>
+                <% var albumName =  d.detail.albumName; %> 
+                <%   
+                
+                if(albumName==''|| typeof albumName==='undefined'){
+                         var albumId1 =   parseInt(d.detail.albumId, 10);;
+                         var albumDet1 =_.findWhere(allAlbums,{id:albumId1});
+                         albumName = albumDet1.nameLang;
+                    }
+                %> 
+                <% var coverImage = FgGalleryBrowser.getCoverImage(d); %> 
+                  <div class="fg-gallery-album  fg-gallery-item fg-album col-md-2 col-sm-3 col-xs-4 fg-sub-gallery-items fg-gal-item">
+                            <div class="fg-image fg-gallery-album-name  fg-gallery-effect-1 fg-sub-gallery-item"  data-row="<%- row %>"  data-albumid="<%- d.detail.albumId %>"  data-album-title="<%- albumName%>"   style="background-image:url('<%- coverImagePath+coverImage %>')">   <img class="fg-thumb" src="<%- coverImagePath+coverImage %>"></div>
+                            <div class="fg-album-title"><%- albumName %></div>
+                        </div>
+            <% });
+            } %>  
+        </div>
+                <div class="fg-gallery-admin-wrapper">
+                    <p id="fg-p-gl-image"  >{% trans %}FG_GL_SELECT_IMAGE{% endtrans %}  </p>
+                    <ul class="fg-gallery-items">
+                        <% _.each(data.images, function(d) { %>
+                            <li class="fg-gallery-img-wrapper fg-gallery-item"  data-filepath="<%- d.filePath %>" data-row="<%- row %>" data-itemId="<%- d.itemId %>" data-fileSize="<%- d.fileSize %>" data-itemDescription="<%- d.itemDescription %>"  style="background-image:url('<%- coverImagePath+d.filePath %>')">
+                                <img src="<%- coverImagePath+d.filePath %>" alt="test" class="fg-img" >
+                           </li> 
+                          
+                           <% }); %> 
+
+                    </ul> 
+                </div>
+       
+<% } %>
+</script>
+<script type="text/template" id="imageFromGallery">
+    <% _.each(data, function(d, i) { %>
+    <% var order = imageCount+i+1;  %>    
+        <li class="fg-image-area">
+            <div class="fg-media-sort">
+                <i class="fa fg-sort ui-draggable"></i>
+            </div>
+        
+            <div class="fg-image-thumb-wrap"><img src="<%- d.imgPath %>"></div>
+            <p>{% trans %}NL_IMAGE_DISCRIPTION{% endtrans %}<span class="fg-bytes"><%- _dynamicFunction.imageUploader.formatFileSize(parseInt(d.fileSize)) %></span></p>
+            
+            <input type="hidden" value="<%- d.itemId %>" data-key="<%- dataName %>.<%- order %>.galleryItemId" class="ignore">
+            <input type="hidden" value="1" data-key="<%- dataName %>.<%- order %>.filename" class="ignore">
+            <input type="hidden" value="<%- d.itemDescription %>" data-key="<%- dataName %>.<%- order %>.description" class="ignore">
+            <input type="hidden" value="<%- order %>" data-key="<%- dataName %>.<%- order %>.imgorder" class="ignore image-order">
+            
+            
+            <textarea name="imageDescription" class="ignore" data-key="<%- dataName %>.<%- order %>.description" data-itemId="<%- d.itemId %>"><%- d.itemDescription %></textarea>
+            <div class="col-md-2 pull-right deletediv fromGallery">
+                <div class="closeico fg-row-close">
+                    <input type="checkbox" data-inactiveblock="changecolor" id="article_<%- d.itemId %>_isDeleted"  class="make-switch ignore">
+                    <label class="removeUpload" for="article__<%- d.itemId %>_isDeleted"></label>
+                </div>
+            </div>
+        </li>
+    <% }); %>    
+</script>
+
+<script type="text/template" id="imageFromGalleryFullWidth">
+    <% _.each(data, function(d, i) { %>
+    <% var order = imageCount+i+1;  %>    
+        <li class="fg-image-area">
+            <div class="fg-media-sort">
+                <i class="fa fg-sort ui-draggable"></i>
+            </div>
+             <div class="col-sm-3">
+            <div class="fg-image-thumb-wrap"><img src="<%- d.imgPath %>"></div>
+            </div>
+            <div class="col-sm-3">
+            <span class="fg-bytes"><%- _dynamicFunction.imageUploader.formatFileSize(parseInt(d.fileSize)) %></span>
+            </div>
+            
+            <input type="hidden" value="<%- d.itemId %>" data-key="<%- dataName %>.<%- order %>.galleryItemId" class="ignore">
+            <input type="hidden" value="1" data-key="<%- dataName %>.<%- order %>.filename" class="ignore">
+            <input type="hidden" value="<%- d.itemDescription %>" data-key="<%- dataName %>.<%- order %>.description" class="ignore">
+            <input type="hidden" value="<%- order %>" data-key="<%- dataName %>.<%- order %>.imgorder" class="ignore image-order">
+            
+            <div class="col-sm-6">
+            
+            <div class="col-md-2 pull-right deletediv fromGallery">
+                <div class="closeico fg-row-close">
+                    <input type="checkbox" data-inactiveblock="changecolor" id="article_<%- d.itemId %>_isDeleted"  class="make-switch ignore">
+                    <label class="removeUpload" for="article__<%- d.itemId %>_isDeleted"></label>
+                </div>
+            </div>
+    </div>
+        </li>
+    <% }); %>    
+</script>
+<script>
+    addFromServerText = "{{ 'ADD_IMAGES_FROM_SERVER'|trans }}";
+</script>

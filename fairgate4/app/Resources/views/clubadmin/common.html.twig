@@ -1,0 +1,113 @@
+{# switch button html #}
+{% if(type=='switch_button') %}
+
+    <label class="switch-light switch-light-sm switchhwd {% if(disable is defined and disable=='true') %}fg-switch-inactive{% endif %}" onClick="">
+        <input type="checkbox" {% if(attributes.isActive == 1) %} checked {% endif %} class="make-switch" data-key="{{random}}.is_active" name="{{random}}_is_active" id="{{random}}_is_active" {% if(disable is defined and disable=='true') %} disabled={{disable}} {% endif %}  />
+        <span>            
+            <span>{%trans%}ON{%endtrans%}</span>
+            <span>{%trans%}OFF{%endtrans%}</span>
+        </span>
+        {% if(disable is defined and disable=='true') %} <a class="btn btn-primary disable-field"></a> 
+        {%else%}
+        <a class="btn btn-primary"></a>
+        {%endif%}
+    </label>
+
+{# switch button in underscore.js #}
+{% elseif(type=='underscorejs_switch')%}
+
+    <% disableRow = (typeof disableRow !== 'undefined') ? disableRow : false  %>
+     
+                    <label class="switch-light switch-light-sm switchhwd <% if (disableRow) { %> fg-switch-inactive<% } %>" onClick="">
+                        {% if (section == 'role') %}
+                            <input type="checkbox" <% if (isRoleActive) { %> checked <% } %> class="make-switch" data-key="<%- catId %><%- roleKey %>.is_active" name="<%- catId %><%- roleName %>_is_active" id="<%- catId %><%- roleName %>_is_active" value="<%- (isRoleActive) ? '1' : '0' %>" <% if (disableRow) { %> disabled="true"<% } %> />
+                        {% elseif(section == 'team_function') %}
+                            <input type="checkbox" <% if (isFunctionActive) { %> checked <% } %> class="make-switch" data-key="<%- catId %><%- roleKey %>.is_active" name="<%- catId %><%- roleName %>_is_active" id="<%- catId %><%- roleName %>_is_active" value="<%- (isFunctionActive) ? '1' : '0' %>" <% if (disableRow) { %> disabled="true"<% } %> />
+                        {% else %}
+                            {% set hasDataKey = (hasDataKey is defined) ? ((hasDataKey) ? true : false) : false %}
+                            {% if (hasDataKey) %}
+                                <input type="checkbox" <% if (isActive) { %> checked <% } %> class="make-switch" data-key="<%- dataKey %>.is_active" name="<%- dataName %>_is_active" id="<%- dataName %>_is_active" <% if (disableRow) { %> disabled="true" <% } %> />
+                            {% else %}
+                                <input type="checkbox" <% if (isFunctionActive) { %> checked <% } %> class="make-switch" data-key="<%- catId %><%- roleKey %>.function<%- newKey %>.<%- functionId %>.is_active" name="<%- catId %><%- roleName %>_function<%- newVar %>_<%- functionId %>_is_active" id="<%- catId %><%- roleName %>_function<%- newVar %>_<%- functionId %>_is_active" value="<%- (isFunctionActive) ? '1' : '0' %>" <% if (disableRow) { %> disabled="true"<% } %> />
+                            {% endif %}
+                        {% endif %}
+
+                        <span>                            
+                            <span>{%trans%}ON{%endtrans%}</span>
+                            <span>{%trans%}OFF{%endtrans%}</span>
+                        </span>
+                        {% set disableField = (disableField is defined) ? disableField : false %}
+                        {% if (disableField) %}
+                            <a class="btn btn-primary disable-field"></a>
+                        {% else %}
+                            <a class="btn btn-primary <% if (disableRow) { %> disable-field<% } %>"></a>
+                        {% endif %}
+                    </label>
+
+
+{# delete button html #}
+{% elseif(type=='delete')%}
+<div class="fg-col-last-icon" name="fg-dev-close-icon">
+    <div class="pull-right deletediv">
+        <div class="closeico">
+            <input type="checkbox" class="make-switch" data-key="{{dataKey}}" name="{{dataName}}"  id="{{dataName}}" data-inactiveblock="changecolor" data-parentid="{{random}}" />
+            <label for="{{dataName}}"></label>
+         </div>
+    </div>
+</div>
+
+{# delete button html in underscore template #}
+{% elseif(type=='underscorejs_delete')%}
+<div class="fg-col-last-icon" name="fg-dev-close-icon">
+    <div class="pull-right deletediv">
+        <div class="closeico">
+            <input type="checkbox" class="make-switch" data-key="<%- dataKey %>.is_deleted" name="<%- dataName %>_is_deleted"  id="<%- dataName %>_is_deleted" data-inactiveblock="changecolor" data-parentid="<%- dataName %>" />
+            <label for="<%- dataName %>_is_deleted"></label>
+         </div>
+    </div>
+</div>
+
+{# using bookmark  in underscore.js #}
+{%elseif(type=='newbookmark')%}
+<div class="bookmark pull-left"><input id="box<%- data.rnad %>" type="checkbox" class="make-switch" checked data-key="new.<%- data.rnad %>.book_marked" name="new.<%- data.rnad %>_book_marked"/> <label for="box<%- data.rnad %>"><i class="fa fa-bookmark"></i></label></div>
+
+
+{# html for new bookmark #}
+{% elseif(type=='bookmark') %}
+<div class="bookmark pull-left"><input id="box{{random}}" type="checkbox" class="make-switch" {% if(attributes.bookmarked == 1) %} checked {% endif %} data-key="{{atKey}}.book_marked" name="{{atKey}}_book_marked"/> <label for="box{{random}}"><i class="fa fa-bookmark"></i></label></div>
+
+{# html for show the total number of contact or any category #}
+{% elseif(type=='totalCount') %}
+
+<div class="paddingzero propertiblk pull-left margin-right-10"> 
+    {% set filterDisplayFlagStorage = (item|default('contact') == 'club') ? 'clubfilterdisplayflag_'~fgclub.clubId~'-'~contactId : 'filterdisplayflag_contact'~fgclub.clubId~'-'~contactId %}
+    <a {%if  filterid is defined and filterid > 4 %} class="filtercount replaceFilterClass{{filterid}}"  filter_id="{{filterid}}" filter_json="{{categoryId}}" book_id="{{book_type}}" url="{{ item|default('contact')=='club' ? path('update_club_filter_count'):path('update_filter_count')}}" href="#" status="calculate" {% else %} href="javascript:handleCountOrSidebarClick.updateFilter('{{book_type}}', '{{filterDisplayFlagStorage}}', '', '{{fgclub.clubId}}', '{{contactId}}', '', '', '{{fgclub.clubUrlIdentifier}}', 'count', '', '', '', '', '{{item|default('contact')=='club' ? 'club':'contact'}}', '', '{{categoryId}}', '{{roleId}}', '{{categoryClubId is defined ? categoryClubId : '' }}');" {% endif %} > 
+        {% if  filterid is defined and filterid > 4 %} 
+            {{ item|default('contact')=='club' ? 'CALCULATE_CLUBS'|trans|replace({'%clubs%': fgtwig.getTerminolgyName('Club', plural)})|trans:'CALCULATE_CONTACTS'|trans}}
+        {% elseif tCount == 1 %} 
+            {{ item|default('contact')=='club' ? 1~' '~ fgtwig.getTerminolgyName('Club', singular, 'UCF'):'CONTACT_COUNT_SINGULAR'|trans({'%count%' : 1})}}              
+        {%else%}
+            {{ item|default('contact')=='club' ? tCount~' '~ fgtwig.getTerminolgyName('Club', plural, 'UCF'):'CONTACT_COUNT_PLURAL'|trans({'%count%' : tCount})}}
+        {%endif%}
+    </a> </div>
+{% elseif(type=='docCount') %}
+
+
+<div class="paddingzero propertiblk pull-left margin-right-10"> 
+     {% if clubId == catClubId %}
+     {% set docParam = 'DOCS' %}
+     {% else %}
+     {% set docParam = 'FDOCS' %}
+     {% endif %}   
+    <a href="javascript:handleCountOrSidebarClick.updateFilter('bookmark_li-{{docParam}}-{{catClubId}}','documentfilterdisplayflag_{{docType}}-{{catClubId}}-{{contactId}}','{{docType}}','{{clubId}}','{{contactId}}','{{subcatId}}','{{catId}}','{{fgclub.clubUrlIdentifier}}','count','','','','','','','{{catId}}','{{subcatId}}')"> 
+        {%if tCount == 1%}
+          {{'DOCUMENT_COUNT_SINGULAR'|trans({'%count%' : 1})}} 
+            {%elseif(tCount > 0) %}
+              {{'DOCUMENT_COUNT_PLURAL'|trans({'%count%' :tCount })}} 
+            {% else %}
+              {{'DOCUMENT_COUNT_PLURAL'|trans({'%count%' :0 })}} 
+        {% endif %}</a>
+</div>
+{% endif %}
+
+

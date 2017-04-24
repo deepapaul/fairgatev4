@@ -1,0 +1,168 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = (elementId > 0)?'CMS_EDIT_HEADING_ELEMENT'|trans :'CMS_ADD_HEADING_ELEMENT'|trans %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTAINER -->
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN BREADCRUMB-->
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <!-- END BREADCRUMB-->
+            <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+            {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'contactId': '', 'tabs': tabs, 'roleCount' : '' , 'type':'', 'url' : '', 'clubLanguages':clubLanguageArr, 'clubDefaultLang':defaultClubLang} %}
+            <!-- END PAGE TITLE AND PANEL TABS -->
+            <div class="row fg-cms-elements-head-edit-wrapper" id="cmsAddElementHeadingEdit">
+                <form id="addHeaderElement" class="" method="post" data-validation="true" onsubmit="return false;" novalidate="novalidate">
+                    <div class="alert alert-danger display-none">
+                        <button class="close" data-dismiss="alert"></button>
+                        <span data-error>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+                    </div>
+                    <div class="form-body">
+                        <div class="form-group required fg-clear" >
+                            <label class="col-md-2 control-label fg-marg-top-5 text-right" for="articleTitle">{{'CMS_HEADING_TITLE'|trans}}</label>  
+                            <div class="col-md-6 col-lg-5 ">
+                                {% for lang in clubLanguageArr %}
+                                    <input id="headingTitle-{{lang}}" name="headingTitle-{{lang}}" type="text" data-key="headingTitle.text.{{lang}}.title" data-lang="{{lang}}" class="headingTitles form-control {%if(lang != defaultClubLang)%}hide{% endif %}" required="" {% if elementDetails.title[lang] is defined %}value="{{ elementDetails.title[lang]}}"{%endif%}  {% if elementDetails.mainTitle is defined %}placeholder="{{ elementDetails.mainTitle}}"{%endif%} >
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="form-group required fg-clear" >
+                            <label class="col-md-2 control-label fg-marg-top-5  text-right" for="from-date">{{'CMS_HEADING_SIZE'|trans}}</label>  
+                            <div class="col-md-6  col-lg-5 ">
+                                <select name="headingSize" id="headingSize" class="form-control selectpicker" placeholder="">
+                                    <option value="">{{'SELECT_DEFAULT'|trans}}</option>
+                                    {% for key,val in sizeArray %}
+                                        <option {%if elementDetails.headerSize is defined and key==elementDetails.headerSize%}{{'selected="selected"'}}{%endif%} value="{{key}}">{{val}}</option>
+                                    {% endfor %}
+                                </select>  
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="hiddenPageId" id="hiddenPageId" value="{{pageId}}"/>            
+                    <input type="hidden" name="hiddenBoxId" id="hiddenBoxId" value="{{boxId}}"/>            
+                    <input type="hidden" name="hiddenElementId" id="hiddenElementId" value="{{elementId}}"/>            
+                    <input type="hidden" name="hiddenSortOrder" id="hiddenSortOrder" value="{{sortOrder}}"/>
+                    <input type="hidden" name="hiddenCurrentHeading" id="hiddenCurrentHeading" value="{%if elementDetails.title[defaultClubLang] is defined %}{{ elementDetails.title[defaultClubLang]}}{%endif%}"/>
+                    <input type="hidden" name="hiddenCurrentHeaderSize" id="hiddenCurrentHeaderSize" value="{%if elementDetails.headerSize is defined %}{{ elementDetails.headerSize}}{%endif%}"/>
+                    {%if(elementId>0)%}
+                        {% include 'internal/savebutton.html.twig' with {'save_button_val':'CMS_ELEMENT_SAVE_BUTTON'|trans, 'second_btn_val':'CMS_ELEMENT_SAVE_AND_BACK_BUTTON'|trans, 'second_button_id':'save_bac', 'discard_button_val':'CMS_ELEMENT_DISCARD_BUTTON'|trans, 'backLink': path('website_cms_page_edit',{'pageId': pageId}) } %}
+                    {%else%}
+                        {% include 'internal/savebutton.html.twig' with { 'save_button_id':'save_bac', 'save_button_val':'ADD'|trans, 'second_btn_val':'CANCEL'|trans, noDiscardChange:'1', 'backLink': path('website_cms_page_edit',{'pageId': pageId}) } %}
+                    {%endif%}    
+                    
+                </form>
+            </div>
+                
+            <div class="fg-cms-elements-head-log-wrapper fg-dis-none" id="cmsAddElementHeadingLog">
+                <div class="portlet-body new-table-height fg-datatable-wrapper row" id="tableWrapper">
+                    <table class="dataTable
+                           table
+                           table-bordered
+                           table-hover
+                           table-condensed
+                           dataTable-dragable"
+                           id="datatable-element-log-list" dataTable-popover="true" dataTable-hover="true">
+                        <thead>
+                            <tr>
+                                <th> &nbsp;&nbsp;{{'CMS_LOG_DATE'|trans}} </th>
+                                <th> {{'CMS_LOG_OPTION'|trans}} </th>                               
+                                <th> {{'CMS_LOG_VALUE_BEFORE'|trans}} </th>
+                                <th> {{'CMS_LOG_VALUE_AFTER'|trans}} </th>
+                                <th> {{'CMS_EDITED_BY'|trans}} </th>
+                            </tr>
+                        </thead>
+                    </table>
+            </div>
+            </div>
+                            
+        </div> 
+    {% endblock %}
+    {% block javascripts %}
+        <script src="{{ asset('fgassets/internal/js/fg_tab_selection_process.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/website/js/fg-cms-element.js') }}" type="text/javascript"></script>
+        <script>
+                    var saveElementPath = '{{path('website_cms_save_header_element')}}';
+                    var contentEditPagePath = '{{path('website_cms_page_edit',{'pageId': pageId})}}';
+                    var profilePath = "{{ path('internal_community_profile', {'contactId': "**placeholder**" }) }}";
+                    var elementLogDetailsPath = "{{path('website_cms_element_log_data')}}";
+                    var contactId = '{{contactId}}';
+                    var clubId = '{{clubId}}';
+                    var elementId = '{{elementId}}';
+                    var type = 'headerElement';
+                    var defaultlanguage = '{{defaultlang}}';
+                    var required = '{{'REQUIRED_FIELD'|trans}}';
+                    var tabheadingArray = {{ tabs|json_encode()|raw }};
+                    var elementTrans = {
+                                'added': "{{ 'LOG_FLAG_ADDED'|trans }}",
+                                'changed': "{{ 'LOG_FLAG_CHANGED'|trans }}",
+                                'removed': "{{ 'LOG_FLAG_REMOVED'|trans }}",
+                                'element' : "{{ 'CMS_ELEMENT'|trans }}",
+                                'page_assignment' :"{{ 'CMS_PAGE_ASSIGNMENT'|trans }}"
+                            };
+                    $(document).ready(function () {
+                        scope = angular.element($("#BaseController")).scope();
+                        FgPageTitlebar = $(".fg-action-menu-wrapper").FgPageTitlebar({
+                            title: true,
+                            tab: true,
+                            languageSwitch: true,
+                            tabType: 'client'     
+                        });
+                        var option = {
+                            pageType: 'cmsAddElement',
+                            contactId: contactId,
+                            currentClubId: clubId,
+                            localStorageName: type + '_' + clubId + '_' + contactId,
+                            tabheadingArray: tabheadingArray
+                        };
+                        Fgtabselectionprocess.initialize(option);
+                        var CmsElement = new FgCmsElement();
+                        var CmsElementLog = new FgCmsElementLog();
+                        CmsElementLog.init();
+
+                        // Load header element form 
+                        FgGlobalSettings.handleLangSwitch();
+                        $('select.selectpicker').selectpicker();
+                        FgDirtyFields.init('addHeaderElement', {saveChangeSelector: "#save_changes, #save_bac", discardChangesCallback : CmsElement.discardChangesCallback});
+                        CmsElement.renderContent();
+                        //Submit button click event
+                        var currentHeadingDefault = '{%if elementDetails.title[defaultClubLang] is defined %}{{ elementDetails.title[defaultClubLang]}}{%endif%}';
+                        var currentHeaderSize = '{%if elementDetails.headerSize is defined %}{{ elementDetails.headerSize}}{%endif%}';
+                        $('body').off('click', '#save_changes');
+                        $('body').on('click', '#save_changes, #save_bac', function (e) {
+                            var validate = CmsElement.validateHeading();
+                            if(validate){
+                                var data = {};
+                                data['titleSize'] = $('select#headingSize').selectpicker('val');
+                                data['saveType'] = ($(this).attr('id') === 'save_changes') ? 'save' : 'saveAndBack';
+                                data['pageId'] = $('#hiddenPageId').val();
+                                data['boxId'] = $('#hiddenBoxId').val();
+                                data['elementId'] = $('#hiddenElementId').val();
+                                data['sortOrder'] = $('#hiddenSortOrder').val();
+                                var title = {};
+                                $.each($('input.headingTitles'), function (i, obj) {
+                                    title[$(obj).attr('data-lang')] = $(obj).val();
+                                });
+                                data['titleArray'] = title;
+                                //Insert log entry only when header title in def lang or header size is changed
+                                if( $('#hiddenCurrentHeading').val() !== title[defaultlanguage] || $('#hiddenCurrentHeaderSize').val() !== data['titleSize']){
+                                    $('#hiddenCurrentHeading').val(title[defaultlanguage]);
+                                    $('#hiddenCurrentHeaderSize').val(data['titleSize']);
+                                    data['logEntry'] = '1';
+                                }
+                                FgXmlHttp.post(saveElementPath, data, false, CmsElement.saveElementCallback);
+                                FgLanguageSwitch.checkMissingTranslation(defaultlanguage); 
+                            }
+                        });
+                        $('body').on('click', '#preview', function (e) {
+                           window.location.href = contentEditPagePath;
+                        });
+                        
+                        if(elementId > 0){
+                           FgLanguageSwitch.checkMissingTranslation(defaultlanguage); 
+                        }
+                        FgInternal.restrictEnterKeyOnPage('cmsAddElementHeadingEdit');
+                    });        
+        </script>
+    {% endblock %}    

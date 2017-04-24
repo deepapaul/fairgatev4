@@ -1,0 +1,41 @@
+Common\UtilityBundle\Entity\FgClubClassAssignment:
+    repositoryClass: Common\UtilityBundle\Repository\FgClubClassAssignmentRepository
+    type: entity
+    table: fg_club_class_assignment
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        class:
+            targetEntity: FgClubClass
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                class_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        assinedFederation:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                assined_federation_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

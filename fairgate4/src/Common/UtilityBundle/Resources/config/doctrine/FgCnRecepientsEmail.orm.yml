@@ -1,0 +1,44 @@
+Common\UtilityBundle\Entity\FgCnRecepientsEmail:
+    repositoryClass: Common\UtilityBundle\Repository\FgCnRecepientsEmailRepository
+    type: entity
+    table: fg_cn_recepients_email
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        selectionType:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: selection_type
+        emailType:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: email_type
+    manyToOne:
+        emailField:
+            targetEntity: FgCmAttribute
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                email_field_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        recepientList:
+            targetEntity: FgCnRecepients
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                recepient_list_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

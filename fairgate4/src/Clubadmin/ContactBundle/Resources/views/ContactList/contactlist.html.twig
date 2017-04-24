@@ -1,0 +1,520 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : contacttype=='contact'? '::clubadmin/layout-sidebar.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set clubTerminolgy = fgtwig.getTerminolgyName('Club',plural)%}
+    {% set subFederationTerminology = fgtwig.getTerminolgyName('Sub-federation',plural)%}
+        {% set executiveboardTerminology = fgtwig.getTerminolgyName('Executive Board',plural)%}
+            {% set federationmemberTerminology = fgtwig.getTerminolgyName('Federation member',plural)%}
+                {% set federationTerminology = fgtwig.getTerminolgyName('Federation',singular)%}
+
+                    {% if ( contacttype == 'archive' ) %}
+                        {% set title= 'ACTIVE_ARCHIVES'  %}
+                            {% elseif ( contacttype == 'formerfederationmember' )%}
+                                {% set title= 'FORMER_FEDERATION_MEMBERS'  %}
+                                    {% else %}
+                                        {% set title='ACTIVE_CONTACTS' %}
+                                            {% endif %}
+                                                {% set pageTitle = title|trans({'%fedmember%':federationmemberTerminology}) %}
+                                                    {% set title = title|trans({'%fedmember%':federationmemberTerminology}) %}
+
+
+                                                        {% block pagecontent %}
+                                                            <!-- BEGIN PAGE CONTENT-->
+
+                                                            <!-- BEGIN CONTENT -->
+                                                            <!-- BEGIN PAGE HEADER-->
+                                                            <!-- Error on missing executive board members - starts -->
+                                                            <div id="reqExecMembersError" class="alert alert-warning alert-dismissable display-hide">
+                                                                <button class="close" data-close="alert"></button>
+                                                                <strong>{{'ATTENTION'|trans}}! </strong><span>{% trans with {'%executiveboard%':  fgtwig.getTerminolgyName('Executive Board', singular, 'UCF')} %}EXECUTIVE_BOARD_MEMBERS_MISSING{% endtrans %} <a href="{{path('edit_executive_board_members')}}">{{'EXECUTIVE_BOARD_MEMBERS_MISSING_LINK'|trans}}</a></span>
+                                                            </div>
+                                                            <!-- Error on missing executive board members - ends -->
+                                                            <!-- Error on missing req fed role - starts -->
+                                                            <div id="MissingReqAssgmtError" class="alert alert-warning alert-dismissable display-hide">
+                                                                <button class="close" data-close="alert"></button>
+                                                                <strong>{{'ATTENTION'|trans}}! </strong><span>{% trans with {'%fedmember%':  federationmemberTerminology,'%a%':"<a href=\"javascript:FgContactListCustom.sidebarHighlight('"~clubId~"','"~contactId~"')\">",'%b%':"</a>", '%federation%' : federationTerminology } %}REQ_FED_SUBFED_ROLE_MISSING_ASSIGNMT{% endtrans %} </span>
+                                                            </div>
+                                                            <!-- Error on missing req fed role - ends -->
+
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                                                                    {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+                                                                     <input type="hidden" name="defaultColumnStting" id="fg-dev-defaultcolumnsetting" value="{{defaultSettings}}"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <form method="POST" action= "" id="hiddenform">
+                                                                    <input type="hidden" name="selcontacthidden" value="" id="selcontacthidden" search-value="" />
+                                                                    <input type="hidden" name="searchhidden" value="" id="searchhidden" search-value="" />
+                                                                    <input type="hidden" name="counthidden" value="" id="counthidden" search-value="" />
+                                                                </form>
+                                                                
+                                                                {% set columnsUrl = path('columnsettings', {'settings_id': 0,'contacttype':contacttype}) %}
+                                                                {% set inlinediturl = path('inlineedit_contact') %}
+                                                                {% set defaultSettings_name = 'LOAD_COLUMN'|trans %}
+                                                                {% set page_settings = { 'columnsettings':'true','pagetitle':'true','counter':'true','searchbox':'true','filter':'true','editlink':'true','actionmenu':'true' }  %}
+                                                                {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': title|trans, 'page_settings': page_settings,'columnsUrl': columnsUrl,'defaultSettings':defaultSettings,'allTableSettings':allTableSettings,'contacttype':contacttype,'inlinediturl':inlinediturl,'defaultSettings_name':defaultSettings_name,'counter':0,'searchbox_id':'searchbox'} %}
+                                                               
+                                                                <!-- END PAGE TITLE & BREADCRUMB-->
+                                                            </div>
+                                                            <div class="alert alert-danger display-hide">
+                                                                <button class="close" data-close="alert"></button>
+                                                                {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+                                                            </div>
+                                                            <!-- END PAGE HEADER-->
+                                                            <!-- BEGIN FILTER AREA-->
+                                                            <div class="filter-alert alert-block fade in space fg-marg-top-0">
+                                                                <button  class="close fg_filter_hide" type="button" ></button>
+                                                                <div class="row filter-pad">
+                                                                    <div id="target">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="clearfix filter-pad addandsave fg-common-top-btm">
+                                                                    <a data-toggle="modal" href="#basic" id="addCriteria"><i class="fa fa-plus-circle fa-2x"></i><span class="fg-left-move"> {%trans%}SAVED_FILTER_ADD_CRITERION{%endtrans%}</span> </a>
+                                                                            {% if contacttype =='contact' %}
+                                                                        <a id="saveFilter" href="javascript:void(0)" class="col-green fg-left-move"><i class="fa fa-check fa-2x col-green"></i><span class="fg-left-move">{%trans%}ACTIVE_CONTACT_LIST_SAVE_FILTER{%endtrans%}…</span></a>
+                                                                            {% endif %}
+                                                                    <div id="filternameText" class="editable editable-click fg-filter-name btn-group"> </div>
+                                                                </div>
+                                                                <div class="portlet-body form">
+                                                                    <div class="form-actions fluid">
+                                                                        <div class="col-md-offset-0 col-md-10">
+                                                                            <button type="submit" id="search" class="btn blue">{%trans%}CONTACT_FILTER_SEARCH{%endtrans%}</button>
+                                                                            <button type="button" class="btn default remove-filter">{%trans%}CONTACT_FILTER_CLEAR{%endtrans%}</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                                                                {% if contacttype =='contact' %}
+                                                                    {% set draggable= 'dataTable-dragable dataTable-droppable'%}
+                                                                        {% else %}
+                                                                            {% set draggable= 'archive-border-remove fg-dev-sort-disable'%}
+                                                                                {% endif %}
+                                                                                    <div class="portlet-body new-table-height fg-contactlist-table-wrapper" id="tableWrapper">
+                                                                                        <table data-ajax-path="{{ path('list_contact',{'contactType': contacttype})  }}"
+                                                                                               class="{% if (fgtwig.inArray('contact',fgclub.get('allowedRights'))) %} {{draggable}} {% endif %}
+                                                                                               dataTable
+                                                                                               table
+                                                                                               table-bordered
+                                                                                               table-hover
+                                                                                               table-condensed
+                                                                                               dataTable-scroll-y
+                                                                                               dataTable-ajax
+                                                                                               dataTable-ajaxHeader
+                                                                                               dataTable-fixed
+                                                                                               dataTable-rows
+                                                                                               dataTable-scroll-x
+                                                                                               dataTables_scrollBody
+                                                                                               lastcolumn_sort dataTable-initialSort data-count dataTable-widthResize" xWidth="100" yHeight="300" data-table-name="dataTables" data_row_change="fgrowchange" {%if contacttype=='contact'%}data-sort="1#asc"{% else%}data-sort="2#desc" {% endif%} dataTable-popover="true" dataTable-hover="true" {% if (contacttype =='contact') %} dataTable-column-hide="2" {% else %} dataTable-column-hide="3" {% endif %} >
+                                                                                        </table>
+                                                                                    </div>
+                                                                                    <!-- END EXAMPLE TABLE PORTLET-->
+                                                                                </div>
+                                                                                <div id="callPopupFunction"></div>
+                                                                                <!-- Connection Popup -->
+                                                                                <div class="modal fade fg-modal-wrapper" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+                                                                                    <div class="modal-dialog modal-wide">
+                                                                                        <div class="modal-content fg-popup-wrap" id="popup_contents">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div id="fg-dev-reativateMsgBox" class="hide">
+                                                                                    <input type="hidden" name="reactivateContactId" id="reactivateContactId" value="" />
+                                                                                    <input type="hidden" name="reacivateRedirectPath" id="reacivateRedirectPath" value="" />
+                                                                                </div>
+                                                                                
+                                                                                <!-- End Connection Popup -->
+                                                                                <!-- END PAGE CONTENT-->
+
+
+                                                                                <!-- END CONTENT -->
+                                                                                <!-- END PAGE CONTENT-->
+                                                                                
+                                                                                <!-- Included template for merge contact -->
+                                                                                {% include 'ClubadminContactBundle:Archive:mergeContact.html.twig' %}
+                                                                                {% endblock %}
+{% block javascripts %}
+
+    <script>
+        var filter;
+        var filterdata = 'contact';
+        var filterStorage = 'contactfilter-{{contacttype}}{{clubId}}-{{contactId}}';
+        var filterName = 'contact_filter';
+        var totalCount = '';
+        var saveFilterPath = '{{path('contact_saved_filter_data')}}';
+        var saveFilterErrorPath = "{{url('filter_update_broken')}}";
+        var isFilterBroken = 0;
+        var jsonData = '';
+        var fedmembershipMandatory =   '{{fgclub.get('fedMembershipMandatory')}}';
+        
+        var tableSettingValue = '';
+        var tableColumnTitle = [];
+        var clubId ={{clubId}} ;
+        var fedclubId={{fedClubId}};
+        var fedIcon = {{fgclub.get('federation_icon')|json_encode()|raw}};
+        var contactId ={{contactId}} ;
+        var contactType = '{{contacttype}}';
+        var connectionPath = '{{path('connect_contacts')}}';
+        var reactivateSavePath = "{{ path('save_reactivate_contact')}}";
+        var filterRoleStorage = 'filterrole-{{contacttype}}{{clubId}}-{{contactId}}';
+        var teamId ={{teamId}} ;
+        var workgroupId ={{workgroupId}} ;
+        var tableSettingValueStorage = 'tableSettingValue_{{contacttype}}{{clubId}}-{{contactId}}';
+        var tableColumnTitleStorage = 'tableColumnTitle_{{contacttype}}{{clubId}}-{{contactId}}';
+        var filterDisplayFlagStorage = 'filterdisplayflag_{{contacttype}}{{clubId}}-{{contactId}}';
+        var functionType = '';
+        var tableSettingIdStorage = 'tableSettingId_{{contacttype}}{{clubId}}-{{contactId}}';
+        var clubType = '{{clubType}}';
+        var ActiveMenuDetVar = 'contact_active_menu_det{{clubId}}-{{contactId}}';
+        var functionshowStoragename='showfunction_{{clubId}}-{{contactId}}';
+        FgSidebar.ActiveMenuDetVar = ActiveMenuDetVar;
+        var showfunctionStorageValue =localStorage.getItem(functionshowStoragename);
+        if (showfunctionStorageValue === null || showfunctionStorageValue === '' || showfunctionStorageValue == 'undefined') {
+          localStorage.setItem(functionshowStoragename,'');  
+        } 
+        var addExistingFedMemberClub = {{addExistingFedMemberClub}};
+        var clubMembershipAvailable = '{{clubMembershipAvailable}}';
+        var fedmemConfirmTootipMsg  ="{{'CONTACT_FED_MEMBER_TOOLTIP'|trans}}";
+        var isReadOnlyContact = '{{ isReadOnlyContact }}';
+        var actionmenuFlag = true;
+        //For hide action menu in case of read only user with formerfederation
+        if(isReadOnlyContact==1 && contactType=='formerfederationmember') {
+           actionmenuFlag =false; 
+        }
+        
+         {% if((clubType == 'sub_federation_club' or clubType == 'federation_club') and (addExistingFedMemberClub == 1 or addExistingFedMemberClub == 2))%}                                                                                       {# DEFINE DYNAMIC MENU TEXT HERE#}
+             {% set c4 = 1%}
+          {% else%}
+              {% set c4 = 0%}
+         {% endif %}
+            if (contactType == 'contact') {
+                var actionMenuNoneSelectedText = {
+               {% if ((not fgtwig.inArray('contact',fgclub.get('allowedRights')) and fgtwig.inArray('contact',fgclub.get('bookedModulesDet'))) or  isReadOnlyContact ==1) %}
+                        'export': {'title': "{{'EXPORT_ALL'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}'},
+                    {% else %}
+                            
+                        'createcontact': {'title': "{{'CREATE_CONTACT'|trans}}", 'dataUrl': '{{ path('create_contact') }}', 'hrefLink': '{{ path('create_contact') }}', 'visibleAlways': true},
+                        {% if(clubType == 'federation' and isSuperAdmin|default(0)==1) %} 
+                        'importShare': {'title': "{{'IMPORT_AND_SHARE'|trans}}", 'dataUrl': '{{ path('import_merge_file') }}', 'hrefLink': '{{ path('import_merge_file') }}', 'visibleAlways': true},
+                        {% endif%}
+                        'import': {'title': "{{'IMPORT_ALL'|trans}}", 'dataUrl': '{{ path('import_file') }}', 'hrefLink': '{{ path('import_file') }}', {% if(c4 == 0 ) %} 'divider': '1',{% endif %} 'visibleAlways': true},
+                        {% if(c4 == 1 ) %} 
+                            'addexistingfedmember':{'title':"{{'ADD_EXISTING_FED_MEMBER_TITLE'|trans}}",'dataUrl':'{{path('add_existing_fed_member')}}','divider': '1','visibleAlways': true},
+                        {% endif%}
+                        'editcontact': {'title': "{{'EDIT_SELECTED'|trans}}", 'dataUrl': '', 'visibleAlways':false, 'isActive': false},
+                        
+                        {% if(clubType == 'federation' or clubType == 'sub_federation' ) %} 
+                            'assign': {'title': "{{'ASSIGN_CONTACTS_TO'|trans}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}'},
+                            'assign_fedmembership': {'title': "{{'ASSIGN_CONTACTS_TO_FEDMEMBERSHIP'|trans}}", 'dataUrl': '','isActive':false },
+                               
+                        {% elseif(clubType == 'standard_club')%}
+                            'assign': {'title': "{{'ASSIGN_CONTACTS_TO_GROUP'|trans}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}'},
+                            'assign_membership': {'title': "{{'ASSIGN_CONTACTS_TO_MEMBERSHIP'|trans}}", 'dataUrl': '', 'isActive': false},
+                            'quit_membership':{'title':"{{'QUIT_MEMBERSHIP'|trans}}",'dataUrl':'', 'isActive': false},     
+                        {% else%}
+                            {% if(clubMembershipAvailable) %}
+                                'assign': {'title': "{{'ASSIGN_CONTACTS_TO_GROUP'|trans}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}'},
+                                'assign_membership': {'title': "{{'ASSIGN_CONTACTS_TO_MEMBERSHIP'|trans}}", 'dataUrl': '', 'isActive': false},
+                                'assign_fedmembership': {'title': "{{'ASSIGN_CONTACTS_TO_FEDMEMBERSHIP'|trans}}", 'dataUrl': '', 'isActive': false},
+                                'quit_membership':{'title':"{{'QUIT_MEMBERSHIP'|trans}}",'dataUrl':'', 'isActive': false},
+                             {% else%}
+                                'assign': {'title': "{{'ASSIGN_CONTACTS_TO_GROUP'|trans}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}'},
+                                'assign_fedmembership': {'title': "{{'ASSIGN_CONTACTS_TO_FEDMEMBERSHIP'|trans}}", 'dataUrl': '','isActive':false},
+                             {% endif %}            
+                        {% endif %}    
+                      {% if((clubType == 'federation' or  clubType == 'sub_federation' or clubType == 'sub_federation_club'  or clubType == 'federation_club' ) and (fgclub.get('fedMembershipMandatory')==0) )%} 
+                            'quit_fed_membership':{'title':"{{'QUIT_FED_MEMBERSHIP'|trans}}",'dataUrl': '','isActive':false},  
+                        {% endif%} 
+                        'move': {'title': "{{'MOVE_CONTACTS_FROM_groupA_TO'|trans ({'%groupA%' : '#groupA#'})}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}'},
+                        'remove': {'title': "{{'REMOVE_CONTACTS_FROM_groupA'|trans ({'%groupA%' : '#groupA#'})}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}','divider': '1'},
+                        'export': {'title': "{{'EXPORT_ALL'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}'},
+                    {% endif %}
+
+                };
+                var actionMenuSingleSelectedText = {
+                    {% if ((not fgtwig.inArray('contact',fgclub.get('allowedRights')) and fgtwig.inArray('contact',fgclub.get('bookedModulesDet'))) or  isReadOnlyContact ==1) %}
+                        'export': {'title': "{{'EXPORT_SELECTED'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}'}
+                    {% else %}
+                        'createcontact': {'title': "{{'CREATE_CONTACT'|trans}}", 'dataUrl': '', 'visibleAlways':false, 'isActive': false},
+                        {% if(clubType == 'federation' and isSuperAdmin|default(0)==1) %} 
+                            'importShare': {'title': "{{'IMPORT_AND_SHARE'|trans}}", 'dataUrl': '', 'visibleAlways': false, 'isActive': false},
+                        {% endif%}
+                        'import': {'title': "{{'IMPORT_ALL'|trans}}", 'dataUrl': '', 'divider': '1', 'visibleAlways':false, 'isActive': false},
+                        'editcontact': {'title': "{{'EDIT_SELECTED'|trans}}", 'dataUrl': '{{editUrl}}', 'appendSelectedId': '1'},
+                        {% if(clubType == 'federation' or clubType == 'sub_federation' ) %} 
+                            'assign': {'title': "{{'ASSIGN_CONTACT_TO'|trans}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}'},
+                            'assign_fedmembership': {'title': "{{'ASSIGN_CONTACT_TO_FEDMEMBERSHIP'|trans}}", 'dataUrl': '{{path('update_membership_assignments')}}' },
+                        {% elseif(clubType == 'standard_club')%}
+                            'assign': {'title': "{{'ASSIGN_CONTACT_TO_GROUP'|trans}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}'},
+                            'assign_membership': {'title': "{{'ASSIGN_CONTACT_TO_MEMBERSHIP'|trans}}", 'dataUrl': '{{path('update_membership_assignments')}}'},
+                            'quit_membership':{'title':"{{'QUIT_MEMBERSHIP'|trans}}",'dataUrl':'{{path('quit_membership')}}'},
+                        {% else %}
+                            {% if(clubMembershipAvailable) %}
+                                'assign': {'title': "{{'ASSIGN_CONTACT_TO_GROUP'|trans}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}'},
+                                'assign_membership': {'title': "{{'ASSIGN_CONTACT_TO_MEMBERSHIP'|trans}}", 'dataUrl': '{{path('update_membership_assignments')}}'}, 
+                                'assign_fedmembership': {'title': "{{'ASSIGN_CONTACT_TO_FEDMEMBERSHIP'|trans}}", 'dataUrl': '{{path('update_membership_assignments')}}'},
+                                'quit_membership':{'title':"{{'QUIT_MEMBERSHIP'|trans}}",'dataUrl':'{{path('quit_membership')}}'},
+                            {% else%}
+                                'assign': {'title': "{{'ASSIGN_CONTACT_TO_GROUP'|trans}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}'},
+                                'assign_fedmembership': {'title': "{{'ASSIGN_CONTACT_TO_FEDMEMBERSHIP'|trans}}", 'dataUrl': '{{path('update_membership_assignments')}}'},
+                            {% endif %}      
+                        {% endif %}
+                          {% if((clubType == 'federation' or  clubType == 'sub_federation' or clubType == 'sub_federation_club'  or clubType == 'federation_club' ) and (fgclub.get('fedMembershipMandatory')==0) )%} 
+                            'quit_fed_membership':{'title':"{{'QUIT_FED_MEMBERSHIP'|trans}}",'dataUrl': '{{path('quit_fed_membership')}}'},  
+                        {% endif%}    
+                        'move': {'title': "{{'MOVE_CONTACT_FROM_groupA_TO'|trans ({'%groupA%' : '#groupA#'})}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}'},
+                        'remove': {'title': "{{'REMOVE_CONTACT_FROM_groupA'|trans ({'%groupA%' : '#groupA#'})}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}','divider': '1'},
+                        'export': {'title': "{{'EXPORT_SELECTED'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}','divider': '1'},
+                        'archive': {'title': "{{'ARCHIVE_SELECTED'|trans}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}'}
+                    {% endif %}
+
+                };
+                var actionMenuMultipleSelectedText = {
+                    {% if ((not fgtwig.inArray('contact',fgclub.get('allowedRights')) and fgtwig.inArray('contact',fgclub.get('bookedModulesDet'))) or  isReadOnlyContact ==1 ) %}
+                        'export': {'title': "{{'EXPORT_SELECTED'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}'}
+                    {% else %}
+                        'createcontact': {'title': "{{'CREATE_CONTACT'|trans}}", 'dataUrl': '', 'visibleAlways':false, 'isActive': false},
+                        {% if(clubType == 'federation' and isSuperAdmin|default(0)==1 ) %} 
+                            'importShare': {'title': "{{'IMPORT_AND_SHARE'|trans}}", 'visibleAlways': false, 'isActive': false},
+                        {% endif%}
+                        'import': {'title': "{{'IMPORT_ALL'|trans}}", 'dataUrl': '', 'divider': '1', 'visibleAlways':false, 'isActive': false},
+                        'editcontact': {'title': "{{'EDIT_SELECTED'|trans}}", 'appendSelectedId': '1'},
+                        {% if(clubType == 'federation' or clubType == 'sub_federation' ) %} 
+                            'assign': {'title': "{{'ASSIGN_SELECTED_CONTACTS_TO'|trans}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}'},
+                            'assign_fedmembership': {'title': "{{'ASSIGN_SELECTED_CONTACTS_TO_FEDMEMBERSHIP'|trans}}", 'dataUrl': '{{path('update_membership_assignments')}}' },
+                        {% elseif(clubType == 'standard_club')%}
+                            'assign': {'title': "{{'ASSIGN_CONTACT_TO_GROUP'|trans}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}'},
+                            'assign_membership': {'title': "{{'ASSIGN_SELECTED_CONTACTS_TO_MEMBERSHIP'|trans}}", 'dataUrl': '{{path('update_membership_assignments')}}'},
+                            'quit_membership':{'title':"{{'QUIT_MEMBERSHIP'|trans}}",'dataUrl':'{{path('quit_membership')}}'},
+                        {% else %}
+                            {% if(clubMembershipAvailable) %}
+                                'assign': {'title': "{{'ASSIGN_SELECTED_CONTACTS_TO_GROUP'|trans}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}'},
+                                'assign_membership': {'title': "{{'ASSIGN_SELECTED_CONTACTS_TO_MEMBERSHIP'|trans}}", 'dataUrl': '{{path('update_membership_assignments')}}'},
+                                'assign_fedmembership': {'title': "{{'ASSIGN_SELECTED_CONTACTS_TO_FEDMEMBERSHIP'|trans}}", 'dataUrl': '{{path('update_membership_assignments')}}' },
+                                'quit_membership':{'title':"{{'QUIT_MEMBERSHIP'|trans}}",'dataUrl':'{{path('quit_membership')}}'},
+                            {% else%}
+                                'assign': {'title': "{{'ASSIGN_SELECTED_CONTACTS_TO_GROUP'|trans}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}'},
+                                'assign_fedmembership': {'title': "{{'ASSIGN_SELECTED_CONTACTS_TO_FEDMEMBERSHIP'|trans}}", 'dataUrl': '{{path('update_membership_assignments')}}'},
+                            {% endif %} 
+                       {% endif%}
+                        {% if((clubType == 'federation' or  clubType == 'sub_federation' or clubType == 'sub_federation_club'  or clubType == 'federation_club' ) and (fgclub.get('fedMembershipMandatory')==0) )%} 
+                            'quit_fed_membership':{'title':"{{'QUIT_FED_MEMBERSHIP'|trans}}",'dataUrl': '{{path('quit_fed_membership')}}'},  
+                        {% endif%}
+                        'move': {'title': "{{'MOVE_CONTACT_FROM_groupA_TO'|trans ({'%groupA%' : '#groupA#'})}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}'},
+                        'remove': {'title': "{{'REMOVE_CONTACT_FROM_groupA'|trans ({'%groupA%' : '#groupA#'})}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}','divider': '1'},
+                        'export': {'title': "{{'EXPORT_SELECTED'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}','divider': '1'},
+                        'archive': {'title': "{{'ARCHIVE_SELECTED'|trans}}", 'dataUrl': '{{path('get_all_contactids_assignment')}}'}
+                    {% endif %}
+
+                };
+            } else if (contactType == 'formerfederationmember') {
+                if (clubType == 'federation') {
+                    var actionMenuNoneSelectedText = {
+                        {% if (not fgtwig.inArray('contact',fgclub.get('allowedRights')) and fgtwig.inArray('contact',fgclub.get('bookedModulesDet'))) %}
+                            'export': {'title': "{{'EXPORT_ALL'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}'},
+                        {% else %}
+                            'export': {'title': "{{'EXPORT_ALL'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}'},
+                            'formerfedmember-delete': {'title': "{{'DELETE_ALL'|trans }}", 'dataUrl': '{{path('delete_former_federation_member')}}', 'htmlCreatePath': '{{path('checked_former_federation_member')}}'},
+                        {% endif %}
+                    };
+                    var actionMenuMultipleSelectedText = {
+                        {% if (not fgtwig.inArray('contact',fgclub.get('allowedRights')) and fgtwig.inArray('contact',fgclub.get('bookedModulesDet'))) %}
+                            'export': {'title': "{{'EXPORT_SELECTED'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}'},
+                        {% else %}
+                            'export': {'title': "{{'EXPORT_SELECTED'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}'},
+                            'formerfedmember-delete': {'title': "{{'DELETE_SELECTED'|trans }}", 'dataUrl': '{{path('delete_former_federation_member')}}', 'htmlCreatePath': '{{path('checked_former_federation_member')}}'},
+                        {% endif %}
+                    };
+                    var actionMenuSingleSelectedText = {
+                        {% if (not fgtwig.inArray('contact',fgclub.get('allowedRights')) and fgtwig.inArray('contact',fgclub.get('bookedModulesDet'))) %}
+                            'export': {'title': "{{'EXPORT_SELECTED'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}'},
+                        {% else %}
+                            'export': {'title': "{{'EXPORT_SELECTED'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}'},
+                            'formerfedmember-delete': {'title': "{{'DELETE_SELECTED'|trans }}", 'dataUrl': '{{path('delete_former_federation_member')}}', 'htmlCreatePath': '{{path('checked_former_federation_member')}}'},
+                        {% endif %}
+                    };
+                } else if (clubType == 'sub_federation') {
+                    var actionMenuNoneSelectedText = {
+                        'export': {'title': "{{'EXPORT_ALL'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}'},
+                    };
+                    var actionMenuMultipleSelectedText = {
+                        'export': {'title': "{{'EXPORT_SELECTED'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}'},
+                    };
+                    var actionMenuSingleSelectedText = {
+                        'export': {'title': "{{'EXPORT_SELECTED'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}'},
+                    };
+                }
+            }
+            else {
+                var actionMenuNoneSelectedText = {
+                    'export': {'title': "{{'EXPORT_ALL'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}'},
+                };
+                var actionMenuSingleSelectedText = {
+                    {% if (not fgtwig.inArray('contact',fgclub.get('allowedRights')) and fgtwig.inArray('contact',fgclub.get('bookedModulesDet'))) %}
+                        'export': {'title': "{{'EXPORT_SELECTED'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}'},
+                    {% else %}
+                        'reactivate': {'title': "{{'REACTIVATE_SELECTED'|trans}}", 'dataUrl': '{{path('get_all_contactids_reactivate')}}', 'htmlCreatePath': '{{path('get_reactivate_popup')}}'},
+                        'editcontact': {'title': "{{'EDIT_SELECTED'|trans}}", 'dataUrl': '{{editUrl}}', 'appendSelectedId': '1'},
+                        'export': {'title': "{{'EXPORT_SELECTED'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}'},
+                        'delete': {'title': "{{'DELETE_SELECTED'|trans }}", 'dataUrl': '{{path('get_all_contactids_archive')}}'},
+                    {% endif %}
+                };
+                var actionMenuMultipleSelectedText = {
+                    {% if (not fgtwig.inArray('contact',fgclub.get('allowedRights')) and fgtwig.inArray('contact',fgclub.get('bookedModulesDet'))) %}
+                        'export': {'title': "{{'EXPORT_SELECTED'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}'},
+                    {% else %}
+                        'reactivate': {'title': "{{'REACTIVATE_SELECTED'|trans}}", 'dataUrl': '{{path('get_all_contactids_reactivate')}}', 'htmlCreatePath': '{{path('get_reactivate_popup')}}'},
+                        'export': {'title': "{{'EXPORT_SELECTED'|trans}}", 'dataUrl': '{{ path('export_file', {'contactType': contacttype}) }}'},
+                        'delete': {'title': "{{'DELETE_SELECTED'|trans }}", 'dataUrl': '{{path('get_all_contactids_archive')}}'},
+                    {% endif %}
+                };
+            }
+            var actionMenuText = {'active' : {'none': actionMenuNoneSelectedText, 'single': actionMenuSingleSelectedText, 'multiple': actionMenuMultipleSelectedText}};
+            FgSidebar.dynamicMenus.push({actionmenu: actionMenuText});
+        {# DEFINE DYNAMIC MENU TEXT HERE#}
+
+        {# DEFINE CONTEXT MENU TEXT HERE#}
+            var contextMenuText = {
+                'context_assign_none_text': "{{'ASSIGN_CONTACT_TO_groupA'|trans ({'%groupA%' : '#groupA#'})}}",
+                'context_assign_singular_text': "{{'ASSIGN_CONTACT_TO_groupA'|trans ({'%groupA%' : '#groupA#'})}}",
+                'context_assign_plural_text': "{{'ASSIGN_CONTACTS_TO_groupA'|trans ({'%groupA%' : '#groupA#'})}}",
+                'context_move_none_text': "{{'MOVE_CONTACT_FROM_groupA_TO_groupB'|trans ({'%groupA%' : '#groupA#', '%groupB%' : '#groupB#'})}}",
+                'context_move_singular_text': "{{'MOVE_CONTACT_FROM_groupA_TO_groupB'|trans ({'%groupA%' : '#groupA#', '%groupB%' : '#groupB#'})}}",
+                'context_move_plural_text': "{{'MOVE_CONTACTS_FROM_groupA_TO_groupB'|trans ({'%groupA%' : '#groupA#', '%groupB%' : '#groupB#'})}}",
+            };
+            FgSidebar.dynamicMenus.push({context: contextMenuText});
+        {# DEFINE CONTEXT MENU TEXT HERE#}
+            var assignmentPath = '{{path('update_assignments')}}';
+            var membershipAssignmentPath = '{{path('update_membership_assignments')}}';
+            var currentActiveMenu = '';
+
+            /* table title for general data */
+            var general_table_title_array = {contact_id: "{{'CONTACT_ID'|trans}}",
+                created_at: "{{'CM_CREATED_ON'|trans}}",
+                last_updated: "{{'CM_LAST_UPDATED'|trans}}",
+                last_login: "{{'CONTACT_OVERVIEW_SETTINGS_LAST_LOGIN'|trans}}",
+                last_invoice_sending: "{{'LAST_INV_SENDING'|trans}}",
+                profile_company_pic: "{{'CM_PROFILE_IMG_SHORTNAME'|trans}}",
+                fed_membership_category: "{{fgtwig.getTerminolgyName('Fed membership',singular)}}",
+                membership_category: "{{'CM_MEMBERSHIP'|trans}}",
+                nl_subscriber: "{{'NL_SUBSCRIBER'|trans}}",
+                community_status: "{{ 'COLSETT_INTRANET_ACCESS'|trans}}",
+                intranet_access: "{{ 'COLSETT_INTRANET_ACCESS'|trans}}",
+                dispatch_type_invoice: "{{'DISPATCH_TYPE_INVOICES'|trans}}",
+                dispatch_type_dun: "{{'DISPATCH_TYPE_DUNS'|trans}}",                
+                age: "{{'AGE'|trans}}",
+                birth_year: "{{'YEAR_OF_BIRTH'|trans}}",
+                salutation_text: "{{'SALUTATION_TEXT'|trans}}",
+                notes: "{{'NOTES'|trans}}",
+                documents: "{{'DOCUMENTS'|trans}}",
+                no_of_logins: "{{'CONTACT_OVERVIEW_SETTINGS_NUMBER_OF_LOGIN'|trans}}",
+                household_main_contact: "{{'CM_HOUSEHOLD_MAIN_CONTACT'|trans}}",
+                household_contact: "{{'CM_HOUSEHOLD_CONTACT'|trans}}",
+                member_years: "{{'MEMBERSHIP_YEARS'|trans}}",
+                fed_member_years:"{{'FED_MEMBERSHIP_YEARS'|trans}}",
+                club: "{{clubTerminolgy}}",
+                sub_federation: "{{subFederationTerminology}}",
+                club_executive_board_function: "{{'CM_CLUB_EXECUTIVE_BOARD_FUNCTION'|trans({'%club%':clubTerminolgy,'%executive_board%':executiveboardTerminology})}}",
+                sponsor:"{{'SPONSOR'|trans}}",
+                is_stealth_mode:"{{'COLSETT_INTERNAL_INVISIBLE'|trans}}",
+
+            };
+            var corrAddrFieldIds = {{corrAddrFieldIds|json_encode|raw}};
+                    var invAddrFieldIds = {{invAddrFieldIds|json_encode|raw}};
+                    var archivePath = '{{path('move_to_archive')}}';
+            var permanentDeletePath = '{{path('permanent_delete_archive')}}';
+            var reqExecBoardFunError = '{{reqExecBoardFunError}}';
+            var reqRoleMissing = false;
+            var urlIdentifier = '{{urlIdentifier}}';
+
+            var CLTrans={
+                CM_CRITERIA: '{{'CM_CRITERIA'|trans}}', 
+                CM_SELECT_TYPE: '{{'CM_SELECT_TYPE'|trans}}',
+                VALIDATION_THIS_FIELD_REQUIRED: '{{'VALIDATION_THIS_FIELD_REQUIRED'|trans}}',
+                CM_CONTACT_FILTER_SAVE_SUCCESS: "{%trans%}CM_CONTACT_FILTER_SAVE_SUCCESS{%endtrans%}",
+                SIDEBAR_CONTACTS: '{{'SIDEBAR_CONTACTS'|trans}}',
+                SIDEBAR_MEMBERSHIPS: '{{'SIDEBAR_MEMBERSHIPS'|trans}}',
+                SIDEBAR_CREATE_MEMBERSHIP:'{%trans with {'%team%': fgtwig.getTerminolgyName('Team',singular)}%}SIDEBAR_CREATE_MEMBERSHIP{% endtrans %}',
+                SIDEBAR_MEMBERSHIP_SETTINGS: '{{'SIDEBAR_MEMBERSHIP_SETTINGS'|trans}}',
+                SIDEBAR_CREATE_WORKGROUP: '{%trans%}SIDEBAR_CREATE_WORKGROUP{%endtrans%}',
+                SIDEBAR_ADD_WORKGROUP: '{{'SIDEBAR_ADD_WORKGROUP'|trans}}',
+                SIDEBAR_ADD_FUNCTION: '{{'SIDEBAR_ADD_FUNCTION'|trans}}',
+                SIDEBAR_WORKGROUP_SETTINGS: '{%trans%}SIDEBAR_WORKGROUP_SETTINGS{%endtrans%}',
+                SIDEBAR_CREATE_TEAM_CATEGORRY: '{%trans with {'%team%': fgtwig.getTerminolgyName('Team',singular)}%}SIDEBAR_CREATE_TEAM_CATEGORRY{% endtrans %}',
+                SIDEBAR_ADD_TEAM_CATEGORRY: '{%trans with {'%team%': fgtwig.getTerminolgyName('Team',singular)}%}SIDEBAR_ADD_TEAM_CATEGORRY{% endtrans %}',
+                SIDEBAR_CATEGORY_SORTING: '{%trans%}SIDEBAR_CATEGORY_SORTING{%endtrans%}',
+                SIDEBAR_CREATE_TEAM: '{%trans with {'%team%': fgtwig.getTerminolgyName('Team',singular)}%}SIDEBAR_CREATE_TEAM{% endtrans %}',
+                SIDEBAR_ADD_TEAM: '{%trans with {'%team%': fgtwig.getTerminolgyName('Team',singular)}%}SIDEBAR_ADD_TEAM{% endtrans %}',
+                SIDEBAR_TEAM_SETTINGS: '{%trans with {'%teams%': fgtwig.getTerminolgyName('Team',plural)}%}SIDEBAR_TEAM_SETTINGS{% endtrans %}',
+                SIDEBAR_CREATE_ROLE_CATEGORY: '{%trans%}SIDEBAR_CREATE_ROLE_CATEGORY{%endtrans%}',
+                SIDEBAR_ADD_ROLE_CATEGORRY: '{{'SIDEBAR_ADD_ROLE_CATEGORRY'|trans}}',
+                SIDEBAR_CREATE_ROLE: '{%trans%}SIDEBAR_CREATE_ROLE{%endtrans%}',
+                SIDEBAR_ADD_ROLE: '{{'SIDEBAR_ADD_ROLE'|trans}}',
+                SIDEBAR_ROLE_CATEGORY_SETTINGS: '{%trans%}SIDEBAR_ROLE_CATEGORY_SETTINGS{%endtrans%}',
+                SIDEBAR_CREATE_FILTER_ROLE_CATEGORY:'{%trans%}SIDEBAR_CREATE_FILTER_ROLE_CATEGORY{%endtrans%}',
+                SIDEBAR_ADD_FILTERROLE_CATEGORRY: '{{'SIDEBAR_ADD_FILTERROLE_CATEGORRY'|trans}}',
+                SIDEBAR_FILTER_ROLE_CATEGORY_SETTINGS: '{%trans%}SIDEBAR_FILTER_ROLE_CATEGORY_SETTINGS{%endtrans%}',
+                SIDEBAR_EXECUTIVE_FUNCTION: '{{ 'SIDEBAR_EXECUTIVE_FUNCTION'|trans ({'%executiveboard%': fgtwig.getTerminolgyName('Executive Board', singular, 'UCF')}) }}',
+                SIDEBAR_EXECUTIVEBOARD_SETTINGS: '{{ 'SIDEBAR_EXECUTIVEBOARD_SETTINGS'|trans ({'%executiveboard%': fgtwig.getTerminolgyName('Executive Board', singular, 'UCF')}) }}',
+                SIDEBAR_FILTER: '{{'SIDEBAR_FILTER'|trans}}',
+                SIDEBAR_SAVEDFILTER_SETTINGS:'{{'SIDEBAR_SAVEDFILTER_SETTINGS'|trans}}',
+                SIDEBAR_BOOKMARKS: '{{'SIDEBAR_BOOKMARKS'|trans}}',
+                SIDEBAR_SORTING: '{{'SIDEBAR_SORTING'|trans}}',
+                SIDEBAR_CREATE_FEDMEMBERSHIP:'{%trans with {'%fedmembership%': fgtwig.getTerminolgyName('Fed membership',singular)}%}SIDEBAR_CREATE_FEDMEMBERSHIP{% endtrans %}',
+                SIDEBAR_FEDMEMBERSHIP_SETTINGS:'{%trans with {'%fedmembership%': fgtwig.getTerminolgyName('Fed membership',plural)}%}SIDEBAR_FEDMEMBERSHIP_SETTINGS{% endtrans %}',
+
+            }
+            var CLParams = {
+                contactSidebarCountUrl: "{{url('contact_sidebar_count')}}",
+                sidebarMissingAssignmentsUrl:"{{url('sidebar_missing_assignments')}}",
+                filterContactDataUrl:"{{url('filter_contact_data')}}",
+                updateFilterDataUrl: "{{url('update_filter_data')}}",
+                formerFederationMemberIndexPath: '{{path("former_federation_member_index")}}',
+                contactIndexPath: '{{path("contact_index")}}',
+                archiveIndexPath: '{{path("archive_index")}}',
+
+                allActiveMenu: [{'isAllActive': 1, 'title': '{{ pageTitle }}', count: '{{fgclub.get('activeContacts')}}'}],
+                bookemarkUpdateUrl: '{{url('create_delete_bookmark')}}',
+                filterCountUrl: '{{path('update_filter_count', {'filter_id': '|id|'})}}',
+                filterDataUrl: '{{path('contact_saved_filter_data', {'filterId': '|id|'})}}',
+                newElementLevel1: '{{ include('::clubadmin/new-element-sidebar_level1.html.twig')}}',
+                newElementLevel2: '{{ include('::clubadmin/new-element-sidebar_level2.html.twig')}}',
+                newElementLevel2Sub: '{{ include('::clubadmin/new-element-sidebar_level2_withfunction.html.twig')}}',
+                newElementUrl: '{{path("new_element_sidebar")}}',
+                module: '{{fgclub.get('module')}}',
+
+                clubWorkgroupId: '{{ fgclub.get('club_workgroup_id')}}',
+                membershipListPath: '{{path('membership_list')}}',
+                workgroupSettingsPath: '{{path('workgroupsettings')}}',
+                editRoleCategoryTeamPath: '{{path('edit_role_category', {'cat_type' : 'team'})}}',
+                teamCategorySettingsPath:'{{path('team_category_settings', {'cat_id' : '|id|'})}}',
+                editRoleCategoryClubPath: '{{path('edit_role_category', {'cat_type' : 'club'})}}',
+                roleCategorySettingsPath: '{{path('role_category_settings', {'cat_id' : '|id|'})}}',
+                editRoleCategoryFedPath: '{{path('edit_role_category', {'cat_type' : 'fed_cat'})}}',
+                editRoleCategoryFilterPath: '{{path('edit_role_category', {'cat_type' : 'filter_role'})}}',
+                filterRoleSettingsPath: '{{path('filter_role_settings', {'cat_id' : '|id|'})}}',
+                executeBoardTitle: '{{fgtwig.getTerminolgyName('Club',plural,'UCF')}} {{fgtwig.getTerminolgyName('Executive Board',singular,'UCF')}}',
+                execboardfunctionSettingsPath: '{{path('execboardfunction_settings')}}',
+                savedFilterSettingsUrl: '{{ url('saved_filter_settings') }}',
+                type: "{{fgclub.get('type')}}",
+                bookmarkListPath: '{{path('bookmark_list')}}',
+                contactId: '{{contactId}}'
+            }
+
+    </script>
+    <script src="{{ asset('fgcustom/js/search-filter.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_contact_list.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/filter-settings.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/inline-edit.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/combodate/moment-with-locales.min.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/combodate/combodate.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/sidebarfilter.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_filter_validate.js')}}" type="text/javascript"></script>
+    <script>
+        var filterCondition = FgFilter.getCondition('{{'CM_AND'|trans}}', '{{'CM_OR'|trans}}', '{{'CM_IS'|trans}}', '{{'CM_ISNOT'|trans}}', '{{'CM_IS_BETWEEN'|trans}}', '{{'CM_IS_NOTBETWEEN'|trans}}', '{{'CM_CONTAINS'|trans}}', '{{'CM_NOTCONTAINS'|trans}}', '{{'CM_BEGINSWITH'|trans}}', '{{'CM_NOTBEGINSWITH'|trans}}', '{{'CM_ENDWITH'|trans}}', '{{'CM_NOTENDWITH'|trans}}');
+    </script>
+    <script src="{{ asset('fgcustom/js/fg_contact_list_custom.js')}}" type="text/javascript"></script>
+                                                                                    <script src="{{ asset('fgcustom/js/custom-fileupload.js')}}" type="text/javascript"></script>
+{% endblock %}

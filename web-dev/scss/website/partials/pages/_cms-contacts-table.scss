@@ -1,0 +1,74 @@
+/*
+* Contact table  page styles
+* 01 - Create contact table
+* 02 - Contact table modal
+**/
+/* ------------------------------------------
+* 01 - Create contact table
+---------------------------------------------*/
+.fg-cms-create-contact-table-lists{
+	.fg-border-line{
+		.fg-col-hack{
+			.row{
+				margin-left:-30px;
+				margin-right:-30px;
+				>div[class^='col-sm-'], >div[class*=' col-sm-']{
+					@include bpMax('768px'){
+						margin-bottom: 10px;
+					}
+				}
+
+			}
+		}
+	}
+}
+
+.fg-cms-form-element-create-wrapper{
+
+	#saved-contactlist-fields{
+		font-size:13px;
+		.form-control,label,.selectpicker{
+			font-size:13px;
+		}
+		.selectpicker{
+			&.dropdown-menu li > a{
+				font-size:13px !important;
+			}
+		}
+	}
+	.bootstrap-select{
+		div.dropdown-menu{
+			width: 100%;
+			min-width: 200px;
+			.selectpicker{
+				width: 100%;
+				li a span.text {
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					width: 100%;
+					overflow: hidden;
+				}
+			}
+		}
+	}
+}
+/* ------------------------------------------
+* 02 - Contact table modal
+---------------------------------------------*/
+.fg-modal-contact-list-column-content,
+.fg-modal-contact-list-filter-content{
+	.bootstrap-select{
+		div.dropdown-menu{
+			width: 100%;
+			.selectpicker{
+				width: 100%;
+				li a span.text {
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					width: 100%;
+					overflow: hidden;
+				}
+			}
+		}
+	}
+}

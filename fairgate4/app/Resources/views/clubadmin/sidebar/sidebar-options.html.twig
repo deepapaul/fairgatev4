@@ -1,0 +1,19 @@
+<script type="text/template" id="template_sidebar_options">
+<!-- sidebar menu option area starts here -->      
+    <div class="pull-right settingsright">
+        <div class="btn-group pull-left btngrpdivsub dropup custom-drop">
+            <button class="btn" data-toggle="tooltip" title="{{'TOOLTIP_SIDEBAR_SETTINGS'|trans({}, 'tooltip')}}"> <i class="fa fa-cog fa-2x"></i> </button>
+            <ul id="chkitems" class="dropdown-menu dropdown-menu-align-left pull-right drpmenu-new dropdown-menu dropdown-menu-align-left-form padinten hold-on-click hidden-settings">
+                <%  _.each(data,function(row,key){ %>
+                    <li>
+                        <label>
+                            <input class="clsid" type="checkbox" value="<%- row.id %>" id="<%- row.id %>_check">
+                            <span class="dropdownbtmtext"><%= row.title %></span>
+                        </label>
+                    </li>  
+                <% });%>
+            </ul>
+        </div>
+    </div>
+<!-- sidebar menu option area ends here -->   
+</script>  

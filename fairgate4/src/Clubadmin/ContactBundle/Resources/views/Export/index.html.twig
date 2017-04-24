@@ -1,0 +1,270 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = (contacttype=='sponsor') ? 'EXPORT_SPONSOR_TITLE'|trans : ((contacttype=='archivedsponsor') ? 'SM_EXPORT_ARCHIVED_SPONSOR_TITLE'|trans : 'EXPORT_CONTACTS_TITLE'|trans )%}
+{% set federationmemberSingularTerminology = fgtwig.getTerminolgyName('Federation member',singular)%}
+{% set clubTerminolgy = fgtwig.getTerminolgyName('Club',plural)%}
+{% set subFederationTerminology = fgtwig.getTerminolgyName('Sub-federation',plural)%}
+{% set executiveboardTerminology = fgtwig.getTerminolgyName('Executive Board',plural)%}
+{% set federationmemberPluralTerminology = fgtwig.getTerminolgyName('Federation member',plural)%}   
+{% set exportPostUrl = ((contacttype == "sponsor" or contacttype == "archivedsponsor") ? path('sponsor_export_file_data') : path('export_file_data'))%}  
+{% block pagecontent %}
+
+  <div class="row">
+    <div class="col-md-12">
+          <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+            {% include 'clubadmin/breadcrumb.html.twig' with {'breadCrumb':{'back': backLink }} %}
+          <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+    <!-- END PAGE TITLE & BREADCRUMB-->
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN PAGE CONTENT-->    
+     <div class="row fg-export-wrap">
+          <div class="col-md-12">
+            <div class="panel">
+            <div class="row">   
+                
+                {# <div class="col-md-6">
+                          <h3 class="page-title pull-left fg-inner-title">
+                              {% if contactType=='archive' %} 
+                              {% if totalContact==1 %}{{'EXPORT_SINGLE_ARCHIVED_CONTACT'|trans}}{% else %}{{'EXPORT_ARCHIVED_CONTACTS'|trans ({'%count%' : totalContact})}}{% endif %}
+                               {% elseif contactType=='formerfederationmember' %}
+                               {% if totalContact==1 %}{{'EXPORT_SINGLE_FORMERFEDERATION_CONTACT'|trans({'%fedmember%':federationmemberSingularTerminology})}}{% else %}{{'EXPORT_FORMERFEDERATION_CONTACTS'|trans ({'%count%' : totalContact,'%fedmembers%':federationmemberPluralTerminology})}}{% endif %}
+                               {% elseif contactType=='sponsor' %}
+                               {% if totalContact==1 %}{{'EXPORT_SINGLE_SPONSOR'|trans}}{% else %}{{'EXPORT_MULTIPLE_SPONSOR'|trans ({'%count%' : totalContact})}}{% endif %}  
+                               {% elseif contactType=='archivedsponsor' %}
+                               {% if totalContact==1 %}{{'EXPORT_SINGLE_ARCHIVED_SPONSOR'|trans}}{% else %}{{'EXPORT_MULTIPLE_ARCHIVED_SPONSOR'|trans ({'%count%' : totalContact})}}{% endif %}  
+                               {% else %}{% if totalContact==1 %}{{'EXPORT_SINGLE_ACTIVE_CONTACT'|trans}}{% else %}{{'EXPORT_ACTIVE_CONTACTS'|trans ({'%count%' : totalContact})}}{% endif %}{% endif %}</h3>           
+                </div>    #}
+                {% if contacttype=='archive' %} 
+                              {% set pageTitle = (totalContact==1) ? 'EXPORT_SINGLE_ARCHIVED_CONTACT'|trans : 'EXPORT_ARCHIVED_CONTACTS'|trans ({'%count%' : totalContact}) %}
+                               {% elseif contacttype=='formerfederationmember' %}
+                               {% set pageTitle = (totalContact==1) ? 'EXPORT_SINGLE_FORMERFEDERATION_CONTACT'|trans({'%fedmember%':federationmemberSingularTerminology}) : 'EXPORT_FORMERFEDERATION_CONTACTS'|trans ({'%count%' : totalContact,'%fedmembers%':federationmemberPluralTerminology}) %}
+                               {% elseif contacttype=='sponsor' %}
+                               {% set pageTitle = (totalContact==1) ?'EXPORT_SINGLE_SPONSOR'|trans :'EXPORT_MULTIPLE_SPONSOR'|trans ({'%count%' : totalContact}) %}  
+                               {% elseif contacttype=='archivedsponsor' %}
+                               {% set pageTitle = (totalContact==1) ? 'EXPORT_SINGLE_ARCHIVED_SPONSOR'|trans :'EXPORT_MULTIPLE_ARCHIVED_SPONSOR'|trans ({'%count%' : totalContact}) %}  
+                               {% else %}{% set pageTitle = (totalContact==1) ? 'EXPORT_SINGLE_ACTIVE_CONTACT'|trans : 'EXPORT_ACTIVE_CONTACTS'|trans ({'%count%' : totalContact}) %}{% endif %}</h3>           
+               
+                {% set page_settings = { 'pagetitle':'true' }  %}
+                {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'page_settings': page_settings } %}
+            </div>
+             <div class="portlet-body form">
+                    <!-- BEGIN FORM-->
+                    <form action="{{exportPostUrl}}" method="POST"   autocomplete="off" class="form-horizontal form-row-sepe" id="exportform">
+                      <div class="form-body fg-csv-expt fg-exprt">
+                        <div class="form-group ">
+                          <label class="control-label col-md-3">{%trans%}CSV TYPE{%endtrans%}</label>
+                          <div class="col-lg-2 col-md-3 col-sm-12  col-xs-12">
+                            <label class="fg-cursor">
+                            <input type="radio" name="CSVtype" id="CSVtype " value="colonSep" checked>
+                            {%trans%}SEMICOLON SEPERATED{%endtrans%}
+                            </label>
+                          </div>
+                          <div class="col-lg-2 col-md-3 col-sm-12  col-xs-12">
+                            <label class="fg-cursor">   
+                             <input type="radio" name="CSVtype" id="CSVtype" value="commaSep" >                       
+                            {%trans%}COMMA SEPERATED{%endtrans%}
+                            </label>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label col-md-3">{%trans%}COLUMNS{%endtrans%}</label>
+                          <div class="col-lg-2 col-md-3 col-sm-12  col-xs-12">
+                            <label class="fg-cursor">
+                            <input type="radio" name="Columns" id="Columns" class="fg-dev-select-disable-add" value="actCol" checked>
+                            {%trans%}CURRENTLY ACTIVE COLUMNS{%endtrans%}
+                            </label>
+                          </div>
+                          <div class="col-lg-2 col-md-3 col-sm-12  col-xs-12">
+                            <label class="fg-cursor">   
+                             <input type="radio" name="Columns" id="Columns" value="savedColset"  class="fg-dev-select-disable-remove" >                       
+                            {%trans%}SAVED COLUMNS SETTINGS{%endtrans%}
+                            </label>
+                          </div>
+                          <div class="col-md-3 fg-expt-ml" id="error_select">
+                            <select class="form-control select2 input-sm" name="selctCol" >
+                               <option value="" > {%trans%}ASSIGNMENT_SELECT_DROPDOWN{%endtrans%}</option>
+                        
+                        {% for values in columnSettings %}
+                         <option value="{{values.attributes}}" >{{values.title}}</option>
+                        {% endfor %}
+                        
+                            </select>
+                                   <p class="help-block display-none" data-required> {%trans%}REQUIRED{%endtrans%}</p> 
+                          </div>
+                        </div>
+                         
+                        <div class="row">
+                          {% if contacttype != 'sponsor' and contacttype != 'archivedsponsor'%}
+                          <div class="col-md-12">
+                             <label class="fg-cursor"> <input type="checkbox" name="isOptimzeImport" value="checked">{%trans%}EXPORT CONTACT CHECKBOX TEXT{%endtrans%}</label>
+                          </div>
+                            {% endif %}
+                                   <input type="hidden" name="formhidden" value="" id="formhidden" />
+                                   <input type="hidden" name="contactType" value="{{contacttype}}" id="contactType" />
+                                   
+                        </div> 
+                       
+                      </div>
+                   
+                    <!-- END FORM-->
+                  </div>
+            </div>
+        <div class="portlet-body form fg-sticky-block">
+                    <div class="form-actions fluid"> 
+                        <div class="col-md-offset-0  col-md-12 col-sm-12 col-xs-12">
+                            <input type="button" id="exportsubmit" value="{%trans%}EXPORT{%endtrans%}" class="btn green" disabled="disabled">
+                            <button data-url="{{ backLink }}" class="btn default-ash bckid fg-expt-canc" type="button">{%trans%}CANCEL{%endtrans%}</button>
+                             <div class="btn-group pull-right">                
+                                 <button type="button" class="btn default-ash bckid" data-url="{{ backLink }} "><i class="fa fg-chevron-left"></i>{%trans%}BACK{%endtrans%}</button>
+                            </div>
+                        </div>  
+                </div>
+         </div>
+                </form>   
+          </div>
+        </div>       
+
+   
+         
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    var jsonData='';
+    var teamId='{{teamId}}';
+    var workgroupId='{{workGroupId}}';
+    var tableSettingValue='';
+    var value='';
+    var columnTypeArray='';
+    var columnNameArray='';
+    var clubId='{{clubId}}';
+    
+    var contactId='{{contactId}}';
+    var contactType='{{contacttype}}';
+    var selectedIds="{{selectedIds}}";
+    var filterStorage = ((contactType == 'sponsor') || (contactType == 'archivedsponsor')) ? 'sponsorfilter-{{contacttype}}{{clubId}}-{{contactId}}' : 'contactfilter-{{contacttype}}{{clubId}}-{{contactId}}';
+    console.log(filterStorage);
+    var contactFilterStorageData = localStorage.getItem(filterStorage);
+    var searchval="{{searchval}}";
+    var general_table_title_array = {contact_id: "{{'CONTACT_ID'|trans}}",
+                         created_at: "{{'CM_CREATED_ON'|trans}}",
+                         last_updated: "{{'CM_LAST_UPDATED'|trans}}",
+                         last_login: "{{'LAST_LOGIN'|trans}}",
+                         last_invoice_sending: "{{'LAST_INV_SENDING'|trans}}",
+                         membership_category: "{{'CM_MEMBERSHIP'|trans}}",
+                         nl_subscriber: "{{'NL_SUBSCRIBER'|trans}}",
+                         profile_company_pic: "{{'CM_PROFILE_IMG_SHORTNAME'|trans}}",
+                         community_status: "{{ 'INTRANET_ACCESS'|trans}}",
+                         intranet_access: "{{ 'INTRANET_ACCESS'|trans}}",
+                         dispatch_type_invoice: "{{'DISPATCH_TYPE_INVOICES'|trans}}",
+                         dispatch_type_dun: "{{'DISPATCH_TYPE_DUNS'|trans}}",
+                         age: "{{'AGE'|trans}}",
+                         birth_year: "{{'YEAR_OF_BIRTH'|trans}}",
+                         salutation_text: "{{'SALUTATION_TEXT'|trans}}",
+                         notes: "{{'NOTES'|trans}}",
+                         documents: "{{'DOCUMENTS'|trans}}",
+                         no_of_logins: "{{'CONTACT_OVERVIEW_SETTINGS_NUMBER_OF_LOGIN'|trans}}",
+                         household_main_contact: "{{'CM_HOUSEHOLD_MAIN_CONTACT'|trans}}",
+                         household_contact: "{{'CM_HOUSEHOLD_CONTACT'|trans}}",
+                         members_years: "{{'MEMBERS_YEARS'|trans}}",
+                         club: "{{clubTerminolgy}}",
+                         sub_federation:"{{subFederationTerminology}}",
+                         club_executive_board_function:"{{'CM_CLUB_EXECUTIVE_BOARD_FUNCTION'|trans({'%club%':clubTerminolgy,'%executive_board%':executiveboardTerminology})}}",
+                         sponsor:"{{'SPONSOR'|trans}}",
+                         fed_membership_category:"{{'FED_MEMBERSHIP_CATEGORY'|trans}}",
+                         is_stealth_mode:"{{'IS_STEALTH_MODE'|trans}}",
+                         member_years:"{{'MEMBER_YEARS'|trans}}",
+                         fed_member_years:"{{'FED_MEMBER_YEARS'|trans}}",
+                         ceb_function:"{{'CEB_FUNCTION'|trans}}",
+                         fedmemberyears:"{{'FEDMEMBERYEARS'|trans}}",
+                         membership_years:"{{'MEMBERSHIP_YEARS'|trans}}",
+             };
+
+    var corrAddrFieldIds = {{corrAddrFieldIds|json_encode|raw}};
+    var invAddrFieldIds = {{invAddrFieldIds|json_encode|raw}};
+    
+    $(document).ready(function() {        
+        FgApp.init();   
+        
+        if((contactType == 'sponsor') || (contactType == 'archivedsponsor')){
+            $.getJSON("{{url('sponsor_filter_data',{'contacttype': contacttype})}}", function(data) {
+               jsonData=data;
+               $("#exportsubmit").prop( "disabled", false );
+            });
+        } else {
+            $.getJSON("{{url('filter_contact_data')}}", function(data) {          
+              jsonData=data;
+              $("#exportsubmit").prop( "disabled", false );
+            }); 
+        }
+        
+      /*select field is disabled on page load*/
+       $(".select2-choice").addClass("fg-dev-select-disable");     
+       
+       //Column settings values from contact table list 
+        LsTblSettingValue = localStorage.getItem('tableSettingValue_' +contactType+ clubId + '-' + contactId);  
+        tblSettingValue = $.parseJSON(LsTblSettingValue); 
+       var exportFlag =0;
+      /*Function for generating csv on form submit*/
+       $("#exportsubmit").on("click", function() {       
+            if ($('input:radio[name=Columns]:checked').val() == 'actCol' ) { 
+                {#var tblSettingValue = localStorage.getItem('tableSettingValue_' +contactType+ clubId + '-' + contactId);                
+                tblSettingValue=$.parseJSON(tblSettingValue); #}
+                if ((contactType == 'sponsor') || (contactType == 'archivedsponsor')){
+                    columnTypeArray= FgSponsorList.deletecheck(tblSettingValue, jsonData);
+                    columnNameArray= FgSponsorColumnHeading.getColumnNames(columnTypeArray, general_table_title_array, true)
+                } else {
+                columnTypeArray = FgContactList.deletecheck(tblSettingValue, jsonData, teamId , workgroupId);
+                columnNameArray = FgTableColumnHeading.getColumnNames(columnTypeArray, teamId , workgroupId, general_table_title_array, true);
+                }
+            } else  if($('input:radio[name=Columns]:checked').val() === 'savedColset' ) {          
+                if ( $('select[name=selctCol]').val()=== '') {
+                    $('.help-block').show(); 
+                    $('#error_select').addClass("has-error");
+                    return false;
+                }
+            }
+            var data= { columnType:columnTypeArray, columnNames:columnNameArray, selectIds:selectedIds, filterdata:contactFilterStorageData, searchvalue:searchval,exportflag:1, extraSearch:tblSettingValue }; // serializes the form's elements.
+       
+        $("#formhidden").val(JSON.stringify(data));
+            $("#exportform").submit();         
+        });
+        $(".select2").on("change", function() {  
+            tableSettingValue= $(this).val();
+            if(tableSettingValue!=''){
+                tableSettingValue=$.parseJSON(tableSettingValue);
+                 if ((contactType == 'sponsor') || (contactType == 'archivedsponsor')){
+                    columnTypeArray= FgSponsorList.deletecheck(tableSettingValue, jsonData);
+                    columnNameArray= FgSponsorColumnHeading.getColumnNames(columnTypeArray, general_table_title_array, true)
+                } else {
+                columnTypeArray = FgContactList.deletecheck(tableSettingValue, jsonData, teamId , workgroupId);
+                columnNameArray = FgTableColumnHeading.getColumnNames(columnTypeArray, teamId , workgroupId, general_table_title_array, true);
+            }
+                exportFlag = 1;
+            }
+        });
+        /*Function to make selected dropdown as enabled*/
+        $(".fg-dev-select-disable-remove").click(function() {
+            $(".select2-choice").removeClass("fg-dev-select-disable");
+        });
+        /*Function to make selected dropdown as disabled*/
+        $(".fg-dev-select-disable-add").click(function() {
+
+            $(".select2-choice").addClass("fg-dev-select-disable");
+            $('.help-block').hide();
+            $('#error_select').removeClass("has-error");
+        });       
+    });
+    /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                    
+                     title: true
+                    
+
+             });
+          
+   </script>
+   {% if (contacttype == 'sponsor' or contacttype == 'archivedsponsor') %}
+     <script src="{{ asset('fgcustom/js/page/fg_sponsor_list_columns.js') }}" type="text/javascript"></script>
+   {% endif %}
+{% endblock %}

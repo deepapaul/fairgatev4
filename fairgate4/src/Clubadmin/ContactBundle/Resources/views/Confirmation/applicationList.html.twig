@@ -1,0 +1,59 @@
+<div class="row">
+    <div class="portlet-body new-table-height" id="tableWrapper">
+        <table data-ajax-path="{{ activeTab == 'log' ? path( 'confirmation_application_getData', {'type' : activeTab, 'page' : page} ) : path( 'confirmation_application_getData', {'type' : activeTab, 'page' : page} ) }}"
+               class="table confirmationsListDatatable 
+               table-bordered
+               table-hover
+               table-condensed
+               dataTable-scroll-y
+               dataTable-ajax1
+               dataTable-rows
+               dataTable-scroll-x
+               dataTables_scrollBody
+               dataTable-initialSort data-count" xWidth="100" yHeight="300" data-table-name="dataTables" data_row_change="fgrowchange" id="confirmations-{{ activeTab }}-table" data-table-group="confirmations-list-table" dataTable-popover="true" dataTable-hover="true" data-sort="1#desc" >
+            <thead>
+                <tr>
+                    {% if (activeTab == 'list') %}
+                        {% if (clubType=='federation') %}
+                            <th><input type="checkbox" class="dataTable_checkall fg-dev-avoidicon-behaviour" id="check_all" name="check_all" /><i class="chk_cnt"></i></th>
+                        {% endif %}
+                        <th>{{ 'CONFIRM_APPLICATION_MODIFIEDDATE'|trans}}</th>
+                        <th>{{ 'CONFIRM_CONTACT'|trans }}</th>
+                        {% if (clubType == 'federation') %}
+                            {% if (page == 'mergeapplication') %}
+                                <th>{{ fgtwig.getTerminolgyName('Club',singular,'UCF')}}</th>
+                            {% else %}
+                                <th>{{ fgtwig.getTerminolgyName('Club',plural,'UCF')}}</th>
+                            {% endif %}
+                        {% endif %}
+                        {% if (page == 'mergeapplication') %}
+                            <th>{{ 'MERGE_APPLICATION_EXISTING_CONTACT'|trans }}</th>
+                            <th>{{ 'MERGE_APPLICATION_NEW_CLUBS'|trans }}</th>
+                        {% else %} 
+                            <th>{{ 'APPLICATION_CONFIRMATION_FEDMEMBERSHIP_BEFORE'|trans }}</th>
+                            <th>{{ 'APPLICATION_CONFIRMATION_FEDMEMBERSHIP_AFTER'|trans }}</th>
+                        {% endif %}
+                        <th>{{ 'APPLICATION_MODIFIEDBY'|trans }}</th>
+                    {% else %}
+                        <th></th>
+                        <th>{{ 'CONFIRMLOG_DECISIONDATE'|trans }}</th>
+                        <th>{{ 'CONFIRMLOG_DECIDEDBY'|trans }}</th>
+                        <th>{{ 'CONFIRM_APPLICATION_MODIFIEDDATE'|trans }}</th>
+                        <th>{{ 'CONFIRM_CONTACT'|trans }}</th>
+                        {% if (clubType == 'federation' or page == 'mergeapplication') %}
+                            <th>{{ fgtwig.getTerminolgyName('Club',plural,'UCF') }}</th>
+                        {% endif %}
+                        {% if (clubType == 'federation' and page == 'mergeapplication') %}
+                            <th>{{ 'MERGE_APPLICATION_NEW_CLUBS'|trans }}</th>
+                        {% endif %}
+                        {% if (page == 'fedapplication') %} 
+                            <th>{{ 'APPLICATION_CONFIRMATION_FEDMEMBERSHIP_BEFORE'|trans }}</th>
+                            <th>{{ 'APPLICATION_CONFIRMATION_FEDMEMBERSHIP_AFTER'|trans }}</th>
+                        {% endif %}
+                        <th>{{ 'APPLICATION_MODIFIEDBY'|trans }}</th>
+                    {% endif %}
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>

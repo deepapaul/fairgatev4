@@ -1,0 +1,105 @@
+<script type="text/template" id="topicViewTemplate">
+    <div class="fg-forum-topic-content-lists">
+        <% _.each(topicDetails, function(postDetails, key) { %> 
+            <div class="fg-forum-topic-content-wrapper forum-topic-content-<%- postDetails.topicDataId %>" id="forum-content-<%- postDetails.topicDataId %>" data-id="<%- postDetails.topicDataId %>">
+                <div data-unique-id="<%- postDetails.uniqueId %>">
+                    <div class="col-sm-2 fg-forum-profile">
+                        <p class="fg-forum-profile-name"> 
+                            <% if (postDetails.isStealthMode == 1 || postDetails.isSuperAdmin == 1 || (postDetails.isFedAdmin == 1 && clubType !='federation')) { %>
+                                <span class="fg-dev-forum-posted-by"> <%- postDetails.createdBy %> </span>
+                            <% } else { %>
+                                <% var profileUrlTemp = profileUrl.replace('|contactId|', postDetails.createdById); %>
+                                <a href="<%- profileUrlTemp %>" class="fg-dev-forum-posted-by"><%- postDetails.createdBy %></a>
+                            <% } %>
+                        </p>
+                        <div class="fg-forum-avatar">
+                            <% var imgPathTemp = postDetails.imagePath  %> 
+                            <% if( postDetails.isCompany != 1 || (postDetails.profileImg == '' || postDetails.profileImg == null) ) { %>                                 
+                                <div class="fg-profile-img-blk100 <% if( postDetails.isCompany != 1) { %> fg-round-img <% } %> " style="background-image:url('<%- (imgPathTemp != '') ? imgPathTemp : '' %>')" >                        
+                                </div>
+                            <% } else { %>
+                                <div class="fg-profile-img-blk-C100" >
+                                    <img src="<%- imgPathTemp %>" alt="logo">
+                                </div>
+                            <% } %>   
+                        </div>
+                    </div>
+                    <div class="col-sm-10 fg-forum-post">
+                        <div class="fg-forum-post-timestamp">{{ 'FORUM_POSTED_ON'|trans }} <span class="fg-dev-forum-posted-on"><%- postDetails.createdDate %></span></div>
+                        <div class="fg-forum-post-right-top">
+                            <ul class="fg-forum-control-lists">
+                                <% if ((postDetails.createdById == contactId) || isAdmin) { %>
+                                    <li><a href="#" id="<%- postDetails.topicDataId %>" class="fg-post-edit"><i class="fa fa-pencil-square-o fa-2x"></i>{{ 'FORUM_POST_EDIT'|trans }}</a> </li>
+                                <% } %>
+                                <% if (postDetails.uniqueId != 1 && ((postDetails.createdById == contactId) || isAdmin)) { %>
+                                    <li><a class="fg-post-delete" data-type="content" data-id="<%- postDetails.topicDataId %>" data-unique-id="<%- postDetails.uniqueId %>"><i class="fa fa-times-circle fa-2x"></i>{{ 'FORUM_POST_DELETE'|trans }}</a> </li>
+                                <% } %>                               
+                                <li><a href="magicid/<%- postDetails.magicId %>" class="fa-post-count">#<%- postDetails.uniqueId %></a></li>
+                            </ul>
+                        </div>                                                
+                        <div class="fg-forum-post-content fg-clear"><%= postDetails.content %></div>
+                        <div class="clearfix"></div>
+                        <div class="fg-forum-post-content-edit hide"><textarea rows="6" name="forum-post-<%- postDetails.topicDataId %>" id="forum-post-<%- postDetails.topicDataId %>" data-key="forum-post-edit" class="form-control " style="" ><%= postDetails.content %></textarea>
+                        <span class="help-block fg-dev-errorblock hide">{{ 'VALIDATION_THIS_FIELD_REQUIRED'|trans }}</span></div>  
+                        <div class="fg-forum-post-edit <% if (postDetails.updatedBy == '') { %> hide<% } %> ">{{ 'FORUM_POST_EDITED_BY'|trans }} <%- postDetails.updatedBy %> {{ 'FORUM_POST_EDITED_ON'|trans }} <%- postDetails.updatedDate %></div>
+
+                        <div class="fg-forum-post-right-bottom">
+                            <ul class="fg-forum-control-lists">
+                                <li><a href="#" class="fg-post-edit-cancel hide" data-id="<%- postDetails.topicDataId %>">{{ 'CANCEL'|trans }}</a> </li>
+                                <li><a href="#" class="fg-post-edit-save hide" data-id="<%- postDetails.topicDataId %>">{{ 'SAVE'|trans }}</a> </li>
+                                <li><a href="#" class="fg-post-quote" data-id="<%- postDetails.topicDataId %>"><i class="fa fa-quote-left fa-2x"></i>{{ 'FORUM_TOPIC_QUOTE'|trans }}</a> </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% }); %>
+        <% if (totalCnt > 0) { %>
+            <div class="fg-forum-topic-list-footer">
+                <div class="FL">
+                    <div class="fg-active-IB fg-forum-topic-pagination-left">
+                    <% var start = (page <= 1) ? 1 : (((page - 1) * dpp) + 1);
+                       var end = ((page * dpp) > totalCnt) ? totalCnt : (page * dpp);
+                       var text = '{{ 'FORUM_SHOWING_ENTRIES_FROM_TO'|trans }}';
+                       text = text.replace('%start%', start).replace('%end%', end).replace('%total%', totalCnt);
+                    %>
+                    <%- text %>
+                    </div>
+                </div>
+                <div class="FR">
+                    <ul class="pagination pagination-sm fg-dev-posts-pagination fg-pagination">
+                        <% var pages = _.range(1,(Math.ceil(totalCnt/dpp)+1),1); %>
+                        <li class="<%- (page == 1) ? 'disabled' : '' %>">
+                            <a href="javascript:;" data-page="1">
+                                <i class="fa fa-angle-double-left"></i>
+                            </a>
+                        </li>
+                        <li class="<%-(page == 1) ? 'disabled' : '' %>">
+                            <a href="javascript:;" data-page="<%- ((page - 1) <= 0) ? 1 : (page -1) %>">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        </li>
+                        <% _.each(pages,function(pg) { %>
+                            <li class="<%- (page == pg) ? 'active' : '' %>">
+                                <a href="javascript:;" data-page="<%- pg %>"> <%- pg %> </a>
+                            </li>
+                        <% }); %>
+                        <li class="<%- (page == _.last(pages)) ? 'disabled' : '' %>">
+                            <a href="javascript:;" data-page="<%- ((page + 1) >= _.last(pages)) ? _.last(pages) : (page + 1) %>">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li class="<%- (page == _.last(pages)) ? 'disabled' : '' %>">
+                            <a href="javascript:;" data-page="<%- _.last(pages) %>">
+                                <i class="fa fa-angle-double-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        <% } %>
+    </div>
+    
+    
+</script>

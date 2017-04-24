@@ -1,0 +1,36 @@
+Common\UtilityBundle\Entity\FgCmChangeEmail:
+    type: entity
+    table: fg_cm_change_email
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        contactId:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: contact_id
+        changeInterval:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: change_interval
+        lastSend:
+            type: datetime
+            nullable: true
+            column: last_send
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

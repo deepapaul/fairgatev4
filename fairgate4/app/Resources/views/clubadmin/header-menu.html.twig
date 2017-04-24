@@ -1,0 +1,366 @@
+{% set federationmemberTerminology = fgtwig.getTerminolgyName('Federation member',plural)%}
+<!-- BEGIN RESPONSIVE HEADER MENU -->
+{% if (app.session.get('loggedClubUserId')) %}
+    <div class="page-sidebar navbar-collapse collapse fg-autocomplete-parent">
+    <ul class="page-sidebar-menu visible-sm visible-xs fg-topnav-orientation">  
+        {% if (fgtwig.inArray('contact',fgclub.get('allowedRights')) or fgtwig.inArray('readonly_contact',fgclub.get('allowedRights'))) %}
+            <!--STARTS CONTACT MENU-->
+            <li class="fg-header-nav-contact {% if (moduleName =='contact' and (level1 != 'agelimits')) %} fg-header-nav-active fg-dev-header-nav-active {% endif %}" id="fg-top-contact-menu"><a href="javascript:;" name="fg-dev-topnav-contactmenu"><span class="title">{{'Contacts'|trans}}</span><span class="arrow"></span></a>
+                <ul class="sub-menu">
+                   <li> <div><i class="fa fa-search fg-autocomplete-search"></i> <input type="text" id="existingContacts-menu" class="fg-autocomplete-contact fg-autocomplete-txt" /> </div></li>  
+                   <li {% if (moduleName =='contact' and (not(fgtwig.inArray(level1,['formerfederationmember','contactarchive','contactfields','contactoverview','contactprofilefield','confirmchanges','confirmmutations','confirmcreations','contactfieldsoption', 'confirmappclubassignment', 'confirmfedmembership','externalapplications','confirmmergeapplication','applicationform','confirmcreationsappform'])) and moduleMenu =='contact')) %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a id="fgdev-topnav-activecontacts" data-module="contact" data-type="active" name="fgdev-topnav-activecontacts" href="{{path('contact_index')}}"><span class="title">{{'Active Contacts'|trans}}</span><span class="badge badge-round badge-important" id="fg-dev-activecontact-count"> {{counts['activeContacts']}} </span></a> </li>
+                   <li {% if (moduleName =='contact' and ((level1 =='contactarchive') or (moduleMenu =='contactarchive'))) %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %} id="fg_dev-header-menu-archivecontact"> <a data-module="contact" data-type="active" name="fg-dev-topnav-archivecontacts" href="{{path('archive_index')}}"><span class="title">{{'Archived contacts'|trans}}</span><span class="badge badge-round badge-important" id="fg-dev-archivecontact-count"> {{counts['archiveContacts']}} </span></a></li>
+                   {% if (fgclub.get('clubMembershipAvailable') != '0' and fgclub.get('type') != 'federation' and fgclub.get('type') != 'sub_federation') %}
+                   <li {% if (moduleName =='contact' and level1 == 'applicationform') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %} id="fg_dev-header-menu-applicationform"> <a data-module="applicationform" data-type="active" name="fg-dev-topnav-contact-application-form" href="{{path('contact_application_form_list')}}"><span class="title">{{'CONTACT_APPLICATION_FORMS'|trans}}</span></a></li>
+                   {% endif %}
+                   {% if (fgclub.get('type') =='federation' or fgclub.get('type') == 'sub_federation') %}
+                      <li {% if (moduleName =='contact' and ((level1 =='formerfederationmember') or (moduleMenu =='formerfederationmember'))) %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %} id="fg_dev-header-menu-archivecontact"> <a data-type="active" data-module="contact" href="{{path('former_federation_member_index')}}"><span class="title">
+                                  {{'FORMER_FEDERATION_MEMBERS'|trans({'%fedmember%':federationmemberTerminology})}}
+                              </span><span class="badge badge-round badge-important" id="fg-dev-formerfedmem-count"> {{counts['formerfedContacts']}} </span></a></li>
+                   {% endif %}
+                   {% if(fgtwig.inArray('contact',fgclub.get('allowedRights')) ) %}
+                            {% set hideclass = "" %}
+                             {% if (  ('frontend1' not in fgclub.get('bookedModulesDet') ) and (fgclub.get('type') == 'federation' or fgclub.get('type') == 'sub_federation')  or ('frontend1' not in fgclub.get('bookedModulesDet') and  fgclub.get('clubMembershipAvailable') == '0' )  ) %}
+                                     {% set hideclass = " hide" %}
+                                  {% endif %}
+                             <li id="fg-dev-confirmations" class="dropdown-submenu fg-dev-top-settings-selected fg-header-settings-contact {{hideclass}}"> <a href="#" name="fg-dev-topnav-confirmations"><span class="title">{{'TOPNAV_CONFIRMATIONS'|trans}}</span> {% if (counts['totalConfirmations'] > 0) %}<i data-content="" data-original-title="" data-trigger="hover" data-placement="bottom" class="fa fa-warning fg-dev-Popovers fg-warning-mailings fg-confirmations-warning"></i>{% endif %}</a>
+                                 <ul class="sub-menu" id="contact_confirmations">
+                                    {% if ('frontend1' in fgclub.get('bookedModulesDet')) %}
+                                     <li {% if (moduleName == 'contact' and level1 == 'confirmchanges') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a name="fg-dev-topnav-confirmchanges" href="{{ path('confirmation_changes', {'type': 'changes'}) }}"><span class="title">{{ 'CONFIRM_CHANGES'|trans }}</span><span class="badge badge-round badge-important" id="fg-dev-confirmchanges-count"> {{ counts['confirmChanges'] }} </span></a> </li>
+                                     <li {% if (moduleName == 'contact' and level1 == 'confirmmutations') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a name="fg-dev-topnav-confirmmutations" href="{{ path('confirmations_mutations') }}"><span class="title">{{ 'CONFIRM_MUTATIONS'|trans }}</span><span class="badge badge-round badge-important" id="fg-dev-confirmmutations-count"> {{ counts['confirmMutations'] }} </span></a> </li>     
+                                     <li {% if (moduleName == 'contact' and level1 == 'confirmcreations') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a name="fg-dev-topnav-confirmcreations" href="{{ path('confirmations_creations') }}"><span class="title">{{ 'CONFIRM_CREATIONS'|trans }}</span><span class="badge badge-round badge-important" id="fg-dev-confirmcreations-count"> {{ counts['confirmCreations'] }} </span></a> </li>     
+                                    {% endif %}
+                                    {% if(fgclub.get('type') !='federation' and fgclub.get('type') !='sub_federation' and clubSettings['c1']) %}
+                                    <li {% if (moduleName == 'contact' and level1 == 'confirmcreationsappform') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a name="fg-dev-topnav-confirmcreationsappform" href="{{ path('confirmations_creations_appform') }}"><span class="title">{{ 'TOPNAV_CREATIONS_APPFORM'|trans }}</span><span class="badge badge-round badge-important" id="fg-dev-confirmcreationsappform-count"> {{ counts['appFormconfirmCount'] }} </span></a> </li>     
+                                    {% endif %}
+                                 </ul>
+                             </li> 
+                       
+                      {% endif %}
+                    {% if(fgtwig.inArray('contact',fgclub.get('allowedRights')) ) %}
+                        <li id="fg-dev-confirmations-applications" class="dropdown-submenu fg-dev-top-settings-selected fg-header-settings-contact"> <a href="#" name="fg-dev-topnav-confirmations-applications"><span class="title">{{'TOPNAV_CONFIRMATIONS_APPLICATIONS'|trans}}</span>{% if (counts['totalAppConfirmation'] > 0) and (fgclub.get('type') =='federation') %}<i class="fa fa-warning  fg-warning-mailings fg-dev-application-warning"></i>{% endif %}</a>
+                            <ul class="sub-menu" id="contact_confirmations_applications">
+                               {% if (fgclub.get('type') !='sub_federation') %}
+                                   {% if(fgclub.get('assignFedmembershipWithApplication') == 1) %}
+                                       <li {% if (moduleName == 'contact' and level1 == 'confirmfedmembership') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a name="fg-dev-topnav-confirmfedmembership" href="{{ path('confirmation_application_fedmembership') }}"><span class="title">{{ 'CONFIRM_APPLICATION_FEDMEMBERSHIP'|trans }}</span><span class="badge badge-round badge-important" id="fg-dev-topnav-confirmfedmemberships-count"> {{ counts['applicationConfirmCount'] }} </span></a></li>
+                                   {% endif %}
+                               {% endif %}
+                               <li {% if (moduleName == 'contact' and level1 == 'confirmappclubassignment' and (fgclub.get('addExistingFedMemberClub')== 2 ) and (fgclub.get('type') =='federation' or fgclub.get('type') =='sub_federation_club' or fgclub.get('type') =='federation_club') ) %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a name="fg-dev-topnav-confirmappclubassignment" href="{{ path('confirm_application_club_assignments') }}"><span class="title">{{ 'CLUB_ASSIGNMENTS_CONFIRM_TOP'|trans }}</span><span class="badge badge-round badge-important" id="fg-dev-topnav-confirmclubassignment-count"> {{ counts['confirmappclubassignment'] }} </span></a> </li>
+                                {% if (fgclub.get('assignFedmembershipWithApplication') == 1 and (fgclub.get('type') =='federation' or fgclub.get('type') =='sub_federation_club' or fgclub.get('type') =='federation_club')) %}
+                                    <li {% if (moduleName == 'contact' and level1 == 'confirmmergeapplication') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a name="fg-dev-topnav-confirmmergeapplications" href="{{ path('confirm_merge_application') }}"><span class="title">{{ 'MERGE_APPLICATION_CONFIRM_TOP_NAV'|trans }}</span><span class="badge badge-round badge-important" id="fg-dev-topnav-confirmmergeapplications-count"> {{ counts['mergeApplicationsCount'] }} </span></a> </li>
+                                {% endif %}
+                               {% if(fgclub.get('externalApplicationAccess')) %}
+                                     <li {% if (moduleName == 'contact' and level1 == 'externalapplications') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}><a name="fg-dev-topnav-externalapplications" href="{{ path('external_application_confirmation') }}"><span class="title">{{ 'EXTERNAL_APPLICATION_TOP_NAV_TEXT'|trans }}</span><span class="badge badge-round badge-important" id="fg-dev-topnav-confirmclubassignment-count"> {{ counts['externalapplicationCount'] }} </span></a></li>
+                               {% endif %}  
+                            </ul>
+                        </li>  
+                    {% endif %}
+                   {% if not(not fgtwig.inArray('contact',fgclub.get('allowedRights')) and fgtwig.inArray('contact',fgclub.get('bookedModulesDet'))) %}
+                        <li id="fg-dev-top-settings" class="dropdown-submenu fg-dev-top-settings-selected fg-header-settings-contact"> <a href="#" name="fg-dev-topnav-contactsettings"><span class="title">{{'TOPNAV_CONTACTFIELDS'|trans}} </span></a>
+                            <ul class="sub-menu" id="contact_settings_header2">
+                                <li {% if (moduleName =='contact' and level1 =='contactfields') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a name="fg-dev-topnav-contactfields" href="{{path('list_all_contact_fields')}}"><span class="title">{{'TOPNAV_CONTACTFIELDS_ADMINISTRATION'|trans}}</span></a> </li>
+                                <li {% if (moduleName =='contact' and level1 =='contactoverview') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a name="fg-dev-topnav-contactoverview" href="{{path('contact_overview_settings')}}"><span class="title">{{'Contact overview settings'|trans}}</span></a> </li> 
+                                
+                                {% if (fgtwig.inArray('frontend1',fgclub.get('bookedModulesDet'))) %}
+                                    <li {% if (moduleName =='contact' and level1 == 'contactprofilefield') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a name="fg-dev-topnav-internalsection" href="{{ path('contact_field_profile') }}"><span class="title">{{ 'TOPNAV_CONTACTFIELDS_INTERNAL'|trans }}</span></a> </li>
+                                {% endif %}
+                                
+                                {% if (fgclub.get('type') =='federation' or fgclub.get('type')=='sub_federation') %}
+                                    <li {% if (moduleName =='contact' and level1 =='contactfieldsoption') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a name="fg-dev-topnav-contactfields" href="{{path('contact_fields_administration_option')}}"><span class="title">{{'TOPNAV_CONTACTFIELDS_FIELDS'|trans}}</span></a> </li>
+                                {% endif %}
+                            </ul>
+                        </li>  
+                    {% endif %}
+                   {# <a name="fg-dev-topnav-contactuserguide" href="http://handbuch.fairgate.ch/category/kontaktverwaltung" target="_blank"><span class="title">{{'TOPNAV_USERGUIDE'|trans}}</span></a> </li>                        #}
+                </ul>
+            </li>
+           <!--ENDS CONTACT MENU-->
+        {% endif %}
+        {% if (fgtwig.inArray('clubAdmin',fgclub.get('allowedRights'))) or (fgtwig.inArray('superAdmin',fgclub.get('allowedRights'))) %}
+            <!--STARTS CLUB MENU-->
+            {% if (fgclub.get('type') =='federation' or fgclub.get('type') =='sub_federation') %}
+            <li class="fg-header-nav-club {% if (moduleName =='club') %} fg-header-nav-active {% endif %}" > 
+                <a href="#" name="fg-dev-topnav-clubsettings"><span class="title">{{fgtwig.getTerminolgyName('Club',plural,'UCF')}}</span> <span class="arrow"></span> </a>
+                <ul class="sub-menu">
+                    <li> <div><i class="fa fa-search fg-autocomplete-search"></i> <input type="text" id="existingClubs-menu" class="fg-autocomplete-club fg-autocomplete-txt" /> </div></li> 
+                    <li {% if (moduleName =='club' and level1 =='club') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a data-module="club" data-type="active" name="fg-dev-topnav-club" href="{{path('club_homepage')}}"><span class="title">{{fgtwig.getTerminolgyName('Club',plural,'UCF')}}</span><span class="badge badge-round badge-important"> {{counts['clubCount']}} </span></a> </li>
+{#                    <li>  <a name="fg-dev-topnav-clubuserguide" href=" http://handbuch.fairgate.ch/category/vereine" target="_blank"><span class="title">{{'TOPNAV_USERGUIDE'|trans}}</span></a> </li>#}
+                </ul>
+            </li>
+            {% endif %}
+        {% endif %}
+        <!--ENDS CLUB MENU-->
+        {% if (fgtwig.inArray('document',fgclub.get('allowedRights'))) %}
+            <!--STARTS DOCUMENT MENU-->
+            {% if 'document' in fgclub.get('bookedModulesDet') %}
+                <li class="fg-header-nav-document {% if (moduleName == 'document') %} g-header-nav-active fg-dev-header-nav-active {% endif %}" id="fg-top-document-menu"> 
+                    <a href="#" name="fg-dev-topnav-documentmenu"> <span class="title">{{'TOPNAV_DOCUMENTS'|trans}}</span> <span class="arrow"></span></a>
+                    <ul class="sub-menu">
+                        <li> <div><i class="fa fa-search fg-autocomplete-search"></i> <input type="text" id="existingDocuments-menu" class="fg-autocomplete-document fg-autocomplete-txt" /> </div></li>  
+                        <li {% if (moduleName =='document' and level1 =='club') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> 
+                                    <a id="fg-dev-topnav-document-club" data-module="document" data-type="club" name="fg-dev-topnav-document-club" href="{{path('club_documents_listing')}}"><span class="title">{% if (fgclub.get('type') =='standard_club') %}{{fgtwig.getTerminolgyName('Club',singular,'UCF')}}{% else %}{{fgtwig.getTerminolgyName('Federation',singular,'UCF')}} & {{fgtwig.getTerminolgyName('Club',plural,'UCF')}}{% endif %}</span><span class="badge badge-round badge-important" id="fg-dev-activecontact-count"> {{counts['clubDocCount']}} </span></a> </li>
+                        <li {% if (moduleName =='document' and level1 =='team') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %} > 
+                                    <a id="fg-dev-topnav-document-team" data-module="document" data-type="team" name="fg-dev-topnav-document-team" href="{{path('team_documents_listing')}}"><span class="title">{{ fgtwig.getTerminolgyName('Team',plural,'UCF') }}</span><span class="badge badge-round badge-important" id="fg-dev-archivecontact-count"> {{counts['teamDocCount']}}  </span></a></li>                             
+                        <li {% if (moduleName =='document' and level1 =='workgroup') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> 
+                                <a id="fg-dev-topnav-document-workgroup" data-module="document" data-type="workgroup" name="fg-dev-topnav-document-workgroup" href="{{path('workgroup_documents_listing')}}"><span class="title">{{'TOPNAV_WORKGROUP_DOCS'|trans}}</span><span class="badge badge-round badge-important" id="fg-dev-activecontact-count"> {{counts['workgroupDocCount']}} </span></a> </li>
+                        <li {% if (moduleName =='document' and level1 =='contact') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> 
+                                <a id="fg-dev-topnav-document-contact" data-module="document" data-type="contact" name="fg-dev-topnav-document-contact" href="{{path('contact_documents_listing')}}"><span class="title">{{'TOPNAV_CONTACT_DOCS'|trans}}</span><span class="badge badge-round badge-important" id="fg-dev-archivecontact-count"> {{counts['contactDocCount']}} </span></a></li>                             
+                     </ul>
+                </li>                
+            {% endif %}
+            <!--ENDS DOCUMENT MENU-->
+        {% endif %}
+        {% if (fgtwig.inArray('communication',fgclub.get('allowedRights'))) %}
+            <!--STARTS COMMUNICATION MENU-->
+            {% if 'communication' in fgclub.get('bookedModulesDet') %}           
+                <li {% if (moduleName =='communication') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}>
+                    <a href="#" name="fg-dev-topnav-communication">
+                        <span class="title">{{'TOPNAV_COMMUNICATION'|trans}}</span>  <span class="arrow"></span>
+                    </a>
+                    <ul class="sub-menu">                        
+                        <li {% if (moduleName =='communication' and  level1 == 'newsletter') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> 
+                            <a name="fg-dev-topnav-club" href="#">
+                                <span class="title">{{'TOPNAV_NEWSLETTER'|trans}}</span>
+                                <span class="arrow"></span></a> 
+                                <ul class="sub-menu">
+                                    <li {% if (moduleName =='communication' and  level1 == 'newsletter' and  level2 =='mailings') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}>
+                                        <a href="{{path('newsletter_mailings')}}" name="fg-dev-topnav-mailings"><span class="title">{{'TOPNAV_MAILINGS'|trans}}</span></a>
+                                    </li>
+                                    <li {% if (moduleName =='communication' and  level1 == 'newsletter' and  level2 =='recipient') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %} >
+                                        <a href="{{path('recipents_list')}}" name="fg-dev-topnav-recipients"><span class="title">{{'TOPNAV_RECIPIENTS'|trans}}</span></a>
+                                    </li>
+                                    <li {% if (moduleName =='communication' and  level1 == 'newsletter' and  level2 =='subscribers') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %} id="fg_dev-header-menu-subscriber">                                        
+                                        <a href="{{path('subscriber_list')}}" name="fg-dev-topnav-subscribers"><span class="title">{{'TOPNAV_SUBSCRIBERS'|trans}}</span>
+                                            <span id="fg-dev-subscriber-count" class="badge badge-round badge-important"> {{counts['subscriberCount']}} </span>
+                                        </a>
+                                    </li>
+                                    <li {% if (moduleName =='communication' and  level1 == 'newsletter' and  level2 =='design') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %} >
+                                        <a href="{{path('template_list')}}" name="fg-dev-topnav-design-template"><span class="title">{{'TOPNAV_DESIGN_TEMPLATE'|trans}}</span></a>
+                                    </li>
+                                    <li {% if (moduleName =='communication' and  level1 == 'newsletter' and  level2 =='statistics') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}>
+                                        <a href="{{path('newsletter_statistics')}}" name="fg-dev-topnav-statistics"><span class="title">{{'TOPNAV_STATISTICS'|trans}}</span></a>
+                                    </li>
+                                </ul>
+                        </li>   
+                        <li {% if (moduleName =='communication' and  level1 == 'simplemail') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> 
+                            <a name="fg-dev-topnav-club" href="#">
+                                <span class="title">{{'TOPNAV_SIMPLEMAIL'|trans}}</span>
+                                <span class="arrow"></span></a> 
+                                <ul class="sub-menu">
+                                    <li {% if (moduleName =='communication' and  level1 == 'simplemail' and  level2 =='mailings') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}>
+                                        <a href="{{path('newsletter_simplemailings')}}" name="fg-dev-topnav-mailings"><span class="title">{{'TOPNAV_MAILINGS'|trans}}</span></a>
+                                    </li>
+                                    <li {% if (moduleName =='communication' and  level1 == 'simplemail' and  level2 =='recipient') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %} >
+                                        <a href="{{path('simplemail_recipents_list')}}" name="fg-dev-topnav-recipients"><span class="title">{{'TOPNAV_RECIPIENTS'|trans}}</span></a>
+                                    </li>
+                                    <li {% if (moduleName =='communication' and  level1 == 'simplemail' and  level2 =='statistics') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}>
+                                        <a href="{{path('simplemail_statistics')}}" name="fg-dev-topnav-statistics"><span class="title">{{'TOPNAV_STATISTICS'|trans}}</span></a>
+                                    </li>
+                                </ul>
+                        </li>                     
+                    </ul>
+                </li>
+            {% endif %}
+        {% endif %}
+        <!--STARTS SPONSOR MENU-->
+        {% if (fgtwig.inArray('sponsor',fgclub.get('allowedRights')) or fgtwig.inArray('readonly_sponsor',fgclub.get('allowedRights'))) %}
+            {% if 'sponsor' in fgclub.get('bookedModulesDet') %}
+                <li class="fg-header-nav-sponsor {% if (moduleName =='sponsor') %} fg-header-nav-active {% endif %}" > 
+                    <a href="#" name="fg-dev-topnav-sponsorsettings"><span class="title">{{'TOPNAV_SPONSOR'|trans}}</span> <span class="arrow"></span> </a>
+                    <ul class="sub-menu">
+                        <li> <div><i class="fa fa-search fg-autocomplete-search"></i> <input type="text" id="existingSponsors-menu" class="fg-autocomplete-sponsor fg-autocomplete-txt" /> </div></li>                     
+                        <li {% if (moduleName =='sponsor' and level1 =='sponsor' and moduleMenu !='archivedsponsor') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a id="fg-dev-topnav-sponsor-active" data-module="sponsor" data-type="active" name="fg-dev-topnav-sponsor" href="{{path('clubadmin_sponsor_homepage')}}"><span class="title">{{'TOPNAV_SPONSOR'|trans}}</span><span class="badge badge-round badge-important"> {{counts['sponsorCount']}} </span></a> </li>
+                        <li {% if (moduleName =='sponsor' and moduleMenu =='archivedsponsor') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a id="fg-dev-topnav-sponsor-archived" data-module="sponsor" data-type="archived" name="fg-dev-topnav-archived-sponsor" href="{{path('view_archived_sponsors')}}"><span class="title">{{'TOPNAV_ARCHIVED_SPONSOR'|trans}}</span><span class="badge badge-round badge-important"> {{counts['archivedSponsorCount']}} </span></a> </li>
+                        <li {% if (moduleName =='sponsor' and level1 =='analysis') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a id="fg-dev-topnav-sponsor-analysis" data-module="sponsor" data-type="analysis" name="fg-dev-topnav-sponsor-analysis" href="{{path('sponsor_service_analysis')}}"><span class="title">{{'TOPNAV_SPONSOR_ANALYSIS'|trans}}</span></a> </li>
+                        {% if not(not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                            <li id="fg-dev-top-settings" class="fg-dev-top-settings-selected fg-header-settings-sponsor"> <a href="#" name="fg-dev-topnav-sponsorsettings"><span class="title">{{'TOPNAV_SETTINGS'|trans}} </span><span class="arrow"></span></a>
+                                <ul class="sub-menu" id="sponsor_settings_header2">                           
+                                     <li {% if (moduleName =='sponsor' and level1 =='sponsor_ads_area') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a name="fg-dev-topnav-sponsoradareas" href="{{path('sponsor_ads_area_settings')}}"><span class="title">{{'TOP_NAV_SPONSOR_AD_AREAS'|trans}}</span></a> </li>
+                                     <li {% if (moduleName =='sponsor' and level1 =='sponsor_overview_settings') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a name="fg-dev-topnav-sponsoroverview" href="{{path('sponsor_overview_settings')}}"><span class="title">{{'TOPNAV_OVERVIEW_SPONSOR'|trans}}</span></a> </li>     
+                                </ul>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </li>
+            {% endif %}
+        {% endif %}
+        <!--ENDS SPONSOR MENU-->
+        <!--USERGUIDE SECTION-->
+        <li class="fg-help-menu-wrapper">
+            <a name="fg-dev-topnav-clubmainmenu" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" class="dropdown-toggle" href=" http://handbuch.fairgate.ch/" target="_blank"> <i class="fa fa-question-circle"></i><span class="arrow"></span></a>
+         <ul class="sub-menu">
+             <li>
+                 <a name="fg-dev-topnav-club" href="#">
+                 <span class="title">{{'TOPNAV_HELP_HELP_RESOURCES'|trans}}</span>
+                 <span class="arrow"></span></a> 
+                 <ul class="sub-menu">
+                      <li>
+                        <a href="javascript:FgHelpQuickStart.showQuickstartWindow()" id="fg-dev-help-quickstart" name="fg-dev-help-quickstart">
+                            <span class="title">{{'TOPNAV_HELP_QUICKSTART_WINDOW'|trans}}</span>
+                            <span id="fg-dev-subscriber-count" class="badge badge-round badge-important"> {{'TOPNAV_HELP_QUICKTIP_NEW'|trans}}</span>
+                        </a>
+                      </li> 
+                      {#<li class="fg-disabled">
+                        <a href="#" name="fg-dev-topnav-recipients">
+                            <span class="title">{{'TOPNAV_HELP_SIDEBAR_TTUTORIALS'|trans}}</span>
+                        </a>
+                    </li>#}
+                    <li id="fg_dev-header-menu-subscriber">
+                       <a href="{{helpUrls['video']['playlists']['quicktips']}}" name="fg-dev-help-quicktips" target="_blank">
+                            
+                            <span class="title">{{'TOPNAV_HELP_QUICKTIP_VIDEOS'|trans}}</span>
+                            <span id="fg-dev-subscriber-count" class="badge badge-round badge-important"> {{'TOPNAV_HELP_QUICKTIP_NEW'|trans}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{helpUrls['video']['playlists']['videotutorials']}}" name="fg-dev-help-videotutorials" target="_blank">
+                            <span class="title">{{'TOPNAV_HELP_VIDEO_TUTORIALS'|trans}}</span>
+                            <span id="fg-dev-subscriber-count" class="badge badge-round badge-important"> {{'TOPNAV_HELP_QUICKTIP_NEW'|trans}}</span>
+                        </a>
+                    </li>
+                    <li class="fg-disabled">
+                        <a href="#" name="fg-dev-topnav-statistics">
+                            <span class="title">{{'TOPNAV_HELP_CHEAT_SHEET'|trans}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{helpUrls['manual'][moduleName]|default(helpUrls['manual']['general'])}}" name="fg-dev-topnav-manual" target="_blank">
+                            <span class="title">{{'TOPNAV_HELP_MANUAL'|trans}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{helpUrls['support']}}" name="fg-dev-topnav-support" target="_blank">
+                            <span class="title">{{'TOPNAV_HELP_REQUEST_SUPPORT'|trans}}</span>
+                        </a>
+                    </li>                    
+                 </ul>
+             </li>
+             {#<li>
+               <a name="fg-dev-topnav-club" href="#">  
+               <span class="title">{{'TOPNAV_HELP_SOCIALMEDIA'|trans}}</span>
+                 <span class="arrow"></span></a> 
+                <ul class="sub-menu">
+                     <li>
+                        <a href="{{helpUrls['facebook']}}" name="fg-dev-topnav-facebook" target="_blank">
+                            <span class="title">{{'TOPNAV_HELP_FACEBOOK'|trans}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{helpUrls['twitter']}}" name="fg-dev-topnav-twitter" target="_blank">
+                            <span class="title">{{'TOPNAV_HELP_TWITTER'|trans}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{helpUrls['google+']}}" name="fg-dev-topnav-google" target="_blank">
+                            <span class="title">{{'TOPNAV_HELP_GOOGLEPLUS'|trans}}</span>
+                        </a>
+                    </li>
+                    <li>
+                         <a href="{{helpUrls['video']['channel']}}" name="fg-dev-help-youtube-channel" target="_blank">
+                            <span class="title">{{'TOPNAV_HELP_YOUTUBE_CHANNELS'|trans}}</span>
+                        </a>
+                    </li>   
+                    </ul>
+                 </li>#}
+                  {#<li class="fg-helpmenu-skype-wrapper">
+                    <a name="fg-dev-topnav-club" href="#">  
+                    <span class="title">{{'TOPNAV_HELP_SUPPORT'|trans}}</span>
+                      <span class="arrow"></span></a> 
+                        <ul class="sub-menu">
+                            <li class="tiles">
+                                <div class="tile double bg-blue-madison fg-helpmenu-disabled">
+                                    <div class="tile-body">
+                                        <i class="fa fa-skype"></i>
+                                        <h4>{{'TOPNAV_HELP_SKYPE'|trans}}</h4>
+                                        <p>{{'TOPNAV_HELP_SKYPE_DATE'|trans}}</p>
+                                    </div>
+                                    <div class="tile-object">
+                                        <div class="number">{{'TOPNAV_HELP_SKYPE_SUBSCRIPTION'|trans}}</div>
+                                    </div>
+                                </div>
+                                <div class="tile double bg-blue-madison fg-helpmenu-disabled">
+                                    <div class="tile-body">
+                                        <i class="fa fa-desktop"></i>
+                                        <h4>{{'TOPNAV_HELP_WEBINARS'|trans}}</h4>
+                                        <p>{{'TOPNAV_HELP_WEBINARS_BOOKSEAT'|trans}}</p>
+                                    </div>
+                                    <div class="tile-object">
+                                        <div class="number">Next on 22.02.2016</div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                </li>#}
+                {# <li class="fg-helpmenu-footer">
+                    <a name="fg-dev-topnav-club" href="#">  
+                    <span class="title">{{'TOPNAV_HELP_ADDITIONAL_MODULES_TEXT'|trans}}</span>
+                      <span class="arrow"></span></a> 
+                        <ul class="sub-menu">
+                            <li>
+                                <div class="tiles">
+                                    {% if (fgtwig.inArray('document',fgclub.get('allowedRights'))) %}
+                                    <div class="tile bg-red-sunglo">
+                                      <a class="youtube cboxElement" name="fg-dev-topnav-statistics" href="{{helpUrls['video']['promovideos']['documents']}}">
+                                        <div class="tile-body">
+                                            <i class="fa fa-video-camera"></i>
+                                        </div>
+                                        <div class="tile-object">
+                                           <div class="name">{{'TOPNAV_HELP_DOCUMENTS'|trans}}</div>
+                                        </div>
+                                      </a>
+                                    </div>
+                                    {% endif %}
+                                     {% if (fgtwig.inArray('sponsor',fgclub.get('allowedRights')) or fgtwig.inArray('readonly_sponsor',fgclub.get('allowedRights'))) %}
+                                        <div class="tile bg-red-sunglo">
+                                           <a class="youtube cboxElement" name="fg-dev-topnav-statistics" href="{{helpUrls['video']['promovideos']['sponsor']}}">
+                                            <div class="tile-body">
+                                                <i class="fa fa-video-camera"></i>
+                                            </div>
+                                            <div class="tile-object">
+                                                <div class="name">{{'TOPNAV_HELP_SPONSOR'|trans}}</div>
+                                            </div>
+                                           </a>
+                                        </div>
+                                    {% endif %}
+                                   {% if (fgtwig.inArray('communication',fgclub.get('allowedRights'))) %}
+                                        <div class="tile bg-red-sunglo">
+                                         <a class="youtube cboxElement" name="fg-dev-topnav-statistics" href="{{helpUrls['video']['promovideos']['newsletter']}}">
+                                            <div class="tile-body">
+                                                <i class="fa fa-video-camera"></i>
+                                            </div>
+                                            <div class="tile-object">
+                                               <div class="name">{{'TOPNAV_HELP_NEWSLETTER'|trans}}</div>
+                                            </div>
+                                         </a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </li>
+                        </ul>
+                </li>#}
+             </ul>
+          </li>
+      
+        <!--STARTS SETTINGS MENU-->
+        {% if ((fgtwig.inArray('clubAdmin',fgclub.get('allowedRights'))) and (fgclub.get('type') != 'federation' and fgclub.get('type') != 'standard_club')) or ((fgtwig.inArray('clubAdmin',fgclub.get('allowedRights'))) or (fgtwig.inArray('superAdmin',fgclub.get('allowedRights'))))%}
+            <li {% if (moduleName == 'settings' ) %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %} id="fg-dev-top-settings">
+                <a name="fg-dev-topnav-clubmainmenu" href="#"> 
+                    <span class="title">{{fgclub.get('title')}}</span> <span class="arrow"></span> </a>
+                    <ul class="sub-menu">
+                        {% if (fgtwig.inArray('clubAdmin',fgclub.get('allowedRights'))) or (fgtwig.inArray('superAdmin',fgclub.get('allowedRights'))) %}
+                            <li {% if (moduleName =='settings' and level1 =='clubsettings') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a name="fg-dev-topnav-clubsettings" href="{{path('club_settings_data',{'offset':0 ,'clubid': fgclub.get('id')})}}"><span class="title">{{'SUBFEDCLUB_DATA'|trans}}</span></a> </li>
+                            <li {% if (moduleName =='filemanager' and level1 =='files') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a name="fg-dev-topnav-files" href="{{path('filemanager_listModuleFiles')}}"><span class="title">{{'TOPNAV_FILES'|trans}}</span></a> </li>
+                        {% endif %}
+                        <li {% if (moduleName =='settings' and level1 =='editexecutiveboardmembers') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a name="fg-dev-topnav-executiveboard" href="{{path('edit_executive_board_members')}}"><span class="title">{{fgtwig.getTerminolgyName('Executive Board',singular,'UCF')}}</span></a> </li>
+                        {% if (fgtwig.inArray('clubAdmin',fgclub.get('allowedRights'))) or (fgtwig.inArray('superAdmin',fgclub.get('allowedRights'))) %}
+                            <li {% if (moduleName =='settings' and level1 =='userrightsettings') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %}> <a name="fg-dev-topnav-userrights" href="{{path('user_rights_page')}}"><span class="title">{{'TOPNAV_USERRIGHTS'|trans}}</span></a> </li>
+                            <li {% if (moduleName =='settings' and level1 =='settingstabs') %} class="fg-header-nav-active fg-dev-header-nav-active" {% endif %} > <a name="fg-dev-topnav-settingstabs" data-disabled-breadcrumb="true" href="{{path('settings_language')}}"><span class="title">{{'GENERAL_SETTINGS'|trans}}</span></a> </li>
+                        {% endif %}
+                    </ul>
+            </li>
+        {% endif %}
+            <!--ENDS SETTINGS MENU-->
+{#        <li> <a class="fg-logout-icon" name="fg-dev-topnav-logout" href="{{path('fairgate_user_security_logout')}}"> <i class="fa fg-fa-sign-in"></i></a></li>#}
+    </ul>
+</div>
+{% endif %}

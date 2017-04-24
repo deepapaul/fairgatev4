@@ -1,0 +1,210 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = (elementId == 'new') ? 'CMS_MAP_ELEMENT_ADD_PAGE_TITLE'|trans : 'CMS_MAP_ELEMENT_EDIT_PAGE_TITLE'|trans %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTAINER -->
+
+        <div class="col-md-12">
+            <!-- BEGIN BREADCRUMB-->
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <!-- END BREADCRUMB-->
+            <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+            {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'contactId': '', 'tabs': tabs, 'roleCount' : '' , 'type':'', 'url' : ''} %}
+            <!-- END PAGE TITLE AND PANEL TABS -->
+
+             <div class="row fg-cms-image-video-edit-wrapper" id="elementMapWrapper">
+                        <div class="col-md-12">
+                            <div class="form-body">
+                           <form id="mapElement" class="" method="post" data-validation="true" onsubmit="return false;" novalidate="novalidate">
+                                <div class="form-group required fg-clear fg-cms-map-location">
+                                    <label class="col-md-3 col-sm-4 control-label text-right" for="mapLocation">{{'CMS_ADD_MAP_ELEMENT_LOCATION_TEXT'|trans}}</label>
+                                    <div class="col-md-6 col-sm-8 col-lg-5">
+                                       {# <input id="textinput" name="mapLocation" type="text" class="form-control"> #}
+                                         <input id="locAutoComp" name="mapLocation" type="text" placeholder=""  class="form-control locauto" value="{{existingMapElementData.location|default('')}}">
+                                         <input type="hidden" id="mapLat" name="latitude" value="{{existingMapElementData.latitude|default('')}}">
+                                         <input type="hidden" id="mapLng" name="longitude" value="{{existingMapElementData.longitude|default('')}}">
+                                    </div>
+                                </div>
+                                <div class="form-group fg-clear">
+                                    <div class="col-md-6 col-sm-8 col-lg-5 col-md-offset-3 col-sm-offset-4">
+                                        <label class="checkbox-inline fg-pad-left-0 " for="mapMarker">
+                                            <input type="checkbox" name="mapMarker" id="mapMarker" {%if existingMapElementData.mapMarker is defined and existingMapElementData.mapMarker== 1 %}checked {% endif %} class="uniform">
+                                            {{'CMS_ADD_MAP_ELEMENT_MARKER_TEXT'|trans}}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group required fg-clear fg-cms-map-height" >
+                                    <label class="col-md-3 col-sm-4 col-xs-auto control-label text-right" for="mapHeight"  max="20">{{'CMS_ADD_MAP_ELEMENT_HEIGHT_TEXT'|trans}}</label>
+                                    <div class="col-md-2 col-sm-3 col-xs-auto col-lg-1 ">
+                                        <input id="mapHeight" name="mapHeight" type="text" value="{{existingMapElementData.mapHeight|default(400)}}" class="form-control numbermask" maxlength="4">
+                                    </div>
+                                </div>
+                                 <input type="hidden"  id="mapStyleHidden" value ="">
+                                 <input type="hidden"  id="mapMarkerHidden" value ="">
+                                <div class="form-group  fg-clear" >
+                                    <label class="col-md-3  col-sm-4 control-label text-right" >{{'CMS_ADD_MAP_ELEMENT_MAP_STYLE_TEXT'|trans}}</label>
+                                    <div class="col-md-8  col-sm-8 ">
+                                        <label class="radio-inline fg-pad-left-0" for="roadmap">
+                                            <input type="radio" name="mapDisp" id="roadmap" class="uniform" value="roadmap" {%if existingMapElementData.mapDisplay is defined and existingMapElementData.mapDisplay=='satellite'%}checked="checked"{% else %}checked="checked"{%endif%}>
+                                              <span data-toggle="tooltip" title="{{ 'TOOLTIP_CMS_MAP_ELEMENT_ROADMAP'|trans({}, 'tooltip') }}">{{'CMS_ADD_MAP_ELEMENT_ROADMAP_TEXT'|trans}}</span>
+                                        </label>
+                                        <label class="radio-inline" for="satellite">
+                                            <input type="radio" name="mapDisp" id="satellite" class="uniform" value="satellite" {%if existingMapElementData.mapDisplay is defined and existingMapElementData.mapDisplay=='satellite'%}checked="checked"{%endif%}>
+                                        <span data-toggle="tooltip" title="{{ 'TOOLTIP_CMS_MAP_ELEMENT_SATELLITE'|trans({}, 'tooltip') }}">{{'CMS_ADD_MAP_ELEMENT_SATELLITE_TEXT'|trans}}</span>
+                                        </label>
+                                        <label class="radio-inline" for="hybrid">
+                                            <input type="radio" name="mapDisp" id="hybrid" class="uniform" value="hybrid" {%if existingMapElementData.mapDisplay is defined and existingMapElementData.mapDisplay=='hybrid'%}checked="checked"{%endif%}>
+                                              <span data-toggle="tooltip" title="{{ 'TOOLTIP_CMS_MAP_ELEMENT_HYBRID'|trans({}, 'tooltip') }}">{{'CMS_ADD_MAP_ELEMENT_HYBRID_TEXT'|trans}}</span> 
+                                        </label>
+
+                                        <label class="radio-inline" for="terrain">
+                                            <input type="radio" name="mapDisp" id="terrain" class="uniform" value="terrain" {%if existingMapElementData.mapDisplay is defined and existingMapElementData.mapDisplay=='terrain'%}checked="checked"{%endif%}>
+                                            <span data-toggle="tooltip" title="{{ 'TOOLTIP_CMS_MAP_ELEMENT_TERRAIN'|trans({}, 'tooltip') }}">{{'CMS_ADD_MAP_ELEMENT_TERRAIN_TEXT'|trans}}</span>
+                                        </label>
+
+
+                                    </div>
+                                </div>
+                                <div class="form-group  fg-clear" >
+                                    <label class="col-md-3 col-sm-4  col-xs-auto control-label text-right" >{{'CMS_ADD_MAP_ELEMENT_MAP_ZOOM_TEXT'|trans}}</label>
+                                    <div class="col-xs-auto spinDiv fg-cms-map-zoom-spinner"  id="mapZoomDiv">
+                                        <input type="text" name="mapZoom"  id="mapZoom" value= "{{existingMapElementData.mapZoomValue|default(15)}}" class="form-control spinner-input" readonly maxlength="2">
+                                         <div class="spinner-buttons input-group-btn btn-group-vertical">
+                                                <button type="button" class="btn spinner-up btn-xs ash spinner-btn">
+                                                    <i class="fa fa-angle-up"></i>
+                                                </button>
+                                                <button type="button" class="btn spinner-down btn-xs ash">
+                                                    <i class="fa fa-angle-down"></i>
+                                                </button>
+                                          </div>
+                                    </div>
+                                </div>
+                   {%if (elementId > 0)%}
+                        {% include 'internal/savebutton.html.twig' with {'save_button_val':'CMS_ELEMENT_SAVE_BUTTON'|trans,'second_btn_val':'CMS_ELEMENT_SAVE_AND_BACK_BUTTON'|trans, 'second_button_id':'save_bac', 'discard_button_val':'CMS_ELEMENT_DISCARD_BUTTON'|trans, 'backLink': path('website_cms_page_edit',{'pageId': pageId}) } %}
+                    {%else%}
+                        {% include 'internal/savebutton.html.twig' with { 'save_button_id':'save_bac', 'save_button_val':'CMS_ELEMENT_ADD_BUTTON'|trans, 'second_btn_val':'CMS_ELEMENT_CANCEL_BUTTON'|trans, noDiscardChange:'1', 'backLink': path('website_cms_page_edit',{'pageId': pageId}) } %}
+                    {%endif%} 
+                           </form>
+                            </div>
+                        </div>
+
+                    </div>
+                 {% include 'WebsiteCMSBundle:PageContentElements:cmsElementLogHeaderTemplate.html.twig' %}
+        </div>
+    {% endblock %}
+    {% block customstylesheets %}
+     <link href="{{ asset('fgassets/website/css/style-cms.css') }}" rel="stylesheet" type="text/css"/>
+    {% endblock %}
+    {% block javascripts %}
+        <script src="{{ asset('fgassets/internal/js/fg_tab_selection_process.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/website/js/Fg_cms_map_element.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js')}}" type="text/javascript"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAH8aNG-whPcbHlMXbeGYKswcBjTVwpLVk&libraries=places" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/fuelux/js/spinner.min.js') }}" type="text/javascript"></script>
+        <script>
+            var FgPageTitlebar;
+            var tabheadingArray = {{ tabs|json_encode()|raw }};
+            var elementLogDetailsPath = "{{path('website_cms_element_log_data')}}";
+            var saveMapElement = "{{path('website_cms_save_map_element')}}";
+            var profilePath = "{{ path('internal_community_profile', {'contactId': "dummy" }) }}";
+            var contentEditPagePath = '{{path('website_cms_page_edit',{'pageId': pageId})}}';
+            var type = 'articleElement';
+            var clubId = '{{fgclub.get('id')}}';
+            var contactId = '{{contactId}}';
+            var boxId = '{{boxId}}';
+            var elementId = '{{elementId}}';
+            var sortOrder = '{{sortOrder}}';
+            var pageId = '{{pageId}}';
+            statusTranslations = {
+                'added': "{{ 'LOG_FLAG_ADDED'|trans }}",
+                'changed': "{{ 'LOG_FLAG_CHANGED'|trans }}",
+                'deleted': "{{ 'LOG_FLAG_REMOVED'|trans }}",
+                'element' : "{{ 'CMS_ELEMENT'|trans }}",
+                'page_assignment' :"{{ 'CMS_PAGE_ASSIGNMENT'|trans }}"
+            };
+            var CmsMapElement = new FgCmsMapElement();
+            var invalidMapLocationMessage = "{{'VALIDATION_INVALID_MAP_LOCATION'|trans}}";
+            $(document).ready(function ()
+            {
+                scope = angular.element($("#BaseController")).scope();
+                FgPageTitlebar = $(".fg-action-menu-wrapper").FgPageTitlebar({
+                    title: true,
+                    tab: true,
+                    tabType: 'client'
+                });
+                var option = {
+                    pageType: 'cmsAddElement',
+                    contactId: contactId,
+                    currentClubId: clubId,
+                    localStorageName: type + '_' + clubId + '_' + contactId,
+                    tabheadingArray: tabheadingArray
+                };
+                Fgtabselectionprocess.initialize(option);
+                FgDirtyFields.init('mapElement', {saveChangeSelector: "#save_changes, #save_bac", discardChangesCallback:CmsMapElement.discardChangesCallback});
+
+                var CmsMapElementLog = new FgCmsMapElementLog();
+                CmsMapElementLog.init();
+                CmsMapElement.renderContent();
+                FgMapSettings.mapAutoComplete(); 
+                FgFormTools.handleInputmask();
+                CmsMapElement.handleSpinner();
+                FgFormTools.handleUniform();
+                FgInternal.restrictEnterKeyOnPage('elementMapWrapper');
+            });  
+    
+            $('body').off('click', '#save_changes');
+            $('body').on('click', '#save_changes, #save_bac', function (e) {
+
+                var currentSelectedButton = $(this).attr('id');
+                var longitude = $("#mapLng").val();
+                var latitude =  $("#mapLat").val(); 
+                var location =  $("#locAutoComp").val();
+                var mapHeight = $("#mapHeight").val();
+                var mapDisplay = $("input[name=mapDisp]:checked").val();
+                var mapZoomValue = $("#mapZoom").val();
+                var mapMarker = 0;
+                if($("#mapMarker").is(':checked')){
+                   mapMarker = 1;
+                }
+                var mapData = {
+                    currentSelectedButton :currentSelectedButton,
+                    longitude :longitude,
+                    latitude :latitude,
+                    location :location,
+                    mapHeight :mapHeight,
+                    mapDisplay :mapDisplay,
+                    mapZoomValue :mapZoomValue,
+                    mapMarker :mapMarker
+                };
+                
+                $("#mapStyleHidden").val(mapDisplay);
+                $("#mapMarkerHidden").val(mapMarker);
+                var validation =  CmsMapElement.isValidForm(mapData);
+                $('#save_changes,#save_bac').attr('disabled','disabled');
+                
+
+
+            });
+    
+            $('body').on('keyup','#locAutoComp', function(){
+                $('#mapLat').val('');
+                $('#mapLng').val('');
+             $('form#mapElement input#locAutoComp').parent().removeClass('has-error');
+             $('.fg-cms-map-location').removeClass('has-error'); 
+             $('.fg-cms-map-location-error-block').hide();
+
+            });
+
+            $('body').on('keyup','#mapHeight', function()
+            {
+              $('form#mapElement input#mapHeight').parent().removeClass('has-error');
+              $('.fg-cms-map-height').removeClass('has-error');
+              $('.fg-cms-map-height-error-block').hide();
+            });
+            
+            $('body').on('click', '#preview', function (e) {
+                 window.location.href = contentEditPagePath;
+            });
+            
+  </script>    
+    {% endblock %}

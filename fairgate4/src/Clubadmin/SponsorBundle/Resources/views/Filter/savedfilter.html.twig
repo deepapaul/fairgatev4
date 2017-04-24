@@ -1,0 +1,153 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'TITLE_SAVED_FILTER'|trans %}
+{% block pagecontent %}
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row" id="bookmark_form">
+        <div class="col-md-12">
+            <!-- BREADCRUMB STARTS -->
+            {% include 'clubadmin/breadcrumb.html.twig' with {'breadCrumb':{'back': path('clubadmin_sponsor_homepage') }} %}
+            <!-- BREADCRUMB ENDS -->
+            <div class="row">
+                 {% set page_settings = { 'pagetitle':'true'}  %}
+                 {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': pageTitle ,'page_settings': page_settings} %} 
+            </div>             
+            <!-- BEGIN FORM-->
+            <form id="formSponsorFilter" skipDirtyCheck class="form-horizontal fg-saved-filter-contact-wrap" action="formSponsorFilter" onSubmit="return false;">            
+                <div class="alert alert-danger display-hide">
+                    <button class="close" data-close="alert"></button>
+                    {%trans%}SAVED_FILTER_ERROR_DISPLAY{%endtrans%}
+                </div>
+                <div id="savedfilterlist_sort" class="fg-saved-filter-new">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div data-list-wrap class="admin-fontsize filterrole-list dragndrop excludejs" id="sortrole">
+                                <!-- SPONSOR SAVED FILTER LISTING HERE -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                 <!-- ROLE DISPLAY STARTS-->
+                  
+                    <!-- ADD ROLE DISPLAY STARTS-->
+                    <div class="row">
+                        <div class="col-md-5 fg-common-top fg-common-btm pull-left">
+                            <a id="addrow" href="#basic" data-toggle="modal" data-parentdiv-id="sortrole" data-add-type="role">
+                                <i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> 
+                                <span class="fg-add-text"> {%trans%}ADD_FILTER{%endtrans%}</span> 
+                            </a>
+                        </div>
+                    </div>
+                    <!-- ADD ROLE DISPLAY ENDS-->
+                            
+                    <!-- ROLE DISPLAY ENDS-->
+                <div id="filter_html" class="hide"></div>
+                <div id="callSaveFunction" class="hide"></div>
+                <input type="hidden" value="0" id="editedFilter" name="editedFilter">
+                
+                
+
+                <!--  Partial twig for savebutton-->          
+                {% include 'clubadmin/savebutton.html.twig' with  {'backLink': path('clubadmin_sponsor_homepage')} %}          
+
+            </form>
+            <!-- END FORM-->
+        </div>
+            <div id="callPopupFunction"></div>        
+    </div>
+    <!-- UNDERSCORE TEMPLATES STARTS -->
+    <div id="divTemplates">
+        {# template for listing sponsor saved filters #}
+        {% include 'ClubadminSponsorBundle:Filter:addsponsorfilter.html.twig' %}
+         {% include 'ClubadminSponsorBundle:Filter:sponsorSavedFilterTemplate.html.twig' %}
+    </div>
+    <!-- UNDERSCORE TEMPLATES ENDS -->
+<!-- END PAGE CONTENT-->
+{% endblock %}
+
+{% block javascripts %}
+    {% if not (app.request.xmlHttpRequest) %}
+        <script src="{{ asset('fgcustom/js/page/filter-settings.js')}}" type="text/javascript"></script>
+    {% endif %}
+    <script src="{{ asset('fgcustom/js/search-filter.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/dirtyfields/jquery.dirtyFields.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_dirtyfields.js') }}" type="text/javascript"></script>
+    <script>
+        /*-------------- Page title bar configuration --------*/ 
+        FgPageTitlebar.init({
+                 title: true
+
+         });
+        
+        var selectedLang = defaultLang = '';
+        var contactId='{{contactId}}';
+        var clubId='{{fgclub.clubId}}';
+        var clubDataSingleUrl='{{url('filter_sponsor_data_single')}}';
+        var filterClubDataUrl='{{url('sponsor_filter_data', {contacttype: 'sponsor'})}}';
+        var brokenUrl='{{url('filter_update_broken')}}';
+        var requestType=0;
+        var filterTarget = new Array();
+        var CRITERIA='{{'CM_CRITERIA'|trans}}';
+        var SELECTTYPE= '{{'CM_SELECT_TYPE'|trans}}';
+        var filterType = 'sponsor';
+        var filterIds = [];
+        var filterCount = saveCount = 0;
+        var pageVars = {
+            pathFilterData: "{{ path('get_sponsor_saved_filters') }}",
+            saveAction: "{{ path('update_filter_settings')}}",
+            clubId: '{{fgclub.clubId}}',
+            contactId: {{contactId}},
+            clubUrlIdentifier: '{{fgclub.clubUrlIdentifier}}',
+            contact: '{{'CONTACT'|trans}}',
+            contacts: '{{'contacts'|trans}}'
+        };
+        var translationTerms = {'contacts': '{{'Contacts'|trans}}', 'mandatory': '{{'MANDATORY'|trans}}', 'nonMandatory': '{{'NON-MANDATORY'|trans}}', 'selectTitle': '{{'CM_SELECT_TYPE'|trans}}', 'criteria': '{{'CM_CRITERIA'|trans}}'};
+        FgUtility.changeColorOnDelete();
+        var filter;
+        var filterdata = 'sponsor';
+        var filterStorage = 'sponsorfilter-new-{{clubId}}-{{contactId}}';
+        var filterName = 'sponsor_filter';
+        var langTitleArray = {};
+        var selectTitle = '{{'CM_SELECT_TYPE'|trans}}';
+        var filterCondition = FgFilterSettings.FgSponsorCondition;
+        var saveFilterPath = '{{path('contact_saved_filter_data')}}';
+        var filterContactDataUrl= "{{url('filter_contact_data')}}";
+        var selectCriteria= '{{'CM_CRITERIA'|trans}}';
+        var jsonData = '';
+        var roleTitleLangs = {};
+        var filterClubDataUrl='{{url('sponsor_filter_data', {contacttype: 'sponsor'})}}';
+        $.getJSON(filterClubDataUrl, function (data) {
+           jsonData = data;
+        });
+        var updateFilterDataUrl ='{{path('update_sposor_filter_data')}}';
+        var  VALIDATION_THIS_FIELD_REQUIRED = '{{'VALIDATION_THIS_FIELD_REQUIRED'|trans}}';
+         $('#save_changes').click( function(){
+            updateSortFilter();
+       });
+        
+        function updateSortFilter(){
+            var i =1;
+          
+            $("#sortrole").children().each(function(){
+                var id = $(this).attr("id")+'_sort_order';
+                 if($('#'+id).length==0){
+                    var id = 'new_'+$(this).attr("id")+'_sort_order'; 
+                }
+                $('#'+id).val(i);
+              i++;
+            });
+            FgDirtyFields.updateFormState();
+        }
+    </script>
+    {% if app.request.xmlHttpRequest %}
+        <script>requestType = 1;</script>
+    {% else %}
+        
+        <script src="{{ asset('fgcustom/js/search-filter.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/listRow.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/fg_filter_validate.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/backend/js/page/sponsor-savedfilter.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/sidebarfilter.js')}}" type="text/javascript"></script>
+    {% endif %}
+{% endblock %}

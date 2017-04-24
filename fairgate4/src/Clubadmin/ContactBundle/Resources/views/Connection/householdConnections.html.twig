@@ -1,0 +1,90 @@
+<!-- START Houshold-->
+{% set housholdIds = [contactdetails.id] %}
+<div class="row">
+    <div class="col-md-12 fg-common-top"><span class="fg-sub-caption">{%trans%}CONTACT_OVERVIEW_TITLE_CONNECTIONS_HOUSEHOLD{%endtrans%}</span></div>
+</div>
+<div class="row fg-common-top">
+    {% if ( householdContacts|length >0 ) %}
+    <div class="col-md-3 col-sm-6" data-cloumn >
+        <div class="portlet box fg-red-border">
+            <div class="portlet-title fg-theme-head">
+                <div class="caption">({{'CONNECTION_SELF'|trans}})</div>
+                {% if(not readOnly) %}
+                    <div class="closeico" data-close='' >
+                        <input type="checkbox" class="make-switch" data-inactiveblock="changecolor" data-parentid="fg-content-minarea" data-key="household.{{contactdetails.id}}.self.is_deleted" name="household_{{contactdetails.id}}_self_is_deleted" id="household_{{contactdetails.id}}_self_is_deleted"  />
+                        <label for="household_{{contactdetails.id}}_self_is_deleted" class="fa fa-times-circle fa-2x fg-close-btn" {% if(contactdetails.is_household_head) %}style="display:none;"{% endif %} ></label>
+                        <i class="fa fg-lock fa-2x fg-close-btn" {% if(not contactdetails.is_household_head) %}style="display:none;"{% endif %}></i>
+                    </div>
+                    {% endif %}
+            </div>
+            <div class="portlet-body fg-content-minarea"><div class="fg-connection-img ">
+                {% include 'clubadmin/profile-image.html.twig' with {'clubId':contactdetails.clubId,'filename':contactdetails['21'],'contactType': contactdetails.is_company,'type':'other'} %}</div>
+                <div class="fg-contact-info"> <span class="fg-contact-name"><span class="fg-blue-title">{{contactdetails.contactName}}</span></span>
+                    <ul>
+                        <li> <span class="fg-float-text">{%trans%}MAIN_CONTACT{%endtrans%}</span> <span class="pull-right">
+                                <span data-toggle="tooltip" data-original-title="" title="{{'SWITCH_DESC'|trans}}">
+                                <label onClick="" data-type="MC" class="switch-light switch-light-sm switchhwd">
+                                    <input type="checkbox" {{contactdetails.is_household_head ? 'checked'}} name="household_{{contactdetails.id}}_self_is_main_contact" data-key="household.{{contactdetails.id}}.self.is_main_contact" id="household_{{contactdetails.id}}_self_is_main_contact" value='1' class="make-switch">
+                                    <span> <span>{{'ON'|trans}}</span><span>{{'OFF'|trans}}</span></span> <a class="btn btn-primary"></a> </label></span>
+                            </span> 
+                        </li>
+                        {% if(fgtwig.inArray('invoice', bookedModule)) %}  
+                        <li> <span class="fg-float-text">{%trans%}SEPARATE_INVOICE{%endtrans%}</span> <span class="pull-right">                                
+                                <label onClick="" data-type="SI" class="switch-light switch-light-sm switchhwd">
+                                    <input type="checkbox" {{contactdetails.is_seperate_invoice ? 'checked'}}  data-key="household.{{contactdetails.id}}.self.seperate_invoice" name="household_{{contactdetails.id}}_self_seperate_invoice" id="household_{{contactdetails.id}}_self_seperate_invoice" value='1' class="make-switch" >
+                                    <span> <span>{{'ON'|trans}}</span><span>{{'OFF'|trans}}</span></span> <a class="btn btn-primary"></a> </label>
+                            </span> </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% for household in householdContacts %}
+    {% set housholdIds = housholdIds|merge([household.contact_id]) %}
+    <div class="col-md-3 col-sm-6" data-cloumn>
+        <div class="portlet box fg-red-border">
+            <div class="portlet-title fg-theme-head">
+                <div class="caption"> {{household.name}} </div>
+                {% if(not readOnly) %}
+                <div class="closeico" data-close=''>
+                    <input type="checkbox" class="make-switch" data-inactiveblock="changecolor" data-parentid="fg-content-minarea" data-key="household.{{household.contact_id}}.{{household.rId}}.is_deleted" name="household_{{household.contact_id}}_{{household.rId}}_is_deleted" id="household_{{household.contact_id}}_{{household.rId}}_is_deleted"  />
+                    <label for="household_{{household.contact_id}}_{{household.rId}}_is_deleted" class="fa fa-times-circle fa-2x fg-close-btn" {% if(household.is_household_head) %}style="display:none;"{% endif %} ></label>
+                    <i class="fa fg-lock fa-2x fg-close-btn" {% if(not household.is_household_head) %}style="display:none;"{% endif %}></i>
+               </div>
+               {% endif %}
+            </div>
+            <div class="portlet-body fg-content-minarea"><div class="fg-connection-img"> 
+                    {% include 'clubadmin/profile-image.html.twig' with {'clubId':household.club_id,'filename':household.profilbild,'contactType': household.is_company,'type':'other'} %}</div>
+                <div class="fg-contact-info"> <span class="fg-contact-name"><a href="{{path('contact_connection',{'contact': household.contact_id,'offset':offset})}}">{{household.contactName}}</a></span>
+                    <ul>
+                        <li> <span class="fg-float-text">{%trans%}MAIN_CONTACT{%endtrans%}</span> <span class="pull-right">
+                                <span data-toggle="tooltip"  data-original-title="" title="{{'SWITCH_DESC'|trans}}">
+                                <label onClick="" data-type="MC" class="switch-light switch-light-sm switchhwd">
+                                    <input type="checkbox" {{household.is_household_head ? 'checked'}} data-key="household.{{household.contact_id}}.{{household.rId}}.is_main_contact" id="household_{{household.contact_id}}_{{household.rId}}_is_main_contact" name="household_{{household.contact_id}}_{{household.rId}}_is_main_contact" class="make-switch">
+                                    <span> <span>{{'ON'|trans}}</span><span>{{'OFF'|trans}}</span></span> <a class="btn btn-primary"></a> </label></span>
+                            </span> </li>
+                       {% if(fgtwig.inArray('invoice', bookedModule)) %}  
+                        <li> <span class="fg-float-text">{%trans%}SEPARATE_INVOICE{%endtrans%}</span> <span class="pull-right">
+                                <label onClick="" data-type="SI" class="switch-light switch-light-sm switchhwd">
+                                    <input type="checkbox" {{household.is_seperate_invoice ? 'checked'}} name="household_{{household.contact_id}}_{{household.rId}}_seperate_invoice" id="household_{{household.contact_id}}_{{household.rId}}_seperate_invoice" data-key="household.{{household.contact_id}}.{{household.rId}}.seperate_invoice" class="make-switch">
+                                    <span> <span>{{'ON'|trans}}</span><span>{{'OFF'|trans}}</span></span> <a class="btn btn-primary"></a> </label>
+                            </span> </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <input type="hidden" name="current_household_contacts" id="current_household_contacts" value="{{housholdIds|join(',')}}" />
+    {% if(not readOnly) %}
+    <div class="col-md-3 col-sm-6">
+        <div class="portlet box fg-red-border fg-disable-block">
+            <div class="fg-disable-link"> <a data-toggle="connection" data-exclude="{{housholdIds|join(',')}}" data-isCompany="0" data-type="household" href="#basic" onclick="return false" id="pencil"><i class="fa fa-plus-circle fa-2x col-blue"></i><span class="fg-left-move">{%trans%}ADD_CONNECTION{%endtrans%}</span></a> </div>
+        </div>
+    </div>
+    {% endif %}    
+</div>
+<!-- END Houshold-->

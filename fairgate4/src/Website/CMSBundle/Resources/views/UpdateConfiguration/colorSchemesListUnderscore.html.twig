@@ -1,0 +1,41 @@
+<script type='template' id='tm-color-scheme-list'>
+    <% _.each(data, function(datas,key) { %>
+    <li class="row fg-border-line fg-pad-5" id="<%-key%>" data-theme="<%-datas.themeId%>">
+        <div class="col-md-4 col-sm-5 col-xs-6 fg-color-schemes-wrapper" <% if(key == datas.colorSchemeId) { %>data-active="1"<% } else { %>data-active="0"<% } %>>
+            <ul class="fg-color-schemes" data-id="<%-key%>">
+                <% _.each(datas.colorSchemes, function(colorVal,colorKey) { %>
+                    <% if(colorKey!='colorPreviewImage') { %>
+                        <li style="background: <%-colorVal['value']%>" data-value="<%-colorVal['value']%>" class="fg-colorscheme-display-<%-key%>" data-toggle="tooltip" data-title="<%-colorKey%>" title="<%-colorSchemeTooltipTrans[colorKey]%>"></li>
+                    <% } %>
+                <% }) %>
+            </ul>
+            <% if(!(datas.idDefault)) { %>
+                <a href="javascript:void(0)" class="fg-edit-scheme" data-id="<%-key%>"><i class="fa fa-2x fa-pencil-square-o"></i>{{'EDIT'|trans}}</a>
+            <% } %>
+        </div>
+        <% if(key == datas.colorSchemeId) { %>
+            <div class="col-sm-3 col-xs-4 fg-activate-wrapper fg-pad-top-5 fg-activate-wrapper-<%-key%>">
+                <span class="fg-activated" data-id="<%-key%>">{{'CMS_COLOR_SCHEME_ON'|trans}}</span>
+            </div>
+        <% } else { %>
+            <div class="col-sm-3 col-xs-4 fg-activate-wrapper  fg-pad-top-5 fg-activate-wrapper-<%-key%>">
+                 <a  href="javascript:void(0)" class="fg-deactivated fg-activate-link" data-id="<%-key%>"><i class="fa fa-2x fa-check-square-o"></i>{{'ACTIVATE'|trans}}</a>
+            </div>
+        <% } %>
+        <div class="col-sm-2 col-xs-2 col-md-offset-3 col-sm-offset-2 fg-duplicate fg-pad-top-5 text-right" data-id="<%-key%>">
+             <i class="fa fa-2x fa-files-o" data-id="<%-key%>" title="{{'DUPLICATE_COLOR_SCHEME'|trans}}"></i>
+         </div>
+        <div class="fg-col-last-icon">
+            <% if(datas.colorSchemeCount == 0) { %>
+            <div class="deletediv" title="{{'DELETE_COLOR_SCHEME'|trans}}">
+                <div class="closeico" data-id="<%-key%>"><input type="checkbox" name="" id="" class="make-switch"><label for=""></label></div>
+            </div>
+            <% } else { %>
+            <div class="lockedDiv">
+                <i class="fa fa-lock fa-2x ash" data-toggle="tooltip" title=""></i>
+            <% } %>
+            </div>
+        </div>
+    </li>
+    <% }) %>
+</script>

@@ -1,0 +1,88 @@
+<script type="text/template" id="template_pagetitlebar_container">
+    <div class="<%- containerClass %>">
+        <div class="fg-web-titlebar-left-col pull-left <% if ((breadcrumb == true) && (breadcrumbData.length > 0)) { %> has-breadcrumb  <% } %> <%- (!nextPrevious) ? 'close-btn-only' : '' %>">
+
+
+            {# ----------- Breadcrub Starts --------------  #}
+                <% if ((breadcrumb == true) && (breadcrumbData.length > 0)) { %>
+                    
+                <div class="fg-web-page-title-block fg-breadcrumb-block">
+                <ul class="fg-breadcrumbs">
+                 <%
+                 var i=1;
+                _.each(breadcrumbData , function(data,key) { %>
+                    <li id="fg-cms-ws-bc-<%-i%>"><a id="fg-cms-ws-bc-anchor-<%-i%>" href="<%- data.link %>"><%= data.label %></a></li>
+                    <% i++; %>
+                 <% }); %>    
+                  </ul>
+                </div>
+            <% } %>
+
+            {# ----------- Breadcrub Ends  ---------------  #}
+
+
+            {# ----------- Page Title Starts --------------  #}
+            <% if (titleBar == true) { %>
+                <div class="fg-titlebar-block fg-web-page-title-block">
+                  <h1 class="fg-web-page-title"><%= title %></h1>
+                </div>
+            <% } %>
+            {# ----------- Page Title Ends --------------  #}
+                
+        </div>
+  
+        <div class="fg-web-titlebar-right-col pull-right">
+
+
+            {# ----------- Next Previous Navigation Start --------------  #}
+            <% if (nextPrevious == true) { %>
+                <div class="fg-titlebar-block fg-icon-bg fg-page-prev <%- (hideNextPreviousOnSmallDevices == true)?'hidden-xs':'' %> <%- (nextPreviousLinks[0] == '')?'fg-disabled-link':'' %>">
+                    <a href="<%- (nextPreviousLinks[0] == '')?'javascript:void(0)':nextPreviousLinks[0] %>" class="fg-page-prev-link"><i class="fg-icon"></i></a>
+                </div>
+            <% } %>
+            <% if (backButton == true) { %>
+                <div class="fg-titlebar-block fg-icon-bg fg-page-close   <%- (backButtonData == '')?'fg-disabled-link':'' %>">
+                    <a href="<%- (backButtonData == '')?'javascript:void(0)':backButtonData %>" class="fg-page-close-link"><i class="fg-icon fg-icon-pagetitle-back"></i></a>
+                </div>
+            <% } %>
+            <% if (nextPrevious == true) { %>
+                <div class="fg-titlebar-block fg-icon-bg fg-page-next <%- (hideNextPreviousOnSmallDevices == true)?'hidden-xs':'' %> <%- (nextPreviousLinks[1] == '')?'fg-disabled-link':'' %>">
+                    <a href="<%- (nextPreviousLinks[1] == '')?'javascript:void(0)':nextPreviousLinks[1] %>" class="fg-page-next-link"><i class="fg-icon"></i></a>
+                </div>
+            <% } %>
+            {# ----------- Next Previous Navigation Ends --------------  #}
+         </div>       
+          <div class="fg-web-titlebar-right-col pull-right fg-web-title-filter-wrapper">     
+        
+            <% if (timeperiod == true && timeperiodData.length > 0) { %>
+                <div class="fg-titlebar-block fg-page-timeperiod">
+                    <select class="fg-page-timeperiod-input <%- (timeperiodData.length == 1)?'hide':'' %>" name="fg-page-timeperiod-input" id="fg-page-timeperiod-input">
+                        <% _.each(timeperiodData, function(t){ %>
+                            <% value = t.start+'__'+t.end %>
+                            <option value="<%- value %>"><%= t.label%></option>
+                        <% }) %>
+                    </select>
+                </div>
+            <% } %>
+        
+            <% if (calendarViewSwitch == true) { %>
+                <div class="fg-titlebar-block fg-page-monthswitch">
+                    <select class="fg-page-monthswitch-input" name="fg-page-monthswitch-input" id="fg-page-monthswitch-input">
+                        <option value="month">{{'WEBSITE_CALENDAR_SWITCH_MONTHVIEW'|trans}}</option>
+                        <option value="agendaWeek">{{'WEBSITE_CALENDAR_SWITCH_WEEKVIEW'|trans}}</option>
+                        <option value="list">{{'WEBSITE_CALENDAR_SWITCH_LISTVIEW'|trans}}</option>
+                    </select>
+                </div>
+            <% } %>
+        
+            <% if (searchBox == true) { %>
+                <div class="fg-titlebar-block fg-page-search">
+                    <input placeholder="{{'WEBSITE_ARTICLE_SEARCH_PALCEHOLDER'|trans}}" type="text" class="fg-page-search-input" data-search-type="<%- searchBoxType %>" name="fg-page-search" id="fg-page-search"/>
+                </div>
+            <% } %>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+</script>
+

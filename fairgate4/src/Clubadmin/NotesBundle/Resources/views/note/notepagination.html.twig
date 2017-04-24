@@ -1,0 +1,49 @@
+{% if type is defined %}    
+   {%set type=type%}
+{% else %}
+    {%set type='club'%} 
+{% endif %}  
+{% if contactModuleType is defined %}    
+   {%set contactModuleType = contactModuleType%}
+{% else %}
+    {%set contactModuleType ='club'%} 
+{% endif %} 
+{% if notesDetails|length > 0 %}
+{%for  details in notesDetails%}
+    {% set link=details.id %}
+        <a id="{{link}}"></a>
+        <li class="timeline-purple">
+            <div class="timeline-time">
+                <span class="date"> {{details.ctdate}}</span> 
+                <span class="time"> {{ details.cttime }} </span> 
+                <span class="time"> {{details.createdname}}</span> 
+            </div>
+            <div class="timeline-icon"> </div>
+            <div class="timeline-body" >
+                <div class=""> {{form_widget(form[details.id])}}</div>
+                <div class="noteico">
+                    <input type="checkbox" class="make-switch" data-key="{{details.id}}.isDeleted" name="isDeleted_{{details.id}}" id="isDeleted_{{details.id}}" data-inactiveblock="changecolor" data-parentid="{{details.id}}" />
+                    {% if type =='contact' or type=='club' or type=='sponsor'%}
+                         <label for="isDeleted_{{details.id}}"></label>
+                    {% endif %}
+                </div>
+                {% if details.edate!="" %}
+                    {% set edate =details.edate %}
+                    {% set etime =details.etime %}
+                    {% set ename =details.editedname %}
+                    <div class="timeline-footer">{{'EDITED_NOTES'|trans ({'%edate%':edate,'%etime%' : etime,'%ename%' : ename})}}  </div>
+                {% endif %}
+            </div>
+        </li>
+{% endfor %}
+    {% elseif (type=='archive' or type=='formerfederationmember' or contactModuleType == 'archivedsponsor') and (notesDetails|length <= 0 ) %}
+     <div class="alert alert-info">
+         <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
+         <p>{%trans%}NO_DATA_AVAILABLE{%endtrans%}</p>
+     </div>
+    {% endif %}
+
+
+
+
+

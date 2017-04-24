@@ -1,0 +1,54 @@
+<script type="text/template" id="template-albumsettings-add">
+<% dataKey = isNew ? albumId : albumId %>
+<% dataName = isNew ? 'new_' + albumId : albumId %>
+
+<li class="dd-item row" data-id=  "<%- albumId %>">
+    <div <% if (isNew) { %>style="display:none;"  <% } %> class="fg-nestable-row fg-clear <% if (isNew) { %> addednew <% } %>" id="<%- dataName %>">
+        <div  class="fg-col-first-icon fg-nestable-sort-drag dd-handle " ><i class="fa fa-ellipsis-v"></i></div>
+        <div class="col-md-12 fg-col-hack ">
+            <div class="row">
+                <div class="col-sm-5 fg-gallery-name">
+                    <div class=" fg-gallery-album-name ">
+                        <% _.each(clubLanguages, function(clubLang) { %>
+                            <% catTitleLang = attributes['title']; %>
+                            <% if (typeof attributes['titleLang'] !== 'undefined') { %>
+                                <% catTitleLang = (typeof attributes['titleLang'][clubLang] !== 'undefined') ? attributes['titleLang'][clubLang] : ''; %>
+                            <% } %>
+                          <div dataerror-group data-lang="<%- clubLang %>">
+                            <input type="text" class="form-control <% if (isNew) { %> fairgatedirty <% } %> input-sm fg-input-area <%- clubLang %> <% if (isNew) { %>fg-dev-newfield<% } %>" data-key="<%- dataKey %>.title.<%- clubLang %>" id="<%- dataName %>_title_<%- clubLang %>_titleLang" name="<%- dataName %>_title_<%- clubLang %>_titleLang" placeholder = "<%- attributes['title'] %>" data-lang="<%- clubLang %>" value="<%- catTitleLang %>" <% if (clubLang == defaultLang) { %> required="true" <% } else { %> data-notrequired = "true" <% } %> />
+                       </div>
+                        <% }); %>
+                    </div>
+                     <div class="fg-active-IB fg-gallery-bookmark bookmark fg-v-middle">
+                          <input type="checkbox" <% if (attributes['bookmarkId'] > 0) { %> checked <% } %>class="make-switch <% if (isNew) { %> fairgatedirty <% } %>" data-key="<%- dataKey %>.is_bookmarked"  name="<%- dataName %>_is_bookmarked" id="<%- dataName %>_is_bookmarked" value="0">
+                          <label for="<%- dataName %>_is_bookmarked">
+                           <i class="fa fa-bookmark"></i>
+                          </label>
+                      </div>
+
+                </div>
+        <% if (!isNew) { %>
+          <div class="col-sm-5 text-right fg-gallery-img-count-wrapper col-lg-3">
+             <a href="#"  class="fg-dev-image-count-click" data-album-id="<%- albumId %>" data-parent-id="<%- attributes['parentId'] %>"><%- attributes['imageCount'] %> {{'GALLERY_ALBUM_SETTINGS_IMAGE_LINK_TEXT'|trans}}</a>
+          </div>
+   <% } %>
+            </div>     
+        </div>
+    <div class="fg-col-last-icon" name="fg-dev-close-icon">
+    <div class="pull-right deletediv">
+        <% if (attributes['subAlbumCount'] > 0) { %>
+          <i class="fa fa-lock fa-2x ash"></i>
+        <% } else { %>
+            <div class="closeico">
+              <input type="checkbox" class="make-switch <% if (isNew) { %> fairgatedirty <% } %>" data-key="<%- dataKey %>.is_deleted" name="<%- dataName %>_is_deleted"  id="<%- dataName %>_is_deleted" data-inactiveblock="changecolor" data-parentid="<%- dataName %>" />
+              <label for="<%- dataName %>_is_deleted"></label>
+           </div>
+        <% } %>
+    </div>
+</div>
+<input type="text" class="hide <% if (isNew) { %> fairgatedirty <% } %>" data-key="<%- dataKey %>.imageCount" name="<%- dataName %>_imageCount" id="<%- dataName %>_imageCount" value="<%- attributes['imageCount'] %>" />
+
+    </div>
+</li>
+
+</script>

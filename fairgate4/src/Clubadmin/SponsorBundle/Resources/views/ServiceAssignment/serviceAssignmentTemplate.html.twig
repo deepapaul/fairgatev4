@@ -1,0 +1,79 @@
+<script type="text/template" id="serviceDropdownTemplate">
+    <select data-error-container="#serviceId_error" data-services required name="serviceId" id="serviceId" data-key="service_id"  class="form-control bs-select" aria-invalid="false">
+        <option value="">{% trans %}SELECT_DEFAULT{% endtrans %}</option>
+        {% for categorie in categories %}
+            <% if('{{categorie.categoryId}}'==catId) { %>
+                {% for services in categorie.services %}
+                    <option data-serviceType="{{services.serviceType}}" data-price="{{services.price|default(0)}}" data-pPlan="{{services.paymentPlan|default('none')}}" data-repMonth="{{services.repetitionMonths|default('')}}" <%- subCat=='{{services.servicesId}}' ? 'selected' : ''%> value="{{services.servicesId}}">{{services.serviceTitle}}</option>
+                {% endfor %}
+            <% } %>
+        {% endfor %}
+    </select>
+    <span id="serviceId_error" class="has-error"></span>
+</script>
+<script type="text/template" id="serviceDepositedWithTemplate">
+    <dt data-deposited-row>{% trans %}DM_DEPOSITED_WITH{% endtrans %} </dt>
+    <dd data-deposited-row>
+        <div class="fg-spon-width">
+        <% if(serviceType=='team') { %>
+            <select name="depositedWith" id="depositedWith" data-key="depositedWith" multiple data-deposited class="form-control fg-dev-newfield bs-select selectpicker bootstrap-select " aria-invalid="false">
+                <option value="NONE" class="single fg-arrow-all">{% trans %}DOCUMENT_NONE{% endtrans %}</option>
+                {% if(teams.roles|default('')!='') %}
+                    <option value="" class="selectall fg-arrow-all">{% trans %}SELECT_ALL{% endtrans %}</option>
+                    <optgroup label="">
+                    {% for key,role in teams.roles|default({}) %}
+                        <option value="{{key}}" {{','~key~',' in ','~deposited.deposits.roleId|default('')~',' ? 'selected':'' }} class="multiple">{{role}}</option>
+                    {% endfor %}
+                    </optgroup>
+                {% endif %}
+            </select> 
+        <% } else { %>
+                <div>
+                    <input type="text" id="depositedWithAuto" placeholder="{{ 'DM_ADD_CONTACT'|trans }}" data-contactlist name="depositedWithAuto" value="" class="form-control" />
+                </div>
+                <input type="hidden" id="depositedWithAutoSelection" data-club="contact" name="depositedWithSelection" value="[{% for deposit in deposited.deposits|default('') %}{{ loop.last ? '"'~deposit.id|default('')~'"' : '"'~deposit.id|default('')~'",' }}{% endfor %}]" data-key="depositedWithSelection" />
+                        
+        <% } %>
+        </div>
+    </dd>
+</script>
+<script type="text/template" id="servicePaymentsTemplate">
+    <div class="row fg-border-line newCustomRow fg-custom-payments">
+        <div class="col-md-12 fg-col-hack fg-left-zero">
+            <div class="row">
+                <div dataerror-group class="col-lg-3 col-sm-12 col-xs-12 fg-spon-sm"> 
+                    <div class="fg-spon-content-area">{%trans%}SM_PAYMENT_ON{% endtrans %} <span class="fg-mandatory">*</span></div>
+                    <div class="input-group date datepicker form_datetime">
+                        <input data-error-container="#<%- data %>_paymentOn_error" required type="text" data-paymentdate="" size="16" name="<%- data %>_paymentOn" id="<%- data %>_paymentOn" data-key="custom.<%- data %>.date" class="form-control">
+                        <span class="input-group-btn">
+                            <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                    </div>
+                    <span for="<%- data %>_paymentOn" id="<%- data %>_paymentOn_error" class="has-error"></span>
+                </div>
+                <div dataerror-group class="col-lg-4 col-sm-12 col-xs-12 fg-spon-sm">
+                    <div class="fg-spon-content-area">{%trans%}SM_WITH_VALUE_OF_CURR{% endtrans %} {{fgclub.get('clubCurrency')}} <span class="fg-mandatory">*</span></div>
+                    <input data-discount-validate="<%- data %>" data-amount required type="text" name="<%- data %>_amount" id="<%- data %>_amount" value="<%- amount %>" data-key="custom.<%- data %>.amount" class="form-control numbermask fg-spon-input-area">
+                </div>
+                <div dataerror-group class="col-lg-5 col-sm-12 col-xs-12 fg-spon-sm">
+                    <div class="fg-spon-content-area">{%trans%}SM_AND_WITH_DISCOUNT_OF{% endtrans %}</div> 
+                    <input data-notrequired="true" data-error-container="#<%- data %>_discount_error" type="text" min="0" max="100" data-discount="<%- data %>" data-discount-validate="<%- data %>" name="<%- data %>_discount" id="<%- data %>_discount" data-key="custom.<%- data %>.discount" class="hide fg-validate-inp">
+                    <input type="text" data-discount-shown="<%- data %>"  name="{{paymentPlan.paymentId|default('') }}_discount" id="{{paymentPlan.paymentId|default('') }}_discount"  class="form-control numbermask ignore fg-spon-input-area">
+                    <select data-discount-validate="<%- data %>" class="bs-select form-control fg-spon-input-area" id="<%- data %>_discount_type" name="discount" data-key="custom.<%- data %>.discount_type" aria-invalid="false">
+                        <option value="P">%</option>
+                        <option value="A">{{fgclub.get('clubCurrency')}}</option>
+                    </select>
+                    <span id="<%- data %>_discount_error" class="has-error"></span>
+                </div>
+            </div>
+        </div>                        
+        <div class="fg-col-last-icon">
+            <div class="col-md-2 pull-right deletediv ">
+                <div class="closeico">
+                    <input name="isDeleted" id="<%- data %>_isDeleted" data-key="custom.<%- data %>.isDeleted" value="1" type="checkbox" class="make-switch">
+                    <label for="select4"></label>
+                </div>
+            </div>
+        </div>                         
+    </div>
+</script>

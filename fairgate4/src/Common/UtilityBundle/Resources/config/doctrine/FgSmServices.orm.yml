@@ -1,0 +1,64 @@
+Common\UtilityBundle\Entity\FgSmServices:
+    repositoryClass: Common\UtilityBundle\Repository\FgSmServicesRepository
+    type: entity
+    table: fg_sm_services
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        description:
+            type: text
+            nullable: true
+        price:
+            type: decimal
+            nullable: true
+        serviceType:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: service_type
+        paymentPlan:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: payment_plan
+        repetitionMonths:
+            type: smallint
+            nullable: true
+            column: repetition_months
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sort_order
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        category:
+            targetEntity: FgSmCategory
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                category_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

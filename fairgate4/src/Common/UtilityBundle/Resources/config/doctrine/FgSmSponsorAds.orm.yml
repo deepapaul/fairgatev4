@@ -1,0 +1,68 @@
+Common\UtilityBundle\Entity\FgSmSponsorAds:
+    repositoryClass: Common\UtilityBundle\Repository\FgSmSponsorAdsRepository    
+    type: entity
+    table: fg_sm_sponsor_ads
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        description:
+            type: text
+            nullable: true
+        image:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        url:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        imageSize:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: image_size
+        isDefault:
+            type: boolean
+            nullable: true
+            column: is_default
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sort_order
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        adArea:
+            targetEntity: FgSmAdArea
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                ad_area_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

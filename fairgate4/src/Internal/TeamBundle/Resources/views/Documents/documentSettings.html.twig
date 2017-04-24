@@ -1,0 +1,116 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = dataSet['name'] %}
+{% block pagecontent %}
+    
+<!-- BREADCRUMB STARTS -->
+    <div class="row">
+        <div class="col-lg-12">
+        {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+        </div>
+    </div>
+<!-- BREADCRUMB ENDS -->
+<!-- BEGIN PAGE CONTENT-->
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet-body fg-theme-blue fg-document-edit-wrapper">
+                    <form id="documentsettings" class="form-horizontal" action="documentsettings" autocomplete="off" onSubmit="return false;">
+                        <!-- DOCUMENT DATA SECTION STARTS -->
+
+                            <!-- EDIT DOCUMENT TEMPLATE SECTION STARTS -->
+                            <div id = "editTemplate">
+
+                            </div>
+                            <!-- EDIT DOCUMENT TEMPLATE SECTION ENDS -->
+                        <!-- DOCUMENT DATA SECTION ENDS -->
+
+                        <!-- VERSION LISTING SECTION STARTS -->
+                        {% include 'InternalTeamBundle:Documents:versionList.html.twig' with {'documentId' : documentId } %}
+                        <!-- VERSION LISTING SECTION ENDS -->
+
+                        <!-- RENEW DOCUMENT SECTION STARTS -->
+                        {% include 'InternalTeamBundle:Documents:renewDocument.html.twig' with {'documentId' : documentId } %}
+                        <!-- RENEW DOCUMENT SECTION ENDS -->
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                  {% include 'internal/savebutton.html.twig' with {'backLink':backLink} %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT-->
+{% endblock %}
+{% block underscoretemplate %}
+        {% include 'InternalTeamBundle:Documents:templateEditDocument.html.twig' with {'docType': 'team'} %}
+{% endblock %}   
+{% block javascripts %}   
+
+    <script src="{{ asset('fgassets/internal/js/page/fgDocumentUploader.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.ui.widget.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.iframe-transport.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.fileupload.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/FgFileUpload.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/internal/js/page/fgDocumentEdit.js')}}" type="text/javascript"></script>
+    <script type="text/javascript">
+        fgDocumentEdit.settings.selectedLang = '{{ dataSet['clubDefaultLang'] }}';
+        fgDocumentEdit.settings.defaultLang = '{{ dataSet['clubDefaultLang'] }}';
+        fgDocumentEdit.settings.dataSet = {{ dataSet|escape('js')|json_encode()|raw }};
+        fgDocumentEdit.settings.uploadUrl = "{{ path('internal_document_upload',{'type':'document'}) }}";
+        fgDocumentEdit.settings.getVersionsUrl = "{{ path('get_document_versions', {'documentId': documentId}) }}";
+        fgDocumentEdit.settings.updateDocumentUrl = '{{ path('update_document', {'documentId' : documentId }) }}';
+    
+        var actionMenuNoneSelectedText = {
+            'documentDownload' : {'title' : "{{'DOWNLOAD'|trans}}", 'dataUrl' : '{{ path('document_download', {'docId' : documentId, 'versionId': 'versionId' }) }}', 'isActive' : 'false'}, 
+        };
+        var actionMenuSingleSelectedText = {
+            'documentDownload' : {'title' : "{{'DOWNLOAD'|trans}}", 'dataUrl' : '{{ path('document_download', {'docId' : documentId, 'versionId': 'versionId' }) }}', 'isActive' : 'true'}, 
+        };
+        var actionMenuMultipleSelectedText = {
+            'documentDownload' : {'title' : "{{'DOWNLOAD'|trans}}", 'dataUrl' : '{{ path('document_download', {'docId' : documentId, 'versionId': 'versionId' }) }}', 'isActive' : 'false'},
+        };
+
+        fgDocumentEdit.actionMenuTextDraft = {'active': {'none': actionMenuNoneSelectedText, 'single': actionMenuSingleSelectedText, 'multiple': actionMenuMultipleSelectedText}};
+
+        fgDocumentEdit.settings.columnDefs = [
+                            { type : "checkbox", "width": "2%", orderable : false, targets : 0, data : function(row, type, val, meta) {
+                                return "<div class='fg-td-wrap fg-no-sorting-cb'>&nbsp;<input type='checkbox' class='dataClass fg-dev-avoidicon-behaviour dFExclude' id='"+row[0]+"' name='check'></div>";
+                            }},
+                            { "name" : "version", "targets": 1, data : function(row, type, val, meta) {
+                                var versionText = '';
+                                if (row[1] == '' || row[1] == null) {
+                                    versionText = '-';
+                                } else {
+                                    var downloadPath = '{{ path('document_download', {'docId' : documentId, 'versionId': 'versionId' }) }}';
+                                    downloadPath = downloadPath.replace('versionId', row[0]);
+                                    versionText = (type === 'display') ? '<a href="'+downloadPath+'" target="_blank">'+'{{ 'VERSION'|trans }} '+row[1]+'</a>' : row[1];
+                                }
+                                return versionText;
+                            }},
+                            { "name" : "size", "targets" : 2, data : function(row, type, val, meta) {
+                                var sizeText = '',
+                                    sizeInMB = '';
+                                if (row[2] == '' || row[2] == null) {
+                                    sizeText = '-';
+                                } else {
+                                    sizeInMB = (row[2])/(1024*1024);
+                                    sizeInMB = sizeInMB.toFixed(1);
+                                    sizeInMB = (sizeInMB == '0.0') ? '< '+FgClubSettings.formatNumber(0.1)+' MB' : FgClubSettings.formatNumber(sizeInMB)+' MB';
+                                    sizeText = (type === 'display') ? sizeInMB : row[2];
+                                }
+                                return sizeText; 
+                            }},
+                            { "name" : "uploaded_on", "targets" : 3, data : function(row, type, val, meta) {
+                                return row[3] == '' || row[3] == null ? '-' : row[3]; 
+                            }},
+                            { "name" : "uploaded_by", "targets" : 4, data : function(row, type, val, meta) {
+                                return row[4] == '' || row[4] == null ? '-' : row[4]; 
+                            }}
+                         ];         
+    </script>
+{% endblock %}

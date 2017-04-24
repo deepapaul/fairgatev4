@@ -1,0 +1,38 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout_login.html.twig' %}
+{% set pageTitle = 'NEWSLETTER_UNSUBSCRIPTION'|trans %}
+{% block logincontent %}
+<div class="content"> 
+    <h3 class="form-title">{{clubName}} {% trans %}NEWSLETTER{% endtrans %}</h3>
+    {% if(name is not null)%}
+    <div class="form-actions">
+        <p id="msg-unsubscribe">{{ 'NEWSLETTER_UNSUBSCRIBE_MESSAGE'|trans({'%name%': name})  }}</p>
+            <button id="submit-unsubscribe" name="_submit" class="btn green pull-right" type="submit">
+            {% trans %}UNSUBSCRIBE{% endtrans %} 
+            </button>            
+    </div>
+    {% else %}    
+       <div class="form-actions">
+            <p>{{ 'NEWSLETTER_ALREADY_UNSUBSCRIBED'|trans  }}</p>                
+        </div> 
+    {% endif %}
+</div>
+{% endblock %}
+ 
+{% block javascripts %}
+<script type = "text/javascript">  
+    var unsubscribePath = "{{path('nl_newsletter_unsubscription_ajax', {'encodings':encodings})}}";
+    $( "#submit-unsubscribe" ).click(function() {
+        $.post( unsubscribePath, function( data ) {
+            if(data.success == "success") {                
+                msg = '{{ 'NEWSLETTER_UNSUBSCRIBE_SUCCESS_MESSAGE'|trans({'%email%': email})  }}';
+                $(".form-actions").html(msg);
+            }
+        });
+    });
+     $( "#unsubscribe_reset" ).click(function() {
+     alert("shgsg");
+    window.close(); 
+      });
+</script>    
+{% endblock %}    
+

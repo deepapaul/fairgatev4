@@ -1,0 +1,44 @@
+Common\UtilityBundle\Entity\FgCnNewsletterManualContactsEmail:
+    repositoryClass: Common\UtilityBundle\Repository\FgCnNewsletterManualContactsEmailRepository
+    type: entity
+    table: fg_cn_newsletter_manual_contacts_email
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        selectionType:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: selection_type
+        emailType:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: email_type
+    manyToOne:
+        newsletter:
+            targetEntity: FgCnNewsletter
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                newsletter_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        emailField:
+            targetEntity: FgCmAttribute
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                email_field_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

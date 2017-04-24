@@ -1,0 +1,75 @@
+{%  if(textelement.text|length > 0) %}
+    <section class="fg-text-widget-wrapper {% if(textelement.media.position == 'rightColumn') %}fg-text-right-img {% else %}fg-text-left-img {% endif%}" columnWidth = {{columnWidth}}>
+        {% if (textelement.text[defaultLanguage] is defined) and (textelement.text[defaultLanguage].text != '') %}
+               {% set textValue = textelement.text[defaultLanguage].text %}
+           {% else %} 
+               {% set textValue = textelement.text.default.text %}
+        {% endif %} 
+        {% if(textelement.media|length > 1) %}
+            <input type="hidden" id="hidetextimage-{{ elementId }}"  value="image" />
+            <input type="hidden" id="hidetextslider{{ elementId }}"  value="{{textelement.slider.slider}}" />
+            {% if(textelement.media.position == 'rightColumn' or textelement.media.position == 'leftColumn')%}
+               
+                <div class="{{ (columnWidth >= 3) ? 'col-sm-4':'col-sm-2'}} fg-thumb">
+                    <figure class="fg-cms-website-gallery " id="row-gallery-{{elementId}}">
+                        {% for key, data in textelement.media %}
+                            {% if(data.imgsrc is defined) %}
+                                {% if (data.type == 'videos')%}
+                                    <img onload="cmspage.getCmsVideoDetails('{{data.videoUrl}}', this);" alt="{{data.description.default|default('')|escape|replace({"'": ""})}}" data-type="" src="{{data.imgsrc}}" data-image="{{data.imgsrc1920}}" data-description="{{data.description.default|default('')|escape|replace({"'": ""})}}" data-videoid="" style="display:none;" />
+                                {% else %}
+                                    <img src="{{data.imgsrc}}" alt="{{data.description.default|default('')|escape|replace({"'": ""})}}"  data-image="{{data.imgsrc1920}}"  {% if (data.description.default is defined) %} data-description="{{data.description.default|default('')|escape|replace({"'": ""})}}"  {% endif %} style="display:none;" />
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </figure>
+                </div>
+                {{textValue|raw}}
+            {% elseif(textelement.media.position == 'topSlider')%}
+                <div class="col-md-12 fg-pad-0 fg-content">
+                    <div class="fg-slider fg-marg-btm-20">
+                        <div id="gallery-textelement-{{elementId}}" class="fg-cms-website-gallery" style="display:none;">
+                            {% for key, data in textelement.media %}
+                                {% if(data.imgsrc is defined) %}
+                                    {% if (data.type == 'videos')%}
+                                        <img onload="cmspage.getCmsVideoDetails('{{data.videoUrl}}', this);" alt="{{data.description.default|default('')|escape|replace({"'": ""})}}" data-type="" src="{{data.imgsrc}}" data-image="{{data.imgsrc}}" data-description="{{data.description.default|default('')|escape|replace({"'": ""})}}" data-videoid="" style="display:none;" />
+                                    {% else %}
+                                        <img alt="{{data.description.default|default('')|escape|replace({"'": ""})}}"  src="{{data.imgsrc}}" data-image="{{data.imgsrc}}"
+                                             {% if (data.description.default is defined) %}data-description="{{data.description.default|default('')|escape|replace({"'": ""})}}" {% endif %} style="display:none;" >
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {{textValue|raw}}
+                </div>
+              {% elseif(textelement.media.position == 'bottomSlider')%}
+                <div class="col-md-12 fg-pad-0 fg-content">
+                      {{textelement.text.default.text|raw}}
+                      
+                      <div class="fg-slider">
+                        <div id="gallery-textelement-{{elementId}}" class="fg-cms-website-gallery" style="display:none;">
+                            {% for key, data in textelement.media %}
+                                {% if(data.imgsrc is defined) %}
+                                    {% if (data.type == 'videos')%}
+                                        <img onload="cmspage.getCmsVideoDetails('{{data.videoUrl}}', this);" alt="{{data.description.default|default('')|escape|replace({"'": ""})}}" data-type="" src="{{data.imgsrc}}" data-image="{{data.imgsrc}}" data-description="{{data.description.default|default('')|escape|replace({"'": ""})}}" data-videoid="" style="display:none;" />
+                                    {% else %}
+
+                                        <img alt="{{data.description.default|default('')|escape|replace({"'": ""})}}"  src="{{data.imgsrc}}" data-image="{{data.imgsrc}}"
+                                             data-description="{{data.description.default|default('')|escape|replace({"'": ""})}}" style="display:none;" >
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+
+
+                        </div>
+                    </div>
+                </div>
+            {% endif%}
+        {% else %}        
+            {{textValue|raw}}
+        {% endif %}
+        <div class="clearfix"></div>
+    </section>
+
+{% endif %}
+

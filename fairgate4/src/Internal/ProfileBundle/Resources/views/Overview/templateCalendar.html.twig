@@ -1,0 +1,39 @@
+<script type="text/template" id="overviewCalendarBox">
+    <div class="portlet-body fg-dashboard-wrap">
+    <% i = 0; %>
+     <ul>     
+      <% var settings = _.sortBy(settings, 'startDate'); %>
+     <% _.each(settings,function(value,key){ %>
+        <% if(i < 7) { %> 
+        <li>
+          <div class="row">
+                <span class="col-sm-4 col-xs-12"><% if(value.dateDetails.startDate) { %><%= value.dateDetails.startDate %><% if(value.dateDetails.endDate) { %> - <%= value.dateDetails.endDate %><% } %><% } %><% if(value.isAllday == 1 ) { %>, {{'OVERVIEW_CALENDARBOX_ALLDAY'|trans}} <% } %></span>             
+                    <a href="javascript:void(0)" class="col-sm-4 col-xs-12 fg-calendarbox-details-link" data-start-date="<%= value.startDate %>" data-end-date="<%= value.endDate %>" data-link="<%=value.detailLink%>"><%= value.title %></a>
+                <% if(roleType == '') { %>
+                  <div class="col-sm-4 col-xs-12">
+                   <% if(value.clubDetails) { %>
+                         <span class="fg-note-block" style="background: <%= value.clubDetails.clubColorCode %>;color: #fff;"><%= value.clubDetails.title %>   <% if (value.clubDetails.clubType == 'federation' || value.clubDetails.clubType == 'sub_federation') { %>   <img src="<%= value.clubDetails.clubLogoPath %>" /> <% } %></span>
+                   <% } %> 
+                   <% if(value.clubId == currentClubId) { %>
+                     <% _.each(value.roleDetails,function(roleData,key){ %>
+                            <span class="fg-note-block" style="background: <%= roleData.color %>;color: #fff;"><%= roleData.role %></span>
+                     <% }); %>
+                   <% } %>
+                 </div>
+               <% } else { %>
+               <% if(value.eventCategories != '' ) { %>
+                <div class="col-sm-4 col-xs-12">
+                    <% _.each(value.catDetails,function(catData,key){ %>
+                        <span class="fg-note-block"><%= catData %></span>
+                    <% }); %>
+                </div>
+                <% } %>
+            <% } %>
+            </div>
+        </li>
+      <% } %>
+   <% i++; %>
+   <% }); %>
+  </ul>
+ </div>
+</script>

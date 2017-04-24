@@ -1,0 +1,64 @@
+Common\UtilityBundle\Entity\FgClubSettings:
+    repositoryClass: Common\UtilityBundle\Repository\FgClubSettingsRepository
+    type: entity
+    table: fg_club_settings
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        fiscalYear:
+            type: date
+            nullable: true
+            column: fiscal_year
+        currency:
+            type: string
+            length: 10
+            fixed: false
+            nullable: true
+        currencyPosition:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: currency_position
+        majorityAge:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: majority_age
+        profileAccessAge:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: profile_access_age
+        signature:
+            type: string
+            length: 250
+            fixed: false
+            nullable: true
+        logo:
+            type: string
+            length: 250
+            fixed: false
+            nullable: true
+        federationIcon:
+            type: string
+            length: 250
+            fixed: false
+            nullable: true
+            column: federation_icon
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

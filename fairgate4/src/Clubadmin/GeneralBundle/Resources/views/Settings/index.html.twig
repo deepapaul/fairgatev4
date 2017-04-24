@@ -1,0 +1,233 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = "GENERAL_SETTINGS"|trans %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body fg-theme-green">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                {% include 'clubadmin/breadcrumb.html.twig' %}
+                
+                <!-- END PAGE TITLE & BREADCRUMB-->
+                
+                {#{% include 'clubadmin/settings-tab.html.twig' with {'tabs':tabs,'active':'language'} %}
+               #}
+                <div class="row">
+                 {% set page_settings = { 'pagetitle':'true','tabs':'true'}  %}
+                 {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle':pageTitle ,'page_settings': page_settings,'tabs': tabs,'hrefLink' : true, 'url':"#",'type':'agelimit' } %}
+                 </div>   
+                <form id="clubSettingsTab" skipDirtyCheck class="form-horizontal" method="post" data-validation="true" onsubmit="return false;" novalidate="novalidate">
+                    <div id="failcallbackServerSide" class="alert alert-danger hide">
+                                        <button class="close" data-close="alert"></button>
+                                        <span>{{'FORM_ERROR_DISPLAY'|trans}}</span>
+                                    </div>
+                    <div id="contactAgeLimits" class="row fg-common-top {{perSessionHide|default(false) ? 'hide':''}}">
+                    <div class="col-md-12">
+                        <div class="panel panel-primary fg-bordernon panel-bg"> 
+                            <div class="panel-heading fg-theme-head">
+                                <h3 class="panel-title">{{'GN_MY_PERSONAL_SYSTEM_LANG'|trans}}</h3>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">                            
+                                    <div class="form-body fg-common-top">
+                                        <div class="form-group" >
+                                            <div class="col-md-12 col-sm-6">
+                                                <label class="col-md-3 col-sm-4 control-label">
+                                                    <label for="<%- item.id %>personalLanguage">{{'GN_SYSTEM_LANGUAGE_OF'|trans({'%contactname%':name})}}</label>
+                                                </label>
+                                                <div class="col-md-5 col-sm-8">
+                                                    <select name="personalLanguage" data-key="personalLanguage" class="form-control bss-select select-for-preview" id="personalLanguage">
+                                                        <option value="default">{{'GN_PERSONAL_LANG_DEFAULT'|trans({'%lang%':corrLang})}}</option>
+                                                        {% for key,lang in systemLangs %}<option {% if perSysLang==key %}selected{% endif %} value="{{key}}">{{lang}}</option>{% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row fg-common-top">
+                    <div class="col-md-12">
+                        <div class="panel panel-primary fg-bordernon panel-bg"> 
+                            <div class="panel-heading fg-theme-head">
+                                <h3 class="panel-title">{{'GN_GLOBAL_CORR_WEBSITE_LANGUAGE'|trans}}</h3>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">                            
+                                    <div class="form-body fg-common-top">
+                                        <div data-list-wrap id="clubLanguagesWrap" ></div>
+                                        {% if(isEditable ==true) %}
+                                            <div class="col-md-12 fg-common-top clearfix">
+                                                <a href="#basic" data-parentdiv-id="clubLanguagesWrap" class="addField">
+                                                    <i class="fa fa-plus-circle fa-2x pull-left "></i>
+                                                    <span class="fg-add-text">{{'GN_ADD_LANGUAGE'|trans}}</span>
+                                                </a>
+                                            </div>
+                                        {% endif %} 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% include 'clubadmin/savebutton.html.twig' with {'save_buttob_id':'save_changes','settings':'settings'} %}
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="callPopupFunction"></div>
+    <!-- Connection Popup -->
+    <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-content fg-popup-wrap" id="popup_contents">
+                {% include 'ClubadminGeneralBundle:Settings:confirmDelete.html.twig'with {'deleteFlag':deleteFlag} %}
+            </div>
+        </div>
+    </div> 
+    <script type="text/template" id="settingsLanguagesListWrap">
+        <% _.each(data,function(item,key){ %>
+            <div id="<%- item.id %>" class="row fg-border-line <% if(item.isNew==1){ %>new-row<% } %>  sortables" data-corr-lang="<%- item.correspondanceLang %>">
+                <div class="fg-col-first-icon fg-sort-drag handle"><i class="fa fg-sort ui-draggable"></i><input type="text" class="sort-val hide" name="<%- item.id %>_sortValue" id="<%- item.id %>_sortValue" value="<% if(item.isNew==1) { %><%- item.sortVal %><% } else { %><%- item.sortOrder %><% } %>" data-key="langs.<%- item.id %>.sort" /></div>
+                <div class="col-md-12 fg-col-hack fg-tab-ckedit">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-4 col-xs-11" dataerror-group><% if(item.isNew==1){ %>
+                        <select name="language<%- item.id %>" data-key="langs.<%- item.id %>.language" class="form-control bs-select fg-lang-selecter select-for-preview" id="language<%- item.id %>">
+                            <% var fKey = ''; %>
+                            {% for key,lang in languages %}
+                                <% var selectedLanguages = FgLanguageSettings.getSelectedLanguages();
+                                    if(selectedLanguages.indexOf('{{key}}') < 0){
+                                        if(fKey == ''){
+                                            fKey = '{{key}}';
+                                        }
+                                %>        
+                                    <option data-thounand="{{langSettings[key].thousand}}" data-decimal="{{langSettings[key].decimal}}" value="{{key}}">{{lang}}</option>
+                                <% } %>
+                            {% endfor %}
+                            <%
+                                var languages = {{languages|json_encode()|raw}};
+                                var langSettings = {{langSettings|json_encode()|raw}};             
+                            %>
+                        </select>
+                            <% } else { %><label class="input-sm fg-input-area"><%- data[0]['languages'][item.correspondanceLang] %></label><% } %></div>
+                        <div class="col-md-8 col-sm-7 col-xs-12 fg-pad-top-3 pull-right">
+                            <div class="col-md-6 col-sm-9 col-xs-12 opened <% if(item.isNew==1){ %>in<% } else { %>out<% } %>" data-id="<%- item.id %>" data-target="#defaults-<%- item.id %>" data-toggle="collapse"> <i class="fa fg-plus-icon-log col-middle <% if(item.isNew==1){ %>fa-minus-square-o<% } else { %>fa-plus-square-o<% } %>"></i>{% trans %}GN_LANGUAGE_OPTIONS_TEXT{% endtrans %} </div>
+                            <div class="col-md-4 col-sm-3 col-xs-12 pull-right {{isEditable ? 'hide':''}}">
+                                <label onclick="" class="switch-light switch-light-sm switchhwd">
+                                    <input type="checkbox" disabled data-key="langs.<%- item.id %>.isActive" <% if(item.isActive==1 || item.isNew){ %>checked=""<% } %> id="langs.<%- item.id %>.isActive" name="langs.<%- item.id %>.isActive" data-active-lang="<%- item.correspondanceLang %>" class="make-switch" data-inactiveblock="changecolor">
+                                    <span> <span>{% trans %}ON{% endtrans %}</span><span>{% trans %}OFF{% endtrans %}</span></span> <a class="btn btn-primary"></a> 
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>                        
+                <div class="fg-col-last-icon">
+                    <div class="col-md-2 pull-right deletediv ">
+                        <div data-unlock class="closeico <% if(_.size(data)==1 && item.isNew !=1){ %>hide<% } %> {% if(isEditable !=true) %}hide{% endif %} fg-row-close">
+                            <input type="checkbox" <% if(item.isNew!=1){ %>data-deletebtm data-active-lang="<%- item.correspondanceLang %>"<% } %>  data-inactiveblock="changecolor" data-parentid="<%- item.id %>" data-key="langs.<%- item.id %>.isDeleted" name="<%- item.id %>_delete" id="<%- item.id %>_delete" class="make-switch">
+                            <label for="<%- item.id %>_delete"></label>
+                        </div>
+                        <div data-lock class="closeico <% if(_.size(data)>1 || item.isNew==1){ %>{% if(isEditable ==true) %}hide{% endif %}<% } %> fg-row-close">
+                            <i class="fa fa-lock fa-2x ash"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="defaults-<%- item.id %>" class="form-body fg-ck-wrap collapse <% if(item.isNew==1){ %>in<% } else { %>out<% } %>">
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}GL_DEFAULT_LANGUAGE{% endtrans %}</label>
+                        <div class="col-md-5 col-sm-9 col-xs-12">
+                            <select data-key="langs.<%- item.id %>.defSysLang" {% if(isEditable !=true) %}disabled{% endif %} name="<%- item.id %>_deflanguage" class="form-control select2 select-for-preview" id="<%- item.id %>_deflanguage">
+                                {% for key,lang in systemLangs %}<option <% if(item.systemLang=="{{key}}"){ %>selected<% } %> value="{{key}}">{{lang}}</option>{% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}GN_DATE_FORMAT{% endtrans %}</label>
+                        <div class="col-md-5 col-sm-9 col-xs-12">
+                            <select data-key="langs.<%- item.id %>.dateFormat" {% if(isEditable !=true) %}disabled{% endif %} name="<%- item.id %>_dateformat" class="form-control select2 select-for-preview" id="<%- item.id %>_dateformat">
+                                <option <% if(item.dateFormat=="dd.mm.YY"){ %>selected<% } %> value="dd.mm.YY">23.08.2015</option>
+                                <option <% if(item.dateFormat=="dd.m.YY"){ %>selected<% } %> value="dd.m.YY">23.8.2015</option>
+                                <option <% if(item.dateFormat=="dd/mm/YY"){ %>selected<% } %> value="dd/mm/YY">23/08/2015</option>
+                                <option <% if(item.dateFormat=="dd/m/YY"){ %>selected<% } %> value="dd/m/YY">23/8/2015</option>
+                                <option <% if(item.dateFormat=="dd-mm-YY"){ %>selected<% } %> value="dd-mm-YY">23-08-2015</option>
+                                <option <% if(item.dateFormat=="dd-m-YY"){ %>selected<% } %> value="dd-m-YY">23-8-2015</option>
+                                <option <% if(item.dateFormat=="dd-mm-Y"){ %>selected<% } %> value="dd-mm-Y">23-08-15</option>
+                                <option <% if(item.dateFormat=="YY.mm.dd"){ %>selected<% } %> value="YY.mm.dd">2015.08.23</option>
+                                <option <% if(item.dateFormat=="YY/mm/dd"){ %>selected<% } %> value="YY/mm/dd">2015/08/23</option>
+                                <option <% if(item.dateFormat=="YY/m/dd"){ %>selected<% } %> value="YY/m/dd">2015/8/23</option>
+                                <option <% if(item.dateFormat=="YY-mm-dd"){ %>selected<% } %> value="YY-mm-dd">2015-08-23</option>
+                                <option <% if(item.dateFormat=="m/dd/YY"){ %>selected<% } %> value="m/dd/YY">8/23/2015</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}GN_TIME_FORMAT{% endtrans %}</label>
+                        <div class="col-md-5 col-sm-9 col-xs-12"><select data-key="langs.<%- item.id %>.timeFormat" {% if(isEditable !=true) %}disabled{% endif %} name="<%- item.id %>_timeformat" class="form-control select2 select-for-preview" id="<%- item.id %>_timeformat">
+                        <option <% if(item.timeFormat=="H:i"){ %>selected<% } %> value="H:i">23:59</option>
+                        <option <% if(item.timeFormat=="H.i"){ %>selected<% } %> value="H.i">23.59</option>
+                        <option <% if(item.timeFormat=="H[h] i"){ %>selected<% } %> value="H[h] i">23 h 59</option>
+                        <option <% if(item.timeFormat=="h:i"){ %>selected<% } %> value="h:i">11:59 PM</option></select></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}GN_THOUSAND_SEPERATOR{% endtrans %}</label>
+                        <div class="col-md-5 col-sm-9 col-xs-12">
+                            <select name="<%- item.id %>_thousandsep" {% if(isEditable !=true) %}disabled{% endif %} data-key="langs.<%- item.id %>.thousandSeparator" class="form-control fg-default-select bs-select select-for-preview" id="<%- item.id %>_thousandsep">
+                                <option <% if(item.thousandSeparator=="default"){ %>selected<% } %> value="default" data-thou="{{'GN_DEFAULT'|trans}}">{{'GN_DEFAULT'|trans}} <% if(item.isNew==1){ %><%- languages[fKey] %> (<%- langSettings[fKey]['thousand'] %>)<% } else { %><%- data[0]['languages'][item.correspondanceLang]+" ("+data[0]['langSettings'][item.correspondanceLang]['thousand']+")" %><% } %></option>
+                                <option <% if(item.thousandSeparator=="space"){ %>selected<% } %> data-value="&#8239" value="space">{{'GN_THIN_SPACE'|trans}}</option>
+                                <option <% if(item.thousandSeparator=="apostrophe"){ %>selected<% } %> data-value="&#8217" value="apostrophe">{{'GN_APOSTROPHE'|trans}}</option>
+                                <option <% if(item.thousandSeparator=="dot"){ %>selected<% } %> data-value="&#46" value="dot">{{'GN_DOT'|trans}}</option>
+                                <option <% if(item.thousandSeparator=="comma"){ %>selected<% } %> data-value="&#44" value="comma">{{'GN_COMMA'|trans}}</option>
+                                <option <% if(item.thousandSeparator=="none"){ %>selected<% } %> value="none">{{'GN_NONE'|trans}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12 fg-ck-caption-txt">{% trans %}GN_DECIMAL_MARKER{% endtrans %}</label>
+                        <div class="col-md-5 col-sm-9 col-xs-12">
+                            <select name="<%- item.id %>_decmarker" {% if(isEditable !=true) %}disabled{% endif %} data-key="langs.<%- item.id %>.decimalMarker" class="form-control bs-select fg-default-select select-for-preview" id="<%- item.id %>_decmarker">
+                                <option <% if(item.decimalMarker=="default"){ %>selected<% } %> value="default" data-decim="{{'GN_DEFAULT'|trans}}">{{'GN_DEFAULT'|trans}} <% if(item.isNew==1){ %><%- languages[fKey] %> (<%- langSettings[fKey]['decimal'] %>)<% } else { %><%- data[0]['languages'][item.correspondanceLang]+" ("+data[0]['langSettings'][item.correspondanceLang]['decimal']+")" %><% } %></option>
+                                <option <% if(item.decimalMarker=="dot"){ %>selected<% } %> value="dot" data-value="&#46">{{'GN_DOT'|trans}}</option>
+                                <option <% if(item.decimalMarker=="comma"){ %>selected<% } %> value="comma" data-value="&#44">{{'GN_COMMA'|trans}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%  }); %>
+    </script>
+    
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/dirtyfields/jquery.dirtyFields.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_dirtyfields.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/listRow.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>  
+    <script src="{{ asset('fgassets/backend/js/page/settings.js') }}" type="text/javascript"></script>
+    <script>
+        $(document).ready(function() {
+            //FgSettings.initPage();
+            FgPageTitlebar.init({
+                title       : true,
+                tab       : true,
+                search     :false,
+                actionMenu  : false,
+                tabType  :'server'
+               
+            }); 
+            FgLanguageSettings.initLanguage();
+        });
+        pathGetContent='{{path('settings_language_getdata')}}';
+        saveURL='{{path('settings_language_save')}}';
+        var saveValidateURl='{{path('settings_lang_check_corr')}}';
+        var confirmMsg='{{'GN_CONFIRM_MSG'|trans}}';
+        var cancelLabel = '{%trans%}CANCEL{%endtrans%}';
+        var saveLabel = '{%trans%}CONFIRM_CONTINUE{%endtrans%}';
+    </script>
+{% endblock %} 

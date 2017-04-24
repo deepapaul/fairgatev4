@@ -1,0 +1,338 @@
+.page-header.navbar.navbar-inverse.navbar-fixed-top.fg-autocomplete-parent
+  // BEGIN TOP NAVIGATION BAR
+  .header-inner
+    // BEGIN LOGO
+    a.navbar-brand.fg-navbar-brand(name='fg_dev-contact', href='/swisstennis/backend/')
+      img.img-responsive(src='../../../fgassets/global/img/fairgate-small-logo.jpg?version=1.0.2', alt='logo')
+    .fg-dropdown-nav
+      ul#fg-top-nav-app-switch.nav.navbar-nav
+        li.dropdown
+          a.fg-dropdown-head(href='#', data-toggle='dropdown')
+            | BACKEND
+            i.fa.fa-angle-down
+          ul.dropdown-menu.animated(data-animation='fadeIn')
+            li
+              a(href='/swisstennis/internal/dashboard') INTERNAL
+            li.active
+              a(href='/swisstennis/backend/') BACKEND
+    // END LOGO
+    // BEGIN RESPONSIVE MENU TOGGLER
+    a.fg-logout-icon.fg-topav-centre-logout(name='fg-dev-topnav-logout', href='/swisstennis/backend/signout')
+      i.fa.fg-fa-sign-in(data-placement='bottom', data-toggle='tooltip', data-original-title='', title='')
+    a.navbar-toggle(href='javascript:;', data-toggle='collapse', data-target='.navbar-collapse')
+      img(src='../../../../web/fgcustom/img/menu-toggler.png?version=1.0.2', alt='')
+    // END RESPONSIVE MENU TOGGLER
+    // BEGIN HORIZANTAL MENU
+    .hor-menu.hidden-sm.hidden-xs
+      ul.nav.navbar-nav
+        // STARTS CONTACT MENU
+        li#fg-top-contact-menu.fg-header-nav-contact
+          a.dropdown-toggle(href='#', name='fg-dev-topnav-contactmenu', data-toggle='dropdown', data-hover='dropdown', data-close-others='true')
+            span.title Contacts
+            i.fa.fa-angle-down
+            span.selected  
+          ul.dropdown-menu.hold-on-click
+            li
+              .fbautocomplete-main-div.ui-helper-clearfix
+                i.fa.fa-search.fg-autocomplete-search
+                span.ui-helper-hidden-accessible(role='status', aria-live='polite')
+                input#existingContacts-menu.fg-autocomplete-contact.fg-autocomplete-txt.ui-autocomplete-input(type='text', autocomplete='off')
+            li
+              a#fg-dev-topnav-contact-active(data-module='contact', data-type='active', name='fg-dev-topnav-contact-active', href='/swisstennis/backend/contact/list')
+                span.title Active contacts
+                span#fg-dev-activecontact-count.badge.badge-round.badge-important  189 
+            li#fg_dev-header-menu-archivecontact
+              a#fg-dev-topnav-contact-archive(name='fg-dev-topnav-contact-archive', data-module='contact', data-type='active', href='/swisstennis/backend/contact/contactarchive')
+                span.title Archived contacts
+                span#fg-dev-archivecontact-count.badge.badge-round.badge-important  26 
+            li#fg_dev-header-menu-archivecontact
+              a(data-type='active', data-module='contact', href='/swisstennis/backend/contact/formerfederationmember')
+                span.title Former hh
+                span#fg-dev-formerfedmem-count.badge.badge-round.badge-important  61 
+            li#fg-dev-confirmations.dropdown-submenu.fg-dev-top-settings-selected.fg-header-settings-contact
+              a(href='#', name='fg-dev-topnav-confirmations')
+                span.title Confirmations
+                i.fa.fa-warning.fg-dev-Popovers.fg-warning-mailings.fg-confirmations-warning(data-content='', data-original-title='', data-trigger='hover', data-placement='bottom')
+              ul#contact_confirmations.dropdown-menu.hold-on-click(style='display: none;')
+                li
+                  a(name='fg-dev-topnav-confirmchanges', href='/swisstennis/backend/contact/confirmationchanges/changes')
+                    span.title Changes
+                    span#fg-dev-confirmchanges-count.badge.badge-round.badge-important  3 
+                li
+                  a(name='fg-dev-topnav-confirmmutations', href='/swisstennis/backend/contact/mutations')
+                    span.title Mutations
+                    span#fg-dev-confirmmutations-count.badge.badge-round.badge-important  8 
+                li
+                  a(name='fg-dev-topnav-confirmcreations', href='/swisstennis/backend/contact/creations')
+                    span.title Creations
+                    span#fg-dev-confirmcreations-count.badge.badge-round.badge-important  1 
+            li#fg-dev-top-settings.dropdown-submenu.fg-dev-top-settings-selected.fg-header-settings-contact
+              a(href='#', name='fg-dev-topnav-contactsettings')
+                span.title Contact fields 
+              ul#contact_settings.dropdown-menu.hold-on-click(style='display: none;')
+                li
+                  a(name='fg-dev-topnav-contactfields', href='/swisstennis/backend/contact/contactfields')
+                    span.title Administration
+                li
+                  a(name='fg-dev-topnav-contactoverview', href='/swisstennis/backend/contact/contactoverview')
+                    span.title Contact overview settings
+                li
+                  a(name='fg-dev-topnav-internalsection', href='/swisstennis/backend/contact/profilefield')
+                    span.title Internal section
+        // ENDS CONTACT MENU
+        // STARTS CLUB MENU
+        li.fg-header-nav-club
+          a.dropdown-toggle(href='#', name='fg-dev-topnav-clubsettings', data-toggle='dropdown', data-hover='dropdown', data-close-others='true')
+            span.title Clubs 12345
+            i.fa.fa-angle-down
+          ul.dropdown-menu.hold-on-click
+            li
+              .fbautocomplete-main-div.ui-helper-clearfix
+                i.fa.fa-search.fg-autocomplete-search
+                span.ui-helper-hidden-accessible(role='status', aria-live='polite')
+                input#existingClubs-menu.fg-autocomplete-club.fg-autocomplete-txt.ui-autocomplete-input(type='text', autocomplete='off')
+            li
+              a#fgdev-topnav-club(data-module='club', data-type='active', name='fg-dev-topnav-club', href='/swisstennis/backend/club')
+                span.title Clubs 12345
+                span.badge.badge-round.badge-important  6 
+        // ENDS CLUB MENU
+        // STARTS DOCUMENT MENU
+        li#fg-top-document-menu.fg-header-nav-document
+          a.dropdown-toggle(href='#', name='fg-dev-topnav-documentmenu', data-toggle='dropdown', data-hover='dropdown', data-close-others='true')
+            span.title Documents
+            i.fa.fa-angle-down
+            span.selected  
+          ul.dropdown-menu.hold-on-click
+            li
+              .fbautocomplete-main-div.ui-helper-clearfix
+                i.fa.fa-search.fg-autocomplete-search
+                span.ui-helper-hidden-accessible(role='status', aria-live='polite')
+                input#existingDocuments-menu.fg-autocomplete-document.fg-autocomplete-txt.ui-autocomplete-input(type='text', autocomplete='off')
+            li
+              a#fg-dev-topnav-document-club(data-module='document', data-type='club', name='fg-dev-topnav-document-club', href='/swisstennis/backend/document/club')
+                span.title
+                  | Tttt & Clubs 12345
+                span#fg-dev-activecontact-count.badge.badge-round.badge-important  32 
+            li
+              a#fg-dev-topnav-document-team(data-module='document', data-type='team', name='fg-dev-topnav-document-team', href='/swisstennis/backend/document/team')
+                span.title
+                  | Bbbbb
+                span#fg-dev-archivecontact-count.badge.badge-round.badge-important  277 
+            li
+              a#fg-dev-topnav-document-workgroup(data-module='document', data-type='workgroup', name='fg-dev-topnav-document-workgroup', href='/swisstennis/backend/document/workgroup')
+                span.title
+                  | Workgroups
+                span#fg-dev-activecontact-count.badge.badge-round.badge-important  40 
+            li
+              a#fg-dev-topnav-document-contact(data-module='document', data-type='contact', name='fg-dev-topnav-document-contact', href='/swisstennis/backend/document/contact')
+                span.title
+                  | Contacts
+                span#fg-dev-archivecontact-count.badge.badge-round.badge-important  19 
+        // ENDS DOCUMENT MENU
+        // STARTS COMMUNICATION MENU
+        li.mega-menu-dropdown
+          a.dropdown-toggle(href='#', name='fg-dev-topnav-communication', data-hover='dropdown', data-close-others='true', data-toggle='dropdown')
+            span.title Communication
+            i.fa.fa-angle-down
+          ul.dropdown-menu
+            li
+              .mega-menu-content
+                .row
+                  ul.col-md-4.mega-menu-submenu
+                    li
+                      h3
+                        span.title Newsletter
+                    li
+                      a(href='/swisstennis/backend/communication/newsletter/mailings', name='fg-dev-topnav-mailings')
+                        i.fa.fa-angle-right
+                        span.title Mailings
+                    li
+                      a(href='/swisstennis/backend/communication/recipientslist', name='fg-dev-topnav-recipients')
+                        i.fa.fa-angle-right
+                        span.title Recipients lists
+                    li#fg_dev-header-menu-subscriber
+                      a(href='/swisstennis/backend/communication/subscribers', name='fg-dev-topnav-subscribers')
+                        i.fa.fa-angle-right
+                        span.title Subscribers
+                        span#fg-dev-subscriber-count.badge.badge-round.badge-important  29 
+                    li
+                      a(href='/swisstennis/backend/communication/template/list', name='fg-dev-topnav-design-template')
+                        i.fa.fa-angle-right
+                        span.title Templates
+                    li
+                      a(href='/swisstennis/backend/communication/newsletter/statistics', name='fg-dev-topnav-statistics')
+                        i.fa.fa-angle-right
+                        span.title Statistics
+                  ul.col-md-4.mega-menu-submenu
+                    li
+                      h3
+                        span.title Simple mail
+                    li
+                      a(href='/swisstennis/backend/communication/simplemail/mailings', name='fg-dev-topnav-mailings')
+                        i.fa.fa-angle-right
+                        span.title Mailings
+                    li
+                      a(href='/swisstennis/backend/communication/simplemailrecipientslist', name='fg-dev-topnav-recipients')
+                        i.fa.fa-angle-right
+                        span.title Recipients lists
+                    li
+                      a(href='/swisstennis/backend/communication/simplemail/statistics', name='fg-dev-topnav-statistics')
+                        i.fa.fa-angle-right
+                        span.title Statistics
+        // ENDS COMMUNICATION MENU
+        // STARTS SPONSOR MENU
+        li#fg-top-sponsor-menu.dashboardfg-header-nav-sponsor
+          a.dropdown-toggle(href='#', name='fg-dev-topnav-sponsormenu', data-toggle='dropdown', data-hover='dropdown', data-close-others='true')
+            span.title Sponsors
+            i.fa.fa-angle-down
+            span.selected  
+          ul.dropdown-menu.hold-on-click
+            li
+              .fbautocomplete-main-div.ui-helper-clearfix
+                i.fa.fa-search.fg-autocomplete-search
+                span.ui-helper-hidden-accessible(role='status', aria-live='polite')
+                input#existingSponsors-menu.fg-autocomplete-sponsor.fg-autocomplete-txt.ui-autocomplete-input(type='text', autocomplete='off')
+            li
+              a#fg-dev-topnav-sponsor-active(data-module='sponsor', data-type='active', name='fg-dev-topnav-sponsor', href='/swisstennis/backend/sponsor')
+                span.title Sponsors
+                span.badge.badge-round.badge-important  25 
+            li
+              a#fg-dev-topnav-sponsor-archived(data-module='sponsor', data-type='archived', name='fg-dev-topnav-archived-sponsor', href='/swisstennis/backend/sponsor/archivedsponsor')
+                span.title Archived Sponsors
+                span.badge.badge-round.badge-important  0 
+            li
+              a#fg-dev-topnav-sponsor-analysis(data-module='sponsor', data-type='analysis', name='fg-dev-topnav-sponsor-analysis', href='/swisstennis/backend/sponsor/analysis')
+                span.title Analysis
+            li#fg-dev-top-settings.dropdown-submenu.fg-dev-top-settings-selected.fg-header-settings-sponsor
+              a(href='#', name='fg-dev-topnav-sponsorsettings')
+                span.title Settings 
+              ul#sponsor_settings.dropdown-menu.hold-on-click
+                li
+                  a(name='fg-dev-topnav-sponsoradareas', href='/swisstennis/backend/sponsor/adscategory')
+                    span.title Ad areas
+                li
+                  a(name='fg-dev-topnav-sponsoroverview', href='/swisstennis/backend/sponsor/overview')
+                    span.title Sponsor overview settings
+        // ENDS SPONSOR MENU
+    .hor-menu.hidden-sm.hidden-xs.pull-right
+      ul.nav.navbar-nav
+        // STARTS SETTINGS MENU
+        li.mega-menu-dropdown.fg-help-menu-wrapper
+          a.dropdown-toggle(name='fg-dev-topnav-clubmainmenu', data-toggle='dropdown', data-hover='dropdown', data-close-others='true', href=' http://handbuch.fairgate.ch/', target='_blank')
+            i.fa.fa-question-circle
+          ul.dropdown-menu.fg-help-menu-wrapper-ul.pull-right.hold-on-click
+            li
+              .mega-menu-content
+                .row
+                  ul.col-md-4.mega-menu-submenu
+                    li
+                      h3
+                        span.title Fairgate Help Resources
+                    li
+                      a#fg-dev-help-quickstart(href='javascript:FgHelpQuickStart.showQuickstartWindow()', name='fg-dev-help-quickstart')
+                        i.fa.fa-angle-right
+                        span.title Quickstart Window
+                    li.fg-disabled
+                      a(href='/federation/backend/communication/recipientslist', name='fg-dev-topnav-recipients')
+                        i.fa.fa-angle-right
+                        span.title Sidebar Tutorials
+                    li#fg_dev-header-menu-subscriber
+                      a(href='https://www.youtube.com/playlist?list=PLgZZagYFKiivGxFZJmS6UH0PYNtwFqnTx', name='fg-dev-help-quicktips', target='_blank')
+                        i.fa.fa-angle-right
+                        span.title Quicktip Videos
+                        span#fg-dev-subscriber-count.badge.badge-round.badge-important  new 
+                    li
+                      a(href='https://www.youtube.com/playlist?list=PLgZZagYFKiiueVTBAZdlM_FTacCTHrvTR', name='fg-dev-help-videotutorials', target='_blank')
+                        i.fa.fa-angle-right
+                        span.title Video Tutorials
+                    li.fg-disabled
+                      a(href='/federation/backend/communication/newsletter/statistics', name='fg-dev-topnav-statistics')
+                        i.fa.fa-angle-right
+                        span.title Cheat Sheet
+                    li
+                      a(href='http://handbuch.fairgate.ch/', name='fg-dev-topnav-manual', target='_blank')
+                        i.fa.fa-angle-right
+                        span.title Manual
+                  ul.col-md-4.mega-menu-submenu
+                    li
+                      h3
+                        span.title Fairgate Social Media Sources
+                    li
+                      a(href='https://m.facebook.com/Fairgate-AG-139151186126484/', name='fg-dev-topnav-facebook', target='_blank')
+                        i.fa.fa-angle-right
+                        span.title Facebook Page
+                    li
+                      a(href='https://twitter.com/fairgateag', name='fg-dev-topnav-twitter', target='_blank')
+                        i.fa.fa-angle-right
+                        span.title Twitter Page
+                    li
+                      a(href='https://plus.google.com/u/0/103879614238188552690/posts', name='fg-dev-topnav-google', target='_blank')
+                        i.fa.fa-angle-right
+                        span.title Google+ Page
+                    li
+                      a(href='https://www.youtube.com/channel/UCQghijR5j4tPJl7Os8nvYVA', name='fg-dev-help-youtube-channel', target='_blank')
+                        i.fa.fa-angle-right
+                        span.title Youtube Channel
+                  ul.col-md-4.mega-menu-submenu.fg-helpmenu-lastcol
+                    li
+                      .fg-helpmenu-skype-support-icon
+                        i.fa.fa-skype
+                      .fg-helpmenu-skype-support-text
+                        h3 Skype Support
+                        p Every Monday from 18:00 until 21:00
+                        p.strong.fg-footer Book subscription
+                    li
+                      .fg-helpmenu-webinar-icon
+                        i.fa.fa-desktop
+                      .fg-helpmenu-webinar-text
+                        h3 Webinars
+                        p Book a seat in the first row.
+                        p.strong.fg-footer Next on 22.02.2016
+                .row.fg-helpmenu-footer
+                  p Do more with less  effort. Our additional modules:
+                  .fg-columns
+                    a.youtube.cboxElement(href='https://www.youtube.com/watch?v=YykjpeuMNEk', name='fg-dev-topnav-statistics')
+                      .fg-helpmenu-icon
+                        i.fa.fa-video-camera
+                      .fg-helpmenu-text
+                        | Documents
+                  .fg-columns
+                    a.youtube.cboxElement(href='https://www.youtube.com/watch?v=YykjpeuMNEk', name='fg-dev-topnav-statistics')
+                      .fg-helpmenu-icon
+                        i.fa.fa-video-camera
+                      .fg-helpmenu-text
+                        | Sponsor
+                  .fg-columns
+                    a.youtube.cboxElement(href='https://www.youtube.com/watch?v=YykjpeuMNEk', name='fg-dev-topnav-statistics')
+                      .fg-helpmenu-icon
+                        i.fa.fa-video-camera
+                      .fg-helpmenu-text
+                        | Newsletter
+        li#fg-dev-top-settings
+          a.dropdown-toggle(name='fg-dev-topnav-clubmainmenu', data-toggle='dropdown', data-hover='dropdown', data-close-others='true', href='#')
+            span.title Swiss Tennis
+            i.fa.fa-angle-down
+          ul.dropdown-menu.pull-right.hold-on-click
+            li
+              a(name='fg-dev-topnav-clubsettings', href='/swisstennis/backend/settings/club/0/608')
+                span.title Data
+            li
+              a(name='fg-dev-topnav-files', href='/swisstennis/files/filemanager/listfiles')
+                span.title Files
+            li
+              a(name='fg-dev-topnav-executiveboard', href='/swisstennis/backend/settings/editexecutiveboardmembers')
+                span.title Executive Board
+            li
+              a(name='fg-dev-topnav-userrights', href='/swisstennis/backend/settings/userrights')
+                span.title User rights
+            li
+              a(name='fg-dev-topnav-settingstabs', data-disabled-breadcrumb='true', href='/swisstennis/backend/settings/language')
+                span.title Settings
+        // ENDS SETTINGS MENU
+        // STARTS LOGOUT MENU
+        li
+          a.fg-logout-icon.fg-topav-right-logout(name='fg-dev-topnav-logout', href='/swisstennis/backend/signout')
+            i.fa.fg-fa-sign-in(data-placement='bottom', data-toggle='tooltip', data-original-title='', title='')
+        // STARTS SETTINGS MENU
+    // END HORIZANTAL MENU
+  // END TOP NAVIGATION BAR

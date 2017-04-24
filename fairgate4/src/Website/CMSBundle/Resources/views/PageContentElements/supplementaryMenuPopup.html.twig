@@ -1,0 +1,43 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close fg-save-supplymentary" aria-hidden="true"></button>
+        <h4 class="modal-title">{{ title|raw }}</h4>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">                    
+                    <div class="form-group">
+                        <label class="col-lg-12 col-md-12 col-xs-12">
+                            {{ text|raw }}
+                        </label>                                
+                    </div>                                             
+                </div>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn green" id="supplementaryMenuSave">{{ 'Ok' }}</button>
+    </div>
+    {#    {% include 'internal/savebuttonPopup.html.twig' %}#}
+</div>
+<script type="text/javascript">
+    var pageId = '{{ pageId|raw }}';
+    var boxId = '{{ boxId|raw }}';
+    var sortOrder = '{{ sortOrder|raw }}';
+    var elementId = '{{ elementId|raw }}';
+    $(document).off('click', '#supplementaryMenuSave,.fg-save-supplymentary');
+    $(document).on('click', '#supplementaryMenuSave,.fg-save-supplymentary', function () {
+        $('#supplementaryMenuSave').attr('disabled','disabled');
+        FgModelbox.hidePopup();
+        FgXmlHttp.post(supplementaryMenuSavePath, {
+            'pageId': pageId, 'boxId': boxId, 'sortOrder': sortOrder, 'elementId': elementId
+        }, '', function (response) {
+            var pageObjct = new Fgcmspage();
+            pageObjct.supplementaryMenuCallback(response);
+        }, false, false);
+    });
+</script>    
+

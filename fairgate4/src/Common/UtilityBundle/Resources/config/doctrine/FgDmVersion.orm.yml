@@ -1,0 +1,64 @@
+Common\UtilityBundle\Entity\FgDmVersion:
+    repositoryClass: Common\UtilityBundle\Repository\FgDmVersionRepository
+    type: entity
+    table: fg_dm_version
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        file:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        createdAt:
+            type: datetime
+            nullable: true
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: true
+            column: updated_at
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: sort_order
+        size:
+            type: string
+            length: 45
+            fixed: false
+            nullable: true
+    manyToOne:
+        updatedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                updated_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        document:
+            targetEntity: FgDmDocuments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                document_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

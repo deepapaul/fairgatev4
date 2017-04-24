@@ -1,0 +1,450 @@
+<script type="text/template" id="templateFullscreen">
+                                      <div class="form-group">
+                                        <label class="col-sm-3 control-label fg-pad-top-0" for="radios">{{'THEME_BACKGROUND_FULLSIZE_MULTIPLE_IMAGE'|trans}}</label>
+                                        <div class="col-sm-8">
+                                            <div class="radio-block">
+                                                <label for="radios-0">
+                                                
+                                                 <% checkType ='';
+                                                    defaultSliderTime='';
+                                                     if(  backgroundDetails.bgImageSelection == '' || backgroundDetails.bgImageSelection == null || backgroundDetails.bgImageSelection == 'random'  ) { 
+                                                         checkType = 'checked' ;
+                                                         defaultSliderTime =  backgroundDetails.bgSliderTime;
+                                                     
+    
+                                                  } %>
+                                                    <input type="radio" name="bgImageSelection" class="fg-uniform-unwrap" id="radios-0" value="random" <%-checkType%> data-key="backgroundimage.fullscreen.config.<%- backgroundDetails.id %>.type"  >
+                                                    {{'THEME_BACKGROUND_RANDOM_IMAGE'|trans}}
+                                                </label>
+                                            </div>
+                                            <div class="radio-block">
+                                                <label for="radios-1">
+                                                 <% checkType ='';
+                                                    defaultSliderTime='';
+                                                     if( (typeof backgroundDetails.bgImageSelection != 'undefined') && backgroundDetails.bgImageSelection == 'default_start_image'  ) { 
+                                                         checkType = 'checked' ;
+                                                         defaultSliderTime =  backgroundDetails.bgSliderTime;
+                                                     } %>
+                                                    <input type="radio" name="bgImageSelection" class="fg-radio-select fg-uniform-unwrap" id="radios-1" <%-checkType%> value="default_start_image" data-key="backgroundimage.fullscreen.config.<%- backgroundDetails.id %>.type" >
+                                                   {{'THEME_BACKGROUND_SLIDER_OPTION_DEFAULT'|trans}}
+                                                </label>
+                                                <div class="fg-active-IB fg-duration">
+                                                    <input type="text" class="form-control fg-bg-radio" id="default_bg_slider_time" name="default_bg_slider_time" value="<%- defaultSliderTime%>" data-key="backgroundimage.fullscreen.config.<%- backgroundDetails.id %>.value" >
+                                                </div>
+                                            </div>
+                                            <div class="radio-block">
+                                                <label for="sliderwithRandom" class="fg-active-IB ">
+                                                 <% checkType ='';
+                                                    defaultSliderTime='';
+                                                     if( (typeof backgroundDetails.bgImageSelection != 'undefined') && backgroundDetails.bgImageSelection == 'random_start_image'  ) {
+                                                         checkType = 'checked' ;
+                                                         defaultSliderTime =  backgroundDetails.bgSliderTime;
+                                                     
+                                                     } %>
+                                                    <input type="radio" name="bgImageSelection" class="fg-radio-select fg-uniform-unwrap" id="sliderwithRandom" <%-checkType%> value="random_start_image" data-key="backgroundimage.fullscreen.config.<%- backgroundDetails.id %>.type">
+                                                    {{'THEME_BACKGROUND_SLIDER_OPTION_RANDOM'|trans}}
+                                                </label>
+                                                <div class="fg-active-IB fg-duration">
+                                                    <input type="text" class="form-control fg-bg-radio" id="random_bg_slider_time" name="random_bg_slider_time" value="<%- defaultSliderTime%>" data-key="backgroundimage.fullscreen.config.<%- backgroundDetails.id %>.value" >
+                                                </div>
+                                            </div>
+                                         <div class="fg-pad-left-15 fg-pad-right-15 text-red" id="articleimg-upload-error-container"></div> 
+                                        </div>
+                                    </div>
+                    
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" for="radios">{{'THEME_BACKGROUND_BACKGROUND_IMAGES'|trans}}</label>
+                                        <div class="col-sm-8">
+
+                                            <div  class="fg-brdr-dash fg-marg-btm-10">
+                                                <div class="fg-files-upload-wrapper">
+                                                    <div class="fg-files-upload-button-wrapper">
+                                                    <input type="file" id="image-uploader" name="image-uploader" style="height:0px;width:0px;visibility: hidden" multiple="multiple" upload-attr="true" class='image-uploader'>
+                                                        <button type="button" class="btn default fg-media-img-uploader">{{"CREATE_EVENT_FILEUPLOAD"|trans}}</button>
+                                                          <div class="btn default fg-add-existing-image" data-toggle="modal" data-target="#myModal-bgimages "> {% trans %}NL_IMAGE_ADD_EXISITNG{% endtrans %} </div>
+                                                        <p class="fg-marg-top-5 fg-marg-btm-0">{{ 'ARTICLE_ALLOWED_FILES'|trans}} </p>
+                                                    </div>
+                                                                                               
+                                                  {% include 'WebsiteCMSBundle:UpdateConfiguration:templateBackgroundCreateImages.html.twig' %}                         
+                                            
+                                            
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div id="myModal-bgimages" class="fg-gallery-browser modal fade fg-gal-browse-model" role="dialog"></div>
+                                            <div class="clearfix"></div>
+                                    
+                                    
+                                            <div class="fg-file-upload-footer fg-v-middle">
+                                           
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                                             
+</script>
+<script type="text/template" id="templateOriginalSize">
+         
+     <div class="form-group">
+        <label class="col-sm-3 control-label" for="radios">{{'THEME_BACKGROUND_BACKGROUND_IMAGES'|trans}}</label>
+        <div class="col-sm-8">
+
+            <div  class="fg-brdr-dash fg-marg-btm-10">
+                <div class="fg-files-upload-wrapper">
+
+             <div class="fg-files-upload-button-wrapper">
+                    <input type="file" id="image-original-uploader" name="image-uploader" style="height:0px;width:0px;visibility: hidden" multiple="multiple" upload-attr="true" class='image-uploader'>
+                        <button type="button" class="btn default fg-media-img-uploader" id="fg-media-img-uploader">{{"CREATE_EVENT_FILEUPLOAD"|trans}}</button>
+                        <div class="btn default fg-add-existing-image" data-toggle="modal" data-target="#myModal-oz-image"> {% trans %}NL_IMAGE_ADD_EXISITNG{% endtrans %} </div>
+                      <p class="fg-marg-top-5 fg-marg-btm-0">{{ 'ARTICLE_ALLOWED_FILES'|trans}} </p>
+                  
+            </div>
+
+            <div class="fg-pad-left-15 fg-pad-right-15" id="articleimg-upload-error-container-original"></div> 
+
+
+                    <ul class="fg-files-uploaded-lists-wrapper">
+                        <%
+_.each(backgroundDetails.original_size,function(media,key){ %> 
+
+  <li class="fg-files-uploaded-list" id="<%- media.itemId %>" >
+
+         <i class="fa fa-ellipsis-v fg-drag fg-media-sort"></i>
+                            <div class="col-sm-2 fg-thumb-wrapper">
+                                 <img src="<%- media.imgSrc %>" class="fg-thumb" id="cms-bgimg-preview-<%- media.itemId %>" >
+                                 <input type="text" name="imageSort-<%- media.itemId %>" id='original-<%- media.itemId %>' data-key="backgroundimage.original.media.images.update.<%- media.itemId %>.sort_order" class="hide fg-dev-sortable" value="<%- media.sortOrder %>">
+                                  <input class="hide" name="imageItemId<%- media.itemId %>"  id='original_item_<%- media.itemId %>' type="text" value="<%- media.itemId %>" data-key="backgroundimage.original.media.images.update.<%- media.itemId %>.itemid">
+                            </div>
+
+                                                            <div class="col-sm-10">
+                                <div class="row">
+                                    <div class="col-sm-6 fg-positioning fg-marg-btm-10">
+                                        <div class="row">
+                                             <label class="col-xs-12" for="radios">{{'THEME_BACKGROUND_POSITIONING'|trans}}</label>
+                                            <div class="col-xs-6">
+                                                <select name="positioning-horizontal-<%- media.itemId %>"  class="form-control select2" data-key="backgroundimage.original.media.images.update.<%- media.itemId %>.positionHorizontal">
+                                                    <option value="center">{{'THEME_BACKGROUND_CENTER'|trans}}</option>
+                                                    <option value="left" <% if(media.positionHorizontal=='left'){ %> selected='selected'   <%} %> >{{'THEME_BACKGROUND_LEFT'|trans}}</option>
+                                                    <option value="right" <% if(media.positionHorizontal=='right'){ %> selected='selected'   <%} %> >{{'THEME_BACKGROUND_RIGHT'|trans}}</option>
+                                                </select>                                                                             
+                                            </div> 
+                                            <div class="col-xs-6">
+                                                <select name="positioning-vertical-<%- media.itemId %>"  class="form-control select2" data-key="backgroundimage.original.media.images.update.<%- media.itemId %>.positionVertical">
+                                                    <option value="top" >{{'THEME_BACKGROUND_TOP'|trans}}</option>
+                                                    <option value="bottom" <% if(media.positionVertical=='bottom'){ %> selected='selected'   <%} %>>{{'THEME_BACKGROUND_BOTTOM'|trans}}</option>
+                                                    <option value="center" <% if(media.positionVertical=='center'){ %> selected='selected'   <%} %>>{{'THEME_BACKGROUND_MIDDLE'|trans}}</option>
+                                                </select>                                                                             
+                                            </div> 
+                                        </div>
+
+                                    </div>
+                                    <div class="col-sm-6 fg-scrolling fg-marg-btm-10">
+                                        <div class="row">
+                                             <label class="col-sm-12" for="radios">{{'THEME_BACKGROUND_SCROLLING_BEHAVIOUR'|trans}}</label>
+                                            <div class="col-sm-12">
+                                                <select name="scrolling-<%- media.itemId %>"  class="form-control select2" data-key="backgroundimage.original.media.images.update.<%- media.itemId %>.scrolling" >
+                                                    <option value="1">{{'THEME_BACKGROUND_SCROLLING'|trans}}</option>
+                                                    <option value="0" <% if(media.isScrollable=='0' || media.isScrollable==false){ %> selected='selected'   <%} %> >{{'THEME_BACKGROUND_FIXED'|trans}}</option>
+
+                                                </select>                                                                             
+                                            </div> 
+                                        </div>
+
+                                    </div>
+                                    <div class="col-sm-6 fg-repeat fg-marg-btm-10">
+                                        <div class="row">
+                                             <label class="col-sm-12" for="radios">{{'THEME_BACKGROUND_SLIDER_REPEAT'|trans}}</label>
+                                            <div class="col-sm-12">
+                                                <select name="repeat-<%- media.itemId %>"  class="form-control select2" data-key="backgroundimage.original.media.images.update.<%- media.itemId %>.repeat" >
+                                                    <option value="none">{{'THEME_BACKGROUND_NONE'|trans}}</option>
+                                                    <option value="horizontal" <% if(media.bgRepeat=='horizontal'){ %> selected='selected'   <%} %>>{{'THEME_BACKGROUND_HORIZONTAL'|trans}}</option>
+                                                    <option value="vertical" <% if(media.bgRepeat=='vertical'){ %> selected='selected'   <%} %> >{{'THEME_BACKGROUND_VERTICAL'|trans}}</option>
+                                                    <option value="both" <% if(media.bgRepeat=='both'){ %> selected='selected'   <%} %> >{{'THEME_BACKGROUND_BOTH'|trans}}</option>
+                                                </select>                                                                             
+                                            </div> 
+                                        </div>
+
+                                    </div>
+                                    <div class="col-sm-6 fg-status fg-marg-btm-10" >
+                                        <div class="row">
+                                            <label class="col-sm-12 hidden-xs" >&nbsp;</label>
+                                            <div class="col-sm-4"><%- FgFileUpload.formatFileSize(parseInt(media.fileSize)) %></div>
+                                            <div class="col-sm-8">
+                                              </div>
+                                            </div>
+                                        </div>                                                                       
+                                    </div>
+                                </div>
+
+
+                             <div class="closeico">
+                            <input type="checkbox" class="make-switch fg-delicon delete-article-attachment" value="1" id="<%-media.itemId %>_is_deleted" data-key="backgroundimage.original.media.images.update.<%- media.itemId %>.is_deleted" name="is_deleted" data-inactiveblock="changecolor" data-parentid="<%-media.itemId %>">
+        <label for="<%-media.itemId %>_is_deleted"></label>
+
+                            </div>
+                            <div class="clearfix"></div>
+                        </li>            
+
+<% }) %>                                                                  
+
+
+
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+             <div id="myModal-oz-image" class="fg-gallery-browser modal fade fg-gal-browse-model" role="dialog"></div>
+            <div class="clearfix"></div>
+            <div class="fg-file-upload-footer fg-v-middle"> 
+                       
+            </div>
+        </div>
+    </div>
+
+            
+</script>
+<script type='template' id='theme-backgroundimages-upload'>
+                                                     
+    <li class="fg-files-uploaded-list" id="<%- id %>">
+        <i class="fa fa-ellipsis-v fg-drag fg-media-sort"></i>
+        <div class="fg-replacewith-errormsg">
+            <div class="col-sm-2 fg-thumb-wrapper">
+            <% fgthemeBackground.createImagePreview(filedetails, 'article-img-preview-'+id)   %>
+                {#<img src="/uploads/temp/<%- value%>" class="fg-thumb" id="background-img-preview-<%- id %>" >#}
+                 <img src="" class="fg-thumb" id="article-img-preview-<%- id %>" >
+                  <input type="text" name="imageSort" data-key="backgroundimage.fullscreen.media.images.new.<%- id %>.sort_order" class="hide fg-dev-sortable" value="">
+                  <input class="hide fg-dev-newfield" name="imageFileName" type="text" value="<%- name %>" data-key="backgroundimage.fullscreen.media.images.new.<%- id %>.fileName">
+                  <input class="hide fg-dev-newfield" name="imageRandFileName" type="text" value="<%- value %>" data-key="backgroundimage.fullscreen.media.images.new.<%- id %>.filepath">
+            </div>
+            <div class="col-sm-5">
+                <div class="progress fg-upload-progress">
+                    <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                    </div>
+                </div>
+            </div>
+           <div class="col-sm-5 col-sm-offset-0 "> <span class="fg-file-size"> <%- size %></span></div>
+        </div>
+        <div class="closeico">
+        <a href="javascript:void(0)" class="fg-delete-img"><i class="fa fa-times-circle fa-2x"></i></a>
+               <label for="group_2_3684_is_deleted"></label>
+
+        </div>
+        <div class="clearfix"></div>
+    </li>
+
+</script>
+
+<script type="text/template" id="templateBackgroundImagesFromGallery">
+    <% _.each(data, function(d, i) { %>
+    <% var order = imageCount+i+1;  %> 
+    
+    <li class="fg-files-uploaded-list sortables fileimgcontent" id="<%- d.itemId %>">
+        <i class="fa fa-ellipsis-v fg-drag fg-media-sort"></i>
+        <div class="col-sm-2 fg-thumb-wrapper">
+              <img src="<%- d.imgPath %>" class="fg-thumb" id="article-img-preview-<%- d.itemId %>" >
+              <input type="text" name="imageSort" data-key="backgroundimage.fullscreen.media.images.media.<%- d.itemId %>.sort_order" class="hide fg-dev-sortable" value="">
+               <input class="hide" name="imageItemId" type="text" value="<%- d.itemId %>" data-key="backgroundimage.fullscreen.media.images.media.<%- d.itemId %>.itemid">
+
+        </div>
+        <div class="col-sm-5 col-sm-offset-5"> <span class="fg-file-size"> <%- FgFileUpload.formatFileSize(parseInt(d.fileSize)) %> </span></div>
+        <div class="col-sm-3">
+
+        </div>
+
+        <div class="closeico">
+        <a href="javascript:void(0)" class="fg-delete-img"><i class="fa fa-times-circle fa-2x"></i></a>
+               <label for="group_2_3684_is_deleted"></label>
+
+        </div>
+        <div class="clearfix"></div>
+    </li>
+    
+    <% }); %>    
+</script>
+
+
+<script type='template' id='theme-backgroundimages-originalsize-upload'>       
+{# ORIGINAl#}
+    <li class="fg-files-uploaded-list" id="<%-id%>" >
+        <i class="fa fa-ellipsis-v fg-drag fg-media-sort"></i>
+        <div class="fg-replacewith-errormsg">
+            <div class="col-sm-2 fg-thumb-wrapper">
+            <% fgthemeBackground.createImagePreview(filedetails, 'cms-bgimg-preview-'+id)   %>
+                 <img src="" class="fg-thumb" id="cms-bgimg-preview-<%- id %>" >
+                 <input type="text" name="imageSort" data-key="backgroundimage.original.media.images.new.<%- id %>.sort_order" class="hide sort-val fg-dev-sortable fg-dev-newfield" value="">
+                  <input class="hide fg-dev-newfield" name="imageFileName" type="text" value="<%- name %>" data-key="backgroundimage.original.media.images.new.<%- id %>.fileName">
+                  <input class="hide fg-dev-newfield" name="imageRandFileName" type="text" value="<%- value %>" data-key="backgroundimage.original.media.images.new.<%- id %>.filepath">
+            </div>
+            <div class="col-sm-10">
+                <div class="row ">
+                    <div class="col-sm-6 fg-positioning fg-marg-btm-10">
+                        <div class="row">
+                             <label class="col-xs-12" for="radios">{{'THEME_BACKGROUND_POSITIONING'|trans}}</label>
+                            <div class="col-xs-6">
+                                <select name="positioning-horizontal-<%- id %>"  class="form-control select2" data-key="backgroundimage.original.media.images.new.<%- id %>.positionHorizontal">
+                                    <option value="center">{{'THEME_BACKGROUND_CENTER'|trans}} </option>
+                                    <option value="left">{{'THEME_BACKGROUND_LEFT'|trans}} </option>
+                                    <option value="right">{{'THEME_BACKGROUND_RIGHT'|trans}} </option>
+                                </select>                                                                             
+                            </div> 
+                            <div class="col-xs-6">
+                                <select name="positioning-vertical-<%- id %>"  class="form-control select2" data-key="backgroundimage.original.media.images.new.<%- id %>.positionVertical">
+                                    <option value="top">{{'THEME_BACKGROUND_TOP'|trans}} </option>
+                                    <option value="bottom">{{'THEME_BACKGROUND_BOTTOM'|trans}} </option>
+                                    <option value="center">{{'THEME_BACKGROUND_MIDDLE'|trans}} </option>
+                                </select>                                                                             
+                            </div> 
+                        </div>
+
+                    </div>
+                    <div class="col-sm-6 fg-scrolling fg-marg-btm-10">
+                        <div class="row">
+                             <label class="col-sm-12" for="radios">{{'THEME_BACKGROUND_SCROLLING_BEHAVIOUR'|trans}}</label>
+                            <div class="col-sm-12">
+                                <select name="scrolling-<%- id %>"  class="form-control select2" data-key="backgroundimage.original.media.images.new.<%- id %>.scrolling">
+                                    <option value="1">{{'THEME_BACKGROUND_SCROLLING'|trans}} </option>
+                                    <option value="0">{{'THEME_BACKGROUND_FIXED'|trans}} </option>
+
+                                </select>                                                                             
+                            </div> 
+                        </div>
+
+                    </div>
+                    <div class="col-sm-6 fg-repeat fg-marg-btm-10">
+                        <div class="row">
+                             <label class="col-sm-12" for="radios">{{'THEME_BACKGROUND_SLIDER_REPEAT'|trans}}</label>
+                            <div class="col-sm-12">
+                                <select name="repeat-<%- id %>"  class="form-control select2" data-key="backgroundimage.original.media.images.new.<%- id %>.repeat">
+                                    <option value="none">{{'THEME_BACKGROUND_NONE'|trans}} </option>
+                                    <option value="horizontal">{{'THEME_BACKGROUND_HORIZONTAL'|trans}}</option>
+                                    <option value="vertical">{{'THEME_BACKGROUND_VERTICAL'|trans}} </option>
+                                    <option value="both">{{'THEME_BACKGROUND_BOTH'|trans}}</option>
+                                </select>                                                                             
+                            </div> 
+                        </div>
+
+                    </div>
+                    <div class="col-sm-6 fg-status fg-marg-btm-10" >
+                        <div class="row">
+                            <label class="col-sm-12 hidden-xs" >&nbsp;</label>
+                            <div class="col-sm-4"><%- size %></div>
+                            <div class="col-sm-8">
+                                  <div class="progress fg-upload-progress">
+                    <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                    </div>
+                </div>
+                              </div>
+                            </div>
+                        </div>                                                                       
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="closeico">
+        <a href="javascript:void(0)" class="fg-delete-img"><i class="fa fa-times-circle fa-2x"></i></a>
+               <label for="group_2_3684_is_deleted"></label>
+
+        </div>
+        <div class="clearfix"></div>
+    </li>
+        
+</script>
+
+<script type="text/template" id="templateBackgroundOriginalImagesFromGallery">
+    <% _.each(data, function(d, i) { %>
+    <% var order = imageCount+i+1;  %> 
+    {# ORIGINAl#}
+    <li class="fg-files-uploaded-list sortables fileimgcontent" id="<%- d.itemId %>">
+        <i class="fa fa-ellipsis-v fg-drag fg-media-sort"></i>
+        <div class="col-sm-2 fg-thumb-wrapper">
+             <img src="<%- d.imgPath %>" class="fg-thumb" id="cms-bgimg-preview-<%- d.itemId %>" >
+             <input type="text" name="imageSort" data-key="backgroundimage.original.media.images.media.<%- d.itemId %>.sort_order" class="hide sort-val fg-dev-sortable fg-dev-newfield" value="">
+              <input class="hide" name="imageItemId" type="text" value="<%- d.itemId %>" data-key="backgroundimage.original.media.images.media.<%- d.itemId %>.itemid">
+        </div>
+        <div class="col-sm-10">
+            <div class="row">
+                <div class="col-sm-6 fg-positioning fg-marg-btm-10">
+                    <div class="row">
+                         <label class="col-xs-12" for="radios">{{'THEME_BACKGROUND_POSITIONING'|trans}}</label>
+                        <div class="col-xs-6">
+                            <select name="positioning-horizontal-<%- d.itemId %>"  class="form-control select2" data-key="backgroundimage.original.media.images.media.<%- d.itemId %>.positionHorizontal">
+                                 <option value="center">{{'THEME_BACKGROUND_CENTER'|trans}} </option>
+                                <option value="left">{{'THEME_BACKGROUND_LEFT'|trans}} </option>
+                                <option value="right">{{'THEME_BACKGROUND_RIGHT'|trans}} </option>
+                            </select>                                                                             
+                        </div> 
+                        <div class="col-xs-6">
+                            <select name="positioning-vertical-<%- d.itemId %>"  class="form-control select2" data-key="backgroundimage.original.media.images.media.<%- d.itemId %>.positionVertical">
+                                 <option value="top">{{'THEME_BACKGROUND_TOP'|trans}} </option>
+                                <option value="bottom">{{'THEME_BACKGROUND_BOTTOM'|trans}} </option>
+                                <option value="middle">{{'THEME_BACKGROUND_MIDDLE'|trans}} </option>
+                            </select>                                                                             
+                        </div> 
+                    </div>
+
+                </div>
+                <div class="col-sm-6 fg-scrolling fg-marg-btm-10">
+                    <div class="row">
+                         <label class="col-sm-12" for="radios">{{'THEME_BACKGROUND_SCROLLING_BEHAVIOUR'|trans}}</label>
+                        <div class="col-sm-12">
+                            <select name="scrolling-<%- d.itemId %>"  class="form-control select2" data-key="backgroundimage.original.media.images.media.<%- d.itemId %>.scrolling">
+                                <option value="1">{{'THEME_BACKGROUND_SCROLLING'|trans}} </option>
+                                <option value="0">{{'THEME_BACKGROUND_FIXED'|trans}} </option>
+
+                            </select>                                                                             
+                        </div> 
+                    </div>
+
+                </div>
+                <div class="col-sm-6 fg-repeat fg-marg-btm-10">
+                    <div class="row">
+                         <label class="col-sm-12" for="radios">{{'THEME_BACKGROUND_SLIDER_REPEAT'|trans}}</label>
+                        <div class="col-sm-12">
+                            <select name="repeat-<%- d.itemId %>"  class="form-control select2" data-key="backgroundimage.original.media.images.media.<%- d.itemId %>.repeat">
+                                <option value="none">{{'THEME_BACKGROUND_NONE'|trans}}</option>
+                                <option value="horizontal">{{'THEME_BACKGROUND_HORIZONTAL'|trans}}</option>
+                                <option value="vertical">{{'THEME_BACKGROUND_VERTICAL'|trans}} </option>
+                                <option value="both">{{'THEME_BACKGROUND_BOTH'|trans}}</option>
+                            </select>                                                                             
+                        </div> 
+                    </div>
+
+                </div>
+                <div class="col-sm-6 fg-status fg-marg-btm-10" >
+                    <div class="row">
+                        <label class="col-sm-12 hidden-xs" >&nbsp;</label>
+                        <div class="col-sm-4"><%- FgFileUpload.formatFileSize(parseInt(d.fileSize)) %></div>
+                        <div class="col-sm-8">
+
+                          </div>
+                        </div>
+                    </div>                                                                       
+                </div>
+            </div>
+        </div>
+
+         <div class="closeico">
+        <a href="javascript:void(0)" class="fg-delete-img"><i class="fa fa-times-circle fa-2x"></i></a>
+               <label for="group_2_3684_is_deleted"></label>
+
+        </div>
+        <div class="clearfix"></div>
+    </li>
+    <% }); %>    
+</script>
+
+ <script type="text/template" id="fileUploadError">
+    <div class="fg-clear">
+   <div class="col-sm-7">
+  <%- name %></div>
+   <div class="col-sm-5">
+         <p><span class="help-block">
+       <% if (error == 0) { %> {{'FILEMANAGER_UPLOAD_FILETYPE_ERROR'|trans}}
+       <% } else if (error == 1) { %> {{'FILEMANAGER_UPLOAD_VIRUS_ERROR'|trans}}
+       <% } else if (error == 2) { %> {{'VIRUS_FILE_CONTACT'|trans}}
+       <% } else { %> <%- error %> <% } %></span></p>
+    </div></div>
+   
+</script>

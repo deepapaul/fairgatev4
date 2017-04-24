@@ -1,0 +1,54 @@
+<script type="text/template" id="addNewConnection">
+<% addClass = ''; %>
+<% if ((data.type == 'company') || (data.type == 'ocy') || (data.type == 'ocp')) { %>
+    <% addClass = 'newCompanyConn'; %>
+<% } %>
+<div class="col-md-3 col-sm-6 <%- addClass %>" data-isNew='1'>
+    <div class="portlet box fg-red-border">
+        <div class="portlet-title fg-title-area fg-theme-head" dataerror-group=''>
+        <% {% if(relation.household|default(0)) %} if(data.type=='household') { %>
+            <div class="fg-select-box-area">
+            <select required class="form-control input-sm fg-select-box" data-key="<%= data.id %>.relation" id="<%= data.id %>_relation" name="<%= data.id %>_relation">
+            <option value="">{{'SELECT_DEFAULT'|trans}}</option>
+            {% for household in relation.household %}
+                <option value="{{household.id}}">{{household.name}}</option>
+            {% endfor %}
+            </select> 
+            </div>
+        <%  } else {% endif %}if(data.type=='osp') { %>
+            <div class="fg-select-box-area">
+            <select required class="form-control input-sm fg-select-box"  name="<%= data.id %>_relation" id="<%= data.id %>_relation">
+            <option value="">{{'SELECT_DEFAULT'|trans}}</option>
+            {% for other in relation.other %}
+                <option value="{{other.id}}">{% if ((other.isHousehold == 1) or (other.isHousehold == '1')) %} {{other.name}} {% else %} {{other.name}} {% endif %}</option>
+            {% endfor %}
+            </select> 
+            </div>
+        <% } else { %>
+                <input type="text"  required class="form-control input-sm fg-select-box" data-key="<%= data.id %>.relation" id="<%= data.id %>_relation" placeholder="{{'FUNCTION'|trans}}" name="<%= data.id %>_relation" data-type="relation_name">
+        <% } %>
+            <div class="fg-close-ico"><div class="closeico">
+                    <input type="checkbox" class="make-switch" data-key="<%= data.id %>.is_deleted" name="<%= data.id %>.is_deleted" id="<%= data.id %>.is_deleted"  />
+                    <label for="<%= data.id %>.is_deleted" class="fa fa-times-circle fa-2x fg-close-btn" ></label>
+               </div></div>
+        </div>
+        <div class="portlet-body fg-content-minarea input-icon" dataerror-group="">
+            <div class="has-error"><span class="help-block" for="<%= data.id %>_relation"></span></div>
+            <i class="fa fa-search"></i>
+            <input type="text" required placeholder="{{'SEARCH_CONTACT'|trans}}" data-contact="" name="contact<%= data.id %>"  id="contact<%= data.id %>" class="form-control input-sm ">
+            <span class="implications"></span>
+       </div>
+       <input type="hidden" id="contact<%= data.id %>Hidden" data-area="<%= data.type %>" value="" >
+    </div>
+</div>
+</script>
+<script type="text/template" id="showImplications">
+    <span class="fg-connection-txt"><%- content[0] %></span>
+    <span class="fg-connection-txt"><%- content[1] %></span>
+    <% if(_.size(content) >2) { %>
+    <% abc=_.last(content, _.size(content)-2); %>
+        <span data-content="<div class='fg-connection-popover-content'><% _.each(abc, function(values) { %><%- _.escape(values) %><br/><% }); %></div>" data-container="body" data-placement="auto" data-html="true" data-original-title="" class="popovers">
+            <a>{{'AND'|trans}} <%- _.size(content)-2 %>{{'MORE_CONNECTION'|trans}}</a>
+        </span>
+    <% } %>
+</script>

@@ -1,0 +1,435 @@
+<script type="text/template" id="calendarAppoinment">
+    <div id="failcallbackClientSide" class="alert alert-danger" style="display:none;">
+        <button class="close" data-close="alert"></button>
+        <span>{% trans %}FORM_ERROR_DISPLAY{% endtrans %}</span>
+    </div>
+    <div class="row  fg-common-top">
+        <div class="form-body fg-create-calendar-appointment">
+        <% if(_.size(clubLanguages) > 0) { %>
+            <% _.each(clubLanguages,function(val,key){ %>
+                <div data-lang="<%- val %>" class="form-group col-md-12 <% if(defLang!=val){ %> hide <% } %> required  %> fg-clear" >
+                    <label class="col-md-2 control-label text-right" for="category">{% trans %}CREATE_EVENT_NAME{% endtrans %}</label>  
+                    <div class="col-md-8 col-lg-6 ">
+                        <input id="event_name_<%- val %>" <%- val==defLang ? 'required':'data-notrequired=true'  %> name="category" type="text" placeholder="{{editArr.titleMain|default('')}}" class="form-control <%- val==defLang ? 'fg-event-name':''  %> " data-key="title_lang.<%- val %>" data-lang="<%- val %>" 
+                        {% if (editArr.titleLang is defined) %}
+                        {% set titleLangs=editArr.titleLang|split('|&&&|') %}
+                        {% for titleLang in titleLangs %}
+                            {% set titleLan=titleLang|split('|@@@|') %}
+                            <% if(val=='{{titleLan[0]|default('')}}'){ %>value="{{titleLan[1]|default('')}}"<% } %>
+                        {% endfor %}
+                        {% endif %}>
+                    </div>
+                </div>
+            <% }); %>
+        <% } %>
+            <div class="form-group col-md-12 required fg-clear" >
+                <label class="col-md-2 control-label text-right" for="from-date">{% trans %}CREATE_EVENT_DATE_TIME{% endtrans %}</label>  
+                <div class="col-md-8  col-sm-10  col-lg-6 fg-datetime-wrapper">
+                    <div class="row">
+                        <div class="col-sm-5 fg-datetime-left">
+                            <div class="input-group date fg-date">
+                                 <input type="text" id="from-date" name="from-date" class="form-control datetimepicker eventStartDate" required data-key="start_date.date" {%if(startDate is defined)%}value="{{startDate}}{% if(startTime is defined )%} {{startTime}}{% endif %}" {% endif %} data-date="">
+                                 <div class="input-group-addon fg-datetimepicker-icon" id="from-date-icon" >
+                                     <i class="fa fa-calendar"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 text-center fg-datetime-center">
+                            <div class="fg-active-IB fg-text-to ">
+                                {% trans %}CREATE_EVENT_TO{% endtrans %}
+                            </div>
+                        </div>
+                        <div class="col-sm-5 pull-right text-right  fg-datetime-right">
+                            <div class="input-group date fg-date FR">
+                                <input type="text" id="to-date" name="to-date"  class="form-control datetimepicker eventEndDate" data-key="end_date.date" {% if(endDate is defined)%}value="{{endDate}}{% if(endTime is defined )%} {{endTime}}{% endif %}"{% endif %} data-date="">
+                                <div class="input-group-addon fg-datetimepicker-icon" id="to-date-icon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fg-active-IB fg-extra-col">
+                    <label class="fg-cursr-pointer"><input type="checkbox" class="is_allday" name="all-day"  data-key="is_allday">   {% trans %}CREATE_EVENT_ALL_DAY{% endtrans %}</label>
+                </div>
+            </div>
+            <div class="form-group col-md-12 fg-clear fg-repeat-type-wrapper" >
+                <label class="col-md-2 control-label text-right" for="repeat-type">{% trans %}CREATE_EVENT_REPEAT{% endtrans %}</label>  
+                <div class="col-md-8 col-lg-6 ">
+                    <div class="row">
+                        <div class="col-sm-7 col-xs-6">
+                            <div class="fg-repeat-type">
+                               <select name="repeat-type"  class="form-control selectpicker fg-repeat-types" data-key="repeat.frequency">
+                                    <option value="NEVER">{% trans %}NEVER_RULE{% endtrans %}</option>
+                                    <option value="DAILY">{% trans %}DAILY_RULE{% endtrans %}</option>
+                                    <option value="WEEKLY">{% trans %}WEEKLY_RULE{% endtrans %}</option>
+                                    <option value="MONTHLY">{% trans %}MONTHLY_RULE{% endtrans %}</option>
+                                    <option value="YEARLY">{% trans %}ANNUALLY_RULE{% endtrans %}</option>
+                               </select>                                        
+                            </div>
+                        </div>
+                        <div class="col-sm-5 col-xs-6 pull-right">
+                            <div class="fg-repeat-until text-right">
+                                 <label class=" fg-active-IB" for="repeat-until">{% trans %}CREATE_EVENT_UNTIL{% endtrans %}</label>  
+                                <div class="input-group date fg-date fg-active-IB fg-event-until-div">
+                                    <input  name="repeat-until" id="until-date" type="text"  class="form-control fg-event-until datepicker" data-key="repeat.until" {% if(retArr.untilDate is defined) %} data-notrequired="true" value="{{retArr.untilDate}}" {% endif %}>
+                                    <div class="input-group-addon" id="until-date-icon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+              </div>
+            </div>
+            <div class="form-group col-md-12 fg-clear fg-repeat-cases" >
+              <label class="col-md-2 control-label text-right fg-rule-label" for="rule">{% trans %}CREATE_EVENT_RULE{% endtrans %}</label>  
+                <div class="col-md-8 col-lg-6 ">
+                    <div class="fg-rule-annualy fg-rule-wrapper">
+                        <div class="row fg-row fg-marg-btm-5">
+                            <div class="col-md-7 col-xs-6">
+                                <label class="fg-active-IB" for="months">{% trans %}CREATE_EVENT_EVERY{% endtrans %}</label><input data-repeat="year" name="months" type="text"  class="form-control fg-active-IB fg-year fg-repeat-interval" data-key="repeat.intervel"> <label class="fg-active-IB" for="months">{% trans %}CREATE_EVENT_EVERY_YEARS{% endtrans %}</label>  
+                            </div>
+                            <div class="col-md-5 col-xs-6">
+                               <select data-repeat="year" name="repeat-type"  class="form-control selectpicker fg-annually-bymonth" multiple data-key="repeat.bymonth">
+                                    <option value="1">{% trans %}JANUARY{% endtrans %}</option>
+                                    <option value="2">{% trans %}FEBRUARY{% endtrans %}</option>
+                                    <option value="3">{% trans %}MARCH{% endtrans %}</option>
+                                    <option value="4">{% trans %}APRIL{% endtrans %}</option>
+                                    <option value="5">{% trans %}MAY{% endtrans %}</option>
+                                    <option value="6">{% trans %}JUNE{% endtrans %}</option>
+                                    <option value="7">{% trans %}JULY{% endtrans %}</option>
+                                    <option value="8">{% trans %}AUGUST{% endtrans %}</option>
+                                    <option value="9">{% trans %}SEPTEMBER{% endtrans %}</option>
+                                    <option value="10">{% trans %}OCTOBER{% endtrans %}</option>
+                                    <option value="11">{% trans %}NOVEMBER{% endtrans %}</option>
+                                    <option value="12">{% trans %}DECEMBER{% endtrans %}</option>
+                               </select>   
+                            </div>
+                        </div>
+                        <div class="row fg-row fg-marg-btm-5">
+                            <div class="col-md-7 col-sm-6">
+                                <label class="fg-active-IB fg-radio-wrapper" >                                    
+                                        <input type="radio" name="optionsAnnually" id="optionsAnnually" value="option1">
+                                  <span> {% trans %}CREATE_EVENT_RULE_ON{% endtrans %}</span>
+                                </label>
+                                <div class="fg-active-IB">
+                                   <select data-repeat="year-op1" name="repeat-type" class="form-control selectpicker fg-annualy-bymonthday" multiple data-key="repeat.bymonthday">
+                                   {% for i in 1..31 %}
+                                       <option value="{{i}}">{{i}}.</option>
+                                    {% endfor %}
+                                   </select>                                        
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row fg-row fg-marg-btm-5">
+                            <div class="col-md-7 col-xs-6">
+                                <label class="fg-active-IB fg-radio-wrapper" >                                    
+                                        <input type="radio" name="optionsAnnually" id="optionsAnnually" value="option2">
+                                    <span>{% trans %}CREATE_EVENT_RULE_ON_THE{% endtrans %}</span>
+                                </label>
+                                <div class="fg-active-IB">
+                                   <select data-repeat="year-op2" name="repeat-type"  class="form-control selectpicker fg-annualy-byday-interval" data-byday="year" data-key="repeat.byday_interval">
+                                        <option value="1">{% trans %}INTERVAL_FIRST{% endtrans %}</option>
+                                        <option value="2">{% trans %}INTERVAL_SECOND{% endtrans %}</option>
+                                        <option value="3">{% trans %}INTERVAL_THIRD{% endtrans %}</option>
+                                        <option value="4">{% trans %}INTERVAL_FOURTH{% endtrans %}</option>
+                                        <option value="-1">{% trans %}INTERVAL_LAST{% endtrans %}</option>
+                                   </select>                                        
+                                </div>
+                            </div>
+                            <div class="col-md-5 col-xs-6">
+                                <div class="fg-select2-2">
+                                   <select data-repeat="year-op2" name="repeat-type"  class="form-control selectpicker fg-annualy-byday" data-byday="year" data-key="repeat.byday">
+                                        <option value="MO">{% trans %}MONDAY{% endtrans %}</option>
+                                        <option value="TU">{% trans %}TUESDAY{% endtrans %}</option>
+                                        <option value="WE">{% trans %}WEDNESDAY{% endtrans %}</option>
+                                        <option value="TH">{% trans %}THURSDAY{% endtrans %}</option>
+                                        <option value="FR">{% trans %}FRIDAY{% endtrans %}</option>
+                                        <option value="SA">{% trans %}SATURDAY{% endtrans %}</option>
+                                        <option value="SU">{% trans %}SUNDAY{% endtrans %}</option>
+                                   </select>                                        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fg-rule-monthly fg-rule-wrapper">
+                        <div class="row fg-row fg-marg-btm-5">
+                            <div class="col-lg-6 col-md-5 col-sm-6">
+                                <label class="fg-active-IB" for="months">{% trans %}CREATE_EVENT_EVERY{% endtrans %}</label><input data-repeat="month" name="months" type="text"  class="form-control fg-active-IB fg-month fg-repeat-interval" data-key="repeat.intervel"> <label class="fg-active-IB" for="months">{% trans %}CREATE_EVENT_EVERY_MONTHS{% endtrans %}</label>  
+                            </div>
+                        </div>
+                        <div class="row fg-row fg-marg-btm-5">
+                            <div class="col-lg-6 col-md-5 col-sm-6">
+                                <label class="fg-active-IB fg-radio-wrapper" >
+                                    
+                                        <input type="radio" name="optionsMonthly" id="optionsMonthly" value="option1">
+                                    <span>{% trans %}CREATE_EVENT_RULE_ON{% endtrans %}</span>
+                                </label>
+                                <div class="fg-active-IB">
+                                   <select data-repeat="month-op1" name="repeat-type" class="form-control selectpicker fg-monthly-bymonthday" multiple data-key="repeat.bymonthday">
+                                    {% for i in 1..31 %}
+                                       <option value="{{i}}">{{i}}.</option>
+                                    {% endfor %}
+                                   </select>                                        
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row fg-row fg-marg-btm-5">
+                            <div class="col-lg-5 col-md-5 col-xs-6 ">
+                                <label class="fg-active-IB fg-radio-wrapper" >                                    
+                                    <input type="radio" name="optionsMonthly" id="optionsMonthly" value="option2">
+                                    <span>{% trans %}CREATE_EVENT_RULE_ON_THE{% endtrans %}</span>
+                                </label>
+                                <div class="fg-active-IB">
+                                   <select data-repeat="month-op2" name="repeat-type" class="form-control selectpicker fg-monthly-byday-interval" data-byday="month" data-key="repeat.byday_interval">
+                                        <option value="1">{% trans %}INTERVAL_FIRST{% endtrans %}</option>
+                                        <option value="2">{% trans %}INTERVAL_SECOND{% endtrans %}</option>
+                                        <option value="3">{% trans %}INTERVAL_THIRD{% endtrans %}</option>
+                                        <option value="4">{% trans %}INTERVAL_FOURTH{% endtrans %}</option>
+                                        <option value="-1">{% trans %}INTERVAL_LAST{% endtrans %}</option>
+                                   </select>                                        
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-xs-6">
+                                <div class="fg-select2-2">
+                                    <select data-repeat="month-op2" name="repeat-type"  class="form-control selectpicker fg-monthly-byday" data-byday="month" data-key="repeat.byday">
+                                        <option value="MO">{% trans %}MONDAY{% endtrans %}</option>
+                                        <option value="TU">{% trans %}TUESDAY{% endtrans %}</option>
+                                        <option value="WE">{% trans %}WEDNESDAY{% endtrans %}</option>
+                                        <option value="TH">{% trans %}THURSDAY{% endtrans %}</option>
+                                        <option value="FR">{% trans %}FRIDAY{% endtrans %}</option>
+                                        <option value="SA">{% trans %}SATURDAY{% endtrans %}</option>
+                                        <option value="SU">{% trans %}SUNDAY{% endtrans %}</option>
+                                    </select>                                        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fg-rule-weekly fg-rule-wrapper">
+                       <div class="fg-row row">
+                            <div class="col-sm-5 col-xs-6 ">
+                            <label class="fg-active-IB" for="months">{% trans %}CREATE_EVENT_EVERY{% endtrans %}</label><input data-repeat="week" name="months" type="text"  class="form-control fg-active-IB fg-week fg-repeat-interval" data-key="repeat.intervel"> <label class="fg-active-IB" for="months">{% trans %}CREATE_EVENT_EVERY_WEEKS{% endtrans %}</label>  
+                            </div>
+                            <div class="col-sm-7 col-xs-6 ">
+                               <select data-repeat="week" name="repeat-type"  class="form-control selectpicker fg-weekly-byday" multiple data-key="repeat.weekly_byday">
+                                    <option value="MO">{% trans %}MONDAY{% endtrans %}</option>
+                                    <option value="TU">{% trans %}TUESDAY{% endtrans %}</option>
+                                    <option value="WE">{% trans %}WEDNESDAY{% endtrans %}</option>
+                                    <option value="TH">{% trans %}THURSDAY{% endtrans %}</option>
+                                    <option value="FR">{% trans %}FRIDAY{% endtrans %}</option>
+                                    <option value="SA">{% trans %}SATURDAY{% endtrans %}</option>
+                                    <option value="SU">{% trans %}SUNDAY{% endtrans %}</option>
+                               </select>                                        
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fg-rule-daily fg-rule-wrapper">
+                       <div class="fg-row ">
+                            <label class="fg-active-IB" for="months">{% trans %}CREATE_EVENT_EVERY{% endtrans %}</label><input data-repeat="day" name="months" type="text"  class="form-control fg-active-IB fg-day fg-repeat-interval" data-key="repeat.intervel"> <label class="fg-active-IB" for="months">{% trans %}CREATE_EVENT_EVERY_DAYS{% endtrans %}</label>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-12 fg-clear" >
+              <label class="col-md-2 control-label text-right" for="textinput">{% trans %}CREATE_EVENT_SCOPE{% endtrans %}</label>  
+              <div class="col-md-8 col-lg-6 ">
+                    <div class="switch-toggle switch-3  switch-fg fg-event-scope">
+                        <input id="public" name="scope" type="radio" checked class="make-switch" value="PUBLIC" data-key="scope">
+                        <label for="public">{% trans %}SCOPE_PUBLIC{% endtrans %}</label>
+                        <input id="internal" name="scope" type="radio" class="make-switch" value="INTERNAL" data-key="scope">
+                        <label for="internal">{% trans %}SCOPE_INTERNAL{% endtrans %}</label>
+                        <input id="group" name="scope" type="radio" class="make-switch" value="GROUP" data-key="scope">
+                        <label for="group">{% trans %}SCOPE_GROUP{% endtrans %}</label>
+                        <a class="btn btn-primary"></a>
+                    </div>
+              </div>
+            </div>
+            <div class="form-group col-md-12 required fg-clear" >
+              <label class="col-md-2 control-label text-right" for="textinput">{% trans %}CREATE_EVENT_AREAS{% endtrans %}</label>  
+              <div class="col-md-8 col-lg-6 fg-event-areas-div">
+                <% if(_.size(assignedTeams)+_.size(assignedWorkgroups) + ((clubTitle !='')?1:0) > 1) { 
+                var type = 'multiple' ; 
+                } else { 
+                    var type = 'single disabled' ;
+                } %>
+                        <select  name="" class="form-control selectpicker fg-event-areas" <%- type %> data-key="areas">
+                        <% if(clubTitle !='') { %>
+                           <option value="Club"><%- clubTitle %></option>
+                        <% } %>
+                        <% if(_.size(assignedTeams) > 0) { %>
+                            <optgroup label="{{fgtwig.getTerminolgyName('Team',plural)}}">
+                                <% _.each(assignedTeams,function(val,key){ %>
+                                    <option value="<%- key %>" ><%- val %></option>
+                                <% }); %>     
+                            </optgroup>
+                        <% } %>
+                        <% if(_.size(assignedWorkgroups) > 0) { %>
+                            <optgroup label="{% trans %}WORKGROUP{% endtrans %}">
+                                <% _.each(assignedWorkgroups,function(val,key){ %>
+                                    <% if(val==='Executive Board'){ %>
+                                        <option value="<%- key %>" >{{fgtwig.getTerminolgyName('Executive Board',singular)}}</option>
+                                    <% } else { %>
+                                        <option value="<%- key %>" ><%- val %></option>
+                                    <% } %>
+                                <% }); %>     
+                            </optgroup>
+                        <% } %>
+                       </select>            
+              </div>
+              <div class="col-md-8 col-lg-6 fg-event-areas-global-div">
+                <% if(_.size(assignedTeams)+_.size(assignedWorkgroups) > 1) { %>
+                <% var countClass = '' ; 
+                } else{ 
+                    var countClass = 'selected' ;
+                } %>
+                <%if(_.size(assignedTeams)+_.size(assignedWorkgroups) > 1) { %>
+                    <select name="" class="form-control selectpicker fg-event-areas-global" data-key="areas">
+                    <option value="">{{'SELECT_DEFAULT'|trans}}</option>
+                    <% } else{ %>
+                        <select name="fg-event-areas-group" class="form-control selectpicker fg-event-areas-global fg-dev-newfield" disabled data-key="areas">
+                    <% } %>
+                    <% if(_.size(assignedTeams) > 0) { %>
+                        <optgroup label="{{fgtwig.getTerminolgyName('Team',plural)}}">
+                            <% _.each(assignedTeams,function(val,key){ %>
+                                <option class="<%- countClass %>" value="<%- key %>" ><%- val %></option>
+                            <% }); %>     
+                        </optgroup>
+                    <% } %>
+                    <% if(_.size(assignedWorkgroups) > 0) { %>
+                        <optgroup label="{% trans %}WORKGROUP{% endtrans %}">
+                            <% _.each(assignedWorkgroups,function(val,key){ %>
+                                <% if(val==='Executive Board'){ %>
+                                    <option class="<%- countClass %>" value="<%- key %>" >{{fgtwig.getTerminolgyName('Executive Board',singular)}}</option>
+                                <% } else { %>
+                                    <option class="<%- countClass %>" value="<%- key %>" ><%- val %></option>
+                                <% } %>
+                            <% }); %>     
+                        </optgroup>
+                    <% } %>
+                   </select>            
+              </div>
+              <% if((clubType != 'sub_federation_club') && (clubType != 'federation_club') && (clubType != 'standard_club')){ %>
+                <div class="fg-marg-top-10px col-md-10 col-md-offset-2  fg-event-share-with-lower">
+                    <label class="fg-cursr-pointer"><input type="checkbox" name="show_to_lower_level" class="fg-check-share-lower" data-key="share_with_lower"> <span class="fg-dotted-br fg-custom-popovers" <% if(clubType == 'federation'){ %>data-content="{% trans %}SHOW_IN_LOWER_LEVEL_TOOLTIP_FED{% endtrans %}"<% } else if(clubType == 'sub_federation'){ %>data-content="{% trans %}SHOW_IN_LOWER_LEVEL_TOOLTIP_SUBFED{% endtrans %}"<% } %>>{% trans %}EVENT_SHOW_IN_LOWER_LEVEL{% endtrans %}</span></label>
+                </div>
+                <% } %>
+            </div>
+            <div class="form-group col-md-12 required fg-clear" >
+              <label class="col-md-2 control-label text-right" for="textinput">{% trans %}CREATE_EVENT_CATEGORIES{% endtrans %}</label>  
+              <div class="col-md-8 col-lg-6 ">
+                       <select name="" id="ajaxLoadSelectpicker" class="form-control selectpicker fg-event-categories" multiple="multiple" data-key="categories">
+                       {#<option value="">Select...</option>#}
+                       <% _.each(category,function(catArray){ %>
+                                <option value="<%- catArray['id'] %>"><%- catArray['title'] %></option>
+                        <% }); %>
+                       </select>        
+              </div>
+              <% if (clubTitle !='') { %>
+                  <div class="fg-extra-col fg-active-IB">
+                       <a href="javascript:void(0)" class="fg-choose-ind-color fg-dev-cat">{% trans %}CREATE_EVENT_CATEGORY_CREATE_NEW{% endtrans %}</a>   
+                  </div>
+              <% } %>
+            </div>
+            <div class="form-group col-md-12  fg-clear" >
+              <label class="col-md-2 control-label text-right" for="textinput">{% trans %}CREATE_EVENT_LOCATION{% endtrans %}</label>  
+              <div class="col-md-8 col-lg-6 ">
+                <input id="locAutoComp" name="textinput" type="text" placeholder="" class="form-control locauto" data-key="location" data-notrequired="true">
+                <input type="hidden" id="mapLat" data-key="latitude"><input type="hidden" id="mapLng" data-key="longitude">
+              </div>
+              <div class="fg-active-IB fg-extra-col ">
+                  <label class="fg-cursr-pointer"><input type="checkbox" name="show_map" class="fg-show-in-map" data-key="is_show_in_googlemap">{% trans %}CREATE_EVENT_LOCATION_SHOW_GOOGLE_MAP{% endtrans %}</label>
+              </div>
+            </div>
+            <div class="form-group col-md-12 fg-clear" >
+              <label class="col-md-2 control-label text-right" for="textinput">{% trans %}CREATE_EVENT_URL{% endtrans %}</label>  
+              <div class="col-md-8 col-lg-6 ">
+                <input id="textinput" name="textinput" type="text" placeholder="" class="form-control fg-url" data-key="url" data-notrequired="true">  
+              </div>
+            </div>
+                <div class="form-group col-md-12 fg-clear" >
+                  <label class="col-md-2 control-label text-right" for="textinput">{% trans %}CREATE_EVENT_DESCRIPTION{% endtrans %}</label>  
+                  <div class="col-md-10 col-lg-10 ">
+                    <% if(_.size(clubLanguages) > 0) { %>
+                        <% _.each(clubLanguages,function(val,key){ %>
+                            <div class="<% if(defLang!=val){ %> hide <% } %>" id="calDescDiv_<%- val %>" data-lang="<%- val %>">
+                           <textarea name="calendar-description" id="calDesc_<%- val %>" class="ckeditor fg-calendar-description " cols="30" rows="10" data-key="desc_lang.<%- val %>" value="" data-lang="">
+                           {% if (editArr.descLang is defined)%}
+                                   {% set descLangs=editArr.descLang|split('|&&&|')%}
+                                   {% for descLang in descLangs%}
+                                       {% set descLan=descLang|split('|@@@|')%}
+                                           <% if(val=='{{descLan[0]|default('')}}'){ %>
+                                           {{descLan[1]|default('')}}
+                                           <% } %>
+                                   {%endfor%}
+                                   {% endif %}                </textarea>
+                            </div>
+                        <% }); %>
+                    <% } %>
+                    <div class="timeline-footer">
+                        <a class="fg-advanced-editor" href="javascript:void(0)" style="display: block;">
+                            <i class="fa fa-caret-square-o-down"></i><span> {{'CKEDITOR_ADVANCED_EDITOR'|trans}}</span>
+                        </a>
+                        <a class="fg-simple-editor" href="javascript:void(0)" style="display: none;">
+                            <i class="fa fa-caret-square-o-up"></i><span> {{'CKEDITOR_SIMPLE_EDITOR'|trans}}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {#attachment upload#}
+            <div class="form-group col-md-12 fg-clear" >
+                <label class="col-md-2 control-label text-right" for="attachments">{% trans %}CREATE_EVENT_ATTACHMENTS{% endtrans %}</label>  
+                <div class="col-md-10 col-lg-10 ">
+                    <input type="file" id="file-uploader" name="file-uploader" style="height:0px;width:0px;visibility: hidden" multiple="multiple"/>
+                    <div class="dropzone" name="attachments" id="drop-upload-area">
+                        {#error container#}
+                        <div class="" id="calendar-upload-error-container">
+                        </div>
+                        {#upload area#}
+                        <div class="fg-calendar-upload-wrapper ">
+                            <div class="fg-calendar-upload-button-wrapper">
+                                <button type="button" class="btn default fg-cal-file-upload">{% trans %}CREATE_EVENT_FILEUPLOAD{% endtrans %}</button>
+                                <button type="button" class="btn default fg-cal-browse-server">{% trans %}CREATE_EVENT_BROWSE_SERVER{% endtrans %}</button>
+                            </div>
+                            <div class="fg-upload-area fg-upload-area-div hide">
+                                <ul class="fg-calendar-upload-items">
+                                {% set fileCount = 0 %}
+                                {% if (editArr.attachmentDetails is defined)%}
+                                    {% set attchDet=editArr.attachmentDetails|split('|&&&|')%}
+                                    {% for attachDet in attchDet%}
+                                    {% if attachDet != '' %}
+                                       {% set attachments=attachDet|split('|@@@|')%}
+                                        <li class="fg-calendar-upload-item fg-clear filecontent" id="{{attachments[0]}}">
+                                            <div class="col-sm-12 fg-calendar-item-name">
+                                                <div id="fg-uploadcalendar-name" class="row fg-uploadcalendar-name"> <div class="col-md-9"><a target="_blank" href="{{path('filemanager_download',{'file':attachments[4]})}}">{{attachments[1]}} </a></div><div class="col-md-3"><span class="fg-file-size"> <%- FgFileUpload.formatFileSize({{attachments[2]}}) %> </span></div></div>
+                                            </div>
+                                            <input id="fg-uploadcalendar-name" name="fileName" type="hidden" placeholder="" value="{{attachments[1]}}" class="form-control fg-uploadcalendar-name" data-key="fileupload.name.{{attachments[0]}}">
+                                            <input class="fg-uploadcalendar-randName" name="randFileName" type="hidden" value="{{attachments[0]}}" data-key="fileupload.randName.{{attachments[0]}}">
+                                            <input class="fg-uploadcalendar-size" name="fileSize" type="hidden" value="{{attachments[2]}}" data-key="fileupload.size.{{attachments[0]}}">
+                                            <% if(duplicate ==1) { %>
+                                                <input class="fg-uploadcalendar-newold" name="newold" type="hidden" value="server" data-key="fileupload.newold.{{attachments[3]}}">
+                                            <% } else { %>
+                                                <input class="fg-uploadcalendar-newold" name="newold" type="hidden" value="old" data-key="fileupload.newold.{{random()}}">
+                                            <% } %>
+                                            <div class="fg-last-icon">
+                                                <div class="closeico">
+                                                    <input type="checkbox" class="make-switch fairgatedirty fg-delicon" id="{{attachments[0]}}_is_deleted" data-key="fileupload.del.{{attachments[3]}}" name="is_deleted" data-inactiveblock="changecolor" data-parentid="{{attachments[0]}}">
+                                                    <label for="{{attachments[0]}}_is_deleted"></label>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        {% set fileCount = fileCount+1 %}
+                                    {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                                    <input class="fileCount" name="fileCount" type="hidden" value="{{fileCount}}" data-key="fileupload.fileCount">
+                                </ul>
+                                <input type="hidden" name="fileCount" id="fileCount" value=""/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

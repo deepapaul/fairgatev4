@@ -1,0 +1,105 @@
+<script type="text/template" id="editContactFormElement">
+    <%  var disabledClass = '';
+                   if(_.find(ContactFieldList, function(num){ return num['id']==data.attributeId; }) ==undefined) {
+                       disabledClass = 'fg-disabled-link';
+                      
+                    }
+               %>
+    <li class="list-group-item <%- disabledClass%>" id="formElement_<%= data.formFieldId %>" data-source="<%=(!_.isUndefined(data.source)?data.source:'')%>">
+        <input type="text" class="fg-dev-newfield fg-dev-sortOrder hide fieldSort" data-key="<%- data.formId %>.<%- data.formFieldId %>.formElementSortOrder" 
+                id="formElementSortOrder_<%- data.formFieldId %>" name="formElementSortOrder_<%- data.formFieldId %>" value="<%=data.sortOrder%>">
+        
+        <input type="text" class="fg-dev-newfield fg-dev-fieldtype hide fieldType" data-key="<%- data.formId %>.<%- data.formFieldId %>.form_field_type" 
+                id="formFieldType_<%- data.formFieldId %>" name="formFieldType_<%- data.formFieldId %>" value="contact">
+        <input type="text" class="fg-dev-newfield fg-dev-fieldtype hide fieldType fg-dev-attribute" data-key="<%- data.formId %>.<%- data.formFieldId %>.attributeId" 
+                id="formFieldType_<%- data.formFieldId %>" name="formFieldType_<%- data.formFieldId %>" value="<%= data.attributeId %>">
+                        
+            <i class="fa fa-2x fa-ellipsis-v fg-sort-row fg-dev-field-sort-handle"></i> 
+       <div class="fg-delete-row" element_type='CF'>
+            <input type="checkbox" class="make-switch fg-dev-field-delete fg-dev-newfield fieldDelete" data-key="<%- data.formId %>.<%- data.formFieldId %>.isDeleted" id="isDeleted_<%- data.formFieldId %>" name="isDeleted_<%- data.formFieldId %>" >
+            <label for="isDeleted_<%- data.formFieldId %>"></label>
+        </div>
+        <div class="fg-sortable-list-item-wrapper">
+                <div class="col-sm-3 fg-pad-top-7">
+                 <label for="type_<%- data.formFieldId %>"><%- data.fieldnameLang %>
+                 <% if(data.fieldAttributeSetId == systemCategoryAddress){ %>
+                     <i class="fa fa-home" data-toggle="tooltip" data-original-title="{{'CLUB_PROPERTIES_CORRESPONDANCE_ADDRESS'|trans}}"></i>             
+                 <% } %>
+                 <% if(data.fieldAttributeSetId == systemCategoryInvoice){ %>
+                     <i class="fa fa-money" data-toggle="tooltip" data-original-title="{{'CLUB_PROPERTIES_INVOICE_ADDRESS'|trans}}"></i>
+                 <% } %>
+                 </label><%= data.isRequired == 1 ? '<span class="fg-field-required-icon fa fa-asterisk"></span>':''%>
+                   
+                </div>
+                <div class="col-sm-2 col-sm-offset-2 fg-pad-top-7" >
+                
+                 <% 
+              var fieldType='';
+              switch(data.mandatoryInputType) {
+                        case 'select': 
+                               fieldType="{{'FORM_SELECT_FIELD'|trans}}"
+                             break; 
+                        case 'radio': 
+                                fieldType="{{'FORM_RADIO_FIELD'|trans}}"
+                           break; 
+                        case 'checkbox':
+                                 fieldType="{{'FORM_CHECKBOX_FIELD'|trans}}"
+                             break;
+                        case 'singleline':
+                                 fieldType="{{'FORM_SINGLELINE_FIELD'|trans}}"
+                             break; 
+                        case 'multiline': 
+                                 fieldType="{{'FORM_MULTILINE_FIELD'|trans}}"
+                             break;
+                        case 'date': 
+                                fieldType= "{{'FORM_DATE_FIELD'|trans}}"
+                            break; 
+                        case 'email': 
+                               fieldType="{{'FORM_EMAIL_FIELD'|trans}}"
+                            break; 
+                        case 'url': 
+                                fieldType="{{'FORM_URL_FIELD'|trans}}"
+                            break;
+                        case 'fileupload': 
+                               fieldType= "{{'FORM_FILEUPLOAD_FIELD'|trans}}"
+                             break; 
+                        case 'imageupload': 
+                                fieldType= "{{'FORM_IMAGEUPLOAD_FIELD'|trans}}"
+                            break; 
+                        case 'login email': 
+                                 fieldType="{{'FORM_LOGINEMAIL_FIELD'|trans}}"
+                             break;
+                        case 'number': 
+                              fieldType="{{'FORM_NUMBER_FIELD'|trans}}"
+                           break; 
+                    
+              } %>            
+            <i><%= fieldType %></i> 
+                  
+                </div>
+        <div class="col-sm-2 col-sm-offset-1" id="typeOptions_<%- data.formFieldId %>_container">
+                    <a href="#typeOptions-<%= data.formFieldId %>" option_type='CF' class="fg-toggle-link collapsed" option_type='CF' data-toggle="collapse"><i class="fa fa-minus-square-o"></i> {{'CMS_FORM_FIELD_OPTION_LINK'|trans}}</a>
+                </div>
+               
+                 <div class="col-sm-2 text-right <%- disabledClass%>"  id="isActive_<%- data.formFieldId %>_container" >
+                 
+                    <label class="switch-light switch-light-sm fg-onoff-switch" onClick="">
+                        <input type="checkbox" name="<%- data.formFieldId %>_isActive" id="isActive_<%- data.formFieldId %>" class="make-switch fg-dev-newfield" data-key="<%- data.formId %>.<%- data.formFieldId %>.isActive" <%=(data.formElementIsActive == 0)?'':'checked="checked"'%>>
+                        <span> 
+                            <span>{{'ON'|trans}}</span>
+                            <span>{{'OFF'|trans}}</span>                                                                    
+                        </span>
+                        <a class="btn btn-primary"></a>
+                    </label>
+                </div>
+                
+        
+             
+        </div>
+        <div id="typeOptions-<%= data.formFieldId %>" class="collapse row fg-clear">
+               
+
+
+        </div>
+    </li>
+</script>

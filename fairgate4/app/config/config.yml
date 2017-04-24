@@ -1,0 +1,123 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: settings.php }
+    - { resource: apisettings.php }
+    - { resource: themeSettings.yml }
+    - { resource: services.yml }
+    - { resource: security.yml }
+    - { resource: assetic.yml }
+    - { resource: "@WebsiteCMSBundle/Resources/config/services.yml" }
+    - { resource: "@InternalArticleBundle/Resources/config/services.yml" }
+    - { resource: file_types.yml }
+    - { resource: doc_param.yml }
+    - { resource: "@FairgateApiBundle/Resources/config/services.yml" }
+    
+    
+framework:
+    #esi:             ~
+    translator: ~
+    secret:          "%secret%"
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+    assets:
+        version: '2.0.2'
+        version_format: '%%s?version=%%s'
+        base_path: /
+    default_locale:  de
+    translator: { fallback: de }
+    trusted_proxies: ~
+    session:         ~
+    fragments:       ~
+    http_method_override: true
+
+# Twig Configuration
+twig:
+    cache:  false
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+    globals:
+       fgclub: "@club"
+       fgavatar: "@fg.avatar"
+       fgtwig: "@fg.twig.extension"
+       singular: "s"
+       plural: "p"
+       title: ""
+       pageTitle : ''
+       asseticEnv : "dev"
+       staticBoxEnabledClubs : "%staticBoxClubIds%"
+       themeFiles: "%themeFiles%"    
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   "%database_driver%"
+        host:     "%database_host%"
+        port:     "%database_port%"
+        dbname:   "%database_name%"
+        user:     "%database_user%"
+        password: "%database_password%"
+        logging: "%kernel.debug%"
+        charset:  UTF8
+        mapping_types:
+          enum: string
+        # if using pdo_sqlite as your database driver, add the path in parameters.yml
+        # e.g. database_path: "%kernel.root_dir%/data/data.db3"
+        # path:     "%database_path%"
+
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        entity_managers: 
+            default: 
+                metadata_cache_driver: apcu
+                result_cache_driver: apcu
+                query_cache_driver: apcu
+                auto_mapping: true
+                dql: 
+                    string_functions: 
+                        GROUP_CONCAT: Common\UtilityBundle\Extensions\GroupConcat
+                        FIND_IN_SET: Common\UtilityBundle\Extensions\FindInSet
+                        MD5: Common\UtilityBundle\Extensions\Md5
+                        
+# Swiftmailer Configuration
+swiftmailer:
+    transport: %mailer_transport%
+    encryption: %mailer_encryption%
+# FOSUser Configuration    
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: "%Clubadmin.entity.user.class%"
+    group:
+        group_class: "%Clubadmin.entity.group.class%"
+    service:
+        mailer: fg.fos_user.mailer
+# KNPSnappy pdf Configuration 
+knp_snappy:
+    pdf:
+        enabled:    true
+        binary:      %kernel.root_dir%/../vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64
+        options:    []
+
+igorw_file_serve:
+    factory: xsendfile
+    skip_file_exists: true
+    
+fos_rest:
+    param_fetcher_listener: true
+    body_listener: true
+    format_listener: true
+    view:
+        view_response_listener: 'force'
+        formats:
+            json: true
+            xml: true
+    exception:
+          enabled:              true
+          codes:
+            'Symfony\Component\Routing\Exception\ResourceNotFoundException': 404
+            'Doctrine\ORM\OptimisticLockException': HTTP_CONFLICT
+          exception_controller: 'FairgateApiBundle\Controller\FedContactsController::errorAction'
+nelmio_api_doc: ~

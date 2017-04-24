@@ -1,0 +1,302 @@
+//css overides for Metronic/Bootstrap global overide styles
+
+@import '../utilities/variables'; // added variables and functions
+
+
+/*----------------------------------------------------------------------
+css overides for Metronic/Bootstrap global overide styles
+--------------------------------------------------------------------------*/
+.btn {
+	padding: 7px 12px;
+}
+
+.btn {
+	&.blue.editable-submit {
+		background: none;
+		padding: 5px 0 0;
+		color: $clrPrimaryBlack;
+		i {
+			font-size: 18px;
+		}
+	}
+	&.default.editable-cancel {
+		background: none;
+		padding: 5px 0 0;
+		i {
+			font-size: 18px;
+		}
+	}
+}
+.btn-default span.fg-contact-mandatory {
+	position: relative;
+	top: 3px;
+	left: 2px;
+}
+.input-sm {
+	font-size: 14px;
+}
+.fg-input-area {
+	width: 220px;
+	padding-left: 0;
+	margin-right: 15px;
+	float: left;
+	text-indent: 6px;
+}
+.form{
+	.form-actions{
+		&.right{
+			.btn{
+				margin-left: 5px;
+			}
+		}
+	}
+} 
+
+.has-error {
+	.help-block {
+		color: $clrRed !important;
+		font-size: 13px;
+	}
+	.help-inline {
+		color: $clrRed !important;
+		font-size: 13px;
+	}
+	.control-label {
+		color: $clrRed !important;
+		font-size: 13px;
+	}
+	.radio {
+		color: $clrRed !important;
+		font-size: 13px;
+	}
+	.checkbox {
+		color: $clrRed !important;
+		font-size: 13px;
+	}
+	.radio-inline {
+		color: $clrRed !important;
+		font-size: 13px;
+	}
+	.checkbox-inline {
+		color: $clrRed !important;
+		font-size: 13px;
+	}
+}
+
+.div.radio, div.checker {
+	margin-left: 3px;
+}
+
+.control-label .required {
+	color: $clrRed !important;
+}
+.fg-ck-caption-txt .required {
+	color: $clrRed !important;
+}
+
+.page-loading {
+	z-index: 9999;
+}
+.page-header {
+	z-index: 99999;
+}
+.fgNavLinks_extend {
+	color: $clrGrey1;
+	background-color: $clrWhite;
+	border: 1px solid $clrbrdrDflt;
+	border-bottom-color: transparent;
+	cursor: default;
+}
+.fg-nav-links {
+	li {
+		float: left;
+		margin-bottom: -0.1026%;
+	}
+	> li {
+		> a {
+			border: 1px solid transparent;
+			@include border-radius (4px 4px 0 0);
+			font-size: 14px;
+			margin-right: 2px;
+			&:hover {
+				padding-bottom: 9px !important;
+			}
+			&:focus {
+				padding-bottom: 9px !important;
+			}
+		}
+		&.active > a {
+			@extend .fgNavLinks_extend;
+			&:hover {
+				@extend .fgNavLinks_extend;
+			}
+			&:focus {
+				@extend .fgNavLinks_extend;
+			}
+		}
+	}
+}
+.page-footer-fixed {
+	.page-content {
+		margin-bottom: 15px;
+	}
+	.new-table-height {
+		margin-bottom: 15px;
+	}
+	.page-container {
+		margin-bottom: 0!important;
+	}
+}
+label.fg-input-area {
+	width: auto;
+	text-indent: 0;
+	margin-right: 0;
+}
+.bootstrap-select .btn:focus {
+	outline: medium none !important;
+}
+.alert-block .close {
+	color: inherit;
+	position: relative;
+	right: 8px;
+	top: 6px;
+}
+
+/*----------------------------------------------------------------------
+/*::::: panel and portlet ::::*
+--------------------------------------------------------------------------*/
+
+.panel-contact-right {
+	padding-left: 12px;
+	padding-top: 1px;
+}
+.fg-panel-title {
+	display: inline-block;
+	font-size: 18px;
+	color: $clrWhite;
+	font-weight: 400;
+	line-height: 18px;
+	margin: 0;
+	padding: 0;
+}
+.fg-panel-title-head {
+	display: inline-block;
+}
+.fg-panel-bg {
+	color: $clrPrimaryBlack;
+	background-color: $clrDarkWhite;
+	padding: 5px 0 5px 8px;
+	&:after {
+		@extend .fg-clear:after;
+	}
+}
+.panel-heading .form-group {
+	margin-bottom: 0 !important;
+}
+.panel-primary .fa-minus-circle {
+	color: $clrGrey1;
+	line-height: 28px;
+}
+.portlet > .portlet-title > .caption {
+	margin: 0 0 6px;
+	line-height: 15px;
+}
+.panel-form-title {
+	padding: 0;
+	margin: 0;
+	line-height: 18px;
+	.fg-label-wrap {
+		line-height: 18px;
+	}
+}
+
+/*----------------------------------------------------------------------
+/*::::: Sticky footer  ::::*
+--------------------------------------------------------------------------*/
+
+.fg-sticky-save-area {
+	.contact_area {
+		margin-bottom: 30px;
+	}
+	.page-content {
+		padding-bottom: 88px;
+	}
+	.fg-content-wraper {
+		padding-bottom: 33px;
+	}
+}
+
+/*----------------------------------------------------------------------
+/*::::: Popover  ::::*
+--------------------------------------------------------------------------*/
+
+.popover {
+	background-color: $clrSandWhite;
+	&.bottom {
+		margin-top: 16px;
+		> .arrow:after {
+			border-bottom-color: $clrSandWhite;
+		}
+	}
+}
+.fg-popover-cion {
+	color: $clrGrey2;
+	cursor: pointer;
+}
+.colorpicker {
+	&.dropdown-menu {
+		margin-left: -100px;
+		min-width: auto !important;
+	}
+	&:before {
+		left: auto !important;
+		right: 10px;
+	}
+	&:after {
+		left: auto !important;
+		right: 10px;
+	}
+}
+.fg-popover-content-nowrap .popover {
+	white-space: nowrap;
+}
+.popover-content .btn-group {
+	display: block;
+	&:after {
+		display: block;
+		clear: both;
+		float: none;
+		content: '';
+	}
+}
+
+.fg-popup-td-text{
+	float: left;
+	width: 150px;
+	white-space: normal;
+}
+
+/*----------------------------------------------------------------------
+/*::::: Switch Multi color  ::::*
+--------------------------------------------------------------------------*/
+.switch-multi-color.switch-toggle {
+	input + label > div {
+		max-width: 90%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		width: 100%;
+		max-height: 100%;
+		padding-left: 5px;
+	}
+	&.switch-3 input:checked {
+		&:nth-of-type(2) ~ a {
+			background-color: $clrDarkYellow;
+		}
+		&:last-of-type ~ a {
+			background-color: $clrDarkRed;
+		}
+	}
+}
+/*----------------------------------------------------------------------
+/*::::: Page header  ::::*
+--------------------------------------------------------------------------*/

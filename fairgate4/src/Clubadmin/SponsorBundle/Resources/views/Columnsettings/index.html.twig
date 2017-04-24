@@ -1,0 +1,178 @@
+{# src/Clubadmin/SPonsorBundle/Resources/views/Columnsettings/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'SPONSOR_TABLE_COLUMNS'|trans %}
+
+{% block pagecontent %}
+
+    <!-- BEGIN CONTENT -->
+    <div class="fg-theme-panel fg-sponsor-table-settings-wrap">
+        <form id="tablesettings" action="tablesettings" onSubmit="return false;">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- PAGE TITLE & BREADCRUMB-->
+                    <!-- BREADCRUMB STARTS -->
+                     {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+                    <!-- BREADCRUMB ENDS -->
+                   {# <div class="row">
+                        <div class="col-md-12">
+                            <h3 class="page-title"> {{'SPONSOR_TABLE_COLUMNS'|trans}} </h3>
+                        </div>
+                    </div>#}
+                </div>
+            </div>
+             <div class="row">
+             {% set page_settings = { 'pagetitle':'true'}  %}
+             {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': 'SPONSOR_TABLE_COLUMNS'|trans , 'page_settings': page_settings  } %}    
+             </div>
+            <!-- BEGIN COLUMN AREA-->
+            <div class="row fg-contact-tables">
+                <div class="col-lg-8 col-md-7">
+                    <div class="portlet box blue">
+                        <div class="portlet-title">
+                            <div class="caption"> {{'ALL_COLUMNS'|trans}} </div>
+                        </div>
+                        <div class="portlet-body fg-portlet">
+                            <div class="row">
+                                <!-- ContactFields -->
+                                <div class="col-lg-6 col-md-6 col-sm-12" id="displayContactFields"></div>
+                                <!-- contactoption FIELDS -->
+                                <div class="col-md-12 col-lg-6 col-sm-12 fg-last-col-hack" id="displayContactoption"></div>
+                                
+                                <!-- Service FIELDS -->
+                                <div class="col-md-12 col-lg-6 col-sm-12 fg-last-col-hack" id="displayServiceFields"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                        
+                <div class="col-lg-4 col-md-5">
+                    
+                    <!-- Selected Columns box starts -->
+                    <div class="portlet box blue">
+                        <div class="portlet-title">
+                            <div class="caption"> {{'SELECTED_COLUMNS'|trans}} </div>
+                            <div class="fg-clear-area">
+                                <a href="#" id="clearselected">{{'CONTACT_FILTER_CLEAR'|trans}} 
+                                    <i class="fa fa-times-circle fa-1x"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body" id="displaySelectedColumns"> </div>
+                    </div>
+                    <!-- Selected Columns box ends -->
+                    
+                     
+                    {% if (allTableSettings|length > 0) %}
+                        <!-- Saved Columns box starts -->
+                        <div class="portlet box blue">
+                            <div class="portlet-title">
+                                <div class="caption"> {{'SAVED_COLUMNS_SETTINGS'|trans}} </div>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-5 col-sm-5">
+                                        <select class="bs-select form-control fg-select-font" id="saved_settings" autocomplete="off" >
+                                            <option value="" data-href="{{path('sponsor_columnsettings', {'settings_id': '0','contacttype':contacttype})}}">{{'SELECT_DEFAULT'|trans}}</option>
+                                            {% set showIcons = false %}
+                                            {% for tableSettings in allTableSettings %}
+                                                {% if (tableSettings.id == selectedSettingId) %}
+                                                    {% set showIcons = true %}
+                                                {% endif %}
+                                                <option value="{{tableSettings.id}}" {% if (tableSettings.id == selectedSettingId) %} selected {% endif %} data-href="{{path('sponsor_columnsettings', {'settings_id': tableSettings.id,'contacttype':contacttype})}}">{{tableSettings.title}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    {% if (showIcons) %}
+                                        <div class="col-md-4 col-sm-3">
+                                            <a href="#" class="fg-refresh-link" id="savesettings" data-save-type="UPDATE">
+                                                <i class="fa fa-refresh"></i>{{'UPDATE'|trans}}
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3 col-sm-3">
+                                            <a href="#" class="fg-delete-link" id="deletesettings">
+                                                <i class="fa fa-times-circle"></i>{{'DELETE'|trans}}
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div id="selectsetting_error" class="txt-red hide">{{'PLEASE_SELECT_A_SETTING'|trans}}</div>
+                            </div>
+                        </div>
+                     {% endif %}
+                         <!-- Saved Column box ends -->
+                         
+                         <!-- Save Columns box starts -->
+                    <div class="portlet box blue">
+                        <div class="portlet-title">
+                            <div class="caption">{{'SAVE_COLUMNS_SETTINGS'|trans}}</div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="row">
+                                <div class="col-md-5 col-sm-5">
+                                    <input type="text" class="form-control input-sm" data-function="settings_name" />
+                                </div>
+                                <div class="col-md-6 col-sm-3">
+                                    <a href="#" class="fg-save-link" id="savesettings" data-save-type="SAVE"><i class="fa fa-check-circle"></i>{{'SAVE'|trans}}</a>
+                                </div>
+                            </div>
+                            <div id="savesetting_error" class="txt-red hide">{{'PLEASE_ENTER_A_SETTINGS_TITLE'|trans}}</div>
+                        </div>
+                    </div>
+                    <!-- Save Columns box ends -->
+                    
+                </div>
+            </div>
+        </form>
+                        
+        <!-- APPLY|CANCEL -->
+        <div class="row">
+            <div class="col-md-12">
+                {% include 'clubadmin/savebutton.html.twig' with {'backLink': path('clubadmin_sponsor_homepage'),'reset_button_id':'cancelsettings','reset_button_val':'CANCEL'|trans,'save_button_val':'APPLY'|trans ,'save_button_id':'applysettings','button_attr_type':'data-save-type','button_attr_val':"APPLY" } %}
+            </div>
+        </div>
+                    
+    </div>
+    <!-- END PAGE CONTENT-->
+    
+    <!-- ROW TEMPLATES STARTS -->
+    <div id="divTemplates">
+       
+        {# template for displaying club fields #}
+        {% include 'ClubadminSponsorBundle:Columnsettings:displaycontactfields.html.twig' %}
+         {# template for displaying contact option field #}
+        {% include 'ClubadminSponsorBundle:Columnsettings:displaycontactoption.html.twig' %}
+        {# template for displaying assignment categories #}
+        {% include 'ClubadminSponsorBundle:Columnsettings:displayservicefields.html.twig' with {'contacttype': contacttype}%}
+        {# template for displaying selected columns #}
+        {% include 'ClubadminSponsorBundle:Columnsettings:displayselectedcolumns.html.twig' %}
+        
+    </div>
+    <!-- ROW TEMPLATES ENDS -->
+{% endblock %}
+
+{% block javascripts %}
+<script src = "{{ asset('fgcustom/js/sponsorcolumnsettings.js')}}" type = "text/javascript"></script>
+<script type = "text/javascript"> 
+    var clubId = '{{clubData['clubId']}}';
+    var contactType='{{contacttype}}';
+    var contactId = '{{clubData['contactId']}}';
+    var selectedSettingId = '{{selectedSettingId}}';
+    var filterDataPath = "{{ path('sponsor_filter_data', {'contacttype': contacttype})}}";
+    var sponsorHomePage = (contactType==='sponsor')?'{{path('clubadmin_sponsor_homepage')}}':'{{path('view_archived_sponsors')}}';
+    var updateSponsorColumnSettings = '{{path('update_sponsor_columnsettings')}}';
+    var deleteSponsorColumnSettings = '{{path('delete_sponsor_columnsettings')}}';
+    var selectedSettingsArray = '{{selectedSettings|json_encode|raw}}';
+    var defaultSettingsArray = '{{defaultSettings|json_encode|raw}}';
+    var corrAddrField = [];
+    var invAddrField = [];
+    var none = "{{'NONE'|trans}}";
+    var all = "{{'ALL'|trans}}";
+    
+    var corrAddrCatId = '{{clubData['corrAddrCatId']}}';
+    var invAddrCatId = '{{clubData['invAddrCatId']}}';
+     /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                     title: true
+             }); 
+</script>
+{% endblock %}

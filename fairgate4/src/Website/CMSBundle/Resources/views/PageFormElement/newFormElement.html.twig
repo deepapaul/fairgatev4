@@ -1,0 +1,91 @@
+<script type="text/template" id="newFormElement">
+    <li class="list-group-item" id="formElement_<%= data.formFieldId %>" data-source="<%=(!_.isUndefined(data.source)?data.source:'')%>">
+        <input type="text" class="fg-dev-newfield fg-dev-sortOrder hide fieldSort" data-key="<%- data.formId %>.<%- data.formFieldId %>.formElementSortOrder" 
+                id="formElementSortOrder_<%- data.formFieldId %>" name="formElementSortOrder_<%- data.formFieldId %>" value="<%=data.formElementSortOrder%>">
+        <i class="fa fa-2x fa-ellipsis-v fg-sort-row fg-dev-field-sort-handle"></i> 
+
+        <div class="fg-delete-row">
+            <input type="checkbox" class="make-switch fg-dev-field-delete fg-dev-newfield fieldDelete" data-key="<%- data.formId %>.<%- data.formFieldId %>.isDeleted" id="isDeleted_<%- data.formFieldId %>" name="isDeleted_<%- data.formFieldId %>">
+            <label for="isDeleted_<%- data.formFieldId %>"></label>
+        </div>
+        <div class="fg-sortable-list-item-wrapper">
+            <div class="col-sm-3">
+            <% _.each(data.clubLanguages, function(clubLang) { %>
+                <div dataerror-group="" data-lang="<%- clubLang %>" class="<%- clubLang != data.clubDefaultLanguage ? 'hide':''  %> <%- data.isRequired == 1 ? 'fg-form-required-inline':''  %>">
+                    <input type="text" class="form-control fg-dev-newfield <%- clubLang != data.clubDefaultLanguage ? 'hide':''  %>" data-lang="<%- clubLang %>"
+                            <% var placeholderDefaultValue = (_.contains(_.keys(data.label),data.clubDefaultLanguage)) ? data.label[data.clubDefaultLanguage]:'' %>
+                            <% var dataFieldDefaultValue = (data.fieldType != 'heading')?'{{'FORM_FIELD_LABEL_PLACEHOLDER'|trans}}':'{{'CMS_FORM_HEADING_PLACEHOLDER'|trans}}' %>
+                            placeholder="<%- (clubLang != data.clubDefaultLanguage)?placeholderDefaultValue:(data.default_label != '' && typeof data.default_label != 'undefined'?data.default_label:dataFieldDefaultValue) %>" 
+                            name="<%- data.formId %>.<%- data.formFieldId %>_label_<%- clubLang %>" 
+                            id="<%- data.formFieldId %>_label_<%- clubLang %>" 
+                            data-key="<%- data.formId %>.<%- data.formFieldId %>.label.<%- clubLang %>" 
+                            value="<%- (_.contains(_.keys(data.label),clubLang)) ? data.label[clubLang]:'' %>"
+                            <%=(clubLang == data.clubDefaultLanguage && data.fieldType != 'heading') ? 'required="required" data-required="true"':'' %> >
+                    <%= data.isRequired == 1 ? '<span class="fg-field-required-icon fa fa-asterisk"></span>':''%>        
+                </div>
+            <% }); %>
+            </div>
+    
+            <% if(data.fieldType != 'heading') { %>
+                <div class="col-sm-3">
+                    <select name="<%- data.formFieldId %>_fieldType"  id="fieldType_<%- data.formFieldId %>" class="form-control fg-dev-newfield form_field_type" data-key="<%- data.formId %>.<%- data.formFieldId %>.fieldType">
+                        <option value="default">{{'FORM_FIELD_DEFAULT'|trans}}</option>
+                        <option value="singleline" <%=(data.fieldType == 'singleline')?'selected':''%>>{{'FORM_FIELD_SINGLELINE'|trans}}</option>
+                        <option value="multiline" <%=(data.fieldType == 'multiline')?'selected':''%>>{{'FORM_FIELD_MULTILINE'|trans}}</option>
+                        <option value="email" <%=(data.fieldType == 'email')?'selected':''%>>{{'FORM_FIELD_EMAIL'|trans}}</option>
+                        <option value="number" <%=(data.fieldType == 'number')?'selected':''%>>{{'FORM_FIELD_NUMBER'|trans}}</option>
+                        <option value="url" <%=(data.fieldType == 'url')?'selected':''%>>{{'FORM_FIELD_URL'|trans}}</option>
+                        <option value="date" <%=(data.fieldType == 'date')?'selected':''%>>{{'FORM_FIELD_DATE'|trans}}</option> 
+                        <option value="time" <%=(data.fieldType == 'time')?'selected':''%>>{{'FORM_FIELD_TIME'|trans}}</option>
+                        <option value="checkbox" <%=(data.fieldType == 'checkbox')?'selected':''%>>{{'FORM_FIELD_CHECKBOX'|trans}}</option>
+                        <option value="select" <%=(data.fieldType == 'select')?'selected':''%>>{{'FORM_FIELD_SELECT'|trans}}</option>
+                        <option value="radio" <%=(data.fieldType == 'radio')?'selected':''%>>{{'FORM_FIELD_RADIO'|trans}}</option>
+                        <option value="fileupload" <%=(data.fieldType == 'fileupload')?'selected':''%>>{{'FORM_FIELD_FILEUPLOAD'|trans}}</option>
+                    </select>
+                </div>
+                <div class="col-sm-2 col-sm-offset-2 <%=(data.fieldType == 'default')?'hide':''%>" id="typeOptions_<%- data.formFieldId %>_container">
+                    <a href="#typeOptions-<%= data.formFieldId %>" class="fg-toggle-link collapsed" data-toggle="collapse"><i class="fa fa-minus-square-o"></i> {{'CMS_FORM_FIELD_OPTION_LINK'|trans}}</a>
+                </div>
+                <div class="col-sm-2 text-right <%=(data.fieldType == 'default')?'hide':''%>" id="isActive_<%- data.formFieldId %>_container">
+                    <label class="switch-light switch-light-sm fg-onoff-switch" onClick="">
+                        <input type="checkbox" name="<%- data.formFieldId %>_isActive" id="isActive_<%- data.formFieldId %>" class="make-switch fg-dev-newfield" data-key="<%- data.formId %>.<%- data.formFieldId %>.isActive" <%=(data.formElementIsActive == 0)?'':'checked="checked"'%>>
+                        <span> 
+                            <span>{{'ON'|trans}}</span>
+                            <span>{{'OFF'|trans}}</span>                                                                    
+                        </span>
+                        <a class="btn btn-primary"></a>
+                    </label>
+                </div>
+            <% } else { %>
+                <div class="col-sm-9">
+                    <input type="hidden" name="<%- data.formFieldId %>_fieldType"  id="fieldType_<%- data.formFieldId %>" class="form-control fg-dev-newfield" data-key="<%- data.formId %>.<%- data.formFieldId %>.fieldType" value="heading">
+                    <input type="checkbox" name="<%- data.formFieldId %>_isActive" id="isActive_<%- data.formFieldId %>" class="hide" data-key="<%- data.formId %>.<%- data.formFieldId %>.isActive" checked="checked">
+                    <hr class="fg-header-seperator">
+                </div>
+            <% }%>
+
+        </div>
+        <div id="typeOptions-<%= data.formFieldId %>" class="collapse row fg-clear">
+            <% if(data.fieldType != 'heading') { %>
+                <%= FgCmsFormFieldsObj.renderOptionHtml(data)%>
+            <% }%>
+        </div>
+    </li>
+</script>
+
+<script type="text/template" id="noFieldError">
+<div class="alert alert-danger alert-br" id="alert_noFieldError">
+    <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
+    <p>{{'CMS_FORM_NO_FIELD_ERROR'|trans}}</p>            
+</div>
+</script>
+<script type="text/template" id="emptyFieldTypeError">
+<div class="alert alert-danger alert-br" id="alert_noFieldError">
+    <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
+    <p>{{'CMS_FORM_EMPTY_FIELDTYPE_ERROR'|trans}}</p>            
+</div>
+</script>
+
+<script type="text/template" id="form_field_templates_default">
+
+</script>

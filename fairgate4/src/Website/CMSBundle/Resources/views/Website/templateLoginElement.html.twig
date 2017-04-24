@@ -1,0 +1,51 @@
+{% if (loggedIn) %}
+    <form class="form-horizontal fg-form-loggedin" action="" skipDirtyCheck method="post" >
+        <p>{{ 'LOGGEDIN_MSG'|trans({ '%contactName%' : contactName }) }}</p>
+        <div class="form-group fg-button-block">
+            <div class="fg-button">
+                <a href="{{ path('internal_dashboard') }}" class="fg-back-button fg-dev-back-button fg-clear-left"><i class="fa fa-arrow-circle-left fa-2x"></i>{{ 'INTERNAL_AREA'|trans|capitalize }} </a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="form-group fg-button-block">
+            <div class="fg-button">
+                <button id="logout-button" name="logout-button" class="btn btn-primary fg-submit fg-dev-logout-btn">{{'CHECKMAIL_LOGOUT_BTN'|trans}}</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+{% else %}    
+    <form class="form-horizontal fg-form-login" action="" skipDirtyCheck method="post" >
+        <div class="alert alert-danger hide fg-dev-alert-div">
+            <span class="fg-dev-alert-span"></span>
+        </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+        <div class="form-group fg-input-box-left">
+          <input id="username" name="_username" type="text" required="" placeholder="{{'RL_EMAIL_ADDRESS'|trans}}" class="form-control input-md">
+        </div>
+        <div class="form-group fg-input-box-right">
+          <input id="password" name="_password" type="password" required="" placeholder="{{'GN_PASSWORD'|trans}}" class="form-control input-md">
+        </div>
+        <div class="form-group fg-button-block">
+          <div class="fg-checkbox">
+            <label for="remember_me" class="radio-inline">
+              <input type="checkbox" id="remember_me" name="_remember_me" value="on" class="uniform" >{{'KEEP_ME_LOGGED_IN'|trans}}
+            </label>
+          </div>
+          <div class="fg-button">
+            <button id="singlebutton" name="singlebutton" class="btn btn-primary fg-submit fg-dev-login-btn">{{'LOGIN_LOGIN_BTN'|trans}}</button>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="fg-footer-block">
+          <div class="fg-first">
+            <p>
+                <a id="forget-password" href="javascript:void(0)" class="fg-dev-forgot-password"><i class="fa fa-arrow-circle-right"></i>{{'LOST_PASSWORD'|trans}}</a> 
+            </p>
+          </div>
+          <div class="fg-last">
+            <p><a id="activate-login" href="javascript:void(0)" class="fg-dev-activate-login" ><i class="fa fa-arrow-circle-right"></i>{{'BACKEND_LOGIN_FIRST_TIME'|trans}}</a> </p>
+          </div>
+        </div>
+    </form>   
+{% endif %}

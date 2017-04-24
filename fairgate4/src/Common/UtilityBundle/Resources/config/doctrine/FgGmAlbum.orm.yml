@@ -1,0 +1,28 @@
+Common\UtilityBundle\Entity\FgGmAlbum:
+    repositoryClass: Common\UtilityBundle\Repository\Gallery\FgGmAlbumRepository
+    type: entity
+    table: fg_gm_album
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 45
+            fixed: false
+            nullable: true
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

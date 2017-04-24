@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<!--
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.0.3
+Version: 1.5.5
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+-->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js">
+    <!--<![endif]-->
+    <!-- BEGIN HEAD -->
+    <head>
+        <meta charset="utf-8"/>
+        <title>Metronic | Layouts - Horizontal & Sidebar Menu</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+        <meta content="" name="description"/>
+        <meta content="" name="author"/>
+        <meta name="MobileOptimized" content="320">
+        <!-- BEGIN GLOBAL MANDATORY STYLES -->
+        <!--  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>-->
+        <link href="../../assets/global/plugins/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet" />
+        <link href="../../assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
+        <link href="../../assets/global/plugins/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+        <link href="../../assets/global/plugins/uniform/css/uniform.default.css" type="text/css" rel="stylesheet" />
+        <!-- END GLOBAL MANDATORY STYLES -->
+
+        <!-- BEGIN PAGE LEVEL STYLES -->
+        <link href="../../assets/global/plugins/bootstrap-toastr/toastr.min.css" type="text/css" rel="stylesheet" />
+        <!-- END PAGE LEVEL STYLES -->
+
+        <!-- BEGIN THEME STYLES -->
+        <link href="../../assets/global/css/plugins.css" type="text/css" rel="stylesheet" />
+        <link href="../../assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
+        <link href="../../assets/admin/layout/css/themes/default.css" type="text/css" rel="stylesheet" />
+        <link href="../../assets/global/css/components.css" type="text/css" rel="stylesheet" />
+        <link href="../../../fgassets/global/css/bootstrap-toggle-switch.css" rel="stylesheet" type="text/css"/>
+        <link href="../../../assets/global/plugins/colorbox-master/example5/colorbox.css" rel="stylesheet" type="text/css"/>
+        <link href="../../assets/global/plugins/select2/select2.css" rel="stylesheet" type="text/css"/>
+        <!-- END THEME STYLES -->
+        <!-- BEGIN CUSTOM STYLES -->
+        <link href="../../../bundles/commonHelp/css/metronic-new-elements.css" rel="stylesheet" type="text/css"/>
+        <link href="../css/animate.min.css" type="text/css" rel="stylesheet" >
+        <link href="../css/internal-style.css" type="text/css" rel="stylesheet" />
+        <link href="../css/fg-media.css" type="text/css" rel="stylesheet" />
+        <link href="../../global/css/global-style.css" type="text/css" rel="stylesheet" />
+        <link href="../css/fg-override.css" rel="stylesheet" type="text/css"/>
+        <link href="../../../fgcustom/css/style-fairgate.css" rel="stylesheet" type="text/css"/>
+        <link href="../../../bundles/commonHelp/css/fg-help-styles.css" rel="stylesheet" type="text/css"/>
+        <!-- END CUSTOM STYLES -->
+        <!-- PLEASE MAKE SURE FAIRGATE STYLE SHOULD BE LOADED AT THE END -->
+        <link rel="shortcut icon" href="img/favicon.ico" />
+    </head>
+    <!-- BEGIN BODY -->
+    <body class="page-header-fixed page-sidebar-fixed page-footer-fixed ">
+
+        <!-- BEGIN HEADER -->
+        <div class="page-header navbar navbar-inverse navbar-fixed-top fg-autocomplete-parent">
+            <!-- BEGIN TOP NAVIGATION BAR -->
+            <div class="header-inner">
+                <!-- BEGIN LOGO -->
+
+                <a class="navbar-brand fg-navbar-brand" name="fg_dev-contact" href="/federation/backend/"> <img src="http://192.168.0.48:9044/fgassets/global/img/fairgate-small-logo.jpg?version=1.0.2" alt="logo" class="img-responsive"> </a>   
+                <div class="fg-dropdown-nav">
+                    <ul id="fg-top-nav-app-switch" class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" data-toggle="dropdown" class="fg-dropdown-head">BACKEND<i class="fa fa-angle-down"></i></a>
+                            <ul class="dropdown-menu animated" data-animation="fadeIn">                      
+                                <li><a href="/federation/internal/dashboard">INTERNAL</a></li>                    
+                                <li class="active"><a href="/federation/backend/">BACKEND</a></li>
+                            </ul>
+                        </li>
+                    </ul>  
+                </div>          
+
+                <!-- END LOGO -->
+                <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+
+                <a href="javascript:;" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <img src="/fgcustom/img/menu-toggler.png?version=1.0.2" alt=""> </a>
+                <!-- END RESPONSIVE MENU TOGGLER -->
+                <!-- BEGIN HORIZANTAL MENU -->
+                <div class="hor-menu hidden-sm hidden-xs">
+                    <ul class="nav navbar-nav">
+                        <!--STARTS CONTACT MENU-->
+                        <li class="fg-header-nav-contact" id="fg-top-contact-menu"> <a href="#" name="fg-dev-topnav-contactmenu" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" class="dropdown-toggle"> <span class="title">Contacts</span>   <i class="fa fa-angle-down"></i><span class="selected"> </span> </a>
+                            <ul class="dropdown-menu  hold-on-click">
+                                <li> <div class="fbautocomplete-main-div ui-helper-clearfix"><i class="fa fa-search fg-autocomplete-search"></i> <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span><input type="text" id="existingContacts-menu" class="fg-autocomplete-contact fg-autocomplete-txt ui-autocomplete-input" autocomplete="off"> </div></li>  
+                                <li> <a id="fg-dev-topnav-contact-active" data-module="contact" data-type="active" name="fg-dev-topnav-contact-active" href="/federation/backend/contact/list"><span class="title">Active contacts</span><span class="badge badge-round badge-important" id="fg-dev-activecontact-count"> 314 </span></a> </li>
+                                <li id="fg_dev-header-menu-archivecontact"> <a id="fg-dev-topnav-contact-archive" name="fg-dev-topnav-contact-archive" data-module="contact" data-type="active" href="/federation/backend/contact/contactarchive"><span class="title">Archived contacts</span><span class="badge badge-round badge-important" id="fg-dev-archivecontact-count"> 27 </span></a></li>
+                                <li id="fg_dev-header-menu-archivecontact"> <a data-type="active" data-module="contact" href="/federation/backend/contact/formerfederationmember"><span class="title">Former abcd</span><span class="badge badge-round badge-important" id="fg-dev-formerfedmem-count"> 43 </span></a></li>
+                                <li id="fg-dev-confirmations" class="dropdown-submenu fg-dev-top-settings-selected fg-header-settings-contact"> <a href="#" name="fg-dev-topnav-confirmations"><span class="title">Confirmations</span> <i data-content="" data-original-title="" data-trigger="hover" data-placement="bottom" class="fa fa-warning fg-dev-Popovers fg-warning-mailings fg-confirmations-warning"></i></a>
+                                    <ul class="dropdown-menu hold-on-click" id="contact_confirmations">
+                                        <li> <a name="fg-dev-topnav-confirmchanges" href="/federation/backend/contact/confirmationchanges/changes"><span class="title">Changes</span><span class="badge badge-round badge-important" id="fg-dev-confirmchanges-count"> 6 </span></a> </li>
+                                        <li> <a name="fg-dev-topnav-confirmmutations" href="/federation/backend/contact/mutations"><span class="title">Mutations</span><span class="badge badge-round badge-important" id="fg-dev-confirmmutations-count"> 14 </span></a> </li>
+                                        <li> <a name="fg-dev-topnav-confirmcreations" href="/federation/backend/contact/creations"><span class="title">Creations</span><span class="badge badge-round badge-important" id="fg-dev-confirmcreations-count"> 0 </span></a> </li> 
+                                    </ul>
+                                </li>
+                                <li id="fg-dev-top-settings" class="dropdown-submenu fg-dev-top-settings-selected fg-header-settings-contact"> <a href="#" name="fg-dev-topnav-contactsettings"><span class="title">Contact fields </span></a>
+                                    <ul class="dropdown-menu hold-on-click" id="contact_settings">
+                                        <li> <a name="fg-dev-topnav-contactfields" href="/federation/backend/contact/contactfields"><span class="title">Administration</span></a> </li>
+                                        <li> <a name="fg-dev-topnav-contactoverview" href="/federation/backend/contact/contactoverview"><span class="title">Contact overview settings</span></a> </li>
+                                        <li> <a name="fg-dev-topnav-internalsection" href="/federation/backend/contact/profilefield"><span class="title">Internal section</span></a> </li> 
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--ENDS CONTACT MENU-->
+                        <!--STARTS CLUB MENU-->
+                        <li class="fg-header-nav-club"> <a href="#" name="fg-dev-topnav-clubsettings" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" class="dropdown-toggle"><span class="title">Clubs</span> <i class="fa fa-angle-down"></i> </a>
+                            <ul class="dropdown-menu  hold-on-click">
+                                <li> <div class="fbautocomplete-main-div ui-helper-clearfix"><i class="fa fa-search fg-autocomplete-search"></i> <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span><input type="text" id="existingClubs-menu" class="fg-autocomplete-club fg-autocomplete-txt ui-autocomplete-input" autocomplete="off"> </div></li>  
+                                <li> <a id="fgdev-topnav-club" data-module="club" data-type="active" name="fg-dev-topnav-club" href="/federation/backend/club"><span class="title">Clubs</span><span class="badge badge-round badge-important"> 28 </span></a> </li>
+                            </ul>
+                        </li>
+                        <!--ENDS CLUB MENU-->
+                        <!--STARTS DOCUMENT MENU-->
+                        <li class="fg-header-nav-document" id="fg-top-document-menu"> <a href="#" name="fg-dev-topnav-documentmenu" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" class="dropdown-toggle"> <span class="title">Documents</span>   <i class="fa fa-angle-down"></i><span class="selected"> </span> </a>
+                            <ul class="dropdown-menu  hold-on-click">
+                                <li> <div class="fbautocomplete-main-div ui-helper-clearfix"><i class="fa fa-search fg-autocomplete-search"></i> <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span><input type="text" id="existingDocuments-menu" class="fg-autocomplete-document fg-autocomplete-txt ui-autocomplete-input" autocomplete="off"> </div></li>  
+                                <li> 
+                                    <a id="fg-dev-topnav-document-club" data-module="document" data-type="club" name="fg-dev-topnav-document-club" href="/federation/backend/document/club"><span class="title">                                            
+                                            Federation &amp; Clubs
+                                        </span><span class="badge badge-round badge-important" id="fg-dev-activecontact-count"> 176 </span></a> </li>
+                                <li> 
+                                    <a id="fg-dev-topnav-document-team" data-module="document" data-type="team" name="fg-dev-topnav-document-team" href="/federation/backend/document/team"><span class="title">
+                                            Teams
+                                        </span><span class="badge badge-round badge-important" id="fg-dev-archivecontact-count"> 87 </span></a></li>                             
+                                <li> 
+                                    <a id="fg-dev-topnav-document-workgroup" data-module="document" data-type="workgroup" name="fg-dev-topnav-document-workgroup" href="/federation/backend/document/workgroup"><span class="title">
+                                            Workgroups
+                                        </span><span class="badge badge-round badge-important" id="fg-dev-activecontact-count"> 23 </span></a> </li>
+                                <li> 
+                                    <a id="fg-dev-topnav-document-contact" data-module="document" data-type="contact" name="fg-dev-topnav-document-contact" href="/federation/backend/document/contact"><span class="title">
+                                            Contacts
+                                        </span><span class="badge badge-round badge-important" id="fg-dev-archivecontact-count"> 115 </span></a></li>                             
+                            </ul>
+                        </li>                
+                        <!--ENDS DOCUMENT MENU-->
+                        <!--STARTS COMMUNICATION MENU-->
+                        <li class="mega-menu-dropdown">
+                            <a href="#" name="fg-dev-topnav-communication" data-hover="dropdown" data-close-others="true" data-toggle="dropdown" class="dropdown-toggle" aria-expanded="true">
+                                <span class="title">Communication</span>  <i class="fa fa-angle-down"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <div class="mega-menu-content">
+                                        <div class="row">                                        
+                                            <ul class="col-md-4 mega-menu-submenu">
+                                                <li><h3><span class="title">Newsletter</span></h3></li>
+                                                <li>
+                                                    <a href="/federation/backend/communication/newsletter/mailings" name="fg-dev-topnav-mailings"><i class="fa fa-angle-right"></i><span class="title">Mailings</span></a>
+                                                </li>
+                                                <li>
+                                                    <a href="/federation/backend/communication/recipientslist" name="fg-dev-topnav-recipients"><i class="fa fa-angle-right"></i><span class="title">Recipients lists</span></a>
+                                                </li>
+                                                <li id="fg_dev-header-menu-subscriber">                                        
+                                                    <a href="/federation/backend/communication/subscribers" name="fg-dev-topnav-subscribers"><i class="fa fa-angle-right"></i><span class="title">Subscribers</span>
+                                                        <span id="fg-dev-subscriber-count" class="badge badge-round badge-important"> 86 </span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="/federation/backend/communication/template/list" name="fg-dev-topnav-design-template"><i class="fa fa-angle-right"></i><span class="title">Templates</span></a>
+                                                </li>
+                                                <li>
+                                                    <a href="/federation/backend/communication/newsletter/statistics" name="fg-dev-topnav-statistics"><i class="fa fa-angle-right"></i><span class="title">Statistics</span></a>
+                                                </li>                                                       
+                                            </ul>
+                                            <ul class="col-md-4 mega-menu-submenu">
+                                                <li><h3><span class="title">Simple mail</span></h3></li>
+                                                <li>
+                                                    <a href="/federation/backend/communication/simplemail/mailings" name="fg-dev-topnav-mailings"><i class="fa fa-angle-right"></i><span class="title">Mailings</span></a>
+                                                </li>
+                                                <li>
+                                                    <a href="/federation/backend/communication/simplemailrecipientslist" name="fg-dev-topnav-recipients"><i class="fa fa-angle-right"></i><span class="title">Recipients lists</span></a>
+                                                </li>
+                                                <li>
+                                                    <a href="/federation/backend/communication/simplemail/statistics" name="fg-dev-topnav-statistics"><i class="fa fa-angle-right"></i><span class="title">Statistics</span></a>
+                                                </li>
+                                            </ul>    
+                                        </div>
+                                    </div>    
+                                </li>
+                            </ul>
+                        </li>
+                        <!--ENDS COMMUNICATION MENU-->
+
+                        <!--STARTS SPONSOR MENU-->                    
+                        <li class="nullfg-header-nav-sponsor" id="fg-top-sponsor-menu"> <a href="#" name="fg-dev-topnav-sponsormenu" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" class="dropdown-toggle"> <span class="title">Sponsors</span>   <i class="fa fa-angle-down"></i><span class="selected"> </span> </a>
+
+                            <ul class="dropdown-menu  hold-on-click" style="
+                                ">
+                                <li> <a class="youtube" href="https://www.youtube.com/watch?v=YykjpeuMNEk" name="fg-dev-topnav-statistics">
+                                        <div class="fg-helpmenu-icon">
+                                            <i class="fa fa-video-camera"></i>
+                                        </div>
+                                        <div class="fg-helpmenu-text">
+                                            Newsletter
+                                        </div>
+                                    </a><div class="fbautocomplete-main-div ui-helper-clearfix"><i class="fa fa-search fg-autocomplete-search"></i> <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span><input type="text" id="existingSponsors-menu" class="fg-autocomplete-sponsor fg-autocomplete-txt ui-autocomplete-input" autocomplete="off"> </div></li>
+                                <li> <a id="fg-dev-topnav-sponsor-active" data-module="sponsor" data-type="active" name="fg-dev-topnav-sponsor" href="/federation/backend/sponsor"><span class="title">Sponsors</span><span class="badge badge-round badge-important"> 69 </span></a> </li>
+                                <li> <a id="fg-dev-topnav-sponsor-archived" data-module="sponsor" data-type="archived" name="fg-dev-topnav-archived-sponsor" href="/federation/backend/sponsor/archivedsponsor"><span class="title">Archived Sponsors</span><span class="badge badge-round badge-important"> 0 </span></a> </li>
+                                <li> <a id="fg-dev-topnav-sponsor-analysis" data-module="sponsor" data-type="analysis" name="fg-dev-topnav-sponsor-analysis" href="/federation/backend/sponsor/analysis"><span class="title">Analysis</span></a> </li>
+                                <li id="fg-dev-top-settings" class="dropdown-submenu fg-dev-top-settings-selected fg-header-settings-sponsor"> <a href="#" name="fg-dev-topnav-sponsorsettings"><span class="title">Settings </span></a>
+                                    <ul class="dropdown-menu  hold-on-click" id="sponsor_settings">
+                                        <li> <a name="fg-dev-topnav-sponsoradareas" href="/federation/backend/sponsor/adscategory"><span class="title">Ad areas</span></a> </li>
+                                        <li> <a name="fg-dev-topnav-sponsoroverview" href="/federation/backend/sponsor/overview"><span class="title">Sponsor overview settings</span></a> </li>     
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--ENDS SPONSOR MENU-->
+                    </ul>      
+                </div>
+                <div class="hor-menu hidden-sm hidden-xs pull-right">
+                    <ul class="nav navbar-nav">
+
+                        <!--STARTS SETTINGS MENU-->
+                        <li class="mega-menu-dropdown fg-help-menu-wrapper">
+                            <a name="fg-dev-topnav-clubmainmenu" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" class="dropdown-toggle" href=" http://handbuch.fairgate.ch/" target="_blank"> <i class="fa fa-question-circle"></i> </a>
+                            <ul class="dropdown-menu  pull-right hold-on-click">
+                                <li> 
+                                    <div class="mega-menu-content">
+                                        <div class="row">
+                                            <ul class="col-md-4 mega-menu-submenu">
+                                                <li>
+                                                    <h3>
+                                                        <span class="title">Fairgate Help resources</span>
+                                                    </h3>
+                                                </li>
+                                                <li>
+                                                    <a href="/federation/backend/communication/newsletter/mailings" name="fg-dev-topnav-mailings">
+                                                        <i class="fa fa-angle-right"></i>
+                                                        <span class="title">Quickstart Window</span>
+                                                    </a>
+                                                </li>
+                                                <li class="fg-disabled">
+                                                    <a href="/federation/backend/communication/recipientslist" name="fg-dev-topnav-recipients">
+                                                        <i class="fa fa-angle-right"></i>
+                                                        <span class="title">Sidebar Tuotorial</span>
+                                                    </a>
+                                                </li>
+                                                <li id="fg_dev-header-menu-subscriber">
+                                                    <a href="/federation/backend/communication/subscribers" name="fg-dev-topnav-subscribers">
+                                                        <i class="fa fa-angle-right"></i>
+                                                        <span class="title">Quicktip videos</span>
+                                                        <span id="fg-dev-subscriber-count" class="badge badge-round badge-important"> new </span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="/federation/backend/communication/template/list" name="fg-dev-topnav-design-template">
+                                                        <i class="fa fa-angle-right"></i>
+                                                        <span class="title">Video Tutorials</span>
+                                                    </a>
+                                                </li>
+                                                <li class="fg-disabled">
+                                                    <a href="/federation/backend/communication/newsletter/statistics" name="fg-dev-topnav-statistics">
+                                                        <i class="fa fa-angle-right"></i>
+                                                        <span class="title">Cheat sheet</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="/federation/backend/communication/newsletter/statistics" name="fg-dev-topnav-statistics">
+                                                        <i class="fa fa-angle-right"></i>
+                                                        <span class="title">Manual</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <ul class="col-md-4 mega-menu-submenu">
+                                                <li>
+                                                    <h3>
+                                                        <span class="title">Social Media</span>
+                                                    </h3>
+                                                </li>
+                                                <li>
+                                                    <a href="/federation/backend/communication/simplemail/mailings" name="fg-dev-topnav-mailings">
+                                                        <i class="fa fa-angle-right"></i>
+                                                        <span class="title">facebook Page</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="/federation/backend/communication/simplemailrecipientslist" name="fg-dev-topnav-recipients">
+                                                        <i class="fa fa-angle-right"></i>
+                                                        <span class="title">Twitter Page</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="/federation/backend/communication/simplemail/statistics" name="fg-dev-topnav-statistics">
+                                                        <i class="fa fa-angle-right"></i>
+                                                        <span class="title">Google+ Page</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="/federation/backend/communication/simplemail/statistics" name="fg-dev-topnav-statistics">
+                                                        <i class="fa fa-angle-right"></i>
+                                                        <span class="title">Youtube Channel</span>
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                            <ul class="col-md-4 mega-menu-submenu fg-helpmenu-lastcol">
+                                                <li class="tiles">
+                                                    <div class="tile double bg-blue-madison">
+                                                        <div class="tile-body">
+                                                            <i class="fa fa-skype"></i>
+                                                            <h4>Skype Support</h4>
+                                                            <p>Every Monday from 18:00 until 21:00</p>
+                                                        </div>
+                                                        <div class="tile-object">
+                                                            <div class="number">Book subscription</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tile double bg-blue-madison">
+                                                        <div class="tile-body">
+                                                            <i class="fa fa-desktop"></i>
+                                                            <h4>Webinars</h4>
+                                                            <p>Book a seat in the first row.</p>
+                                                        </div>
+                                                        <div class="tile-object">
+                                                            <div class="number">Next on 22.02.2016</div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                        <div class="row fg-helpmenu-footer">
+                                            <p>Do more with less  effort. Our additional modules:</p>
+                                            <div class="tiles">
+                                                <div class="tile bg-red-sunglo">
+                                                    <div class="tile-body">
+                                                        <i class="fa fa-video-camera"></i>
+                                                    </div>
+                                                    <div class="tile-object">
+                                                        <div class="name"> Documents </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tile bg-red-sunglo">
+                                                    <div class="tile-body">
+                                                        <i class="fa fa-video-camera"></i>
+                                                    </div>
+                                                    <div class="tile-object">
+                                                        <div class="name"> Sponsors </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tile bg-red-sunglo">
+                                                    <div class="tile-body">
+                                                        <i class="fa fa-video-camera"></i>
+                                                    </div>
+                                                    <div class="tile-object">
+                                                        <div class="name"> Communication </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tile bg-red-sunglo">
+                                                    <div class="tile-body">
+                                                        <i class="fa fa-video-camera"></i>
+                                                    </div>
+                                                    <div class="tile-object">
+                                                        <div class="name"> Invoice </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </li>
+
+
+                            </ul>
+                        </li>
+
+                        <li id="fg-dev-top-settings"><a name="fg-dev-topnav-clubmainmenu" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" class="dropdown-toggle" href="#"> <span class="title">Federation</span> <i class="fa fa-angle-down"></i> </a>
+                            <ul class="dropdown-menu  pull-right hold-on-click">
+                                <li> <a name="fg-dev-topnav-clubsettings" href="/federation/backend/settings/club/0/8514"><span class="title">Data</span></a> </li>
+                                <li> <a name="fg-dev-topnav-files" href="/federation/files/filemanager/listfiles"><span class="title">Files</span></a> </li>
+
+
+                                <li> <a name="fg-dev-topnav-executiveboard" href="/federation/backend/settings/editexecutiveboardmembers"><span class="title">Executive Board</span></a> </li>
+                                <li> <a name="fg-dev-topnav-userrights" href="/federation/backend/settings/userrights"><span class="title">User rights</span></a> </li>
+                                <li> <a name="fg-dev-topnav-settingstabs" data-disabled-breadcrumb="true" href="/federation/backend/settings/language"><span class="title">Settings</span></a> </li>
+
+
+                            </ul>
+                        </li>
+                        <!--ENDS SETTINGS MENU-->
+
+                        <!--STARTS LOGOUT MENU-->
+
+                        <!--STARTS SETTINGS MENU-->
+                    </ul>
+                </div>
+                <!-- END HORIZANTAL MENU -->
+            </div>
+            <!-- END TOP NAVIGATION BAR -->
+        </div>
+        <!-- END HEADER -->    
+        <div class="clearfix"> </div>
+
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container" style="margin-top: 46px;">
+            <!-- BEGIN HORIZONTAL MENU PAGE SIDEBAR1 -->
+            <div class="page-sidebar-wrapper">
+                <div class="page-sidebar">
+                    <!-- BEGIN SIDEBAR MENU -->
+                    <ul class="page-sidebar-menu margintp20 dropdowndiv">
+                        <li id="frontend-link" class="tooltips">
+                            <a href="http://keenthemes.com/preview/index.php?theme=metronic_frontend" target="_blank"> <span class="arrow pull-left"></span> <span class="title"> Roles </span> </a>
+                            <ul class="page-sidebar-menu sub-menu firstleval">
+                                <li>
+                                    <div class="control-aranew">
+                                        <input type="text" class="form-control input-sm wd76 pull-left fg-sidebar-input" placeholder="Add Role">
+                                        <i class="fa fa-check"></i><i class="fa fa-times"></i>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul class="sub-menu bookmarkdown">
+                                <li> <a href="rolecategory_settings.html?catId=3911"> Roles category (common)</a> </li>
+                                <li> <a href="rolecategory_settings.html?catId=5632"> Roles category (own)</a> </li>
+                            </ul>
+                            <div class="btn-group fg-sidebar-btn-right btngrpdiv">
+                                <button data-toggle="dropdown" class="btn"> <i class="fa fa-bars"></i> </button>
+                            </div>
+                        </li>
+                        <li class="">
+                            <a href="javascript:;"> <span class="arrow pull-left"></span> <span class="title"> Saved filter </span> </a>
+                            <ul class="sub-menu bookmarkdown">
+                                <li class="subclass"> <a class="pull-left side-right-zro" href="#"><i id="3" data_type="filter" class="fa fa-bookmark  bookmarkclick  fa-bookmark-o"></i> </a> <a class="ajaxify" href="/twilight/backend/index"><span class="badge fg-badge-blue badge-round badge-important"> 55 </span> Members</a> </li>
+                                <li class="subclass"> <a class="pull-left side-right-zro" href="#"><i id="4" data_type="filter" class="fa fa-bookmark  bookmarkclick   fa-bookmark-o"></i> </a> <a class="ajaxify" href="/twilight/backend/index"><span class="badge fg-badge-blue badge-round badge-important"> 55 </span> Sponsors</a> </li>
+                            </ul>
+
+                            <div class="btn-group  fg-sidebar-btn-right btngrpdiv">
+                                <button data-toggle="dropdown" class="btn"> <i class="fa fa-bars"></i> </button>
+                            </div>
+                        </li>
+                        <li class="">
+                            <a href="javascript:;"> <span class="arrow pull-left"></span> <span class="title"> Saved filter </span> </a>
+                            <ul class="sub-menu bookmarkdown">
+                                <li class="subclass"> <a class="pull-left side-right-zro" href="#"><i id="3" data_type="filter" class="fa fa-bookmark  bookmarkclick "></i> </a> <a class="ajaxify" href="/twilight/backend/index"><span class="badge fg-badge-blue badge-round badge-important"> 55 </span> Members</a> </li>
+                                <li class="subclass"> <a class="pull-left side-right-zro" href="#"><i id="4" data_type="filter" class="fa fa-bookmark  bookmarkclick"></i> </a> <a class="ajaxify" href="/twilight/backend/index"><span class="badge fg-badge-blue badge-round badge-important"> 55 </span> Sponsors</a> </li>
+                            </ul>
+
+                            <div class="btn-group  fg-sidebar-btn-right btngrpdiv">
+                                <button data-toggle="dropdown" class="btn"> <i class="fa fa-bars"></i> </button>
+                            </div>
+                        </li>
+                        <li class="">
+                            <a href="javascript:;"> <span class="arrow pull-left"></span> <span class="title"> Saved filter </span> </a>
+                            <ul class="sub-menu bookmarkdown">
+                                <li class="subclass"> <a class="pull-left side-right-zro" href="#"><i id="3" data_type="filter" class="fa fa-bookmark  bookmarkclick "></i> </a> <a class="ajaxify" href="/twilight/backend/index"><span class="badge fg-badge-blue badge-round badge-important"> 55 </span> Members</a> </li>
+                                <li class="subclass"> <a class="pull-left side-right-zro" href="#"><i id="4" data_type="filter" class="fa fa-bookmark  bookmarkclick"></i> </a> <a class="ajaxify" href="/twilight/backend/index"><span class="badge fg-badge-blue badge-round badge-important"> 55 </span> Sponsors</a> </li>
+                            </ul>
+
+                            <div class="btn-group  fg-sidebar-btn-right btngrpdiv">
+                                <button data-toggle="dropdown" class="btn"> <i class="fa fa-bars"></i> </button>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="pull-right settingsright">
+                                <div class="btn-group btngrpdivsub dropup custom-drop">
+                                    <button class="btn"> <i class="fa fa-cog fa-2x"></i> </button>
+                                    <ul class="dropdown-menu pull-right drpmenu-new dropdown-menu-form padinten hidden-settings hold-on-click">
+                                        <li>
+                                            <label>
+                                                <div class="checker"><span><input type="checkbox"></span>
+                                                </div>
+                                                Contacts</label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <div class="checker"><span><input type="checkbox"></span>
+                                                </div>
+                                                Roles</label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <div class="checker"><span><input type="checkbox"></span>
+                                                </div>
+                                                Federation Roles</label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <div class="checker"><span><input type="checkbox"></span>
+                                                </div>
+                                                Filter roles </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <div class="checker"><span><input type="checkbox"></span>
+                                                </div>
+                                                Teams </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <div class="checker"><span><input type="checkbox"></span>
+                                                </div>
+                                                Workgroups </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <div class="checker"><span><input type="checkbox"></span>
+                                                </div>
+                                                Saved filters </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- END SIDEBAR MENU -->
+
+                </div>
+            </div>
+            <!-- END BEGIN HORIZONTAL MENU PAGE SIDEBAR -->
+            <!-- BEGIN CONTENT -->
+            <div class="page-content-wrapper">
+                <div class="page-content" style="min-height:296px">
+                    <!-- BEGIN PAGE HEADER-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                            <ul class="page-breadcrumb breadcrumb">
+                                <li><a href="index.html"><i class="fa fa-home"></i></a>
+                                </li>
+                                <li class="fg-dynamic-links fg-page-inactive" data-auto="breadcrumb_level2"><i class="fa fa-angle-right"></i><a href="#">Gallery</a></li>
+                                <li class="fg-dynamic-links fg-page-inactive" data-auto="breadcrumb_level3"><i class="fa fa-angle-right"></i><a href="/federation/backend/contact/list" id="fg-dev-topnav-contact-active" data-type="active" data-module="contact">All Images</a></li>
+                            </ul>
+                            <div class="fg-action-menu-wrapper">
+                                <div class="fg-page-title-block-1 fg-active-IB">
+                                    <div class="fg-internal-data-tab">
+                                        <ul class="nav nav-tabs data-more-tab" id="data-tabs">
+                                            <li id="data_li_1" data-type="1" class="show active">
+                                                <a data-toggle="tab" href="#fg_field_category_1">Contact</a>
+                                            </li>
+                                            <li id="data_li_2" data-type="2" class="show">
+                                                <a data-toggle="tab" href="#fg_field_category_2">Communication</a>
+                                            </li>
+                                            <li id="data_li_6" data-type="6" class="show">
+                                                <a data-toggle="tab" href="#fg_field_category_6">Documents</a>
+                                            </li>
+                                            <li id="data_li_290" data-type="290" class="show">
+                                                <a data-toggle="tab" href="#fg_field_category_290">Internal area </a>
+                                            </li>
+                                            <li id="data_li_279" data-type="279" class="show">
+                                                <a data-toggle="tab" href="#fg_field_category_279">Welcome </a>
+                                            </li>
+                                            <li class="datahideshow dropdown show">
+                                                <a href="#" id="fg-contact-more-tab" class="dropdown-toggle" data-toggle="dropdown">More
+                                                    <i class="fa fa-angle-down"></i>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li id="data_li_1" data-type="1" class="active hidden">
+                                                        <a data-toggle="tab" href="#fg_field_category_1">Contact</a>
+                                                    </li>
+                                                    <li id="data_li_2" data-type="2" class="hidden">
+                                                        <a data-toggle="tab" href="#fg_field_category_2">Communication</a>
+                                                    </li>
+                                                    <li id="data_li_6" data-type="6" class="hidden">
+                                                        <a data-toggle="tab" href="#fg_field_category_6">Documents</a>
+                                                    </li>
+                                                    <li id="data_li_290" data-type="290" class="hidden">
+                                                        <a data-toggle="tab" href="#fg_field_category_290">Internal area
+                                                            <img class="fa-envelope-o" src="/uploads/8514/club.png">
+                                                        </a>
+                                                    </li>
+                                                    <li id="data_li_279" data-type="279" class="hidden">
+                                                        <a data-toggle="tab" href="#fg_field_category_279">Welcome
+                                                            <img class="fa-envelope-o" src="/uploads/8514/club.png">
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <p style="width: 100%;max-width: 200px;"> <a class='youtube' href="http://www.youtube.com/embed/VOJyrQa_WR4?rel=0&amp;wmode=transparent" ><img src="http://themes.pagelines.com/pinspro/wp-content/uploads/sites/8/2014/04/youtube-thumb-1200x715.jpg"></a></p>
+                            <p><a class="btn default" data-toggle="modal" href="#addVideo">Help Modal</a><a class="btn default" data-toggle="modal" href="#tab">data tabs</a></p>
+
+
+                            <div class="fg-columns">
+                                <a class="youtube" href="https://www.youtube.com/watch?v=YykjpeuMNEk" name="fg-dev-topnav-statistics">
+                                    <div class="fg-helpmenu-icon">
+                                        <i class="fa fa-video-camera"></i>
+                                    </div>
+                                    <div class="fg-helpmenu-text">
+                                        Newsletter
+                                    </div>
+                                </a>
+                            </div>
+
+
+                            <!-- /.modal -->
+                            <div id="addVideo" class="modal fg-help-content-modal fade" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog" >
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                            <h4 class="modal-title fg-clear">Sed vel aliquam leo. Maecenas et metus eu quam rutrum maximus</h4>
+
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="fg-action-menu-wrapper">
+                                                <div class="fg-page-title-block-1 fg-active-IB">
+                                                    <div class="fg-internal-data-tab">
+                                                        <ul class="nav nav-tabs data-more-tab" id="data-tabs">
+                                                            <li id="data_li_1" data-type="1" class="show">
+                                                                <a data-toggle="tab" href="#fg_field_category_1">Contact</a>
+                                                            </li>
+                                                            <li id="data_li_2" data-type="2" class="show">
+                                                                <a data-toggle="tab" href="#fg_field_category_2">Communication</a>
+                                                            </li>
+                                                            <li id="data_li_6" data-type="6" class="show">
+                                                                <a data-toggle="tab" href="#fg_field_category_6">Documents</a>
+                                                            </li>
+                                                            <li id="data_li_290" data-type="290" class="show">
+                                                                <a data-toggle="tab" href="#fg_field_category_290">Internal area </a>
+                                                            </li>
+                                                            <li id="data_li_279" data-type="279" class="show active">
+                                                                <a data-toggle="tab" href="#fg_field_category_279">Welcome </a>
+                                                            </li>
+                                                            <li class="datahideshow dropdown show">
+                                                                <a href="#" id="fg-contact-more-tab" class="dropdown-toggle" data-toggle="dropdown">More
+                                                                    <i class="fa fa-angle-down"></i>
+                                                                </a>
+                                                                <ul class="dropdown-menu">
+                                                                    <li id="data_li_1" data-type="1" class="active hidden">
+                                                                        <a data-toggle="tab" href="#fg_field_category_1">Contact</a>
+                                                                    </li>
+                                                                    <li id="data_li_2" data-type="2" class="hidden">
+                                                                        <a data-toggle="tab" href="#fg_field_category_2">Communication</a>
+                                                                    </li>
+                                                                    <li id="data_li_6" data-type="6" class="hidden">
+                                                                        <a data-toggle="tab" href="#fg_field_category_6">Documents</a>
+                                                                    </li>
+                                                                    <li id="data_li_290" data-type="290" class="hidden">
+                                                                        <a data-toggle="tab" href="#fg_field_category_290">Internal area
+                                                                            <img class="fa-envelope-o" src="/uploads/8514/club.png">
+                                                                        </a>
+                                                                    </li>
+                                                                    <li id="data_li_279" data-type="279" class="hidden">
+                                                                        <a data-toggle="tab" href="#fg_field_category_279">Welcome
+                                                                            <img class="fa-envelope-o" src="/uploads/8514/club.png">
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+
+                                            </div>
+
+                                            <div class="fg-help-content-wrapper-small hide">
+                                                <div class="panel-group fg-help-content-accordian-wrapper" id="accordion" role="tablist" aria-multiselectable="true">
+                                                </div>
+                                            </div>
+                                            <div class="fg-help-content-wrapper  fg-clear">
+                                                <div class="hide">
+
+                                                    <div class="fg-help-topic-list-wrapper hide">
+                                                        <ul class="fg-help-topic-lists">
+                                                            <li class="fg-help-topic-list active"  data-target="act-01">
+                                                                <div class="fg-help-topic-header">Lorem Ipsum is simply dummy </div>
+                                                                <div class="fg-help-topic-excerpt">Text of the printing and typesetting industry  when an unknown printer took a galley of type and scrambled</div>
+                                                            </li>
+                                                            <li class="fg-help-topic-list"  data-target="act-02">
+                                                                <div class="fg-help-topic-header">Lorem Ipsum is simply dummy </div>
+                                                                <div class="fg-help-topic-excerpt">Text of the printing and typesetting industry  when an unknown printer took a galley of type and scrambled</div>
+                                                            </li>
+                                                            <li class="fg-help-topic-list"  data-target="act-03">
+                                                                <div class="fg-help-topic-header">Lorem Ipsum is simply dummy </div>
+                                                                <div class="fg-help-topic-excerpt">Text of the printing and typesetting industry  when an unknown printer took a galley of type and scrambled</div>
+                                                            </li>
+                                                            <li class="fg-help-topic-list"  data-target="act-04">
+                                                                <div class="fg-help-topic-header">Lorem Ipsum is simply dummy </div>
+                                                                <div class="fg-help-topic-excerpt">Text of the printing and typesetting industry  when an unknown printer took a galley of type and scrambled</div>
+                                                            </li>
+                                                            <li class="fg-help-topic-list"  data-target="act-05">
+                                                                <div class="fg-help-topic-header">Lorem Ipsum is simply dummy </div>
+                                                                <div class="fg-help-topic-excerpt">Text of the printing and typesetting industry  when an unknown printer took a galley of type and scrambled</div>
+                                                            </li>
+                                                            <li class="fg-help-topic-list"   data-target="act-06">
+                                                                <div class="fg-help-topic-header">Lorem Ipsum is simply dummy </div>
+                                                                <div class="fg-help-topic-excerpt">Text of the printing and typesetting industry  when an unknown printer took a galley of type and scrambled</div>
+                                                            </li>
+                                                            <li class="fg-help-topic-list"   data-target="act-07">
+                                                                <div class="fg-help-topic-header">Lorem Ipsum is simply dummy </div>
+                                                                <div class="fg-help-topic-excerpt">Text of the printing and typesetting industry  when an unknown printer took a galley of type and scrambled</div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="fg-help-topic-details-wrapper hide">
+                                                        <div class="fg-help-topic-details-content-scroll-wrapper">
+                                                            <div class="fg-help-topic-details-content hide" id="act-001" >
+                                                                <p style="color:red">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae urna euismod, porta erat id, rutrum erat. Sed id libero justo. Etiam sed luctus nibh. Etiam dolor velit, convallis eu odio varius, egestas convallis nisl. Nulla bibendum, nisl quis dictum ultricies, diam nulla commodo risus, ac tempus sem ipsum nec tellus. Proin tempus tincidunt elit. Mauris eget velit nisl.</p>
+                                                                <p> Phasellus sit amet tortor luctus, ultrices justo id, congue ex. Quisque sed aliquet leo. Fusce ac mauris non odio vestibulum suscipit at sed libero. Pellentesque lacinia sem at lorem gravida, sed varius nisl feugiat. Nullam eleifend, nibh eget ultrices volutpat, ex eros mattis leo, eget condimentum mi massa nec odio. Aenean sit amet cursus dolor, at molestie mi. </p>
+                                                                <img src="../../global/js/unitegallery-master/package/images/big/image2.jpg" alt=""/>
+                                                                <p style="color:#f53">Nulla lorem eros, lacinia in massa vitae, luctus fermentum nisl. Duis aliquam, neque sed sollicitudin elementum, nibh dui pellentesque eros, sed egestas ipsum metus eget risus. Curabitur accumsan dui lectus, ut cursus tellus vestibulum viverra. Duis aliquet, felis in aliquet semper, erat mauris varius enim, in molestie dui lectus at dui. </p>
+                                                                <p>Aliquam rhoncus consequat velit ac ultrices. Etiam pharetra purus ut ligula bibendum, ac porta diam faucibus. Maecenas fermentum nunc quis quam dictum, a gravida justo rhoncus.</p>
+                                                            </div>
+                                                            <div class="fg-help-topic-details-content hide" id="act-02">
+                                                                <p style="color:#006dcc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae urna euismod, porta erat id, rutrum erat. Sed id libero justo. Etiam sed luctus nibh. Etiam dolor velit, convallis eu odio varius, egestas convallis nisl. Nulla bibendum, nisl quis dictum ultricies, diam nulla commodo risus, ac tempus sem ipsum nec tellus. Proin tempus tincidunt elit. Mauris eget velit nisl.</p>
+                                                                <p> Phasellus sit amet tortor luctus, ultrices justo id, congue ex. Quisque sed aliquet leo. Fusce ac mauris non odio vestibulum suscipit at sed libero. Pellentesque lacinia sem at lorem gravida, sed varius nisl feugiat. Nullam eleifend, nibh eget ultrices volutpat, ex eros mattis leo, eget condimentum mi massa nec odio. Aenean sit amet cursus dolor, at molestie mi. 
+                                                                    <img src="../../global/js/unitegallery-master/package/images/big/image3.jpg" alt=""/></p>
+                                                                <p>Nulla lorem eros, lacinia in massa vitae, luctus fermentum nisl. Duis aliquam, neque sed sollicitudin elementum, nibh dui pellentesque eros, sed egestas ipsum metus eget risus. Curabitur accumsan dui lectus, ut cursus tellus vestibulum viverra. Duis aliquet, felis in aliquet semper, erat mauris varius enim, in molestie dui lectus at dui. </p>
+                                                                <p>Aliquam rhoncus consequat velit ac ultrices. Etiam pharetra purus ut ligula bibendum, ac porta diam faucibus. Maecenas fermentum nunc quis quam dictum, a gravida justo rhoncus.</p>
+                                                            </div>
+                                                            <div class="fg-help-topic-details-content hide" id="act-03">
+                                                                <p style="color:green">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae urna euismod, porta erat id, rutrum erat. Sed id libero justo. Etiam sed luctus nibh. Etiam dolor velit, convallis eu odio varius, egestas convallis nisl. Nulla bibendum, nisl quis dictum ultricies, diam nulla commodo risus, ac tempus sem ipsum nec tellus. Proin tempus tincidunt elit. Mauris eget velit nisl.</p>
+                                                                <p> Phasellus sit amet tortor luctus, ultrices justo id, congue ex. Quisque sed aliquet leo. Fusce ac mauris non odio vestibulum suscipit at sed libero. Pellentesque lacinia sem at lorem gravida,
+                                                                    <img src="../../global/js/unitegallery-master/package/images/big/image4.jpg" alt=""/> sed varius nisl feugiat. Nullam eleifend, nibh eget ultrices volutpat, ex eros mattis leo, eget condimentum mi massa nec odio. Aenean sit amet cursus dolor, at molestie mi. </p>
+                                                                <p>Nulla lorem eros, lacinia in massa vitae, luctus fermentum nisl. Duis aliquam, neque sed sollicitudin elementum, nibh dui pellentesque eros, sed egestas ipsum metus eget risus. Curabitur accumsan dui lectus, ut cursus tellus vestibulum viverra. Duis aliquet, felis in aliquet semper, erat mauris varius enim, in molestie dui lectus at dui. </p>
+                                                                <p>Aliquam rhoncus consequat velit ac ultrices. Etiam pharetra purus ut ligula bibendum, ac porta diam faucibus. Maecenas fermentum nunc quis quam dictum, a gravida justo rhoncus.</p>
+                                                                <img src="../../global/js/unitegallery-master/package/images/big/sound_cloud.jpg" alt=""/>
+                                                            </div>
+                                                            <div class="fg-help-topic-details-content hide" id="act-04">
+                                                                <p style="color:yellow">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae urna euismod, porta erat id, rutrum erat. Sed id libero justo. Etiam sed luctus nibh. Etiam dolor velit, convallis eu odio varius, egestas convallis nisl. Nulla bibendum, nisl quis dictum ultricies, diam nulla commodo risus, ac tempus sem ipsum nec tellus. Proin tempus tincidunt elit. Mauris eget velit nisl.</p>
+                                                                <p> Phasellus sit amet tortor luctus, ultrices justo id, congue ex. Quisque sed aliquet leo. Fusce ac mauris non odio vestibulum suscipit at sed libero. Pellentesque lacinia sem at lorem gravida, sed varius nisl feugiat. Nullam eleifend, nibh eget ultrices volutpat, ex eros mattis leo, eget condimentum mi massa nec odio. Aenean sit amet cursus dolor, at molestie mi. </p>
+                                                                <img src="../../global/js/unitegallery-master/package/images/big/tile1.jpg" alt=""/>
+                                                                <p>Nulla lorem eros, lacinia in massa vitae, luctus fermentum nisl. Duis aliquam, neque sed sollicitudin elementum, nibh dui pellentesque eros, sed egestas ipsum metus eget risus. Curabitur accumsan dui lectus, ut cursus tellus vestibulum viverra. Duis aliquet, felis in aliquet semper, erat mauris varius enim, in molestie dui lectus at dui. </p>
+                                                                <p>Aliquam rhoncus consequat velit ac ultrices. Etiam pharetra purus ut ligula bibendum, ac porta diam faucibus. Maecenas fermentum nunc quis quam dictum, a gravida justo rhoncus.</p>
+                                                            </div>
+                                                            <div class="fg-help-topic-details-content hide" id="act-05">
+                                                                <p style="color:brown">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae urna euismod, porta erat id, rutrum erat. Sed id libero justo. Etiam sed luctus nibh. Etiam dolor velit, convallis eu odio varius, egestas convallis nisl. Nulla bibendum, nisl quis dictum ultricies, diam nulla commodo risus, ac tempus sem ipsum nec tellus. Proin tempus tincidunt elit. Mauris eget velit nisl.</p>
+                                                                <img src="../../global/js/unitegallery-master/package/images/big/tile10.jpg" alt=""/>
+                                                                <p> Phasellus sit amet tortor luctus, ultrices justo id, congue ex. Quisque sed aliquet leo. Fusce ac mauris non odio vestibulum suscipit at sed libero. Pellentesque lacinia sem at lorem gravida, sed varius nisl feugiat. Nullam eleifend, nibh eget ultrices volutpat, ex eros mattis leo, eget condimentum mi massa nec odio. Aenean sit amet cursus dolor, at molestie mi. </p>
+                                                                <p>Nulla lorem eros, lacinia in massa vitae, luctus fermentum nisl. Duis aliquam, neque sed sollicitudin elementum, nibh dui pellentesque eros, sed egestas ipsum metus eget risus. Curabitur accumsan dui lectus, ut cursus tellus vestibulum viverra. Duis aliquet, felis in aliquet semper, erat mauris varius enim, in molestie dui lectus at dui. </p>
+                                                                <img src="../../global/js/unitegallery-master/package/images/big/tile5.jpg" alt=""/>
+                                                                <p>Aliquam rhoncus consequat velit ac ultrices. Etiam pharetra purus ut ligula bibendum, ac porta diam faucibus. Maecenas fermentum nunc quis quam dictum, a gravida justo rhoncus.</p>
+                                                            </div>
+                                                            <div class="fg-help-topic-details-content hide" id="act-06">
+                                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae urna euismod, porta erat id, rutrum erat. Sed id libero justo. Etiam sed luctus nibh. Etiam dolor velit, convallis eu odio varius, egestas convallis nisl. Nulla bibendum, nisl quis dictum ultricies, diam nulla commodo risus, ac tempus sem ipsum nec tellus. Proin tempus tincidunt elit. Mauris eget velit nisl.</p>
+                                                                <img src="../../global/js/unitegallery-master/package/images/big/tile8.jpg" alt=""/>
+                                                                <p> Phasellus sit amet tortor luctus, ultrices justo id, congue ex. Quisque sed aliquet leo. Fusce ac mauris non odio vestibulum suscipit at sed libero. Pellentesque lacinia sem at lorem gravida, sed varius nisl feugiat. Nullam eleifend, nibh eget ultrices volutpat, ex eros mattis leo, eget condimentum mi massa nec odio. Aenean sit amet cursus dolor, at molestie mi. </p>
+                                                                <p>Nulla lorem eros, lacinia in massa vitae, luctus fermentum nisl. Duis aliquam, neque sed sollicitudin elementum, nibh dui pellentesque eros, sed egestas ipsum metus eget risus. Curabitur accumsan dui lectus, ut cursus tellus vestibulum viverra. Duis aliquet, felis in aliquet semper, erat mauris varius enim, in molestie dui lectus at dui. </p>
+                                                                <img src="../../global/js/unitegallery-master/package/images/big/tile2.jpg" alt=""/>
+                                                                <p>Aliquam rhoncus consequat velit ac ultrices. Etiam pharetra purus ut ligula bibendum, ac porta diam faucibus. Maecenas fermentum nunc quis quam dictum, a gravida justo rhoncus.</p>
+                                                            </div>
+                                                            <div class="fg-help-topic-details-content hide" id="act-07">
+                                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae urna euismod, porta erat id, rutrum erat. Sed id libero justo. Etiam sed luctus nibh. Etiam dolor velit, convallis eu odio varius, egestas convallis nisl. Nulla bibendum, nisl quis dictum ultricies, diam nulla commodo risus, ac tempus sem ipsum nec tellus. Proin tempus tincidunt elit. Mauris eget velit nisl.</p>
+                                                                <p> Phasellus sit amet tortor luctus, ultrices justo id, congue ex. Quisque sed aliquet leo. Fusce ac mauris non odio vestibulum suscipit at sed libero. Pellentesque lacinia sem at lorem gravida, sed varius nisl feugiat. Nullam eleifend, nibh eget ultrices volutpat, ex eros mattis leo, eget condimentum mi massa nec odio. Aenean sit amet cursus dolor, at molestie mi. </p>
+                                                                <img src="../../global/js/unitegallery-master/package/images/big/tile6.jpg" alt=""/>
+                                                                <p>Nulla lorem eros, lacinia in massa vitae, luctus fermentum nisl. Duis aliquam, neque sed sollicitudin elementum, nibh dui pellentesque eros, sed egestas ipsum metus eget risus. Curabitur accumsan dui lectus, ut cursus tellus vestibulum viverra. Duis aliquet, felis in aliquet semper, erat mauris varius enim, in molestie dui lectus at dui. </p>
+                                                                <p>Aliquam rhoncus consequat velit ac ultrices. Etiam pharetra purus ut ligula bibendum, ac porta diam faucibus. Maecenas fermentum nunc quis quam dictum, a gravida justo rhoncus.</p>
+                                                                <img src="../../global/js/unitegallery-master/package/images/big/tile9.jpg" alt=""/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="show">
+
+                                                    <div class="fg-help-topic-list-wrapper show">
+                                                        <ul class="fg-help-topic-lists">
+                                                            <li class="fg-help-topic-list active"  data-target="act-01">
+                                                                <div class="fg-help-topic-header">Lorem Ipsum is simply dummy </div>
+                                                                <div class="fg-help-topic-excerpt">Text of the printing and typesetting industry  when an unknown printer took a galley of type and scrambled</div>
+                                                            </li>
+                                                            <li class="fg-help-topic-list"  data-target="act-02">
+                                                                <div class="fg-help-topic-header">Lorem Ipsum is simply dummy </div>
+                                                                <div class="fg-help-topic-excerpt">Text of the printing and typesetting industry  when an unknown printer took a galley of type and scrambled</div>
+                                                            </li>
+                                                            <li class="fg-help-topic-list"  data-target="act-03">
+                                                                <div class="fg-help-topic-header">Lorem Ipsum is simply dummy </div>
+                                                                <div class="fg-help-topic-excerpt">Text of the printing and typesetting industry  when an unknown printer took a galley of type and scrambled</div>
+                                                            </li>
+                                                            <li class="fg-help-topic-list"  data-target="act-04">
+                                                                <div class="fg-help-topic-header">Lorem Ipsum is simply dummy </div>
+                                                                <div class="fg-help-topic-excerpt">Text of the printing and typesetting industry  when an unknown printer took a galley of type and scrambled</div>
+                                                            </li>
+                                                            <li class="fg-help-topic-list"  data-target="act-05">
+                                                                <div class="fg-help-topic-header">Lorem Ipsum is simply dummy </div>
+                                                                <div class="fg-help-topic-excerpt">Text of the printing and typesetting industry  when an unknown printer took a galley of type and scrambled</div>
+                                                            </li>
+                                                            <li class="fg-help-topic-list"   data-target="act-06">
+                                                                <div class="fg-help-topic-header">Lorem Ipsum is simply dummy </div>
+                                                                <div class="fg-help-topic-excerpt">Text of the printing and typesetting industry  when an unknown printer took a galley of type and scrambled</div>
+                                                            </li>
+                                                            <li class="fg-help-topic-list"   data-target="act-07">
+                                                                <div class="fg-help-topic-header">Lorem Ipsum is simply dummy </div>
+                                                                <div class="fg-help-topic-excerpt">Text of the printing and typesetting industry  when an unknown printer took a galley of type and scrambled</div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="fg-help-topic-details-wrapper ">
+                                                        <div class="fg-help-topic-details-content-scroll-wrapper fg-help-sample-page-wrapper">
+                                                            <div class="fg-help-topic-details-content show" id="act-001" >
+                                                                <div class="row">
+                                                                    <div class="col-md-12 fg-pad-5">
+                                                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam in pulvinar nisi. Nullam rhoncus ante in nisl rhoncus cursus. Vivamus aliquet justo eu neque iaculis, quis consequat diam blandit. Pellentesque condimentum at ex quis varius. In hac habitasse platea dictumst.</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-12 fg-pad-5">
+                                                                    <h2 class="fg-help-sample-title">1. Maecenas vitae blandit nunc, id scelerisque odio (h2)</h2>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-6 col-md-7">
+                                                                            <p>Morbi semper vestibulum libero, et scelerisque dolor. Donec elementum (a), dui quis faucibus rutrum, eros risus accumsan felis, sed facilisis libero ante at nisi. Aenean vel velit sed metus sollicitudin porttitor. Sed iaculis erat ac arcu lobortis, vitae pharetra orci pulvinar. Aliquam venenatis sed lectus ac semper. Aliquam vitae pretium ex.</p>
+                                                                        </div>   
+                                                                        <div class="col-sm-6 col-md-5">
+                                                                            <div class="mt-element-ribbon bg-grey-steel">
+                                                                                <div class="ribbon ribbon-color-info uppercase">MEMORIZE</div>
+                                                                                <p class="ribbon-content">Duis mollis, est non commodo luctus, nisi erat porttitor lobortis mauris nec dignissim. Duis mollis, est non commodo luctus. (vertical ribbon)</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div> <!-- Row end --->
+                                                            <div class="row">
+                                                                <div class="col-md-12 fg-pad-5">
+                                                                    <h2 class="fg-help-sample-title">2. Pellentesque vel cursus diam (h2, clear floatings)</h2>
+                                                                    <div class="fg-help-sample-content-with-img">
+                                                                        
+                                                                    </div>
+                                                                    <div class="fg-help-sample-content-with-img">
+                                                                       
+                                                                        <div class="FL">
+                                                                                <img src="../../../bundles/commonHelp/images/content-images/nav-header1.png" class="fg-help-sample-img" alt=""/>
+                                                                                <p class="fg-help-sample-img-footer">Quisque vitae nunc dignissim elit tincidunt vehicula.</p>
+                                                                        </div>   
+                                                                            <p>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus augue tortor, porttitor in lacus vitae, aliquam sollicitudin mi. Proin non tellus ac metus convallis mollis vitae non enim. Praesent efficitur consequat diam a imperdiet. Nunc porttitor iaculis ex eu luctus. Sed a viverra metus, eu aliquam ligula. Praesent quam libero, finibus in tempor et, semper vitae felis. Sed condimentum finibus dui, ac auctor libero lacinia non. Suspendisse a quam lobortis ligula placerat mattis pulvinar ut lacus. Quisque vitae nunc dignissim elit 
+tincidunt vehicula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Quisque aliquet metus orci, nec egestas nibh vestibulum non. Nunc auctor sed odio eu dapibus.</p>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div> <!-- Row end --->
+                                                            <div class="row">
+                                                                <div class="col-md-12 fg-pad-5">
+                                                                    <h3 class="fg-help-sample-subtitle">Vivamus accumsan vulputate nulla (h3)</h3>
+                                                                    <ul class="fg-help-sample-ul">
+                                                                        <li>In et mauris fermentum, interdum nibh ut, convallis eros. Sed aliquet tristique tellus, ac dignissim ipsum pharetra. (ul / li)</li>
+                                                                        <li>Suspendisse magna tellus, mollis vel finibus ac, suscipit ac sem. Quisque malesuada, ante nec vehicula vehicula, sapien ipsum gravida mi, in gravida ante ex ut ante. </li>
+                                                                        <li>Phasellus et odio non diam placerat convallis in ut nisl. Vivamus scelerisque vel purus ac mollis. </li>
+                                                                    </ul>
+                                                                    <p>Vivamus accumsan vulputate nulla, consectetur vulputate nunc gravida vel. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ac tortor at enim iaculis pulvinar. Duis est arcu, suscipit et aliquet in, gravida non quam. Nullam id sapien eu felis egestas pretium sit amet id libero. Maecenas feugiat, ipsum quis pellentesque posuere, ante ante cursus diam, in tempor nisi odio a lorem. Nullam tristique sapien vitae venenatis iaculis. Cras venenatis tincidunt lectus vitae efficitur. Aliquam justo magna, pharetra eget pharetra et, pharetra eget augue. Ut lorem sapien, lobortis vitae dolor id, consectetur venenatis sapien. Phasellus quam enim, lacinia a malesuada at, feugiat vel lectus.</p>
+                                                                </div>
+                                                            </div> <!-- Row end --->
+                                                            <div class="row">
+                                                                <div class="col-md-12 fg-pad-5">
+                                                                    <h3 class="fg-help-sample-subtitle">Vivamus sit amet gravida risus (h3)</h3>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-6 col-md-7">
+                                                                            <h4 class="fg-help-sample-subtitle">In non purus non leo vehicula dignissim (h4)</h4>
+                                                                                <p class="">Phasellus tellus ligula, feugiat sit amet lacinia non, interdum at enim. Proin facilisis odio non sollicitudin interdum. Duis eros est, posuere a tellus a, rutrum lobortis tortor. Integer eget nisi at neque aliquam varius quis at tellus. Sed blandit lobortis sapien id auctor. Cras auctor fermentum dolor, sed sollicitudin risus viverra et. Mauris at lacus et libero blandit viverra sed imperdiet mi. Sed eget diam velit.</p>
+                                                                        </div>   
+                                                                        <div class="col-sm-6 col-md-5">
+                                                                            <div class="mt-element-ribbon bg-grey-steel">
+                                                                                <div class="ribbon ribbon-vertical-left ribbon-color-danger uppercase">
+                                                                                    <i class="fa fa-star"></i>
+                                                                                </div>
+                                                                                <p class="ribbon-content">Duis mollis, est non commodo luctus, nisi erat porttitor lobortis mauris nec dignissim. (vertical ribbon)</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div> <!-- Row end --->
+                                                            <div class="row">
+                                                                <div class="col-md-12 fg-pad-5">
+                                                                     <h4 class="fg-help-sample-subtitle">Ut ullamcorper ligula ut massa consequat fringilla (h4)</h4>
+                                                                     <p>Ut ullamcorper ligula ut massa consequat fringilla. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur tincidunt, purus a bibendum porta, enim arcu commodo magna, eu fringilla diam justo non odio. Curabitur commodo finibus nisi volutpat commodo. Sed euismod mollis leo. Aliquam lobortis mauris nec dignissim imperdiet. Nunc ultrices, leo quis molestie euismod, neque risus lobortis enim, sit amet mattis est orci ornare turpis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
+                                                                     <ol class="fg-help-sample-ol">
+                                                                         <li>Cras pulvinar (ol / li)</li>
+                                                                         <li>Ipsum et</li>
+                                                                         <li>congue gravida. Donec interdum, felis vitae aliquam sagittis, justo nulla iaculis turpis, at commodo urna odio quis enim. Suspendisse ut lacinia justo. </li>
+                                                                     </ol>
+                                                                </div>
+                                                            </div> <!-- Row end --->
+                                                            <div class="row">
+                                                                <div class="col-md-12 fg-pad-5">
+                                                                    <h3 class="fg-help-sample-subtitle">Vivamus sit amet gravida risus (h3)</h3>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-6 col-lg-5">
+                                                                                <img src="../../../bundles/commonHelp/images/content-images/nav-header1.png" class="fg-help-sample-img" alt=""/>
+                                                                                <p></p>
+                                                                                <img src="../../../bundles/commonHelp/images/content-images/nav-header1.png" class="fg-help-sample-img" alt=""/>
+                                                                                <p class="fg-help-sample-img-footer">Quisque vitae nunc dignissim elit tincidunt vehicula.</p>
+                                                                        </div>   
+                                                                        <div class="col-sm-6 col-lg-7">
+                                                                            <p>ed semper dolor in ante luctus, id molestie magna ornare. Donec et ipsum et diam tempus hendrerit. Sed at aliquet orci, ut tempus tortor. Nunc eu nibh eu lorem dictum mollis sit amet quis metus. Nullam et condimentum enim. Quisque id fermentum dolor. Phasellus pharetra turpis non dignissim rutrum. Nunc malesuada et elit id hendrerit. Quisque et dapibus arcu. Nunc pulvinar efficitur sapien, eu tincidunt elit pellentesque in. Donec erat libero, pellentesque vitae nulla in, cursus tristique nulla. Vivamus tempus non felis rutrum commodo. In at est quis purus posuere rutrum. Proin consectetur lorem et aliquet iaculis.</p>
+                                                                            <table class="table table-striped table-bordered table-advance table-hover">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th>Column Heading</th>
+                                                                                        <th>Column Heading </th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td>Value 1</td>
+                                                                                        <td >
+                                                                                            <a href="javascript:;"> RedBull </a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>Value 1</td>
+                                                                                        <td class="highlight">
+                                                                                            <a href="javascript:;"> RedBull </a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div> <!-- Row end --->
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="fg-help-topic-details-wrapper  hide fg-help-topic-welcome-wrapper">
+                                                    <div class="fg-help-topic-details-content-scroll-wrapper">
+                                                        <div class="fg-help-topic-details-content" id="act-001" >
+                                                            <div class="row">
+                                                                <div class="col-sm-5 fg-help-welcome-left">
+                                                                    <div class="fg-help-welcome-bg-1"></div>
+                                                                    <h3 class="fg-subtitle">Willkommen bei Fairgate. Mehrwert für Vereine und Verbände</h3>
+                                                                    <p>Die «ersten Schritte» helfen Ihnen, sich in der Lösung rasch zurecht zu finden.</p>
+
+                                                                </div>
+                                                                <div class="col-sm-7 fg-help-welcome-right">
+                                                                    <div class="fg-help-welcome-bg-2"></div>
+
+                                                                </div>
+
+                                                                <div class="text-center col-sm-12 fg-help-selectbox-wrapper">
+                                                                    <select name="a" class="fg-help-welcome-select ">
+                                                                        <option selected="selected">Vereine</option>
+                                                                        <option>BBBB</option>
+                                                                        <option>CCCC</option>
+                                                                    </select>
+                                                                    <select name="a" class="fg-help-welcome-select">
+                                                                        <option selected="selected">Verbände</option>
+                                                                        <option>YYYYY</option>
+                                                                        <option>ZZZZZZ</option>
+                                                                    </select>
+                                                                    <select name="a" class="fg-help-welcome-select">
+                                                                        <option selected="selected">Webpräsenz</option>
+                                                                        <option>IIIIIII</option>
+                                                                        <option>JJJJJJJJJJ</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="portlet box fg-portlet-ash">
+                                                <div class="portlet-title ">
+                                                    <div class="caption">
+                                                        List Groups
+                                                    </div>
+                                                </div>
+                                                <div class="portlet-body">
+                                                    <div class="row fg-metronic-dashboar-icons">
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                            <div class="dashboard-stat blue">
+                                                                <div class="visual">
+                                                                    <i class="fa fa-comments"></i>
+                                                                </div>
+                                                                <div class="details">
+                                                                    <div class="number">
+                                                                        <span data-counter="counterup" data-value="1349">1349</span>
+                                                                    </div>
+                                                                    <div class="desc"> New Feedbacks </div>
+                                                                </div>
+                                                                <a class="more" href="javascript:;"> 
+                                                                    <i class="fa fa-arrow-circle-right"></i>View more...
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                            <div class="dashboard-stat red">
+                                                                <div class="visual">
+                                                                    <i class="fa fa-bar-chart-o"></i>
+                                                                </div>
+                                                                <div class="details">
+                                                                    <div class="number">
+                                                                        <span data-counter="counterup" data-value="12,5">12,5</span>M$ </div>
+                                                                    <div class="desc"> Total Profit </div>
+                                                                </div>
+                                                                <a class="more" href="javascript:;"> 
+                                                                    <i class="fa fa-arrow-circle-right"></i>View more...
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                            <div class="dashboard-stat green">
+                                                                <div class="visual">
+                                                                    <i class="fa fa-shopping-cart"></i>
+                                                                </div>
+                                                                <div class="details">
+                                                                    <div class="number">
+                                                                        <span data-counter="counterup" data-value="549">549</span>
+                                                                    </div>
+                                                                    <div class="desc"> New Orders </div>
+                                                                </div>
+                                                                <a class="more" href="javascript:;"> 
+                                                                    <i class="fa fa-arrow-circle-right"></i>View more...
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                            <div class="dashboard-stat purple">
+                                                                <div class="visual">
+                                                                    <i class="fa fa-globe"></i>
+                                                                </div>
+                                                                <div class="details">
+                                                                    <div class="number"> +
+                                                                        <span data-counter="counterup" data-value="89">89</span>% </div>
+                                                                    <div class="desc"> Brand Popularity </div>
+                                                                </div>
+                                                                <a class="more" href="javascript:;"> 
+                                                                    <i class="fa fa-arrow-circle-right"></i>View more...
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <label for="checkboxes-0" class="fg-dont-show-again">
+                                                <input type="checkbox" name="checkboxes" id="checkboxes-0" value="1">
+                                                Don't show this again
+                                            </label>
+                                            <button type="button" data-dismiss="modal" class="btn default">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div id="tab" class="modal fg-help-content-modal fade" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog" >
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                            <h4 class="modal-title fg-clear">Sed vel aliquam leo. Maecenas et metus eu quam rutrum maximus</h4>
+
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="portlet-body">
+                                                <div class="tabbable-custom ">
+                                                    <ul class="nav nav-tabs ">
+                                                        <li class="active">
+                                                            <a href="#tab_5_1" data-toggle="tab" aria-expanded="true"> Section 1 </a>
+                                                        </li>
+                                                        <li class="">
+                                                            <a href="#tab_5_2" data-toggle="tab" aria-expanded="false"> Section 2 </a>
+                                                        </li>
+                                                        <li class="">
+                                                            <a href="#tab_5_3" data-toggle="tab" aria-expanded="false"> Section 3 </a>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="tab-content">
+                                                        <div class="tab-pane active" id="tab_5_1">
+                                                            <p> I'm in Section 1. </p>
+                                                            <p> Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo
+                                                                consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat. </p>
+                                                        </div>
+                                                        <div class="tab-pane" id="tab_5_2">
+                                                            <p> Howdy, I'm in Section 2. </p>
+                                                            <p> Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie
+                                                                consequat. Ut wisi enim ad minim veniam, quis nostrud exerci tation. </p>
+                                                            <p>
+                                                                <a class="btn green" href="ui_tabs_accordions_navs.html#tab_5_2" target="_blank"> Activate this tab via URL </a>
+                                                            </p>
+                                                        </div>
+                                                        <div class="tab-pane" id="tab_5_3">
+                                                            <p> Howdy, I'm in Section 3. </p>
+                                                            <p> Duis autem vel eum iriure dolor in hendrerit in vulputate. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum
+                                                                iriure dolor in hendrerit in vulputate velit esse molestie consequat </p>
+                                                            <p>
+                                                                <a class="btn yellow" href="ui_tabs_accordions_navs.html#tab_5_3" target="_blank"> Activate this tab via URL </a>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="">
+                                <button type="button" class="btn fg-delete1 " data-toggle="tooltip" data-placement="left">
+                                    Tooltip on left1 
+                                </button>
+                                <button type="button" class="btn btn-secondary fg-delete-2" data-toggle="tooltip" data-placement="left">
+                                    Tooltip on left
+                                </button>
+                                <button type="button" class="btn btn-secondary " data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+                                    Tooltip on top
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">
+                                    Tooltip on bottom
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="right" title="Tooltip on right">
+                                    Tooltip on right
+                                </button>
+                            </div>
+                        </div>
+                        <!-- END PAGE TITLE & BREADCRUMB-->
+                    </div>
+
+                    <!-- END PAGE CONTENT-->
+                </div>
+            </div>
+            <!-- END CONTENT -->
+        </div>
+        <!-- END CONTAINER -->
+
+
+        <!-- BEGIN FOOTER -->
+        <div class="page-footer">
+            <div class="page-footer-inner"> Fairgate Vereinslösung V 4.00 </div>
+            <div class="page-footer-tools"> <span class="go-top"> <i class="fa fa-angle-up"></i> </span> </div>
+        </div>
+        <!-- END FOOTER -->
+        <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+        <!-- BEGIN CORE PLUGINS -->
+        <!--[if lt IE 9]>
+        <script src="../../assets/global/plugins/respond.min.js"></script>
+        <script src="../../assets/global/plugins/excanvas.min.js"></script> 
+        <![endif]--> 
+
+
+        <script src="../../../fgassets/assets/global/plugins/jquery.min.js?version=1.7.8" type="text/javascript"></script>
+        <script src="../../../fgassets/assets/global/plugins/jquery-migrate.min.js?version=1.7.8" type="text/javascript"></script>
+        <script src="../../../fgassets/assets/global/plugins/jquery-ui/jquery-ui.min.js?version=1.7.8" type="text/javascript"></script>
+        <script src="../../../fgassets/assets/global/plugins/bootstrap/js/bootstrap.min.js?version=1.7.8" type="text/javascript"></script>
+        <script src="../../../fgassets/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js?version=1.7.8" type="text/javascript"></script>
+        <script src="../../../fgassets/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js?version=1.7.8" type="text/javascript"></script>
+        <script src="../../../fgassets/assets/global/plugins/jquery.blockui.min.js?version=1.7.8" type="text/javascript"></script>
+        <script src="../../../fgassets/assets/global/plugins/jquery.cokie.min.js?version=1.7.8" type="text/javascript"></script>
+        <script src="../../../fgassets/assets/global/plugins/uniform/jquery.uniform.min.js?version=1.7.8" type="text/javascript"></script>
+        <script src="../../../fgassets/assets/admin/pages/scripts/components-dropdowns.js?version=1.7.8" type="text/javascript"></script>
+        <script src="../../../fgassets/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js?version=1.7.8" type="text/javascript"></script>
+
+
+        <script src="../../../fgassets/assets/global/plugins/angularjs/angular.min.js?version=1.7.8" type="text/javascript"></script>	
+
+        <script src="../../../assets/global/scripts/metronic.js" type="text/javascript"></script>
+        <!-- BEGIN APP LEVEL JQUERY SCRIPTS -->
+        <script src="../../../assets/global/scripts/metronic.js" type="text/javascript"></script>
+        <script src="../../../assets/admin/layout/scripts/layout.js" type="text/javascript"></script>
+        <script src="../../../fgassets/global/js/bootstrap-dropdown-on-hover.js?version=1.7.8" type="text/javascript"></script>
+        <script src="../../../fgassets/assets/global/plugins/bootstrap-toastr/toastr.min.js?version=1.7.8" type="text/javascript"></script>
+        <script src="../../../assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+        <script src="../../assets/global/plugins/select2/select2.min.js" type="text/javascript"></script>
+        <!-- END APP LEVEL JQUERY SCRIPTS -->
+
+
+
+        <!--           <!-- BEGIN FAIRGATE SCRIPTS -->
+        <script src="../../global/js/fg_more_menu.js" type="text/javascript"></script>
+        <script src="../../global/js/pagetitlebar.js" type="text/javascript"></script>
+        <script src="../../../bundles/commonHelp/js/fg-helper-main.js" type="text/javascript"></script>
+        <script src="../../../assets/global/plugins/colorbox-master/jquery.colorbox-min.js" type="text/javascript"></script>
+        <script src="../../global/js/fg_tooltip.js" type="text/javascript"></script>
+        <!-- END FAIRGATE SCRIPTS -->    
+        <script>
+            jQuery(function ($) {
+                // initiate layout and plugins
+                Metronic.init(); // init metronic core components
+                Layout.init(); // init current layout
+
+
+            });
+            $(document).ready(function () {
+                FgTooltip.init({
+                });
+                $(".youtube").colorbox({iframe: true, innerWidth: 640, innerHeight: 390});
+                FgPageTitlebar = $(".fg-action-menu-wrapper").FgPageTitlebar({
+                    tab: true,
+                    tabType: 'client'
+                });
+            });
+            $('select').select2();
+        </script>
+
+    </body>
+    <!-- END BODY -->
+</html>

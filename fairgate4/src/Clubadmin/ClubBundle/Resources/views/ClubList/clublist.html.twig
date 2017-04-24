@@ -1,0 +1,418 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout-sidebar.html.twig' %}
+{% set clubTerminolgy = fgtwig.getTerminolgyName('Club',plural)%}
+    {% set clubSingleTerminolgy = fgtwig.getTerminolgyName('Club',singular)%}    
+
+        {% set pageTitle = 'GN_ALL_CLUBS'|trans ({'%clubs%' : clubTerminolgy}) %}
+            {% block pagecontent %}
+                <!-- BEGIN PAGE CONTENT-->
+
+                <!-- BEGIN CONTENT -->
+                <!-- BEGIN PAGE HEADER-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                        {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-7 col-sm-6">
+                        <form method="POST" action= "" id="hiddenform">   
+                            <input type="hidden" name="selcontacthidden" value="" id="selcontacthidden" search-value="" />  
+                            <input type="hidden" name="searchhidden" value="" id="searchhidden" search-value="" />  
+                            <input type="hidden" name="counthidden" value="" id="counthidden" search-value="" />  
+                        </form>
+                      {#  {% include 'clubadmin/dynamicmenu.html.twig' with {'title':'Active Clubs'|trans} %}#}            
+                    </div> 
+                    {% set columnsUrl = path('clubcolumnsettings', {'settings_id': 0}) %}
+                    {% set defaultSettings_name = 'LOAD_COLUMN'|trans %}
+                    {% set page_settings = { 'columnsettings':'true','pagetitle':'true','counter':'true','searchbox':'true','filter':'true','actionmenu':'true' }  %}
+                    {% include 'clubadmin/page-title-bar.html.twig' with {'page_settings': page_settings,'pageTitle': pageTitle, 'columnsUrl': columnsUrl,'defaultSettings':defaultSettings,'defaultSettings_name':defaultSettings_name,'allTableSettings':allTableSettings,'counter':1,'searchbox_id':'searchbox'} %}
+          
+                        <input type="hidden" name="defaultColumnStting" id="fg-dev-defaultcolumnsetting" value="{{defaultSettings}}"/>
+                        <!-- END PAGE TITLE & BREADCRUMB-->
+                    </div>
+                    <div class="alert alert-danger display-hide">
+                        <button class="close" data-close="alert"></button>
+                        {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+                    </div>
+                    <!-- END PAGE HEADER-->
+                    <!-- BEGIN FILTER AREA-->
+
+                    <div class="filter-alert alert-block fade in space fg-marg-top-0">
+                        <button  class="close fg_filter_hide" type="button" ></button>
+                        <div class="row filter-pad">
+                            <div id="target">
+                            </div>    
+                        </div>
+                        <div class="clearfix filter-pad addandsave fg-common-top-btm">
+                            <a data-toggle="modal" href="#basic" id="addCriteria"><i class="fa fa-plus-circle fa-2x"></i><span class="fg-left-move"> {%trans%}SAVED_FILTER_ADD_CRITERION{%endtrans%}</span> </a>
+                            <a id="saveFilter" href="javascript:void(0)" class="col-green fg-left-move"><i class="fa fa-check fa-2x col-green"></i><span class="fg-left-move">{%trans%}ACTIVE_CONTACT_LIST_SAVE_FILTER{%endtrans%}…</span></a>
+                            <div id="filternameText" class="editable editable-click fg-filter-name btn-group"> </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <div class="form-actions fluid">
+                                <div class="col-md-offset-0 col-md-10">
+                                    <button type="submit" id="search" class="btn blue">{%trans%}CONTACT_FILTER_SEARCH{%endtrans%}</button>
+                                    <button type="button" class="btn default remove-filter">{%trans%}CONTACT_FILTER_CLEAR{%endtrans%}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                        <div class="portlet-body new-table-height fg-club-table-wrapper" id="tableWrapper">
+                            <table data-ajax-path="{{ path('list_clubs') }}" 
+                                   class="dataTable 
+                                   table
+                                   table-bordered 
+                                   table-hover 
+                                   table-condensed                                                                       
+                                   dataTable-scroll-y
+                                   dataTable-ajax
+                                   dataTable-ajaxHeader
+                                   dataTable-fixed
+                                   dataTable-rows
+                                   dataTable-scroll-x
+                                   dataTable-dragable
+                                   dataTables_scrollBody
+                                   firstcolumn_sort 
+                                   dataTable-initialSort 
+                                   dataTable-dragable
+                                   data-count dataTable-widthResize"   xWidth="100" yHeight="300" data-table-name="dataTables" data_row_change="fgrowchange" data-sort="1#asc" dataTable-popover="true" dataTable-hover="true" data-storage="ClubtableSettingValue" data-columnstorage="Clubtablecolumn">
+
+                            </table>
+                        </div>
+                        <!-- END EXAMPLE TABLE PORTLET-->
+                    </div>
+                    <div id="callPopupFunction"></div>
+                    <!-- Assignment Popup -->
+                    <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+                        <div class="modal-dialog modal-wide">
+                            <div class="modal-content fg-popup-wrap" id="popup_contents">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Assignment Popup -->
+                    <!-- END PAGE CONTENT-->
+
+
+                    <!-- END CONTENT -->
+                    <!-- END PAGE CONTENT-->
+                                        {% endblock %}
+                                            {% block javascripts %}
+                                                <script>
+                                                    var clubId = '{{clubId}}';
+                                                    var contactId = '{{contactId}}';
+                                                    var jsonData = '';
+                                                    var dummy = '';
+                                                    var filterdata = '';
+                                                    var tableColumnTitle = [];
+                                                    var filterStorage = 'clubfilter{{clubId}}-{{contactId}}';
+                                                    var filterName = 'club_filter';
+                                                    var filterDisplayFlagStorage = 'clubfilterdisplayflag_{{clubId}}-{{contactId}}';
+                                                    var tableSettingValue = '';
+                                                    var columsettingId= 'ClubcolumnSettingId_{{clubId}}-{{contactId}}';;
+                                                    var filterMenuId;
+                                                    var filter;
+                                                    var clubTerminology = '{{clubTerminolgy}}';
+                                                    var ActiveMenuDetVar = 'club_active_menu_det{{clubId}}-{{contactId}}';
+                                                    var ClubhomepPath = '{{path("club_homepage")}}';
+                                                    var totalCount = '';
+                                                    {# DEFINE DYNAMIC MENU TEXT HERE#}
+                                                        var actionMenuNoneSelectedText = {
+                                                            'assign': {'title': "{{'ASSIGN_CLUBS_TO'|trans({'%clubs%' : clubTerminolgy})}}", 'dataUrl': '{{path('get_all_clubids_assignment')}}'},
+                                                            'move': {'title': "{{'MOVE_CLUBS_FROM_groupA_TO'|trans ({'%groupA%' : '#groupA#','%clubs%' : clubTerminolgy})}}", 'dataUrl': '{{path('get_all_clubids_assignment')}}'},
+                                                            'remove': {'title': "{{'REMOVE_CLUBS_FROM_groupA'|trans ({'%groupA%' : '#groupA#','%clubs%' : clubTerminolgy})}}", 'dataUrl': '{{path('get_all_clubids_assignment')}}'},
+                                                            'export': {'title': "{{'EXPORT_ALL'|trans}}", 'dataUrl': '{{ path('club_export') }}'},
+                                                        };
+                                                        var actionMenuSingleSelectedText = {
+                                                            'assign': {'title': "{{'ASSIGN_CLUB_TO'|trans({'%club%' : clubSingleTerminolgy})}}", 'dataUrl': '{{path('get_all_clubids_assignment')}}'},
+                                                            'move': {'title': "{{'MOVE_CLUB_FROM_groupA_TO'|trans ({'%groupA%' : '#groupA#','%club%' : clubSingleTerminolgy})}}", 'dataUrl': '{{path('get_all_clubids_assignment')}}'},
+                                                            'remove': {'title': "{{'REMOVE_CLUB_FROM_groupA'|trans ({'%groupA%' : '#groupA#','%club%' : clubSingleTerminolgy})}}", 'dataUrl': '{{path('get_all_clubids_assignment')}}'},
+                                                            'export': {'title': "{{'EXPORT_SELECTED'|trans}}", 'dataUrl': '{{ path('club_export') }}'},
+                                                        };
+                                                        var actionMenuMultipleSelectedText = {
+                                                            'assign': {'title': "{{'ASSIGN_SELECTED_CLUBS_TO'|trans({'%clubs%' : clubTerminolgy})}}", 'dataUrl': '{{path('get_all_clubids_assignment')}}'},
+                                                            'move': {'title': "{{'MOVE_CLUBS_FROM_groupA_TO'|trans ({'%groupA%' : '#groupA#','%clubs%' : clubTerminolgy})}}", 'dataUrl': '{{path('get_all_clubids_assignment')}}'},
+                                                            'remove': {'title': "{{'REMOVE_CLUBS_FROM_groupA'|trans ({'%groupA%' : '#groupA#','%clubs%' : clubTerminolgy})}}", 'dataUrl': '{{path('get_all_clubids_assignment')}}'},
+                                                            'export': {'title': "{{'EXPORT_SELECTED'|trans}}", 'dataUrl': '{{ path('club_export') }}'},
+                                                        };
+
+                                                        var actionMenuText = {'active' : {'none': actionMenuNoneSelectedText, 'single': actionMenuSingleSelectedText, 'multiple': actionMenuMultipleSelectedText}};
+                                                        FgSidebar.dynamicMenus.push({actionmenu: actionMenuText});
+                                                    {# DEFINE DYNAMIC MENU TEXT HERE#}
+
+                                                    {# DEFINE CONTEXT MENU TEXT HERE#}
+                                                        var contextMenuText = {
+                                                            'context_assign_none_text': "{{'ASSIGN_CLUB_TO_groupA'|trans ({'%groupA%' : '#groupA#', '%club%' : clubSingleTerminolgy})}}",
+                                                            'context_assign_singular_text': "{{'ASSIGN_CLUB_TO_groupA'|trans ({'%groupA%' : '#groupA#', '%club%' : clubSingleTerminolgy})}}",
+                                                            'context_assign_plural_text': "{{'ASSIGN_CLUBS_TO_groupA'|trans ({'%groupA%' : '#groupA#', '%clubs%' : clubTerminolgy})}}",
+                                                            'context_move_none_text': "{{'MOVE_CLUB_FROM_groupA_TO_groupB'|trans ({'%groupA%' : '#groupA#', '%groupB%' : '#groupB#', '%club%' : clubSingleTerminolgy})}}",
+                                                            'context_move_singular_text': "{{'MOVE_CLUB_FROM_groupA_TO_groupB'|trans ({'%groupA%' : '#groupA#', '%groupB%' : '#groupB#', '%club%' : clubSingleTerminolgy})}}",
+                                                            'context_move_plural_text': "{{'MOVE_CLUBS_FROM_groupA_TO_groupB'|trans ({'%groupA%' : '#groupA#', '%groupB%' : '#groupB#', '%clubs%' : clubTerminolgy})}}",
+                                                        }; 
+                                                        FgSidebar.dynamicMenus.push({context: contextMenuText});
+                                                    {# DEFINE CONTEXT MENU TEXT HERE#}
+                                                            var assignmentPath = '{{path('update_assignments_clubs')}}';
+                                                        FgSidebar.ActiveMenuDetVar = ActiveMenuDetVar;
+                                                        FgSidebar.activeMenuVar = 'activeMenu{{clubId}}-{{contactId}}';
+                                                </script>    
+
+                                                <script src="{{ asset('fgcustom/js/search-filter.js')}}" type="text/javascript"></script>
+
+                                                <script src="{{ asset('fgcustom/js/page/filter-settings.js')}}" type="text/javascript"></script>
+                                                <script src="{{ asset('fgcustom/js/clublist.js')}}" type="text/javascript"></script>
+                                                <script src="{{ asset('fgcustom/js/sidebarfilter.js')}}" type="text/javascript"></script>
+                                                <script>
+                                                        var filterCondition = FgFilter.getCondition('{{'CM_AND'|trans}}', '{{'CM_OR'|trans}}', '{{'CM_IS'|trans}}', '{{'CM_ISNOT'|trans}}', '{{'CM_IS_BETWEEN'|trans}}', '{{'CM_IS_NOTBETWEEN'|trans}}', '{{'CM_CONTAINS'|trans}}', '{{'CM_NOTCONTAINS'|trans}}', '{{'CM_BEGINSWITH'|trans}}', '{{'CM_NOTBEGINSWITH'|trans}}', '{{'CM_ENDWITH'|trans}}', '{{'CM_NOTENDWITH'|trans}}');
+                                                        jQuery(document).ready(function() {
+                                                            
+                                                            var rand = Math.random();
+                                                            $(".fa-filter").hide();
+                                                            $.getJSON("{{url('filter_club_data')}}?rand=" + rand, function(data) {
+                                                                jsonData = data;
+                                                                //set the value to the global variable
+
+                                                                var activeMenu = JSON.parse(localStorage.getItem(FgSidebar.ActiveMenuDetVar));
+                                                                if (activeMenu !== null) {
+                                                                    switch (activeMenu.type) {
+                                                                        case 'filter':
+                                                                            isData = false;
+                                                                            if (_.chain(jsonData["filter"]['entry']).where({"id": parseInt(activeMenu.id)}).flatten().pluck("id").value() != '') {
+                                                                                isData = true;
+                                                                            }
+                                                                            if (!isData) {
+                                                                                localStorage.removeItem(FgSidebar.activeMenuVar);
+                                                                                localStorage.removeItem(filterStorage);
+                                                                                localStorage.setItem(filterDisplayFlagStorage, 0);
+                                                                            }
+                                                                            break;
+                                                                    }
+                                                                }
+                                                                var tblSettingValue = localStorage.getItem('ClubtableSettingValue_' + clubId + '_' + contactId);
+                                                                var tblSettingId = localStorage.getItem(columsettingId);
+                                                                if (tblSettingValue === null || tblSettingValue === '' || tblSettingValue == 'undefined') {
+                                                                    $("#tableColumns").find('option:eq(0)').prop('selected', true);                                                                    
+                                                                    localStorage.setItem("ClubtableSettingIndex_" + clubId + "_" + contactId, $("#tableColumns option:selected").attr("index"));
+                                                                    tblSettingValue = $("#fg-dev-defaultcolumnsetting").val();
+                                                                } else {                                                                   
+                                                                    $("#tableColumns").select2('val',tblSettingId); 
+                                                                }
+                                                                tableSettingValues = $.parseJSON(tblSettingValue);
+
+                                                                tableSettingValues = removeDeletedFields(tableSettingValues, jsonData);
+
+                                                                settingValue = tableSettingValues;
+                                                                localStorage.setItem("ClubtableSettingValue_" + clubId + "_" + contactId, JSON.stringify(tableSettingValues));
+                                                                tableColumnTitles = getTableColumns(settingValue, jsonData, clubTerminology, false);
+                                                                localStorage.setItem("Clubtablecolumn_" + clubId + "_" + contactId, JSON.stringify(tableColumnTitles));
+
+                                                                callFilter();
+                                                                callFilterFlag(filterDisplayFlagStorage);
+
+                                                            });
+
+                                                            var filterflag = localStorage.getItem(filterDisplayFlagStorage);
+
+                                                            updateFilterFlag(filterflag, filterDisplayFlagStorage);
+                                                            
+                                                        });
+
+                                                        function callFilter() {
+                                                            FgUtility.startPageLoading();
+                                                            filter = $("#target").searchFilter({
+                                                                jsonGlobalVar: jsonData,
+                                                                submit: '#search',
+                                                                save: '#saveFilter',
+                                                                filterName: filterName,
+                                                                storageName: filterStorage,
+                                                                addBtn: '#addCriteria',
+                                                                clearBtn: '.remove-filter',
+                                                                dateFormat: FgApp.dateFormat,
+                                                                customSelect: true,
+                                                                selectTitle: 'Select type',
+                                                                conditions: filterCondition,
+                                                                selectTitle: '{{'CM_SELECT_TYPE'|trans}}',
+                                                                        criteria: '<div class="col-md-1"><span class="fg-criterion">{{'CM_CRITERIA'|trans}}:</span></div>',
+                                                                savedCallback: function() {
+                                                                    setTimeout(function() {
+                                                                        $("#callPopupFunction").click();
+                                                                    }, 1);
+                                                                },
+                                                                onComplete: function(data) {
+
+                                                                    if (localStorage.getItem(filterDisplayFlagStorage) == 0) {
+                                                                        $('.filter-alert').hide();
+                                                                    }
+                                                                    if (data != 0) {
+                                                                        if (data == 1) {
+                                                                            filterdata = 'all';
+                                                                            $("#tcount").hide();
+                                                                            $("#fg-slash").hide();
+                                                                        } else {
+                                                                            filterdata = data;
+                                                                            oldFilterCount = localStorage.getItem('oldClubfiltercount-' + clubId + "-" + contactId);
+                                                                            newFilterCount = _.size(filterdata['club_filter']);
+                                                                            if (newFilterCount != oldFilterCount) {
+                                                                                $(".fa-filter").show();
+                                                                                $("#tcount").show();
+                                                                                $("#fg-slash").show();
+                                                                            } else {
+                                                                                $("#tcount").hide();
+                                                                                $("#fg-slash").hide();
+                                                                            }
+                                                                        }
+
+                                                                        filterCallback();
+                                                                        if ($("#searchbox").val() != '') {
+                                                                            $("#tcount").show();
+                                                                            $("#fg-slash").show();
+                                                                        }
+                                                                        $('.alert').addClass('display-hide');
+                                                                    } else {
+                                                                        isFilterBroken = 1;
+                                                                        $('.remove-filter').attr('disabled',true);
+                                                                        filterdata = 0;
+                                                                        $('.filter-alert').show();
+                                                                        //enable the filter checkbox
+                                                                        $("#filterFlag").attr("checked", true);
+                                                                        //store the filterdisplay flag in html5
+                                                                        localStorage.setItem(filterDisplayFlagStorage, 1);
+                                                                        //update the property of the checkbox of jquery uniform plugin    
+                                                                        jQuery.uniform.update('#filterFlag');
+                                                                        filterCallback();
+                                                                    }
+
+                                                                },
+                                                            });
+                                                        }
+
+                                                        function callSidebar() {
+                                                            var filterBookmark = {};
+                                                            var defaultTitle;
+                                                            var type = "{{fgclub.get('type')}}";
+                                                            if (type == 'sub_federation') {
+                                                                defaultTitle = " {{ pageTitle }}";
+                                                            } else {
+                                                                defaultTitle = " {{ 'GN_ALL_CLUBS_AND_SUBFED'|trans ({'%clubs%' : clubTerminolgy, '%subfed%' : fgtwig.getTerminolgyName('Sub-federation',plural)})}}";
+                                                            }
+                                                            var allActiveMenu = [{'isAllActive': 1, 'title': '{{ pageTitle }}', count: '{{fgclub.get('clubCount')}}'}];
+
+                                                            filterBookmark = allActiveMenu.concat(jsonData['bookmark']['entry']);
+                                                            filterSavedFilter = jsonData['filter']['entry'];
+                                                            /* sidebar settings */
+                                                            FgSidebar.jsonData = true;
+                                                            FgSidebar.activeSubMenuVar = 'activeSubMenu{{clubId}}-{{contactId}}';
+                                                            FgSidebar.activeOptionsVar = 'activeOptions{{clubId}}-{{contactId}}';
+                                                            FgSidebar.defaultMenu = 'bookmark_li';
+                                                            FgSidebar.defaultSubMenu = 'allActive';
+                                                            FgSidebar.bookemarkUpdateUrl = '{{url('club_handle_bookmark')}}';
+                                                            FgSidebar.filterCountUrl = '{{path('club_filter_count', {'id': '|id|'})}}';
+                                                            FgSidebar.filterDataUrl = '{{path('club_filter_data', {'id': '|id|'})}}';
+                                                            FgSidebar.list = 'club';
+                                                            FgSidebar.options = [];
+                                                            FgSidebar.newElementLevel1 = '{{ include('::clubadmin/new-element-sidebar_level1.html.twig')}}';
+                                                            FgSidebar.newElementLevel2 = '{{ include('::clubadmin/new-element-sidebar_level2.html.twig')}}';
+                                                            FgSidebar.newElementLevel2Sub = '{{ include('::clubadmin/new-element-sidebar_level2_withfunction.html.twig')}}';
+                                                            FgSidebar.defaultTitle = defaultTitle;
+                                                            FgSidebar.newElementUrl = '{{path("club_sidebar_new_element")}}';
+                                                            FgSidebar.module = '{{fgclub.get('module')}}';
+                                                            sidebarClickObj = {
+                                                                currentModule: FgSidebar.module,
+                                                                tableDetails: {'object': oTable, 'name': FgTable},
+                                                                oldFilterCountVar: 'oldClubfiltercount-' + clubId + "-" + contactId,
+                                                                filterPath: '',
+                                                                filterNameVar: 'club_filter',
+                                                                oldFilterTypeCountVar: 'oldClubfiltercount-' + clubId + "-" + contactId
+                                                            };
+                                                            $.extend( handleCountOrSidebarClick, sidebarClickObj );
+                                                            FgSidebar.settings = {};
+                                                            /* sidebar bookmark settings */
+                                                            var bookmarkTitle = '{{'SIDEBAR_BOOKMARKS'|trans}}';
+                                                            var bookmarkId = 'bookmark_li';
+                                                            var bookmarksMenu = {templateType: 'general', menuType: 'bookmark', 'parent': {id: bookmarkId, class: 'tooltips bookmark-link', name: 'bookmark-link', 'data-placement': "right"}, title: bookmarkTitle, template: '#template_sidebar_menu', 'settings': {"0": {'title': '{{'SIDEBAR_SORTING'|trans}}', 'url': '{{url('club_bookmarks')}}'}}, 'menu': {'items': filterBookmark}};
+                                                            FgSidebar.settings[bookmarkId] = bookmarksMenu;
+                                                            if (typeof jsonData['CO'] !== "undefined") {
+                                                                var subfeddata = jsonData['CO']['entry'][0]['input'];
+                                                                var subfedTitle = '{{ fgtwig.getTerminolgyName('Sub-federation',plural,'UCF')}}';
+
+                                                                var subFedId = 'subfed_li';
+                                                                var subFedMenu = {templateType: 'general', menuType: 'subfed', 'parent': {id: subFedId, class: subFedId}, title: subfedTitle, template: '#template_sidebar_menu', 'menu': {'items': subfeddata}};
+                                                                FgSidebar.settings[subFedId] = subFedMenu;
+                                                                FgSidebar.options.push({'id': subFedId, 'title': subfedTitle});
+                                                            }
+
+                                                            /* sidebar classification settings */
+                                                            var classifilcationTitle = '{{'CL_CLASSIFICATION'|trans}}';
+                                                            var classifilcationData = (typeof jsonData['class'] !== "undefined" && typeof jsonData['class']['entry'] !== "undefined") ? jsonData['class']['entry'] : {};
+                                                            var classificationId = 'class_li';
+                                                            var level1Settings = {"0": {'type': 'newElement', 'title': '{{'CLUB_CREATE_CLASSIFICATION'|trans}}', 'url': '#', 'contentType': 'classification', 'target': '#class_li', 'hierarchy': '1', 'placeHolder': '{{'CLUB_ADD_CLASSIFICATION'|trans}}'}, "1": {'title': '{{'CLUB_MANAGE_CLASSIFICATION'|trans}}', 'url': '{{url('classification_list')}}'}};
+                                                            var level2Settings = {"0": {'type': 'newElement', 'title': '{{'CLUB_CREATE_CLASS'|trans}}', 'url': '#', 'contentType': 'class', 'hierarchy': '1', 'placeHolder': '{{'CLUB_ADD_CLASS'|trans}}'}, "1": {'title': '{{'CLUB_MANAGE_CLASSES'|trans}}', 'url': '{{ url('manage_classes', {'cat_id': '|id|'}) }}'}};
+                                                            var classifilcationMenu = {templateType: 'menu2level', menuType: 'class', 'parent': {id: classificationId, class: 'class_li'}, title: classifilcationTitle, template: '#template_sidebar_menu2level', 'menu': {'items': classifilcationData}};
+                                                    {% if (fgclub.get('type') =='federation') %}
+                                                            classifilcationMenu.settingsLevel1 = level1Settings;
+                                                            classifilcationMenu.settingsLevel2 = level2Settings;
+                                                    {% endif %}    
+                                                            FgSidebar.settings[classificationId] = classifilcationMenu;
+                                                            FgSidebar.options.push({'id': classificationId, 'title': classifilcationTitle});
+
+                                                            /* sidebar saved filter settings */
+                                                            var filterTitle = '{{'SIDEBAR_FILTER'|trans}}';
+                                                            filterMenuId = 'filter_li';
+                                                            var filterMenu = {templateType: 'general', menuType: 'filter', 'parent': {id: filterMenuId}, title: filterTitle, template: '#template_sidebar_menu', 'settings': {"0": {'title': '{{'SIDEBAR_SAVEDFILTER_SETTINGS'|trans}}', 'url': '{{ url('saved_club_filter_settings') }}'}}, 'menu': {'items': filterSavedFilter}};
+                                                            FgSidebar.settings[filterMenuId] = filterMenu;
+                                                            FgSidebar.init();
+                                                            //For handling the pre-opening of the sponsor menu
+                                                            FgSidebar.handlePreOpening('open',FgSidebar.module);
+
+                                                        }
+
+                                                        //For generate a filter save pop up generate area 
+
+                                                        filterSave('#filternameText', "{{url('update_club_filter_data')}}", "{{clubId}}", "{%trans%}CM_CONTACT_FILTER_SAVE_SUCCESS{%endtrans%}");
+
+
+                                                        $('#callPopupFunction').click(function(event) {
+                                                            event.stopPropagation();
+                                                            event.preventDefault();
+                                                            $('#filternameText').editable('toggle');
+                                                            $('#filternameText').editable('setValue', null);
+                                                        });
+                                                        function callFilterFlag(filtername) {
+                                                            $("#filterFlag").on("click", function() {
+                                                                oldFilterCount = localStorage.getItem('oldClubfiltercount-' + clubId + "-" + contactId);
+                                                                newFilterCount = _.size(filterdata['club_filter']);
+                                                                if (newFilterCount != oldFilterCount) {
+                                                                    $(".fa-filter").show();
+                                                                } else {
+                                                                    $(".fa-filter").hide();
+                                                                }
+
+                                                                if ($(this).is(':checked')) {
+                                                                    $('.filter-alert').show();
+                                                                    localStorage.setItem(filtername, 1);
+                                                                } else {
+                                                                    $('.filter-alert').hide();
+                                                                    localStorage.setItem(filtername, 0);
+                                                                }
+                                                            })
+                                                            if (localStorage.getItem(filtername) == 1) {
+                                                                $('#filterFlag').attr('checked', true);
+                                                                //update the property of the checkbox of jquery uniform plugin
+                                                                $.uniform.update('#filterFlag');
+                                                            }
+                                                        }
+                                            /*-------------- Page title bar configuration --------*/ 
+                                                               FgPageTitlebar.init({
+                                                                        actionMenu: true,
+                                                                        title: true,
+                                                                        counter: true,
+                                                                        filter: true,
+                                                                        search: true,
+                                                                        searchFilter: true,
+
+                                                                });
+
+                                                </script>
+                                            {% endblock %}

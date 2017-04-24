@@ -1,0 +1,137 @@
+<script type="text/template" id="log-listing">
+<% var logDataTableClass = (type == 'class') ? "" : "dataTable-widthResize"; %>
+<div class="portlet-body fg-contact-data fg-assign-log">
+    <div class="tabbable-custom ">
+        <ul  class="nav nav-tabs data-more-tab" id="data-tabs_<%- typeId %>">
+            <% _.each(logTabs,function(val1,key1){ %>
+                <% var active = (activeTab == key1) ? 'active': ''; %>
+                <% var tabName = (key1 == 1) ? '{%trans%}LOG_ASSIGNMENTS{%endtrans%}' : '{%trans%}LOG_DATA{%endtrans%}'; %>
+                <% var name = (key1 == 1) ? 'fg_dev_assignments' : 'fg_dev_data'; %>
+                <li id="data_li_<%- typeId %>_<%- key1 %>" class="<%- active %>" name="<%- name %>">
+                    <a data-toggle="tab" data-datatableId="log_display_<%- typeId %>_<%- key1 %>" href="#log-table_<%- typeId%>_<%- key1 %>"><%- tabName %><i class="fa fa-exclamation-triangle fg-data-error"></i></a>
+                </li> 
+            <% }); %>
+            {#more tab#}
+            <li class="datahideshow dropdown" ><a href="#"  id="fg-contact-more-tab" class="dropdown-toggle" data-toggle="dropdown">'{%trans%}MORE{%endtrans%}'<i class="fa fa-exclamation-triangle fg-data-error"></i><i class="fa fa-angle-down"></i></a>
+                <ul class="dropdown-menu">
+                    <% _.each(logTabs,function(val2,key2){ %>
+                        <% var active = (activeTab == key2) ? 'active': '' %>
+                        <% var tabName = (key2 == 1) ? '{%trans%}LOG_ASSIGNMENTS{%endtrans%}' : '{%trans%}LOG_DATA{%endtrans%}'; %>
+                        <% var name = (key2 == 1) ? 'fg_dev_assignments' : 'fg_dev_data'; %>
+                        <li id="data_li_<%- typeId %>_<%- key2 %>" class="<%- active %>" name="<%- name %>">
+                            <a data-toggle="tab" data-datatableId="log_display_<%- typeId %>_<%- key2 %>" href="#log-table_<%- typeId %>_<%- key2 %>"><%- tabName %><i class="fa fa-exclamation-triangle fg-data-error"></i></a>
+                        </li>  
+                    <% }); %>
+                </ul>
+            </li>
+            {# more tab ends #}
+        </ul>
+        <div class="fg-log-filter" id="fg-log-filter_<%- typeId %>" data-toggle="tooltip"><button id="fgContactLog_<%- typeId %>" data-toggle="dropdown" data-typeId="<%- typeId %>" class="btn tableaction fgContactLogFilter"><i class="fa fa-filter fa-2x"></i></button></div>
+        <div class="fg-clear"></div>
+    </div>
+</div>
+<div id="data-tabs-content_<%- typeId %>" class="tab-content">   
+<% _.each(logTabs,function(val,key){ %>
+    <% var active = (activeTab == key) ? 'active': '' %>
+    <div name="log-table_<%- key %>" class="portlet-body tab-pane new-table-height fg-role-br <%- active %>" id="log-table_<%- typeId %>_<%- key %>">
+        <div class="row">
+            <div class="date-filter log-area col-md-12 fg-log-datefilter" data-log-area="log-area_<%- typeId %>" id="date_filter_<%- typeId %>_<%- key %>">
+                <div class="pull-left">
+                    <label for="filter_start_date" class="filter-log-from"><span>{%trans%}LOG ENTRIES FROM{%endtrans%}</span></label>
+                    <div class='input-group date'>
+                        <input type="date_range" name="filter_start_date" id="filter_start_date_<%- typeId %>_<%- key %>" value="" class="form-control filter-log-input" data-event="<%- typeId %>_<%- key %>"/>
+                        <span class="input-group-addon cal filter-log-date"><span class="glyphicon glyphicon-calendar"></span></span>
+                    </div>
+                </div>
+                <div class="pull-left">
+                    <label for="filter_end_date" class="filter-log-from"><span>{%trans%}LOG_TO{%endtrans%}</span></label>
+                    <div class='input-group date'>
+                        <input type="date_range" name="filter_end_date" id="filter_end_date_<%- typeId %>_<%- key %>" value="" class="form-control filter-log-input" data-event="<%- typeId %>_<%- key %>"/>
+                        <span class="input-group-addon cal filter-log-date"><span class="glyphicon glyphicon-calendar"></span></span>
+                    </div>
+                </div>
+                <!-- Date filter error message-->        
+                <div class="col-sm-3 has-error fg-log-error">
+                    <span class="help-block fg-error-hide" id="log_date_error_<%- typeId %>_<%- key %>"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="fg-clear"></div>
+            <table
+                class="dataTable  fg-left-zero fg-right-zero
+                table
+                table-bordered
+                table-hover
+                table-condensed
+                dataTable-rows
+                logDataTableClass
+                dataTable-scroll-x
+                dataTable-initialSort" xWidth="100" data-table-name="dataTables" data-table-group="log_display_<%- typeId %>" id="log_display_<%- typeId %>_<%- key %>" data-sort="0#desc">
+                <thead>
+                    <tr>
+                        <th>{%trans%}LOG_DATE{%endtrans%}</th>
+                        <% if (key == 1) { %>
+                            <th>{%trans%}LOG_ACTION{%endtrans%}</th>
+                            <th>{%trans%}LOG_CONTACT{%endtrans%}</th>
+                        <% } else if (key == 2) { %>
+                            <th>{%trans%}LOG_DATA FIELD{%endtrans%}</th>
+                            <th>{%trans%}LOG_BEFORE{%endtrans%}</th>
+                            <th>{%trans%}LOG_AFTER{%endtrans%}</th>                    
+                        <% } %>
+                        <th>{%trans%}LOG_EDITED_BY{%endtrans%}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% 
+                    _.each(details[val], function(logEntries) { %>
+                        <tr>
+                            <% if (type == 'service') { %>
+                                <% logDate = logEntries['date'] %>
+                                <td data-sort="<%- logDate.date %>"><%- FgLocaleSettings.formatDate(logDate.date, 'datetime', 'YYYY-MM-DD HH:mm') %></td>
+                            <% } else { %>
+                                <td data-sort="<%- logEntries['dateOriginal'] %>"><%- FgLocaleSettings.formatDate(logEntries['dateOriginal'], 'datetime', 'YYYY-MM-DD HH:mm') %></td>
+                            <% } %>
+                            <% colorFlag = (logEntries['status'] != "none") ? logEntries['status'] : ''; %>
+                            <% colorFlaglabels = {"added": '{%trans%}LOG_FLAG_ADDED{%endtrans%}', "changed": '{%trans%}LOG_FLAG_CHANGED{%endtrans%}', "removed": '{%trans%}LOG_FLAG_REMOVED{%endtrans%}', 'assigned': '{{'SM_LOG_FLAG_ASSIGNED'|trans}}', 'stopped': '{{'SM_LOG_FLAG_STOPPED'|trans}}', 'deleted': '{{'SM_LOG_FLAG_DELETED'|trans}}', 'skipped': '{{'SM_LOG_FLAG_SKIPPED'|trans}}'} %>
+                            <% colorLabel = colorFlaglabels[colorFlag]; %>
+                            <% if (key == 1) { %>
+                                    <% colorFlagClass = colorFlag %>
+                                    <% if (colorFlagClass == 'assigned') { %>
+                                        <% colorFlagClass = 'added' %>
+                                    <% } else if (colorFlagClass == 'deleted' || colorFlagClass == 'skipped') { %>
+                                        <% colorFlagClass = 'removed' %>
+                                    <% } %>
+                                    <td><span class="label label-sm fg-color-<%- colorFlagClass %>"><%- colorLabel %></span></td>
+                                    <% if (type == 'service') { %>
+                                        <% sponsorOverviewPath = '{{path('render_sponsor_overview', {'offset': '0', 'sponsor': 'sponsorId'})}}' %>
+                                        <% sponsorOverviewLink = sponsorOverviewPath.replace('sponsorId', logEntries['sponsorId']) %>
+                                        <td><a href="<%- sponsorOverviewLink %>" target="blank"><%- logEntries['columnVal3'] %></a></td>
+                                    <% } else { %>
+                                        <td><%- logEntries['columnVal3']%></td>
+                                    <% } %>
+                            <% } else if (key == 2) { %>
+                                <td><%- logEntries['field'] %> <span class="label label-sm fg-color-<%- colorFlag %>"><%- colorLabel %></span></td>
+                                <td><%- logEntries['value_before'] %></td>
+                                <td><%- logEntries['value_after'] %></td>                    
+                            <% }
+                    
+                    var extra =""; 
+                    //use - for sponsor service
+                    if(typeof logEntries['activeContact'] != "undefined" && typeof logEntries['changedById']!= "undefined") {extra = (logEntries['activeContact'] == null && logEntries['changedById'] != 1) ?' ('+logEntries['clubChangedBy']+')':"";} 
+                    //end
+                    if(logEntries['activeContact']!= null){
+                        overViewPath = '{{path('render_contact_overview', {'offset': '0', 'contact': '**dummy**'})}}'
+                        var oPath = overViewPath.replace('**dummy**', logEntries['activeContact']);
+                        logEntries['editedBy'] ='<a href="'+oPath+'" target="_blank" data-cont-id="'+ logEntries['activeContact']+'">'+logEntries['editedBy']+'</a>';
+                     }%>
+                        <td><%= logEntries['editedBy']%><%- extra %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<% }); %>
+</div>       
+</script>

@@ -1,0 +1,22 @@
+
+<div class="content fg-reset-pwd-block">
+    <!-- BEGIN LOGIN FORM -->
+    <!-- END LOGIN FORM -->
+    <!-- BEGIN FORGOT PASSWORD FORM -->
+    <h3 class="form-title">{% trans %}RESET_PASSWORD_PAGE_TITLE_NEW{% endtrans %}</h3>
+    <form action="{{ path('fos_user_resetting_reset', {'token': token}) }}"  skipDirtyCheck novalidate="novalidate" method="POST" class="fos_user_resetting_reset">
+        {{ form_errors(form.plainPassword.first) }}
+        {{ form_row(form.plainPassword.first) }}
+        {{ form_row(form.plainPassword.second) }}
+        <div class="form-actions">
+            <button class="btn blue pull-right" type="submit">
+                {% trans %}FORGOT_SUBMIT_BTN{% endtrans %} <i class="m-icon-swapright m-icon-white"></i>
+            </button>
+        </div>
+        {{ form_rest(form) }}
+    </form>
+    <!-- END FORGOT PASSWORD FORM -->
+    <!-- BEGIN REGISTRATION FORM -->
+
+    <!-- END REGISTRATION FORM -->
+</div>

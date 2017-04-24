@@ -1,0 +1,86 @@
+<script type="text/template" id="newMandatoryElement">
+    <li class="list-group-item" id="formElement_<%= data.formFieldId %>" data-source="<%=(!_.isUndefined(data.source)?data.source:'')%>">
+        <input type="text" class="fg-dev-newfield fg-dev-sortOrder hide fieldSort" data-key="<%- data.formId %>.<%- data.formFieldId %>.formElementSortOrder" 
+                id="formElementSortOrder_<%- data.formFieldId %>" name="formElementSortOrder_<%- data.formFieldId %>" value="<%=data.formElementSortOrder%>">
+        
+       <input type="text" class="fg-dev-newfield fg-dev-sortOrder hide" data-key="<%- data.formId %>.<%- data.formFieldId %>.mandatoryfield" 
+                id="formElement_<%- data.formFieldId %>" name="formElement_<%- data.formFieldId %>" value="mandatory">
+                        
+            <input type="text" class="fg-dev-newfield fg-dev-fieldtype hide fieldType" data-key="<%- data.formId %>.<%- data.formFieldId %>.form_field_type" 
+                id="formFieldType_<%- data.formFieldId %>" name="formFieldType_<%- data.formFieldId %>" value="contact">
+            <i class="fa fa-2x fa-ellipsis-v fg-sort-row fg-dev-field-sort-handle"></i> 
+
+        <div class="fg-delete-row fg-disabled" element_type='mandatory'>
+            <input type="checkbox" class="make-switch fg-dev-field-delete fg-dev-newfield fieldDelete"  id="isDeleted_<%- data.formFieldId %>" name="isDeleted_<%- data.formFieldId %>" disabled='disabled'>
+            <label for="isDeleted_<%- data.formFieldId %>"></label>
+        </div>
+        <div class="fg-sortable-list-item-wrapper">
+                <div class="col-sm-3 fg-pad-top-7">
+                 <label for="type_<%- data.formFieldId %>" ><%- data.fieldTitle %></label><i class='fa fa-asterisk'></i>
+                   
+                </div>
+                <div class="col-sm-2 col-sm-offset-2 fg-pad-top-7"  > 
+              <% 
+              var fieldType='';
+              switch(data.typeField) {
+                        case 'select': 
+                               fieldType="{{'FORM_SELECT_FIELD'|trans}}"
+                             break; 
+                        case 'radio': 
+                                fieldType="{{'FORM_RADIO_FIELD'|trans}}"
+                           break; 
+                        case 'checkbox':
+                                 fieldType="{{'FORM_CHECKBOX_FIELD'|trans}}"
+                             break;
+                        case 'singleline':
+                                 fieldType="{{'FORM_SINGLELINE_FIELD'|trans}}"
+                             break; 
+                        case 'multiline': 
+                                 fieldType="{{'FORM_MULTILINE_FIELD'|trans}}"
+                             break;
+                        case 'date': 
+                                fieldType= "{{'FORM_DATE_FIELD'|trans}}"
+                            break; 
+                        case 'email': 
+                               fieldType="{{'FORM_EMAIL_FIELD'|trans}}"
+                            break; 
+                        case 'url': 
+                                fieldType="{{'FORM_URL_FIELD'|trans}}"
+                            break;
+                        case 'fileupload': 
+                               fieldType= "{{'FORM_FILEUPLOAD_FIELD'|trans}}"
+                             break; 
+                        case 'imageupload': 
+                                fieldType= "{{'FORM_IMAGEUPLOAD_FIELD'|trans}}"
+                            break; 
+                        case 'login email': 
+                                 fieldType="{{'FORM_LOGINEMAIL_FIELD'|trans}}"
+                             break;
+                        case 'number': 
+                              fieldType="{{'FORM_NUMBER_FIELD'|trans}}"
+                           break; 
+                    
+              } %>            
+            <i><%= fieldType %></i> 
+                  
+                </div>
+                <div class="col-sm-2 col-sm-offset-1" id="typeOptions_<%- data.formFieldId %>_container">
+                    <a href="#typeOptions-<%= data.formFieldId %>" class="fg-toggle-link collapsed" option_type='CF' data-toggle="collapse"><i class="fa fa-minus-square-o"></i> {{'CMS_FORM_FIELD_OPTION_LINK'|trans}}</a>
+                </div>
+             
+        </div>
+        <div id="typeOptions-<%= data.formFieldId %>" class="collapse row fg-clear">
+               
+
+
+        </div>
+    </li>
+</script>
+<script type="text/template" id="emptyMandatoryError">
+  <div class="alert alert-danger alert-br" id="alert_noMandatoryError">
+    <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
+    <p>{{'MANDATORY_FIELDTYPE_ERROR'|trans}}</p>            
+</div>  
+    
+</script>
+

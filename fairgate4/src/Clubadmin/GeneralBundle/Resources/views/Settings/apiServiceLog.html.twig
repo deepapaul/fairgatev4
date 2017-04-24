@@ -1,0 +1,221 @@
+{% extends '::clubadmin/layout.html.twig' %}
+{% set pageTitle = "GENERAL_SETTINGS"|trans %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body fg-theme-green">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                {% include 'clubadmin/breadcrumb.html.twig' with {'breadCrumb':{}} %}
+
+                <!-- END PAGE TITLE & BREADCRUMB-->
+
+                {# {% include 'clubadmin/settings-tab.html.twig' with {'tabs':tabs,'active':'misc'} %}
+                 #} 
+                <div class="row">
+                    {% set page_settings = { 'pagetitle':'true','tabs':'true'}  %}
+                    {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle':pageTitle ,'page_settings': page_settings,'tabs': tabs,'hrefLink' : true, 'url':"#",'type':'agelimit' } %}
+                </div>
+                <div class="row">
+
+                    <div class="fg-log-filter-wrapper fg-clear col-md-12">
+                        <div class="fg-active-IB fg-date-wrapper">
+                            <label for="filter_start_date" class="filter-log-from"><span>{{ 'FILE_LOG ENTRIES FROM'|trans }}</span></label>
+                            <div class='input-group date datepicker'>
+                                <input type="date_range" name="filter_start_date" id="filter_start_date" value="" class="form-control log-datepicker filter-log-input"/>
+                                <span class="input-group-addon cal filter-log-date"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                        </div>
+                        <div class="fg-active-IB fg-date-wrapper">                        
+                            <label for="filter_end_date" class="filter-log-from"><span>{{ 'FILE_LOG_TO'|trans }}</span></label>
+                            <div class='input-group date datepicker'>
+                                <input type="date_range" name="filter_end_date" id="filter_end_date" value="" class="form-control log-datepicker filter-log-input"/>
+                                <span class="input-group-addon cal filter-log-date"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                        </div>
+                        <div class="has-error fg-log-error">
+                            <span class="help-block fg-error-hide" id="log_date_error"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <table data-ajax-path="{{path('api_response_gc_log_data')}}"
+                           class="table confirmationsListDatatable 
+                           table-bordered
+                           table-hover
+                           table-condensed
+                           dataTable-scroll-y
+                           dataTable-ajax1
+                           dataTable-rows
+                           dataTable-scroll-x
+                           dataTables_scrollBody
+                           dataTable-initialSort data-count" xWidth="100" yHeight="300" data-table-name="dataTables" data_row_change="fgrowchange" id="dataTable-api-service-log" data-table-group="confirmations-list-table" dataTable-popover="true" dataTable-hover="true" data-sort="1#desc" >
+                        <thead>  
+                            <tr>
+                                <th>{{ 'SERVICE_LOG_EVENT'|trans }}</th>
+                                <th>{{ 'SERVICE_LOG_DATE'|trans }}</th>
+                                <th>{{ 'SERVICE_LOG_FIELDS'|trans }}</th>
+                                <th>{{ 'SERVICE_LOG_VALUE_AFTER'|trans }}</th>
+                                <th>{{ 'SERVICE_LOG_VALUE_BEFORE'|trans }}</th>
+                                <th>{{ 'SERVICE_LOG_CHANGED_BY'|trans }}</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>  
+    <script src="{{ asset('fgassets/backend/js/page/settings.js') }}" type="text/javascript"></script>  
+    <script>
+        var profilePath = "{{ path('render_contact_overview', {'offset' : '0','contact': "**dummy**" }) }}";
+        var eventTrans = {
+            'booking': '{{ 'SERVICE_BOOKING'|trans }}',
+            'keyGeneration': '{{ 'SERVICE_KEY_GENERATION'|trans }}',
+            'booked': '{{ 'GN_SETTINGS_GOTCOURT_API_BOOKED'|trans }}',
+            'generated': '{{ 'GN_SETTINGS_GOTCOURT_API_GENERATED'|trans }}',
+            'regenerated': '{{ 'GN_SETTINGS_GOTCOURT_API_REGENERATED'|trans }}',
+            'registered': '{{ 'GN_SETTINGS_GOTCOURT_API_ACTIVATED'|trans }}',
+            'cancelled': '{{ 'GN_SETTINGS_GOTCOURT_API_CANCELLED'|trans }}'
+        };
+        
+        $(document).ready(function () {
+            FgPageTitlebar.init({
+                title: true,
+                tab: true,
+                search: false,
+                actionMenu: false,
+                tabType: 'server'
+
+            });
+            var tableElement = $('table#dataTable-api-service-log');
+            var rowCount = 10;
+            var disOrder = [[1, "desc"]];
+            var i = 0;
+            var columnDef = [];
+
+            columnDef.push(
+                    {"name": "event", "width": "10%", "targets": i++, "type": "null-last", data: function (row, type, val, meta) {
+                            row.sortData = eventTrans[row['event']];
+                            row.displayData = eventTrans[row['event']];
+                            return row;
+                        }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}
+                    }
+            );
+            columnDef.push(
+                    {"name": "logDisplayDate", "width": "10%", "targets": i++, "type": "null-last", data: function (row, type, val, meta) {
+                            row.sortData = moment(row['logDisplayDate'], FgLocaleSettingsData.momentDateTimeFormat).format("x");
+                            row.displayData = row['logDisplayDate'];
+                            return row;
+                        }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}
+                    }
+            );
+            columnDef.push(
+                    {"name": "field", "width": "10%", "targets": i++, "type": "null-last", data: function (row, type, val, meta) {
+                            row.sortData = row['field'];
+                            row.displayData = row['field'];
+                            return row;
+                        }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}
+                    }
+            );
+            columnDef.push(
+                    {"name": "valueAfter", "width": "10%", "targets": i++, "type": "null-last", data: function (row, type, val, meta) {
+                            var valueAfter =  (row['field'] === 'status') ? eventTrans[row['valueAfter']] : row['valueAfter'];
+                            row.sortData = valueAfter;
+                            row.displayData = valueAfter;
+                            return row;
+                        }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}
+                    }
+            );
+            columnDef.push(
+                    {"name": "valueBefore", "width": "10%", "targets": i++, "type": "null-last", data: function (row, type, val, meta) {
+                            var valueBefore =  (row['field'] === 'status') ? eventTrans[row['valueBefore']] : row['valueBefore'];
+                            row.sortData = valueBefore;
+                            row.displayData = valueBefore;
+                            return row;
+                        }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}
+                    }
+            );
+            columnDef.push(
+                    {"name": "changedby", "width": "10%", "targets": i++, "type": "null-last", data: function (row, type, val, meta) {
+                            row.sortData = row['contact'];
+                            if (row['activeContactId'] != null) {
+                                var oPath = profilePath.replace('**dummy**', row['activeContactId']);
+                                row.displayData = '<a href="' + oPath + '" target="_blank" data-cont-id="' + row['activeContactId'] + '">' + row['contact'] + '</a>';
+                            } else {
+                                row.displayData = row['contact'] == '' || row['contact'] == null ? '-' : row['contact'];
+                            }
+
+                            return row;
+                        }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}
+                    }
+            );
+
+            var opt = {
+                ajax: {'url': tableElement.attr('data-ajax-path'), "data": function ( d ) {
+                                            d.startDate = $('#filter_start_date').val();
+                                            d.endDate = $('#filter_end_date').val();
+                                            return d;
+                                    }
+                    },
+                deferRender: true,
+                order: disOrder,
+                dom: "<'row_select_datatow col-md-12'l><'col-md-12't><'col-md-4'><'col-md-8'p>",
+                scrollCollapse: true,
+                paging: false,
+                autoWidth: true,
+                sScrollX: tableElement.attr('xWidth') + "%",
+                sScrollXInner: tableElement.attr('xWidth') + "%",
+                scrollY: FgCommon.getWindowHeight(275) + "px",
+                stateDuration: 60 * 60 * 24,
+                lengthChange: true,
+                sServerMethod: "POST",
+                iDisplayLength: rowCount,
+                lengthMenu: [10, 20, 50, 100, 200],
+                pagingType: "full_numbers",
+                language: {
+                    sSearch: "<span>" + datatabletranslations['data_Search'] + ":</span> ",
+                    sInfo: datatabletranslations['data_showing'] + " <span>_START_</span> " + datatabletranslations['data_to'] + " <span>_END_</span> " + datatabletranslations['data_of'] + " <span>_TOTAL_</span> " + datatabletranslations['data_entries'],
+                    sZeroRecords: datatabletranslations['no_matching_records'],
+                    sInfoEmpty: datatabletranslations['data_showing'] + " <span>0</span> " + datatabletranslations['data_to'] + " <span>0</span> " + datatabletranslations['data_of'] + " <span>0</span> " + datatabletranslations['data_entries'],
+                    sEmptyTable: datatabletranslations['no_record'],
+                    sInfoFiltered: "(" + datatabletranslations['filtered_from'] + " <span>_MAX_</span> " + datatabletranslations['total_entries'] + ")",
+                    lengthMenu: '<select>' +
+                            '<option value="10">10 ' + datatabletranslations['row'] + '</option>' +
+                            '<option value="20">20 ' + datatabletranslations['row'] + '</option>' +
+                            '<option value="50">50 ' + datatabletranslations['row'] + '</option>' +
+                            '<option value="100">100 ' + datatabletranslations['row'] + '</option>' +
+                            '<option value="200">200 ' + datatabletranslations['row'] + '</option>' +
+                            '</select> ',
+                    oPaginate: {
+                        "sFirst": '<i class="fa fa-angle-double-left"></i>',
+                        "sLast": '<i class="fa fa-angle-double-right"></i>',
+                        "sNext": '<i class="fa fa-angle-right"></i>',
+                        "sPrevious": '<i class="fa fa-angle-left"></i>'
+                    }
+
+                },
+                columnDefs: columnDef,
+                fnDrawCallback: function () {
+                },
+                fnInitComplete: function () {
+                }
+            };
+            opt.serverSide = false;
+            opt.processing = false;
+            
+            apiLogTbale = tableElement.DataTable(opt);
+            $('.log-datepicker').change(function(){
+                apiLogTbale.ajax.reload();
+            });
+        });
+
+
+    </script>
+{% endblock %} 

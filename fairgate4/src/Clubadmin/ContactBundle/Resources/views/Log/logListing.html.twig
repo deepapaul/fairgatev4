@@ -1,0 +1,50 @@
+ {% if ((activeTab != "membership") and (activeTab != "fed_membership")) %}
+    <div class="row">
+        <div class="date-filter log-area col-md-12" id="date_filter_{{contactData['id']}}_{{typeId}}">
+            <div class="pull-left">
+                <label for="filter_start_date" class="filter-log-from"><span>{{ 'LOG ENTRIES FROM'|trans }}</span></label>
+                <div class='input-group date'>
+                    <input type="date_range" name="filter_start_date" id="filter_start_date_{{contactData['id']}}_{{typeId}}" value="" class="form-control filter-log-input" data-event="{{contactData['id']}}_{{typeId}}" data-tab="{{activeTab}}"/>
+                    <span class="input-group-addon cal filter-log-date"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+            <div class="pull-left">
+                <label for="filter_end_date" class="filter-log-from"><span>{{ 'LOG_TO'|trans }}</span></label>
+                <div class='input-group date'>
+                    <input type="date_range" name="filter_end_date" id="filter_end_date_{{contactData['id']}}_{{typeId}}" value="" class="form-control filter-log-input" data-event="{{contactData['id']}}_{{typeId}}" data-tab="{{activeTab}}"/>
+                    <span class="input-group-addon cal filter-log-date"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+            <!-- Date filter error message-->        
+            <div class="col-sm-3 has-error fg-log-error">
+                <span class="help-block fg-error-hide" id="log_date_error_{{contactData['id']}}_{{typeId}}"></span>
+            </div>
+        </div>
+    </div>
+{% endif %}
+<div class="fg-clear"></div>
+<div class="row">
+    
+    {% if activeTab == "data" %}
+        {% include 'ClubadminContactBundle:Log:logTemplate.html.twig' with {'contactData': contactData, 'activeTab' : 'data', 'typeId' : typeId ,'isMembershipEditable':isMembershipEditable} %}
+    {% elseif activeTab == "assignments" %}
+        {% include 'ClubadminContactBundle:Log:logTemplate.html.twig' with { 'contactData': contactData, 'activeTab' : 'assignments', 'typeId' : typeId ,'isMembershipEditable':isMembershipEditable} %}
+    {% elseif activeTab == "connections" %}
+        {% include 'ClubadminContactBundle:Log:logTemplate.html.twig' with { 'contactData': contactData, 'activeTab' : 'connections', 'typeId' : typeId ,'isMembershipEditable':isMembershipEditable} %}
+    {% elseif activeTab == "membership" %}
+        {% include 'ClubadminContactBundle:Log:logTemplate.html.twig' with {'contactData': contactData, 'activeTab' : 'membership', 'typeId' : typeId ,'isMembershipEditable':isMembershipEditable} %}
+    {% elseif activeTab == "fed_membership" %}
+        {% include 'ClubadminContactBundle:Log:logTemplate.html.twig' with {'contactData': contactData, 'activeTab' : 'fed_membership', 'typeId' : typeId ,'fedmembershipEdit':fedmembershipEdit} %}
+    {% elseif activeTab == "communication" %}
+        {% include 'ClubadminContactBundle:Log:logTemplate.html.twig' with { 'contactData': contactData, 'activeTab' : 'communication', 'typeId' : typeId ,'isMembershipEditable':isMembershipEditable} %}
+    {% elseif activeTab == "notes" %}
+        {% include 'ClubadminContactBundle:Log:logTemplate.html.twig' with { 'contactData': contactData, 'activeTab' : 'notes', 'typeId' : typeId ,'isMembershipEditable':isMembershipEditable} %}
+    {% elseif activeTab == "system" %}
+        {% include 'ClubadminContactBundle:Log:logTemplate.html.twig' with { 'contactData': contactData, 'activeTab' : 'system', 'typeId' : typeId ,'isMembershipEditable':isMembershipEditable} %}
+    {% endif %}
+</div>
+{% if (((activeTab == "membership") and (isMembershipEditable)) or ((activeTab == 'fed_membership') and fedmembershipEdit == 1 )) %}
+    <div class="row addandsave fg-add-log-entry">
+        <div class="col-md-12 col-sm-12 col-xx-12"><a class="btn btn-default" id="membership-add" data-toggle="modal" data-target="#membership-add-popup"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i><span>{%trans%}ADD_ENTRY{%endtrans%}</span></a></div>
+    </div>
+{% endif %}

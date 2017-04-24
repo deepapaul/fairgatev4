@@ -1,0 +1,463 @@
+extends _helpers/theme-02/layout.jade
+
+block vars
+  - var bodyClass = 'fg-web-theme-02 fg-header-sticky';  
+  - var bodyStyles = 'background:url("https://awesomewallpapers.files.wordpress.com/2016/03/cities-37.jpg") no-repeat; background-size:cover; ';  
+  - var headerClass = 'header-bg-full-width ';
+block title
+    title Article Title
+
+block page-level-library-css      
+      link(href='https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css', rel='stylesheet', media='screen')
+      link(href='https://cdn.datatables.net/responsive/2.1.0/css/responsive.dataTables.min.css', rel='stylesheet', media='screen')
+block page-level-header
+      link(href='../../css/fg-web-theme-02.css', rel='stylesheet', media='screen')
+      link(href='../theme-based-styles/theme-02-color-schemes.css', rel='stylesheet', media='screen')
+      link(href='../theme-based-styles/theme-02-config.css', rel='stylesheet', media='screen')
+block header
+    .row.fg-web-top-nav-wrapper
+        .container
+            .FR
+                ul.fg-web-top-nav-links.list-inline
+                    li
+                        a(href='#') FAQ
+                    li
+                        a(href='#') Contact
+                    li
+                        a(href='#') Map
+                .fg-web-top-nav-languages
+                    .fg-current-language 
+                        a(href="#" data-toggle='dropdown', role='navigation', aria-expanded='false') EN
+                    ul.dropdown-menu.pull-right.fg-web-language-list
+                        li.active 
+                          a(href="javascript:void(0)") EN
+                        li
+                          a(href="javascript:void(0)") RU
+                        li
+                          a(href="javascript:void(0)") DE
+                        li
+                          a(href="javascript:void(0)") CH
+
+    .row.fg-web-header-content
+        figure.fg-header-bg
+          img(src="http://www.romantic-escapes.co.uk/wp-content/uploads/2015/02/city-breaks-slider.jpg").fg-width-P
+        .fg-logo-wrapper.fg-logo-center
+            
+            a(href='#').fg-logo
+              img(src="http://www.fauchard.org/system/ckeditor_assets/pictures/101/content_pfa_portrait_logo-300print.jpg")
+        .container
+            .clearfix
+            .fg-navbar-container
+                .fg-web-nav-icon
+                    span
+
+                nav.navbar.navbar-default.fg-web-main-nav
+                    ul.nav.navbar-nav
+                        li.active                                    
+                            a(href='#') Home     
+                        li
+                            a(href='#') Club
+                        li
+                            a(href='#') Teams
+                        li
+                            a(href='#') News
+                        li.dropdown
+                            a(href='#')
+                                | Photos 
+                            span.fg-dropdown-toggle.material-icons(data-toggle='dropdown', role='navigation', aria-expanded='false') keyboard_arrow_right
+                            ul.dropdown-menu
+                                li
+                                    a(href='#') Second level menu
+                                li
+                                    a(href='#') Second level menu
+                                li.dropdown
+                                    a(href='#')
+                                        | Second level Dropdown Second level Dropdown 
+                                    span.material-icons.fg-dropdown-toggle(data-toggle='dropdown', role='navigation', aria-expanded='false') keyboard_arrow_right
+                                    ul.dropdown-menu.fg-web-open-right
+                                        li
+                                            a(href='#') Third level menu
+                                        li
+                                            a(href='#') Third level menu
+
+                                        li.dropdown
+                                            a(href='#')
+                                                | Third level Dropdown 
+                                            span.material-icons.fg-dropdown-toggle(data-toggle='dropdown', role='navigation', aria-expanded='false') keyboard_arrow_right
+                                            ul.dropdown-menu.fg-web-open-left
+                                                li
+                                                    a(href='#') Fourth level menu
+                                                li
+                                                    a(href='#') Fourth level menu
+                                                li
+                                                    a(href='#') Fourth level menu
+                                                li
+                                                    a(href='#') Fourth level menu
+                                        li
+                                            a(href='#') Third level menu
+                                li
+                                    a(href='#') Second level menu
+                                li
+                                    a(href='#') Second level menu
+                  
+                        li
+                            a(href='#') Contact
+                .fg-additional-nav
+                    .fg-web-top-nav-languages
+                        .fg-current-language 
+                            a(href="javascript:void(0)" data-toggle='dropdown', role='navigation', aria-expanded='false') EN
+                        ul.dropdown-menu.fg-web-language-list
+                            li.active 
+                              a(href="javascript:void(0)") EN
+                            li
+                              a(href="javascript:void(0)") RU
+                            li
+                              a(href="javascript:void(0)") DE
+                            li
+                              a(href="javascript:void(0)") CH
+                    .fg-web-top-nav-links.active
+                        a(href="javascript:void(0)" data-toggle='dropdown', role='navigation', aria-expanded='false') 
+                            i.material-icons more_vert
+                        ul.dropdown-menu
+                          li
+                              a(href='#') FAQ
+                          li
+                              a(href='#') Contact
+                          li
+                              a(href='#') Map
+                    
+block content
+
+        .row.fg-web-page-title-bar
+            .container
+                h1.fg-web-page-title
+                  | How to contact us
+        
+        .container
+            .row.fg-web-page-container
+              .col-sm-12.fg-web-page-content-wrapper
+                  .row
+                      .col-sm-12.fg-grid-col-6(style=' border:1px solid red;')
+                          .fg-header-widget.fg-widget-block
+                              h2 Column 6
+                          .fg-header-widget.fg-widget-block
+                              h2.col-md-12 Heading 1
+                          .fg-header-widget.fg-widget-block
+                              h3.col-md-12 Heading 2
+                          .fg-header-widget.fg-widget-block
+                              h4.col-md-12 Heading 3
+                          .fg-header-widget.fg-widget-block
+                              h5.col-md-12 Heading 4
+                          .fg-header-widget.fg-widget-block
+                              h6.col-md-12 Heading 5
+  
+
+                      .col-sm-10.fg-grid-col-5(style=' border:1px solid green;')
+                            .fg-header-widget.fg-widget-block
+                                h2 Column 5
+
+                            .fg-form-widget.fg-widget-block
+                              form.form-horizontal
+                                  fieldset
+                                      legend Form Name
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Mandatory field 
+                                          .col-md-8
+                                              input#textinput.form-control.input-md(name='textinput', type='text', placeholder='', required='') 
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Field with tooltip
+                                          .col-md-8
+                                              input#textinput.form-control.input-md(name='textinput', type='text', placeholder='')
+     
+                                      .form-group
+                                          label.col-md-4.control-label(for='checkboxes') Checkbox group
+                                          .col-md-8
+                                              .checkbox-block
+                                                  label(for='checkboxes-0')
+                                                      input#checkboxes-0(type='checkbox', name='checkboxes', value='1')
+                                                      |       Option one
+                                              .checkbox-block
+                                                  label(for='checkboxes-1')
+                                                      input#checkboxes-1(type='checkbox', name='checkboxes', value='2')
+                                                      |       Option two
+       
+                                      .form-group
+                                          label.col-md-4.control-label(for='radios') Multiple Radios
+                                          .col-md-8
+                                              .radio-block
+                                                  label(for='radios-0')
+                                                      input#radios-0(type='radio', name='radios1', value='1', checked='checked')
+                                                      |       Option one
+                                              .radio-block
+                                                  label(for='radios-1')
+                                                      input#radios-1(type='radio', name='radios1', value='2')
+                                                      |       Option two
+        
+                                      .form-group
+                                          label.col-md-4.control-label(for='radios') Inline Radios
+                                          .col-md-8
+                                                label.radio-inline(for='radios-4')
+                                                    input#radios-4(type='radio', name='radios2', value='1', checked='checked')
+                                                    |       1
+                                                label.radio-inline(for='radios-5')
+                                                    input#radios-5(type='radio', name='radios2', value='2')
+                                                    |       2
+                                                label.radio-inline(for='radios-2')
+                                                    input#radios-2(type='radio', name='radios2', value='3')
+                                                    |       3
+                                                label.radio-inline(for='radios-3')
+                                                    input#radios-3(type='radio', name='radios2', value='4')
+                                                    |       4
+     
+                                  
+                                 
+
+                                  fieldset.fg-noseprator
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Field with placeholder
+                                          .col-md-8
+                                              input#textinput.form-control.input-md(name='textinput', type='text', placeholder='placeholder')
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Pre-filled field
+                                          .col-md-8
+                                              input#textinput.form-control.input-md(name='textinput', type='text', placeholder='')
+                                      .form-group
+                                          label.col-md-4.control-label(for='textarea') Multi-line field
+                                          .col-md-8
+                                              textarea#textarea.form-control(name='textarea') value
+                                      .form-group
+                                          label.col-md-4.control-label(for='selectbasic') Dropdown
+                                          .col-md-8
+                                              select#selectbasic.form-control(name='selectbasic')
+                                                  option(value='1') Option one
+                                                  option(value='2') Option two
+                                  fieldset
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Date field with picker
+                                          .col-md-8
+                                              .input-group.date(data-provide='datepicker')
+                                                  input.form-control(type='text')
+                                                  .input-group-addon
+                                                     span.fa.fa-calendar
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Time field with picker
+                                          .col-md-8
+                                              .input-group.bootstrap-timepicker.timepicker(data-provide='timepicker', data-minute-step='1',  type='text')
+                                                  input#timepicker.form-control
+                                                  .input-group-addon
+                                                     span.fa.fa-clock-o
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Number field
+                                          .col-md-8
+                                              .fg-input-plus-minus
+                                                  button.left.minus.form-control.FL.selectButton.btn-number(data-field='columnCount', data-type='minus') -
+                                                  input#columnCount.form-control.FL.number.input-number(type='number', disabled='')
+                                                  button.right.plus.form-control.FL.selectButton.btn-number(data-field='columnCount', data-type='plus') +
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') File field
+                                          .col-md-8
+                                              .fg-web-fileupload-wrapper
+                                                  input.filestyle(type="file", data-buttonText="Select file", data-buttonName="fg-upload-btn", data-iconName="fa fa-file")
+                                      .form-group
+                                          .col-md-8.col-md-offset-4
+                                              input(type="submit").btn.btn-default
+                            .fg-sponsor-ads-widget.fg-sponsor-ads-horizontal.fg-widget-block.medium
+                              .fg-sponsor-block
+                                  img(src='https://static1.squarespace.com/static/51cb2e75e4b06e55251bb95e/523f867ae4b00600a83072ff/584ad65b8419c22ce76b2b93/1481299548866/Twitter_Ad_800x200_112816.png?format=500w')
+                              .fg-sponsor-block
+                                  img(src='https://www.bluechipfeed.com/wp/wp-content/uploads/banner1.jpg')
+                              .fg-sponsor-block
+                                  img(src='https://www.brandcrap.com/wp-content/uploads/2016/03/reviewed-new-logo-and-identity-for-ascot-by-the-clearing-2')
+                              .fg-sponsor-block
+                                  img(src='https://www.brandcrap.com/wp-content/uploads/2015/11/noted-new-logo-for-tourism-ohio-by-cult-marketing2')
+                              .fg-sponsor-block
+                                  img(src='https://www.brandcrap.com/wp-content/uploads/2016/04/reviewed-new-logo-and-identity-for-oi-by-wolff-olins-and-futurebrand')
+                              .fg-sponsor-block
+                                  img(src='https://www.bluechipfeed.com/wp/wp-content/uploads/banner1.jpg')
+
+                      .col-sm-8.fg-grid-col-4(style=' border:1px solid blue;')
+                          .fg-header-widget.fg-widget-block
+                              h2 Column 4
+
+                          .fg-article-widget.fg-widget-block.fg-dev-element-box.elementBox
+                                article.fg-article-wrapper.fg-article-left-img
+                                  header
+                                    h2 test
+                                  .col-md-12.fg-pad-0.fg-content
+                                    figure.col-sm-4
+                                      img(src='http://192.168.0.39:12004/uploads/8762/gallery/width_300/images22.jpg', alt='')
+                                    .col-sm-8.fg-right-col
+                                      | Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
+                                      a.fg-read-more(href='#')
+                                        i.fa.fa-arrow-circle-right
+                                        | Read more
+                                      footer
+                                        .fg-post-date 28/07/2016
+                                  .clearfix
+                                article.fg-article-wrapper.fg-article-left-img
+                                  header
+                                    h2 kenyadupeee
+                                  .col-md-12.fg-pad-0.fg-content
+                                    figure.col-sm-4
+                                      img(src='http://192.168.0.39:12004/uploads/8762/gallery/width_300/exec(1).jpg', alt='')
+                                    .col-sm-8.fg-right-col
+                                      a.fg-read-more(href='#')
+                                        i.fa.fa-arrow-circle-right
+                                        | Read more
+                                      footer
+                                        .fg-post-date 09/06/2016
+                                  .clearfix
+                                article.fg-article-wrapper.fg-article-left-img
+                                  header
+                                    h2 article5dup
+                                  .col-md-12.fg-pad-0.fg-content
+                                    figure.col-sm-4
+                                      img(src='http://192.168.0.39:12004/uploads/8762/gallery/width_300/download.jpg', alt='')
+                                    .col-sm-8.fg-right-col
+                                      a.fg-read-more(href='#')
+                                        i.fa.fa-arrow-circle-right
+                                        | Read more
+                                      footer
+                                        .fg-post-date 09/06/2016
+                                  .clearfix
+                                article.fg-article-wrapper.fg-article-left-img
+                                  header
+                                    h2 articledup
+                                  .col-md-12.fg-pad-0.fg-content
+                                    div
+                                      | teaser
+                                      a.fg-read-more(href='#')
+                                        i.fa.fa-arrow-circle-right
+                                        | Read more
+                                      footer
+                                        .fg-post-date 02/06/2016
+                                  .clearfix
+                      .col-sm-6.fg-grid-col-3(style=' border:1px solid yellow;')
+                          .fg-header-widget.fg-widget-block
+                              h2 Column 3
+
+                          .fg-supplementary-widget.fg-widget-block
+                                #accordion1.panel-group
+                                    .panel
+                                      .panel-heading
+                                        h4.panel-title.fg-title.active
+                                          a(href='#collapse11')
+                                            | Active section
+                                          i.fa.fa-angle-down.fg-arrow(data-toggle='collapse', data-parent='#accordion1', href='#collapse11')
+                                      #collapse11.panel-collapse.collapse.in
+                                        .panel-body
+                                          ul.fg-menu-links
+                                            li.active
+                                              a(href='#') Active Link
+                                            li
+                                              a(href='#') Example Link
+                                            li
+                                              a(href='#') Example Link
+                                            li
+                                              a(href='#') Example Link
+                                            li
+                                              a(href='#') Example Link
+                                    .panel
+                                      .panel-heading
+                                        h4.panel-title.fg-title
+                                          a(href='#collapse12')
+                                            | Sub Menu Section
+                                          i.fa.fa-angle-down.fg-arrow(data-toggle='collapse', data-parent='#accordion1', href='#collapse12').collapsed
+                                      #collapse12.panel-collapse.collapse
+                                        .panel-body
+                                          ul.fg-menu-links
+                                            li
+                                              a(href='#') Example Link
+                                            li
+                                              a(href='#') Example Link
+                                            li
+                                              a(href='#') Example Link
+                                            li
+                                              a(href='#') Example Link
+
+                                    .panel
+                                      .panel-heading
+                                        h4.panel-title.fg-title
+                                          a(href='#collapse13')
+                                            | Sub Menu Section
+                                          i.fa.fa-angle-down.fg-arrow(data-toggle='collapse', data-parent='#accordion1', href='#collapse13').collapsed
+                                      #collapse13.panel-collapse.collapse
+                                        .panel-body
+                                          ul.fg-menu-links
+                                            li
+                                              a(href='#') Example Link
+                                            li
+                                              a(href='#') Example Link
+                                            li
+                                              a(href='#') Example Link
+                                            li
+                                              a(href='#') Example Link
+
+                                  .clearfix
+                      .col-sm-4.fg-grid-col-2(style='border:1px solid red;')
+                            .fg-header-widget.fg-widget-block
+                                h2 Column 2
+
+                            .fg-login-widget.fg-widget-block.fg-dev-element-box.elementBox
+                           
+                                p
+                                    strong ACTIVATE YOUR ACCOUNT: 
+                                    | Enter the email which is stored on your account to get linked to a page where you can set up your password. If you don't know which email is stored on your account, ask the responsibles of your organanisation FC Musterheim.
+                                form.form-horizontal
+                                    .form-group.fg-input-box-left
+                                      input.form-control.input-md(name='dummyText', type='text', placeholder='E-mail address')
+                                    .form-group.fg-google-captcha
+                                        img(src='https://www.google.com/recaptcha/intro/images/hero-recaptcha-demo.gif')
+                                    .form-group.fg-button-block
+                                      .fg-button
+                                        button#singlebutton.btn.btn-primary.fg-submit(name='singlebutton') Send
+                                        a(href='javascript:void(0)').fg-back-button
+                                            i.fa.fa-arrow-circle-left.fa-2x
+                                            | Back
+                                  .clearfix
+                      .col-sm-2.fg-grid-col-1(style=' border:1px solid SlateBlue;')
+                          .fg-header-widget.fg-widget-block
+                              h2 Column 1
+block page-level-footer
+    script(src='https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js')
+    script(src='https://cdn.datatables.net/responsive/2.1.0/js/dataTables.responsive.min.js')
+    script(src='.././../js/fg-website-02.js')
+    script.
+      jQuery(document).ready(function () {
+            $("select").selectpicker();
+            window.DT=  $('#example').DataTable({
+                  dom: "<'col-md-12't><'col-md-12'p>",
+                  "autoWidth": false,
+                  scrollX: true,
+                  language: {
+                      paginate: {
+                          "next": '<i class="fa fa-angle-right"></i>',
+                          "previous": '<i class="fa fa-angle-left"></i>'
+                      }
+                  },
+                  
+            });
+
+            $('.dataTable tbody').on( 'mouseover', 'tr', function () {
+                $(this).addClass('fg-hover');
+            } );
+
+            $('.dataTable tbody').on( 'mouseout', 'tr', function () {
+                $(this).removeClass('fg-hover');
+            } );
+            $(window).resize(function(){
+                DT.columns.adjust().draw();
+            });
+            /*------------------------------------------------
+            Navigation actions
+            -------------------------------------------------*/
+            $('.fg-web-nav-icon').on('click',function(){
+                var $this = $(this)
+                var $navIcon =  $this;
+                var $navContainer = $navIcon.siblings('.fg-web-main-nav');
+                $navIcon.toggleClass('active');
+                $navContainer.toggleClass('active');
+            });
+            fgwebsite = 'ss';
+            FgWebsiteThemeObj = new FgWebsiteTheme();
+      });

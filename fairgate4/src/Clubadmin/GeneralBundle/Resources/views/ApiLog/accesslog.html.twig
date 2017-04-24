@@ -1,0 +1,164 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout_filemanager.html.twig' %}
+{% set pageTitle = 'ACCESS_LOG'|trans %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN BREADCRUMB-->
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <!-- END BREADCRUMB-->
+            
+            <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+            {% include 'global/page-title-bar.html.twig' with {'pageTitle': 'ACCESS_LOG'|trans, 'contactId': '', 'tabs': {}, 'hrefLink': true , 'roleCount' : '' , 'type':'', 'url' : '','columnsUrl':''} %}
+            <!-- END PAGE TITLE AND PANEL TABS -->
+            <div class="row">
+
+                <div class="fg-log-filter-wrapper fg-clear col-md-12">
+                    <div class="fg-active-IB fg-date-wrapper">
+                        <label for="filter_start_date" class="filter-log-from"><span>{{ 'FILE_LOG ENTRIES FROM'|trans }}</span></label>
+                        <div class='input-group date datepicker'>
+                            <input type="date_range" name="filter_start_date" id="filter_start_date" value="" class="form-control log-datepicker filter-log-input"/>
+                            <span class="input-group-addon cal filter-log-date"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                    </div>
+                    <div class="fg-active-IB fg-date-wrapper">                        
+                        <label for="filter_end_date" class="filter-log-from"><span>{{ 'FILE_LOG_TO'|trans }}</span></label>
+                        <div class='input-group date datepicker'>
+                            <input type="date_range" name="filter_end_date" id="filter_end_date" value="" class="form-control log-datepicker filter-log-input"/>
+                            <span class="input-group-addon cal filter-log-date"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                    </div>
+                    <div class="has-error fg-log-error">
+                        <span class="help-block fg-error-hide" id="log_date_error"></span>
+                    </div>
+                </div>
+            </div>
+                    
+            <div class="row">
+                <table class="dataTable table table-bordered table-hover table-condensed fg-brdr-btm-1 fg-no-table-border-bottom" id="dataTable-api-access-log">
+                    <thead>
+                        <tr>
+                            <th>{{ 'ACCESS_LOG_DATE'|trans }}</th>
+                            <th>{{ fgtwig.getTerminolgyName('Club', singular,'UCF') }}</th>
+                            <th>{{ 'ACCESS_LOG_URL'|trans }}</th>
+                            <th>{{ 'ACCESS_LOG_IP'|trans }}</th>
+                            <th>{{ 'ACCESS_LOG_REQUEST'|trans }}</th>
+                            <th>{{ 'ACCESS_LOG_RESPONSE_CODE'|trans }}</th>
+                            <th>{{ 'ACCESS_LOG_RESPONSE'|trans }}</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %} 
+
+{% block customstylesheets %}
+    <link href="{{ asset('bundles/commonFilemanager/css/fg-filemanager-styles.css')}}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+            
+{% block javascripts %}
+    <script src="{{ path('javascript_variables_handler', { 'contactId' : fgclub.get('contactId'), 'version': asset_version(),'updated': random(5000) }) }}" data-sr="{{fgclub.get('settingsUpdated')}}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/commonFilemanager/js/filemanager.js')}}" type="text/javascript"></script>
+    <script>
+        var logDataPath = "{{path('api_response_log_data')}}";
+        var columnDefs = [
+            {"name": "date", "targets": 0, data: function (row, type, val, meta) {
+                    row.displayData = row['logDisplayDate'];
+                    return row;
+                }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'sortData'}},
+            {"name": "title","targets": 1,  "orderable": true, data: function (row, type, val, meta) {
+                    row.displayData = row['title'];
+                    return row;
+                }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'sortData'}},
+            {"name": "url", "targets": 2, "orderable": false, data: function (row, type, val, meta) {
+                    row.displayData = row['apiUrl'];
+                    return row;
+                }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}},
+            {"name": "requestClientip", "targets": 3, "orderable": true, data: function (row, type, val, meta) {
+                    row.displayData = row['requestClientip'];
+                    return row;
+                }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'sortData'}},
+            {"name": "requestDetail", "targets": 4, "orderable": false, data: function (row, type, val, meta) {
+                    row.displayData = row['requestDetail'];
+                    return row;
+                }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'sortData'}},
+            {"name": "responseCode", "targets": 5, "orderable": true, data: function (row, type, val, meta) {
+                    row.displayData = row['responseCode'];
+                    return row;
+                }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}},
+            {"name": "responseDetail", "targets": 6, "orderable": false, data: function (row, type, val, meta) {
+                    row.displayData = row['responseDetail'];
+                    return row;
+                }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}}
+        ];
+        options = {
+           fixedcolumn: false,
+           columnDefFlag: true,
+           columnDefValues: columnDefs,
+           serverSideprocess: true,
+           ajaxPath: logDataPath,
+           ajaxparameterflag: true,
+           nextPreviousOptions: {},
+           stateSaveFlag:false,
+           displaylength:20
+       }
+            
+        $(document).ready(function () {
+            
+            setTimeout(function(){
+                loadList();
+            },2000)
+            
+            var headerData = {
+                    'module': '{{fgclub.get('module') ? fgclub.get('module') : 'null'}}',
+                    'level1': '{{app.request.attributes.get('level1') ? app.request.attributes.get('level1') : 'null'}}',
+                    'level2': '{{app.request.attributes.get('level2') ? app.request.attributes.get('level2') : 'null'}}',
+                    'moduleMenu': '{{fgclub.get('moduleMenu') ? fgclub.get('moduleMenu') : 'null'}}'
+                };
+            FgHeader.init("{{ path('display_header') }}", headerData);
+            
+            var clearDate = true;
+             var defaultSettings = {
+                language: jstranslations.localeName, 
+                format: FgLocaleSettingsData.jqueryDateFormat, 
+                autoclose: true, 
+                weekStart: 1,
+                clearBtn:true,
+                todayHighlight:true,
+                maxDate: 0
+            };
+            $('.log-datepicker').datepicker(defaultSettings)
+            .on('clearDate', function(e) {
+                if(clearDate==false){
+                   loadList()
+                    setTimeout(function() {
+                        clearDate = false;    
+                    }, 500);
+                }})
+            .on('show', function(e) {
+                var currentTop = parseInt($('div.datepicker.datepicker-dropdown').css('top'));
+                $('div.datepicker.datepicker-dropdown').css('top',currentTop-40);
+            });
+            
+            FgPageTitlebar = $(".fg-action-menu-wrapper").FgPageTitlebar({
+                actionMenu: false,
+                title: true,
+                counter: true
+            });
+    
+            $('body').on('change', '#filter_start_date,#filter_end_date', function(){
+                loadList();
+            });
+            
+            function loadList(){
+                options.ajaxparameters = {
+                                    'startDate':$('#filter_start_date').val(),
+                                    'endDate':$('#filter_end_date').val()
+                                    };
+                FgDatatable.listdataTableInit('dataTable-api-access-log',options);
+            }
+        });
+    </script>
+{% endblock %}

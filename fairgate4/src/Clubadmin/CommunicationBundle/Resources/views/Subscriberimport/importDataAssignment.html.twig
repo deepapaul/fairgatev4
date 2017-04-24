@@ -1,0 +1,80 @@
+<form id="form-tab2" method="post" data-url="{{ path('subscriber_import_file_correction') }}" onsubmit="return false;" autocomplete="off" novalidate="novalidate" class="form-horizontal">
+    <div class="alert alert-danger display-none">
+        <button class="close" data-dismiss="alert"></button>
+        <strong>{%trans%}IMPORT_ERROR{%endtrans%}: </strong><span data-error>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+    </div>
+        <h3 class="block">{{'SUBSCRIBER_YOU_ARE_IMPORT'|trans}} <span data-colCount>{{contactCount==1 ? contactCount:contactCount-1}}</span> {%trans%}SUBSCRIBER_IMPORTING_DATA_SETS{%endtrans%}</h3>
+    <div class="form-group">
+        <div class="col-md-9">
+            <div class="checkbox-list">
+                <label class="checkbox-inline">
+                    <span class="fg-field-pading">{%trans%}SUBSCRIBER_NOT_IMPORT_COLUM_HEAD{%endtrans%}</span><input type="checkbox" id="not_import_first_row" name="not_import_first_row" {{contactCount==1 ? 'disabled':'checked'}} value="1"> {%trans%}SUBSCRIBER_NOT_IMPORT_FIRST_ROW{%endtrans%} </label>
+            </div>
+        </div>
+    </div>
+    <!-- Table -->
+    <div class="fg-table-wrap">
+        <table class="table fg-import-table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        <span data-firstRow="sample" class="display-none">{%trans%}SAMPLE_DATA{%endtrans%}  ({%trans%}FIRST_ROW{%endtrans%})</span><span data-firstRow="source">{%trans%}SOURCE_HEADER{%endtrans%}  ({%trans%}FIRST_ROW{%endtrans%})</span>
+                    </th>
+                    <th>
+                        {%trans%}SAMPLE_DATA{%endtrans%} ({%trans%}SECOND_ROW{%endtrans%})
+                    </th>
+                    <th>
+                        {%trans%}FAIRGATE_FIELD{%endtrans%}
+                    </th>   
+                    <th></th>                 
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <!-- End Table -->
+    <div class="row">
+        <div class="col-md-12 fg-import-add" data-addMore="">
+            <a data-toggle="modal" href="#basic" id="pencil"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text">5 {%trans%}IMPORT_MORE_COLUMN{%endtrans%}</span></a>
+        </div>
+    </div>
+    <input type="hidden" name="step" value="data" />
+</form>
+<script type="text/template" id="assign-data-fields-selection-subscriber" data-rows="{{data}}" data-mandatory="{{requiredIds|join(':')}}" data-manFileds="{ {% for requiredId in requiredIds %}{% endfor %} }">
+    <% for(i=data.offset;i<limit;i++) { %>
+        <tr>
+            <td>
+                <%- data.csvData[0][i] %>
+            </td>                    
+            <td>
+                <%- (_.isUndefined(data.csvData[1]) || _.isNull(data.csvData[1])) ? '':data.csvData[1][i]  %>
+            </td>
+            <td>
+                <span data-field="field">
+                    <select class="bs-select form-control fg-select-font" name="maping[]">
+                        <option value="">{%trans%}SELECT_DEFAULT{%endtrans%}</option>
+                        <option <%- (data.csvData[0][i]=='{%trans%}SUBSCRIBER_IMPORT_EMAIL{%endtrans%}') ? 'selected' :'' %> value="email">{%trans%}SUBSCRIBER_IMPORT_EMAIL{%endtrans%} *</option>
+                        <option <%- (data.csvData[0][i]=='{%trans%}SUBSCRIBER_IMPORT_LANGUAGE{%endtrans%}') ? 'selected' :'' %> value="correspondance_lang">{%trans%}SUBSCRIBER_IMPORT_LANGUAGE{%endtrans%} *</option>
+                        <option <%- (data.csvData[0][i]=='{%trans%}SUBSCRIBER_IMPORT_SURNAME{%endtrans%}') ? 'selected' :'' %> value="last_name">{%trans%}SUBSCRIBER_IMPORT_SURNAME{%endtrans%}</option>
+                        <option <%- (data.csvData[0][i]=='{%trans%}SUBSCRIBER_IMPORT_FORENAME{%endtrans%}') ? 'selected' :'' %> value="first_name">{%trans%}SUBSCRIBER_IMPORT_FORENAME{%endtrans%}</option>
+                        <option <%- (data.csvData[0][i]=='{%trans%}SUBSCRIBER_IMPORT_SALUTATION{%endtrans%}') ? 'selected' :'' %> value="salutation">{%trans%}SUBSCRIBER_IMPORT_SALUTATION{%endtrans%}</option>
+                        <option <%- (data.csvData[0][i]=='{%trans%}SUBSCRIBER_IMPORT_GENDER{%endtrans%}') ? 'selected' :'' %> value="gender">{%trans%}SUBSCRIBER_IMPORT_GENDER{%endtrans%}</option>
+                        <option <%- (data.csvData[0][i]=='{%trans%}SUBSCRIBER_IMPORT_COMPANY{%endtrans%}') ? 'selected' :'' %> value="company">{%trans%}SUBSCRIBER_IMPORT_COMPANY{%endtrans%}</option>
+                    </select>
+                </span>
+                <span data-field="skipped" class="fg-table-italic display-none">{%trans%}IMPORT_COLUMN_SKIPPED{%endtrans%}</span>
+            </td>
+            <td>
+                <div class="fg-table-delete">
+                    <div class="fg-last-icon">
+                        <div class="closeico">
+                            <input type="checkbox" data-inactiveblock="changecolor" class="make-switch" id="fieldMap<%- i %>" name="fieldMap[<%- i %>]">
+                            <label for="fieldMap<%- i %>"></label>
+                        </div>
+                    </div>
+                </div>
+            </td>                    
+        </tr> 
+    <% } %>
+</script>

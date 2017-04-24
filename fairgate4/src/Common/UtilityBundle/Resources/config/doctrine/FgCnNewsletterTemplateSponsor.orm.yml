@@ -1,0 +1,53 @@
+Common\UtilityBundle\Entity\FgCnNewsletterTemplateSponsor:
+    repositoryClass: Common\UtilityBundle\Repository\FgCnNewsletterTemplateSponsorRepository
+    type: entity
+    table: fg_cn_newsletter_template_sponsor
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: sort_order
+        position:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+        sponsorAdWidth:
+            type: string
+            length: 5
+            fixed: false
+            nullable: true
+            column: sponsor_ad_width
+    manyToOne:
+        sponsorAdArea:
+            targetEntity: FgSmAdArea
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                sponsor_ad_area_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        template:
+            targetEntity: FgCnNewsletterTemplate
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                template_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

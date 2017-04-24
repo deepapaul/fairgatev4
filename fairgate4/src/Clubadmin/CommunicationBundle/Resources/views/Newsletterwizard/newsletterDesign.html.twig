@@ -1,0 +1,70 @@
+{% extends 'ClubadminCommunicationBundle:Newsletterwizard:newsletterWizard.html.twig' %}
+{% block wizard_preview %}
+<div id="data-list-wrap-design"></div>
+<script type="text/template" id="newsletterDesign">
+    <h3 class="block"> <% if(Cdata.pageType == "newsletter") { %> {% trans %}CHECK_YOUR_NEWSLETTER{% endtrans %} <% } else { %> {% trans %}SM_PREVIEW_TITLE{% endtrans %} <% } %></h3>
+    <form name="step5" id="form-tab5" action="" data-validation="true">
+    <div id="failcallbackServerSide" class="alert alert-danger fg-clear" style="display:none;">
+        <button class="close" data-close="alert"></button>
+        <span>{{'FORM_ERROR_DISPLAY'|trans}}</span>
+    </div>
+    <div class="fg-tab-list">
+    <dl>
+{#    <% if(Cdata.pageType == "newsletter") { %>
+       <dt>{%trans%}DESIGN_TEMPLATE{%endtrans%} <span class="required" aria-required="true"> * </span></dt>
+       <dd>
+       
+       <select class="form-control select2 fg-newsleter-input-width" id="template_dropdown">
+           <option value = "">{{'SELECT_DEFAULT'|trans}}</option>
+            <% _.each(Cdata.list,function(item,key){ %>
+               <option value="<%- item.id %>" <% if (item.id == Cdata.selectedTemplate) { %> selected <% } %> > <%- item.title %></option>
+           <% }); %>
+        </select>
+        <span style="padding:15px;">
+        <a href = {{path('template_list')}}>{%trans%}MANAGE_TEMPLATE{%endtrans%}</a></span>
+        <div class="fg-error" id="templateError" style="display:none">{{"REQUIRED"|trans}}</div> 
+       </dd>
+      
+    <% } %>#}
+       <dt>{% trans %}TEST_RECIPIENT_MAIL_ADDRESS{% endtrans %}</dt>
+       <dd>
+         <input id="EmailSelection" type="text" class="form-control select2 tags fg-newsleter-input-width"  value="<%- Cdata.defaultEmail %>"/>
+         <a id="fg-dev-sendmail" class="btn default fg-send-btn "> {%trans%}NL_SEND{%endtrans%}</a>
+       </dd>
+       <dt>{%trans%}TEST_RECIPIENT_CONTACT{%endtrans%}</dt>
+       <dd><div class="fg-send-design">
+        <input type="text" name="contactSelection" class="form-control select2 fg-newsleter-input-width" value="" id="contactSelection">
+        </div>
+        <a id="fg-dev-sendmails" href="#" class="btn default fg-send-btn ">{%trans%}NL_SEND{%endtrans%}  </a>
+       </dd>                                     
+    </dl>  
+    </div>                
+</form>
+<input type="hidden" id='hiddenContacts' values="">     
+</script>
+{% endblock %}
+{% block customstylesheets %}  
+    <link href="{{ asset('fgcustom/css/jquery-ui.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('fgcustom/css/fbautocomplete.css')}}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+{% block wizardscriptstart %}
+<script type="text/javascript">
+    var sendingPath = "#";
+    var templatePath = "{{path('nl_template_selection',{'newsletterId':newsletterId,'pageType':pageType})}}";
+    {% if (pageType =="newsletter") %}
+        sendingPath= "{{path('nl_sending',{'newsletterId':newsletterId})}}";
+        var previewPath = "{{ path('newsletter_template_preview', { 'templateid' : templateId, 'newsletterId' : newsletterId, 'mode' : 'designpreview' }) }}";
+    {% else %}
+        var previewPath = "{{ path('simplemail_preview', { 'newsletterId' : newsletterId, 'mode' : 'designpreview' }) }} ";
+        sendingPath= "{{path('sm_sending',{'newsletterId':newsletterId})}}";
+    {% endif %}
+    var contactNamePath = "{{path('nl_collect_contactname',{step:step})}}";
+    var sendMailPath = "{{path('send_test_newsletter')}}";
+    var updateTemplate = "{{path('nl_template_update')}}";
+</script>
+{% endblock %} 
+{% block wizardscriptinit %}
+    <script src="{{ asset('fgcustom/js/fbautocomplete/fbautocomplete.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/newsletter-step5.js')}}" type="text/javascript"></script>
+{% endblock %}
+

@@ -1,0 +1,21 @@
+<script type="text/template" id="template-display-selectedcolumns">
+    <% aliasType = (type == 'CF') ? 'CF_' : type %>
+    <div class="row fg-border-line selectedrow sortables fg-sort-drag-hover">
+        <div class="fg-col-first-icon fg-sort-drag" name="fg-dev-sorting"><i class="fa fg-sort ui-draggable handle" data-toggle="tooltip"></i></div>
+        <div class="col-md-12 fg-col-hack"><%= labelName %></div>
+        <div class="fg-last-icon"><div class="closeico"><i class="fa fa-minus-circle fa-2x removeitem" id="<%- id %>" type="<%- type %>"></i></div></div>
+        <input type="hidden" id="id" name="id" data-key="id" data-value="<%- id %>" value="" data-sortorder-added="0" />
+        <input type="hidden" id="type" name="type" data-key="type" data-value="<%- type %>" value="" data-sortorder-added="0" />
+        <input type="hidden" id="club_id" name="club_id" data-key="club_id" data-value="<%- club_id %>" value="" data-sortorder-added="0" />
+        <input type="hidden" id="name" name="name" data-key="name" data-type="alias" data-field-type="<%- type %>" data-value="<%- aliasType %><%- id %>" value="" data-sortorder-added="0" />
+        <% if ((type == 'R') || (type == 'RF')) { %>
+            <input type="hidden" id="sub_ids" name="sub_ids" data-key="sub_ids" data-value="<%- sub_ids %>" value="" data-sortorder-added="0" />
+            <% if (team_rolecat_ids) { %>
+                <input type="hidden" id="team_rolecat_ids" name="team_rolecat_ids" data-key="team_rolecat_ids" data-type="jsonData" data-value="<%- team_rolecat_ids %>" value="" data-sortorder-added="0" />
+            <% } %>
+            <% if (is_fed_cat) { %>
+                <input type="hidden" id="is_fed_cat" name="is_fed_cat" data-key="is_fed_cat" data-value="<%- is_fed_cat %>" value="" data-sortorder-added="0" />
+            <% } %>
+        <% } %>
+    </div>
+</script>

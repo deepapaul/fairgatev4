@@ -1,0 +1,204 @@
+<script type="text/template" id="calendarListTemplate">
+    <% _.each(dataSet, function(d,i,c) {  %>
+    <section class="col-sm-12 fg-calendar-month-block">
+        <h2 class="fg-page-subtitle"><%- moment(i, "YYYYMM").format('MMMM') %></h2>
+        <div class="fg-content fg-border-rows">
+        <% d = _.sortBy(d, 'evTimestamp'); %>
+        <% _.each(d, function(event) {  %>
+            <div class="row fg-rows"> 
+                <div class="col-md-4 col-sm-3 fg-event-duration ">
+                    <%- moment(event.evDate).format('ddd') %> <%- moment(event.evDate).format(FgLocaleSettingsData.momentDateFormat) %><% if(event.isAllDay==1){ %><% }else{ %><% if(event.evStartDate.format('YYYYMMDD')==event.evEndDate.format('YYYYMMDD')){ %>,
+                            <%- event.evStartDate.format(FgLocaleSettingsData.momentTimeFormat) %> -
+                            <%- event.evEndDate.format(FgLocaleSettingsData.momentTimeFormat) %>
+                        <% }else if(event.evStartDate.format('YYYYMMDD')==moment(event.evDate).format('YYYYMMDD')){ %>,
+                            <%- event.evStartDate.format(FgLocaleSettingsData.momentTimeFormat) %> <i class="fa fa-angle-double-right"></i>
+                        <% }else if(event.evEndDate.format('YYYYMMDD')==moment(event.evDate).format('YYYYMMDD')){ %> 
+                            <i class="fa fa-angle-double-right"></i> <%- event.evEndDate.format(FgLocaleSettingsData.momentTimeFormat) %>
+                        <% } %>
+
+                      <% } %>   
+                </div>
+
+
+                 <%
+                    var evUrl = "{{ path('website_calendar_appointment_details', { 'navIdentifier': (menu == '')? 'menu' : menu, 'eventId': "****", 'startTimeStamp': '**startTime**', 'endTimeStamp': '**endTime**','view':'list' }) }}";
+                    evUrl =evUrl.replace('****',event.evDetId);
+                    evUrl =evUrl.replace('**startTime**',event.eventStartTimeStamp);
+                    evUrl =evUrl.replace('**endTime**',event.eventEndTimeStamp); 
+                %>
+                <div class="col-md-4 col-sm-3 fg-event-title"><a href="<%- evUrl %>" class="fg-event-link" data-index="<%- event.rowId %>"><strong><%- event.evTitle %></a></strong></div>
+
+                <div class="col-md-2 col-sm-3">
+                    <div class="fg-event-teams">
+                       <% if( clubId == event.evClubId){ %>
+                            <% if(event.isClubAreaSelected==1){ %>
+                                <span class="fg-team" style="background: <%- event.clubColorCode %>;color: #fff;">
+                                    <%- event.evClubs.title.title %>
+                                    <% if(event.evClubs.title.clubType=='federation'|| event.evClubs.title.clubType=='sub_federation'){ %> <img src="<%- event.evClubs.logo %>"/> <% } %> 
+                                </span>
+                            <% } %>
+                        
+                            <% if(event.evRole !=null){ _.each(event.evRole.split('|&&&|'), function(role) { %> 
+                                  <% var rol = role.split('|@@@|'); %>
+                                  <span class="fg-team" style="background: <%- rol[2] %>;color: #fff;"><%- rol[1] %></span>
+                            <% } )}; %>
+                       <% } else { %>
+                            <span class="fg-team" style="background: <%- event.clubColorCode %>;color: #fff;"><%- event.evClubs.title.title %></span>
+                       <% } %>
+                    </div>
+                </div>
+        
+
+                <div class="col-md-2 col-sm-3">
+                    <div class="fg-event-cats">
+                        <% if(event.evCategory !=null){ 
+                            var shownCategories = new Array();
+                            _.each(event.evCategory.split('|&&&|'), function(cat) {
+                            var evcat =cat.split('|@@@|'); 
+                            if(shownCategories.indexOf(evcat[1]) < 0) {
+                                %>
+                                <span class="fg-cat"><%- evcat[1] %></span>
+                                <%
+                            }                                               
+                            shownCategories.push(evcat[1]);
+                        }); } %> 
+                    </div>
+                </div>
+
+            </div> 
+        <% }); %> 
+        </div>
+    </section>
+    <% }); %>
+</script>  
+
+<script type="text/template" id="eventPopOverTemplate">
+<div class="panel panel-default fg-calendar-popover">
+  <div class="panel-heading">
+    <% var eventDetailLink = detailPath.replace("__EVENTID__", e.eventDetailId,'g').replace("__START__", e.startTimestamp,'g').replace("__END__", e.endTimestamp,'g');%>
+    <% eventDetailLink = (typeof e.v != 'undefined')? eventDetailLink+'?'+jQuery.param( {'view':e.v} ):eventDetailLink; %>
+    <h3 class="panel-title"><a href="<%- eventDetailLink %>"><%-e.title%></a></h3>
+    <span onclick="$('.popover').popover('destroy')" class="fa fa-close"></span>
+  </div>
+  <div id="calendar-popover-body" class="panel-body">
+    <div class="fg-calendar-popover-loader"></div>
+  </div>
+</div>
+</script>
+
+<script type="text/template" id="noEventTemplate">
+    <div class="col-md-12"><p>{{'NO_CALENDAR_EVENT_MESSAGE'|trans}}</p></div>
+</script>
+
+
+
+<script type="text/template" id="eventPopOverSubTemplate">
+    <div class="fg-calendar-app-dtls-wrapper col-lg-12">
+      <div class="row fg-calendar-app-dtls-content fg-marg-btm-0">
+        <div class="col-sm-12">
+          <p class="event-desicription">
+            <%
+                var descHTML = d.description;
+                var tempDiv = document.createElement("div");
+                tempDiv.innerHTML = descHTML;
+                var desc = tempDiv.textContent || tempDiv.innerText || "";
+                $(tempDiv).remove();
+                var truncated = desc;
+                var maxLength = 120;
+                if (truncated.length > maxLength) {
+                    truncated = truncated.substr(0, maxLength) + '...';
+                }
+            %>
+            <%- truncated %>
+            <% var eventDetailLink = detailPath.replace("__EVENTID__", calEvent.eventDetailId,'g').replace("__START__", d.dateDetails.startTimestamp,'g').replace("__END__", d.dateDetails.endTimestamp,'g');%>
+            <% eventDetailLink = (typeof calEvent.v != 'undefined')? eventDetailLink+'?'+jQuery.param( {'view':calEvent.v} ):eventDetailLink; %>
+            <a href="<%- eventDetailLink %>" class="fg-readmore"><i class="fa fa-arrow-circle-right"></i>{{'WEBSITE_CALENDAR_POPOVER_READMORE'|trans}}</a>
+          </p>
+          <ul class="fg-event-dtls">
+            <li>
+              <label class="col-sm-4"> {{'WEBSITE_CALENDAR_POPOVER_DATE'|trans}} </label>
+              <div class="col-sm-8">
+                <% if(d.dateDetails.endDate){ %>
+                    <%-d.dateDetails.startDate.replace(' ', ', ')%>
+                <% } else { %>
+                    <%-d.dateDetails.startDate%>
+                <% } %>
+                <% if(d.dateDetails.endDate){ %>
+                    <%- ' - '+d.dateDetails.endDate.replace(' ', ', ')%> 
+                <% } %>
+              </div>
+            </li>
+    
+            
+            {% if (areaFlag == 1 ) %}  
+                <li>
+                  <label class="col-sm-4"> {{'WEBSITE_CALENDAR_POPOVER_AREAS'|trans}} </label>
+                  <div class="col-sm-8">
+                    <div class="fg-event-teams">
+
+                        <% if(d.isClubAreaSelected >= 1){ %>
+                            <span style="background: <%- d.clubColorCode %>;color: #fff;" class="fg-team"><%- d.clubDetails[d.clubId]['title'] %></span>
+                        <% } %>
+
+                        <% if (d.clubId == d.currentClubId){ %>
+                            <% if(d.eventRoleAreas !=null){ _.each(d.eventRoleAreas.split('|&&&|'), function(role) { %>  
+                                <% var rol = role.split('|@@@|'); %>
+                                <% if(role !=''){ %>
+                                    <span class="fg-team" style="background: <%- rol[2] %>;color: #fff;"><%- rol[1] %></span>
+                            <% }  }); } %>
+
+                        <% } %>
+                    </div>
+                  </div>
+                </li>
+            {% endif %}
+              
+            {% if (categoryFlag == 1 ) %}  
+                <% if(d.eventCategories){ %>
+                    <li>
+                      <label class="col-sm-4"> {{'WEBSITE_CALENDAR_POPOVER_CATEGORY'|trans}} </label>
+                      <div class="col-sm-8">
+                        <div class="fg-event-cats">
+                            <% if(d.eventCategories !=null){ _.each(d.eventCategories.split('|&&&|'), function(category) { %>  
+                                <% var categoryArray = category.split('|@@@|'); %>
+                                <% if(categoryArray.length > 0){ %>
+                                    <span class="fg-cat"><%- categoryArray[1] %></span>
+                            <% }  }); } %>
+                        </div>
+                      </div>
+                    </li>
+                <% } %>
+            {% endif %}
+            
+            <% if(d.eventAttachments.length>0){ %>
+                <li>
+                    <label class="col-sm-4"> {{'WEBSITE_CALENDAR_POPOVER_ATTACHMENT'|trans}} </label>
+                    <div class="col-sm-8">
+                        <% $.each(d.eventAttachments,function(i,v){ %>   
+                            <p><a onclick="websiteCalendarObj.downloadAttachment('<%- v.filename %>','<%- v.encryptedFilename %>',<%- d.clubId %>)" href="javascript:void(0)"><%- v.filename %></a> (<%- FgClubSettings.formatNumber( Math.round(v.size/1024) ) %>{{'CALENDAR_DETAILS_ATTACHMENT_SIZE'|trans}})</p>
+                        <% }) %>
+                    </div>
+                </li>
+            <% } %>
+        
+            <% if(d.url){ %>
+                <li>
+                  <label class="col-sm-4"> {{'WEBSITE_CALENDAR_POPOVER_WEBLINK'|trans}} </label>
+                  <div class="col-sm-8"><a href="<%- d.url %>" target="_blank"><%- d.url %></a></div>
+                </li>
+            <% } %>
+        
+            <% if(d.location){ %>
+                <li>
+                  <label class="col-sm-4"> {{'WEBSITE_CALENDAR_POPOVER_LOCATION'|trans}} </label>
+                  <div class="col-sm-8">
+                    <p><%- d.location %></p>
+                  </div>
+                </li>
+            <% } %>
+        
+          </ul>
+        </div>
+      </div>
+    </div>
+</script>

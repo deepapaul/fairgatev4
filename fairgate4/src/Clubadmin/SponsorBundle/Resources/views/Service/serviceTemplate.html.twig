@@ -1,0 +1,127 @@
+<script type="text/template" id="sponsorServices">
+<%
+index = 1;
+catId = serviceSettingVars.catId;
+%>
+{% set currency = fgclub.get('clubCurrency') %}
+<% _.each(data, function(item,key){ %>
+    <% if ((item.id != '') && (item.id != null)) { %>
+        <div class="row fg-border-line sortables fg-sort-drag-hover" id="<%- item.id %>">
+            <div class="fg-col-first-icon fg-sort-drag"><i class="fa fa fg-sort ui-draggable handle"></i></div>
+            <div class="col-md-12 fg-col-hack">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-sm-6  col-xs-12 fg-clear-left">
+                        <div class="fg-txt-area">
+                            <% _.each(serviceSettingVars.clubLanguages, function(lang,key){ %>
+                                <% titleVal = item['titleLang'][lang] %>
+                            <div dataerror-group data-lang="<%- lang %>">
+                                <input type="text" data-lang="<%- lang %>" data-title-id="<%- item.id %>" id="<%- catId %>_service_<%- item.id %>_i18n_<%- lang %>_title" name="<%- catId %>_service_<%- item.id %>_i18n_<%- lang %>_title" data-key="<%- catId %>.service.<%- item.id %>.i18n.<%- lang %>.title" class="form-control input-sm" placeholder="<%- item['title'] %>" value="<%- titleVal %>" <% if (lang == serviceSettingVars.defaultLang) { %>required<% } %> />
+                            </div>
+                        <% }); %>
+                        </div>
+                        <div class="bookmark fg-bkmrk-icon fg-bkmrk-ico-new">
+                            <input type="checkbox" <% if (item.bookMarkId) { %> checked="" <% } %> class="make-switch" data-key="<%- catId %>.service.<%- item.id %>.book_marked" name="<%- catId %>_service_<%- item.id %>_book_marked" id="<%- catId %>_service_<%- item.id %>_book_marked" value="<%- item.bookMarkId %>">
+                            <label for="<%- catId %>_service_<%- item.id %>_book_marked"><i class="fa fa-bookmark"></i></label>
+                        </div>
+                    </div>
+            
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+            <div class="fg-disp-IB col-sm-8 fg-pad-left-0">
+            <span class="fg-rectangle-box fg-blue-badge">
+            <% if (item.serviceType == 'club') { %>{{'%club%_SERVICE'|trans({'%club%': fgtwig.getTerminolgyName('Club', singular, 'UCF')})}}<% } else if (item.serviceType == 'team') { %>{{'%team%_SERVICE'|trans({'%team%': fgtwig.getTerminolgyName('Team', singular, 'UCF')})}}<% } else if (item.serviceType == 'contact') { %>{{'CONTACT_SERVICE'|trans}}<% } %>
+            </span></div>
+                        <div class="fg-disp-IB">
+                            <a onclick ="javascript:assignmentClick(this);" type="service" catid= "<%- catId %>" id="assignmentCount<%- item.id %>" class="contact-count-link" service_id="<%- item.id %>" service_type ="<%-item.serviceType %>" data-replaceid="<%- item.id %>"><%- item.assignmentCount %> <% if (item.assignmentCount == 1) { %>{{'SPONSOR_ACTIVE_ASSIGNMENT'|trans}}<% } else { %>{{'SPONSOR_ACTIVE_ASSIGNMENTS'|trans}}<% } %></a>
+                        </div>
+            </div>
+                    <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12 fg-dev-rowactions fg-left-zero">
+                        
+                        <div class="col-lg-3 col-sm-2 col-xs-12 fg-left-zero"> <a href="#" class="fg-recipients-active" data-fn="openDetails" data-toggle="collapse" data-target="#data-details-<%- item.id %>" data-id="<%- item.id %>"><i class="fa fa-plus-square-o"></i> {{'SERVICE_DETAILS'|trans}}</a></div>
+                        <div class="col-lg-7 col-sm-5 col-xs-12"> <a href="#" class="fg-recipients-active" data-fn="openPaymentPlan" data-toggle="collapse" data-target="#data-paymentplan-<%- item.id %>" data-id="<%- item.id %>"><i class="fa fa-plus-square-o"></i> {{'SERVICE_DEFAULT_PAYMENT_PLAN'|trans}}</a> <span class="fg-rectangle-box"><% if (item.paymentPlan == 'regular') { %>{{'SM_REGULAR'|trans}}<% } else if (item.paymentPlan == 'custom') { %>{{'SM_CUSTOM'|trans}}<% } else { %>{{'SM_NONE'|trans}}<% } %></span></div>
+                        <div class="col-lg-2 col-sm-2 col-xs-12"> <a href="#" class="fg-recipients-active fg-fa-plus-anchor" data-fn="openLog" data-toggle="collapse" data-target="#data-log-<%- item.id %>" data-id="<%- item.id %>"><i class="fa fa-plus-square-o"></i> {{'LOG'|trans}}</a></div>
+                    </div>
+                </div>
+            </div>
+            <input type="text" data-key="<%- catId %>.service.<%- item.id %>.sort_order" name="<%- item.id %>_sort_order" class="sort-val hide" id="<%- item.id %>_sort_order" value="<%- index %>" data-element="sortorder" data-sort-parent="sortservices" />
+            <div class="fg-col-last-icon">
+                <% if (item.assignmentCount > 0) { %>
+                    <i class="fa fa-lock fa-2x ash"></i>
+                <% } else { %>
+                    <div class="closeico">
+                        <input type="checkbox" data-key="<%- catId %>.service.<%- item.id %>.is_deleted" name="<%- item.id %>_is_deleted" id="<%- item.id %>_is_deleted" class="make-switch" value="0" data-inactiveblock="changecolor" data-parentid="<%- item.id %>">
+                        <label for="<%- item.id %>_is_deleted"></label>
+                    </div>
+                <% } %>
+            </div>
+            {#<!-- SERVICE DETAILS - STARTS-->#}
+            <div class="collapse" id="data-details-<%- item.id %>">
+                <div class="col-md-12 fg-control-aranew fg-filter-role">
+                    <div class="fg-tab-list fg-nl-lang-drop">
+                        <dl>
+                            <div dataerror-group>
+                                <dt class="control-label">{{'SERVICE_CATEGORY'|trans}} <span class="required" aria-required="true"> * </span></dt>
+                                <dd>
+                                   <select class="form-control bs-select fg-select-font selectpicker" id="<%- catId %>_service_<%- item.id %>_category_id" name="<%- catId %>_service_<%- item.id %>_category_id" data-key="<%- catId %>.service.<%- item.id %>.category_id" required data-error-container="#serviceCatError<%- item.id %>" data-type="selectcategory" data-id="<%- item.id %>">
+                                        <option value="">{{'SELECT_DROPDOWN'|trans}}</option>
+                                        {% for key,category in categories %}
+                                            <option value="{{category['categoryId']}}" <% if ({{category['categoryId']}} == catId) { %>selected<% } %>>{{category['catTitle']}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <div id="serviceCatError<%- item.id %>"></div>
+                                </dd>
+                            </div>
+                            <dt>{{'SERVICE_DESCRIPTION'|trans}}</dt>
+                            <dd>
+                                <% _.each(serviceSettingVars.clubLanguages, function(lang,key){ %>
+                                    <textarea class="form-control" data-lang="<%- lang %>" id="<%- catId %>_service_<%- item.id %>_i18n_<%- lang %>_description" name="<%- catId %>_service_<%- item.id %>_i18n_<%- lang %>_description" data-key="<%- catId %>.service.<%- item.id %>.i18n.<%- lang %>.description" placeholder="{{'SERVICE_DESCRIPTION_PLACEHOLDER'|trans}}..."><%- item['descriptionLang'][lang] %></textarea>
+                                <% }); %>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            {#<!-- SERVICE DETAILS - ENDS-->#}
+            {#<!-- SERVICE DEFAULT PAYMENT PLAN - STARTS-->#}
+            <div class="col-md-12 fg-control-aranew collapse fg-pad-0" id="data-paymentplan-<%- item.id %>">
+            <div class="fg-pad-20 fg-clear">
+                <div class="col-lg-3 col-sm-12 col-xs-12 fg-spon-sm fg-left-zero">
+                    <div class="switch-toggle switch-3">
+                        <input name="paymentPlan_<%- item.id %>" id="paymentPlan_<%- item.id %>_none" data-type="paymentplan" data-id="<%- item.id %>" type="radio" class="make-switch" value="none" data-key="<%- catId %>.service.<%- item.id %>.payment_plan" <% if (item.paymentPlan == 'none') { %>checked<% } %> />
+                            <label for="paymentPlan_<%- item.id %>_none" onClick="">{% trans %}SM_NONE{% endtrans %}</label>
+                        <input name="paymentPlan_<%- item.id %>" id="paymentPlan_<%- item.id %>_regular" data-type="paymentplan" data-id="<%- item.id %>" type="radio" class="make-switch" value="regular" data-key="<%- catId %>.service.<%- item.id %>.payment_plan" <% if (item.paymentPlan == 'regular') { %>checked<% } %> />
+                            <label for="paymentPlan_<%- item.id %>_regular" onClick="">{% trans %}SM_REGULAR{% endtrans %}</label>
+                        <input name="paymentPlan_<%- item.id %>" id="paymentPlan_<%- item.id %>_custom" data-type="paymentplan" data-id="<%- item.id %>" type="radio" class="make-switch" value="custom" data-key="<%- catId %>.service.<%- item.id %>.payment_plan" <% if (item.paymentPlan == 'custom') { %>checked<% } %> />
+                            <label for="paymentPlan_<%- item.id %>_custom" onClick="">{% trans %}SM_CUSTOM{% endtrans %}</label>
+                        <a class="btn btn-primary"></a>
+                    </div>
+                </div>
+                <% regularRequiredAttr = (item.paymentPlan == 'regular') ? 'required' : '' %>
+                <% customRequiredAttr = (item.paymentPlan == 'custom') ? 'required' : '' %>
+                {% set html1 = '<div class="fg-service-payment-txt fg-form-group"><div class="fg-spon-content-area fg-spon-assignment">' %}
+                {% set regularhtml2 = '<span class="fg-mandatory">*</span></div><input type="text" class="form-control numbermask fg-monthbox fg-dev-paymentdata" <%- regularRequiredAttr %> id="repetition_months_<%- item.id %>" name="repetition_months_<%- item.id %>" data-key="<%- catId %>.service.<%- item.id %>.repetition_months" value="<%- item.repetitionMonths %>" data-error-container="#monthError<%- item.id %>" /><div class="fg-clear"></div><div id="monthError<%- item.id %>" class="fg-back-btn"></div></div><div class="fg-service-payment-txt fg-form-group"><div class="fg-spon-content-area fg-spon-assignment">' %}
+                {% set regularhtml3 = '<span class="fg-mandatory">*</span></div><input type="text" class="form-control numbermask fg-amountbox fg-dev-paymentdata" <%- regularRequiredAttr %> id="price_<%- item.id %>_regular" name="price_<%- item.id %>_regular" data-key="<%- catId %>.service.<%- item.id %>.price" value="<% if (item.paymentPlan == "regular") { %><%- FgClubSettings.formatDecimalMark(item.price) %><% } %>" data-error-container="#regularpriceError<%- item.id %>" /><div class="fg-clear"></div><div id="regularpriceError<%- item.id %>" class="fg-back-btn"></div></div><div class="fg-service-payment-txt fg-form-group"><div class="fg-spon-content-area fg-spon-assignment">' %}
+                {% set customhtml3 = '<span class="fg-mandatory">*</span></div><input type="text" class="form-control numbermask fg-amountbox fg-dev-paymentdata" <%- customRequiredAttr %> id="price_<%- item.id %>_custom" name="price_<%- item.id %>_custom" data-key="<%- catId %>.service.<%- item.id %>.price" value="<% if (item.paymentPlan == "custom") { %><%- FgClubSettings.formatDecimalMark(item.price) %><% } %>" data-error-container="#custompriceError<%- item.id %>" /><div class="fg-clear"></div><div id="custompriceError<%- item.id %>" class="fg-back-btn"></div></div><div class="fg-service-payment-txt fg-form-group"><div class="fg-spon-content-area fg-spon-assignment">' %}
+                {% set html4 = '</div></div>' %}
+                <div id="regularText_<%- item.id %>" data-type="paymentplan_<%- item.id %>" class="col-lg-9 col-sm-12 col-xs-12 <% if (item.paymentPlan != 'regular') { %>hide<% } %>">
+                    {% trans with {'%cur%': currency, '%html1%': html1, '%html2%': regularhtml2, '%html3%': regularhtml3, '%html4%': html4} %}%html1%_REGULAR_PAYMENT_EVERY_%html2%_MONTHS_WITH_A_VALUE_OF_%cur%_%html3%_EACH_%html4%{% endtrans %}
+                </div>
+                <div id="customText_<%- item.id %>" data-type="paymentplan_<%- item.id %>" class="col-lg-9 col-sm-12 col-xs-12 <% if (item.paymentPlan != 'custom') { %>hide<% } %>">
+                    {% trans with {'%cur%': currency, '%html1%': html1, '%html3%': customhtml3, '%html4%': html4} %}%html1%_CUSTOM_PAYMENTS_WITH_A_VALUE_OF_%cur%_%html3%_EACH_%html4%{% endtrans %}
+                </div>
+            </div>
+            </div>
+            {#<!-- SERVICE DEFAULT PAYMENT PLAN - ENDS-->#}
+            {#<!-- SERVICE LOG - STARTS-->#}
+            <div class="col-md-12 fg-control-aranew collapse fg-pad-0" id="data-log-<%- item.id %>"><div class="fg-pad-20" style="display:none"></div></div>
+            {#<!-- SERVICE LOG - ENDS-->#}
+        </div>
+        <% if (index == _.size(data)) { %>
+            <% initPageFunctions(); %>
+        <% } %>
+        <% index++%>
+    <% } %>
+<%  }); %>
+<% if (_.size(data) == 0) { %>
+    <% initPageFunctions(); %>
+<% } %>
+</script>

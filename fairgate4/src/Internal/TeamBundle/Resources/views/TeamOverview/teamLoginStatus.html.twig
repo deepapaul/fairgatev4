@@ -1,0 +1,210 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = 'LOGIN_STATUS_TITLE'|trans({ '%team%':teamName }) %}
+{% block pagecontent %}   
+{#    <div  id="login-status">#}
+        <div class="clearfix"> </div>
+        <!-- BEGIN BREADCRUMB-->
+        <div class="row">
+            <div class="col-lg-12">
+                {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            </div>
+        </div>
+        <!-- END BREADCRUMB-->
+        <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+        {% include 'global/page-title-bar.html.twig' with {'pageTitle': 'LOGIN_STATUS_TITLE'|trans({ '%team%':teamName }), 'contactId': contactId } %}
+        <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+        <!-- BEGIN CONTENT -->
+        <div class="row">
+            <div class="fg-loginstatus-table">
+                <table class="dataTable
+                       table
+                       table-bordered
+                       table-hover
+                       table-condensed"
+                       id="datatable-loginstatus" >
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" name="check_all" id="check_all" class="dataTable_checkall"><i class='chk_cnt' ></i></th>
+                            <th> {{'CONTACT'|trans}}  </th>
+                            <th> {{'EMAIL'|trans}}  </th>                               
+                            <th> {{'LOGIN_STATUS'|trans}} </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>       
+        <!-- END CONTENT -->
+{#    </div>#}
+
+{% endblock %}
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css') }}" rel="stylesheet"/>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}" type="text/javascript"></script>
+    <script>
+        $(function () {
+
+            var actionMenuNoneSelectedText = {
+                'reminder': {'title': "{{ 'SEND_REMINDER'|trans }}", 'isActive': 'false', 'dataUrl': '{{ path('send_reminder_mail') }}', 'dataCallback': 'sendReminderMail'}
+            };
+            var actionMenuSingleSelectedText = {
+                'reminder': {'title': "{{ 'SEND_REMINDER'|trans }}", 'dataUrl': '{{ path('send_reminder_mail') }}', 'dataCallback': 'sendReminderMail'}
+            };
+            var actionMenuMultipleSelectedText = {
+                'reminder': {'title': "{{ 'SEND_REMINDER'|trans }}", 'dataUrl': '{{ path('send_reminder_mail') }}', 'dataCallback': 'sendReminderMail'}
+            };
+
+            scope = angular.element($("#BaseController")).scope();
+
+            window.actionMenuTextDraft = {'active': {'none': actionMenuNoneSelectedText, 'single': actionMenuSingleSelectedText, 'multiple': actionMenuMultipleSelectedText}};
+            scope.$apply(function () {
+                scope.menuContent = window.actionMenuTextDraft;
+            });
+
+        });
+        /* action menu bar ---- */
+        $(".fg-action-menu-wrapper").FgPageTitlebar({
+            title: true,
+            tab: false,
+            actionMenu: true
+        });
+        FgMoreMenu.initServerSide('paneltab');
+        // initializing datatable
+        var columnDefs = [{type: "checkbox", width: '1%', orderable: false, sortable: false, className:'fg-checkbox-th', targets: 0, data: function (row, type, val, meta) {
+                    if (row['last_login'] == null || row['last_login'] == '0000-00-00 00:00:00' || row['email'] == '') {
+                        return "<input type='checkbox' class='dataClass'  id='" + row['id'] + "' data-email='" + row['email'] + "' data-contact-name='" + row['contactname'] + "' data-salutation='" + row['salutation_text'] + "'  >";
+                    } else {
+                        return "<input type='checkbox' disabled class='dataClass'  id='" + row['id'] + "' data-email='" + row['email'] + "' data-contact-name='" + row['contactname'] + "' data-salutation='" + row['salutation_text'] + "'>";
+                    }
+                }},
+            {"name": "contact", width: '20%', "targets": 1, data: function (row, type, val, meta) {
+
+                    var route = "{{ path('internal_community_profile', {'contactId': "PLACEHOLDER" }) }}";
+                    var newRoute = route.replace("PLACEHOLDER", row['id']);
+                    row.sortData = row['contactname'];
+                    row.displayData = (row['stealthFlag'] == '1') ? "<span class='fg-table-reply'>" + row['contactname'] + "</span>" : "<span class='fg-table-reply'><a href='"+newRoute+"'>" + row['contactname'] + "</a></span>";
+                    return row;
+                }, render: {"_": 'sortData', width: '20%', "display": 'displayData', 'filter': 'displayData'}},
+            {"name": "Email", "targets": 2, data: function (row, type, val, meta) {
+
+                    if (!row['privacy'] && !row['emailVisibility']) {
+                        return '<i class="fa fa-eye-slash fa-4x"></i>';
+                    } else {
+                        var edit = (row['isEmailEditable'] == 1) ? 'edit' : '';
+
+                        return  "<span class='" + edit + "' data-contact-id='" + row['id'] + "' data-email='" + row['email'] + "' data-showbuttons='true' data-mode='popup' data-placement='right'>" + ((row['email']) ? row['email'] : '') + "</span>";
+                    }
+                }},
+            {"name": "Login status", width: '100%', "targets": 3, data: function (row, type, val, meta) {
+                    var formattedDate = '';
+                    var formattedRemDate = '';
+                    var lastLogin = row['last_login'];
+                    if (lastLogin) {
+                        formattedDate = FgLocaleSettings.formatDate(lastLogin, 'date', 'YYYY-MM-DD');
+                    }
+                    var lastReminder = row['last_reminder'];
+                    if (lastReminder) {
+                        formattedRemDate = FgLocaleSettings.formatDate(lastReminder, 'date', 'YYYY-MM-DD');
+                    }
+
+                    if (row['last_login'] === null || row['last_login'] === '0000-00-00 00:00:00') {
+                        var res = '<span class="label label-sm fg-badge fg-badge-red">{{'LOG_BADGE_INACTIVE'|trans}}</span> ' +
+                                ((formattedRemDate) ? '<span>{{'LOG_TEXT_LAST_REMINDER'|trans}}: ' + formattedRemDate + '</span>' : '');
+                        return res;
+                    } else {
+                        var res = '<span class="label label-sm fg-badge fg-badge-green">{{'LOG_BADGE_ACTIVE'|trans}}</span> ' +
+                                ((formattedDate) ? '<span>{{'LOG_TEXT_LAST_LOGIN'|trans}}: ' + formattedDate + '</span>' : '');
+                        return res;
+                    }
+                }}
+        ];
+$(function () {
+        var datatableOptions = {
+            columnDefFlag: true,
+            ajaxPath: "{{url('team_loginstatus_ajax')}}/{{roleId}}",
+            columnDefValues: columnDefs,
+            editFlag: true,
+            fixedcolumn: false,
+            scrollYflag: true,
+            scrollxValue: '99.7',
+            displaylengthflag:true,
+            displaylength: '50',
+            initialSortingFlag:true,
+            initialsortingColumn: 1,
+            initialSortingorder: 'asc',
+            opt: {
+            language: {
+             infoFiltered: "",   
+            }},
+            inlineEditCallback: function () {
+                inlineEdit();
+            }
+        };
+
+        FgDatatable.listdataTableInit('datatable-loginstatus', datatableOptions);
+});
+        //function for inline edit
+        function inlineEdit() {
+            // $('.edit').editable();
+            $('.edit').editable({
+                type: 'text',
+                emptytext: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                pk: '',
+                // contactId: 548554,
+                params: function (params) {
+                    params.prevVal = $(this).data('email');
+                    params.contactId = $(this).data('contact-id');
+                    return params;
+                },
+                url: "{{url('mail_edit')}}",
+                validate: function (value) {
+                    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                    if ($.trim(value) === '') {
+                        return '{{'VALIDATION_THIS_FIELD_REQUIRED'|trans}}';
+                    } else if (!regex.test(value)) {
+                        return '{{'INVALID_EMAIL'|trans}}';
+                    }
+                },
+                success: function (r) {
+                    if (r == false) {
+                        return '{{'EMAIL_EXITS'|trans}}';
+                    }
+                    if (r.status == 'SUCCESS') {
+                        toastr["success"]('{{'MAIL_UPDATE_SUCCESS'|trans}}');
+                        listTable.ajax.reload();
+                    }
+                }
+            }).css('cursor', 'pointer');
+        }
+        //Function: To send reminder mail
+        function sendReminderMail() {
+            var chkBox = $('input[type=checkbox].dataClass:not(:disabled):checked');
+            if (chkBox.length == 0) {
+                return false;
+            }
+            var mailArr = [];
+            var nameArr = [];
+            var idArr = [];
+            var salutationArr = [];
+            $.each(chkBox, function (i, ob) {
+                mailArr.push($(ob).data('email'));
+                nameArr.push($(ob).data('contact-name'));
+                idArr.push($(ob).attr('id'));
+                salutationArr.push($(ob).data('salutation'));
+            });
+            $.ajax({
+                url: '{{url('send_reminder_mail')}}',
+                type: 'POST',
+                data: {emails: mailArr, names: nameArr, contactIds: idArr, salutations: salutationArr}
+            }).success(function (r) {
+
+                if (r.status === 'SUCCESS') {
+                    toastr["success"]('{{'MAIL_SENT_SUCCESS'|trans}}');
+                }
+                listTable.ajax.reload();
+                $('#send-reminder').parent().addClass('disabled');
+            });
+        }
+    </script>
+{% endblock %}  

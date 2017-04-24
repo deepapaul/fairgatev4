@@ -1,0 +1,345 @@
+HELP DB CHANGES TO BE INTERRATED IN FEDV2
+=========================================================================================MYSQL Functions==================================================================================================
+* contactName
+* contactNameNoSort
+* contactNameYOB
+* salutationTextOwnLocale
+* salutationOnlyText
+* salutationText
+* getFedMemberCount
+
+=========================================================================================fg_club==================================================================================================
+ALTER TABLE `fg_club` 
+ADD COLUMN `club_membership_available` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0-no, 1- yes',  AFTER `calendar_color_code` , 
+ADD COLUMN `fed_membership_mandatory` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0-non-mandatory, 1- mandatory',  AFTER `club_membership_available` , 
+ADD COLUMN `assign_fedmembership_with_application` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0-without application, 1- with application',  AFTER `fed_membership_mandatory` , 
+ADD COLUMN `add_existing_fed_member_club` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0 - not possible, 1- possible without application, 2 - possible with application',  AFTER `assign_fedmembership_with_application` , 
+ADD COLUMN `fed_admin_access` tinyint(1) DEFAULT '0' COMMENT '0-no, 1- yes'  AFTER `add_existing_fed_member_club` 
+==================================DELETED FEW FIELDS AND TAKE CARE=========== fg_cm_contact =======================================================================================================
+ALTER TABLE `fg_cm_contact` CHANGE COLUMN `membership_cat_id` `club_membership_cat_id` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `fg_cm_contact` 
+ADD COLUMN `main_club_id` INT(11) NULL DEFAULT NULL  AFTER `club_id` , 
+ADD COLUMN `fed_contact_id` INT(11) NULL DEFAULT NULL  AFTER `main_club_id` , 
+ADD COLUMN `subfed_contact_id` INT(11) NULL DEFAULT NULL  AFTER `fed_contact_id` , 
+ADD COLUMN `is_fed_member` TINYINT(1) NOT NULL DEFAULT '0'  AFTER `is_member` , 
+ADD COLUMN `is_fed_membership_confirmed` TINYINT(1) NULL DEFAULT NULL  AFTER `is_fed_member` , 
+ADD COLUMN `is_club_assignment_confirmed` TINYINT(1) NULL DEFAULT NULL  AFTER `is_fed_membership_confirmed` , 
+ADD COLUMN `fed_membership_cat_id` INT(11) NULL DEFAULT NULL  AFTER `club_membership_cat_id` , 
+ADD COLUMN `is_fed_own_contact` TINYINT(1) NOT NULL DEFAULT '0'  AFTER `fed_membership_cat_id` , 
+ADD COLUMN `allow_merging` TINYINT(1) NOT NULL DEFAULT '1'  AFTER `is_newsletter_subscriber` , 
+ADD COLUMN `intranet_access` TINYINT(1) NOT NULL DEFAULT '1'  AFTER `allow_merging` , 
+ADD COLUMN `is_stealth_mode` TINYINT(1) NOT NULL DEFAULT '0'  AFTER `intranet_access` , 
+ADD COLUMN `is_sponsor` TINYINT(1) NOT NULL DEFAULT '0'  AFTER `is_stealth_mode` , 
+ADD COLUMN `is_subscriber` TINYINT(1) NOT NULL DEFAULT '0'  AFTER `is_sponsor` , 
+ADD COLUMN `is_household_head` TINYINT(1) NOT NULL DEFAULT '0'  AFTER `is_subscriber` , 
+ADD COLUMN `is_seperate_invoice` TINYINT(1) NOT NULL DEFAULT '0'  AFTER `is_household_head` , 
+ADD COLUMN `is_postal_address` TINYINT(1) NOT NULL DEFAULT '0'  AFTER `is_seperate_invoice` , 
+ADD COLUMN `system_language` VARCHAR(8) NULL DEFAULT 'default'  AFTER `is_postal_address`; 
+
+ALTER TABLE `fg_cm_contact` 
+CHANGE COLUMN `member_id` `member_id` INT(11) NOT NULL DEFAULT '0'  AFTER `subfed_contact_id` , 
+CHANGE COLUMN `is_former_fed_member` `is_former_fed_member` TINYINT(1) NOT NULL DEFAULT '0'  AFTER `member_id` , 
+CHANGE COLUMN `club_membership_cat_id` `club_membership_cat_id` INT(11) NULL DEFAULT NULL  AFTER `is_club_assignment_confirmed`;
+
+ALTER TABLE `fg_cm_contact` ADD INDEX(`fed_membership_cat_id`);
+
+ALTER TABLE `fg_cm_contact` ADD CONSTRAINT `fg_cm_contact_ibfk_4` 
+FOREIGN KEY (`fed_membership_cat_id`) 
+REFERENCES `fairgate_fedv2_qa`.`fg_cm_membership`(`id`) 
+ON DELETE SET NULL ON UPDATE SET NULL;
+
+ALTER TABLE `fg_cm_contact` ADD INDEX(`fed_contact_id`);
+ALTER TABLE `fg_cm_contact` ADD INDEX(`subfed_contact_id`);
+ALTER TABLE `fg_cm_contact` ADD CONSTRAINT `fg_cm_contact_ibfk_8` FOREIGN KEY (`fed_contact_id`) REFERENCES `fairgate_fedv2_qa`.`fg_cm_contact`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION; ALTER TABLE `fg_cm_contact` ADD CONSTRAINT `fg_cm_contact_ibfk_9` FOREIGN KEY (`subfed_contact_id`) REFERENCES `fairgate_fedv2_qa`.`fg_cm_contact`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;  
+ALTER TABLE `fg_cm_contact` ADD INDEX(`main_club_id`);
+
+ALTER TABLE `fg_cm_contact` ADD  CONSTRAINT `fg_cm_contact_ibfk_10` FOREIGN KEY (`main_club_id`) REFERENCES `fairgate_fedv2_qa`.`fg_club`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+UPDATE `fg_cm_contact` SET `fed_contact_id` = '1' WHERE `fg_cm_contact`.`id` = 1;
+
+ALTER TABLE `fg_cm_contact` ADD `resigned_on` DATETIME NULL DEFAULT NULL AFTER `allow_merging`;
+
+
+DROP TRIGGER IF EXISTS `assignMemberId`;
+CREATE TRIGGER `assignMemberId` BEFORE INSERT ON `fg_cm_contact` FOR EACH ROW BEGIN
+	DECLARE maxMemberId INT;
+	IF NEW.member_id ='0' THEN
+		SELECT CASE WHEN MAX(member_id) IS NULL THEN 0 ELSE MAX(member_id) END INTO  maxMemberId FROM `fg_cm_contact` WHERE club_id = NEW.club_id;
+		SET NEW.member_id = maxMemberId + 1;
+	END IF;
+END
+
+
+ALTER TABLE `fg_cm_contact` ADD `merge_to_contact_id` INT(11) NULL DEFAULT NULL AFTER `allow_merging`;
+
+
+ALTER TABLE `fg_cm_contact` ADD INDEX(`merge_to_contact_id`);
+
+ALTER TABLE `fg_cm_contact` ADD CONSTRAINT `fg_cm_contact_ibfk_11` FOREIGN KEY (`merge_to_contact_id`) REFERENCES`fairgate_fedv2_qa`.`fg_cm_contact`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+UPDATE `fg_cm_contact` SET `subfed_contact_id` = '1' WHERE `fg_cm_contact`.`id` = 1;
+===================================================== sf_guard_user ===============================================================================================================================
+
+NO CHANGE FOUND
+
+===========================================================fg_cm_attribute==========================================================
+ALTER TABLE `fg_cm_attribute`
+  DROP `is_visible_subfed`,
+  DROP `is_editable_subfed`,
+  DROP `is_visible_club`,
+  DROP `is_editable_club`;
+
+ALTER TABLE `fg_temp_attribute`
+  DROP `isVisibleSubfed`,
+  DROP `isEditableSubfed`,
+  DROP `isVisibleClub`,
+  DROP `isEditableClub`;
+  
+ALTER TABLE `fg_cm_attribute` ADD `availability_sub_fed` ENUM('changable', 'visible', 'not_available') NULL DEFAULT 'not_available' AFTER `club_id`;
+ALTER TABLE `fg_cm_attribute` ADD `availability_club` ENUM('changable', 'visible', 'not_available') NULL DEFAULT 'not_available' AFTER `availability_sub_fed`;
+
+
+ALTER TABLE `fg_temp_attribute` ADD `availability_sub_fed` ENUM('changable', 'visible', 'not_available') NULL DEFAULT 'not_available' AFTER `club_id`;
+ALTER TABLE `fg_temp_attribute` ADD `availability_club` ENUM('changable', 'visible', 'not_available') NULL DEFAULT 'not_available' AFTER `availability_sub_fed`;
+
+ALTER TABLE `fg_cm_club_attribute` CHANGE `is_required_type` `is_required_type` ENUM('not_required','all_contacts','all_club_members','all_fed_members','selected_members') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT 'not_required';
+
+ALTER TABLE `fg_temp_attribute` CHANGE `is_required_type` `is_required_type` ENUM('not_required','all_contacts','all_club_members','all_fed_members','selected_members') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT 'not_required';
+
+UPDATE `fg_cm_attribute` SET availability_sub_fed = 'changable',availability_club= 'changable' WHERE is_system_field = 1 AND is_crucial_system_field = 1 ;
+
+ALTER TABLE `fg_cm_attribute` ADD CONSTRAINT `fg_cm_attribute_ibfk_2` FOREIGN KEY (`club_id`) REFERENCES `fairgate_fedv2_qa`.`fg_club`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+===================================================== membership =====================================================
+
+ALTER TABLE `fg_cm_membership` 
+ DROP COLUMN `is_fed_category`;
+ 
+ALTER TABLE `fg_cm_membership_history` 
+CHANGE COLUMN `membership_type` `membership_type` ENUM('club','federation') NULL DEFAULT NULL  ;
+
+===================================================== master_federation_608 =================================================
+ALTER TABLE `master_federation_608` 
+DROP COLUMN `is_postal_address` , 
+DROP COLUMN `is_seperate_invoice` , 
+DROP COLUMN `is_household_head` , 
+DROP COLUMN `is_subscriber` , 
+DROP COLUMN `is_sponsor` , 
+DROP COLUMN `is_stealth_mode` , 
+DROP COLUMN `intranet_access` , 
+DROP COLUMN `system_language` , 
+DROP COLUMN `is_fed_member` ;
+
+ALTER TABLE `master_federation_608` CHANGE COLUMN `contact_id` `fed_contact_id` INT(11) NOT NULL DEFAULT '0';
+===================================================== master_club_651 =================================================
+ALTER TABLE `master_club_651` 
+DROP COLUMN `is_postal_address` , 
+DROP COLUMN `is_seperate_invoice` , 
+DROP COLUMN `is_household_head` , 
+DROP COLUMN `is_subscriber` , 
+DROP COLUMN `is_sponsor` , 
+DROP COLUMN `is_stealth_mode` , 
+DROP COLUMN `intranet_access` , 
+DROP COLUMN `system_language` ;
+===================================================== master_federation_609 =================================================
+ALTER TABLE `master_federation_609` 
+DROP COLUMN `is_postal_address` , 
+DROP COLUMN `is_seperate_invoice` , 
+DROP COLUMN `is_household_head` , 
+DROP COLUMN `is_subscriber` , 
+DROP COLUMN `is_sponsor` , 
+DROP COLUMN `is_stealth_mode` , 
+DROP COLUMN `intranet_access` , 
+DROP COLUMN `system_language` , 
+DROP COLUMN `is_fed_member` ;
+===================================================== master_system ====================================================
+ALTER TABLE `master_system` CHANGE COLUMN `contact_id` `fed_contact_id` INT(11) NOT NULL DEFAULT '0';
+ALTER TABLE `master_system` ADD CONSTRAINT `master_system_fed_contact_id` FOREIGN KEY (`fed_contact_id`) REFERENCES `fairgate_fedv2_qa`.`fg_cm_contact`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION; 
+
+ALTER TABLE `master_system` DROP `club_id`;
+
+ALTER TABLE `master_system` ADD UNIQUE(`fed_contact_id`);
+===================================================== fg_club_assignment =================================================
+CREATE TABLE `fg_club_assignment` (
+  `id` int(11) NOT NULL,
+  `fed_contact_id` int(11) NOT NULL,
+  `club_id` int(11) NOT NULL,
+  `from_date` datetime DEFAULT NULL,
+  `to_date` datetime DEFAULT NULL,
+  `is_approved` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1-approved, 0- not approved'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE `fg_club_assignment` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `fg_club_assignment`
+--
+ALTER TABLE `fg_club_assignment`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_fg_club_assignment_fg_cm_contact1_idx` (`fed_contact_id`),
+  ADD KEY `fk_fg_club_assignment_fg_club1_idx` (`club_id`);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `fg_club_assignment`
+--
+
+ALTER TABLE `fg_club_assignment`
+  ADD CONSTRAINT `fk_fg_club_assignment_fg_club1` FOREIGN KEY (`club_id`) REFERENCES `fg_club` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_fg_club_assignment_fg_cm_contact1` FOREIGN KEY (`fed_contact_id`) REFERENCES `fg_cm_contact` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+
+CREATE  TABLE IF NOT EXISTS `fg_cm_club_assignment_confirmation` (
+  `id` INT(11) NOT NULL ,
+  `club_id` INT(11) NOT NULL ,
+  `fed_contact_id` INT(11) NOT NULL ,
+  `federation_club_id` INT(11) NOT NULL ,
+  `existing_club_ids` VARCHAR(45) NULL DEFAULT NULL ,
+  `is_confirmed` TINYINT(4) NOT NULL DEFAULT '0' ,
+  `modified_date` DATETIME NULL DEFAULT NULL ,
+  `modified_by` INT(11) NOT NULL ,
+  `decided_date` DATETIME NULL DEFAULT NULL ,
+  `decided_by` INT(11) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `fk_fg_cm_club_assignment_confirmation_fg_cm_contact1_idx` (`fed_contact_id` ASC) ,
+  INDEX `fk_fg_cm_club_assignment_confirmation_fg_club1_idx` (`club_id` ASC) ,
+  INDEX `fk_fg_cm_club_assignment_confirmation_fg_club2_idx` (`federation_club_id` ASC) ,
+  INDEX `fk_fg_cm_club_assignment_confirmation_fg_cm_contact2_idx` (`modified_by` ASC) ,
+  INDEX `fk_fg_cm_club_assignment_confirmation_fg_cm_contact3_idx` (`decided_by` ASC) ,
+  CONSTRAINT `fk_fg_cm_club_assignment_confirmation_fg_cm_contact1`
+    FOREIGN KEY (`fed_contact_id` )
+    REFERENCES `fg_cm_contact` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_fg_cm_club_assignment_confirmation_fg_club1`
+    FOREIGN KEY (`club_id` )
+    REFERENCES `fg_club` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_fg_cm_club_assignment_confirmation_fg_club2`
+    FOREIGN KEY (`federation_club_id` )
+    REFERENCES `fg_clu	b` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_fg_cm_club_assignment_confirmation_fg_cm_contact2`
+    FOREIGN KEY (`modified_by` )
+    REFERENCES `fg_cm_contact` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_fg_cm_club_assignment_confirmation_fg_cm_contact3`
+    FOREIGN KEY (`decided_by` )
+    REFERENCES `fg_cm_contact` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+ALTER TABLE `fg_cm_club_assignment_confirmation` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+
+
+CREATE  TABLE IF NOT EXISTS `fg_cm_club_assignment_confirmation_log` (
+  `id` INT(11) NOT NULL ,
+  `club_assignment_confirmation_id` INT(11) NOT NULL ,
+  `confirmed_date` DATETIME NULL DEFAULT NULL ,
+  `confirmed_by` INT(11) NOT NULL ,
+  `status` ENUM('CONFIRMED','DECLINED') NULL DEFAULT 'CONFIRMED' ,
+  PRIMARY KEY (`id`) ,
+  INDEX `fk_fg_cm_club_assignment_confirmation_log_fg_cm_club_assign_idx` (`club_assignment_confirmation_id` ASC) ,
+  INDEX `fk_fg_cm_club_assignment_confirmation_log_fg_cm_contact1_idx` (`confirmed_by` ASC) ,
+  CONSTRAINT `fk_fg_cm_club_assignment_confirmation_log_fg_cm_club_assignme1`
+    FOREIGN KEY (`club_assignment_confirmation_id` )
+    REFERENCES `fg_cm_club_assignment_confirmation` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_fg_cm_club_assignment_confirmation_log_fg_cm_contact1`
+    FOREIGN KEY (`confirmed_by` )
+    REFERENCES `fg_cm_contact` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+ALTER TABLE `fg_cm_club_assignment_confirmation_log` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `fg_cm_contact` CHANGE `is_member` `is_waiting_confirmed` ENUM('0','1') NOT NULL DEFAULT '0' COMMENT '0 - Confirmaed, 1 - Waiting for confirmation';
+
+ALTER TABLE `fg_cm_contact` ADD `created_club_id` INT(11) NOT NULL AFTER `fed_membership_assigned_club_id`;
+UPDATE `fg_cm_contact` SET created_club_id = club_id;
+ALTER TABLE `fg_cm_contact` ADD CONSTRAINT `fg_cm_contact_ibfk_7` FOREIGN KEY (`created_club_id`) REFERENCES `fairgate_fedv2_qa`.`fg_club`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+
+
+
+CREATE TABLE `fg_cm_fedmembership_confirmation_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `club_id` int(11) NOT NULL,
+  `contact_id` int(11) NOT NULL,
+  `federation_club_id` int(11) NOT NULL,
+  `modified_date` datetime DEFAULT NULL,
+  `modified_by` int(11) NOT NULL,
+  `decided_date` datetime DEFAULT NULL,
+  `decided_by` int(11) NULL,
+  `fedmembership_value_before` int(11) NULL,
+  `fedmembership_value_after` int(11) NULL,
+  `status` enum('CONFIRMED','PENDING','DECLINED') COLLATE utf8mb4_unicode_ci DEFAULT 'CONFIRMED'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `fg_cm_fedmembership_confirmation_log`
+--
+ALTER TABLE `fg_cm_fedmembership_confirmation_log`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `club_id` (`club_id`),
+  ADD KEY `contact_id` (`contact_id`),
+  ADD KEY `federation_club_id` (`federation_club_id`),
+  ADD KEY `modified_by` (`modified_by`),
+  ADD KEY `decided_by` (`decided_by`),
+  ADD KEY `fedmembership_value_before` (`fedmembership_value_before`),
+  ADD KEY `fedmembership_value_after` (`fedmembership_value_after`);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `fg_cm_fedmembership_confirmation_log`
+--
+ALTER TABLE `fg_cm_fedmembership_confirmation_log`
+  ADD CONSTRAINT `fk_fg_cm_fedmembership_confirmation_log_fg_club_01` FOREIGN KEY (`club_id`) REFERENCES `fg_club` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_fg_cm_fedmembership_confirmation_log_fg_club_02` FOREIGN KEY (`federation_club_id`) REFERENCES `fg_club` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_fg_cm_fedmembership_confirmation_log_fg_cm_contact_01` FOREIGN KEY (`contact_id`) REFERENCES `fg_cm_contact` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_fg_cm_fedmembership_confirmation_log_fg_cm_contact_02` FOREIGN KEY (`modified_by`) REFERENCES `fg_cm_contact` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_fg_cm_fedmembership_confirmation_log_fg_cm_contact_03` FOREIGN KEY (`decided_by`) REFERENCES `fg_cm_contact` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_fg_cm_fedmembership_confirmation_log_fg_cm_membership_01` FOREIGN KEY (`fedmembership_value_before`) REFERENCES `fg_cm_membership` (`id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_fg_cm_fedmembership_confirmation_log_fg_cm_membership_02` FOREIGN KEY (`fedmembership_value_after`) REFERENCES `fg_cm_membership` (`id`) ON UPDATE NO ACTION;
+
+  
+  
+ALTER TABLE `fg_club` CHANGE `club_membership_available` `club_membership_available` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '0-no, 1- yes';
+  
+================================================================= fg_club_terminology=========================================================================
+INSERT INTO `fg_club_terminology` (`id`, `club_id`, `default_singular_term`, `default_plural_term`, `singular`, `plural`, `sort_order`, `is_federation`) VALUES (NULL, '1', 'Fed membership', 'Fed memberships', 'Fed membership', 'Fed memberships', '0', '1');
+
+Kindly alter the ids for the following
+
+INSERT INTO `fg_club_terminology_i18n` (`id`, `singular_lang`, `plural_lang`, `lang`, `is_active`) VALUES ('462', 'Fed membership', 'Fed memberships', 'en', '0');
+INSERT INTO `fg_club_terminology_i18n` (`id`, `singular_lang`, `plural_lang`, `lang`, `is_active`) VALUES ('462', 'Fed membership', 'Fed memberships', 'de', '0');
+INSERT INTO `fg_club_terminology_i18n` (`id`, `singular_lang`, `plural_lang`, `lang`, `is_active`) VALUES ('462', 'Fed membership', 'Fed memberships', 'fr', '0');
+INSERT INTO `fg_club_terminology_i18n` (`id`, `singular_lang`, `plural_lang`, `lang`, `is_active`) VALUES ('462', 'Fed membership', 'Fed memberships', 'it', '0');
+
+=========================================
+DROP TABLE fg_cm_change_email;
+DROP TABLE fg_cm_documents;
+======================================================  

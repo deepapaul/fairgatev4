@@ -1,0 +1,177 @@
+//-common style for sortable row
+.fg-sortable-list{
+	>.list-group-item{
+		padding: 0 15px;
+		position:relative;
+	    margin-bottom: -1px;
+		@extend %clearfix;
+		min-height: 32px;
+		.fg-sort-row{
+			@include position(absolute,15px,auto,auto,0);
+			opacity: 0;
+            cursor: url("../../internal/img/openhand.cur.ico"), move;
+            cursor: -moz-grab;
+            cursor: -webkit-grab;
+            cursor: grab;
+		}
+		.fg-delete-row{
+			@include position(absolute,10px,6px,auto,auto);
+			z-index: 1;
+			input[type=checkbox] {
+				display: none;
+
+				+label{
+					&:before{
+						content: "\f057";
+					    color: #7A7A7A;
+					    cursor: pointer;
+				        font: normal normal normal 14px/1 FontAwesome;
+				        font-size: 19px;
+					}
+				}
+
+				&:checked +label{
+					&:before{
+						content: "\f01e";
+					}					
+				}
+			}
+
+			&.fg-disabled {
+			    opacity: 0.5;
+			    cursor: not-allowed;
+			    pointer-events: none;
+			}
+		}
+		.fg-locked-row{
+			@include position(absolute,10px,2px,auto,auto);
+		    color: #ccc;
+		}
+		.fg-sortable-list-item-wrapper{
+			padding: 5px 0;
+			@extend %clearfix;
+			input[type="text"]{
+				padding: 2px 5px;
+				height: 32px;
+			}
+			.fg-toggle-link{
+				color: #333;
+				text-decoration: none;
+			    line-height: 32px;
+				&.collapsed{
+					> .fa-minus-square-o:before{
+						content: "\f196";
+					}
+				}
+			}
+			.fg-onoff-switch{
+				width:75px;
+				top: 6px;
+				display: inline-block;
+				margin-right: 10px;
+
+				>span{
+					display: block;
+
+				}
+			}
+		}
+		&.fg-disabled{
+			cursor: not-allowed;
+			pointer-events:none;
+			color: #aaa;
+			.fg-toggle-link,.fg-delete-row label:before{
+				color: #aaa !important;
+			}
+			
+		}
+		//- .list-group-item hover
+		&:hover{
+			> .fg-sort-row{
+				opacity: 1;
+				color: #7a7a7a;
+			}
+		}
+
+		.fg-collapsed-content-wrapper{
+			background: #f2f2f2;
+			width: 100%;
+			padding: 15px 15px 10px 15px;
+
+		}
+
+		.fg-add-text{
+			padding-left:0;
+		}
+		.fg-textarea{
+			resize:none;
+			height: 75px;
+		}
+	}
+}
+
+//-page based sortable design
+.fg-cms-form-element-create-wrapper{
+	.fg-sortable-list{
+
+		>.list-group-item{
+			.fg-header-seperator{
+				margin: 14px 10px 0 0;
+				line-height: 30px;
+				border-top: 4px solid #ccc;
+			}
+		}
+		.list-group-item{
+
+			&.ui-sortable-placeholder{
+				min-height: 44px;
+			}
+			.fg-collapsed-content-wrapper{
+				.fg-date-input-wrapper{
+					.input-group-addon{
+						background: #cccccc;
+					}
+				}
+				.fg-checkbox{
+					padding-top: 8px;
+					margin-bottom: 0;
+				}
+			}
+
+		}
+	}
+	.fg-text-area{
+		width: 100%;
+		resize:none;
+	}
+	.tab-content {
+		h3.block{
+			margin-left:-20px;
+			margin-right:-20px;
+		}
+	}
+	#saved-contactlist-fields{
+		font-size:13px;
+		.form-control,label{
+			font-size:13px;
+		}
+	}
+	@include bpMin('360px') {
+		.bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+		    width: 165px;
+		}
+	}
+}
+.fg-form-required-inline{
+	position: relative;
+	>.form-control{
+		padding-right: 25px !important;
+	}
+	.fg-field-required-icon{
+		color:#c70000;
+		height: 14px;
+		margin: auto;
+		@include position(absolute,0,3px,0,auto);
+	}
+
+}

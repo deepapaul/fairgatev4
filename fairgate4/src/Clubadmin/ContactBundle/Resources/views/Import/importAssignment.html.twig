@@ -1,0 +1,16 @@
+<form id="form-tab5" method="post" data-url="{{ path('import_assignment_submit') }}" onsubmit="return false;" autocomplete="off" novalidate="novalidate" class="form-horizontal">
+    <h3 class="block">{{ 'IMPORT_ASSIGNMENT_COUNT_HEAD'|trans({'%count%': count, '%team%' :  fgtwig.getTerminolgyName('Team',singular) }) }}</h3>
+    <div id="fg-dev-import-assignment-section">
+        <div id="fg-dev-failcallback-import" class="alert alert-danger fg-common-top" style="display:none;">
+            <button class="close" data-close="alert"></button>
+            <span>{{'FORM_ERROR_DISPLAY'|trans}}</span>
+        </div>
+        <div class="new-import-assignment-panel"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 fg-common-top">
+            <a class="create_new_assignment" data-toggle="modal" href="#basic" id="pencil"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i><span class="fg-add-text"> {{'CREATE_CONTACT_ADD_ASSIGNMENT'|trans}}</span></a>
+        </div>
+    </div>
+    <input type="hidden" name="step" value="assignment" />
+</form>

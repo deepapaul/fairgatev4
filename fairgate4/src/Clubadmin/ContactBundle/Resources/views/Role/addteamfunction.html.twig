@@ -1,0 +1,89 @@
+<script type="text/template" id="template-teamfunction-add">
+    <% newClass = isNew ? 'addednew' : '' %>
+    <% newKey = isNew ? '.new' : '' %>
+    <% newVar = isNew ? '_new' : '' %>
+    <% roleType = 'team_funtion' %>
+    <% roleKey = '' %>
+    <% roleName = '' %>
+    <% roleKey = ''%>
+    <% functionTitleMain = '{%trans%}FUNCTION{%endtrans%}' %>
+    <% fnTotalCount = 0 %>
+    <% if (functionId.indexOf('newfunction') != -1) { %>
+        <% functionId = functionId.replace('newfunction', ''); %>
+        <% roleKey = '.function' + newKey + '.' + functionId %>
+        <% roleName = '_function' + newVar + '_' + functionId %>
+    <% }  else { %>
+        <% roleKey = '.function.' + functionId %>
+        <% roleName = '_function_' + functionId %>
+    <% } %>
+    <% dataKeyVar = catId + roleKey %>
+    <% dataNameVar = catId + roleName %>
+
+    <div <% if (isNew) { %>style="display:none;"  <% } %> class="row fg-border-line sortables fg-sort-drag-hover <%- newClass %>" id="<%- dataNameVar %>">
+    <div class="fg-col-first-icon fg-sort-drag" name="fg-dev-sorting"><i class="fa fg-sort ui-draggable handle"  data-toggle="tooltip"></i></div>
+    <div class="col-md-12 fg-col-hack">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-7 col-lg-8 fg-clear-left">
+                <div class="col-xs-12 col-md-4 fg-clear-left">
+                <% _.each(clubLanguages, function(clubLang) { %>
+                    <% functionTitleLang = ''
+                    isFunctionActive = true;%>
+                    <% fnSumCount = '';%>
+                    <% delFnRestriction = 0; %>
+                    <% if (typeof function_data !== 'undefined') { %>
+                        <% if (clubLang in function_data) { %>
+                            <% functionTitleLang = function_data[clubLang][0]['f_titleLang'] %>
+                            <% functionTitleMain = function_data[clubLang][0]['f_title'] %>
+                            <% isFunctionActive = function_data[clubLang][0]['f_visible'] %>
+                            <% fnSumCount = function_data[clubLang][0]['fnSumCount'] %>
+                            <% fnTotalCount = function_data[clubLang][0]['total'] %>
+                            <% delFnRestriction = function_data[clubLang][0]['functionRestriction'] %>
+                        <% } else { %>
+                            <% firstLang = FgUtility.getFirstKeyOfArray(function_data) %>
+                            <% functionTitleLang = '' %>
+                            <% functionTitleMain = function_data[firstLang][0]['f_title'] %>
+                            <% isFunctionActive = function_data[firstLang][0]['f_visible'] %>
+                            <% fnSumCount = function_data[firstLang][0]['fnSumCount'] %>
+                            <% fnTotalCount = function_data[firstLang][0]['total'] %>
+                            <% delFnRestriction = function_data[firstLang][0]['functionRestriction'] %>
+                        <% } %>
+                    <% } %>
+                <div dataerror-group="" data-lang="<%- clubLang %>">
+                    <input type="text" data-key="<%- dataKeyVar %>.i18n.<%- clubLang %>.title" name="<%- dataNameVar %>_i18n_<%- clubLang %>_title" id="<%- dataNameVar %>_i18n_<%- clubLang %>_title" data-lang="<%- clubLang %>" class="form-control input-sm wd220" placeholder="<%- functionTitleMain %>" value="<%- functionTitleLang %>" <%- (clubLang == defaultLang)? 'required=true':"data-notrequired=true" %>>
+                </div>
+                <% }); %>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-2 col-md-2 col-lg-1">
+            <% if (fnSumCount > 0 && isFunctionActive == 1) { %>
+                <% disableRow = true; %>
+            <% } else { %>
+                <% disableRow = false; %>
+            <% } %>
+            </div>
+            <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2" name="fg-dev-cont-cnt">  <% if (!isNew) { %><%if(fnSumCount == 1){ %> <%- fnSumCount %> {%trans%}contact{%endtrans%}<% }else if(fnSumCount > 1){ %> <%- fnSumCount %> {%trans%}contacts{%endtrans%}  <% } else { %> 0  {%trans%}contacts{%endtrans%}<% } %> <% } %> </div>
+            <div class="col-xs-12 col-sm-2 col-md-1 col-lg-1 log_fun" id = "<%- dataNameVar %>_fun" name="fg-dev-log">
+                <% if (!isNew) { %>
+                    <i class="fa fa-plus-square-o fg-plus-icon-log" data-id="<%- functionId %>" data-showlog="true" data-parent-div="<%- dataNameVar %>" data-placeholder="log_<%- functionId %>" data-loaded="false"><span class="fg-icon-span"> {%trans%}LOG{%endtrans%}</span></i>
+                <% } %>
+            </div>
+            <input type="text" data-key="<%- dataKeyVar %>.sort_order" name="<%- dataNameVar %>_sort_order" id="<%- dataNameVar %>_sort_order" value="0" data-element="sortorder" class="hide sort-val <%- newClass %>" data-sort-parent="child_sortrole" />
+        </div>
+
+    </div>
+    <% if (((fnTotalCount > 0) && !isNew) || (delFnRestriction > 0)) { %>
+        <div class="fg-col-last-icon">
+            <div class="pull-right deletediv">
+            <i class="fa fa-lock fa-2x ash"></i>
+            </div>
+        </div>
+    <% } else { %>
+        <div class="fg-col-last-icon closeico" name="fg-dev-close-icon">
+            <input type="checkbox" data-key="<%- dataKeyVar %>.is_deleted" name="<%- dataNameVar %>_is_deleted" id="<%- dataNameVar %>_is_deleted" class="make-switch" value="0" data-inactiveblock="changecolor" data-parentid="<%- dataNameVar %>" data-deletable="checknew" />
+            <label for="<%- dataNameVar %>_is_deleted"></label>
+        </div>
+    <% } %>
+    <div id="displaydetails_<%- dataNameVar %>" class="row fg-tablearea-padding fg-pad-0">
+        <div id="log_<%- functionId %>" class="hide col-md-12 fg-pad-0"  showdetail="true"><div class="fg-pad-20"></div></div>
+    </div>
+</script>

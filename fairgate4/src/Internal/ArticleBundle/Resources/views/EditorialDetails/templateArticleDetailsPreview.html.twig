@@ -1,0 +1,58 @@
+<script type="text/template" id="templateArticleDetailsPreview">   
+    
+        <div class="col-md-10 col-lg-9 fg-news-editorial-artcl-dtl-preview-wrapper">
+            <h2 class="page-subtitle-01 fg-marg-top-0 fg-marg-btm-15">
+            <%- (ArticleData.article.text[defaultClubLang]) ? ArticleData.article.text[defaultClubLang].title : ArticleData.article.text.default.title %></h2>
+            <div class="row">
+                <%
+                var position = ArticleData.article.media.position;
+                if( position === 'left_column' ){ %>
+                    <% if($.trim(content.media).length > 0) { %>       
+                        <div class="col-sm-3 left-col pull-left col-xs-12"><%= content.media %></div>
+                    <% } %>
+                
+                    <div class="col-sm-3 right-col pull-right col-xs-12"><%= content.link %></div>
+            
+                    <% if($.trim(content.media).length > 0) { %>
+                        <div class="col-sm-6 middle-col col-xs-12"><%= content.text %></div>
+                    <% } else { %>
+                        <div class="col-sm-9 middle-col col-xs-12"><%= content.text %></div>
+                    <% } %>
+            
+                <% } else if( position === 'right_column' ){ %>
+                
+                    <div class="col-sm-9 middle-col col-xs-12">
+                        <div class="row">
+                            <% if($.trim(content.media).length > 0) { %>
+                                <div class="col-md-9 col-xs-12 col-sm-8 left-col"><%= content.text %></div>
+                                <div class="col-md-3 col-xs-12 col-sm-4 fg-pad-right-0 fg-marg-btm-10"><%= content.media %></div>
+                            <% } else { %>
+                                <div class="col-md-12 left-col"><%= content.text %></div>
+                            <% } %>                    
+                        </div>
+                    </div>
+                    <div class="col-sm-3 right-col pull-right col-xs-12"><%= content.link %></div>
+            
+                <% } else if( position === 'top_slider' ){ %>
+                
+                    <div class="col-sm-8 col-md-9 fg-news-contents">
+                        <%= content.slider %>
+                        <%= content.text %>
+                    </div>
+                    <div class="col-sm-4 col-md-3 right-col pull-right"><%= content.link %></div>
+            
+                <% } else if( position === 'bottom_slider' ){ %>
+                
+                    <div class="col-sm-8 col-md-9 fg-news-contents">
+                        <%= content.text %>
+                        <%= content.slider %>
+                    </div>
+                    <div class="col-sm-4 col-md-3 right-col pull-right"><%= content.link %></div>
+            
+                <% } %>
+            </div>
+        </div>
+
+
+    
+</script>

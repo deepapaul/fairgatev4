@@ -1,0 +1,11 @@
+services:
+    validator.unique.fg_email_exists:
+        class: Clubadmin\ContactBundle\Validator\Constraints\FgEmailExistsValidator
+        arguments: ['@service_container']
+        tags:
+            -  { name: validator.constraint_validator, alias: email_exists }	
+    validator.unique.fg_files:
+        class: Clubadmin\ContactBundle\Validator\Constraints\FileValidator
+        arguments: ['@service_container']
+        tags:
+            -  { name: validator.constraint_validator, alias: fg_files }            

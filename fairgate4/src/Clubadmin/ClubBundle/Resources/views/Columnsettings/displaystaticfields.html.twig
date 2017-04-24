@@ -1,0 +1,45 @@
+<script type="text/template" id="template-display-staticfields">
+    <% //SYSTEM FIELDS 
+    %>
+    <h4 class="fg-cols-fsz"> <%- systemFields['title'] %></h4>
+    <% _.each(systemFields.entry, function(systemField) { %>
+        <div class="form-group">                
+            <div class="checkbox-list">       
+                <label class="fg-col-settings-label">
+                    <i class="fa fg-plus-circle fa-2x pull-left selectitem" id="<%- systemField.id %>" type="SI" club_id="<%- clubId %>" >
+                    <span class="fg-label-inner" data-label-id="SI<%- systemField.id %>"><%- systemField.title %></span></i>
+                </label>           
+            </div>
+    <% }); %>
+        </div>
+
+    <%  //CLUB OPTIONS 
+        if(!_.isNull(clubOptions)) {
+    %>
+    <h4 class="fg-cols-fsz"> <%- clubOptions['title'] %></h4>
+     <% _.each(clubOptions.entry, function(clubOption) { %>                      
+           
+            <div class="form-group">                
+                <div class="checkbox-list">       
+                    <label class="fg-col-settings-label">
+                        <i class="fa fg-plus-circle fa-2x pull-left selectitem" id="<%- clubOption.id %>" type="CO" club_id="<%- clubId %>" >
+                        <span class="fg-label-inner" data-label-id="CO<%- clubOption.id %>"><%- clubOption.title %></span></i>
+                    </label>
+               </div>            
+    <% }); } %>
+           </div>
+   <%  //Additional fields
+    %>
+    <h4 class="fg-cols-fsz"> <%- additionalFields['title'] %></h4>
+     <% _.each(additionalFields.entry, function(additionalField) { %>                      
+           
+            <div class="form-group">                
+                <div class="checkbox-list">       
+                    <label class="fg-col-settings-label">
+                        <i class="fa fg-plus-circle fa-2x pull-left selectitem" id="<%- additionalField.id %>" type="AF" club_id="<%- clubId %>" >
+                        <span class="fg-label-inner" data-label-id="AF<%- additionalField.id %>"><%- additionalField.title %></span></i>
+                    </label>
+               </div>            
+    <% }); %>
+           </div>
+</script> 

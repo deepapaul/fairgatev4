@@ -1,0 +1,131 @@
+Common\UtilityBundle\Entity\FgCmsContactTable:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsContactTableRepository
+    type: entity
+    table: fg_cms_contact_table
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        includeContacts:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: include_contacts
+        excludeContacts:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: exclude_contacts
+        columnData:
+            type: text
+            nullable: true
+            column: column_data
+        rowPerpage:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: row_perpage
+        overflowBehavior:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: overflow_behavior
+        rowHighlighting:
+            type: boolean
+            nullable: true
+            column: row_highlighting
+        tableSearch:
+            type: boolean
+            nullable: true
+            column: table_search
+        tableExport:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: table_export
+        stage:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        createdAt:
+            type: date
+            nullable: false
+            column: created_at
+        updatedAt:
+            type: date
+            nullable: true
+            column: updated_at
+        isDeleted:
+            type: boolean
+            nullable: false
+            column: is_deleted
+        displayType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: display_type
+        portraitPerRow:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: portrait_per_row
+        initialSortingDetails:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: initial_sorting_details
+        initialSortOrder:
+            type: string
+            length: 100
+            fixed: false
+            nullable: true
+            column: initial_sort_order
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        filter:
+            targetEntity: FgFilter
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                filter_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        updatedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                updated_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

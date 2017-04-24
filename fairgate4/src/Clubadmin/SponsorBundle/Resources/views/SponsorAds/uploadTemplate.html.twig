@@ -1,0 +1,51 @@
+<script type="text/template" id="imageUploadArticle">
+    <div class="row fg-border-line selectedrow sortables fg-sort-drag-hover new-row" id="<%- itemId %>">
+        <div name="fg-dev-sorting" class="fg-col-first-icon fg-sort-drag">
+            <i class="fa fg-sort ui-draggable handle "></i>
+        </div>
+        <div class="col-md-12 fg-col-hack">
+            <div class="col-lg-2 col-sm-12 col-xs-12 fg-left-zero">
+                <div data-image-area class="fg-upload-div"> </div>
+            </div>
+            <div class="col-lg-5 col-sm-12 col-xs-12">
+                <div class="fg-description-block">
+                    <dl>
+                        <div dataerror-group><dt>{{'SPONSOR_ADS_DESCRIPTION'|trans}}</dt><dd><input type="text" class="form-control input-sm" value="" id="new_<%- itemId %>_description" name="new_<%- itemId %>_description" data-key="new.<%- itemId %>.description" data-notrequired="true" /></dd></div>
+                        <div dataerror-group><dt>{{'SPONSOR_ADS_URL'|trans}}</dt><dd><input type="url" class="form-control input-sm fg-urlmask" value="" id="new_<%- itemId %>_url" name="new_<%- itemId %>_url" data-key="new.<%- itemId %>.url" data-notrequired="true" /></dd></div>
+                    </dl>
+                </div>
+            </div>
+            <div class="col-lg-5 col-sm-12 col-xs-12">
+                <div class="fg-description-block">
+                    <dl>
+                    {% if not adAreas is empty %}
+                        <dt>{{'SPONSOR_ADS_AREAS'|trans}}</dt>
+                        <dd><select class="form-control input-sm bs-select" data-placeholder="Contact fields" id="new_<%- itemId %>_ad_area_id" name="new_<%- itemId %>_ad_area_id" data-key="new.<%- itemId %>.ad_area_id">
+                                <option value="">{{'ALL'|trans}}</option>
+                                {% for adArea in adAreas %}
+                                    <option value="{{adArea.adId}}">{% if (adArea.isSystem) %} {{'SM_AD_AREA_GENERAL'|trans}} {% else %} {{adArea.adTitle}} {% endif %}</option>
+                                {% endfor %}
+                            </select></dd>
+                    {% endif %}
+                        <dt>{{'SPONSOR_ADS_FILESIZE'|trans}}</dt>
+                        <dd> <div class="fg-progress-txt" data-filesize=""> 0 KB </div><div class="progress progress-striped active" data-progress="">
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+                                    <span class="sr-only">
+                                        80% Complete (success) </span>
+                                </div>
+                            </div></dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="fg-last-icon">
+            <div class="closeico">
+                <input type="checkbox" class="make-switch" data-key="new.<%- itemId %>.is_deleted" id="<%- itemId %>_is_deleted" data-inactiveblock="changecolor" data-parentid="<%- itemId %>" />
+                <label for="<%- itemId %>_is_deleted"></label>
+            </div>
+        </div>
+        <input type="hidden" id="new_<%- itemId %>_image" name="new_<%- itemId %>_image" data-key="new.<%- itemId %>.image" value="" class="fg-dev-newfield" />
+        <input type="hidden" id="new_<%- itemId %>_image_size" name="new_<%- itemId %>_image_size" data-key="new.<%- itemId %>.image_size" value="" class="fg-dev-newfield" />
+        <input type="text" id="new_<%- itemId %>_sort_order" name="new_<%- itemId %>_sort_order" data-key="new.<%- itemId %>.sort_order" value="0" class="fg-dev-newfield sort-val hide" data-element="sortorder" />
+    </div>
+</script>

@@ -1,0 +1,55 @@
+Common\UtilityBundle\Entity\FgRmCategoryRoleFunction:
+    repositoryClass: Common\UtilityBundle\Repository\FgRmCategoryRoleFunctionRepository
+    type: entity
+    table: fg_rm_category_role_function
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        fnCount:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: fn_count
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        role:
+            targetEntity: FgRmRole
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                role_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        function:
+            targetEntity: FgRmFunction
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                function_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        category:
+            targetEntity: FgRmCategory
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                category_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

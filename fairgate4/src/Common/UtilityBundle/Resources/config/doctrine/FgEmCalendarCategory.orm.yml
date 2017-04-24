@@ -1,0 +1,33 @@
+Common\UtilityBundle\Entity\FgEmCalendarCategory:
+    repositoryClass: Common\UtilityBundle\Repository\Calendar\FgEmCalendarCategoryRepository
+    type: entity
+    table: fg_em_calendar_category
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sort_order
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

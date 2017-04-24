@@ -1,0 +1,240 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = articleTitle  %}
+{% set nextPrevDetail = fgclub.getNextPrevious(articleId,clubId~'_ARTICLE','internal_article_editorial_details','articleId') %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+    <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BREADCRUMB STARTS -->
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <!-- BREADCRUMB ENDS -->
+        </div>
+    </div>
+
+            {% set articleLevel = (articleLevel == 'planned') ? '<span class="fg-badge fg-cms-stat-badge fg-badge-green" id="article-badge" >'~'PLANNED'|trans|upper~'</span>' : ( (articleLevel == 'draft') ? '<span class="fg-badge fg-cms-stat-badge fg-badge-dark-grey" id="article-badge" >'~'DRAFT'|trans|upper~'</span>' : '<span class="fg-badge fg-cms-stat-badge hide" id="article-badge" ></span>') %}
+    {% include 'global/page-title-bar.html.twig' with {'pageTitle': articleLevel~articleTitle, 'tabs': tabs, showCountBadge: 1, countBadgeId : 'span-badge-'~roleCount, 'roleCount' : roleCount, 'clubLanguages':clubLanguageArr, 'clubDefaultLang':defaultClubLang, 'type': '', 'url' : ''} %}
+    <div class="clearfix"></div>
+   
+    <div data-list-wrap="" class="fg-common-top fg-news-create-article-wrapper" id="editorial-content"></div>
+
+
+
+{% endblock %}
+{% block underscoretemplate %}
+    {% include 'InternalArticleBundle:EditorialDetails:templateArticleDetailsPreview.html.twig' %} 
+    {% include 'InternalArticleBundle:EditorialDetails:templateArticleMedia.html.twig' %} 
+    {% include 'InternalArticleBundle:EditorialDetails:templateArticleText.html.twig' %} 
+    {% include 'InternalArticleBundle:EditorialDetails:templateArticleLink.html.twig' %} 
+    {% include 'InternalArticleBundle:EditorialDetails:templateArticleSlider.html.twig' %} 
+    {% include 'InternalArticleBundle:EditorialDetails:templateArticleComments.html.twig' %} 
+    {% include 'InternalArticleBundle:EditorialDetails:templateArticleAttachments.html.twig' %} 
+    {% include 'InternalArticleBundle:EditorialDetails:templateArticleSettings.html.twig' %} 
+    {% include 'InternalArticleBundle:EditorialDetails:templateArticleDetailText.html.twig' %} 
+    {% include 'InternalArticleBundle:EditorialDetails:templateArticleDetailMedia.html.twig' %} 
+    {% include 'InternalArticleBundle:EditorialDetails:templateArticleHistory.html.twig' %} 
+   
+    {#for attachments upload#}
+    {% include 'InternalArticleBundle:Editorial:templateAttachmentsUpload.html.twig' %}
+    {#gallery browser#}
+    {% include 'InternalGalleryBundle:GalleryBrowser:templateGalleryBrowser.html.twig' %}
+    {% include 'InternalArticleBundle:EditorialDetails:templateArticleLog.html.twig' %}
+{% endblock %}
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/global/js/unitegallery-master/package/unitegallery/css/unite-gallery.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('fgassets/internal/css/timeline.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgassets/internal/js/fg_tab_selection_process.js') }}" type="text/javascript"></script>
+    <script>
+        var downloadPath = "{{path('article_details_download_attachments')}}";
+    </script>
+    <script src="{{ asset('fgassets/internal/js/page/FgEditorialDetails.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/assets/global/plugins/ckeditor/ckeditor.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/ckEditor-config.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/internal/js/page/ForumCkEditorBBCodeConfig.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/unitegallery-master/package/unitegallery/js/unitegallery.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/unitegallery-master/package/unitegallery/themes/slider/ug-theme-slider.js') }}" type="text/javascript"></script>
+    
+       
+    <script src="{{ asset('fgassets/global/js/DateTimePicker/src/DateTimePicker.js')}}"></script>
+    <script src="{{ asset('fgassets/internal/js/page/FgCreateArticle.js')}}"></script>
+    <script src="{{ asset('fgassets/global/js/listRow.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.ui.widget.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.iframe-transport.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.fileupload.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/internal/js/thumbnail.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/internal/js/page/FgGalleryBrowser.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/FgFileUpload.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/unitegallery-master/source/unitegallery/themes/tilesgrid/ug-theme-tilesgrid.js') }}" type="text/javascript"></script>
+    <script src="{{asset('fgassets/global/js/unitegallery-master/package/unitegallery/themes/tiles/ug-theme-tiles.js')}}" type="text/javascript"></script>
+
+
+    <script>
+        //initial setting of tabs 
+        var contactId = '{{ contactId }}';
+        var clubId = '{{ clubId }}';
+        var type = 'article';
+        var commentSavePath = '{{path('internal_article_editorial_details_comments_save')}}';
+        var deleteConfirmationPath = '{{path('internal_article_editorial_details_comments_delete_popup')}}';
+        var logAjaxUrl = '{{ url('internal_article_editorial_details_log_data', {'articleId':articleId})}}';    
+        //create/edit/ section
+        var filemanagerImageBrowse = "{{path('filemanager_view', {'type' : 'image', 'module' : 'article' } )}}";
+        var filemanagerDocumentBrowse = "{{path('filemanager_view', {'type' : 'document', 'module' : 'article' } )}}";              
+        var mode = 'edit';        
+        var articleId = '{{ articleId }}';
+        var clubLanguagesJson = '{{ clubLanguagesJson|raw }}';        
+        var defaultClubLang = '{{ defaultClubLang }}';
+        var clubLanguages = $.parseJSON( clubLanguagesJson ); 
+        //console.log(clubLanguages);
+        var authorName = '{{ authorName }}';
+        var isCluborSuperAdmin = '{{ isCluborSuperAdmin }}';
+        var isClubArticleAdmin = '{{ isClubArticleAdmin }}';
+        var selectTrans = '{{'SELECT_DEFAULT'|trans}}';
+        var invalidUrl = '{{'INVALID_URL'|trans}}';
+        var pathTemplateArticleJson = '{{ path('internal_article_editorial_create_json',{'pagetype':'editorial'}) }}';
+        var pathArticleSave = "{{ path('internal_article_editorial_save_detail', {'articleId': articleId, 'fromPage':'detail'} ) }}";
+        var browseServerPath = '{{path('filemanager_view',{'type':'document','module':'article'})}}';
+        var articleCategorySave = '{{ path('internal_article_category_save_popup') }}';  
+        var articleFilemanagerPath = '{{ path('filemanager_download',{'file':'__FILEID__'}) }}';  
+        var articleStatusUpdatePath = '{{ path('internal_article_editorial_status_update')}}';  
+        var articleCurrentStatus = '{{articleStatus}}';  
+        var articleLevel = '{{articleLevel}}';  
+        
+        var articleUploaderOptions = {
+            wrapperContainer: '#uploader-container-template',
+            dropZoneElement: '#fg-wrapper',
+            fileListTemplate: 'attachments-upload',
+            fileListTemplateContainer: '.fg-article-upload-items',
+            progressBarContainer: '.fg-upload-progress',
+            progressBarElement: '.progress-bar',
+            removeElement: '.removeUploadedFile',
+            uploadUrl: '{{path('public_file_upload_check',{'type':'article'})}}',
+            extraDataToTemplate: {},
+            onFileListAdd: 'AttachmentsUploader.initElements',
+            onFileUploadSuccess:'updateFormstate',
+            errorContainer: '#articleattachments-upload-error-container',   
+            errorListTemplate: 'attachments-uploader-errorlist-template',
+            fileListTemplatePlacement: 'append',
+            validationErrorTemplateId:'fileUploadError',
+            onFileUploadError:'AttachmentsUploader.setUploadErrorMessage', 
+            validations: {
+                forbiddenFiletypes: globalForbiddenfiles,
+            }
+        };
+        var articleImgUploaderOptions = {
+             wrapperContainer: '#uploader-container-template',
+            dropZoneElement: '#fg-wrapper',
+            fileListTemplate: 'article-images-upload',
+            fileListTemplateContainer: '.fg-files-uploaded-lists-wrapper',
+            progressBarContainer: '.fg-upload-progress',
+            progressBarElement: '.progress-bar',
+            removeElement: '.removeUploadedFile',
+            uploadUrl: '{{path('internal_article_tmp_upload_file',{'type':'article'})}}',
+            extraDataToTemplate: {},
+            onFileListAdd: 'ImagesUploader.addImgCallback',
+            onFileUploadSuccess:'updateFormstate',
+            errorContainer: '#articleimg-upload-error-container',
+            errorListTemplate: 'attachments-uploader-errorlist-template',
+            fileListTemplatePlacement: 'append',
+            validationErrorTemplateId:'fileUploadError',
+             validations: {
+                fileType: 'image',
+                forbiddenFiletypes: globalForbiddenfiles,
+            },
+            onFileUploadError:'ImagesUploader.setUploadErrorMessage',        
+        };
+        function updateFormstate(){
+
+             FgDirtyFields.updateFormState();
+        }
+        var galleryBrowserSettings = {
+                browserUrl: '{{ url('internal_gallery_browser')}}',
+                galleryDataUrl: '{{ url('internal_gallery_gallerydetails_ajax')}}',
+                coverImagePath: '/uploads/{{clubId}}/gallery/width_300/',
+                hasInternalArea: true,
+                addFromGalleryText:'{{'ADD_FROM_GALLERY'|trans}}',
+                addedImagesTemplate: 'templateImagesFromGallery',
+                templatePlacementDiv: '.fg-files-uploaded-lists-wrapper',
+                addTemplateCallBackFlag: true,
+                addTemplateCallBack:  ImagesUploader.addGalleryImgCallback              
+            };
+        var editorialMode = '';
+        //----
+
+        $(document).ready(function () {
+            /**/
+            FgEditorialDetails.handlePageTitleBar(false);
+            errorMsgTranslations = {
+                    'Log_date_filter_err_msg1' : "{{ 'LOG_DATE_FILTER_ERR_MSG1'|trans }}",
+                    'Log_date_filter_err_msg2' : "{{ 'LOG_DATE_FILTER_ERR_MSG2'|trans }}",
+                    'Log_date_filter_err_msg3' : "{{ 'LOG_DATE_FILTER_ERR_MSG3'|trans }}",
+                    'Log_date_filter_err_msg4' : "{{ 'LOG_DATE_FILTER_ERR_MSG4'|trans }}"
+            } ;
+            
+            statusTranslations = {
+                    'added' : "{{ 'LOG_FLAG_ADDED'|trans }}",
+                    'changed' : "{{ 'LOG_FLAG_CHANGED'|trans }}",
+                    'removed' : "{{ 'LOG_FLAG_REMOVED'|trans }}",
+                    'expiry_date':"{{'ARTICLE_LOG_EXPIRY_DATE'|trans }}",
+                    'author':"{{'LOG_AUTHOR'|trans }}",
+                    'comments':"{{'ARTICLE_LOG_COMMENTS'|trans }}",
+                    'category':"{{'ARTICLE_LOG_CATEGORY'|trans }}",
+                    'imagename':"{{'ARTICLE_LOG_IMAGE'|trans }}",
+                    'scope':"{{'ARTICLE_LOG_SCOPE'|trans }}",
+                    'videourl':"{{'ARTICLE_LOG_VIDEO'|trans}}",
+                    'publication_date':"{{'ARTICLE_LOG_START_DATE'|trans}}",
+                    'attachmentname':"{{'ARTICLE_LOG_ATTACHMENT'|trans}}",
+                    'image_position':"{{'ARTICLE_LOG_IMAGE_POSITION'|trans}}",
+                    'areas':"{{'ARTICLE_LOG_AREAS'|trans}}",
+                    'status':"{{'ARTICLE_LOG_STATUS'|trans}}",
+                    'planned':"{{'PLANNED'|trans|upper}}",
+                    'draft':"{{'DRAFT'|trans|upper}}"
+       
+            };
+            
+            var option = { 
+                    pageType : 'articleDetails',
+                    grouptype : type,
+                    contactId : contactId,
+                    currentClubId : clubId,
+                    localStorageName : type+'_'+clubId+'_'+contactId,
+                    tabheadingArray : {{ tabs|json_encode()|raw }},
+                    articleDataUrl : '{{ url('internal_article_editorial_create_json', {'pagetype':'editorial'})}}',
+                    articleCommentsUrl:'{{ url('internal_article_editorial_details_comments_data', {'articleId':articleId})}}',
+                    articleDetailTextUrl: '{{ url('internal_article_detail_text', {'articleId':articleId} )}}',
+                    articleDetailMediaUrl: '{{ url('internal_article_detail_media', {'articleId':articleId} )}}',
+                    articleAttachmentsUrl:'{{ url('internal_article_detail_attachments', {'articleId':articleId} )}}',
+                    articleSettingsUrl:'{{ url('internal_article_detail_settings', {'articleId':articleId} )}}',
+                    articleId   : '{{articleId}}',
+                    articleLogUrl:'{{ url('internal_article_editorial_details_log_data', {'articleId':articleId})}}'
+                };
+                localStorage.removeItem(option.localStorageName);
+                Fgtabselectionprocess.initialize(option);
+                var editorialTabSelection = JSON.parse(localStorage.getItem(option.localStorageName)).id;
+                FgEditorialDetails.renderArticle();
+                                
+                FgEditorialDetails.toggleArticleText();
+                //handle lang switch
+                FgGlobalSettings.handleLangSwitch(); 
+                //in settings tab
+                FgCreateArticle.handleDateFields(); 
+                FgCreateArticle.categorysave();
+                //in media section
+                FgCreateArticle.handleVideoUrls();
+                //attachments section
+                FgCreateArticle.handleDeleteArticleAttachments(); 
+                //save();
+                FgCreateArticle.handleSave();
+                FgInternal.toolTipInit(); 
+                FgCreateArticle.handleShareDisable();
+                FgCreateArticle.handleDeleteIconColor();
+                FgCreateArticle.handleDeleteNewRow();
+                
+                FgCreateArticle.handleStatusSwitch();
+        });
+        var updateHistoryFlag = 0; //will set on updating history
+    </script>
+{% endblock %}

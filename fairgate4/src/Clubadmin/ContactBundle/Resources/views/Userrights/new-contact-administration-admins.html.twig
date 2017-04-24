@@ -1,0 +1,37 @@
+<script type="text/template" id="fg-dev-add-new-contact-calendar-admins"> 
+    <div class="row fg-border-line sortables fg-dev-new-contact-div" >
+        <div class="col-md-5 col-sm-12 col-xs-12">
+            <div class="input-icon"> <i class="fa fa-search"></i>
+                <input id="include-contacts-admins-<%- randomNumber %>" name="include-contacts-admins-<%- randomNumber %>" type="text"  class="form-control input-sm dfExclude" placeholder = "{{'CHOOSE_CONTACT'|trans}}"/>
+            </div>
+        </div>
+        <input class="fg-dev-auto-complete-val hide" type="text" name="new-include-contacts-admins-<%- randomNumber %>" id="new-include-contacts-admins-<%- randomNumber %>" value=""/>
+        <div class="col-md-6 col-sm-12 col-xs-12">
+            <div class="fg-adminstration-wrap">
+                <div class="fg-adminstration-area"><i class="fa fa-plus-square-o"></i><i class="fa fa-minus-square-o"></i></div>
+                <div class="fg-adminstration-area-icons">
+                    <a href="#"><i class="fa fa-newspaper-o text-red"></i></a>
+                    <a href="#"><i class="fa fa-calendar text-red"></i></a>
+                    <a href="#"><i class="fa fa-image text-red"></i></a>
+                </div>
+            </div>                    
+        </div>
+    <div class="clearfix"></div> 
+        <div class="fg-adminstration-area-open fg-dev-chk-area ">
+            <div class="clearfix"></div>
+            <ul>
+            <% _.each(internalAdminList, function(list,key){ %>
+                <li><input type="checkbox"  name="admin_<%- randomNumber %>_group_<%- list['id'] %>" id="admin_<%- randomNumber %>_group_<%- list['id'] %>" data-key="admin.<%- randomNumber %>.group.<%- list['id'] %>"  value="1"/><%- list['name'] %></li>
+           <% }); %>
+            </ul>
+        </div>
+        
+        <div class="fg-last-icon new_contact_right_admins_rmv">
+            <div class="closeico">
+                <input type="checkbox" class="make-switch" id="select_<%- randomNumber %>" name="fg-dev-cls_<%- randomNumber %>">
+                <label for="select_<%- randomNumber %>"></label>
+            </div>
+        </div>
+    </div>
+ 
+</script>

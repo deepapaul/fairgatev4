@@ -1,0 +1,258 @@
+<!--
+    Global Actionmenu bar HTML
+-->
+<div class="fg-action-menu-wrapper">
+    <div class="fg-title-bar-row-1">        
+         {%if( page_settings.actionmenu|default(false)) %}
+        <div class="fg-btn-first-block fg-action-menu"  id="fg-dev-dynamic-menu">
+            {% set showAction = '1' %}
+            {% if (((listType|default('')=='confirmchanges') and (actionType|default('')=='log')) ) %}
+                {% set showAction = '0' %}
+            {% endif %}
+            {% if (fgtwig.inArray('contact',fgclub.get('allowedRights'))) %}
+                {% set showAction = '1' %}
+            {% endif %}    
+            {% if((listType|default('')!='receipient') and (showAction == '1')) %}
+                <button data-auto="actionMenu" class="btn tableaction fgContactdrop fgSponsordrop" data-toggle="dropdown" data-type="{{menuType|default('active')}}" data-menu-type="{{actionMenuCount|default('single')}}" data-auto="actionmenu-{{actionMenuCount|default('single')}}"> <i class="fa fa-bars fa-2x"></i></button>
+                <ul class="dropdown-menu pull-left fgdropmenu" ></ul>
+            {% endif %}
+          
+       </div>
+             {% endif %}
+          
+          {% if( page_settings.addmail|default(false)) %}  
+              <div class="fg-dev-addmail" >
+                <a href="{{ create_newsletter_path }}" class="fg-edit-plus"><i class="fa fa-plus-circle" data-toggle="tooltip" title="{{ create_newsletter_title }}"></i></a>
+                <div class="clearfix"></div>
+              </div>
+              
+           {% endif %}
+         {% if( page_settings.pagetitle|default(false)) %} 
+        <div class="fg-title-first-block fg-test-block  fg-action-title">
+          {% if ((contactType is defined) and (contactType == 'archive' or contactType == 'archivedsponsor')) %}
+              <button id="fg-dev-reactivate" data-toggle="dropdown" class="btn tableaction fg-cursor-point fg-active-IB fg-reactivate-button"> <i id="fg-dev-reactivate" class="fa fa-undo fa-2x fg-cursor"></i></button>    
+           {% endif %}  
+         <h3 class="page-title fg-active-IB">
+                <span class="page-title-text">
+                    <div class="page-title-sub">{{ pageTitle }}   
+                        {%if( page_settings.langcount|default(false)) %} 
+                             <div class="fg-count-text"><span id="langcount"></span></div> 
+                        {%endif%}
+                    </div>
+                 </span>
+                    
+                {%if( page_settings.counter|default(false)) %}
+                    
+                <span class="fg-action-counter fg-dis-none">
+                    <small><div class="fg-count-text"><span id="fcount" {% if counter is defined %}class ="" {% else %} class ="" {% endif %}>{% if counter is defined %} {{counter}} {%endif %}</span><small id="slash"> <span id="fg-slash" >/</span> </small> <span id="tcount" ></span></div></small>
+                    {#<span class="fg-action-filter fg-dis-none">
+                        <i class="fa fa-filter "></i>
+                    </span>#}
+                </span>
+                   <i class="fa fa-filter fg_dev_filter_show"></i>
+                {% endif %} 
+                
+            </h3>
+          {# <i class="fa fa-filter fg_dev_filter_show"></i>#}
+        </div> 
+         {% endif %}   
+         
+          {%if( page_settings.input_language_switch|default(false)) %}
+              <div class="col-md-6 col-sm-6 col-xs-12 fg-left-zero">
+               {%if ( lang_switch_type  is defined )  %}
+                 {% for clubLang in clubLanguages %}
+                     <div dataerror-group="" data-lang="{{clubLang}}">
+                     <input type="text" data-key="{{result_data.id}}.i18n.{{clubLang}}.title" data-filtertype="role" name="{{result_data.id}}_i18n_{{clubLang}}_title" id="{{result_data.id}}_i18n_{{clubLang}}_title" data-lang="{{clubLang}}" class="form-control input-lg page-title {{(clubLang == clubDefaultLang) ? '' : 'hide'}}" placeholder="{{result_data.title}}"  value="{{result_data['titleLang'][clubLang]|default('')}}" {% if(clubLang == clubDefaultLang) %}required="true"{% else %}data-notrequired="true"{% endif %}>
+                     </div>
+                 {% endfor %}
+              {%else %}  
+                   <div dataerror-group>
+                   <input type="text" data-key="{{result_data.id}}.title" name="{{result_data.id}}_title" id="{{result_data.id}}_title" class="form-control input-lg page-title" placeholder="{{'SERVICE_CATEGORY_PLACEHOLDER'|trans}}"  value="{{result_data.title}}" required="true" />
+                   </div>
+                   {% endif %} 
+              </div>
+           {% endif %}  
+              {%if( page_settings.input_field|default(false)) %}
+                <div class="col-md-6 col-sm-6 col-xs-12 fg-left-zero">
+                        {% for clubLang in clubLanguages %}
+                           {% set teamTitleLang = result_data['titleLang'][clubLang]|default('') %}
+                           <div class="{{(clubLang == clubDefaultLang) ? '' : 'hide'}}" dataerror-group="" data-lang="{{clubLang}}">
+                           <input type="text" placeholder="{{title}}" data-key="{{ catId }}.i18n.{{clubLang}}.title" name="{{ catId }}_i18n_{{ clubLang }}_title" id="{{ catId }}_i18n_{{ clubLang }}_title" data-lang="{{ clubLang }}" class="form-control input-lg page-title fg-inner-title" value="{{ teamTitleLang }}" {% if(clubLang == clubDefaultLang) %}required="true"{% else %}data-notrequired="true"{% endif %}>
+                           </div>
+                        {% endfor %}
+                </div>
+           {% endif %}
+
+           {%if( page_settings.executivefunctionlink|default(false)) %}
+
+               <div class="fg-active-IB fg-btn-grey-icon fg-action-executive-function">
+                   <a class="fg-event-edit-link" href="{{ url('workgroupsettings', {'wgId': workgroupId, 'exbdId': execBoardId}) }}">
+                           <i class="fa fa-pencil-square-o fa-2x"></i> {{'FUNCTIONS'|trans}}
+ 
+                   </a>
+               </div>
+           </div>
+                           
+           {% endif %}
+         {%if( page_settings.languageswitch|default(false)) %}
+         <div class="fg-action-language-set fg-dis-none fg-language-set-2 " >
+            <div class="btn-toolbar fg-lang-tab ">
+                    <div class="btn-group  fg-language-left fg-clear-marg">
+                        {% if (clubLanguages|length > 1) %}
+                            {% for clubLanguage in clubLanguages %}
+                                <button type="button" id="{{clubLanguage}}"  lang="{{clubLanguage}}" class=" {% if(clubLanguage == clubDefaultLang) %} adminbtn-ash {% else %} blue {% endif %}  btn  btlang" data-elem-function="switch_lang" data-selected-lang="{{clubLanguage}}">{{clubLanguage|upper}}</button>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+            </div>
+         </div>
+         {% endif %}  
+         
+        {%if( page_settings.tabs|default(false)) %}  
+            {% if (tabs is defined) %}       
+                <div class="fg-tab-block  fg-action-tab fg-dis-none" id="fg_dev_internalTab">
+                    <i class="fg-moretab-bottom-line"></i>    
+                    {% set litagdata =''%}
+                    {% set morelitagdata =''%}   
+                    {% for key,tab in tabs %}
+                
+                        {% if (serviceTabs is defined) %}    
+                 
+                            {% set litagdata = litagdata ~ '
+                                <li id="'~tab.listId~'" name="'~tab.name~'" data-target="'~ loop.index ~'" class="'~tab.activeClass~'" data_type="'~ tab.tabtype ~'" >
+                                <a  href="'~ ((hrefLink is defined) ? tab.url :"#") ~'"  aria-controls="'~tab.id~'" data_id="'~ key ~ '" data-toggle="tab"><span class="fg-dev-tab-text">'~ tab.text~ '</span><span id="'~tab.countId~'" class="badge '~tab.countId~'">'~tab.count~'</span>'~'</a>' ~           
+                              '</li>' %}
+
+                            {% set morelitagdata = morelitagdata ~ '
+                                <li id="'~tab.listId~'" name="'~tab.name~'" data-target="'~ loop.index ~'" class="'~tab.activeClass~'" data_type="'~ tab.tabtype ~'" >
+                                <a  href="'~ ((hrefLink is defined) ? tab.url :"#") ~'"  aria-controls="'~tab.id~'" data_id="'~ key ~ '" data-toggle="tab"><span class="fg-dev-tab-text">'~ tab.text~ '</span><span id="'~tab.countId~'" class="badge '~tab.countId~' ">'~tab.count~'</span>'~'</a>'~            
+                              '</li>' %}
+  
+                        {% else %}   
+                            {% set hasUserRights = (hasUserRights is defined) ? hasUserRights : 0 %}  
+                            {% set litagdata = litagdata ~ '
+                               <li id="fg_tab_'~ key ~'" name="'~tab.name~'" class="'~tab.activeClass~'">
+                               <a '~ ((tab.tabtype == 'mutations_tab' or tab.tabtype == 'mutations_log' or tab.tabtype == 'creations_tab' or tab.tabtype == 'creations_log' or tab.tabtype == 'applicationqueue' or tab.tabtype == 'applicationlog' or tab.tabtype == 'mergeapplicationqueue' or tab.tabtype == 'mergeapplicationlog') ? 'data-tabname="'~tab.dataTabname~'" data-datatableid="'~tab.dataDatatableid~'"': '')~' id = "'~ ((aId is defined) ? tab.name :"") ~'" href="'~ ((hrefLink is defined) ? tab.url :"#") ~'" data_url="'~ ((tab.data_url is defined) ? tab.data_url :"#") ~'" data_id="'~ key ~ '" data_type="'~ type ~'" data-toggle="tab">'~ '<span class="fg-dev-tab-text">' ~ ((tab.text is defined) ? tab.text : tab ) ~ '</span>'~  ((tab.count != '' or tab.tabtype == 'connection' or tab.tabtype == 'subscribercontact' or tab.tabtype == 'assignment') ? '<span class="badge badge-round badge-important ' ~ ((tab.tabtype == 'document') ? "count-document-tab" :'') ~'">'~tab.count~' </span>' : '')~ ((tab.tabtype == 'userright') ? ((hasUserRights==1) ? '<span class="fg-more-icons-nav"><i class="fa fg-fa-check-circle-o "></i></span>':'<span class="fg-more-icons-nav"><i class="fa fg-fa-ban "></i></span>') : '' )~'</a>    
+                               </li>' %}
+
+                            {% set morelitagdata = morelitagdata ~ '
+                               <li id="fg_tab_'~ key ~'" name="'~tab.name~'" data-target="'~ loop.index ~'" class="'~tab.activeClass~'">
+                               <a '~ ((tab.tabtype == 'mutations_tab' or tab.tabtype == 'mutations_log' or tab.tabtype == 'creations_tab' or tab.tabtype == 'creations_log' or tab.tabtype == 'applicationqueue' or tab.tabtype == 'applicationlog' or tab.tabtype == 'mergeapplicationqueue' or tab.tabtype == 'mergeapplicationlog') ? 'data-tabname="'~tab.dataTabname~'" data-datatableid="'~tab.dataDatatableid~'"': '')~' id = "'~ ((aId is defined) ? tab.name :"") ~'" href="'~ ((hrefLink is defined) ? tab.url :"#") ~'" data_url="'~ ((tab.data_url is defined) ? tab.data_url :"#") ~'"  data_id="'~ key ~ '" data_type="'~ type ~'" data-toggle="tab">'~ '<span class="fg-dev-tab-text">' ~ ((tab.text is defined) ? tab.text : tab ) ~ '</span>'~  ((tab.count != '' or tab.tabtype == 'connection' or tab.tabtype == 'subscribercontact' or tab.tabtype == 'assignment') ? '<span class="badge badge-round badge-important ' ~ ((tab.tabtype == 'document') ? "count-document-tab" :'') ~'">'~tab.count~' </span>' : '')~ ((tab.tabtype == 'userright') ? ((hasUserRights==1) ? '<span class="fg-more-icons-nav"><i class="fa fg-fa-check-circle-o "></i></span>':'<span class="fg-more-icons-nav"><i class="fa fg-fa-ban "></i></span>') : '' )~'</a>
+                               </li>' %}
+            
+                        {% endif %} 
+                    {% endfor %}
+       
+                    {% if tabClass is defined %}
+                        {% set tabClass = "data-tabs" %}
+                    {% else %}
+                        {% set tabClass = "paneltab" %}
+                    {% endif %}
+
+                    <div class="">
+                        <div class="col-md-height col-bottom fg-nav-tab-border">
+                            <ul id="{{tabClass}}" class="fg-page-title-tab nav fg-nav-links data-more-tab  fg_sponsor_nav_tab">
+                                {{litagdata|raw}} 
+
+                                <li name="fg-dev-more-tab" class="datahideshow dropdown">
+                                    <a href="#" class="dropdown-toggle"  data-toggle="dropdown">{{ 'MORE'|trans }} 
+                                        <i class="fa fa-angle-down"></i>
+                                    </a>
+                                    <ul class="dropdown-menu fg-dropdown-more pull-right {{ moreClass|default('') }}">
+                                        {{morelitagdata|raw}}
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+          {% endif %}
+        {% endif %} 
+      {%if( page_settings.lang_switch_left|default(false)) %}
+                <div class="fg-action-language-switch fg-dis-none FR">
+                  {% if langSwitch|default(0)==1 %}
+                      <div class="btn-toolbar fg-lang-tab FR">
+                          <div class="btn-group  fg-language-left fg-clear-marg">
+                              {% if (clubLanguages|length > 1) %}
+                                  {% for clubLanguage in clubLanguages %}
+                                      <button type="button" id="{{clubLanguage}}"  lang="{{clubLanguage}}" class=" {% if(clubLanguage == clubDefaultLang) %} adminbtn-ash {% else %} fg-lang-switch-btn {% endif %}  btn  btlang" data-elem-function="switch_lang" data-selected-lang="{{clubLanguage}}">{{clubLanguage|upper}}</button>
+                                  {% endfor %}
+                              {% endif %}
+                          </div>
+                      </div>
+                  {% endif %}
+              </div>
+           {% endif %}
+        <div class="fg-search-last-block fg-action-search">
+            
+            {%if( page_settings.searchbox|default(false)) %} 
+                <div class="input-icon fg-input-icon ">
+                    <i class="fa fa-search"></i>
+                    <input type="text" placeholder="{{'SEARCH_TABLE'|trans}}" class="form-control control2 {{ searchbox_id }}" id="{{ searchbox_id }}" >
+                    {%if( assignmentsearch_id  is defined ) %}
+                     <input type="text" placeholder="{{'SEARCH_TABLE'|trans}}" class="form-control control2 display-hide {{ assignmentsearch_id }} " id="{{ assignmentsearch_id }}">
+                    {% endif %} 
+                </div>
+                {% endif %}
+
+                {% if ( page_settings.filter|default(false)) %}
+                    <div class="fg-filter-check-icon fg-dis-none fg-action-search-filter" data-toggle="tooltip">
+                        <input type="checkbox" id="filterFlag" class="filterFlag" name="fg_filter">
+                    </div>
+                {% endif %} 
+                
+                {%if( page_settings.columnsettings|default(false)) %}
+
+                <button class="btn tableactionright pull-left fg-col-settings" data-toggle="dropdown"  data-rel="tooltip"  >
+                    <i class="fa fa-table fa-2x" ></i>
+                </button>
+               
+                <ul class="dropdown-menu pull-right fg-drpmenu-new drpmenu-new dropdown-menu-form padinten">
+                   {% if columnsUrl is defined%}
+                    <li id="fg-dev-coumnsetting-title"><a href= "{% if columnsUrl is defined%} {{columnsUrl}} {% else %} # {% endif %}">{% trans%} COLUMN {% endtrans%}&hellip;</a> 
+                    </li>
+                    {% endif %} 
+                    <li>
+                        <div id="fg_dev_memberlist_row_length"></div>
+                    </li>
+                    
+                   <li id="fg-dev-columnsetting-flag">
+                    <!-- Display saved table settings starts -->
+                    {%if (   allTableSettings  is defined and (allTableSettings|length > 0))  %}
+                    <select class="form-control select2me" data-placeholder="Contact fields" id="tableColumns">
+                        <option value="" data-attributes="{{defaultSettings}}">{{ defaultSettings_name }}</option>
+                            {% for tableSettings in allTableSettings %}
+                                <option value="{{tableSettings.id}}" data-attributes="{{tableSettings.attributes}}">{{tableSettings.title}}</option>
+                            {% endfor %}
+                    </select>
+                    {% endif %}
+                    
+                    <!-- Display saved table settings ends -->
+                </li>
+                 <li><div id="fgrowchange" ></div></li>
+                 <li><div id="fgoverviewrowchange" ></div></li>
+                 <li><div id="fgfuturerowchange" ></div></li>
+                 
+                 {%if( page_settings.editlink|default(false)) %}
+                    {% if (contacttype != 'formerfederationmember') %}
+                        <li class="fg-inlineEdit-blk">
+                            <label>
+                                <input type="checkbox" id="inlineEditContact" name="fg_contact_inline_edit" inlineedit-post-url="{{ inlinediturl }}"> {% trans%} EDIT_MODE {% endtrans %}</label>
+                        </li>
+                    {% endif %} 
+                  {% endif %}
+                  
+                {% if (type is defined and type =='subscriber') %}
+                        <li>
+                            <label>
+                               <input type="checkbox" id="inlineEditSubscriber" name="fg_subscriber_inline_edit" inlineedit-post-url="{{ subscriberedit_path }}"> {% trans%} EDIT_MODE {% endtrans%}</label>
+                        </li>
+                 {% endif %}
+                </ul>
+                 {% endif %}
+        </div>  
+        <div class="clearfix"></div>                  
+    </div>
+        <div class="clearfix"></div>
+</div>

@@ -1,0 +1,86 @@
+internal_calendar_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: InternalCalendarBundle:Default:index }
+internal_calendar_view:
+    path: /calendar
+    defaults: { _controller: InternalCalendarBundle:Default:calendarView, module : calendar, level1: calendar  }
+internal_calendar_list:
+    path: /calendar/
+    defaults: { _controller: InternalCalendarBundle:Default:calendarView, module : calendar, level1: calendar  }
+calendar_appointment_create:
+    path: /calendar/create
+    defaults: {_controller: InternalCalendarBundle:Calendar:calendarAppointmentCreate, module: calendar, level1: calendar }
+internal_calendar_editcategory:
+    path: /calendar/editcategory
+    defaults: { _controller: InternalCalendarBundle:CalendarCategory:editcategory, module : calendar, level1: calendar }   
+internal_calendar_addcategory:
+    path: /calendar/addcategory
+    defaults: { _controller: InternalCalendarBundle:CalendarCategory:addcategory }
+calendar_appointment_save:
+    path: /calendar/saveAppointment
+    defaults: { _controller: InternalCalendarBundle:CreateAppointment:saveCalenderData }
+calendar_get_events:
+    path: /calendar/getEvents
+    defaults: { _controller: InternalCalendarBundle:Calendar:getCalendarEvents, module : calendar}
+internal_calendar_userrights:
+    path: calendar/settings/userrights
+    defaults: { _controller: InternalCalendarBundle:Calendar:userrights, module: calendar, level1: userrights }
+save_calendar_userrights:
+    path: calendar/userrights/save
+    defaults: { _controller: InternalCalendarBundle:Calendar:saveRoleUserRights}
+calendar_appointment_edit:
+    path: /calendar/edit/{eventId}
+    defaults: {_controller: InternalCalendarBundle:Calendar:calendarAppointmentEdit, module : calendar, level1: calendar  }
+calendar_appointment_delete:
+    path: /calendar/delete
+    defaults: {_controller: InternalCalendarBundle:Calendar:confirmDeleteAppPopUp }
+save_calendar_delete:
+    path: /calendar/delete/save
+    defaults: {_controller: InternalCalendarBundle:Calendar:saveAppDelete } 
+area_colours_view:
+    path: /calendar/areacolours
+    defaults: { _controller: InternalCalendarBundle:AreaColours:index, module : calendar } 
+area_colours_save:   
+    path: /calendar/areacolours/save
+    defaults: { _controller: InternalCalendarBundle:AreaColours:saveColours } 
+calendar_appointment_details:
+    path: /calendar/appointment/details/{eventId}/{startTimeStamp}/{endTimeStamp}
+    defaults: { _controller: InternalCalendarBundle:AppointmentDetails:details, module : calendar, level1: calendar }
+calendar_appointment_details_ajax:
+    path: /calendar/appointment/detailsAjax/{eventId}/{startTimeStamp}/{endTimeStamp}
+    defaults: { _controller: InternalCalendarBundle:AppointmentDetails:getEventData }        
+calendar_import_events:
+    path: /calendar/importEvents
+    defaults: { _controller: InternalCalendarBundle:ImportCalendar:importCalendar, module : calendar, level1: calendar }
+calendar_category_save:
+    path: /calendar/categorysave
+    defaults: {_controller: InternalCalendarBundle:Calendar:calendarCategorySave }
+calendar_multi_edit_app:
+    path: /calendar/multieditapp
+    defaults: { _controller: InternalCalendarBundle:Calendar:multiEditApp , module : calendar , level1: calendar }
+    
+calendar_appointment_export:
+    path: /calendar/appointment/export
+    defaults: { _controller: InternalCalendarBundle:Export:index } 
+    
+calendar_appointment_export_popup:
+    path: /calendar/appointment/exportpopup
+    defaults: { _controller: InternalCalendarBundle:Export:calendarexportPopup } 
+
+calendar_categories:
+    path: /calendar/categories
+    defaults: { _controller: InternalCalendarBundle:Calendar:getCategories } 
+calendar_edit_popup:
+    path: /calendar/editPopup
+    defaults: { _controller: InternalCalendarBundle:Calendar:editPopup }
+calendar_edit_duplicate:
+    path: /calendar/editDuplicate/{eventId}/{duplicate}
+    defaults: { _controller: InternalCalendarBundle:Calendar:calendarAppointmentEdit,duplicate : 1, module : calendar, level1: calendar }
+calendar_import_validate:
+    path: /calendar/importValidate
+    defaults: { _controller: InternalCalendarBundle:ImportCalendar:importFileSubmit, module : calendar }
+    
+calendar_appointment_details_download_attachments:
+    path: /calendar/appointment/downloadFile
+    defaults: { _controller: InternalCalendarBundle:AppointmentDetails:downloadCalendarAttachment } 
+    

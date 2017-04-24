@@ -1,0 +1,48 @@
+<script type="text/template" id="templateCreateArticle">
+    <div id="failcallbackClientSide" class="alert alert-danger" style="display:none;">
+        <button class="close" data-close="alert"></button>
+        <span>{% trans %}FORM_ERROR_DISPLAY{% endtrans %}</span>
+    </div>
+    <div class="row  fg-common-top fg-news-create-article-wrapper">
+        <section class="fg-clear">
+            <div class="col-md-12 fg-common-btm">
+                <div class="panel-primary panel-bg">
+                    <div class="panel-heading fg-theme-head paneldisplay">
+                        <h3 class="panel-title pull-left">{{'ARTICLE_SECTION_TEXT'|trans}}</h3>
+                    </div>
+                </div>
+            </div>
+            {% include 'InternalArticleBundle:Editorial:templateArticleCreateText.html.twig' %}    
+        </section>
+        <section class="fg-clear" id="fg-cms-artcile-media">
+            <div class="col-md-12  fg-common-btm">
+                <div class="panel-primary panel-bg">
+                    <div class="panel-heading fg-theme-head paneldisplay">
+                        <h3 class="panel-title pull-left">{{'ARTICLE_SECTION_IMAGES'|trans}} </h3>
+                    </div>
+                </div>
+            </div>
+            {% include 'InternalArticleBundle:Editorial:templateArticleCreateImages.html.twig' %}
+        </section>
+        <section class="fg-clear" id="fg-cms-artcile-attachment">
+            <div class="col-md-12   fg-common-btm">
+                <div class="panel-primary panel-bg">
+                    <div class="panel-heading fg-theme-head paneldisplay">
+                        <h3 class="panel-title pull-left">{{'ARTICLE_SECTION_ATTACHMENTS'|trans}} </h3>
+                    </div>
+                </div>
+            </div>
+            {% include 'InternalArticleBundle:Editorial:templateArticleCreateAttachments.html.twig' %}
+        </section>
+        <section class="fg-clear">
+            <div class="col-md-12  fg-common-btm">
+                <div class="panel-primary panel-bg">
+                    <div class="panel-heading fg-theme-head paneldisplay">
+                        <h3 class="panel-title pull-left">{{'ARTICLE_SECTION_SETTINGS'|trans}} </h3>
+                    </div>
+                </div>
+            </div>
+            {% include 'InternalArticleBundle:Editorial:templateArticleCreateSettings.html.twig' %}
+        </section>        
+    </div>                                        
+</script>

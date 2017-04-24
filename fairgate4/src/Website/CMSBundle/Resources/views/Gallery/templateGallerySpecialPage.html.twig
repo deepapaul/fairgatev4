@@ -1,0 +1,91 @@
+<script type="text/template" id="level1Template">
+    <div class="fg-gallery-album-wrapper fg-clear">
+    <% _.each(data, function(data) { %>
+              <div class="fg-gallery-album col-md-2 col-sm-3 col-xs-4">
+                <div class="fg-image fg-gallery-effect-1 fg-cursr-pointer" data-hash="<%- data.role_id %>" data-type="gallery" style="background-image:url('/<%- uploadPath +'/width_300/'+ data.file_name %>')"><img src="/<%- uploadPath +'/width_300/'+ data.file_name %>"> </div>
+                <div class="fg-album-title fg-cursr-pointer" data-hash="<%- data.role_id %>"  data-type="gallery"><%= data.title %></div>
+              </div>
+      <% }); %>
+    </div>
+</script>
+<script type="text/template" id="level2Template">
+    <% if(_.size(data.albums) > 0) { %>
+        <h2 class="fg-page-subtitle">{{'WEBSITE_GALLERY_ALBUMS'|trans}}</h2>
+        <div class="fg-gallery-album-wrapper fg-clear">
+            <% _.each(data.albums, function(d) { %>
+                <div class="fg-gallery-album col-md-2 col-sm-3 col-xs-4">
+                    <div class="fg-image fg-gallery-effect-1 fg-cursr-pointer" data-id="<%- d.parent_id %>" data-hash="<%- d.role_id %>_<%- d.parent_id %>" style="background-image:url('/<%- uploadPath +'/width_300/'+ d.file_name %>')"><img src="/<%- uploadPath +'/width_300/'+ d.file_name %>"></div>
+                    <div class="fg-album-title fg-cursr-pointer" data-id="<%- d.parent_id %>" data-hash="<%- d.role_id %>_<%- d.parent_id %>"><%- d.parentname %></div>
+                </div>
+            <% }); %>
+        </div>
+    <% } %>  
+</script>
+    
+ <script type="text/template" id="level3Template">
+     <%
+        var galImgs = data.images;
+        var galLen = galImgs.length;
+      %>
+     <% if(_.size(data.albums) > 0) { %>
+        <h2 class="fg-page-subtitle">{{'WEBSITE_GALLERY_ALBUMS'|trans}}</h2>
+        <div class="fg-gallery-album-wrapper fg-clear">
+            <% _.each(data.albums, function(d) { %>
+                <div class="fg-gallery-album col-md-2 col-sm-3 col-xs-4">
+                    <div class="fg-image fg-gallery-effect-1 fg-cursr-pointer" data-id="<%- d.album_id %>" data-hash="<%- d.role_id %>_<%- d.parent_id %>_<%- d.album_id %>" style="background-image:url('/<%- uploadPath +'/width_300/'+ d.file_name %>')"><img src="/<%- uploadPath +'/width_300/'+ d.file_name %>"></div>
+                    <div class="fg-album-title fg-cursr-pointer" data-id="<%- d.album_id %>" data-hash="<%- d.role_id %>_<%- d.parent_id %>_<%- d.album_id %>"><%- d.name %></div>
+                </div>
+            <% }); %>
+        </div>
+    <% } %>     
+    <% if(typeof data.images != 'undefined' && _.size(data.images) > 0 ) { %>
+        <h2 class="fg-page-subtitle">{{'WEBSITE_GALLERY_PHOTOS'|trans}}</h2>
+        <div class="fg-gallery-photos-wrapper fg-clear">
+            <div id="gallery-<%- curentPage %>" style="display:none;" class="<%- (galLen <= 4) ? 'item-'+galLen :'' %> slider-wrapper">
+            <% _.each(data.images, function(data) { %>
+                <% if(data.type == 'IMAGE'){ %> 
+                    <img alt="<%- data.description %>" src="/<%- uploadPath +'/width_580/'+ data.file_name %>" data-image="/<%- uploadPath +'/original/'+ data.file_name %>" data-description="<%- data.description %>">
+                <% } else if(data.type == 'VIDEO'){
+                        var vDet= FgVideoThumbnail.getVideoId(data.filepath);
+                        var vType = (vDet.type=='y')?'youtube':((vDet.type=='v')?'vimeo':'');
+                      %>
+                      <img alt="<%- data.description %>" 
+                                  data-type="<%- vType %>"  src="/<%- uploadPath %>/width_300/<%- data.video_thumb_url %>"
+                                  data-image="/<%- uploadPath %>/width_1920/<%- data.video_thumb_url %>"
+                            data-description="<%- data.description %>"
+                            data-videoid="<%- vDet.id %>" style="display:none">
+                
+                <% } %>
+                <% }); %> 
+            </div>
+        </div>
+    <% } %>   
+    </script>
+    <script type="text/template" id="galleryLoadRemainingTemplate">    
+        <%
+        var galImgs = data.images;
+        var galLen = galImgs.length;
+        %>
+        <div id="gallery-<%- curentPage %>" style="display:none;" class="<%- (galLen <= 4) ? 'item-'+galLen :'' %> slider-wrapper fg-marg-top-3">
+        <% _.each(data.images, function(data) { %>
+            <% if(data.type == 'IMAGE'){ %> 
+                <img alt="<%- data.description %>" src="/<%- uploadPath +'/width_580/'+ data.file_name %>" data-image="/<%- uploadPath +'/original/'+ data.file_name %>" data-description="<%- data.description %>">
+            <% } else if(data.type == 'VIDEO'){
+                var vDet= FgVideoThumbnail.getVideoId(data.filepath);
+                var vType = (vDet.type=='y')?'youtube':((vDet.type=='v')?'vimeo':'');
+                %>
+                <img alt="<%- data.description %>" 
+                data-type="<%- vType %>"  src="/<%- uploadPath %>/width_300/<%- data.video_thumb_url %>"
+                data-image="/<%- uploadPath %>/width_1920/<%- data.video_thumb_url %>"
+                data-description="<%- data.description %>"
+                data-videoid="<%- vDet.id %>" style="display:none">
+
+                <% } %>
+        <% }); %> 
+        </div>
+    </script>
+    <script type="text/template" id="gallaryLoadmoreTemplate">
+        <div id="gallery-loader" class="fg-gallery-page-loading" onclick="WebsiteGallery.renderUniteGallery();">
+            <span>{{'GALLERY_LOAD_MORE_IMAGE_BUTTON_TEXT'|trans}}</span>
+        </div>
+    </script>

@@ -1,0 +1,76 @@
+gallery_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: InternalGalleryBundle:Default:index }
+internal_gallery_view:
+    path: /gallery
+    defaults: { _controller: InternalGalleryBundle:Default:galleryView, module : gallery, level1 : gallery  }
+gallery_bookmark_list:
+    path: /gallery/bookmark
+    defaults: { _controller: InternalGalleryBundle:Bookmark:bookmarklist, module : gallery  }
+gallery_modal_popup:
+    path: /gallery/confirmation
+    defaults: { _controller: InternalGalleryBundle:Default:modalPopup }
+gallery_change_scope:
+    path: /gallery/changeScope
+    defaults: { _controller: InternalGalleryBundle:Default:changeScope }    
+gallery_remove_item:
+    path: /gallery/removeitem
+    defaults: { _controller: InternalGalleryBundle:Default:removeItem }    
+gallery_data_sidebar:
+    path: /gallery/sidebardata
+    defaults: { _controller: InternalGalleryBundle:Default:galleryDataSidebar }
+gallery_album_settings:
+    path: /gallery/albumsettings/{type}
+    defaults: { _controller: InternalGalleryBundle:AlbumSettings:index, module : gallery, level1 : gallery  }  
+gallery_upload_image:
+    path: /gallery/uploadImage
+    defaults: { _controller: InternalGalleryBundle:GalleryUpload:imageUpload }
+gallery_album_sorting:
+    path: /gallery/sortalbumitems
+    defaults: { _controller: InternalGalleryBundle:Default:sortAlbumItems }
+gallery_bookmark_update:
+    path: /gallery/bookmarkupdate
+    defaults: { _controller: InternalGalleryBundle:Bookmark:bookmarkUpdate }  
+gallery_bookmark_sidebar_update:
+    path: /gallery/sidebarbookmarkupdate
+    defaults: { _controller: InternalGalleryBundle:Bookmark:sidebarBookmarkUpdate } 
+new_element_gallery_sidebar:
+    path: /gallery/newelement
+    defaults: { _controller: InternalGalleryBundle:Default:newElement}
+gallery_upload_video_popup:
+    path: /gallery/uploadVideoPopup
+    defaults: { _controller: InternalGalleryBundle:GalleryUpload:uploadVideoPopup}
+gallery_reorder_albumitems:
+    path: /gallery/reorderAlbumItems
+    defaults: { _controller: InternalGalleryBundle:Default:reorderAlbumItems }
+gallery_albumdetails_ajax:
+    path: /gallery/albumdetails
+    defaults: { _controller: InternalGalleryBundle:Default:getAlbumDetailsAjax }
+gallery_set_coverimage:
+    path: /gallery/coverImage
+    defaults: { _controller: InternalGalleryBundle:Default:setCoverImage }       
+gallery_edit_desc_popup:
+    path: /gallery/editDescPopup
+    defaults: { _controller: InternalGalleryBundle:GalleryUpload:editDescPopup}
+gallery_edit_desc_save:
+    path: /gallery/editDescSave
+    defaults: { _controller: InternalGalleryBundle:GalleryUpload:editDescSave}
+    
+gallery_album_settings_save:
+    path: /gallery/albumsettings/data/save/{type}
+    defaults: { _controller: InternalGalleryBundle:AlbumSettings:saveAlbum }     
+gallery_move_item:
+    path: /gallery/moveitem
+    defaults: { _controller: InternalGalleryBundle:Default:moveItem } 
+gallery_delete_item:
+    path: /gallery/deleteitem
+    defaults: { _controller: InternalGalleryBundle:Default:deleteItem }  
+internal_gallery_upload:
+    path:     /gallery/upload
+    defaults: { _controller: ClubadminDocumentsBundle:Default:uploadFile,type: "gallery" }     
+internal_gallery_gallerydetails_ajax:
+    path: /gallery/gallerydetails
+    defaults: { _controller: InternalGalleryBundle:GalleryBrowser:getGalleryDetailsAjax } 
+internal_gallery_browser:
+    path: /gallery/browser/{hasAddVideoLink}
+    defaults: { _controller: InternalGalleryBundle:GalleryBrowser:index, hasAddVideoLink: 1 }    

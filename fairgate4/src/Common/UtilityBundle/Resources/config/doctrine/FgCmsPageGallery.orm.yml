@@ -1,0 +1,38 @@
+Common\UtilityBundle\Entity\FgCmsPageGallery:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPageGalleryRepository
+    type: entity
+    table: fg_cms_page_gallery
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        galleryType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: gallery_type
+    manyToOne:
+        page:
+            targetEntity: FgCmsPage
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                page_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        galleryRole:
+            targetEntity: FgRmRole
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                gallery_role_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

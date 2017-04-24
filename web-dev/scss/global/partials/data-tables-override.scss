@@ -1,0 +1,215 @@
+
+@import '../utilities/variables'; // added variables and functions
+
+table {
+	&.dataTable {
+		margin-top: 0 !important;
+
+		td {
+
+			@include bxsz-brdrbx;
+			&.sorting_1 {
+				background-color: $clrWhite !important;
+				&.fg-remove-member{
+					background-color: #ffe6e6 !important;
+				}
+			}
+			&.sorting_2 {
+				background-color: $clrWhite !important;
+				&.fg-remove-member{
+					background-color: #ffe6e6 !important;
+				}
+			}
+			&.sorting_3 {
+				background-color: $clrWhite !important;
+				&.fg-remove-member{
+					background-color: #ffe6e6 !important;
+				}
+			}
+			&.fghover.fg-dev-td-hover {
+				background-color: $clrSandWhite !important;
+				&.fg-remove-member{
+					background-color: #ffe6e6 !important;
+				}
+			}
+			&.fg-dev-checkedtr {
+			    background-color: $clrSandWhite!important;
+				&.fg-remove-member{
+					background-color: #ffe6e6 !important;
+				}
+			}
+			&.fg-new-member{			    
+				background-color: $clrNewMembrYellow !important;
+				&.fg-remove-member{
+					background-color: #ffe6e6 !important;
+				}
+			}
+		}
+		th {
+			@include bxsz-brdrbx;
+			&.sorting_1 {
+				background-color: $clrWhite !important;
+			}
+			&.sorting_2 {
+				background-color: $clrWhite !important;
+			}
+			&.sorting_3 {
+				background-color: $clrWhite !important;
+			}
+		}
+		thead {
+			.sorting_asc:after,
+			.sorting_desc:after,
+			.sorting:after {
+				display: none;
+			}
+		}
+		&.table-condensed > thead > tr > th {
+			// padding-right: 5px !important;
+		    background-color: #fff;
+		}
+	}
+	&.table-bordered.dataTable tbody {
+		th {
+			border-bottom: 1px solid $clrbrdrDflt;
+		}
+		td {
+			border-bottom: 1px solid $clrbrdrDflt;
+		}
+	}
+	&.table{
+		th{
+			font-size: 14px;
+		}
+		td{
+			font-size: 13px;
+		}
+	}
+	&.table-bordered > tfoot {
+		& > tr{
+			td,th{
+				 padding: 5px;
+			}
+		}
+	}
+}
+.table-bordered {
+	> tbody > tr {
+		> th {
+			border-bottom: 1px solid $clrbrdrDflt;
+		}
+		> td {
+			border-bottom: 1px solid $clrbrdrDflt;
+		}
+	}
+	> tfoot > tr {
+		> th {
+			border-bottom: 1px solid $clrbrdrDflt;
+		}
+		> td {
+			border-bottom: 1px solid $clrbrdrDflt;
+		}
+	}
+	> thead > tr > td {
+		border-bottom: 1px solid $clrbrdrDflt;
+	}
+}
+.table {
+	> tbody > tr {
+		&.active {
+			> td {
+				background: none;
+			}
+			> th {
+				background: none;
+			}
+		}
+		> td.active {
+			background: none;
+		}
+		> th.active {
+			background: none;
+		}
+	}
+	> tfoot > tr {
+		&.active {
+			> td {
+				background: none;
+			}
+			> th {
+				background: none;
+			}
+		}
+		> td.active {
+			background: none;
+		}
+		> th.active {
+			background: none;
+		}
+	}
+	> thead > tr {
+		&.active {
+			> td {
+				background: none;
+			}
+			> th {
+				background: none;
+			}
+		}
+		> td.active {
+			background: none;
+		}
+		> th{
+			border-bottom: 1px solid #e7ecf1;
+		}
+		> th.active {
+			background: none;
+		}
+	}
+}
+.DTFC_LeftBodyWrapper {
+	margin-top: -5px;
+}
+#tab2 .table-bordered > thead > tr > th {
+	border-bottom: 1px solid $clrbrdrDflt;
+}
+.table-hover > tbody > tr:hover {
+	background: none;
+	> td{
+		background-color: $clrSandWhite !important;
+	}
+	> th{
+		background-color: $clrSandWhite !important;
+	}
+}
+div.DTFC_LeftBodyWrapper table {
+	margin: 0 !important;
+	tr td {
+		background: $clrWhite !important;
+		&.fghover.fg-dev-td-hover {
+			background: $clrSandWhite !important;
+		}
+		
+		&.fg-remove-member{
+			background-color: #ffe6e6 !important;
+		}
+	}
+}
+
+div.dataTables_paginate {
+    float: right;
+}
+.dataTables_scrollBody{
+	border-bottom: none !important;
+	position: static !important;
+}
+.dataTables_scrollHead{
+	border-bottom: 1px solid $clrbrdrDflt !important;
+}
+.DTFC_LeftBodyWrapper table.table-bordered.dataTable{
+	border-top: none !important;
+
+}
+div.dataTables_wrapper div.dataTables_info{
+    margin-top: 8px;
+}

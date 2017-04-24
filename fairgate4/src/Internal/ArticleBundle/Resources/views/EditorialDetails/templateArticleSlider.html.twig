@@ -1,0 +1,27 @@
+<script type="text/template" id="templateArticleSlider">
+<% var mediaData = jQuery.extend(true, {}, ArticleData.article.media); delete mediaData.position; %>
+
+<% if( _.size(mediaData) > 0 ){ %>
+    <div id="fg-article-gallery" style="display:none;" class="slider-wrapper fg-marg-btm-15">
+        <% var mediaData = jQuery.extend(true, {}, ArticleData.article.media); delete mediaData.position; %>    
+        <% $.each(mediaData, function(i, v){ %>
+            <% if(v.type == 'images'){ %> 
+                <img alt="<%- v.description.default %>"
+                     src="<%- v.imgsrc %>"
+                     data-image="<%- v.imgsrc %>"
+                     data-description="<%- v.description.default %>"
+                     style="display:none">
+            <% } else if(v.type == 'videos'){ %>  
+                <% var vDet = FgVideoThumbnail.getVideoId(v.videoUrl); %>
+                <% var vType = (vDet.type=='y')?'youtube':((vDet.type=='v')?'vimeo':''); %>
+                <img alt="<%- v.description.default %>" 
+                    data-type="<%- vType %>"  
+                    src="<%- v.imgsrc %>"
+                    data-image="<%- v.imgsrc %>"
+                    data-description="<%- v.description.default %>"
+                    data-videoid="<%- vDet.id %>" style="display:none">
+            <% } %>   
+        <% });  %>             
+    </div>
+<% } %>
+</script>

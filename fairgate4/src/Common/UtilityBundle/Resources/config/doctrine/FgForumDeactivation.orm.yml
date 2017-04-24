@@ -1,0 +1,35 @@
+Common\UtilityBundle\Entity\FgForumDeactivation:
+    type: entity
+    table: fg_forum_deactivation
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        isDeactivatedForum:
+            type: boolean
+            nullable: true
+            column: is_deactivated_forum
+    manyToOne:
+        group:
+            targetEntity: FgRmRole
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                group_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

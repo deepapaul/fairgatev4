@@ -1,0 +1,388 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'MAILINGS_RECIPIENTS'|trans %}
+    {% block pagecontent %}
+        <!-- BEGIN PAGE HEADER-->
+        {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+        <!-- ENDS PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        {% set resentMenu = (newsletterDetails.status == 'sent' and newsletterDetails.isResent == 0) ? ((newsletterDetails.recepientsCount > 0 and newsletterDetails.bounceEmailCount > 0) ? 1 : 0) : 0 %}
+        {% if (resentMenu) %}
+            {% set tooltip = (type == 'simplemail') ? 'SIMPLE_MAILINGS_TOOPTIP_NOT_SENT'|trans : 'MAILINGS_TOOPTIP_NOT_SENT'|trans %}                    
+            {% set tooltipData = '<i data-original-title="" data-content="'~tooltip~'" data-placement="bottom" data-container="body" class="fa fa-warning  fg-dev-Popovers tooltips"></i>' %}  
+        {% else %}
+            {% set tooltipData = '' %}  
+        {% endif %}
+        <div class="row">
+            {% set page_settings = { 'pagetitle':'true','tabs':'true'}  %}
+            {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': newsletterDetails.sendDate ~" - "~ newsletterDetails.subject ,'page_settings': page_settings,'tabs': tabs, 'type':'overview', 'hrefLink' : true, 'url':"#", 'tooltipData':tooltipData } %}
+        </div>
+        {% if (resentMenu) %}
+            <div class="row">
+                <div class="col-md-12 fg-recepients-alertwrap">                    
+                    {% if (newsletterDetails.bounceEmailCount > 0) %}
+                        <div class="alert alert-warning fg-warning-block col-xs-12">
+                            {% if(type == 'newsletter') %}
+                                <strong>{{ 'MAILINGS_WARNING'|trans }}</strong> {%trans with {'%a%': newsletterDetails.bounceEmailCount}%}%a%_RECEPIENTS_WARNING_TEXT{%endtrans%}  
+                            {% else %}
+                                <strong>{{ 'MAILINGS_WARNING'|trans }}</strong> {%trans with {'%a%': newsletterDetails.bounceEmailCount}%}%a%_RECEPIENTS_SIMPLEMAIL_WARNING_TEXT{%endtrans%}  
+                            {% endif%}
+                            <button class="close" data-close="alert"></button>
+                            <button class="btn tableaction fg-resend" data-toggle="dropdown"> <i class="fa fa-paper-plane"></i> {{ 'RECIPIENTS_RESEND'|trans }}</button>
+                            <ul class="dropdown-menu pull-left">
+                                {% if(newsletterDetails.isResent) %}
+                                    {% set resentClass = 'fg-dev-menu-click-inactive'%}
+                                {% else %}
+                                    {% if (resentMenu) %}
+                                        {% set resentClass = ''%}
+                                     {% else %}    
+                                        {% set resentClass = 'fg-dev-menu-click-inactive'%}
+                                     {% endif%}
+                                {% endif%}
+                                <li> <a href="#" id="recepients-resend" class="{{resentClass}}">{{ 'MAILINGS_RESEND_TEXT'|trans }}</a> </li>
+                            </ul>
+                        </div>
+                    {% endif%}                    
+                </div>
+            </div>
+        {% endif%}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="fg-preview-div">
+                    <dl>
+                        {% if(type == 'newsletter') %}
+                            <dt>{%trans%}MAILINGS_TYPE{%endtrans%}</dt>
+                            {% set publishText = '' %}
+                              {%  if(newsletterDetails.publishType == 'SUBSCRIPTION')%}
+                                     {% set publishText = 'MAILINGS_NONMANDATORY'|trans %}
+                              {% else%}
+                                  {% set publishText = 'MAILINGS_MANDATORY'|trans %}
+                              {% endif %}
+                            <dd>{{(publishText)?publishText:'-'}}</dd>
+                        {% endif %}
+                        {% if(langExists) %}
+                            <dt>{%trans%}MAILINGS_CORRESPONDENCE_LANG{%endtrans%}</dt>
+                            <dd>{{(corresLang)?corresLang:'-'}}</dd>
+                        {% endif%}
+                        <dt>{%trans%}MAILINGS_EMAIL_ADDRESSES{%endtrans%}</dt>
+                        <dd>{{(emailFields.emailField)?emailFields.emailField:'-'}}</dd>
+                        {% if(emailFields.subField) %}
+                           <dt>{%trans%}MAILINGS_EMPTY_SUBSTITUTE{%endtrans%}</dt>
+                           <dd>{{emailFields.subField}}</dd>
+                        {% endif%}
+                    </dl>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Popup to show bounce popup --> 
+        <div id="callPopupFunction"></div>
+        <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+            <div class="modal-dialog modal-wide">
+                <div class="modal-content fg-popup-wrap" id="popup_contents">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <table class="table
+                       fg-recipient-table-border
+                       table-bordered
+                       table-hover
+                       table-condensed
+                       dataTable-scroll-y
+                       dataTable-ajax
+                       dataTable-rows
+                       dataTable-scroll-x
+                       dataTables_scrollBody
+                       lastcolumn_sort dataTable-initialSort data-count fg-ta"  id="fg-dev-dataTable-recepients" xWidth="100" yHeight="300" data-table-name="dataTables"   dataTable-hover="true" data-sort="1#asc" data-column-def="true" data_table_type="recipient"  serverside_process="0">
+                <thead>
+                    <tr>
+                        <th class="fg-bounce-dt-wdth">{% if(resentMenu) %}{{ 'MAILINGS_RECEPIENTS_ERROR'|trans }}{% else %}{% endif %}</th>
+                        <th>{{ 'MAILINGS_RECEPIENTS_EADDRESS'|trans }}</th>
+                        <th>{{ 'MAILINGS_RECEPIENTS_EFIELD'|trans }}</th>
+                        <th>{{ 'MAILINGS_RECEPIENTS_CONTACT'|trans }}</th>
+                        <th>{{ 'MAILINGS_RECEPIENTS_SALUTATION'|trans }}</th>
+                        {% if(status =='sent')%}
+                            <th>{{ 'MAILINGS_RECEPIENTS_OPENED'|trans }}</th>
+                        {% endif%}
+                        {% if ((fgclub.get('type') == 'federation') or (fgclub.get('type') == 'sub_federation')) %}
+                            <th>{{ fgtwig.getTerminolgyName('Club',singular)|capitalize }}</th>
+                        {% endif %}
+                        {% if (fgclub.get('type') == 'federation') %}
+                            <th>{{ fgtwig.getTerminolgyName('Sub-federation',singular)|capitalize }}</th>
+                        {% endif %}                                
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+        <!-- END PAGE CONTENT-->
+    {% endblock %}
+    {% block javascripts %}
+    <script src="{{ asset('fgcustom/js/inline-edit.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/datetime-moment.js')}}" type="text/javascript"></script> 
+    <script src="{{ asset('fgcustom/js/fg-nullsort-handle-dataTable.js')}}" type="text/javascript"></script> 
+    <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/FgBackendDatatable.js') }}" type="text/javascript"></script>
+   
+    <script>
+        function getMainClub(contactClub){
+            var myarr = contactClub.split(",");
+            for(var loc = 0; loc < myarr.length; loc++){
+                var clubTitle = (myarr[loc] !== null && myarr[loc] !== "0") ? clubData[myarr[loc].replace('#mainclub#','')] : "-";
+                if (myarr.length == 1) {
+                    myarr[loc] = clubTitle;
+                } else {
+                    myarr[loc] = clubTitle + ((myarr[loc].indexOf('#mainclub#') !== -1) ? ' <i class="fa  fa-star text-yellow"></i>' : '');
+                }
+            }
+            return myarr.join('<br>');
+        }
+        var newsletterId = {{newsletterId}};
+        var type = '{{type}}';
+        var status = '{{status}}';
+        var contactId = 0;
+        var status = '{{ status }}';
+        var isResent = {{ newsletterDetails.isResent }};
+        var resentMenu = {{ (newsletterDetails.status == 'sent' and newsletterDetails.isResent == 0) ? ((newsletterDetails.recepientsCount > 0 and newsletterDetails.bounceEmailCount > 0) ? 1 : 0) : 0 }};
+        var activedatatable;
+        FgPopOver.init(".fg-dev-Popovers", true);
+        var currentDateFormat = FgLocaleSettingsData.momentDateTimeFormat;
+        var hasContactModuleRights = {{ ((fgtwig.inArray('contact', fgclub.get('allowedRights')) or fgtwig.inArray('readonly_contact', fgclub.get('allowedRights'))) and fgtwig.inArray('contact', fgclub.get('bookedModulesDet'))) ? 1 : 0 }};
+        var contactOverviewPath = '{{ path('render_contact_overview', {'offset': 0, 'contact' : '|contactId|'}) }}';
+        var clubType = '{{ fgclub.get('type') }}';
+        var clubDetails = '{{clubData|json_encode()|raw}}';
+        var clubData = JSON.parse(clubDetails);
+        $(window).on('load', function(){
+            var data1 = '{{ inlineeditData|json_encode()| raw }}';
+            var data2 = JSON.parse(data1);
+            $('.recepients-editable').editable({
+                emptytext : '-',
+                autotext:'never',
+            });
+            inlineEdit.init({
+                    element: '.recepients-editable',
+                    postUrl: '{{ path('check_email_exists') }}',
+                    data: data2,
+                    onComplete: function(rowId, response) {
+                        console.log(rowId);
+                        console.log(response);
+                        $('div#confirmelement').confirmation("destroy");
+                        $('div.popover-content').attr("id", "confirmelement");
+                        $('div.popover-content').attr("data-toggle", "confirmation");
+                        //if primary email already exists for other contact 
+                        if (response.confirmType=='EmailExists') {
+                            var confirmNote = '{{'PRIMARYMAIL_EXISTS_CONFIRMNOTE'|trans}}';
+                            FgConfirmation.confirm(confirmNote, '', '{{'CONFIRMLABEL_OK'|trans}}', $('div#confirmelement'), saveBouceMail, response);
+                            $('a[data-dismiss=confirmation]').remove();
+                        //if email not editable for current club   
+                        }else if (response.confirmType=='EmailNotEditable') {
+                            var confirmNote = '{{'EMAIL_NOT_EDITABLE_CONFIRMNOTE'|trans}}';
+                            FgConfirmation.confirm(confirmNote, '', '{{'CONFIRMLABEL_OK'|trans}}', $('div#confirmelement'), saveBouceMail, response);
+                            $('a[data-dismiss=confirmation]').remove();
+                        } else {
+                            var confirmNote = '{{'PRIMARYMAIL_NOTEXISTS_CONFIRMNOTE'|trans}}';
+                            FgConfirmation.confirm(confirmNote, '{{'CONFIRMLABEL_NO'|trans}}', '{{'CONFIRMLABEL_YES'|trans}}', $('div#confirmelement'), saveContactMail, response, false, saveBouceMail, response);
+                        }
+                        $('[data-edit-row="'+rowId+'"]').removeClass('fg-error-warning');
+                        return false;
+                    },
+                    stopExecutionOnComplete: true,
+                    returnResponse: true
+            });
+        });
+        function saveBouceMail(params) {
+            var emailSavePath = '{{ path('inlineedit_recepients_bounced',{'newsletterId':newsletterId}) }}';
+            FgXmlHttp.post(emailSavePath, params, false, function(){ Breadcrumb.load(); FgPageTitlebar.setMoreTab();});
+        }
+        function saveContactMail(params) {
+            var emailSavePath = '{{ path('update_primaryemail',{'newsletterId':newsletterId}) }}';
+            FgXmlHttp.post(emailSavePath, params, false, function(){ Breadcrumb.load();FgPageTitlebar.setMoreTab(); });
+        }
+        $(document).ready(function() {
+            FgPageTitlebar.init({
+                title       : true,
+                tab       : true,
+                search     :false,
+                actionMenu  : false,
+                tabType  :'server'
+               
+            }); 
+            
+            if (status == 'sent') {
+            var columnSend = [
+                {"name": "isBounce", "targets": 0, data: function(row, type, val, meta) {
+                       var bounceText = '';
+                        if (isResent != 0) {
+                            bounceText = '';
+                        } else {
+                            if (row['isBounce'] == 0) {
+                                bounceText = '';
+                            } else {
+                                bounceText = '<a href="#" data-logId="'+row['logId']+'" data-edit-log="'+row['logId']+'"  data-url="" onClick="javascript:popUp(this, true)" class="pull-left fg-link-error"><span class="fg-error-warning" ><i class="fa fa-warning"></i>'+'{{'MAILINGS_RECEPIENTS_DETAILS'|trans}}'+'</span></a>';
+                            }
+                        }
+                        return bounceText;
+                                //return row['isBounce'] == 0  ? '':(isResent == 0 )?'<a href="#" data-newsletterId="'+newsletterId+'" data-contactId="'+contactId+'" data-url="" onClick="javascript:popUp(this, true)" class="pull-left"><span class="fg-error-warning" ><i class="fa fa-warning"></i></span></a>':''; 
+                }},
+                {"name": "email", "targets": 1, data: function(row, type, val, meta) {
+                        var emailText = row['email'];
+                        if (isResent != 0) {
+                            emailText = row['email'];
+                        } else {
+                            if (row['isBounce'] == 0) {
+                                emailText = row['email'];
+                            } else {
+                                var emailTextWhenNull = (row['email'] == '') ? '-' : row['email'];
+                                if (row['isEmailChanged']==1) { 
+                                    emailText = '<span class="recepients-editable editable-click" data-edit-row='+row['logId']+' data-edit-contactId='+row['contactId']+' data-edit-emailids='+row['email_field_ids']+' data-contactId="'+contactId+'" data-edit-col="email" data-edit-val='+row['email']+'>'+emailTextWhenNull+'</span>';
+                                } else {
+                                    emailText = '<span class="recepients-editable editable-click fg-error-warning" data-edit-row='+row['logId']+' data-edit-contactId='+row['contactId']+' data-edit-emailids='+row['email_field_ids']+' data-contactId="'+contactId+'" fg-error-warning" data-edit-row='+newsletterId+' data-edit-col="email" data-edit-val='+row['email']+'>'+emailTextWhenNull+'</span>';
+                                }
+                            }
+                        }
+                        return  emailText;
+                        //return  row['isBounce']== 0 ? row['email']: (row['isEmailChanged']==1)?'<span class="recepients-editable editable-click" data-edit-row='+newsletterId+' data-edit-col="email" data-edit-val='+row['email']+'>'+row['email']+'</span>':'<span class="recepients-editable editable-click fg-error-warning" data-edit-row='+newsletterId+' data-edit-col="email" data-edit-val='+row['email']+'>'+row['email']+'</span>';  
+                }},
+                {"name": "emailFields", "targets": 2, data: function(row, type, val, meta) {
+                    return  ((row['contactType'] == 'subscriber') ? '{{ 'EMAIL'|trans }}' : (row['emailField'] == '' || row['emailField'] == null ? '-' : row['emailField']));  
+                }},
+                {"name": "contacts", "sortable": false, "targets": 3, data: function(row, type, val, meta) {
+                    if (row['contactType'] == 'contact') {
+                        if(row['contactNames'] == '' || row['contactNames'] == null){
+                            var contact =   '-' ;
+                        }else{
+                            var contact = row['contactNames'];
+                        }
+                    } else {
+                        var contact = (row['subscriberName'] == '' || row['subscriberName'] == null) ? '-' : row['subscriberName']; 
+                    }
+                    return  contact;  
+                }},
+                {"name": "salutation", "targets": 4, data: function(row, type, val, meta) {
+                    return  row['salutation']=='' || row['salutation'] == null ? '-':row['salutation'];  
+                }},
+                {"name": "opened", "targets": 5, "type": "moment-"+currentDateFormat, data: function(row, type, val, meta) {
+                    return  row['opened']=='' || row['opened'] == null ? '-':row['opened'];  
+                }}
+            ];
+            if (clubType == 'federation') {
+                columnSend.push({"name": "contactClub", "sortable": false, "targets": 6, data: function(row, type, val, meta) {
+                        var contactClub = '-';
+                        if (row['contactClub'] !== '' && row['contactClub'] !== null) {
+                            contactClub = getMainClub(row['contactClub']);
+                        }
+                        return contactClub;  
+                }});
+                columnSend.push({"name": "contactSubFederation", "sortable": false, "targets": 7, data: function(row, type, val, meta) {                            
+                        return  (row['contactSubFederation'] !== '' && row['contactSubFederation'] !== null) ? getMainClub(row['contactSubFederation']) : '-';                   
+                                                
+                }});
+            } else if (clubType == 'sub_federation') {
+                columnSend.push({"name": "contactClub", "sortable": false, "targets": 6, data: function(row, type, val, meta) {
+                        var contactClub = '-';
+                        if (row['contactClub'] != '' && row['contactClub'] != null) {
+                            contactClub = getMainClub(row['contactClub']);
+                        }
+                        return contactClub;  
+                }});
+            }
+        } else { 
+              var columnSend = [
+                {"name": "isBounce", "targets": 0, data: function(row, type, val, meta) {
+                      return row['isBounce'] == 0  ? '':'<a href="#" data-logId="'+row['logId']+'" data-url="" onClick="javascript:popUp(this, true)" class="pull-left"><span class="fg-error-warning" ><i class="fa fa-warning"></i></span></a>'; 
+                }},
+                {"name": "email", "targets": 1, data: function(row, type, val, meta) {
+                        return  row['isBounce']== 0 ? row['email']: (row['isEmailChanged']==1)?'<span class="recepients-editable editable-click" data-edit-row='+newsletterId+' data-edit-col="email" data-edit-val='+row['email']+'>'+row['email']+'</span>':'<span class="recepients-editable editable-click fg-error-warning" data-edit-row='+newsletterId+' data-edit-col="email" data-edit-val='+row['email']+'>'+row['email']+'</span>';  
+                }},
+                {"name": "emailFields", "targets": 2, data: function(row, type, val, meta) {
+                        return  ((row['contactType'] == 'subscriber') ? '{{ 'EMAIL'|trans }}' : (row['emailField'] == '' || row['emailField'] == null ? '-' : row['emailField']));  
+                }},
+                {"name": "contacts", "targets": 3, "sortable": false, data: function(row, type, val, meta) {
+                        return  row['contact']=='' || row['contact'] == null ? '-': row['contact'];  
+                }},
+                {"name": "salutation", "targets": 4, data: function(row, type, val, meta) {
+                        return  row['salutation']=='' || row['salutation'] == null ? '-':row['salutation'];  
+                }}
+            ];
+            if (clubType == 'federation') {
+                columnSend.push({"name": "contactClub", "targets": 5,"sortable": false, data: function(row, type, val, meta) {
+                        var contactClub = '-';
+                        if (row['contactClub'] != '' && row['contactClub'] != null) {
+                            contactClub = getMainClub(row['contactClub']);
+                        }
+                        return contactClub;  
+                }});
+                columnSend.push({"name": "contactSubFederation", "targets": 6,"sortable": false, data: function(row, type, val, meta) {
+                        return  (row['contactSubFederation'] !== '' && row['contactSubFederation'] !== null) ? getMainClub(row['contactSubFederation']) : '-';  
+                }});
+            } else if (clubType == 'sub_federation') {
+                columnSend.push({"name": "contactClub", "targets": 5,"sortable": false, data: function(row, type, val, meta) {
+                        var contactClub = '-';
+                        if (row['contactClub'] != '' && row['contactClub'] != null) {
+                            contactClub = getMainClub(row['contactClub']);
+                        }
+                        return contactClub;   
+                }});
+            }
+        }
+        
+        
+        $("#recepients-resend").on('click', function(){
+            var param = { newsletterId: newsletterId, type:type, status:status };
+            FgXmlHttp.post('{{ path("recepients_resend") }}', param, false);
+        });
+
+        var ajaxPath='{{ path('get_newsletter_receivers') }}';
+        var datatableOptions = {
+                fixedcolumn: false,
+                columnDefFlag: true,
+                columnDefValues: columnSend,               
+                rowlengthshow: false,
+                tableId: "fg-dev-dataTable-recepients",                    
+                popupFlag: false,
+                widthResize: false,
+                ajaxHeader: false,
+                displaylength: 20,
+                serverSideprocess:true,
+                ajaxPath: ajaxPath,
+                ajaxparameters: { 
+                    newsletterId: newsletterId,
+                    newsletterType : type,
+                    status : status,
+                    publishType : '{{ newsletterDetails.publishType }}'
+                },
+                ajaxparameterflag: true,
+                hasTooltip : false,
+                isCheckbox:false
+            };
+                   
+        activedatatable = FgBackendDatatable.listdataTableInit('fg-dev-dataTable-recepients', datatableOptions); 
+
+        if (resentMenu == 0) {
+            activedatatable.column(0).visible(false);
+        } else {
+            activedatatable.column(0).visible(true); 
+        }
+        $("#fgremoverowchange").html('');
+        $("#fg-dev-dataTable-recepients_length").detach().prependTo("#fgremoverowchange");
+        //add our own classes to the selectbox
+        $("#fg-dev-dataTable-recepients_length").find('select').addClass('form-control cl-bs-select');
+        $("#fg-dev-dataTable-recepients_length").find('select').select2();
+    });
+        
+    </script>
+    <script>
+        function popUp(t, event){
+            var logId= $(t).attr("data-logId");
+            $(t).parent().parent().addClass('fg-dev-row-selected');
+            var htmlgetPath = "{{ path('recepients_bounce_message',{'logId':'logId'}) }}";
+            htmlgetPath =  htmlgetPath.replace("logId", logId);
+           
+            $.get(htmlgetPath, function(data) {
+               $('#popup_contents').html(data);
+               $('#popup').modal('show');
+            });
+        }
+    </script>
+    {% endblock %}

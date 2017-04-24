@@ -1,0 +1,71 @@
+Common\UtilityBundle\Entity\FgCmLogConnection:
+    type: entity
+    table: fg_cm_log_connection
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        date:
+            type: datetime
+            nullable: true
+        connectionType:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: connection_type
+        relation:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        valueBefore:
+            type: text
+            nullable: true
+            column: value_before
+        valueAfter:
+            type: text
+            nullable: true
+            column: value_after
+    manyToOne:
+        linkedContact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                linked_contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        assignedClub:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                assigned_club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        changedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                changed_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

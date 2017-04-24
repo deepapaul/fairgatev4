@@ -1,0 +1,64 @@
+Common\UtilityBundle\Entity\FgCmsContactFormApplications:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsContactFormApplicationsRepository
+    type: entity
+    table: fg_cms_contact_form_applications
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        contactName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: contact_name
+        formData:
+            type: text
+            nullable: true
+            column: form_data
+        status:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        createdAt:
+            type: datetime
+            nullable: true
+            column: created_at
+        decisionDate:
+            type: datetime
+            nullable: true
+            column: decision_date
+    manyToOne:
+        form:
+            targetEntity: FgCmsForms
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                form_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        decidedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                decided_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        clubContact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

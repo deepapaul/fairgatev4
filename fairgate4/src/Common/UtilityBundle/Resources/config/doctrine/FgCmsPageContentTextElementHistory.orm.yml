@@ -1,0 +1,39 @@
+Common\UtilityBundle\Entity\FgCmsPageContentTextElementHistory:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPageContentTextElementHistoryRepository
+    type: entity
+    table: fg_cms_page_content_text_element_history
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        text:
+            type: text
+            nullable: false
+        lastEditedDate:
+            type: datetime
+            nullable: false
+            column: last_edited_date
+    manyToOne:
+        textElement:
+            targetEntity: FgCmsPageContentTextElement
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                text_element_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        lastEditedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                last_edited_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

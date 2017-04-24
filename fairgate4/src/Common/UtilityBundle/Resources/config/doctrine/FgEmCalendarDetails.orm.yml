@@ -1,0 +1,93 @@
+Common\UtilityBundle\Entity\FgEmCalendarDetails:
+    repositoryClass: Common\UtilityBundle\Repository\Calendar\FgEmCalendarDetailsRepository
+    type: entity
+    table: fg_em_calendar_details
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        startDate:
+            type: datetime
+            nullable: true
+            column: start_date
+        endDate:
+            type: datetime
+            nullable: true
+            column: end_date
+        untill:
+            type: datetime
+            nullable: true
+        location:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        locationLatitude:
+            type: float
+            nullable: true
+            column: location_latitude
+        locationLongitude:
+            type: float
+            nullable: true
+            column: location_longitude
+        isShowInGooglemap:
+            type: boolean
+            nullable: true
+            column: is_show_in_googlemap
+        url:
+            type: string
+            length: 250
+            fixed: false
+            nullable: true
+        description:
+            type: text
+            nullable: true
+        createdAt:
+            type: datetime
+            nullable: true
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: true
+            column: updated_at
+        status:
+            type: boolean
+            nullable: false
+    manyToOne:
+        updatedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                updated_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        calendar:
+            targetEntity: FgEmCalendar
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                calendar_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

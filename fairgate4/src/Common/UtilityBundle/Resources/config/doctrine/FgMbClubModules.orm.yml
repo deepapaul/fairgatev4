@@ -1,0 +1,74 @@
+Common\UtilityBundle\Entity\FgMbClubModules:
+    type: entity
+    table: fg_mb_club_modules
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        isCostOnetime:
+            type: boolean
+            nullable: true
+            column: is_cost_onetime
+        costOnetime:
+            type: float
+            nullable: true
+            column: cost_onetime
+        isCostYearly:
+            type: boolean
+            nullable: true
+            column: is_cost_yearly
+        costYearly:
+            type: float
+            nullable: true
+            column: cost_yearly
+        invoiceAmount:
+            type: float
+            nullable: true
+            column: invoice_amount
+        signedOn:
+            type: datetime
+            nullable: true
+            column: signed_on
+        isModuleActive:
+            type: boolean
+            nullable: true
+            column: is_module_active
+        backendTerms:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: backend_terms
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        signedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                signed_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        module:
+            targetEntity: FgMbModule
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                module_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

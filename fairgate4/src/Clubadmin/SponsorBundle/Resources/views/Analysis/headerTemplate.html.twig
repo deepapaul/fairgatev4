@@ -1,0 +1,94 @@
+<table data-ajax-path="#" class= "table 
+              table-bordered 
+               table-hover
+               table-condensed
+               dataTable-scroll-y
+               dataTable-rows
+               dataTable-scroll-x
+               dataTables_scrollBody
+               lastcolumn_sort dataTable-initialSort dataTable-sm" xWidth="100" yWidth="300" data-id={{typeId}} data-tab={{activeTab}} data-table-name="dataTables" id="service_display_{{contactId}}_{{typeId}}" data-sort="0#asc" style="width:100%">
+     
+    <thead>
+       {% if (activeTab =='sponsor')%}
+            <tr> 
+                <th></th>
+                <th></th>
+             {% set prevCat = '' %}
+             {% for key,cat in catHead %}
+                 {% if (prevCat == cat.categoryId)%}
+                     {% set catTitle = '' %}
+                 {% else %}
+                     {% set catTitle = cat.catTitle %}
+                 {% endif%}
+                     {% if catTitle != "" %}
+                         <th class="fg-border-left fg-datatable-footer-grey">{{ catTitle }}</th>
+                     {% else %}
+                         <th class="fg-datatable-footer-grey">{{ catTitle }}</th>
+                     {% endif %}
+                     {% set prevCat = cat.categoryId %}
+             {% else %}
+            <th class="fg-datatable-footer-grey" style="width:100%"></th>
+            {% endfor %}
+                <th class="fg-border-left">{%trans%}TOTAL{%endtrans%}</th>
+            </tr>
+        {% endif %}
+            
+        {% if (activeTab =='service')%}
+            <tr>
+                <th>{%trans%}SERVICE_CATEGORY{%endtrans%}</th>
+                <th>{%trans%}SA_SERVICE{%endtrans%}</th>
+                <th>{%trans%}SA_SPONSORS{%endtrans%}</th>
+                <th>{%trans%}SA_PAYMENTS{%endtrans%}</th>
+                <th>{%trans%}SA_TOTAL_AMOUNT{%endtrans%}</th>
+            </tr>
+        {% else %}
+            <tr>
+                <th></th>
+                <th>{% trans %}SPONSOR{% endtrans %}</th>
+            {% set prevCat = '' %}
+            {% for key,cat in catHead %}
+                {% if (prevCat == cat.categoryId)%}
+                    {% set catTitle = '' %}
+                {% else %}
+                    {% set catTitle = cat.catTitle %}
+                {% endif%}
+                    {% if catTitle != "" %}
+                        <th class="fg-border-left">{{cat.serviceTitle}}</th>
+                    {% else %}
+                        <th>{{cat.serviceTitle}}</th>
+                    {% endif %}
+                    {% set prevCat = cat.categoryId %}
+            {% else %}
+            <th class="fg-border-left" style="width:100%"></th>
+            {% endfor %}
+            
+                <th style="text-align:right" class="fg-border-left"></th>
+            </tr>
+        {% endif %}
+
+    </thead>
+    <tfoot>
+         {% if (activeTab =='service')%}
+            <tr>
+                <th class="fg-datatable-footer-grey">{%trans%}TOTAL{%endtrans%}</th>
+                <th class="fg-datatable-footer-grey"></th>
+                <th class="fg-datatable-footer-grey"></th>
+                <th class="fg-datatable-footer-grey"></th>
+                <th style="text-align:right" class="fg-datatable-footer-grey"></th>
+            </tr>
+        {% else %}
+            <tr>
+                <th class="fg-datatable-footer-grey"></th>
+                <th class="fg-datatable-footer-grey">{%trans%}TOTAL{%endtrans%}</th>
+                {% for key,cat in catHead %}
+                <th  class="fg-datatable-footer-grey text-right fg-pad-right-18"><span id="servid_{{cat.servicesId}}"></span></th>
+                {% else %}
+            <th class="fg-datatable-footer-grey text-right fg-pad-right-18" style="width:100%"></th>
+                {% endfor %}
+                <th  class="fg-datatable-footer-grey text-right"><span id="colTotal"></span></th>
+            </tr>
+        {% endif %}    
+    </tfoot>
+</table>
+           
+    

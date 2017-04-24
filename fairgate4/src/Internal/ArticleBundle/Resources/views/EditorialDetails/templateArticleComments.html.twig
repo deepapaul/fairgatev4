@@ -1,0 +1,105 @@
+<script type="text/template" id="templateArticleComments">
+<%if (commentDetails.globalCommentAccess == 1) { %>
+   <%if (commentDetails.data.length < 1 && commentDetails.isCommentAllow == 0 && commentAreaType == 'editorialDetails') { %>
+    <div class="alert alert-info">
+         <p>{{'EDITORIAL_COMMENT_NO_COMMENTS_TEXT'|trans}}</p>
+     </div>
+    <% } %>
+    <div class = <% if (commentAreaType == 'editorialDetails') { %> "col-md-11 fg-news-editorial-artcl-dtl-comment-wrapper"  <% } else { %> "col-md-10 col-lg-9 col-md-offset-2 fg-news-editorial-artcl-dtl-comment-wrapper margin-top-10" <% } %>>
+    <ul class="timeline fg-timeline-right">
+     <%if (commentDetails.data.length > 0) { %>
+      <% _.each(commentDetails.data, function(commentData) { %>
+         <% var createdByName = (commentData.guestUserName == '' ) ? commentData.createdBy : commentData.guestUserName ; %>
+         <li class="timeline-purple margin-bottom-40" id="comments-li-data_<%- commentData.id %>">
+            <div class="timeline-time">
+                <div class="timeline-title"><%- createdByName %></div>
+                <div class="timeline-created"><span class="date"> <%- commentData.createdDate %></span></div>
+                <%if (commentData.updatedId == commentData.createdId && commentData.guestUserName == '') { %>
+                    <div class="timeline-last-edited">{{'EDITORIAL_COMMENT_LAST_EDITED_TEXT'|trans}} <%- commentData.updatedDate %> </div>
+                <% } %>
+            </div>
+            <div class = "timeline-icon">
+            <div class="fg-avatar-default fg-profile-img-blk45 fg-round-img " style="background-image:url('<%- (commentData.contactImage != '') ? commentData.contactImage : '' %>')">
+            </div>
+             
+            </div>
+            <div class="timeline-body">
+             <%if ((commentDetails.isAdmin == 1) || (commentDetails.contactId == commentData.createdId) ) { %>
+                <div class="timeline-news-top text-right">
+                    <ul class="fg-news-control-lists">
+                        <li><a id="comment-edit_<%- commentData.id %>" data-id="<%- commentData.id %>" href="javascript:void(0);" class="comment-edit"><i class="fa fa-pencil-square-o fa-2x"></i>{{'EDITORIAL_COMMENT_EDIT_BUTTON'|trans}}</a> </li>
+                        <li><a id="comment-delete-<%- commentData.id %>" data-id="<%- commentData.id %>" href="javascript:void(0);" class="fg-comment-delete"><i class="fa fa-times-circle fa-2x"></i>{{'EDITORIAL_COMMENT_DELETE_BUTTON'|trans}}</a> </li>
+                    </ul>
+                </div>
+               <% } %>
+                <div class="timeline-content" >
+                    <div id="comment-text-content_<%- commentData.id %>">
+                        <%=  commentData.comment.replace(/\r\n|\r|\n/g,"<br />") %>
+                    </div>
+
+                    <form class="hide" id="comments-form_<%- commentData.id %>" method="post" data-validation="true" onsubmit="return false;" novalidate="novalidate">
+                        <div class="">
+                            <textarea class="fg-width-P" id="comment-text-area_<%- commentData.id %>" name="comment-text-area_<%- commentData.id %>" rows="8" data-value="<%- commentData.comment %>"><%- commentData.comment %></textarea>
+                             <div class ="fg-dev-comment-errorblock text-red fg-marg-top-5 hide" id="comment-error-block_<%- commentData.id %>">{{'EDITORIAL_COMMENT_REQUIRED_MESSAGE'|trans}}</div>
+                        </div>
+                        <div class="fg-timeline-footer fg-pad-top-5 hide" id="timeline_footer_<%- commentData.id %>">
+                            <div class="form-group last">
+                                <div class="form-actions right">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="fg-msg-btn pull-right">
+                                                <button data-id="<%- commentData.id %>" class="btn default fg-display comment_cancel" id="discard_change-<%- commentData.id %>">{{'EDITORIAL_COMMENT_CANCEL_BUTTON'|trans}}</button>
+                                                <button data-id="<%- commentData.id %>" data-articleId= "<%- commentData.articleId %>" type="submit" class="btn default fg-display green comment_save" id="save_change-<%- commentData.id %>" disabled="disabled">{{'EDITORIAL_COMMENT_SAVE_BUTTON'|trans}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                <%if ((commentData.createdId != commentData.updatedId) && (commentData.updatedId)) { %>
+                      <div class="comment-last-edited">{{'EDITORIAL_COMMENT_LAST_EDITED_TEXT'|trans}} <%- commentData.updatedDate %> {{'EDITORIAL_COMMENT_BY_TEXT'|trans}} <%- commentData.updatedBy %></div>
+                 <% } %>
+                </div>
+            </div>
+        </li>
+
+     <% }); %>
+  <% } %>
+
+    <% if (commentDetails.isCommentAllow != 0) { %>
+           <li class="timeline-purple" id="comments-li-data_new">
+           <div class="timeline-time">
+                <div class="timeline-title"> <%-commentDetails.contactName %> </div>
+            </div>
+            <div class = "timeline-icon">            
+                <div class="fg-avatar-default fg-profile-img-blk45 fg-round-img " style="background-image:url('<%- (commentDetails.contactImage != '') ? commentDetails.contactImage : '' %>')">
+                </div>
+            </div>
+            <div class="timeline-body">
+                <div class="timeline-content" >
+                    <form class="" id="comments-form_new" method="post" data-validation="true" onsubmit="return false;" novalidate="novalidate">
+                        <textarea class="fg-width-P" id="comment-text-area_new" name="comment-text-area_new %>" rows="8"></textarea>
+                        <span class ="fg-dev-comment-errorblock text-red fg-marg-top-5 hide" id="comment-error-block_new">{{'EDITORIAL_COMMENT_REQUIRED_MESSAGE'|trans}}</span>
+                        <div class="timeline-footer fg-marg-btm-0 "></div>
+                        <div class="fg-timeline-footer fg-pad-top-5" id="timeline_footer_new %>">
+                            <div class="form-group last">
+                                <div class="form-actions right">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="fg-msg-btn pull-right">
+                                                <button data-id="new" data-articleId= "<%- commentDetails.articleId %>" type="submit" class="btn default fg-display green comment_save" id="save_changes" disabled="disabled">{{'ARTICLE_COMMENT_SAVE_NEW_COMMENT'|trans}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </li>
+    <% } %>
+</ul>
+ <% } %>
+</script>

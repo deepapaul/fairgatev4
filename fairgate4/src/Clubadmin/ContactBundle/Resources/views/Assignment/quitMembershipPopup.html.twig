@@ -1,0 +1,225 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" data-dismiss="modal" aria-hidden="true" class="close"></button>
+    <h4 class="modal-title fg-clear"></h4>
+</div>
+<div class="modal-body fg-contact-assign-membership-modal-1">
+    <div class="portlet-body" id="error-option">
+        <div class="form-group">
+            <label class="radio-inline">
+                <input type="radio" name="radios" id="radios-0" value="1"  class="uniform" checked="checked">
+                {{'SET_LEAVING_DATE'|trans}}:
+            </label>
+            <div class="fg-date-inline date" id="fg-date-inline-quit">
+                <input type="text" name="leaving_date"  class='input-group date' >
+                <span class="input-group-addon fg-calendar-icon"><i class="fa fa-calendar"></i></span>
+            </div>
+            <div id='fg-date-inline-leaving-error' class="has-error fg-error-label fg-pad-left-20 fg-marg-left-10"></div>
+        </div>
+        <div class="form-group">
+            <label class="radio-inline">
+                <input type="radio" name="radios" id="radios-2" value="2"  class="uniform" >
+                {{'DELETE_CURRENT_MEMBERSHIP_FROM_LOG'|trans}}.
+            </label>
+        </div>
+        <div class="form-group">
+            <label class="radio-inline">
+                <input type="radio" name="radios" id="radios-0" value="3"  class="uniform" >
+                {{'DELETE_WHOLE_MEMBERSHIP_HISTORY'|trans}}.
+            </label>
+        </div>
+    </div>
+    <div class="hide" id="error">
+        <p>{{'ERROR_NO_MEMBERS_TO_QUIT'|trans}}<span></span></p>
+    </div>     
+</div>
+{% include 'clubadmin/savebuttonpopup.html.twig' with {'save_button_val': 'SAVE'|trans,'save_button_id':'quitmembership'} %}
+
+<script type="text/javascript">
+    var clubId = '{{clubId}}';
+    var actionType = '{{actionType}}';
+    var popupHeadText = '';
+    var toQuitContacts = [];
+    var selContIds = [];
+    var selContNames = [];
+    var contactMembership = [];
+    var type = '{{type}}';
+    var hasError = false;
+    var required = "{{'REQUIRED'|trans}}";
+    var leavingDateRange = "{{'LEAVING_DATE_RANGE'|trans}}";
+    var ok = "{{'OK'|trans}}";
+    
+    $(document).ready(function() {
+        var selectedIdsElement = ($(".dataTables_wrapper div").hasClass('DTFC_LeftBodyWrapper')) ? ".DTFC_LeftBodyWrapper input.dataClass:checked" : "input.dataClass:checked";
+        $(selectedIdsElement).each(function() {
+            var contactId = $(this).attr('id');
+            if ($.inArray(contactId, selContIds) == -1) {
+                selContIds.push(contactId);
+                if ($(this).attr('data-club-membership_id') != '') {
+                    contactMembership.push({'id': contactId, 'membership': $(this).attr('data-club-membership_id')});
+                    toQuitContacts.push(contactId);
+                }
+                selContNames.push({'id': contactId, 'name': $(this).parents('tr').find('.fg-dev-contactname').text()});
+            }
+        });
+
+
+        selContNames = selContNames.sort(function(a, b) {
+            return a.name.localeCompare(b.name);
+        });
+        displayPopupHeading();
+        selectCriterias();
+        $('#popup_contents input').uniform(); //for styling
+        
+        if(toQuitContacts.length < 1){
+            $('#error').removeClass('hide');
+            $('#error-option').addClass('hide');
+            $('#cancel').addClass('hide');
+            $('#quitmembership').text(ok);
+        }
+    });
+    
+    $('.radio-inline').click(function(){
+            selectCriterias();
+    });
+    
+    function selectCriterias(){
+        if($('input[name=radios]:checked').val() == 1){
+            $('div.fg-date-inline input').parent().datepicker(FgApp.dateFormat);
+            var currdatetime = moment().format(FgLocaleSettingsData.momentDateTimeFormat); 
+            $('.fg-date-inline').datepicker( "setDate" , currdatetime );
+            $('.fg-date-inline').datepicker('setEndDate', currdatetime);
+            $('.fg-calendar-icon').removeClass('fg-disabled-icon');
+            $('div.fg-date-inline input').prop('readonly', false);
+            $('.fg-calendar-icon').prop('disabled', false);
+            $('div.fg-date-inline input').removeClass('fg-disabled-icon');
+        }else{
+            $('.fg-calendar-icon').addClass('fg-disabled-icon');
+            $('.fg-calendar-icon').removeClass('fg-normal-icon');
+            $('.fg-calendar-icon').prop('disabled', true);
+            $('div.fg-date-inline input').val('');
+            $('div.fg-date-inline input').prop('readonly', true);
+            $('div.fg-date-inline input').addClass('fg-disabled-icon');
+            $(".date").datepicker("remove");
+        }
+    }
+    
+    function displayPopupHeading() {
+        var singleAssignTxt = '{{'QUIT_MEMBERSHIP_%contname%'|trans}}' + ' ';
+        var multipleAssignTxt = '{{'QUIT_MEMBERSHIP_%contcount%_CONTACTS'|trans}}' + ' ';
+        if (selContIds.length == 1) {
+            popupHeadText = singleAssignTxt.replace('%contname%', selContNames[0].name);
+            $('h4.modal-title').html('<div class="fg-popup-text" id="popup_head_text"></div>');
+            $('div#popup_head_text').text(popupHeadText);
+        } else {
+            popupHeadText = multipleAssignTxt.replace('%contcount%', selContIds.length);
+            
+            var contNamesHtml = '';
+            var contactNameLinks = {};
+            var i = 0;
+            $.each(selContNames, function(ckey, selContName) {
+                i++;
+                if (i == 11) {
+                    contNamesHtml += '<li>&hellip;</li>';
+                    return false;
+                } else {
+                    contactNameLinks[selContName.id] = selContName.name;
+                    contNamesHtml += '<li><a href="overviewcontact/0/' + selContName.id + '" target="_blank" data-cont-id="' + selContName.id + '"></a></li>';
+                }
+            });
+            $('h4.modal-title').html('<span class="fg-dev-contact-names"><a href="#" class="fg-plus-icon"></a><a href="#" class="fg-minus-icon"></a></span><div class="fg-popup-text" id="popup_head_text"></div>\n\
+            <div class="fg-arrow-sh"><ul>' + contNamesHtml + '</ul></div>');
+            $('div#popup_head_text').text(popupHeadText);
+            displayContactNames(contactNameLinks);
+        }
+    }
+    
+    function displayContactNames(contactNameLinks) {
+        $.each(contactNameLinks, function(selContId, selContName) {
+            $('a[data-cont-id=' + selContId + ']').text(selContName);
+        });
+    }
+    
+    $(document).off('click', '#quitmembership');
+    $(document).on('click', '#quitmembership', function() {
+        if(toQuitContacts.length < 1){
+            $( "#cancel" ).trigger( "click" );
+        }else{
+            validate();
+        }
+        
+    });
+    
+    function validate(){
+        $('#error').addClass('hide');
+        $('#fg-date-inline-leaving-error').addClass('hide');
+        hasError = false;
+        if(parseInt($('input[name=radios]:checked').val()) == 1){
+            if($('div.date input').val() == ''){
+                $('div.date input').addClass('has-error');
+                hasError = true;
+                $('#fg-date-inline-leaving-error').removeClass('hide').text(required+".");
+                return false;
+            }else{
+                var contcts = toQuitContacts.join();
+                path = "{{path('validate_transfer_membership',{'contactids':'##','isnull':1})}}";
+                path = path.replace('%23%23', contcts);
+                
+                 $.ajax({
+                    type: 'GET',
+                    url: path,
+                    success: function(data) {
+                        joiningTimestamp = parseInt(moment(data['joining1'], FgLocaleSettingsData.momentDateFormat).format('x'));
+                        leavingTimestamp = parseInt(moment($('div.date input').val(), FgLocaleSettingsData.momentDateFormat).format('x'));
+                        if (joiningTimestamp > leavingTimestamp) {
+                            $('div.date input').addClass('has-error');
+                            $('#fg-date-inline-leaving-error').removeClass('hide').text(leavingDateRange + ": " + data['joining1']);
+                            hasError = true;
+                        }
+                        saveAssignments();
+                    },
+                    async: false
+                });
+            }
+            
+        }else{
+            hasError = false;
+            saveAssignments();
+        }
+    }
+    
+     function saveAssignments() {
+        if(!hasError){
+            var date = '';
+            if(parseInt($('input[name=radios]:checked').val()) == 1){
+                date = $('div.date input').val();
+            }
+
+            var passingData = {'contact_id': toQuitContacts.join(), 'criteria':$('input[name=radios]:checked').val(),'leavingDate':date,
+                'totalCount': selContIds.length,
+                'fromPage': 'contactlist', 'actionType': actionType};
+
+            FgXmlHttp.post('{{path("save_quit_membership")}}', passingData, false, callBackFn);
+            $('#popup').modal('hide');
+        }else{
+            return false; 
+        }
+        
+    }
+    
+    $(document).off('click', '.modal-title .fg-dev-contact-names');
+    $(document).on('click', '.modal-title .fg-dev-contact-names', function(e) {
+        $(this).parent().toggleClass('fg-arrowicon');
+    });
+    
+    function callBackFn(result){
+        var updateArr = {};
+            var i = 0;
+            for (key in result.membrshipArray) {
+                updateArr[i] = {'categoryId': '', "subCatId": key, 'dataType': 'membership', 'sidebarCount': result['membrshipArray'][key], "action": "remove"};
+         i++;   }
+    
+       
+        FgCountUpdate.update('assignment', 'contact', 'active', updateArr, result.selcount);
+        oTable.api().draw();
+    }
+</script>

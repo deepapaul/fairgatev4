@@ -1,0 +1,47 @@
+
+<script type="text/template" id="templateArticleDetails">
+
+     <% var position = ArticleData.article.media.position;
+        if( position === 'left_column' ){ %>
+
+         <div class="col-md-9 col-sm-8 fg-article-contents fg-left-image-layout fg-pad-right-0">
+            <% if($.trim(content.media).length > 0) { %>
+              <div class="col-sm-4 col-xs-12  left-col pull-left fg-marg-btm-10">
+                <%= content.media %>
+              </div>
+            <% } %>
+            <%= content.text %>
+        </div>
+            
+        <% } else if( position === 'right_column' ){ %>
+
+            <div class="col-sm-10 fg-article-contents fg-right-image-layout">
+                <% if($.trim(content.media).length > 0) { %>
+                    <div class="col-sm-4 col-xs-12  fg-marg-btm-10 pull-right"><%= content.media %></div>
+                <% } %>
+                <%= content.text %>
+            </div>
+    
+           
+        <% } else if( position === 'top_slider' ){ %>
+
+              <div class="col-sm-10 fg-article-contents">
+                 <%= content.slider %>
+                 <div class="clearfix"></div>
+                 <%= content.text %>
+              </div>
+    
+           
+        <% } else if( position === 'bottom_slider' ){ %>
+           <div class="col-sm-10 fg-article-contents">
+                <%= content.text %>
+                <div class="clearfix"></div>
+                <%= content.slider %>
+            </div>
+    
+           
+
+        <% } %>
+       <div class="col-sm-2"><%= content.link %></div>
+
+</script>

@@ -1,0 +1,95 @@
+<script type="text/template" id="template-article-listing">
+    <section class="fg-article-wrapper fg-article-left-img fg-article-link fg-dev-article-list col-md-12"  id="article-<%- data.articleId %>" data-url="<%- data.detailPath %>">
+        <div class="col-md-12 fg-pad-0 fg-content">
+        
+            <% if(data.FIRST_IMAGE) { %>
+                <figure class="col-sm-4" style="background-image:url('/uploads/<%- data.club_id %>/gallery/width_300/<%- data.FIRST_IMAGE %>'">
+                    <img src="/uploads/<%- data.club_id %>/gallery/width_300/<%- data.FIRST_IMAGE %>" alt =""/>
+                </figure>
+                
+                <div class="fg-right-col">
+                    <div class="fg-article-inner-content">
+                        <div class="fg-text-wrapper">
+                            <header><h4><%- data.title %></h4></header>
+                            <span class="fg-teaser"><%- (data.teaser)?data.teaser:data.text%></span>
+                            <a href="<%- data.detailPath %>" class="fg-read-more fg-readmore-text"><i class="fa fa-arrow-circle-right"></i>{{'CMS_ADD_ARTICLE_READ_MORE'|trans}}</a>
+                            
+                            <footer>
+                               <div class="fg-post-date pull-left"><%- FgLocaleSettings.formatDate(data.PUBLICATION_DATE, 'date', 'YYYY-MM-DD hh:mm:ss') %></div>
+                               <div class="pull-right fg-block fg-cat-tags">
+                                    <% if(data.isAllArea == true || data.sharedClub == true || data.areaCount != 1) { %>
+                                        <% if(data.areaTooltip != '') { %>
+                                            <span class="fg-club-tag"><%- data.areaTooltip %></span>
+                                        <% } %>
+
+                                        <% if (data.isClub == 1 && data.isCurrentClub){ %> <span class="fg-club-tag">{{fgtwig.getTerminolgyName('Club',singular,'UCF')}}</span> <% } %>
+                                        <% if(data.AREAS != '' && data.AREAS != null) { %>
+                                            <% var areaArray = data.AREAS.split("*##*");  %>
+                                            <% _.each(areaArray, function(area, index) { %>
+                                                <span class="fg-club-tag"><%- area %></span>
+                                            <% }) %>
+                                        <% } %>
+                                    <% } %>
+
+
+                                    <% if(data.isAllCategory == true || data.categoryCount != 1 || data.sharedClub == true) { %>
+                                        <% if(data.catTooltip != '') { %>
+                                            <span class="fg-cat-tag"><%- data.catTooltip %></span>
+                                        <% } %>
+                                        <% if(data.CATEGORIES != '' && data.CATEGORIES != null) { %>
+                                            <% var categoryArray = data.CATEGORIES.split("*##*");  %>
+                                            <% _.each(categoryArray, function(category, index) { %>
+                                                <span class="fg-cat-tag"><%- category %></span>
+                                            <% }) %>
+                                        <% } %>
+                                    <% } %>
+                                </div>
+                            </footer>
+                        </div>
+                        <a href="<%- data.detailPath %>" class="fg-read-more"><i class="fg-icon-right-angle-right fg-icon"></i></a>
+                    </div>
+                </div>
+            <% } else { %>
+                <div class="fg-article-inner-content">
+                    <header><h4><%- data.title %></h4></header>
+                    <div class="fg-text-wrapper">
+                        <span class="fg-teaser"><%- (data.teaser)?data.teaser:data.text%></span>
+                        <a href="<%- data.detailPath %>" class="fg-read-more fg-readmore-text"><i class="fa fa-arrow-circle-right"></i>{{'CMS_ADD_ARTICLE_READ_MORE'|trans}}</a>
+                        <footer>
+                           <div class="fg-post-date pull-left"><%- FgLocaleSettings.formatDate(data.PUBLICATION_DATE, 'date', 'YYYY-MM-DD hh:mm:ss') %></div>
+                           <div class="pull-right fg-block fg-cat-tags">
+                                <% if(data.isAllArea == true || data.sharedClub == true || data.areaCount != 1) { %>
+                                    <% if(data.areaTooltip != '') { %>
+                                        <span class="fg-club-tag"><%- data.areaTooltip %></span>
+                                    <% } %>
+
+                                    <% if (data.isClub == 1 && data.isCurrentClub){ %> <span class="fg-club-tag">{{fgtwig.getTerminolgyName('Club',singular,'UCF')}}</span> <% } %>
+                                    <% if(data.AREAS != '' && data.AREAS != null) { %>
+                                        <% var areaArray = data.AREAS.split("*##*");  %>
+                                        <% _.each(areaArray, function(area, index) { %>
+                                            <span class="fg-club-tag"><%- area %></span>
+                                        <% }) %>
+                                    <% } %>
+                                <% } %>
+
+
+                                <% if(data.isAllCategory == true || data.categoryCount != 1 || data.sharedClub == true) { %>
+                                    <% if(data.catTooltip != '') { %>
+                                        <span class="fg-cat-tag"><%- data.catTooltip %></span>
+                                    <% } %>
+                                    <% if(data.CATEGORIES != '' && data.CATEGORIES != null) { %>
+                                        <% var categoryArray = data.CATEGORIES.split("*##*");  %>
+                                        <% _.each(categoryArray, function(category, index) { %>
+                                            <span class="fg-cat-tag"><%- category %></span>
+                                        <% }) %>
+                                    <% } %>
+                                <% } %>
+                            </div>
+                        </footer>
+                    </div>
+                    <a href="<%- data.detailPath %>" class="fg-read-more"><i class="fg-icon-right-angle-right fg-icon"></i></a>
+                </div>
+            <% } %>
+        </div>
+    </section>
+</script>

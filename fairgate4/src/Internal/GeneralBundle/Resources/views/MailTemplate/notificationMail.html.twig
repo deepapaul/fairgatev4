@@ -1,0 +1,85 @@
+<html lang="en" class="no-js"><!--<![endif]--><!-- BEGIN HEAD -->
+    <head>
+        <meta charset="utf-8"/>
+        <title>Notification Mail Message</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+        <meta content="" name="description"/>
+        <meta content="" name="author"/>
+
+        <link rel="shortcut icon" href="img/favicon.ico" />
+    </head>
+    <!-- BEGIN BODY -->
+    <body style="">
+        <table  style="background-color: #eee;font-family: Calibri,Arial,sans-serif;padding: 20px;width: 100%;">
+            <tr>
+                <td>
+                    <center style="width: 100%; margin: auto; max-width: 560px;">
+                        <table cellpadding="0" cellspacing="0" border="0" style="width:100%;text-align:left;margin-bottom:5px;" >
+                            <tr>
+                                {% if(logoURL is not empty) %}
+                                    <td style="padding-bottom:12px;padding-left: 1px; font-family: Calibri,Arial,sans-serif;">
+                                        <img style="max-width: 100px;" width="100" src="{{ logoURL }}"  />
+                                    </td>
+                                    <td style="font-family: Calibri,Arial,sans-serif;"><h1 style="margin: 0; padding-left: 28px; font-size: 30px; font-weight: 500; margin-top: -4px;">{{ clubTitle }}</h1></td>
+                                    {% else %}
+                                    <td style="font-family: Calibri,Arial,sans-serif;"><h1 style="margin: 0; padding-left: 0px; font-size: 30px; font-weight: 500; margin-top: -4px;">{{ clubTitle }}</h1></td>
+                                    {% endif %}
+
+                            </tr>
+                        </table>
+                        <table style="background-color:#fff; border:1px solid #e1e1e1; width:100%;" cellpadding="0" cellspacing="0">
+
+                            {% if(notifType|default('login')=='login') %}
+                                {% include 'InternalGeneralBundle:MailTemplate:loginContent.html.twig' %}
+                            {% endif %} 
+                            {% if(notifType|default('login')=='message') %}
+                                {% include 'InternalGeneralBundle:MailTemplate:messageContent.html.twig' %}                            
+                            {% endif %} 
+                            {% if(notifType|default('login')=='forum') %}
+                                {% include 'InternalGeneralBundle:MailTemplate:forumContent.html.twig' %}                            
+                            {% endif %} 
+                            {% if(notifType|default('login')=='simpleMail') %}
+                                {% include 'InternalGeneralBundle:MailTemplate:simpleMailContent.html.twig' %}           
+                            {% endif %} 
+                            {% if attachments is defined and attachments is not empty%}
+                                <tr>
+                                    <td style="padding:20px; border-bottom:1px solid #e1e1e1; font-family: Calibri,Arial,sans-serif;"><strong>{{ 'ATTACHMENTS'|trans}}:</strong>
+                                        <ul style="margin:0;">
+                                            {% for attachment in attachments %}
+                                                <li><a href="{{ attachment.url|default('#') }}" style="text-decoration: none;">{{ attachment.file }}</a></li>
+                                            {% endfor %}
+
+                                        </ul>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            <tr>
+                                <td style="padding:20px; font-family: Calibri,Arial,sans-serif;">
+                                    {% if(notifType|default('login')=='message') %}
+                                        <a style="text-decoration: none;" href="{{replayLink}}">{{'NOTIFICATION_MAIL_REPLAY'|trans}}:<br>
+                                            {{replayLink}}</a>
+                                        {% elseif(notifType|default('login')=='simpleMail') %}
+                                            {{ signature|raw }}
+                                        {% else %}
+                                            {{ signature|nl2br }}
+                                        {% endif %}
+                                </td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                            <tr>                             
+                                {% if(inboxUrl is defined and inboxUrl is not empty) %}
+                                    <td style="padding-top:10px; font-size:12px; font-family: Calibri,Arial,sans-serif;">
+                                        <a href="{{ inboxUrl }}" style="text-decoration: none;">{{ 'MANAGE_NOTIFICATION'|trans }}</a>               
+                                    </td>
+                                {% endif %}
+                                <td style="display:inline-block;float:right;padding-top:10px; font-size:12px; text-align:right;padding-left: 1px; font-family: Calibri,Arial,sans-serif;"> <span>{{ 'MESSAGE_SYS_POWERED_BY'|trans }} <a href="http://www.fairgate.ch/" style="text-decoration: none;">Fairgate</a></span></td>         
+                            </tr>      
+                        </table>   
+                    </center>
+                </td>
+            </tr>
+    </body>
+    <!-- END BODY -->
+</html>

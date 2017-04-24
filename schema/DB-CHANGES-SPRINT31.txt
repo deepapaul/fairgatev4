@@ -1,0 +1,301 @@
+ALTER TABLE `fg_message` DROP FOREIGN KEY `fg_message_ibfk_1` ;
+
+ALTER TABLE `fg_message_attachments` DROP FOREIGN KEY `fk_fg_message_attachments_fg_message_data1` ;
+
+ALTER TABLE `fg_message_data` DROP FOREIGN KEY `fg_message_data_ibfk_3` ;
+
+ALTER TABLE `fg_message_receivers` DROP FOREIGN KEY `fg_message_receivers_ibfk_6` , DROP FOREIGN KEY `fg_message_receivers_ibfk_5` , DROP FOREIGN KEY `fg_message_receivers_ibfk_4` ;
+
+ALTER TABLE `fg_club_settings` ADD COLUMN `signature` VARCHAR(250) NULL DEFAULT NULL  AFTER `profile_access_age` , ADD COLUMN `logo` VARCHAR(250) NULL DEFAULT NULL  AFTER `signature` ;
+
+ALTER TABLE `fg_cm_attribute` DROP COLUMN `is_active` , DROP COLUMN `is_required_fedmember_club` , DROP COLUMN `is_required_fedmember_subfed` , ADD COLUMN `fg_message_email_fields_id` INT(11) NOT NULL  AFTER `club_id` , 
+  ADD CONSTRAINT `fk_fg_cm_attribute_fg_message_email_fields1`
+  FOREIGN KEY (`fg_message_email_fields_id` )
+  REFERENCES `fg_message_email_fields` (`id` )
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION
+, ADD INDEX `fk_fg_cm_attribute_fg_message_email_fields1_idx` (`fg_message_email_fields_id` ASC) ;
+
+ALTER TABLE `fg_cm_contact` DROP COLUMN `is_stealth_mode` , DROP COLUMN `community_status` ;
+
+ALTER TABLE `fg_message` 
+DROP COLUMN `answer_to` , 
+CHANGE COLUMN `message_type` `message_type` ENUM('PERSONAL','GROUP') NOT NULL DEFAULT 'PERSONAL'  , 
+ADD COLUMN `sender_email` VARCHAR(250) NOT NULL  AFTER `club_id` , 
+ADD COLUMN `group_type` ENUM('TEAM','WORKGROUP','CONTACT') NOT NULL DEFAULT 'CONTACT'  AFTER `message_type` , 
+ADD COLUMN `subject` VARCHAR(255) NULL DEFAULT NULL  AFTER `group_type` , 
+ADD COLUMN `step` INT(1) NULL DEFAULT 1  AFTER `subject` , 
+ADD COLUMN `is_draft` INT(1) NULL DEFAULT 1  AFTER `step` , 
+ADD COLUMN `parent_id` INT(11) NULL DEFAULT 0  AFTER `is_draft` , 
+ADD COLUMN `created_at` DATETIME NULL DEFAULT NULL  AFTER `parent_id` , 
+ADD COLUMN `created_by` INT(11) NULL DEFAULT NULL  AFTER `created_at` , 
+ADD COLUMN `update_by` INT(11) NULL DEFAULT NULL  AFTER `created_by` , 
+ADD COLUMN `updated_at` DATETIME NULL DEFAULT NULL  AFTER `update_by` , 
+  ADD CONSTRAINT `fg_message_ibfk_1`
+  FOREIGN KEY (`club_id` )
+  REFERENCES `fg_club` (`id` )
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION, 
+  ADD CONSTRAINT `created_by`
+  FOREIGN KEY (`created_by` )
+  REFERENCES `fg_cm_contact` (`id` )
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION, 
+  ADD CONSTRAINT `updated_by`
+  FOREIGN KEY (`update_by` )
+  REFERENCES `fg_cm_contact` (`id` )
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION
+, ADD INDEX `created_by_idx` (`created_by` ASC) 
+, ADD INDEX `updated_by_idx` (`update_by` ASC) ;
+
+ALTER TABLE `fg_message_attachments` 
+  ADD CONSTRAINT `fk_fg_message_attachments_fg_message_data1`
+  FOREIGN KEY (`message_data_id` )
+  REFERENCES `fg_message_data` (`id` )
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `fg_message_data` DROP COLUMN `is_deleted` , DROP COLUMN `is_read` , DROP COLUMN `subject` , DROP COLUMN `thread_id` , CHANGE COLUMN `updated_at` `updated_at` DATETIME NULL DEFAULT NULL  
+, DROP INDEX `fk_fg_message_data_fg_message_thread1` ;
+
+ALTER TABLE `fg_message_receivers` 
+DROP COLUMN `is_read` , 
+DROP COLUMN `function_id` , 
+DROP COLUMN `team_id` , 
+DROP COLUMN `club_id` , 
+ADD COLUMN `unread_count` INT(11) NULL DEFAULT NULL  AFTER `message_id` , 
+ADD COLUMN `is_notification_enabled` TINYINT(1) NULL DEFAULT NULL  AFTER `is_deleted` 
+, DROP INDEX `club_id` 
+, DROP INDEX `function_id` 
+, DROP INDEX `team_id` ;
+
+CREATE  TABLE IF NOT EXISTS `fg_notification_spool` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `notification_type` ENUM('MESSAGE','FORUM') NULL DEFAULT NULL ,
+  `email` VARCHAR(250) NULL DEFAULT NULL ,
+  `template_content` LONGBLOB NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_general_ci;
+--ALTER TABLE `fg_notification_spool` CHANGE `template_content` `template_content` LONGBLOB NULL DEFAULT NULL;
+
+======================================================================================
+CREATE  TABLE IF NOT EXISTS `fg_message_group` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `message_id` INT(11) NOT NULL ,
+  `role_id` INT(11) NOT NULL ,
+	PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_general_ci
+
+ALTER TABLE  `fg_message_group` ADD INDEX (  `message_id` );
+ALTER TABLE  `fg_message_group` ADD INDEX (  `role_id` );
+ALTER TABLE  `fg_message_group` ADD FOREIGN KEY (  `role_id` ) REFERENCES  `fairgateV4`.`fg_rm_role` (
+`id`
+) ON DELETE CASCADE ON UPDATE NO ACTION ;
+
+ALTER TABLE  `fg_message_group` ADD FOREIGN KEY (  `message_id` ) REFERENCES  `fairgateV4`.`fg_message` (
+`id`
+) ON DELETE CASCADE ON UPDATE NO ACTION ;
+---------------------------------OLD ONE NOT USED-------------------------------
+CREATE  TABLE IF NOT EXISTS `fg_message_group` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `message_id` INT(11) NOT NULL ,
+  `role_id` INT(11) NOT NULL ,
+	PRIMARY KEY (`id`) ,
+	INDEX `fk_fg_message_group_fg_rm_role1_idx` (`role_id` ASC) ,
+	INDEX `fk_fg_message_group_fg_message1_idx` (`message_id` ASC) ,
+	CONSTRAINT `fk_fg_message_group_fg_rm_role1`
+    FOREIGN KEY (`role_id` )
+    REFERENCES `fg_rm_role` (`id` )
+    ON DELETE SET NULL
+    ON UPDATE NO ACTION,
+	CONSTRAINT `fk_fg_message_group_fg_message1`
+    FOREIGN KEY (`message_id` )
+    REFERENCES `fg_message` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_general_ci;
+
+
+ALTER TABLE `fg_message_group` DROP COLUMN `role_id` , ADD COLUMN `role_id` INT(11) NOT NULL  AFTER `message_id` , 
+  ADD CONSTRAINT `fk_fg_message_group_fg_rm_role1`
+  FOREIGN KEY (`role_id` )
+  REFERENCES `fg_rm_role` (`id` )
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION
+, ADD INDEX `fk_fg_message_group_fg_rm_role1_idx1` (`role_id` ASC) 
+, DROP INDEX `fk_fg_message_group_fg_rm_role1_idx` ;
+
+
+
+ALTER TABLE `fg_message_group` DROP COLUMN `role_id` , ADD COLUMN `role_id` INT(11) NOT NULL  AFTER `message_id` , 
+  ADD CONSTRAINT `fk_fg_message_group_fg_rm_role1`
+  FOREIGN KEY (`role_id` )
+  REFERENCES `fg_rm_role` (`id` )
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION
+, ADD INDEX `fk_fg_message_group_fg_rm_role1_idx1` (`role_id` ASC) 
+, DROP INDEX `fk_fg_message_group_fg_rm_role1_idx` ;
+---------------------------------OLD ONE NOT USED-------------------------------
+===================================================================
+CREATE  TABLE IF NOT EXISTS `fg_message_email_fields` (
+
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+
+  `attribute_id` INT(11) NOT NULL ,
+
+  `attribute_type` ENUM('SELF','PARENT') NULL DEFAULT 'SELF' ,
+
+  `receivers_id` INT(11) NOT NULL ,
+
+  PRIMARY KEY (`id`) ,
+
+  INDEX `fk_fg_message_emails_fg_message_receivers1_idx` (`receivers_id` ASC) ,
+
+  INDEX `attribute_id_idx` (`attribute_id` ASC) ,
+
+  CONSTRAINT `fk_fg_message_emails_fg_message_receivers1`
+
+    FOREIGN KEY (`receivers_id` )
+
+    REFERENCES `fg_message_receivers` (`id` )
+
+    ON DELETE CASCADE
+
+    ON UPDATE NO ACTION,
+
+  CONSTRAINT `attribute_id`
+
+    FOREIGN KEY (`attribute_id` )
+
+    REFERENCES `fg_cm_attribute` (`id` )
+
+    ON DELETE CASCADE
+
+    ON UPDATE NO ACTION)
+
+ENGINE = InnoDB
+
+DEFAULT CHARACTER SET = utf8
+
+COLLATE = utf8_general_ci
+===================================================================
+ALTER TABLE `fg_cm_contact` DROP `is_stealth_mode`;
+===================================================================
+ALTER TABLE `fg_cm_contact` DROP `community_status`;
+===================================================================
+DROP TABLE IF EXISTS `fg_message_thread` ;
+
+
+ALTER TABLE `fg_cm_change_toconfirm` ADD COLUMN `role_id` INT(11) NULL AFTER `attribute_id` , ADD COLUMN `function_id` VARCHAR(250) NULL DEFAULT NULL AFTER `club_id`;
+ALTER TABLE `fg_cm_change_toconfirm` ADD INDEX(`role_id`);
+
+ALTER TABLE `fg_cm_change_toconfirm` ADD  FOREIGN KEY (`role_id`) REFERENCES `fg_rm_role`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+ALTER TABLE `fg_cm_change_toconfirm` DROP COLUMN `function_id` , ADD COLUMN `confirm_status` ENUM('NONE','CONFIRMED','DISCARDED') NULL DEFAULT 'NONE'  AFTER `type` ;
+
+ALTER TABLE `fg_rm_role_contact` ADD COLUMN `is_removed` TINYINT(1) NOT NULL DEFAULT 0  AFTER `update_time` ;
+
+
+
+CREATE  TABLE IF NOT EXISTS `fg_cm_change_toconfirm_functions` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `toconfirm_id` INT(11) NOT NULL ,
+  `function_id` INT(11) NOT NULL ,
+  `action_type` ENUM('ADDED','REMOVED') NOT NULL DEFAULT 'ADDED' ,
+  PRIMARY KEY (`id`) ,
+  INDEX `fk_fg_cm_change_toconfirm_functions_fg_cm_change_toconfirm1_idx` (`toconfirm_id` ASC) ,
+  INDEX `fk_fg_cm_change_toconfirm_functions_fg_rm_function1_idx` (`function_id` ASC) ,
+  CONSTRAINT `fk_fg_cm_change_toconfirm_functions_fg_cm_change_toconfirm1`
+    FOREIGN KEY (`toconfirm_id` )
+    REFERENCES `fg_cm_change_toconfirm` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_fg_cm_change_toconfirm_functions_fg_rm_function1`
+    FOREIGN KEY (`function_id` )
+    REFERENCES `fg_rm_function` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+CREATE  TABLE IF NOT EXISTS `fg_cm_mutation_log` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `toconfirm_id` INT(11) NOT NULL ,
+  `confirmed_by` INT(11) NOT NULL ,
+  `confirmed_date` DATETIME NULL DEFAULT NULL ,
+  `contact_id` INT(11) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `fk_fg_cm_mutation_log_fg_cm_contact1_idx` (`contact_id` ASC) ,
+  INDEX `fk_fg_cm_mutation_log_fg_cm_contact2_idx` (`confirmed_by` ASC) ,
+  INDEX `fk_fg_cm_mutation_log_fg_cm_change_toconfirm1_idx` (`toconfirm_id` ASC) ,
+  CONSTRAINT `fk_fg_cm_mutation_log_fg_cm_contact1`
+    FOREIGN KEY (`contact_id` )
+    REFERENCES `fg_cm_contact` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_fg_cm_mutation_log_fg_cm_contact2`
+    FOREIGN KEY (`confirmed_by` )
+    REFERENCES `fg_cm_contact` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_fg_cm_mutation_log_fg_cm_change_toconfirm1`
+    FOREIGN KEY (`toconfirm_id` )
+    REFERENCES `fg_cm_change_toconfirm` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+=============================================================================================================
+ALTER TABLE `fg_message_receivers` CHANGE COLUMN `read_at` `read_at` DATETIME NULL
+=============================================================================================================
+ALTER TABLE `fg_message_attachments` ADD `size` INT(11) NOT NULL AFTER `file`;
+
+ALTER TABLE `sf_guard_group` CHANGE `type` `type` ENUM('federation','fairgate','club','role') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'club';
+
+
+
+DELETE FROM `sf_guard_group` WHERE `sf_guard_group`.`id` = 13;
+DELETE FROM `sf_guard_group` WHERE `sf_guard_group`.`id` = 14;
+DELETE FROM `sf_guard_group` WHERE `sf_guard_group`.`id` = 15;
+
+
+ALTER TABLE `sf_guard_group` CHANGE `module_type` `module_type` ENUM('contact','document','communication','sponsor','invoice','events','all','gallery','cms','message','article','calender','forum','document') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+
+
+UPDATE `sf_guard_group` SET `name` = 'GroupAdmin', `description` = 'GroupAdmin', `roles` = 'a:1:{i:0;s:16:"ROLE_GROUP_ADMIN";}',type='role' WHERE `sf_guard_group`.`id` = 9;
+UPDATE `sf_guard_group` SET `name` = 'ContactAdmin', `description` = 'ContactAdmin', `type` = 'role', `roles` = 'a:1:{i:0;s:18:"ROLE_CONTACT_ADMIN";}' WHERE `sf_guard_group`.`id` = 10;
+UPDATE `sf_guard_group` SET `name` = 'ForumAdmin', `description` = 'ForumAdmin', `type` = 'role', `roles` = 'a:1:{i:0;s:16:"ROLE_FORUM_ADMIN";}', `module_type` = 'forum' WHERE `sf_guard_group`.`id` = 11;
+UPDATE `sf_guard_group` SET `name` = 'DocumentAdmin', `description` = 'DocumentAdmin', `type` = 'role', `roles` = 'a:1:{i:0;s:19:"ROLE_DOCUMENT_ADMIN";}', `module_type` = 'document' WHERE `sf_guard_group`.`id` = 12;
+
+ALTER TABLE `sf_guard_user_team` ADD `created_at` DATETIME NOT NULL AFTER `role_id` 
+==========================================FAIR-1112=====================================================
+
+ALTER TABLE `fg_club` ADD `has_subfederation` BOOLEAN NOT NULL DEFAULT FALSE AFTER `club_number`;
+
+SELECT id, title FROM fg_club WHERE id IN (SELECT parent_club_id FROM `fg_club` WHERE is_sub_federation = 1)
+
+UPDATE `fairgateV4`.`fg_club` SET `has_subfederation` = '1' WHERE `fg_club`.`id` = 8514;
+==========================================FAIR-1112=====================================================
+=============================================================================================================
+V4createClub - procedure modified and committed in svn
+=============================================================================================================
+ALTER TABLE `fg_cm_change_toconfirm` CHANGE `attribute_id` `attribute_id` INT(11) NULL DEFAULT NULL;
+
+=============================================================================================================
+
+--NOTIFICATION MAIL - CRON
+
+UPDATE `fg_club_terminology_i18n` SET `singular_lang` = 'Unterverband', `plural_lang` = 'Unterverbände' WHERE `fg_club_terminology_i18n`.`id` = 6 AND `fg_club_terminology_i18n`.`lang` = 'de';
+
+
+
+ALTER TABLE `fg_cm_change_toconfirm_functions` DROP FOREIGN KEY `fk_fg_cm_change_toconfirm_functions_fg_cm_change_toconfirm1`; ALTER TABLE `fg_cm_change_toconfirm_functions` ADD CONSTRAINT `fk_fg_cm_change_toconfirm_functions_fg_cm_change_toconfirm1` FOREIGN KEY (`toconfirm_id`) REFERENCES `fg_cm_change_toconfirm`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+UPDATE `fairgateV4`.`sf_guard_group` SET `module_type` = 'contact' WHERE `sf_guard_group`.`id` = 10;

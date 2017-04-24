@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="portlet-body new-table-height" id="tableWrapper">
+        <table data-ajax-path="{{ activeTab == 'log' ? path( page~'_list', {'type' : activeTab} ) : path( page~'_list', {'type' : activeTab} ) }}"
+               class="table confirmationsListDatatable 
+               table-bordered
+               table-hover
+               table-condensed
+               dataTable-scroll-y
+               dataTable-ajax1
+               dataTable-rows
+               dataTable-scroll-x
+               dataTables_scrollBody
+               dataTable-initialSort data-count" xWidth="100" yHeight="300" data-table-name="dataTables" data_row_change="fgrowchange" id="confirmations-{{ activeTab }}-table" data-table-group="confirmations-list-table" dataTable-popover="true" dataTable-hover="true" data-sort="1#desc" >
+            <thead>
+                <tr>
+                    {% if (activeTab == 'list') %}
+                        <th><input type="checkbox" class="dataTable_checkall fg-dev-avoidicon-behaviour" id="check_all" name="check_all" /><i class="chk_cnt"></i></th>
+                        <th>{{ (page == 'mutations') ? 'CONFIRM_CHANGEDATE'|trans : 'CONFIRM_CREATE_DATE'|trans }}</th>
+                        <th>{{ 'CONFIRM_CONTACT'|trans }}</th>
+                        <th>{{ fgtwig.getTerminolgyName('Team', singular, 'UCF') }}</th>
+                        <th>{{ 'CONFIRM_FUNCTIONS'|trans }}</th>
+                        <th>{{ (page == 'mutations') ? 'CONFIRM_CHANGEDBY'|trans : 'CONFIRM_CREATED_BY'|trans }}</th>
+                    {% else %}
+                        <th></th>
+                        <th>{{ 'CONFIRMLOG_DECISIONDATE'|trans }}</th>
+                        <th>{{ 'CONFIRMLOG_DECIDEDBY'|trans }}</th>
+                        <th>{{ (page == 'mutations') ? 'CONFIRMLOG_CHANGEDATE'|trans : 'CONFIRMLOG_CREATE_DATE'|trans }}</th>
+                        <th>{{ 'CONFIRMLOG_CONTACT'|trans }}</th>
+                        <th>{{ fgtwig.getTerminolgyName('Team', singular, 'UCF') }}</th>
+                        <th>{{ 'CONFIRMLOG_FUNCTIONS'|trans }}</th>
+                        <th>{{ (page == 'mutations') ? 'CONFIRMLOG_CHANGEDBY'|trans : 'CONFIRMLOG_CREATED_BY'|trans }}</th>
+                    {% endif %}
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>

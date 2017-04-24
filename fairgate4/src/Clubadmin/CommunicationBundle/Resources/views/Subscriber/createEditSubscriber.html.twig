@@ -1,0 +1,168 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = (subscriberId>0) ? 'EDIT_SUBSCRIBER'|trans:'CREATE_SUBSCRIBER'|trans %}
+    {% form_theme form  'CommonUtilityBundle:Form:contact.html.twig' %}
+    {% block pagecontent %}
+        {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+    <!-- END PAGE TITLE & BREADCRUMB-->
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN PAGE CONTENT-->
+            {#<div class="row">
+                <div class="col-md-12">
+                  <div class="col-md-5  fg-left-zero">
+                   <h3 class="page-title pull-left fg-inner-title"> {{ (subscriberId>0) ? 'EDIT_SUBSCRIBER'|trans:'CREATE_SUBSCRIBER'|trans}} </h3>
+                   </div>
+                </div>
+           </div>  #}
+            <div class="row">
+            {% set page_Title =  (subscriberId>0) ? 'EDIT_SUBSCRIBER'|trans:'CREATE_SUBSCRIBER'|trans  %}
+            {% set page_settings = { 'pagetitle':'true'}  %}
+            {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': page_Title , 'page_settings': page_settings  } %}    
+            </div>
+            {{ form_start(form, { 'attr': {'name':'form', 'novalidate' : 'novalidate','id': 'form1' ,'class': 'form-horizontal','action':'metronic_form_submit','autocomplete':'off', 'onSubmit': 'return false;'} }) }}
+            <div class="alert alert-danger {{ isError|default(0) ? '':'display-hide' }}"> {{'FORM_ERROR_DISPLAY'|trans}}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        </div>
+         <div class="form-body">
+                {% set defaultselect = 'SELECT_DEFAULT'|trans %}
+                <div class="row">
+                    <div class="col-md-12">      
+                       <div class="portlet-body form">
+                             <div class="form-group fg-subscibers-list">
+                             <dl>
+                               <dt> {{ form_label(form.Email, null, { 'label_attr': {'class': 'control-label' }}) }}                       
+                                   <span aria-required="true" class="required"> * </span></dt>
+                               <dd> {{ form_widget(form.Email) }}  
+                                   {{form_errors(form.Email)}}</dd>
+                                  {% if form.CorresLang is defined %}
+                                       <dt>{{ form_label(form.CorresLang) }} <span aria-required="true" class="required"> * </span></dt>
+                                       <dd>
+                                           {{ form_widget(form.CorresLang, { 'empty_value': defaultselect }) }}
+                                           {{form_errors(form.CorresLang)}}
+                                       </dd>
+                                   {% endif %}
+                             </dl>
+                             </div>                  
+                         <!-- END FORM-->
+                       </div>         
+                    </div>       
+                </div> 
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="panel panel-primary panel-bg">
+                    <div class="panel-heading fg-theme-head paneldisplay">
+                      <h3 class="panel-title pull-left">{{'PERSONAL_INFO'|trans}}</h3>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">      
+                        <div class="portlet-body form">
+                          <!-- BEGIN FORM-->
+                              <div class="form-group fg-subscibers-list">
+                              <dl>
+                                <dt>{{ form_label(form.LastName) }} </dt>
+                                <dd>{{ form_widget(form.LastName) }} </dd>
+                                <dt>{{ form_label(form.FirstName) }} </dt>
+                                <dd>{{ form_widget(form.FirstName) }}</dd>
+                                <dt>{{ form_label(form.Salutation) }} </dt>
+                                <dd>{{ form_widget(form.Salutation, { 'empty_value': defaultselect }) }}</dd>
+                                <dt>{{ form_label(form.Gender) }}</dt>
+                                <dd>{{ form_widget(form.Gender, { 'empty_value': defaultselect }) }}</dd>
+                              </dl>
+                              </div>                  
+
+                          <!-- END FORM-->
+                        </div>         
+                  </div>       
+                </div> 
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="panel panel-primary panel-bg">
+                    <div class="panel-heading fg-theme-head paneldisplay">
+                      <h3 class="panel-title pull-left">{{'COMPANY_INFO'|trans}}</h3>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">      
+                        <div class="portlet-body form">
+                          <!-- BEGIN FORM-->
+
+                              <div class="form-group fg-subscibers-list">
+                              <dl>
+                                <dt>{{ form_label(form.Company) }}</dt>
+                                <dd>{{ form_widget(form.Company) }}</dd>                    
+                              </dl>
+                              </div>                  
+                        </div>         
+                    </div>       
+                </div>
+                              
+                <div class="row">
+                    <div class="col-md-12">
+                        {% if(subscriberId==0 ) %}
+                            {% set oneMore = {'inputId':'inlineCheckbox','label':'CREATE_ANOTHER_SUBSCRIBER'|trans} %}
+                        {% else %}
+                             {% set oneMore = '' %}
+                        {% endif %}
+                        {% include 'clubadmin/savebutton.html.twig' with {'backLink':  path('subscriber_list'),'reset_button_id':'reset_change','reset_button_val':(subscriberId>0) ? 'DISCARD_CHANGES'|trans :'CANCEL'|trans,'oneMore':oneMore  } %}
+                    </div>
+                </div>     
+            </div>
+                       {{form_rest(form)}}
+
+    <!-- END PAGE CONTENT-->
+        
+    {% endblock %}
+    {% block javascripts %}
+        <script>
+        
+         var offset = '{{offset|default(0)}}';
+         var subscriberId = '{{subscriberId}}';
+         var isError ={{isError}};
+         var objectGraph = {};
+         var attributes ={};
+         var checked={};
+         
+         $(document).ready(function(){
+            FgApp.init(); 
+            FgFormTools.handleUniform();
+         });
+    $('#save_changes').click(function() {
+        if($('#inlineCheckbox').is(":checked")){
+            checked ={'checked':1};
+        }else{
+            checked ={'checked':0};
+        }
+          if(subscriberId ==0){
+               path = "{{ path('subscriber_create')}}";
+          }else{
+              path = "{{ path('subscriber_edit',{ 'offset':offset,'subscriberid':subscriberId })}}";
+          }
+            FgXmlHttp.iframepost(path,$('#form1'),checked,false, callbackfn,false);  
+    });
+      
+      
+    function callbackfn(isError){
+        if(isError != 0){
+{#            $('.help-block').parents('.portlet-body').addClass('has-error');#}
+            $('.help-block').prev('.btn-group').addClass('has-error');
+        }
+    }
+   
+        $('#reset_changes').on('click', function() {
+                FgUtility.startPageLoading();
+                setTimeout(function(){ //update uniform
+                    $('.bs-select').selectpicker('refresh');
+                    $.uniform.update();
+                    FgUtility.stopPageLoading();
+                },200);
+            });
+            /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                     title: true
+             });  
+       </script>
+    {% endblock %}

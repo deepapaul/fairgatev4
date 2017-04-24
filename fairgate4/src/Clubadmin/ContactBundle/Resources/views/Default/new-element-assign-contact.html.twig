@@ -1,0 +1,37 @@
+<script type="text/template" id="newAssignmentCategory"> 
+    <% if(elementtype=='Team') { 
+        arrayCategoryName = FgUtility.groupByMulti(normalArray, ['teamCatId']);
+    } else {
+        arrayCategoryName = FgUtility.groupByMulti(normalArray, ['catId']);
+        
+    } %>
+            
+
+    <div class="col-md-3 col-sm-12 col-xs-12 fg-left-zero categoryDp fg-dev-right-spacer">
+        <select insert-flag="0" class="bs-select form-control fg-select-font catDropDown">
+            <option value="" option-text-category="1">{%trans%}ASSIGNMENT_SELECT_DROPDOWN{%endtrans%}</option>
+
+            <% if(elementtype=='Team') { %>
+                <% var previousTeamCatId=[];
+                _.each(normalArray,function(normalArrayValue,normalArrayKey){
+                    if(filterArray[normalArrayValue['teamCatId']] != undefined ) { 
+                        if(!!_.where(previousTeamCatId, normalArrayValue['teamCatId']).length == false) { 
+                            previousTeamCatId.push(normalArrayValue['teamCatId']); %>
+                            <option name="<%- normalArrayValue['teamCatId'] %>" id="<%- normalArrayValue['teamCatId'] %>" data-key="<%- normalArrayValue['teamCatId'] %>" insert-flag="0" element-type="<%- elementtype %>" value="<%- arrayCategoryName[normalArrayValue['teamCatId']][0]['teamCatId'] %>"><%- arrayCategoryName[normalArrayValue['teamCatId']][0]['teamCategoryTitle'] %></option>
+                        <% } 
+                    }
+                }); 
+            } else { 
+                var previousCatId='';
+                _.each(normalArray,function(normalArrayValue,normalArrayKey){
+                    if(filterArray[normalArrayValue['catId']] != undefined ) { 
+                        if(previousCatId != normalArrayValue['catId']) { 
+                            previousCatId=normalArrayValue['catId']; %>
+                            <option name="<%- normalArrayValue['catId'] %>" id="<%- normalArrayValue['catId'] %>" data-key="<%- normalArrayValue['catId'] %>" insert-flag="0" element-type="<%- elementtype %>" value="<%- normalArrayValue['catId'] %>"><%- arrayCategoryName[normalArrayValue['catId']][0]['catTitle'] %></option>
+                        <% } 
+                    }
+                }); 
+            } %>
+        </select>
+    </div>          
+</script>

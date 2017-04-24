@@ -1,0 +1,287 @@
+{% set dataKey = dataSet.id %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-body">
+            <div id="{{ dataKey }}" class="form-group fg-doc-div-area fg-common-top fg-subscibers-list fg-salutation-clear ">
+                {% if (imagePath) %}
+                    <div class="fg-upload-div fg-document-edit-image" data-image-area=""><a href="{{ path('document_download', {'docId' : dataKey, 'versionId': dataSet['versionId'] }) }}"><img class="pull-right" src="{{imagePath}}"></a></div> 
+                {% else %}
+                    <div class="fg-upload-div fg-document-edit-image" data-image-area=""><a href="{{ path('document_download', {'docId' : dataKey, 'versionId': dataSet['versionId'] }) }}"><i class="fa {{iconPath|default('fg-file')}}"></i></a></div> 
+                {% endif %}
+                <dl>
+                    <dt>{{ 'CONTACTDOCUMENT_CATEGORY'|trans }}</dt>
+                    <dd>
+                        <select data-subcategoryId name="{{ dataKey }}_subCategoryId" data-key="{{ dataKey }}.subCategoryId" class="bs-select selectpicker form-control show-tick">
+                            {% for catId,catArray in subCategories %}
+                                <optgroup data-id="{{ catId }}" label="{{ catArray.title }}">
+                                    {% for subCatId,subCatName in catArray.values %}
+                                        <option value="{{ subCatId }}" {{ (dataSet['subCategoryId'] == subCatId) ? 'selected="selected"' : "" }}>{{ subCatName }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                    </dd>
+                    <dt>{{ 'DM_DESCRIPTION'|trans }}</dt>
+                    <dd>
+                        {% for clubLang in clubLanguages %}
+                            <textarea data-key="{{ dataKey }}.i18n.{{ clubLang }}.description" name="{{ dataKey }}_i18n_{{ clubLang }}_description" id="{{ dataKey }}_i18n_{{ clubLang }}_description" data-lang="{{ clubLang }}" class="form-control fg-upload-description {{ (clubLang == clubDefaultLang) ? '' : 'hide' }}" value="{{ (dataSet['descriptionLang'][clubLang] is defined) ? dataSet['descriptionLang'][clubLang] : dataSet.description }}">{{ (dataSet['descriptionLang'][clubLang] is defined) ? dataSet['descriptionLang'][clubLang] : '' }}</textarea>
+                        {% endfor %}
+                    </dd>
+                    <dt>{{ 'DM_AUTHOR'|trans }}</dt>
+                    <dd>
+                        {% for clubLang in clubLanguages %}
+                            <input type="text" data-key="{{ dataKey }}.i18n.{{ clubLang }}.author" name="{{ dataKey }}_i18n_{{ clubLang }}_author" id="{{ dataKey }}_i18n_{{ clubLang }}_author" data-lang="{{ clubLang }}" class="form-control {{ (clubLang == clubDefaultLang) ? '' : 'hide' }}" value="{{ (dataSet['authorLang'][clubLang] is defined) ? dataSet['authorLang'][clubLang] : '' }}">
+                        {% endfor %}
+                    </dd>
+                    {% if (documentType|default('club') == 'club') %}
+                        {% if ((clubType == 'federation') or (clubType == 'sub_federation')) %}
+                            <div class="col-md-12 col-sm-12 col-xs-12 fg-left-zero fg-upload-token">
+                            <dt>{{ 'DM_DEPOSITED_WITH'|trans }}</dt>
+                            <dd class="fg-dd-fullwidth">
+                            <div class="radio-list" data-error-container="#{{ dataKey }}_depositedSelection1">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <label class="radio-inline fg-upload-label-inline">
+                                            <input type="radio" data-deposited name="{{ dataKey }}_depositedWith" data-key="{{ dataKey }}.depositedWith" id="optionsRadios25" value="ALL" {{ (dataSet['depositedWith'] == 'ALL') ? 'checked' : '' }}> {{'DM_ALL_CLUBS'|trans({'%clubs%':fgtwig.getTerminolgyName('Club',plural)}) }}
+                                        </label>
+                                        <div dataerror-group data-selection-auto="ALL" style="display:block;" data-class="fg-upload-tokenfield" class="form-group">
+                                           <div class="{{ (dataSet['depositedWith'] == 'ALL') ? '' : 'fg-input-wrapper-disabled' }}">
+                                               <input {{ (dataSet['depositedWith'] == 'ALL') ? '' : 'disabled'}} type="text" id="{{ dataKey }}_excludedAuto" data-clublist="exclude" name="{{ dataKey }}_excludedAuto" value="" class="form-control" />
+                                           </div>
+                                           <span for="{{ dataKey }}_excludedSelection1" class="help-block"></span>
+                                           <input type="hidden" id="{{ dataKey }}_excludedSelection1" data-excluded=",{{ dataSet['clubExclude'] }}," name="{{ dataKey }}_excludedSelection1" value="" />
+                                           <input class="hide" type="text" id="{{ dataKey }}_excludedAutoSelection" data-club="club" name="{{ dataKey }}_excludedSelection" value="[{{ (dataSet['clubExclude']|length) ? '"'~dataSet['clubExclude']|split(',')|join('","')~'"' : '' }}]" data-key="{{ dataKey }}.excludedSelection" />
+                                       </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">        
+                                        <label class="radio-inline fg-upload-label-inline">
+                                            <input type="radio" data-deposited name="{{ dataKey }}_depositedWith" data-key="{{ dataKey }}.depositedWith" id="optionsRadios26" value="SELECTED" {{ (dataSet['depositedWith'] == 'SELECTED') ? 'checked' : '' }}> {{'DM_SELECTED_CLUBS'|trans({'%clubs%':fgtwig.getTerminolgyName('Club',plural)}) }}
+                                        </label> 
+                                        <div dataerror-group data-selection-auto="SELECTED" style="display:block" data-class="fg-upload-tokenfield" class="form-group">
+                                                <div class="{{ (dataSet['depositedWith'] == 'SELECTED') ? '' : 'fg-input-wrapper-disabled' }}">
+                                                <input {{ (dataSet['depositedWith'] == 'SELECTED') ? '' : 'disabled' }} type="text" id="{{ dataKey }}_depositedWithAuto" data-clublist name="{{ dataKey }}_depositedWithAuto" value="" class="form-control ignore" />
+                                            </div>
+                                            <input class='ignore hide' type="text" id="{{ dataKey }}_depositedWithAutoSelection" data-club="club" name="{{ dataKey }}_depositedWithSelection" value="[{{ (dataSet['clubAssignments']|length) ? '"'~dataSet['clubAssignments']|split(',')|join('","')~'"' : ''}}]" data-key="{{ dataKey }}.depositedWithSelection" />
+                                            <div id="{{ dataKey }}_depositedSelection1" for="{{ dataKey }}_depositedSelection1" class="help-block"></div>
+                                            <input  data-error-container="#{{ dataKey }}_depositedSelection1" type="hidden" id="{{ dataKey }}_depositedSelection1" {{ (dataSet['depositedWith'] == 'SELECTED') ? 'required' : '' }} data-selected=",{{ dataSet['clubAssignments'] }}," name="{{ dataKey }}_depositedSelection1" value="{{dataSet['clubAssignments']}}" />
+                                            
+                                        </div> 
+                                     </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">        
+                                        <label class="radio-inline">
+                                            <input type="radio" data-deposited name="{{ dataKey }}_depositedWith" data-key="{{ dataKey }}.depositedWith" id="optionsRadios27" value="NONE" {{ (dataSet['depositedWith'] == 'NONE') ? 'checked' : '' }}> {{'DM_FEDERATION_ONLY'|trans({'%federation%':fgtwig.getTerminolgyName(clubType|replace({'_':'-'})|capitalize ,singular,'UCF')}) }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </dd>
+                        </div>
+                        {% endif %} 
+                        {% if (fgtwig.inArray('frontend1', fgclub.get('bookedModulesDet'))) %}
+                            <dt>{{ 'DM_VISIBLE_TO_CONTACTS'|trans }}</dt>
+                            <dd> 
+                                <div class="fg-upload-switch">
+                                    <label onclick="" class="switch-light switch-light-sm"> 
+                                        <input type="checkbox" id="{{ dataKey }}_isVisible" name="{{ dataKey }}_isVisible" data-key="{{ dataKey }}.isVisible" class="make-switch" {{ (dataSet['isVisibleToContact'] == 1) ? 'checked' : '' }}>
+                                        <span>                            
+                                            <span>{{ 'ON'|trans }}</span>
+                                            <span>{{ 'OFF'|trans }}</span>
+                                        </span>
+                                        <a class="btn btn-primary "></a>
+                                    </label>
+                                </div>
+                            </dd>
+                        {% endif %}
+                    {% elseif (documentType|default('club') == 'team') %}
+                        <dt>{{ 'DM_DEPOSITED_WITH'|trans }}</dt>
+                        <dd> 
+                            <div>
+                                <select name="{{ dataKey }}_depositedWith" data-key="{{ dataKey }}.depositedWith" multiple class="bs-select selectpicker form-control show-tick">
+                                <option value="NONE" class="single fg-arrow-all" {{ (dataSet['depositedWith'] == 'NONE') ? 'selected' : "" }}>{{'DOCUMENT_NONE'|trans }}</option>
+                                <option value="ALL" class="single fg-arrow-all" {{ (dataSet['depositedWith'] == 'ALL') ? 'selected' : "" }}>{{ 'ALL'|trans }} {{fgtwig.getTerminolgyName('Team',plural)}}</option>
+                                {% if (teams.roles|default('') != '') %}                                          
+                                    <option value="" class="selectall fg-arrow-all" >{{ 'SELECT_ALL'|trans }}</option>
+                                    <optgroup label="">
+                                    {% for key,role in teams.roles|default({}) %}
+                                        {% set teamAssignmentArr = dataSet['teamAssignments']|split(',') %}     
+                                        {% if fgtwig.inArray(key , teamAssignmentArr) %}
+                                            {% set selectedoption='selected' %}
+                                        {% else %} 
+                                            {% set selectedoption=''%}     
+                                        {% endif %}  
+                                        <option value="{{key}}" class="multiple" {{ selectedoption }}>{{role}}</option>
+                                    {% endfor %}
+                                    </optgroup>
+                                {% endif %}
+                                </select>
+                            </div>
+                        </dd>
+                        {% if (fgtwig.inArray('frontend1', fgclub.get('bookedModulesDet'))) %}
+                            <dt>{{ 'DC_DOCUMENT_VISIBLE_TO'|trans }}</dt>
+                            <dd class="fg-dd-fullwidth">
+                                <div class="radio-list">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label class="radio-inline">
+                                                <input type="radio" data-deposited name="{{ dataKey }}_visibleFor" data-key="{{ dataKey }}.visibleFor" id="optionsRadios25" value="team" {{ (dataSet['visibleFor'] == 'team') ? 'checked' : '' }}> {{ 'DM_WHOLE_TEAMS'|trans({'%team%':fgtwig.getTerminolgyName('Team',singular,'UCF')}) }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    {% if (teams.functions|default('') != '') %}
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12 fg-upload-label-input">
+                                                <label class="radio-inline">
+                                                    <input type="radio" data-deposited name="{{ dataKey }}_visibleFor" data-key="{{ dataKey }}.visibleFor" id="optionsRadios26" value="team_functions" {{ (dataSet['visibleFor'] == 'team_functions') ? 'checked' : '' }}> <span class="fg-upload-visible-label">{{ 'DM_TEAM_AND_FUNCTIONS'|trans({'%team%':fgtwig.getTerminolgyName('Team',singular,'UCF')}) }}: </span>
+                                                </label>
+                                                <div class="fg-display-div" data-selection-auto >
+                                                    <select {{ (dataSet['visibleFor'] == 'team_functions') ? '' : 'disabled' }} name="{{ dataKey }}_visibleForSelection" data-key="{{ dataKey }}.visibleForSelection" multiple  class="bs-select selectpicker show-tick">
+                                                        <optgroup label="">
+                                                        {% for key,functions in teams.functions|default({}) %}
+                                                            {% set teamFunctionsArr = dataSet['teamfunctionAssignments']|split(',') %}     
+                                                            {% if fgtwig.inArray(key , teamFunctionsArr) %}
+                                                                {% set selectedoption='selected' %}
+                                                            {% else %} 
+                                                                {% set selectedoption=''%}     
+                                                            {% endif %}  
+                                                            <option value="{{ key }}" class="multiple" {{ selectedoption }}>{{ functions }}</option>
+                                                        {% endfor %}
+                                                        </optgroup>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label class="radio-inline">
+                                                <input type="radio" data-deposited name="{{ dataKey }}_visibleFor" data-key="{{ dataKey }}.visibleFor" id="optionsRadios27" value="team_admin" {{ (dataSet['visibleFor'] == 'team_admin') ? 'checked' : '' }}> {{ 'DM_TEAM_ADMINS'|trans({'%team%':fgtwig.getTerminolgyName('Team',singular,'UCF')}) }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <label class="radio-inline">
+                                                <input type="radio" data-deposited name="{{ dataKey }}_visibleFor" data-key="{{ dataKey }}.visibleFor" id="optionsRadios27" value="club_contact_admin" {{ (dataSet['visibleFor'] == 'club_contact_admin') ? 'checked' : '' }}> {{'DM_CLUB_ADMINS_DOC_ADMIN'|trans({'%Club%':fgtwig.getTerminolgyName('Club',singular,'UCF')}) }}
+                                            </label>
+                                        </div>
+                                    </div>
+                            </dd>
+                        {% endif %}
+                    {% elseif (documentType|default('club') == 'workgroup') %}
+                        <dt>{{ 'DM_DEPOSITED_WITH'|trans }}</dt>
+                        <dd> 
+                            <div>
+                                <select name="{{ dataKey }}_depositedWith" data-key="{{ dataKey }}.depositedWith" multiple  class="bs-select selectpicker form-control show-tick">
+                                    <option value="NONE" class="single fg-arrow-all" {{ (dataSet['depositedWith'] == 'NONE') ? 'selected' : "" }}>{{ 'DOCUMENT_NONE'|trans }}</option>
+                                    <option value="ALL" class="single fg-arrow-all" {{ (dataSet['depositedWith'] == 'ALL') ? 'selected' : "" }}>{{ 'ALL_WORKGROUPS'|trans }}</option>
+                                    <option value="" class="selectall fg-arrow-all" >{{ 'SELECT_ALL'|trans }}</option>
+                                    <optgroup label="">
+                                    {% for key,role in workgroups.roles %}
+                                        {% set workgroupAssignmentArr = dataSet['workgroupAssignments']|split(',') %}     
+                                        {% if fgtwig.inArray(key , workgroupAssignmentArr) %}
+                                            {% set selectedoption='selected' %}
+                                        {% else %} 
+                                            {% set selectedoption=''%}     
+                                        {% endif %}  
+                                        <option value="{{key}}" class="multiple" {{ selectedoption }}>{{role}}</option>
+                                    {% endfor %}
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </dd>
+                        {% if (fgtwig.inArray('frontend1', fgclub.get('bookedModulesDet'))) %}
+                            <dt>{{ 'DM_VISIBLE_TO_WORKGROUP'|trans }}</dt>
+                            <dd>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <label class="radio-inline">
+                                            <input type="radio" data-deposited name="{{ dataKey }}_visibleFor" data-key="{{ dataKey }}.visibleFor" id="optionsRadios27" value="workgroup" {{ (dataSet['visibleFor'] == 'workgroup') ? 'checked' : '' }}> 
+                                            {{'DM_WORKGROUP_CONTACTS_AND_ADMIN'|trans }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <label class="radio-inline">
+                                            <input type="radio" data-deposited name="{{ dataKey }}_visibleFor" data-key="{{ dataKey }}.visibleFor" id="optionsRadios27" value="workgroup_admin" {{ (dataSet['visibleFor'] == 'workgroup_admin') ? 'checked' : '' }}> 
+                                            {{'DM_WORKGROUP_ADMIN'|trans }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <label class="radio-inline">
+                                            <input type="radio" data-deposited name="{{ dataKey }}_visibleFor" data-key="{{ dataKey }}.visibleFor" id="optionsRadios27" value="main_document_admin" {{ (dataSet['visibleFor'] == 'main_document_admin') ? 'checked' : '' }}> 
+                                            {{'DM_WORKGROUP_MAIN_AND_DOC_ADMIN'|trans }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </dd>
+                        {% endif %}
+                    {% elseif (documentType|default('club') == 'contact') %}
+                        <dt>{{ 'DM_DEPOSITED_TO_CONTACTS_BY_FILTER'|trans }}</dt>
+                        <dd class="fg-dd-fullwidth filter-alert">
+                            <div id="upload-filter-area" >
+                            </div>
+                            <div class="fg-common-top-btm filter-pad">
+                                <a id="add-{{ dataKey }}" href="#basic" data-toggle="modal"><i class="fa fa-plus-circle fa-2x"></i><span class="fg-left-move">{% trans %}SAVED_FILTER_ADD_CRITERION{% endtrans %}</span></a>
+                                <a class="remove-filter" href="#basic" data-toggle="modal"><i class="fa fa-plus-circle fa-2x"></i><span class="fg-left-move"> {% trans %}CONTACT_FILTER_CLEAR{% endtrans %}</span> </a>
+                            </div>
+                            <input type="submit" id="save_filter"  class="hidden">
+                            <input class="dFExclude" type="hidden"  name="{{ dataKey }}_filterError" id="filterError" >
+                            <input class="hide" type="text" data-key="{{ dataKey }}.filterData" name="{{ dataKey }}_filterData" id="{{ dataKey }}_filterData" data-filtertype="filter" value = "{{ (dataSet['filterData'] != '') ? dataSet['filterData'] : '{"contact_filter":{}}' }}">
+                        </dd>
+                        <dt>{{ 'DM_DEPOSITED_TO_CONTACTS_INCLUDE'|trans }}{{ 'DM_DEPOSITED_TO_CONTACTS_MANUAL'|trans }}</dt>
+                        <dd class="fg-dd-fullwidth">
+                            <div>
+                                <input type="text" id="{{ dataKey }}_depositedWithAuto" placeholder="{{ 'DM_ADD_CONTACT'|trans }}" data-contactlist="include" name="{{ dataKey }}_depositedWithAuto" value="" class="form-control" />
+                            </div>
+                            <input type="text" class="hide" id="{{ dataKey }}_depositedWithAutoSelection" value="[{{ (dataSet['contactExclude']|length) ? '"'~dataSet['contactAssignments']|split(',')|join('","')~'"' : '"'~dataSet['contactAssignments']|split(',')|join('","')~'"' }}]" data-club="contact" name="{{ dataKey }}_depositedWithSelection" value="" data-key="{{ dataKey }}.depositedWithSelection" />
+                        </dd>
+                        <input type="hidden" value="" data-categoryId data-key="{{ dataKey }}.categoryId" class="ignore" />
+                        <dt>{% trans %}DM_DEPOSITED_TO_CONTACTS_EXCLUDE_DOC{% endtrans %}{% trans %}DM_DEPOSITED_TO_CONTACTS_EXCLUDE{% endtrans %}</dt>
+                        <dd class="fg-dd-fullwidth">
+                            <div>
+                                <input type="text" id="{{ dataKey }}_excludedAuto" data-contactlist="exclude" placeholder="{{ 'DM_ADD_CONTACT'|trans }}" name="{{ dataKey }}_excludedAuto" value="" class="form-control" />
+                            </div>
+                            <input type="text" class="hide" id="{{ dataKey }}_excludedAutoSelection" data-club="contact" name="{{ dataKey }}_excludedSelection" value="[{{ (dataSet['contactExclude']|length) ? '"'~dataSet['contactExclude']|split(',')|join('","')~'"' : '' }}]" data-key="{{ dataKey }}.excludedSelection" />
+                        </dd>
+                        {% if (fgtwig.inArray('frontend1', fgclub.get('bookedModulesDet'))) %}
+                            <dt>{{ 'DM_VISIBLE_TO_CONTACTS'|trans }}</dt>
+                            <dd> 
+                                <div class="fg-upload-switch">
+                                    <label onclick="" class="switch-light switch-light-sm">
+                                        <input type="checkbox" id="{{ dataKey }}_isVisible" name="{{ dataKey }}_isVisible" data-key="{{ dataKey }}.isVisible" class="make-switch" {{ (dataSet['isVisibleToContact'] == 1) ? 'checked' : '' }}>
+                                        <span>                            
+                                            <span>{{ 'ON'|trans }}</span>
+                                            <span>{{ 'OFF'|trans }}</span>
+                                        </span>
+                                        <a class="btn btn-primary "></a>
+                                    </label>
+                                </div>
+                            </dd>
+                        {% endif %}
+                    {% endif %}
+                        <dt>{% trans %}DM_PUBLIC_VISIBILITY{% endtrans %}</dt>
+                    <dd> 
+                        <div class="fg-upload-switch">
+                            <label onclick="" class="switch-light switch-light-sm">
+                                <input type="checkbox" id="{{ dataKey }}_isPublic" name="{{ dataKey }}_isPublic" data-key="{{ dataKey }}.isPublic" class="make-switch" {{ (dataSet['isPublic'] == 1) ? 'checked' : '' }}>
+                                <span>                            
+                                    <span>{% trans %}ON{% endtrans %}</span>
+                                    <span>{% trans %}OFF{% endtrans %}</span>
+                                </span>
+                                <a class="btn btn-primary "></a>
+                            </label>
+                        </div>
+                    </dd>    
+                    <input type="hidden" data-key="{{ dataKey }}.documentId" name="{{ dataKey }}_documentId" id="{{ dataKey }}_documentId" value="{{ dataKey }}">
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+<div class="form-body ">
+    <div class="form-group col-md-12 required fg-clear col-md-12 " >
+        <label class="col-md-2 control-label fg-marg-top-5 text-right fg-pad-top-0" for="articleTitle">{{ 'ARTICLE_TITLE'|trans }}</label>  
+        <div class="col-md-6 col-lg-5 ">
+            <%  var articleTexts = (typeof data.article == 'undefined') ? {} : data.article.text;
+            var clubLanguages = $.parseJSON( data.clubLanguages );    %>  
+            <% if(_.size(clubLanguages) > 0) { %>
+            <% _.each(clubLanguages,function(val,key){ 
+            var inputAttr = { 'id' : 'articleTitle-'+val }; %>
+            <input id="<%- inputAttr.id %>" name="articleTitle-<%- val %>" type="text" data-key="article.text.<%- val %>.title" data-lang="<%- val %>" class="form-control fg-article-text-field <% if(data.defaultClubLang!=val){ %> hide <% } %>" <% if(data.defaultClubLang == val) { %> required <% } %> 
+                   value="<% if(typeof articleTexts[val] != 'undefined') { %><%- (articleTexts[val].title) %><% } %>" 
+                   placeholder="<% if(typeof articleTexts[val] == 'undefined' && mode=='edit') { %><%- (articleTexts['default'].title) %><% } %>" />                    
+                   <% }); %>
+                   <% } %>            
+
+        </div>
+    </div>
+    <div class="form-group col-md-12  fg-clear col-md-12 " >
+        <label class="col-md-2 control-label  fg-marg-top-5 text-right fg-pad-top-0" for="teaser"><span data-content='{% trans %}ARTICLE_TEASER_TOOLTIP{% endtrans %}' class="fg-dotted-br fg-custom-popovers"> {{ 'ARTICLE_TEASER'|trans }}</span></label>          
+        <div class="col-md-6 col-lg-5 ">   
+            <% if(_.size(clubLanguages) > 0) { %>
+            <% _.each(clubLanguages,function(val,key){ 
+            var inputAttr = { 'id' : 'articleTeaser-'+val };  %>
+            <div>
+                <textarea maxlength="160" class="form-control fg-article-text-field no-resize <% if(data.defaultClubLang!=val){ %> hide <% } %> " name="articleTeaser-<%- val %>" id="<%- inputAttr.id %>" data-key="article.text.<%- val %>.teaser" data-lang="<%- val %>"
+                          placeholder="<% if(typeof articleTexts[val] == 'undefined' && mode=='edit' ) { %><%- (articleTexts['default'].teaser) %><% } %>" ><% if(typeof articleTexts[val] != 'undefined') { %><%- (articleTexts[val].teaser) %><% } %></textarea>
+                <p class="text-grey-dark fg-remain-character fg-clear-marg <% if(data.defaultClubLang!=val){ %> hide <% } %>" data-lang="<%- val %>" > 160 {{ 'ARTICLE_CHARS'|trans }}.</p>
+            </div>
+            <% }); %>
+            <% } %>               
+        </div>
+    </div>
+
+    <div class="form-group col-md-12 fg-clear required  col-md-12 " >
+        <label class="col-md-2 control-label text-right fg-pad-top-0" for="text">{{ 'ARTICLE_TEXT'|trans }}</label>   
+        <div class="col-md-10 col-lg-10 ">
+            <% if(_.size(clubLanguages) > 0) { %>
+            <% _.each(clubLanguages,function(val,key){ 
+            var divAttr = { 'id' : 'calDescDiv_'+val };  
+            var inputAttr = { 'id' : 'articleText-'+val }; 
+            var hiddenAttr = { 'id' : 'articleTextValidation-'+val }; %>
+            <div class="<% if(data.defaultClubLang!=val){ %> hide <% } %>" id="<%- divAttr.id %>" data-lang="<%- val %>">
+                <textarea cols="30" rows="10" class="ckeditor fg-article-text-field " name="articleText-<%- val %>" id="<%- inputAttr.id %>" data-key="article.text.<%- val %>.text" data-lang="<%- val %>" 
+                          placeholder="<% if(typeof articleTexts[val] == 'undefined' && mode=='edit') { %><%- (articleTexts['default'].text) %><% } %>" ><% if(typeof articleTexts[val] != 'undefined') { %><%- (articleTexts[val].text) %><% } %></textarea>
+                <% if(data.defaultClubLang == val){ %>
+                {#used for empty validation#}
+                <textarea class="hide " required name="articleTextValidation-<%- val %>" id="<%- hiddenAttr.id %>" ><% if(typeof articleTexts[val] != 'undefined') { %><%- (articleTexts[val].text) %><% } %></textarea>
+                <% } %>
+            </div>
+            <% }); %>
+            <% } %>  
+
+        </div>
+    </div>
+</div>                            

@@ -1,0 +1,84 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = 'EDIT_APP_MULTI'|trans({'%count%': count}) %}
+{% block pagecontent %}
+ <div class="row">
+        <div class="col-md-12 fg-multiedit-app-wrapper">
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+           <div class="fg-action-menu-wrapper">
+               <div class="fg-page-title-block-1">
+                    <div class="fg-btn-first-block fg-action-toggle  fg-active-IB" >
+                       <i class="fa fg-toggle"></i>
+                   </div>
+
+                   <div class="fg-title-first-block fg-test-block  fg-action-title  ">
+                       <h3 class="page-title "><span class="page-title-text">{{'EDIT_APP_MULTI'|trans({'%count%': count})}}</span> </h3>
+                   </div>
+                   <div id="eventNames" class="hide fg-event-names col-md-12"></div>
+               </div>
+           </div>
+           <div class="clearfix"> </div>
+           <div>
+               <form id="multiEditForm">
+                   <div id="failcallbackServerSide" class="alert alert-danger" style="display:none;">
+                       <button class="close" data-close="alert"></button>
+                       <span>{{'FORM_ERROR_DISPLAY'|trans}}</span>
+                   </div>
+                   <div id="fg-dev-multiedit-div"></div>
+                   {% include 'internal/savebutton.html.twig' with {'backLink':backLink} %}
+               </form>
+           </div>
+    </div>
+    </div>
+    {% block underscoretemplate %}
+         {% include 'InternalCalendarBundle:Calendar:templateEditMultiApp.html.twig' %}
+    {% endblock %}
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgassets/internal/js/page/fgCalendarMultiEdit.js') }}" type="text/javascript"></script>  
+    <script>
+        var categoryPath = "{{path('calendar_categories')}}";
+        var assignedTeams = {{assignedTeams|raw}};
+        var assignedWorkgroups = {{assignedWorkgroups|raw}};
+        var jsonRowIds = {{jsonRowIds|raw}};
+        var calendarDatas = {{calendarDatas|raw}};
+        var clubTer = {{clubTerminology|raw}};
+        var repeat = 0;
+        var initialHtml = '';
+        var finalArray = [];
+        var editPopUpPath = "{{path('calendar_edit_popup')}}";
+        var editSavePath = "{{path('calendar_appointment_save')}}";
+        var detailPath = "{{path('calendar_appointment_details',{'eventId':'dummyId','startTimeStamp':'startTime', 'endTimeStamp':'endTime'})}}";
+        var required = "{{'REQUIRED'|trans}}";
+        var isAdmin ={{isAdmin}};
+        var eventArray = [];
+        var  i= 0;
+        var defLang = "{{ defLang }}";
+        var categoryCreatePath = '{{ path('calendar_category_save') }}';
+        for(var count = 0; count < _.size(jsonRowIds); count++){
+                finalArray[count] = {};
+                finalArray[count]['id'] = calendarDatas[jsonRowIds[count]['index']]['eventDetailId'];
+                finalArray[count]['edit_start_date'] = calendarDatas[jsonRowIds[count]['index']]['startDate'];
+                finalArray[count]['edit_end_date'] = calendarDatas[jsonRowIds[count]['index']]['endDate'];
+                finalArray[count]['title'] = calendarDatas[jsonRowIds[count]['index']]['title'];
+                if(jsonRowIds[count]['repeat'] == 1){
+                   repeat= 1;
+                }
+        }
+        if(repeat == 1){
+            $('#fg-repeat').removeClass('hide');
+        }
+        $(document).ready(function(){
+             var result_data = FGTemplate.bind('editmultiApp', {'clubTerminology':clubTer, 
+                 'assignedTeams':assignedTeams,'assignedWorkgroups':assignedWorkgroups,'isAdmin':isAdmin});
+            $('#fg-dev-multiedit-div').html(result_data); // Displaying data from underscore
+            initialHtml = $('#multiEditForm').html();
+            FgFormTools.selectpickerViaAjax(categoryPath,1);
+            $('select.selectpicker').selectpicker('render');
+            $('#fg-dev-multiedit-div').show();
+            FgMultiEditApp.init();
+            FgMultiEditApp.clickCreateCategory();
+            
+        });
+        
+    </script>
+{% endblock %}

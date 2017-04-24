@@ -1,0 +1,45 @@
+<script type="text/template" id="fg-dev-new-grpadmin"> 
+    <div class="row fg-border-line sortables fg-dev-new-contact-div addednew solid-BG-white" >
+        <div class="col-md-5 col-sm-8 col-xs-8">
+            <div class="input-icon"> <i class="fa fa-search"></i>
+                <input id="include-role-admin-<%- randomNumber %>" name="include-role-admin-<%- randomNumber %>" type="text"  class="form-control input-sm dFExclude" />
+            </div>
+        </div>
+        <input class="fg-dev-auto-complete-val hide" name ="new-include-role-admin-<%- randomNumber %>" type="text" id="new-include-role-admin-<%- randomNumber %>" value=""/>
+        <div>
+            <input class=" hide" type="text"  value="<%- roleId %>" data-key="teams.<%-roleType %>.<%- randomNumber %>.teams.0"/>
+            </div>
+        <div class="FR new_contact_team_right_rmv col-md-1">
+       
+            <div class="closeico">
+                <input type="checkbox" class="make-switch" id="select">
+                <label for="select"></label>
+            </div>
+        </div>
+    </div> 
+</script>
+<script type="text/template" id="fg-dev-add-new-role-section"> 
+    <div class="row fg-border-line sortables fg-dev-new-contact-div addednew solid-BG-white" >
+        <div class="col-md-5 col-sm-8 col-xs-8 ">
+            <div class="input-icon"> <i class="fa fa-search"></i>
+                <input id="include-role-admin-section-<%- randomNumber %>"  name="include-role-admin-section-<%- randomNumber %>" type="text"  class="form-control input-sm dFExclude" />
+            </div>
+        </div>
+        <input class="fg-dev-auto-complete-val hide " type="text"  name="new-include-role-admin-section-<%- randomNumber %>" id="new-include-role-admin-section-<%- randomNumber %>" value=""/>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+         <input class=" hide" type="text"  value="<%- roleId %>"  data-key="teams.<%- roleType%>.new.<%- randomNumber %>.modules.teams"/>
+            <select id="teams_<%- roleType%>_new_<%- randomNumber %>"  title="{{'SELECT_DEFAULT'|trans}}" multiple name="teams_<%- roleType%>_<%- randomNumber %>" data-key="teams.<%- roleType%>.new.<%- randomNumber %>.modules.groups" class="selectpicker form-control show-tick ">
+                <% _.each(admins,function(admin){ %> 
+                    <% var select= "multiple" ; %>
+                    <option value="<%- admin.id %>" class=<%- select %> ><%- admin.transName %></option>
+                <% }); %>
+            </select>   
+        </div>
+        <div class="new_contact_team_right_rmv col-md-1">
+            <div class="closeico">
+                <input type="checkbox" class="make-switch" id="select">
+                <label for="select"></label>
+            </div>
+        </div>
+    </div> 
+</script>

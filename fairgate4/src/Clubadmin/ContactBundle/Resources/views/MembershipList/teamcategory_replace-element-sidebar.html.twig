@@ -1,0 +1,14 @@
+<li id="team_id_selected{{elementId}}">
+    <div class="fg-no-data-sidebar-sub">
+        <span class="fg-without-arrow"></span>
+        <span class="title">{{elementTitle}}</span>
+    </div>
+    <ul class="sub-menu sub-page-clickable" style="display: none;"></ul>
+    <div class="btn-group pull-left btngrpdiv">
+        <button data-toggle="dropdown" class="btn"> <i class="fa fa-bars"></i> </button>
+        <ul class="dropdown-menu dropdown-menu-align-left pull-right drpmenu-new">                
+            <li class="create_new_element" role_type="team" element_type="team" data-target="#team_id_selected{{elementId}}" data-catid="{{elementId}}" data-fntype="same" data-fncount="0" data-placeholder="Add team" hierarchy="2"> <a href="javascript:void(0)">{%trans with {'%team%': fgtwig.getTerminolgyName('Team',singular)}%}SIDEBAR_CREATE_TEAM{% endtrans %}</a> </li>
+            <li><a href="{{path('team_category_settings',{'cat_id':elementId})}}">{%trans with {'%teams%': fgtwig.getTerminolgyName('Team',plural)}%}SIDEBAR_TEAM_SETTINGS{% endtrans %}&hellip;</a></li>
+        </ul>
+    </div>
+</li>

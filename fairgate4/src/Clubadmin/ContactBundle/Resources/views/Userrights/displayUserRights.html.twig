@@ -1,0 +1,152 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = displayedUserName %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+    {% set federationTerminology = fgtwig.getTerminolgyName('Federation',singular)%}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body fg-theme-yellow">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                {% include 'clubadmin/breadcrumb.html.twig' with {'breadCrumb':{'back': path('contact_index') }} %}
+                {% if missingReqAssgment > 0 and isReadOnlyContact == 0 %}
+                    <div id="MissingReqAssgmtError" class="alert alert-warning alert-dismissable ">
+                        <button class="close" data-close="alert"></button>
+                        <strong>{{'ATTENTION'|trans}}! </strong><span>{% trans with {'%fedmember%':  federationTerminology,'%a%':"<a href='"~path('contact_assignments',{'offset':offset,'contact':contactId})~"'>",'%b%':"</a>"} %}REQ_FED_SUBFED_ROLE_MISSING_ASSIGNMT_CONTACT{% endtrans %} </span>
+                    </div>
+                {% endif %}
+              {#  {% include 'clubadmin/panel-tabs.html.twig' with {'contactName':displayedUserName,'contactId':contactId,'active':'contactuserrights','documentsCount' : documentsCount} %}
+#}
+              <div class="row">
+                {% set page_settings = { 'pagetitle':'true','tabs':'true'}  %}
+                {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': displayedUserName ,'page_settings': page_settings, 'tabs': tabs, 'type':'overview', 'hrefLink' : true, 'url':"#"} %}   
+              </div>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+                <!-- ERROR MESSAGE-->
+                {% if primaryEmail == '' %}
+                    <div class="alert alert-warning alert-dismissable">
+                        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+                         <strong>{{'PLEASE_NOTE_TEXT'|trans}}: </strong>
+                        <span>{{'USERRIGHTS_NO_PRIMARY_EMAIL'|trans}}</span></p>
+                    </div>
+                {% endif %}
+                <form id="groupDetailsForm" onsubmit="return false;" class="form-horizontal fg-contactUserrights"> 
+                    <div id="fg-dev-group-details-div" style="display:none;">
+                        
+                    </div> 
+                    {% include 'clubadmin/savebutton.html.twig' %}
+                </form>                          
+            </div>
+        </div>
+    </div>
+     <div id ="divTemplates">
+         {% include 'ClubadminContactBundle:Userrights:groupDetailsUnderscore.html.twig' %}
+        {% include 'ClubadminContactBundle:Userrights:new-team-module-admin.html.twig' %}
+     </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/fg_userrights.js') }}" type="text/javascript"></script>
+    <script>
+     $(document).ready(function() {
+            
+            var tabCondition = {{ (tabs|length > 0) ? 'true' : 'false' }};
+            FgPageTitlebar.init({
+                title       : true,
+                tab       : true,
+                search     :false,
+                actionMenu  : false,
+                tabType  :'server'
+               
+            }); 
+       });
+        FgMoreMenu.initServerSide('paneltab'); // Calling panel tab more menu action
+        FgPopOver.customPophover('.fg-dev-user-right-Popovers');
+        FgPopOver.customPophover('.fg-dev-tabicon-right-Popovers');
+        
+        var groupUserDetails={{groupUserDetails|raw}}; // Assigned user group details
+        var groupDetails={{groupDetails|raw}};  // All groups details
+        var contcId='{{contactId}}'; // Current contact id
+        var loggedContactId='{{loggedContactId}}'; // Logged contact id
+        var transAdministration= {{transAdministration|raw}}; // Translation variables
+        var bookedModuleDetails= {{bookedModuleDetails|raw}}; // Booked modules details
+        var teamsArray = {{teamsArray |raw}}; // All club teams
+        var allTeamGroups = {{allTeamGroups |raw}};
+        var teamGroupsDetails ={{teamGroupsDetails | raw}}; // All team groups
+        var pageGroupDetails ={{pageGroupDetails | raw}}; // All team groups
+        var dropDownListc = JSON.stringify({{dropdownList|raw}});
+        dropDownListc = JSON.parse(dropDownListc);
+        var teamGroupUserDetails = {{teamGroupUserDetails |raw}}; // All assigned user-team-group
+        var pageGroupUserDetails = {{pageGroupUserDetails |raw}}; // All assigned user-team-group
+        var internalAdmin = JSON.stringify({{internalAdmin|raw}});
+        internalAdmin = JSON.parse(internalAdmin);
+        var internalAdminList =JSON.stringify({{internalAdminList|raw}});
+        internalAdminList = JSON.parse(internalAdminList);
+        var hasFedAdminEligibility = "{{hasFedAdminEligibility}}";
+        var pageList =JSON.stringify({{pageJson|raw}});
+        pageList = JSON.parse(pageList);
+        var c5 = "{{c5}}";
+        $(document).ready(function() {
+            initPageFunctions();
+            var teamList = _(dropDownListc).filter(function(list){ return (list['type']=='T');});
+            var workgroupList = _(dropDownListc).filter(function(list){ return (list['type']=='W');});
+            FgUtility.changeColorOnDelete();
+            //left side toggle
+            FgUserRights.expandCollaspe(); // For expand or collaspe functionality
+            //right sid etoggle
+            $('body').off('click','.fg-adminstration-area-right');
+            $('body').on('click','.fg-adminstration-area-right', function() {
+                $(this).toggleClass('clicked');
+                $(this).parent().parent().siblings(".fg-right-area-open").slideToggle(350);
+            });
+            
+            FgUserRights.addNewTeamModuleAdmin(teamList,workgroupList,allTeamGroups, contcId);
+            FgUserRights.removeTeamModulesRow();
+            var options = {
+                saveUrl                 : "{{path('display_user_rights_save')}}",
+                saveFlag                :0
+            };
+            FgUserRights.saveUserRights(options,'backend');
+        });
+        
+        function initPageFunctions(){
+            FgPageTitlebar.setMoreTab();
+            pageInit();  
+            var result_data = FGTemplate.bind('fg-dev-group_details-list',{c5:c5,dropDownList:dropDownListc,content: groupUserDetails,hasFedAdminEligibility:hasFedAdminEligibility,pageList:pageList,
+                contact:contcId,groupDetails:groupDetails,loggedContactId:loggedContactId,transAdministration:transAdministration, 
+                bookedModuleDetails: bookedModuleDetails, teamsArray:teamsArray, teamGroupsDetails:teamGroupsDetails, 
+                teamGroupUserDetails:teamGroupUserDetails,pageGroupDetails:pageGroupDetails,pageGroupUserDetails:pageGroupUserDetails,allTeamGroups:allTeamGroups,internalAdmin:internalAdmin,internalAdminList:internalAdminList});
+            $('#fg-dev-group-details-div').html(result_data); // Loading template using underscore.js
+            $('#fg-dev-group-details-div').show();
+            $('select.selectpicker').selectpicker('render');
+            FgFormTools.handleUniform();
+            FgApp.init();  
+            ComponentsDropdowns.init();
+        }   
+         // Page init
+        function pageInit() {
+            FgDirtyFields.init('groupDetailsForm', {
+                    dirtyFieldSettings :{
+                        {#dirtyFormClass : "isDirty"#}
+                    }, 
+                        enableDragDrop : false, 
+                        enableUpdateSortOrder : false, 
+                        enableDiscardChanges : false
+
+                });
+            
+        }
+     
+        // Function to reset all changes made
+        $('#groupDetailsForm').on('click', '#reset_changes',function(event){ 
+             initPageFunctions();
+        });
+
+
+        
+
+    </script>
+    <script src="{{ asset('fgcustom/js/dirtyfields/jquery.dirtyFields.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_dirtyfields.js') }}" type="text/javascript"></script
+{% endblock %} 

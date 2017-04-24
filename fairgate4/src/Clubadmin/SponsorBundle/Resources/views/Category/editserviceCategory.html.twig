@@ -1,0 +1,132 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'SM_SERVICE_CATEGORIES'|trans %}
+{% block pagecontent %}
+<!-- BEGIN PAGE CONTENT-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BREADCRUMB STARTS -->
+            {% include 'clubadmin/breadcrumb.html.twig' with {'breadCrumb':{'back': path('clubadmin_sponsor_homepage') }} %}
+            <!-- BREADCRUMB ENDS -->
+            <!-- Starts title And Language area -->
+            {#% include 'clubadmin/language_swtich.html.twig' with {'clubLanguages': clubLanguages, 'title': pageTitle} %#}
+             {#<div class="row">                  
+                    <div class="col-sm-12">
+                        <h3 class="page-title pull-left fg-inner-title"> {{pageTitle}} </h3> 
+                </div>                        
+             </div> #}
+             <!-- Begin page title bar -->
+             <div class="row">
+             {% set page_settings = { 'pagetitle':'true' }  %}
+             {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'page_settings': page_settings  } %}    
+             </div>
+             <!-- Ends title bar -->
+            <div class="fg-theme-green fg-theme-panel">
+
+                <!-- BEGIN FORM-->
+                <form id="editcategory" class="form-horizontal" method="post" onsubmit="return false;" novalidate="novalidate">
+                    <div class="alert alert-danger display-hide">
+                        <button class="close" data-close="alert"></button>
+                        {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+                    </div>
+                    <div class="excludejs" id="role_category_sort">
+                        <!-- Category listing here -->
+                    </div>
+                    <div class="btn-group  fg-common-top-btm">
+                        <a href="#basic" data-toggle="modal" class="add-membership" id="addcategory"><i class="fa fa-plus-circle fa-2x"></i><span class="fg-left-move"> {%trans%}SM_ADD_SERVICE_CATEGORY{%endtrans%}</span></a>
+                    </div>
+                    <div class="clearfix">  </div>
+                    {% include 'clubadmin/savebutton.html.twig' with {'backLink':backlink} %}
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+    <!-- ADD ROW TEMPLATES STARTS -->
+    <div id="divTemplates">
+        {# template for adding new category #}
+        {% include 'ClubadminSponsorBundle:Category:addserviceCategory.html.twig' %}
+    </div>
+    <!-- ADD ROW TEMPLATES ENDS -->
+    <!-- END PAGE CONTENT-->
+
+
+{% endblock %}
+{% block javascripts %}
+    <script  type="text/javascript">
+        var categorySettingsPath = '{{path('edit_services', {'catId': 'catId'})}}';
+    FgUtility.handleDelete();
+    
+     $(document).ready(function(){
+        var result_data = {{result_data|json_encode|raw}};
+        var catCount = Object.keys(result_data).length;
+        if (catCount > 0) {
+           var resultData = FgUtility.groupByMulti(result_data, ['sortOrder']);
+            _.each(resultData, function(cat_data, catSortOrder) {
+               _.each(cat_data, function(catData, catVal) {
+                    var jsonData = {catId: catData.id, isNew: false, attributes: catData};
+                    renderNewRow('template-category-add', 'role_category_sort', jsonData);
+                });
+            });
+           // setRedirectUrl();
+        }
+        initPageFunctions();
+    });
+    
+    /* function to remove newly added row on clicking delete button */
+    $('form').on('click', 'div.addednew input[data-inactiveblock=changecolor]', function() {
+        $('#' + $(this).attr('data-parentid')).remove();
+        FgUtility.resetSortOrder($('#role_category_sort'));
+    });
+    
+      $('form').on('click', '#addcategory', function() {
+        var rand = $.now();
+        var attributes = {title: '', serviceCount: 0, isActive: 1};
+        var jsonData = {catId: rand, isNew: true, attributes: attributes};
+        renderNewRow('template-category-add', 'role_category_sort', jsonData);
+    });
+    
+    function initPageFunctions() {
+        FgApp.init();
+        FgDragAndDrop.sortWithOrderUpdation('#role_category_sort', false);
+
+        // For resetting the sorting changes done in the page on 'discard_changes'
+        var initialOrderArray = FgUtility.getOrderOfChildElements('#role_category_sort');
+        var resetSections = {
+            '0': {
+                'parentElement': '#role_category_sort',
+                'initialOrder': initialOrderArray,
+                'addClass': true,
+                'className': 'blkareadiv'
+            }
+        };
+        FgResetChanges.init(resetSections);
+        FormValidation.init('editcategory', 'saveChanges');
+        FgInputTextValidation.init();
+    }
+    
+     /* save function */
+    function saveChanges() {
+        $('div.addednew input[data-key]').addClass('fairgatedirty');
+        var objectGraph = {};
+        //parse the all form field value as json array and assign that value to the array
+        objectGraph = FgParseFormField.fieldParse();
+        var catArr = JSON.stringify(objectGraph);
+        
+        FgXmlHttp.post("{{ path('sponsor_category_update') }}", { 'catArr': catArr} , false, initPageFunctions);
+    }
+    
+    function renderNewRow(templateScriptId, parentDivId, jsonData) {
+        var htmlFinal = FGTemplate.bind(templateScriptId, jsonData);
+        $('#' + parentDivId).append(htmlFinal);
+        $('#' + parentDivId).find('.addednew').slideDown('250','easeInQuart');
+        FgDragAndDrop.sortWithOrderUpdation('#role_category_sort', false);
+        FgUtility.resetSortOrder($('#role_category_sort'));
+    }
+     /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                    
+                     title: true
+
+             });
+    </script>
+{% endblock %}

@@ -1,0 +1,223 @@
+club_documents_listing:
+    path:     /document/club
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:clubDocuments,  level1: club }
+
+team_documents_listing:
+    path:     /document/team
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:teamDocuments,  level1: team }
+
+workgroup_documents_listing:
+    path:     /document/workgroup
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:workgroupDocuments,  level1: workgroup }
+
+contact_documents_listing:
+    path:     /document/contact
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:contactDocuments,  level1: contact }
+
+get_documents_data:
+    path:     /getdocumentsdata/{type}
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:getDocumentsData }
+
+documents_file_upload:
+    path:     /document/upload/{type}
+    defaults: { _controller: ClubadminDocumentsBundle:Default:uploadFile }
+
+category_edit_club:
+    path:   /document/category/club
+    defaults: { _controller: ClubadminDocumentsBundle:Category:editCategory, level1: club }
+
+category_update:
+    path:   /document/category/update/{cat_type}
+    defaults: { _controller: ClubadminDocumentsBundle:Category:updateCategory }
+
+category_edit_contact:
+    path:   /document/category/contact
+    defaults: { _controller: ClubadminDocumentsBundle:Category:editCategory, level1: contact }
+
+category_edit_team:
+    path:   /document/category/team
+    defaults: { _controller: ClubadminDocumentsBundle:Category:editCategory, level1: team}
+
+category_edit_workgroup:
+    path:   /document/category/workgroup
+    defaults: { _controller: ClubadminDocumentsBundle:Category:editCategory, level1: workgroup }
+
+sub_category_edit_workgroup:
+    path:   /document/subcategory/workgroup/{catId}
+    defaults: { _controller: ClubadminDocumentsBundle:SubCategory:editSubCategory, level1: workgroup}
+
+sub_category_update:
+    path:   /document/subcategory/update
+    defaults: { _controller: ClubadminDocumentsBundle:SubCategory:updateSubCategory }
+
+sub_category_edit_club:
+    path:   /document/subcategory/club/{catId}
+    defaults: { _controller: ClubadminDocumentsBundle:SubCategory:editSubCategory, level1: club }
+
+sub_category_edit_contact:
+    path:   /document/subcategory/contact/{catId}
+    defaults: { _controller: ClubadminDocumentsBundle:SubCategory:editSubCategory, level1: contact}
+
+sub_category_edit_team:
+    path:   /document/subcategory/team/{catId}
+    defaults: { _controller: ClubadminDocumentsBundle:SubCategory:editSubCategory, level1: team }
+
+document_settings_club:
+    path: /document/edit/club/{documentId}/{offset}
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:documentSettings, level1: club, documentType: club, module: document }
+
+document_version_list:
+    path: /document/versionlist/{documentId}
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:versionList }
+
+document_save:
+    path: /document/save/{documentType}
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:saveDocument }
+    
+document_club_table_list:
+    path: /document/documentlist/{doctype}
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:listDocument } 
+document_bookmark_list:
+    path: /document/bookmark
+    defaults: { _controller: ClubadminDocumentsBundle:Bookmark:bookmarkList , level1: document, level2: bookmark }
+
+document_bookmark_list_team:
+    path: /document/bookmark/team
+    defaults: { _controller: ClubadminDocumentsBundle:Bookmark:bookmarkList , level1: team}
+
+document_bookmark_update:
+    path: /document/bookmarkupdate
+    defaults: { _controller: ClubadminDocumentsBundle:Bookmark:bookmarkUpdate }
+    
+document_bookmark_createdelete:
+    path: /document/createdeletebookmark
+    defaults: { _controller: ClubadminDocumentsBundle:Bookmark:createdeleteBookmark }
+    
+document_create_category:
+    path: /document/createcategory
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:createCategory }
+    
+document_bookmark_list_club:
+    path: /document/bookmark/club
+    defaults: { _controller: ClubadminDocumentsBundle:Bookmark:bookmarkList , level1: club}  
+    
+document_bookmark_list_workgroup:
+    path: /document/bookmark/workgroup
+    defaults: { _controller: ClubadminDocumentsBundle:Bookmark:bookmarkList , level1: workgroup}   
+    
+document_bookmark_list_contact:
+    path: /document/bookmark/contact
+    defaults: { _controller: ClubadminDocumentsBundle:Bookmark:bookmarkList , level1: contact }  
+    
+document_column_settings_club:
+    path: /document/columnsettings/club
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:columnSettings , level1: club  }
+
+document_column_settings_team:
+    path: /document/columnsettings/team
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:columnSettings , level1: team }
+
+document_column_settings_contact:
+    path: /document/columnsettings/contact
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:columnSettings , level1: contact }
+
+document_column_settings_workgroup:
+    path: /document/columnsettings/workgroup
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:columnSettings , level1: workgroup  }
+    
+document_settings_delete_popup:
+    path: /document/delete/popup
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:deletePopup }
+    
+document_settings_delete:
+    path: /document/delete
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:deleteDocument }
+    
+document_settings_edit_delete_popup:
+    path: /document/editpagedeletepopup
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:editPagedeletePopup }
+    
+document_settings_editpage_delete:
+    path: /document/editpagedelete
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:deleteDocumentFromEditPage }
+    
+document_settings_team:
+    path: /document/edit/team/{documentId}/{offset}
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:documentSettings, level1: team, documentType: team, module: document }
+
+document_settings_contact:
+    path: /document/edit/contact/{documentId}/{offset}
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:documentSettings, level1: contact, documentType: contact, module: document }
+
+document_settings_workgroup:
+    path: /document/edit/workgroup/{documentId}/{offset}
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:documentSettings, level1: workgroup, documentType: workgroup, module: document }
+    
+document_update:
+    path: /document/update/{documentType}/{documentId}/{offset}/{module}
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:updateDocument }
+    
+document_old_versions_delete:
+    path: /document/deleteversions
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:deleteOldVersions }
+
+document_filter_contact_data:
+    path:  /document/filter/data
+    defaults: { _controller: ClubadminContactBundle:Filter:getData }
+
+document_collect_contactname:
+    path:  /document/getcontactname
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletterwizardrecipients:getcontactNames}  
+    
+document_add_category:
+    path: /document/addcategory/{type}
+    defaults: { _controller: ClubadminDocumentsBundle:Category:addCategory }
+    
+document_category_add_page:
+    path: /document/category/add
+    defaults: { _controller: ClubadminDocumentsBundle:Category:categoryAddPage }    
+    
+document_log_club:
+    path: /document/log/club/{documentId}
+    defaults: { _controller: ClubadminDocumentsBundle:DocumentLog:documentLog, level1: club, documentType: club }  
+    
+document_log_data:
+    path: /document/getlogdata/{documentId}
+    defaults: { _controller: ClubadminDocumentsBundle:DocumentLog:getDocumentLogEntries} 
+    
+document_move_data:
+    path: /document/move
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:updateDocumentAssign}
+    
+category_doc_dropdown:
+    path:   /document/category/{typeval}
+    defaults: { _controller: ClubadminDocumentsBundle:Category:getDropdownValues }
+    
+document_log_team:
+    path: /document/log/team/{documentId}
+    defaults: { _controller: ClubadminDocumentsBundle:DocumentLog:documentLog, level1: team, documentType: team }  
+   
+document_log_workgroup:
+    path: /document/log/workgroup/{documentId}
+    defaults: { _controller: ClubadminDocumentsBundle:DocumentLog:documentLog, level1: workgroup, documentType: workgroup }  
+   
+document_log_contact:
+    path: /document/log/contact/{documentId}
+    defaults: { _controller: ClubadminDocumentsBundle:DocumentLog:documentLog, level1: contact, documentType: contact }  
+    
+document_settings_team_files:
+    path: /filemanager/edit/teamdoc/{documentId}/{offset}
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:documentSettings, level1: files, documentType: team, module: files }
+
+document_settings_contact_files:
+    path: /filemanager/edit/contactdoc/{documentId}/{offset}
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:documentSettings, level1: files, documentType: contact, module: files }
+
+document_settings_workgroup_files:
+    path: /filemanager/edit/workgroupdoc/{documentId}/{offset}
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:documentSettings, level1: files, documentType: workgroup, module: files }
+    
+document_settings_club_files:
+    path: /filemanager/edit/clubdoc/{documentId}/{offset}
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:documentSettings, level1: files, documentType: club, module: files }        
+   

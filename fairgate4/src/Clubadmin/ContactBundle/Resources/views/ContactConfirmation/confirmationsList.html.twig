@@ -1,0 +1,34 @@
+<div class="row">
+    <div class="portlet-body new-table-height" id="tableWrapper">
+        <table data-ajax-path="{{ activeTab == 'log' ? path( 'appform_creations_list', {'type' : activeTab} ) : path( 'appform_creations_list', {'type' : activeTab} ) }}"
+               class="table confirmationsListDatatable 
+               table-bordered
+               table-hover
+               table-condensed
+               dataTable-scroll-y
+               dataTable-ajax1
+               dataTable-rows
+               dataTable-scroll-x
+               dataTables_scrollBody
+               dataTable-initialSort data-count" xWidth="100" yHeight="300" data-table-name="dataTables" data_row_change="fgrowchange" id="confirmations-{{ activeTab }}-table" data-table-group="confirmations-list-table" dataTable-popover="true" dataTable-hover="true" data-sort="1#desc" >
+            <thead>
+                <tr>
+                    {% if (activeTab == 'list') %}
+                        <th><input type="checkbox" class="dataTable_checkall fg-dev-avoidicon-behaviour" id="check_all" name="check_all" /><i class="chk_cnt"></i></th>
+                        <th>{{ 'CONFIRM_CREATE_DATE_AT'|trans }}</th>
+                        <th>{{ 'CONFIRM_CONTACT'|trans }}</th>
+                        <th>{{ 'APPLICATION_FORM'|trans }}</th>
+                    {% else %}
+                        <th></th>
+                        <th>{{ 'CONFIRMLOG_DECISIONDATE'|trans }}</th>
+                        <th>{{ 'CONFIRMLOG_DECIDEDBY'|trans }}</th>
+                        <th>{{ 'CONFIRM_CREATE_DATE_AT'|trans }}</th>
+                        <th>{{ 'APPLICATION'|trans }}</th>
+                        <th>{{ 'CONFIRMLOG_CONTACT'|trans }}</th>
+                        <th>{{ 'APPLICATION_FORM'|trans }}</th>
+                    {% endif %}
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+Common\UtilityBundle\Entity\FgCmsPageContentTextElement:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPageContentTextElementRepository
+    type: entity
+    table: fg_cms_page_content_text_element
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        text:
+            type: text
+            nullable: false
+        position:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+    manyToOne:
+        version:
+            targetEntity: FgCmsPageContentTextElementHistory
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                version_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        element:
+            targetEntity: FgCmsPageContentElement
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                element_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

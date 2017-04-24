@@ -1,0 +1,1215 @@
+/*
+=============================================================================
+* Fairgate backend style
+========================================================================== 
+*/
+/*----------------------------------------------------------------------
+Font family
+--------------------------------------------------------------------------*/
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local("Open Sans Light"), local("OpenSans-Light"), url(../../fonts/DXI1ORHCpsQm3Vp6mXoaTRsxEYwM7FgeyaSgU71cLG0.woff) format("woff");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local("Open Sans"), local("OpenSans"), url(../../fonts/uYKcPVoh6c5R0NpdEY5A-Q.woff) format("woff");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: local("Open Sans Semibold"), local("OpenSans-Semibold"), url(../../fonts/MTP_ySUJH_bn48VBG8sNShsxEYwM7FgeyaSgU71cLG0.woff) format("woff");
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local("Open Sans Bold"), local("OpenSans-Bold"), url(../../fonts/k3k702ZOKiLJc3WVjuplzBsxEYwM7FgeyaSgU71cLG0.woff) format("woff");
+}
+/*----------------------------------------------------------------------
+Global classes
+--------------------------------------------------------------------------*/
+body {
+  font-family: Open Sans;
+}
+body.page-footer-fixed {
+  padding-bottom: 10px !important;
+}
+
+a {
+  text-shadow: none;
+  color: #428bca;
+}
+a:hover {
+  color: #428bca;
+  text-decoration: underline;
+}
+a:focus {
+  color: #428bca;
+  text-decoration: underline;
+}
+
+.fg-clear {
+  clear: both;
+}
+.fg-clear:after, .fg-panel-bg:after {
+  content: '';
+  display: block;
+  float: none;
+  height: 0;
+  width: 0;
+  clear: both;
+}
+
+/* =============================================================================
+/******* global padding and margin classess ******
+================================================================================ */
+.fg-clear-top {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+.fg-clear-right {
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}
+
+.fg-clear-btm {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.fg-clear-left {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+.fg-common-top {
+  margin-top: 20px;
+}
+
+.fg-common-btm {
+  margin-bottom: 20px;
+}
+
+.fg-common-top-btm {
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+.fg-common-btm-three {
+  margin-bottom: 30px;
+}
+
+.fg-common-btm-seven {
+  margin-bottom: 7px;
+}
+
+.fg-pad-0 {
+  padding: 0 !important;
+}
+
+.fg-pad-top-0 {
+  padding-top: 0 !important;
+}
+
+.fg-pad-right-0 {
+  padding-left: 0 !important;
+}
+
+.fg-pad-btm-0 {
+  padding-left: 0 !important;
+}
+
+.fg-pad-left-0 {
+  padding-left: 0 !important;
+}
+
+.fg-pad-top-3 {
+  padding-top: 3px !important;
+}
+
+.fg-pad-top-10 {
+  padding-top: 10px !important;
+}
+
+.fg-pad-right-10 {
+  padding-right: 10px !important;
+}
+
+.fg-pad-btm-10 {
+  padding-bottom: 10px !important;
+}
+
+.fg-pad-left-10 {
+  padding-left: 10px !important;
+}
+
+.fg-pad-left-20 {
+  padding-left: 20px !important;
+}
+
+.fg-left-zero {
+  padding-left: 0 !important;
+}
+
+.fg-right-zero {
+  padding-right: 0;
+}
+
+.fg-marg-top-5 {
+  margin-top: 5px !important;
+}
+
+.fg-marg-top-10 {
+  margin-top: 10px !important;
+}
+
+.fg-clear-marg {
+  margin: 0 !important;
+}
+
+.fg-marg-btm-0 {
+  margin-bottom: 0;
+}
+
+.fg-error-hide {
+  display: none;
+}
+
+.fg-bordernon {
+  border: none !important;
+}
+
+body .fg-marg-btm-5 {
+  margin-bottom: 5px !important;
+}
+
+/* =============================================================================
+/******* global contianer display styles ******
+================================================================================ */
+.fg-visibility-hidden {
+  visibility: hidden;
+}
+
+.fg-invisible {
+  visibility: hidden;
+}
+
+.fg-display-table {
+  display: table-cell !important;
+}
+
+.FR {
+  float: right;
+}
+
+.FL {
+  float: left;
+}
+
+.fg-PA {
+  position: absolute !important;
+}
+
+.fg-PR {
+  position: relative !important;
+}
+
+.fg-PS {
+  position: static !important;
+}
+
+/* =============================================================================
+/******* global text styles ******
+================================================================================ */
+.fg-font-frt {
+  font-size: 14px;
+}
+
+.fg-italic-txt {
+  font-style: italic;
+  font-size: 13px;
+  color: #333333;
+}
+
+.fg-disabled-link {
+  pointer-events: none;
+  color: #cccccc;
+  cursor: default;
+}
+
+.fg-disable-link > a:hover {
+  text-decoration: none;
+}
+
+.text-green {
+  color: #35aa47 !important;
+}
+
+.text-red {
+  color: #c70000 !important;
+}
+
+/* =============================================================================
+/******* global border styles ******
+================================================================================ */
+.fg-border-left {
+  border-left: 1px solid #dddddd;
+}
+
+.solid-BG-white {
+  background-color: white;
+}
+
+/* =============================================================================
+/******* global background styles ******
+================================================================================ */
+.fg-bg-light-green {
+  background-color: #bfedc6 !important;
+}
+
+/*----------------------------------------------------------------------
+Metronic/Bootstrap global overide styles
+--------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------
+css overides for Metronic/Bootstrap global overide styles
+--------------------------------------------------------------------------*/
+.btn {
+  padding: 7px 12px;
+}
+
+.btn.blue.editable-submit {
+  background: none;
+  padding: 5px 0 0;
+  color: #333333;
+}
+.btn.blue.editable-submit i {
+  font-size: 18px;
+}
+.btn.default.editable-cancel {
+  background: none;
+  padding: 5px 0 0;
+}
+.btn.default.editable-cancel i {
+  font-size: 18px;
+}
+
+.btn-default span.fg-contact-mandatory {
+  position: relative;
+  top: 3px;
+  left: 2px;
+}
+
+.input-sm {
+  font-size: 14px;
+}
+
+.fg-input-area {
+  width: 220px;
+  padding-left: 0;
+  margin-right: 15px;
+  float: left;
+  text-indent: 6px;
+}
+
+.has-error .help-block {
+  color: #c70000 !important;
+  font-size: 13px;
+}
+.has-error .help-inline {
+  color: #c70000 !important;
+  font-size: 13px;
+}
+.has-error .control-label {
+  color: #c70000 !important;
+  font-size: 13px;
+}
+.has-error .radio {
+  color: #c70000 !important;
+  font-size: 13px;
+}
+.has-error .checkbox {
+  color: #c70000 !important;
+  font-size: 13px;
+}
+.has-error .radio-inline {
+  color: #c70000 !important;
+  font-size: 13px;
+}
+.has-error .checkbox-inline {
+  color: #c70000 !important;
+  font-size: 13px;
+}
+
+.div.radio, div.checker {
+  margin-left: 3px;
+}
+
+.control-label .required {
+  color: #c70000 !important;
+}
+
+.fg-ck-caption-txt .required {
+  color: #c70000 !important;
+}
+
+.page-loading {
+  z-index: 9999;
+}
+
+.page-header {
+  z-index: 99999;
+}
+
+.fgNavLinks_extend, .fg-nav-links > li.active > a, .fg-nav-links > li.active > a:hover, .fg-nav-links > li.active > a:focus {
+  color: #555555;
+  background-color: white;
+  border: 1px solid #dddddd;
+  border-bottom-color: transparent;
+  cursor: default;
+}
+
+.fg-nav-links li {
+  float: left;
+  margin-bottom: -0.1026%;
+}
+.fg-nav-links > li > a {
+  border: 1px solid transparent;
+  -webkit-border-radius: 4px 4px 0 0;
+  -moz-border-radius: 4px 4px 0 0;
+  -ms-border-radius: 4px 4px 0 0;
+  border-radius: 4px 4px 0 0;
+  font-size: 14px;
+  margin-right: 2px;
+}
+.fg-nav-links > li > a:hover {
+  padding-bottom: 9px !important;
+}
+.fg-nav-links > li > a:focus {
+  padding-bottom: 9px !important;
+}
+
+.page-footer-fixed .page-content {
+  margin-bottom: 15px;
+}
+.page-footer-fixed .new-table-height {
+  margin-bottom: 15px;
+}
+.page-footer-fixed .page-container {
+  margin-bottom: 0 !important;
+}
+
+label.fg-input-area {
+  width: auto;
+  text-indent: 0;
+  margin-right: 0;
+}
+
+.bootstrap-select .btn:focus {
+  outline: medium none !important;
+}
+
+.alert-block .close {
+  color: inherit;
+  position: relative;
+  right: 8px;
+  top: 6px;
+}
+
+/*----------------------------------------------------------------------
+/*::::: panel and portlet ::::*
+--------------------------------------------------------------------------*/
+.panel-contact-right {
+  padding-left: 12px;
+  padding-top: 1px;
+}
+
+.fg-panel-title {
+  display: inline-block;
+  font-size: 18px;
+  color: white;
+  font-weight: 400;
+  line-height: 18px;
+  margin: 0;
+  padding: 0;
+}
+
+.fg-panel-title-head {
+  display: inline-block;
+}
+
+.fg-panel-bg {
+  color: #333333;
+  background-color: #eeeeee;
+  padding: 5px 0 5px 8px;
+}
+
+.panel-heading .form-group {
+  margin-bottom: 0 !important;
+}
+
+.panel-primary .fa-minus-circle {
+  color: #555555;
+  line-height: 28px;
+}
+
+.portlet > .portlet-title > .caption {
+  margin: 0 0 6px;
+  line-height: 15px;
+}
+
+.panel-form-title {
+  padding: 0;
+  margin: 0;
+  line-height: 18px;
+}
+.panel-form-title .fg-label-wrap {
+  line-height: 18px;
+}
+
+/*----------------------------------------------------------------------
+/*::::: Sticky footer  ::::*
+--------------------------------------------------------------------------*/
+.fg-sticky-save-area .contact_area {
+  margin-bottom: 30px;
+}
+.fg-sticky-save-area .page-content {
+  padding-bottom: 88px;
+}
+.fg-sticky-save-area .fg-content-wraper {
+  padding-bottom: 33px;
+}
+
+/*----------------------------------------------------------------------
+/*::::: Popover  ::::*
+--------------------------------------------------------------------------*/
+.popover {
+  background-color: whitesmoke;
+}
+.popover.bottom {
+  margin-top: 16px;
+}
+.popover.bottom > .arrow:after {
+  border-bottom-color: whitesmoke;
+}
+
+.fg-popover-cion {
+  color: #666666;
+  cursor: pointer;
+}
+
+.colorpicker.dropdown-menu {
+  margin-left: -100px;
+  min-width: auto !important;
+}
+.colorpicker:before {
+  left: auto !important;
+  right: 10px;
+}
+.colorpicker:after {
+  left: auto !important;
+  right: 10px;
+}
+
+.fg-popover-content-nowrap .popover {
+  white-space: nowrap;
+}
+
+.popover-content .btn-group {
+  display: block;
+}
+.popover-content .btn-group:after {
+  display: block;
+  clear: both;
+  float: none;
+  content: '';
+}
+
+.fg-popup-td-text {
+  float: left;
+  width: 150px;
+  white-space: normal;
+}
+
+/*----------------------------------------------------------------------
+/*::::: Switch Multi color  ::::*
+--------------------------------------------------------------------------*/
+.switch-multi-color.switch-toggle input + label > div {
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  max-height: 100%;
+  padding-left: 5px;
+}
+.switch-multi-color.switch-toggle.switch-3 input:checked:nth-of-type(2) ~ a {
+  background-color: #dbb233;
+}
+.switch-multi-color.switch-toggle.switch-3 input:checked:last-of-type ~ a {
+  background-color: #c23f44;
+}
+
+/*----------------------------------------------------------------------
+/*::::: Page header  ::::*
+--------------------------------------------------------------------------*/
+.fg-control-aranew {
+  padding-top: 5px;
+  background-color: #eeeeee;
+  margin-top: 5px;
+  margin-bottom: -5px;
+  padding-bottom: 5px;
+  float: left;
+  width: 100%;
+}
+.fg-control-aranew > dl {
+  display: inline-block;
+  margin-top: 10px;
+  margin-bottom: 0;
+  width: 100%;
+}
+.fg-control-aranew dl dt {
+  clear: left;
+  float: left;
+  font-weight: 400;
+  min-height: 34px;
+  margin-bottom: 10px;
+  padding-right: 14px;
+  padding-top: 5px;
+  text-align: left;
+  width: 26%;
+}
+.fg-control-aranew dl dd {
+  float: left;
+  margin-bottom: 0;
+  margin-right: 20px;
+  width: 70%;
+}
+
+/*========================================================================
+* Data tables
+========================================================================== */
+.table-bordered > thead > tr > th {
+  height: 35px;
+}
+.table-bordered > thead > tr > td {
+  height: 35px;
+}
+.table-bordered > tbody > tr > th {
+  height: 35px;
+}
+.table-bordered > tbody > tr > td {
+  height: 35px;
+}
+.table-bordered > tfoot > tr > th {
+  height: 35px;
+}
+.table-bordered > tfoot > tr > td {
+  height: 35px;
+}
+
+/*========================================================================
+* Backend common styles
+========================================================================== */
+.include-filter > p, .exclude-filter > p {
+  margin-bottom: 0;
+  padding-bottom: 3px !important;
+  padding-top: 3px;
+}
+
+.fg-btn-home span:first-child:after, .fg-option-home span:after, .fg-option-money span:after, .fg-btn-money span:first-child:after {
+  content: "\f015";
+  font: normal normal normal 14px/1 FontAwesome;
+  margin-left: 5px;
+}
+
+.fg-dev-overview-pre {
+  padding-bottom: 10px;
+}
+.fg-dev-overview-pre pre {
+  background: none repeat scroll 0 0 transparent;
+  border: medium none;
+  float: left;
+  font-family: Open Sans;
+  margin: 0;
+  color: black;
+  font-size: 14px;
+  padding: 0;
+  width: 100%;
+}
+
+.fg-mailings-head {
+  float: left;
+  margin: 0;
+}
+.fg-mailings-head .page-title-sub {
+  line-height: 30px;
+}
+
+.include-filter dl dd .tokenfield .token span.token-label {
+  white-space: nowrap !important;
+}
+
+.fg-count-text {
+  display: inline-block;
+  font-size: 14px;
+  padding-right: 8px;
+}
+
+.fg-page-sub-txt {
+  font-size: 23px;
+}
+
+.fg-tab-nav {
+  display: none;
+}
+.fg-tab-nav .dropdown-menu li > a {
+  padding: 6px 0 6px 13px !important;
+}
+
+.fg-filter-name {
+  border-bottom: none !important;
+}
+
+.fg-required-label {
+  display: inline-block;
+  line-height: unset !important;
+  width: 28%;
+}
+
+.fg-width-half {
+  width: 50%;
+  float: left;
+}
+
+.fg-dev-overview-edit-mship {
+  float: right;
+  padding-top: 2px;
+}
+.fg-dev-overview-edit-mship .fa-pencil-square-o {
+  color: white;
+}
+.fg-dev-overview-edit-mship > a {
+  color: white;
+}
+.fg-dev-overview-edit-mship > a:hover {
+  text-decoration: underline;
+  color: white !important;
+}
+
+a.fg-logout-icon {
+  padding: 1px 10px 0 !important;
+  box-sizing: border-box;
+}
+a.fg-logout-icon .fa {
+  top: 3px;
+  position: relative;
+}
+a.fg-topav-centre-logout {
+  display: none;
+}
+a .fg-contact-mandatory:before {
+  margin-left: 0;
+}
+
+.fg-category {
+  padding: 2px 5px;
+  color: white;
+  font-size: 11px;
+  float: right;
+}
+
+.fg-panel-move {
+  margin-top: 3px;
+  margin-bottom: 3px;
+  padding-left: 4px;
+  font-size: 14px;
+}
+
+.insert_new_assignment_panel .fg-panel-move:first-of-type {
+  padding-left: 15px;
+}
+.insert_new_assignment_panel .fg-left-right-move:first-of-type {
+  padding-left: 0;
+}
+
+.fg-theme-yellow .fg-panel-move {
+  padding-left: 15px;
+}
+.fg-theme-yellow .fg-left-right-move:first-of-type {
+  padding-left: 0;
+}
+
+.fg-dropdown-change {
+  width: 94%;
+}
+
+.fg-last-icon {
+  position: absolute;
+  right: 12px;
+  top: 6px;
+  z-index: 999;
+}
+
+.fg-select-box-area {
+  float: left;
+  width: 92%;
+  margin-top: -1px;
+}
+
+.fg-sub-caption {
+  border-bottom: 1px solid #eeeeee;
+  color: black;
+  float: left;
+  font-size: 18px;
+  padding-bottom: 6px;
+  width: 100%;
+}
+
+.fg-connection-img {
+  float: left;
+  margin-right: 13px;
+  width: 29%;
+}
+.fg-connection-img img {
+  max-height: 130px;
+  max-width: 100%;
+}
+
+.fg-contact-info {
+  float: left;
+  width: 66%;
+}
+.fg-contact-info ul {
+  padding-left: 0;
+}
+.fg-contact-info ul li {
+  list-style: none;
+  width: 100%;
+  float: left;
+  margin-bottom: 10px;
+}
+
+.fg-contact-name {
+  color: #307198;
+  font-size: 14px;
+  float: left;
+  margin-bottom: 10px;
+  cursor: pointer;
+  line-height: 18px;
+}
+
+.fg-float-text {
+  float: left;
+  color: #6b6b6b;
+  font-size: 13px;
+  width: 56%;
+  line-height: 22px;
+}
+
+.fg-page-title {
+  float: left;
+  line-height: 30px !important;
+  padding-left: 12px;
+  font-size: 30px !important;
+  color: #444444 !important;
+  margin-bottom: 0;
+  word-wrap: break-word;
+  width: auto;
+  margin-right: 5%;
+  max-width: 74%;
+}
+
+.page-title-sub {
+  width: 100%;
+}
+
+.fg-saved-filter-new .fg-col-hack {
+  padding-left: 27px;
+}
+.fg-saved-filter-new .fg-input-area {
+  width: 100%;
+}
+
+.openfilterClass {
+  color: #333333;
+}
+
+.fg-reset-back-btn {
+  background: #dfdfdf;
+  color: black;
+  padding: 7px 12px;
+  margin: 17px 0;
+  display: inline-block;
+  font-size: 14px;
+}
+.fg-reset-back-btn:hover {
+  background: #e3e3e3;
+  text-decoration: none;
+  color: black;
+}
+
+.fg-filter-token-div {
+  max-height: 50px;
+  overflow-y: auto;
+}
+
+.fg-reset-pwd-block {
+  border: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.fg-plus-icon-log {
+  padding-right: 4px;
+}
+
+.fg-inner-title {
+  font-size: 30px !important;
+}
+
+.fg-left-move {
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 14px;
+}
+.fg-left-move:hover {
+  text-decoration: underline;
+}
+
+.fg-link-font-siz {
+  font-size: 12px;
+}
+
+.fg-filter-count {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.fg-add-log-entry .btn {
+  border: medium none !important;
+  color: #428bca;
+  padding: 0;
+}
+.fg-add-log-entry .btn:hover {
+  background: transparent;
+  text-decoration: underline;
+}
+.fg-add-log-entry .fg-add-link {
+  padding-top: 2px;
+}
+
+.fg-category-settings-bg {
+  background-color: #f4f4f4;
+}
+
+.fg-function-txt {
+  float: left;
+  width: 33%;
+}
+.fg-function-txt .fg-label-inner {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.fg-label-inner {
+  float: left;
+  padding-right: 2px;
+  width: 80%;
+  word-wrap: break-word;
+}
+
+.fg-data-icons {
+  float: left;
+  padding-top: 4px;
+}
+
+.roleTypeDpdn {
+  padding-bottom: 1px;
+}
+
+.fg-dev-fed-wrap {
+  padding-left: 20px;
+  padding-bottom: 1px;
+}
+.fg-dev-fed-wrap .fg-assign-txt {
+  font-size: 14px;
+  padding-right: 20px;
+  text-align: right;
+}
+.fg-dev-fed-wrap .fg-left-zero {
+  margin-left: -4px;
+}
+.fg-dev-fed-wrap span.red {
+  color: #c70000;
+}
+
+.fg-dev-roles-wrap {
+  padding-left: 20px;
+}
+.fg-dev-roles-wrap .fg-assign-txt {
+  font-size: 14px;
+  padding-right: 20px;
+  text-align: right;
+}
+.fg-dev-roles-wrap .fg-left-zero {
+  margin-left: -4px;
+}
+.fg-dev-roles-wrap span.red {
+  color: #c70000;
+}
+
+.fg-filter-role .twitter-typeahead {
+  display: inline !important;
+}
+.fg-filter-role .tokenfield .tt-hint {
+  display: none;
+}
+.fg-filter-role .tokenfield .token {
+  height: auto;
+  overflow: hidden;
+  padding-right: 20px;
+  position: relative;
+}
+.fg-filter-role .tokenfield .token .close {
+  height: 15px;
+  margin-right: 5px;
+  margin-top: 5px;
+  position: absolute;
+  right: 0;
+}
+.fg-filter-role .tokenfield .token .token-label {
+  white-space: normal;
+}
+
+.fg-contact-log-filter-box {
+  padding-right: 0;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+.fg-contact-log-filter-box .fg-drpmenu-new li {
+  margin-left: 10px !important;
+  margin-right: 10px !important;
+  margin-top: 6px;
+  margin-bottom: 4px;
+}
+.fg-contact-log-filter-box .fg-drpmenu-new li a:hover {
+  color: #333333 !important;
+}
+
+.fg-input-info {
+  font-size: 13px;
+  display: inline-block;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  color: #333333;
+}
+
+.tokenfield.input-sm {
+  min-height: 25px;
+}
+.tokenfield .token .close {
+  vertical-align: middle !important;
+  height: 12px;
+}
+
+.fg-user-div .tokenfield.input-sm .token-input {
+  color: #666666;
+  font-size: 13px;
+  height: 23px;
+  margin-bottom: 0;
+  margin-top: -5px !important;
+  padding-right: 6px;
+}
+.fg-user-div .tokenfield .token .token-label {
+  line-height: 16px;
+}
+.fg-user-div .token {
+  color: #666666;
+  font-size: 13px;
+  margin-top: -4px;
+  padding-right: 5px;
+}
+.fg-user-div .tt-dropdown-menu {
+  font-size: 13px;
+}
+
+.fg-common-add-item {
+  font-size: 14px;
+  margin: 20px 0;
+}
+
+.fg-red-border .fg-theme-head {
+  min-height: 37px;
+}
+
+.subclass a .fg-asterisk {
+  font-size: 11px !important;
+  color: #666666;
+}
+
+.deletediv.work-grp-lock {
+  padding-left: 2px;
+}
+
+.fg-textalign .fg-required-label {
+  line-height: 18px !important;
+  word-wrap: break-word;
+}
+
+.date-picker .btn {
+  padding: 7px 14px !important;
+}
+
+.fg-contact-mandatory:before {
+  content: '\f069';
+  font-family: FontAwesome;
+  font-size: 8px;
+  color: #c70000;
+  font-weight: 100;
+  vertical-align: top;
+  display: inline-block;
+  margin-top: -4px;
+  margin-left: -8px;
+}
+
+.fg-option-mandatory span:after {
+  content: '\f069';
+  font-family: FontAwesome;
+  font-size: 8px;
+  color: #c70000;
+  font-weight: 100;
+  padding-left: 4px;
+  vertical-align: top;
+  margin-top: -4px;
+  display: inline-block;
+}
+
+.fg-btn-mandatory .filter-option:after {
+  content: '\f069';
+  font-family: FontAwesome;
+  font-size: 8px;
+  color: #c70000;
+  font-weight: 100;
+  padding-left: 4px;
+  vertical-align: top;
+  display: inline-block;
+  padding-top: 0;
+  left: -5px;
+  position: relative;
+}
+
+.yellow .selectedrow .fg-last-icon {
+  top: 3px;
+}
+
+.fg-disabled .btn-primary {
+  background-color: #cccccc;
+}
+
+.fg-brdcrb-left > li {
+  float: left;
+}
+
+.fg-col-hack .fg-plus-icon-mov {
+  float: left;
+  padding-right: 6px;
+  padding-top: 5px;
+}
+
+.fg-role-text-width .fg-input-area {
+  width: 300px;
+}
+
+.fg-inactive-bg .fg-connection-img img {
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+}
+
+.input-group-sm .tokenfield {
+  min-height: 25px;
+}
+
+.fg-fa-sign-in:before {
+  content: "\f090";
+  color: gainsboro;
+  display: table-cell;
+  font-size: 20px;
+  height: 40px;
+  vertical-align: middle;
+}
+
+.fg-option-money span:after {
+  content: "\f0d6";
+}
+
+.fg-btn-money span:first-child:after {
+  content: "\f0d6";
+}
+
+/*
+=============================================================================
+* Fairgate backend pages
+========================================================================== 
+*/
+/*:::::Fieldarea ::::*/
+.fieldArea .popover {
+  max-width: 520px;
+  width: 520px;
+}
+.fieldArea .popover .popover-content {
+  max-width: 520px;
+  background: white;
+  float: left;
+}
+.fieldArea .popover .popover-content strong {
+  float: left;
+}
+.fieldArea .popover .popover-content strong:last-of-type {
+  margin-top: 20px;
+}
+.fieldArea .popover .fg-popover-address {
+  float: left;
+  width: 65%;
+}
+.fieldArea .popover .fg-popover-address:last-of-type {
+  width: 35%;
+  margin-right: 0;
+  float: right;
+}
+.fieldArea .popover .fg-popover-address p {
+  float: left;
+  width: 100%;
+  line-height: 18px;
+  margin-bottom: 0;
+}
+.fieldArea .popover .fg-popover-address p:last-child {
+  padding-bottom: 10px;
+}
+
+.fieldArea ::-webkit-input-placeholder {
+  font-style: italic;
+}
+.fieldArea :-moz-placeholder {
+  font-style: italic;
+  opacity: 1;
+}
+.fieldArea ::-moz-placeholder {
+  font-style: italic;
+  opacity: 1;
+}
+.fieldArea :-ms-input-placeholder {
+  font-style: italic;
+}
+.fieldArea :placeholder-shown {
+  font-style: italic;
+}
+
+.fg-contact-data .data-more-tab .dropdown-menu li > a {
+  white-space: normal;
+}

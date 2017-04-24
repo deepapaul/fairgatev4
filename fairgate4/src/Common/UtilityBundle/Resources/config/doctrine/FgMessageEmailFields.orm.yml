@@ -1,0 +1,37 @@
+Common\UtilityBundle\Entity\FgMessageEmailFields:
+    type: entity
+    table: fg_message_email_fields
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        attributeType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: attribute_type
+    manyToOne:
+        receivers:
+            targetEntity: FgMessageReceivers
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                receivers_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        attribute:
+            targetEntity: FgCmAttribute
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                attribute_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

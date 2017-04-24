@@ -1,0 +1,80 @@
+
+{#get_Nl_additional_subscribers#}
+<table 
+    class="table dataTable-subscriber
+    table-bordered
+    table-hover
+    table-condensed
+    dataTable-scroll-y
+    dataTable-ajax
+    dataTable-rows
+    dataTable-scroll-x
+    dataTables_scrollBody
+    lastcolumn_sort dataTable-initialSort data-count"   xWidth="100" yHeight="300" data-table-name="dataTables" data_row_change="fgrowchange" id="subscriber-list" dataTable-popover="true" dataTable-hover="true" fgunwantedsection='true' serverside_process="true">
+    <thead>
+        <tr>
+            <th>{%trans%}RL_EMAIL_ADDRESS{%endtrans%}</th>
+            <th>{%trans%}CONTACT_NAME{%endtrans%}</th>
+            <th>{%trans%}SL_SALUTATION{%endtrans%}</th>
+            <th>{%trans%}SUBSCRIBER_CORRESPONDANCE_LANG{%endtrans%}</th>
+        </tr>
+    </thead>
+</table>
+
+
+<script>
+
+    var columnDefs = [{"name": "email", "targets": 0, data: function (row, type, val, meta) {
+                return  row[1] == '' || row[1] == null ? '-' : row[1];
+            }},
+        {"name": "contactname", "targets": 1, data: function (row, type, val, meta) {
+                if ($.trim(row[2]) != "" || row[2] != null) {
+                    return  $.trim(row[2]) == '' || row[2] == null ? '-' : row[2];
+                } else {
+                    return  row[4] == '' || row[4] == null ? '-' : row[4];
+                }
+
+            }},
+        {"name": "salutation", "targets": 2, data: function (row, type, val, meta) {
+                var salutationJSON = $.parseJSON($("#salutaionDetail").val());
+                var salutaion = '';
+                if (salutationJSON["type"] == 'SAME') {
+                    salutaion = salutationJSON["salutaion"]
+                } else if (salutationJSON["type"] == 'NONE') {
+                    salutaion = '-';
+                } else {
+                    salutaion = (row[3] == '' || row[3] == null) ? '-' : row[3];
+                }
+                return  salutaion;
+            }},
+        {"name": "corresLang", "targets": 3, data: function (row, type, val, meta) {
+
+                return row[5] == '' || row[5] == null ? '-' : row[5];
+            }},
+    ]
+
+    var actionMenuNoneSelectedText,
+            actionMenuSingleSelectedText,
+            actionMenuMultipleSelectedText;
+    var ajaxPath = "{{ path('get_Nl_additional_subscribers', {'newsletterId': newsletterId }) }}";
+    var datatableId = 'subscriber-list';
+    var datatableServerSideprocess = false;
+</script>
+<script src="{{ asset('fgcustom/js/FgBackendDatatable.js') }}" type="text/javascript"></script>
+<script src="{{ asset('fgcustom/js/page/subscriber-list.js')}}" type="text/javascript"></script> 
+<script>
+    $("#searchbox1").hide();
+    $("#searchbox2").hide();
+    $("#searchbox").show();
+
+    $("#fgrowchange1").hide();
+    $("#fgrowchange2").hide();
+    $("#fgrowchange").show();
+    $("#nl_recipient_table_length").hide();
+    $("#subscriber-list_length").show();
+    $("#federation-list_length").hide();
+    $("#nl_recipient_remove_table_length").hide();
+
+
+</script>
+

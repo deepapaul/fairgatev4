@@ -1,0 +1,173 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = 'ARTICLE_LIST'|trans %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTAINER -->
+
+    <!-- BEGIN BREADCRUMB-->
+    <div class="row">
+        <div class="col-lg-12">
+            {% include 'internal/breadcrumb.html.twig'  %}
+        </div>
+    </div>
+    <!-- END BREADCRUMB-->
+
+    <div class="fg-action-menu-wrapper">
+    </div>
+    <!-- BEGIN CONTENT -->
+    <div class="row fg-forum-overview-wrapper">
+        <div class="col-lg-10 col-lg-offset-1 col-sm-12">
+            <h2 class="page-subtitle-01 fg-marg-top-0 fg-marg-btm-15 article-page-title-text">{{pageTitle}}
+                {% if adminFlag %}
+                    <a href="{{path('internal_article_editorial_list')}}" class="pull-right"><div class="fg-action-gallery-mode   fg-btn-grey-icon fg-active-IB ">
+                        <span data-type="justify" class='fg-clear-marg'><i class="fa fa-pencil-square-o fa-2x"></i> {{'TOP_NAV_ARTICLE_EDITORIAL'|trans}}</span> </div>
+                    </a>
+                {% endif %}
+            </h2>
+            <div class="article-nodata-wrapper hide">{{'NO_DATA_FOUND'|trans}}</div>
+                <div class="fg-filter-sidebar-wrapper ">
+                <div class="fg-filter-sidebar-search input-icon">
+                    <i class="fa fa-search"></i>
+                    <input type="text" placeholder="{{'FILTER_SEARCH_PLACEHOLDER'|trans}}" class="form-control control2" id="fg_dev_member_search">
+                </div>
+                <h2 class="fg-filter-sidebar-title">{{'ARTICLE_FILTER'|trans}}<div class="fg-filter-menu fg-active-IB"> 
+                    <a href="javascript:void(0)" class="fg-filter-menu-option fg-filtermenu" data-value="own" id="fg-own-event">{{'FILTER_OWN'|trans}}</a> 
+                    <a href="javascript:void(0)" class="fg-filter-menu-option fg-filtermenu" data-value="all">{{'FILTER_ALL'|trans}}</a>  
+                </div></h2>
+                
+                <div  class="fg-filter-sidebar-list">
+                    <ul >
+                        <li class="has-parent has-child">
+                            <div class="fg-filter-menu fg-clear {% if (sidebaractionMenuFlag != 1) %}fg-no-action{%endif%}">
+                                {% if (areaExist == 1) %}
+                                    <span><input type="checkbox" name="allarea" data-area="all" class="fg-filter-checkbox fg-allday"> </span>
+                                {% endif %}
+                                <a  class="fg-filter-menu-option active">{{'FILTER_AREAS'|trans}}</a>
+                            </div>
+                            <ul class="fg-filter-items">
+                                <li id="fg-general-filter" class="has-child"></li>
+
+                            </ul>
+
+                        </li>
+                        <li id="fg-category-filter" class="has-child fg-filter-hide">
+                            <div class="fg-filter-menu fg-clear {% if (sidebaractionMenuFlag != 1) %}fg-no-action{%endif%}">
+                                  {% if (categoryExist == 1) %}
+                                    <span><input type="checkbox" name="allcat" class="fg-filter-checkbox"> </span>
+                                  {% endif %}
+                                  <a href="javascript:void(0)" class="fg-filter-menu-option active">{{'FILTER_CATEGORIES'|trans}}</a>
+                            </div>
+                        </li>
+                        {#  class="hide"#}
+                        <li id="fg-time-filter" class="fg-time-filter-hide">
+                             <div class="fg-filter-menu fg-clear fg-no-action">
+                                <a href="javascript:void(0)" class="fg-filter-menu-option active">{{'FILTER_TIME_PERIOD'|trans}}</a>
+                             </div>
+                        </li>
+                        <li id="fg-date-filter" class="fg-date-filter-hide">
+                             <div class="fg-filter-menu fg-clear fg-no-action">
+                                <a href="javascript:void(0)" class="fg-filter-menu-option active">{{'ARTICLE_DATE_FILTER'|trans}}</a>
+                             </div>
+                             <ul id="fg-time-filter-levels" class="fg-filter-item ">
+                                 <li class="fg-filter-item">
+                                     <div class="filter-content fg-clear fg-date-wrapper">
+                                        <label class="fg-active-IB" for="START_DATE">{{'ARTICLE_BETWEEN'|trans}}</label>
+                                         <div class="input-group datepicker date fg-date fg-active-IB">
+                                             <input type="text" class="form-control fg-filter-checkbox fg-filter-date fg-dev-newfield" data-type="START_DATE" id="START-DATE" name="START_DATE">
+                                             <div class="input-group-addon">
+                                                 <i class="fa fa-calendar"></i>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </li>
+                                 <li class="fg-filter-item">
+                                     <div class="filter-content fg-clear fg-date-wrapper">
+                                        <label class="fg-active-IB" for="END_DATE">{{'AND'|trans}}</label>
+                                         <div class="input-group datepicker date fg-date fg-active-IB">
+                                             <input type="text" class="form-control fg-filter-checkbox fg-filter-date FILTER-DATE fg-dev-newfield" data-type="END_DATE" id="END-DATE" name="END_DATE">
+                                             <div class="input-group-addon">
+                                                 <i class="fa fa-calendar"></i>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </li>
+                             </ul>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="fg-news-overview-wrapper">
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- END CONTENT -->
+{% endblock %}
+{% block underscoretemplate %}
+    {% include 'InternalArticleBundle:Article:templateArticleList.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('fgassets/internal/js/page/articleSidebar.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/internal/js/page/fg-article-list.js')}}" type="text/javascript"></script>
+    <script>
+        var articleCount = {{lazyLoadingPerRequest}};
+        var currentPageResultCount = articleCount;
+        var totalPages = Math.ceil(100 / articleCount);
+        var articleDetailPath = '{{path('internal_article_details_view',{'articleId':'replaceArticleId'})}}';
+        var sidebarOptions = {{ (sidebarOptions|json_encode()|raw ) }};
+        var clubTitles = {{ (clubTitles|escape('js')|json_encode()|raw ) }};
+        var filterData = '';
+        var searchTitle ='{{'FILTER_SEARCH_TITLE'|trans}}';
+        var pageTitle ='{{pageTitle}}';
+        var clubId ='{{clubId}}';
+        var contactId ='{{contactId}}';
+        var areaTrans = '{{'AR_AREAS'|trans}}';
+        var catTrans = '{{'AR_CATEGORIES'|trans}}';
+        var filterStoragename = 'articlefilter-'+clubId+'-'+contactId;
+       //var articleviewStoragename = 'articleview-'+clubId+'-'+contactId;
+        var isAdmin = ({{adminFlag}} == 1)?true:false;
+        var isSidebarFlag = ({{sidebaractionMenuFlag}}==1)?true:false;
+        var searchLocalStorage = 'articlesearch-'+clubId+'-'+contactId;
+        var defaultlanguage = '{{clubDefaultLang|raw}}';
+        var translationText = {'WithoutArea':'{{'FILTER_WITHOUT_AREA'|trans}}',
+                            'Withoutcategory':'{{'FILTER_WITHOUT_CATEGORY'|trans}}'
+                           };
+        var roleadminFlag = '{{roleadminFlag}}';
+        $(document).ready(function () {
+            //for set the search value
+            var searchvalue = localStorage.getItem(searchLocalStorage);
+            if( searchvalue != 'undefined' && searchvalue !=null && searchvalue !='') {
+                $('#fg_dev_member_search').val(searchvalue);
+                $('.article-page-title-text').html(searchTitle.replace('%searchval%',searchvalue));
+            }
+            FgArticleSidebar.setTristate();
+            var options = {
+                container: '.fg-dev-article-filter',
+                jsonData: $.parseJSON(sidebarOptions),
+                localStorageName:filterStoragename,
+                clubType: '{{clubType}}',
+                adminFlag: isSidebarFlag,
+                roleadminFlag:roleadminFlag,
+                translations:translationText,
+                initCompleteCallback: function () {
+                    FgArticleSidebar.setTristate();
+                }
+            }
+
+            FgArticleSidebar.initialize(options);
+            
+            /* show/hide export button whenever the tabs are changed */
+            $('.fg-action-export').addClass('fg-dis-none').removeClass('fg-active-IB');
+            FgArticleList.init();
+        });
+
+       var getListingPage = "{{path('internal_article_get_listdata')}}";
+    </script>
+
+{% endblock %}

@@ -1,0 +1,56 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">{{contactDetails.title}}</h4>
+</div>
+<div class="modal-body fg-modal-text fg-details " >
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                {% if(contactDetails.company == 0 or contactDetails.has_main_contact != 0 ) %}
+                    <div class="row form-group ">
+                        <div class="col-sm-6 text-right text-grey">{{'FIRST_NAME'|trans}}</div>
+                        <div class="col-sm-6 fg-firstname">{{contactDetails.firstname}}</div>
+                    </div>
+                    <div class="row form-group ">
+                        <div class="col-sm-6 text-right text-grey">{{'LAST_NAME'|trans}}</div>
+                        <div class="col-sm-6 fg-lastname">{{contactDetails.lastname}}</div>
+                    </div>
+                {% endif %}
+                {% if(contactDetails.company == 1) %}
+                    <div class="row form-group ">
+                        <div class="col-sm-6 text-right text-grey">{{'COMPANY'|trans}}</div>
+                        <div class="col-sm-6 fg-lastname">{{contactDetails.lastname}}</div>
+                    </div>
+                {% endif %}
+                {% if(contactDetails.company == 0 or contactDetails.has_main_contact != 0 ) %}
+                    <div class="row form-group ">
+                        <div class="col-sm-6 text-right text-grey">{{'GENDER'|trans}}</div>
+                        <div class="col-sm-6 fg-gender">{% if contactDetails.gender != '' %}{{contactDetails.gender}}{% else%} - {% endif %}</div>
+                    </div>
+                    <div class="row form-group ">
+                        <div class="col-sm-6 text-right text-grey">{{'BIRTH_DATE'|trans}}</div>
+                        <div class="col-sm-6 fg-dob">{% if contactDetails.birth != '' and contactDetails.birth1 != "0000-00-00" %}{{contactDetails.birth}}{% else%} - {% endif %}</div>
+                    </div>
+                {% endif %}
+                <div class="row form-group ">
+                    <div class="col-sm-6 text-right text-grey">{{'LOCATION'|trans}}</div>
+                    <div class="col-sm-6 fg-location">{% if contactDetails.location != '' %}{{contactDetails.location}}{% else%} - {% endif %}</div>
+                </div>
+                <div class="row form-group ">
+                    <div class="col-sm-6 text-right text-grey">{{'CLUBS'|trans}}</div>
+                    {% set replace_value_var= '#mainclub#' %}
+                    {% if ',' in contactDetails.clubs %}
+                        {% set replace_with_value_var = ' <i class="fa  fa-star text-yellow"></i>' %} 
+                    {% else %}
+                        {% set replace_with_value_var = ' ' %} 
+                    {% endif %}
+                    <div class="col-sm-6 fg-clubs">{% if contactDetails.clubs != '' %}{{ contactDetails.clubs|replace({ (replace_value_var): replace_with_value_var })|raw }}{% else%} - {% endif %}</div>
+                </div>
+                <div class="row form-group ">
+                    <div class="col-sm-6 text-right text-grey">{{'FEDERATION_MEMBERSHIP'|trans}}</div>
+                    <div class="col-sm-6 fg-fedmembership">{% if contactDetails.fedmembership != '' %}{{contactDetails.fedmembership}}{% else%} - {% endif %}</div>
+                </div>
+            </div>
+        </div>
+    </div>   
+</div>           

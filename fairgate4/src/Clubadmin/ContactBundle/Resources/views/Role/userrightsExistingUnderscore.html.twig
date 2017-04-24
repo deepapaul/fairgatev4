@@ -1,0 +1,144 @@
+<script type="text/template" id="fg-dev-internal-team-userrights"> 
+<%
+    if(type=='T'){
+        roletype="teamAdminInt";
+        roletype1="teamSection";
+    }else{
+        roletype="wgAdminInt";
+        roletype1="wgSection";
+    }
+    groupAdminTemp = groupAdmin;
+    grpAdmin = _(groupAdminTemp).filter(function (list) { return ((list['module_type']== 'all')&&(list['type']=='role')&& (list['roleType']==type));});
+    grpAdmin = FgUtility.groupByMulti(grpAdmin, ['contactId','team']); 
+   
+    otherSectionAdmin = _(groupAdminTemp).filter(function (list) { return ((list['module_type']!= 'all')&& (list['roleType']== type)&&(list['type']=='role'));});
+    otherSectionAdmin = FgUtility.groupByMulti(otherSectionAdmin, ['contactId','team']);
+    
+    %>
+    
+<div class="row">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12 fg-common-top fg-marg-top-0">
+                <div class="panel-heading fg-theme-head">
+                    <h3 class="fg-panel-title">
+                        <% if(type=='T'){ %>
+                            {{'USER_RIGHTS_TEAM_ADMINISTRATOR'|trans ({'%Team%' : fgtwig.getTerminolgyName('Team',singular,'UCF')})}}
+                        <% } else{ %>   
+                            {{'USER_RIGHTS_WORKGROUP_ADMINISTRATORS'|trans }}
+                        <% } %>
+                    </h3>
+                </div> 
+            </div>
+            <div class="col-md-12 fg-user-div fg-common-top fg-dev-user-rights-elements">
+                <% if(grpAdmin.length!=0) { 
+                    var teamsAdmin = [];        
+                    _.each(grpAdmin,function(contentVal1,contentKey1){ 
+                         teamsAdmin.push(contentKey1);        
+                %>
+                         <% var contactName = '';var createdAt = ''; var isMember = contentVal1['isTeamMember']; %>
+                        <% _.each(contentVal1,function(val,key){ %>
+                            <% contentKey1 = contentKey1.replace('c_','');contactName = val[0]['contactname'] ;%>
+                             <% createdAt = val[0]['createdAt']; %>
+                        <% }); %>
+                         <div class="row fg-border-line sortables solid-BG-white" id="fg-clrChangeBlk_<%- roleId %>_<%- contentKey1 %>" >
+                            <div class="col-md-5 col-sm-5 col-xs-8">
+                                <% var contactLink = contactPath.replace("dummyContactId", contentKey1); %>
+                                <a target="_blank" href="<%- contactLink %>"><%- contactName %></a>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <i>{{'SINCE'|trans}} <%- createdAt %></i>
+                            </div>
+                            <div class="col-md-1">
+                                <% if(contentKey1 != loggedContactId) { %>
+                                    <div class="closeico">
+                                        <input type="checkbox" class="make-switch" id="contact_<%- roleId %>_<%- contentKey1 %>_is_deleted" data-key="teams.<%- roletype %>.delete.<%- contentKey1 %>.team.<%- roleId %>"  name="contact_<%- roleId %>_<%- contentKey1 %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- roleId %>_<%- contentKey1 %>">
+                                        <label for="contact_<%- roleId %>_<%- contentKey1 %>_is_deleted"></label>
+                                    </div>
+                                <% } else { %>
+                                    <i class="fa fa-lock fa-2x ash"></i>
+                                <% } %>
+                            </div>
+                            <div class="random" data-id="{{random()}}"></div>
+                        </div>
+                <% }); }%>
+            </div>
+            <div class="fg-clear"></div>
+      
+            <div class="col-lg-12 fg-common-top"><a class="fg-dev-add-grp-admin-internal" data-toggle="modal" href="#basic" id="pencil"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text"> <% if(type =='T'){ %>{{'USER_RIGHTS_ADD_LINK'|trans ({'%Team%' : fgtwig.getTerminolgyName('Team',singular,'UCF')})}} <% }else { %> {{'USER_RIGHTS_ADD_WG_LINK'|trans}} <% } %> </span></a></div> 
+      
+        </div>    
+        
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+        <div class="clear-fix"></div>
+            <div class="col-md-12 fg-user-div fg-common-top fg-marg-top-0">
+                <div class="panel-heading fg-theme-head">
+                    <h3 class="fg-panel-title"><% if(type=='T'){ %>
+                            {{'USER_RIGHTS_TEAM_SECTION'|trans ({'%Team%' : fgtwig.getTerminolgyName('Team',singular,'UCF')})}}
+                        <% } else{ %>   
+                            {{'USER_RIGHTS_WORKGROUP_SECTION'|trans}}
+                        <% } %></h3>
+                </div>
+            </div>
+              <div class="col-md-12 fg-user-div fg-common-top fg-dev-user-rights-elements-section">
+                <% if(otherSectionAdmin.length!=0) { %>
+                     <% _.each(otherSectionAdmin,function(contentVal1,contentKey1){ %>
+                        <% contentKey1 = contentKey1.replace('c_',''); var contactName = '';%>
+                        <% _.each(contentVal1,function(val,key){ %>
+                            <% contactName = val[0]['contactname'] ;%>
+                        <% }); %>
+                    <% rand = {{random()}} %>
+                <div class="row fg-border-line sortables solid-BG-white" id = "fg-clrChangeBlk_<%- roletype1 %>_<%- contentKey1 %>_<%-roleId%>">
+                    <div class="random" data-id="<%-rand%>"></div>
+                    <div class="col-md-5 col-sm-6 col-xs-12">
+                      <% var contactLink = contactPath.replace("dummyContactId", contentKey1); %>
+                                <a target="_blank" href="<%- contactLink %>"><%- contactName %></a>
+                    </div>
+                    <input id="include-wg-admin-section-<%-rand%>" type="text"  value="<%- contentKey1 %>" class="dFExclude form-control input-sm hide" data-key="teams.new.module.<%-rand%>.contact." />
+                     <%  _.each(contentVal1,function(contentVal,contentKey){ %>
+                        
+                                        
+                            <div class="col-md-6"> 
+                                <% if(contentKey1 != loggedContactId) { %>
+                                    <select name="teams.<%- roletype1 %>.existing.<%- contentKey1 %>.<%-roleId %>.modules"  data-key="teams.<%- roletype1 %>.existing.<%- contentKey1 %>.<%-roleId %>.modules" multiple title="{{'SELECT_DEFAULT'|trans}}" class="selectpicker form-control show-tick">
+                                <% } else { %>
+                                    <select name="teams.<%- roletype1 %>.existing.<%- contentKey1 %>.<%-roleId %>.modules" disabled data-key="teams.<%- roletype1 %>.existing.<%- contentKey1 %>.<%-roleId %>.modules" multiple title="{{'SELECT_DEFAULT'|trans}}" class="selectpicker form-control show-tick">
+                                <% } %>
+                                    <% _.each(admins,function(admin){ %> 
+                                        <% var select= "multiple" ; %>
+                                        <%  _.each(contentVal,function(contentVal1,contentKey1){ 
+                                           var isMember =  contentVal1['isTeamMember'];
+                                           if(admin.id == contentVal1['group_id']){ select +=" selected" ;} %>
+                                       <%});%>
+                                        <option value="<%- admin.id %>" class=<%- select %>  ><%- admin.transName %></option>
+                                    <% }); %>  
+                                    </select>   
+                            </div> 
+                            <div class="col-md-1">
+                                <% if(contentKey1 != loggedContactId) { %>
+                                    <div class="closeico">
+                                        <input type="checkbox" class="make-switch" id="teams_<%- roletype1 %>_existing_<%- roleId %>_<%- contentKey1 %>_is_deleted" data-key="teams.<%- roletype1 %>.existing.<%- contentKey1 %>.<%- roleId %>"  name="teams_<%- roletype %>_existing_<%- roleId %>_<%- contentKey1 %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- roletype1 %>_<%- contentKey1 %>_<%- roleId%>">
+                                    <label for="teams_<%- roletype1 %>_existing_<%- roleId %>_<%- contentKey1 %>_is_deleted"></label>
+                                    </div>
+                                <% } else { %>
+                                    <i class="fa fa-lock fa-2x ash"></i>
+                                <% } %>
+                            </div>
+                </div> 
+                <% });%>
+            <% });%> 
+                <%   } %>
+              </div> 
+              <div class="clearfix"></div>
+          <div class="col-lg-12 fg-common-top">
+          <a class="fg-dev-add-grp-section-internal" data-toggle="modal" href="#basic" id="pencil"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i>
+                <span class="fg-add-text"><% if(type=='T'){ %>
+                          {{'USER_RIGHTS_ADD_LINK_TEAM_SECTION'|trans}}<% } else{ %> {{'USER_RIGHTS_ADD_LINK_WORKGROUP_SECTION'|trans }}<% } %> </span></a>
+                          <div class="clearfix"></div>
+            </div> 
+        </div>   
+     </div>
+</div>
+</script>

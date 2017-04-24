@@ -1,0 +1,59 @@
+<script type="text/template" id="template-display-assignmentfields">
+     <h4 class="fg-cols-fsz"> {{'GN_ASSIGNMENTS'|trans}} </h4>
+     
+     <% prevClassificationId = '' %>
+     <% _.each(assignmentFields,function(assignmentField){ %> 
+        <% classificationId = assignmentField.id %>
+        <% classificationName = assignmentField.title %>
+        
+        <% if (classificationId != prevClassificationId) { %>
+            <% if (prevClassificationId != '') { %>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+            <% } %>
+        
+        <div class="fg-clear"></div>
+        <div class="col-md-12">
+            <% //Classifications %>   
+             <div class="col-md-4 col-sm-4 col-xs-12">
+                 <div class="checkbox-list">
+                     <label class="fg-col-settings-label">
+                         <i class="fa fg-plus-circle fa-2x pull-left selectitem disabled" id="<%- classificationId %>" data-clasftnid="<%- classificationId %>" type="CL" club_id="<%- clubId %>" >      
+                         <span data-clasftnid="<%- classificationId %>" data-label-id="CL<%- classificationId %>" class="fg-label-inner"><%- classificationName %></span></i>  
+                     </label>
+                 </div>
+             </div>
+             <% //classes  %>
+             <div class="col-md-4 col-sm-4 col-xs-12 fg-dropdown-blue"> 
+                 <select multiple class="bs-select form-control fg-select-font selectpicker"  data-clasftnid="<%- classificationId %>">{{'SELECT_DEFAULT'|trans}}
+                    <option value="all" class="single fg-arrow-all">{{'ALL_CLASSES'|trans}}</option>
+               <% //chk condition: no class%>
+                    <% if(!( _.isEmpty(assignmentField.input))){ %>
+                    <option value="selectall" class="selectall fg-arrow-all">{{'SELECT_ALL'|trans}}</option>
+                    <optgroup label="">
+                    <% } %>
+    <% } %>
+     <% _.each(assignmentField.input,function(assignment){ %> 
+         <% classesId = assignment.id %>
+         <% classesName = assignment.title %> 
+
+        <option value="<%-classesId %>" class="multiple" ><%- classesName %></option>
+        <% }) %>
+         <% prevClassificationId = classificationId %>
+        <% });  %>
+    
+    
+  <% if (assignmentFields.length) { %>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+    <% } %>
+    
+</script>
+
+
+
+

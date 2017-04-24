@@ -1,0 +1,32 @@
+Common\UtilityBundle\Entity\FgMessageGroup:
+    repositoryClass: Common\UtilityBundle\Repository\Message\FgMessageGroupRepository
+    type: entity
+    table: fg_message_group
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        role:
+            targetEntity: FgRmRole
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                role_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        message:
+            targetEntity: FgMessage
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                message_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

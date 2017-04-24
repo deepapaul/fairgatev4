@@ -1,0 +1,130 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">{{ header|trans }}</h4>
+</div>
+
+<div class="modal-body fg-modal-text row">
+    <div class="col-md-12">
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <form action="{{ path("do_confirm_or_discard") }}" class="form-horizontal form-row-sepe" id="confirmdiscard">
+                    
+                        <p>{{ label|trans }}</p>
+                        {% if (action == 'confirm' and page == 'creations') %}
+                            <div class="col-md-12">
+                                {% if (clubMembershipAvailable) %}
+                                    <div class="form-group">
+                                        <div class='col-sm-4 text-right'>
+                                            <label class="fg-club-membership control-label" for="select">{{'MEMBERSHIP'|trans}}</label>
+                                        </div>
+                                        <div class='col-sm-6'>
+                                            <select id='contact_assign_club_membership_list'>
+                                            <optgroup label="" data-max-options="2">
+                                            {% for category, membershipCats in memberships.club %}
+                                                <option data-content="{{membershipCats}}" value="{{category}}">{{membershipCats}}</option>
+                                            {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% if (clubType != 'standard_club') %}
+                                    <div class="form-group">
+                                        <div class='col-sm-4 text-right'>
+                                            <label class="fg-fed-membership control-label" for="select">{{'FEDERATION_MEMBERSHIP'|trans}}{% if (fedMembershipMandatory) %}<span class="required" aria-required="true"> *</span>{% endif %}</label>
+                                        </div>
+                                        <div class='col-sm-6'>
+                                            <select id='contact_assign_fed_membership_list'>
+                                            <optgroup label="" data-max-options="2">
+                                            {% for category, membershipCats in memberships.fed %}
+                                                <option data-content="{{membershipCats}}" value="{{category}}">{{membershipCats}}</option>
+                                            {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    <div class="alert  alert-danger fg-poup-alert hide" id="error_assign">
+                        <p><strong>{{'ERROR_NO_MEMBERS_TO_ASSIGN'|trans}} </strong><span></span></p>
+                    </div>
+                <input type="hidden" name="selectedId" id="selectedId" value="" />
+                <input type="hidden" name="page" id="page" value="{{ page }}" />
+                <input type="hidden" name="action" id="action" value="{{ action }}" />
+                <div class="clearfix"></div>
+            </form>
+            <!-- END FORM-->
+        </div>
+    </div>
+</div>
+{% include 'clubadmin/savebuttonpopup.html.twig' with {'save_button_val': ((action == 'confirm') ? 'BUTTON_CONFIRM'|trans : 'BUTTON_DISCARD'|trans)}  %}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#contact_assign_club_membership_list').selectpicker();
+        $('#contact_assign_fed_membership_list').selectpicker();
+    }); 
+    $(document).off('click', 'button[data-function=save], button[data-function=cancel]');
+    $(document).on('click', 'button[data-function=save], button[data-function=cancel]', function () {
+        var buttonId = this.id;
+        if (buttonId == 'save') {
+            confirmOrDiscardChanges();
+        }
+    });
+    function confirmOrDiscardChanges() {
+        $('form#confirmdiscard .help-block').remove();
+        $('form#confirmdiscard .has-error').removeClass('has-error');
+        {% if (action == 'confirm' and page == 'creations') %}
+            {% if (fedMembershipMandatory) %}
+                if ($('#contact_assign_fed_membership_list').val() == 0) {
+                    $('form#confirmdiscard select#contact_assign_fed_membership_list').parent().addClass('has-error');
+                    $('<span class="help-block fg-marg-top-5">required</span>').insertAfter($('form#confirmdiscard select#contact_assign_fed_membership_list + .btn-group.bootstrap-select'));
+                    return false;
+                }
+            {% endif %}
+        {% endif %}
+        var selConfirmIds = [];
+        var selectionClass = ('{{ selActionType }}' == 'selected') ? 'dataClass:checked' : 'dataClass';
+        $("input." + selectionClass).each(function () {
+            var confirmId = $(this).attr('id');
+            if ($.inArray(confirmId, selConfirmIds) == -1) {
+                selConfirmIds.push(confirmId);
+            }
+        });
+        data = {}
+        data.selectedId = JSON.stringify(selConfirmIds);       
+        data.action = '{{ action }}'; 
+        data.page = '{{ page }}'; 
+        if ($('#contact_assign_club_membership_list').length > 0) {
+            data.clubMembership = $('#contact_assign_club_membership_list').val();
+        }
+        if ($('#contact_assign_fed_membership_list').length > 0) {
+            data.fedMembership = $('#contact_assign_fed_membership_list').val();
+        }
+        $('#popup').modal('hide');
+        FgXmlHttp.post('{{ path("update_confirmations") }}', data, '', function(data){
+            if (data.status != 'MERGE') {
+                if(data.status == 'EMAILFAILED') {
+                    setTimeout(function(){
+                        $('#popup').modal('show');
+                        $('#error_assign').removeClass('hide');
+                        return false;
+                    }, 400);
+                } else if (data.status == 'SUCCESS') {
+                    confirmationCallback.confirmOrDiscardCallback(data.count, '{{ page }}');
+                } else {
+                    confirmationCallback.confirmOrDiscardCallback(data.count, '{{ page }}');
+                }
+            }
+            else {
+                if(data.mergeable){
+                    if(data.mergeCount == 'SINGLE') {
+                        FgMergePopup.handleMergerablePopup(data);
+                    } else if (data.mergeCount == 'MULTIPLE') {
+                        FgMultipleMergePopup.handleMergerablePopup(data);
+                    }
+                }
+            }
+        });
+    }
+    
+</script>

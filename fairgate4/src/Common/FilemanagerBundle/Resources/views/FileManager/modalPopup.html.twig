@@ -1,0 +1,72 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">{{ title }}</h4>
+    </div>
+      
+    <div class="portlet-body form">
+        <!-- BEGIN FORM-->
+        <div class="form-body">                               
+                {% if (modalType == 'gallery' or modalType == 'documents') %} 
+                    {#<div class="form-group fg-clear">
+                        <label class="control-label text-right fg-label-valign col-lg-3 col-md-3">{{'GALLERY_GALLERY'|trans}}<span aria-required="true" class="required"> * </span></label>
+                        <div class="col-lg-9 col-md-8">
+                            <input type="text" name="" id="" value="" class="form-control filter-log-input" />
+                        </div>
+                    </div>#}
+                    <div class="row form-group fg-videoUrl">
+                      <label class="col-sm-4 control-label text-right" for="">{{'FILE_NAME'|trans}}</label>  
+                      <div class="col-sm-7">
+                      <input id="zipFilename" name="zipFilename" type="text" class="form-control input-md" value="archive.zip">
+
+                      </div>
+                    </div>
+                {% elseif (modalType == 'admin'or modalType == 'users' or modalType == 'contact') %} 
+                    <div class="row form-group fg-videoUrl">
+                        <label class="col-sm-4 control-label text-right" for="">{{'FILE_NAME'|trans}}</label>  
+                        <div class="col-sm-7">
+                            <input id="zipFilename" name="zipFilename" type="text" class="form-control input-md" value="archive.zip">
+                        </div>
+                    </div>
+                        
+                {% else %}  {#here modalType can be 'REMOVE_IMAGE' OR 'DELETE_IMAGE' #}
+                    <div class="form-group">
+                    <label class="col-lg-12 col-md-12 col-xs-12">
+                        {{ text }}
+                    </label>   
+                    </div>
+                {% endif %}                                                              
+        </div>
+        <!-- END FORM-->
+    </div>        
+   
+    {% set button_val = (button_val is not defined) ? 'SAVE'|trans : button_val%}
+    {% include 'internal/savebuttonPopup.html.twig' with { 'button_val' : button_val } %}
+</div>
+  <script type="text/javascript"> 
+    var checkedIds = '{{ checkedIds|raw }}';
+    var downloadGalleryPath = "{{path('filemanager_download_gallery')}}";
+    var downloadAdminPath = "{{path('filemanager_download_admin')}}";
+    var downloadDocZipPath = "{{path('filemanager_download_zip_documents')}}";
+    var modalType = '{{ modalType }}';
+    var source = '{{ source }}';
+    FgFormTools.handleSelect2();
+    //trim space in subalbums
+    $('#s2id_movealbum .select2-chosen').text($('#s2id_movealbum .select2-chosen').text().replace( /[\s\n\r]+/g, '' ));
+    
+    $(document).off('click', '#savePopup');
+    $(document).on('click', '#savePopup', function() {
+        var filename = $('#zipFilename').val();
+        if(modalType == 'gallery'){
+           FgListModuleFiles.downloadGalleryFiles(checkedIds, filename, '1');
+        }
+        else if(modalType == 'admin' || modalType == 'users' || modalType == 'contact'){
+            FgListModuleFiles.downloadAdminFiles(modalType, checkedIds, filename, source);
+        }else if(modalType == 'documents'){
+            FgListModuleFiles.downloadDocumentsZip(checkedIds, filename);
+        }
+    });
+    
+    
+    
+</script>    

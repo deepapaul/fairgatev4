@@ -1,0 +1,31 @@
+Common\UtilityBundle\Entity\FgClubSettingsI18n:
+    type: entity
+    table: fg_club_settings_i18n
+    fields:
+        lang:
+            id: true
+            type: string
+            length: 6
+            fixed: false
+            nullable: false
+        signatureLang:
+            type: text
+            nullable: false
+            column: signature_lang
+        logoLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: logo_lang
+    oneToOne:
+        id:
+            targetEntity: FgClubSettings
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

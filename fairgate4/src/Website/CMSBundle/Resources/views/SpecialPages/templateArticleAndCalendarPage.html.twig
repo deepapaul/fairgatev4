@@ -1,0 +1,89 @@
+<script type='template' id='articleAndSpecialPageTemplate'>
+<div class="fg-cms-elements-head-edit-wrapper">
+    <div class="form-body articleOrCalendarPageForm">
+        <div class="form-group fg-clear fg-cms-article-areas">
+            <label class="control-label text-right fg-label-valign col-lg-3 col-md-3" for="articleTitle">{{'ARTICLE_AREAS'|trans}}</label>
+            <div class="col-md-6  col-lg-5 fg-error-add-required ">
+                <select class="form-control selectpicker"  multiple="multiple" name='specialPageAreas' id='specialPageAreas'>
+                    <optgroup label="">
+                        <option value="ALL_AREAS" class="single fg-arrow-all" >{{'CMS_ALL_AREAS'|trans }}</option>
+                    </optgroup>
+                    <optgroup label="">
+           
+                        <option class="multiple" value="{{fgclub.get('id')}}">{{fgclub.get('title')|capitalize}}</option>
+                    </optgroup>
+    {% if areas.teams is not empty %}
+                        <optgroup label="{{fgtwig.getTerminolgyName('Team',plural)}}">
+        {% for key, data in areas.teams %}
+                                <option class="multiple"  value="{{ key }}"  >{{ data }}</option>
+        {% endfor %}
+                        </optgroup>
+    {% endif %}
+    {% if areas.workgroups is not empty %}
+                        <optgroup label="{{'CMS_WORKGROUP'|trans}}">
+        {% for key, data in areas.workgroups %}
+                                <option class="multiple" {{selected|default('')}} value="{{ key }}" > {% if (data=='Executive Board') %} {{fgtwig.getTerminolgyName('Executive Board',singular)}} {% else %} {{ data }} {% endif %}</option>
+        {% endfor %}
+                        </optgroup>
+    {% endif %}
+
+                </select>
+                <input type="hidden" name="currentPageId" id="currentPageId" value="<%- data.pageId %>"/>
+                <input type="hidden" name="currentPageType" id="currentPageType" value="<%- data.pageType %>"/>
+            </div>
+        </div>
+
+     <div class="form-group fg-clear fg-cms-special-page-categories">
+    <label class="control-label text-right fg-label-valign col-lg-3 col-md-3" for="from-date">{{'ARTICLE_CATEGORIES'|trans}}</label>
+    <div class="col-md-6  col-lg-5 fg-error-add-required">
+        <select name="specialPageCategories" id="specialPageCategories" class="form-control selectpicker" multiple="multiple" >
+            <optgroup label="">
+                <option value="ALL_CATS" class="single fg-arrow-all" >{{'CMS_ALL_CATEGORIES'|trans }}</option>
+            </optgroup>
+              <% if(data.pageType == 'article') { %>
+            
+    {% for category in articleCategories %}
+                    <option class="multiple" value="{{ category.id }}"  >{{ category.title }}</option>
+    {% endfor %}
+                <%} else { %>  
+                
+    {% for category in calendarCategories %}
+                    <option class="multiple" value="{{ category.id }}"  >{{ category.title }}</option>
+    {% endfor %}
+                
+                <%} %>
+        </select>
+    </div>
+</div>
+    {% if (clubType != 'federation' and clubType != 'standard_club') %}
+            <div class="form-group fg-clear">
+                <div class="col-md-6 col-sm-8 col-lg-6 col-md-offset-3">
+                    <label class="checkbox-inline fg-pad-left-0 " for="fedShared">
+                     <input data-id="" <% if(data.fedLowerLevelCount == 0) { %> disabled <%} %> type="checkbox" name="fedShared" id="fedShared" <% if((typeof(data.existingDatas['sharedClubs']) !== 'undefined') && (!_.isEmpty(data.existingDatas['sharedClubs'])) && ((data.existingDatas['sharedClubs']).indexOf(data.fedId) >= 0)) { %> <% if(data.fedLowerLevelCount > 0) { %> checked <%} %> <%} %>  class="uniform">
+                        <% if(data.pageType == 'article') { %>
+        {{'CMS_FEDERATION_SHARED_ARTICLES'|trans}}
+                    <%} else { %>  
+        {{'CMS_FEDERATION_SHARED_EVENTS'|trans}} 
+                        <%} %> 
+                    </label>
+                </div>
+            </div>
+    {% endif %}
+    {% if (clubType == 'sub_federation_club') %}
+            <div class="form-group fg-clear">
+                <div class="col-md-6 col-sm-8 col-lg-6 col-md-offset-3">
+                    <label class="checkbox-inline fg-pad-left-0 " for="subFedShared">
+                        <input data-id="" <% if(data.subFedLowerLevelCount == 0) { %> disabled <%} %> type="checkbox" name="subFedShared" id="subFedShared" <% if((typeof(data.existingDatas['sharedClubs']) !== 'undefined') && (!_.isEmpty(data.existingDatas['sharedClubs'])) && ((data.existingDatas['sharedClubs']).indexOf(data.subFedId) >= 0)) { %> <% if(data.subFedLowerLevelCount > 0) { %> checked <%} %> <%} %> class="uniform">
+                        <% if(data.pageType == 'article') { %>
+        {{'CMS_SUB_FEDERATION_SHARED_ARTICLES'|trans}}
+                     <%} else { %>  
+        {{'CMS_SUB_FEDERATION_SHARED_EVENTS'|trans}}
+                     <%} %> 
+                    </label>
+                </div>
+            </div>
+    {% endif %}
+    </div>
+    {% include 'internal/savebutton.html.twig' with {'second_btn_val':'CMS_ELEMENT_SAVE_AND_BACK_BUTTON'|trans, 'second_button_id':'save_bac', 'discard_button_val':'DISCARD_CHANGES'|trans}   %}
+</div>
+</script>

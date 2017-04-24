@@ -1,0 +1,84 @@
+<script type="text/template" id="templateCreateTextElement">
+    <div id="failcallbackClientSide" class="alert alert-danger" style="display:none;">
+        <button class="close" data-close="alert"></button>
+        <span>{% trans %}FORM_ERROR_DISPLAY{% endtrans %}</span>
+    </div>
+    <div class="row  fg-common-top fg-news-create-article-wrapper">
+        <section class="fg-clear">
+            <div class="col-md-12 fg-common-btm">
+                <div class="panel-primary panel-bg">
+                    <div class="panel-heading fg-theme-head paneldisplay">
+                        <h3 class="panel-title pull-left">{{'ARTICLE_SECTION_TEXT'|trans}}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="form-body "> 
+                <%  var articleTexts = (typeof data == 'undefined' || typeof data.textelement == 'undefined') ? {} : data.textelement.text;%>
+                <div class="form-group col-md-12 fg-clear required  col-md-12 " >
+                    <label class="col-md-2 control-label text-right fg-pad-top-0" for="text">{{ 'ARTICLE_TEXT'|trans }}</label>   
+                    <div class="col-md-10 col-lg-10 ">
+                        <% if(_.size(clubLanguages) > 0) { %>
+                            <% _.each(clubLanguages,function(val,key){ 
+                            var divAttr = { 'id' : 'calDescDiv_'+val };  
+                            var inputAttr = { 'id' : 'articleText-'+val }; 
+                            var hiddenAttr = { 'id' : 'articleTextValidation-'+val }; %>
+                                <div class="<% if(data.defaultClubLang!=val){ %> hide <% } %>" id="<%- divAttr.id %>" data-lang="<%- val %>">
+                                    <textarea cols="30" rows="10" class="ckeditor fg-article-text-field " name="articleText-<%- val %>" id="<%- inputAttr.id %>" data-key="textelement.text.<%- val %>.text" data-lang="<%- val %>" 
+                                              placeholder="<% if(typeof articleTexts[val] == 'undefined' && mode=='edit') { %><%- (articleTexts['default'].text) %><% } %>" ><% if(typeof articleTexts[val] != 'undefined') { %><%- (articleTexts[val].text) %><% } %></textarea>
+                                    {#<% if(data.defaultClubLang == val){ %>#}
+                                    {#used for empty validation#}
+                                    <textarea class="hide " name="articleTextValidation-<%- val %>" id="<%- hiddenAttr.id %>" ><% if(typeof articleTexts[val] != 'undefined') { %><%- (articleTexts[val].text) %><% } %></textarea>
+                                    {#<% } %>#}
+                                </div>
+                            <% }); %>
+                        <% } %>  
+                        
+                    </div>
+                </div>                            
+            </div>
+        </section>
+        <section class="fg-clear">
+            <div class="col-md-12  fg-common-btm">
+                <div class="panel-primary panel-bg">
+                    <div class="panel-heading fg-theme-head paneldisplay">
+                        <h3 class="panel-title pull-left">{{'ARTICLE_SECTION_IMAGES'|trans}} </h3>
+                    </div>
+                </div>
+            </div>
+            {% include 'WebsiteCMSBundle:PageContentElements:templateTextElementCreateImages.html.twig' %}
+        </section>
+         
+    </div>                                        
+</script>
+
+<script type="text/template" id="templateTextElementDetailHistory">
+ <section class="fg-clear col-md-12 dataTables_wrapper  ">
+<table class="table table-hover table-bordered">
+    <thead class="table-bordered">
+            <tr>
+                <th>{{'ARTICLE_HISTORY_EDITEDON'|trans}} </th>
+                <th>  {{'ARTICLE_HISTORY_EDITEDBY'|trans}} </th>
+                <th> {{'ARTICLE_HISTORY_PREVIEW'|trans}} </th>
+                <th>  {{'ARTICLE_HISTORY_RESTORE'|trans}}</th>
+            </tr>
+        </thead>
+        <tbody>
+   <% _.each(textElementHistory, function(history, key){ %>    
+               <tr>
+                <td><%- history.lastEdited %></td>
+                <td><%- history.updatedBy %> </td>
+                <td>
+                <a href="#" data-content="<%- history.text %>" id="preview-history" ><i class="fa fa-lg fa-search" ></i></a></td>
+                <td><a href="#" id="update-history-revision" data-content="<%- history.id %>" data-element-id="<%- history.textelement %>" ><i class="fa fa-lg fa-chevron-circle-right"></i></a></td>
+            </tr>
+            <% }); %>
+           </tbody>
+    </table>
+    <div class="col-md-9 col-lg-7 fg-news-editorial-artcl-dtl-preview-wrapper hide" id="preview-text-element-version" >
+        <div class="row">
+            <div id="show-history-preview"  class="col-sm-6 middle-col col-xs-12">         </div>
+        </div>
+    </div>
+    </section>
+
+</script>

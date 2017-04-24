@@ -1,0 +1,76 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout-sidebar.html.twig' %}
+
+{% block pagecontent %}
+<!-- BEGIN PAGE CONTENT-->
+<div class="row">
+
+
+    <div class="col-md-6">
+        <!-- BEGIN SAMPLE TABLE PORTLET-->
+        <div class="portlet box red">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-cogs"></i>Simple Table
+                </div>
+                <div class="tools">
+                    <a class="collapse" href="javascript:;">
+                    </a>
+                    <a class="config" data-toggle="modal" href="#portlet-config">
+                    </a>
+                    <a class="reload" href="javascript:;">
+                    </a>
+                    <a class="remove" href="javascript:;">
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body" style="display: block;">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    #
+                                </th>
+                                <th>{%trans%}PrivacyContact{%endtrans%}</th>
+                                <th>{%trans%}Fieldname{%endtrans%}</th>
+                                <th>{%trans%}Inputtype{%endtrans%}</th>
+                                <th>{%trans%}Fieldtype{%endtrans%}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% set i=1 %}
+                            {% for attributes in pagination %}
+                            <tr>
+                                <td>
+                                    {{i}}
+                                </td>
+                                <td>
+                                    {{attributes.privacyContact}}
+                                </td>
+                                <td>
+                                    {{attributes.fieldname}}
+                                </td>
+                                <td>
+                                    {{attributes.inputType}}
+                                </td>
+                                <td>
+                                    {{attributes.fieldtype}}
+                                </td>
+                            </tr>
+                            {% set i=i+1 %}
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                       {# {{ knp_pagination_render(pagination) }} #}
+                </div>
+            </div>
+        </div>
+        <!-- END SAMPLE TABLE PORTLET-->
+    </div>
+
+    
+</div>
+
+{% endblock %}

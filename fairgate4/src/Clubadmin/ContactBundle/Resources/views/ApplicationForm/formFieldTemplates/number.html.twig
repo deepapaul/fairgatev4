@@ -1,0 +1,55 @@
+<script type="text/template" id="form_field_templates_number">
+
+    <div class="fg-collapsed-content-wrapper" id="<%- data.formFieldId %>_wrapper">
+
+        <div class="form-group">
+            <label class="col-md-3 col-sm-4 control-label" for="<%- data.formId %>.<%- data.formFieldId %>_isRequired">{{'CMS_FORM_REQUIRED'|trans}}</label>
+            <div class="col-sm-4">
+                <label for="<%- data.formId %>.<%- data.formFieldId %>_isRequired" class="fg-checkbox">
+                    <input type="checkbox" class="fg-dev-newfield" id="<%- data.formFieldId %>_isRequired" data-key="<%- data.formId %>.<%- data.formFieldId %>.isRequired" name="<%- data.formFieldId %>_isRequired" <%= (($.trim(data.isRequired) == '1' || data.isRequired === true) ? 'checked' :'') %>/>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-3 col-sm-4 control-label ">{{'CMS_FORM_MINVALUE'|trans}}</label>
+            <div class="col-sm-4 fg-input-plus-minus">
+                <button type="button" class="left minus form-control FL selectButton btn-number" data-field='<%- data.formFieldId %>_minValue' data-type='minus'>-</button>
+                <input min="0" max="9999999999999" stepto="1" type="text" required="required" data-required="true" class="form-control FL number input-number fg-dev-newfield" id="<%- data.formFieldId %>_minValue" data-key="<%- data.formId %>.<%- data.formFieldId %>.minValue" value="<%= (data.minValue) ? data.minValue:'0' %>" data-val="<%= (data.minValue) ? data.minValue:'0' %>" name="<%- data.formFieldId %>_minValue"/>
+                <button type="button" class="right plus form-control FL selectButton btn-number" data-field='<%- data.formFieldId %>_minValue' data-type='plus'>+</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-3 col-sm-4 control-label ">{{'CMS_FORM_MAXVALUE'|trans}}</label>
+            <div class="col-sm-4 fg-input-plus-minus">
+                <button type="button" class="left minus form-control FL selectButton btn-number" data-field='<%- data.formFieldId %>_maxValue' data-type='minus'>-</button>
+                <input min="0" max="9999999999999" stepto="1" type="text" class="form-control FL number input-number fg-dev-newfield" id="<%- data.formFieldId %>_maxValue" data-key="<%- data.formId %>.<%- data.formFieldId %>.maxValue" value="<%= (data.maxValue) ? data.maxValue:'' %>" data-val="<%= (data.maxValue) ? data.maxValue:'' %>" name="<%- data.formFieldId %>_maxValue"/>
+                <button type="button" class="right plus form-control FL selectButton btn-number" data-field='<%- data.formFieldId %>_maxValue' data-type='plus'>+</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-3 col-sm-4 control-label ">{{'CMS_FORM_STEP'|trans}}</label>
+            <div class="col-sm-4 fg-input-plus-minus">
+                <button type="button" class="left minus form-control FL selectButton btn-number" data-field='<%- data.formFieldId %>_stepValue' data-type='minus'>-</button>
+                <input min="0" max="9999999999999" stepto="1" type="text" required="required" data-required="true" class="form-control FL number input-number fg-dev-newfield" id="<%- data.formFieldId %>_stepValue" data-key="<%- data.formId %>.<%- data.formFieldId %>.stepValue" value="<%= (data.stepValue) ? data.stepValue:'1' %>" data-val="<%= (data.stepValue) ? data.stepValue:'1' %>" name="<%- data.formFieldId %>_stepValue"/>
+                <button type="button" class="right plus form-control FL selectButton btn-number" data-field='<%- data.formFieldId %>_stepValue' data-type='plus'>+</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-3 col-sm-4 control-label" for="textarea">{{'CMS_FORM_FIELD_TOOLTIP'|trans}}</label>
+            <div class="col-sm-4">
+            <% _.each(data.clubLanguages, function(clubLang) { %>
+                <textarea maxlength="160" class="form-control fg-textarea fg-dev-newfield <%- clubLang != data.clubDefaultLanguage ? 'hide':''  %>" data-key="<%- data.formId %>.<%- data.formFieldId %>.tooltip.<%- clubLang %>" 
+                        <% var placeholderDefaultValue = (_.contains(_.keys(data.tooltip),data.clubDefaultLanguage)) ? data.tooltip[data.clubDefaultLanguage]:'' %>
+                        placeholder="<%- (clubLang != data.clubDefaultLanguage)?placeholderDefaultValue:'' %>"
+                        data-lang="<%- clubLang %>" name="<%- data.formFieldId %>_tooltip_<%- clubLang %>"  id="<%- data.formFieldId %>_tooltip_<%- clubLang %>"><%= (_.contains(_.keys(data.tooltip),clubLang)) ? $.trim(data.tooltip[clubLang]):'' %></textarea>
+            <% }); %>
+            </div>
+        </div>
+ 
+    </div>
+
+</script>

@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel-primary panel-bg"> 
+            <div class="panel-heading fg-theme-head paneldisplay">
+                <div class="fg-action-menu-wrapper-sub">
+                    {% include 'global/page-title-bar.html.twig' with {'pageTitle':  'DOCUMENT_PREVIOUS_VERSIONS'|trans, 'tabs': {} } %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="fg-common-top">
+                <table data-ajax-path="{{ path('document_version_list', {'documentId': documentId}) }}"
+                       class="table dataTable-version-list
+                       table-bordered
+                       table-hover
+                       table-condensed
+                       dataTable-scroll-y
+                       dataTable-ajax
+                       dataTable-rows
+                       dataTable-scroll-x
+                       dataTables_scrollBody" xWidth="100" yHeight="300" data-table-name="dataTables" id="document-version-list" dataTable-popover="true" dataTable-hover="true">
+                    <thead>
+                        <tr>
+                            <th><div class='fg-th-wrap fg-no-sorting-cb'><input type='checkbox' name='check_all' id='check_all' class='dataTable_checkall fg-dev-avoidicon-behaviour dFExclude'><i class='chk_cnt'></i></div></th>
+                            <th>{{ 'DOCUMENT_VERSION'|trans }}</th>
+                            <th>{{ 'DOCUMENT_SIZE'|trans }}</th>
+                            <th>{{ 'DOCUMENT_UPLOADED_ON'|trans }}</th>
+                            <th>{{ 'DOCUMENT_UPLOADED_BY'|trans }}</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

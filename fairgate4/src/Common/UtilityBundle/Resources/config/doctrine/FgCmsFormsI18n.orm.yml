@@ -1,0 +1,58 @@
+Common\UtilityBundle\Entity\FgCmsFormsI18n:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsFormsI18nRepository
+    type: entity
+    table: fg_cms_forms_i18n
+    fields:
+        lang:
+            id: true
+            type: string
+            length: 2
+            fixed: true
+            nullable: false
+        confirmationEmailSubjectLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: confirmation_email_subject_lang
+        confirmationEmailContentLang:
+            type: text
+            nullable: true
+            column: confirmation_email_content_lang
+        acceptanceEmailSubjectLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: acceptance_email_subject_lang
+        acceptanceEmailContentLang:
+            type: text
+            nullable: true
+            column: acceptance_email_content_lang
+        dismissalEmailSubjectLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: dismissal_email_subject_lang
+        dismissalEmailContentLang:
+            type: text
+            nullable: true
+            column: dismissal_email_content_lang
+        successMessageLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: success_message_lang
+    oneToOne:
+        id:
+            targetEntity: FgCmsForms
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,368 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' :'::clubadmin/layout.html.twig' %}
+{% set title='MAILINGS_NEWSLETTER'|trans %}       
+{% set pageTitle = title %}
+    {% block pagecontent %} 
+        <!-- BEGIN PAGE CONTENT-->
+
+        <!-- BEGIN CONTENT -->
+        <!-- BEGIN PAGE HEADER-->
+        <div class="fg-theme-blue">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                    {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+                </div>
+            </div>
+
+                <form method="POST" action= "" id="hiddenform">
+                    <input type="hidden" name="selcontacthidden" value="" id="selcontacthidden" search-value="" />
+                    <input type="hidden" name="searchhidden" value="" id="searchhidden" search-value="" />
+                    <input type="hidden" name="counthidden" value="" id="counthidden" search-value="" />
+                </form>
+
+                {#<div class="col-md-7 col-sm-6" id="fg-dev-dynamic-menu">
+                    {% include 'clubadmin/dynamicmenuTemplates.html.twig' %}
+                </div>#}
+                <!-- END PAGE TITLE & BREADCRUMB-->
+
+            <div class="alert alert-danger display-hide">
+                <button class="close" data-close="alert"></button>
+                {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+            </div>
+            <!-- END PAGE HEADER-->
+            {#<div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-3 col-sm-7 fg-left-zero clearfix fg-common-btm">
+                        
+                        <a href="{{ path('create_newsletter')}}" class="fg-edit-plus"><i class="fa fa-plus-circle"></i></a>
+                        <h3 class="page-title fg-page-title">{%trans%}NEWSLETTER_HEAD_MAILINGS{%endtrans%}</h3>
+                    </div>
+                </div>
+            </div>#}
+            <div class="row">
+            {% set page_settings = { 'pagetitle':'true','addmail':'true' }  %}
+            {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': 'NEWSLETTER_HEAD_MAILINGS'|trans, 'page_settings': page_settings,'create_newsletter_path': path('create_newsletter'), 'create_newsletter_title': 'NEWSLETTER_CREATE_TITLE'|trans   } %}    
+            </div>
+            <div class="fg-dev-dataTable-hide-wrapper" style="display:none;">
+                <div class="row">
+                    <div class="col-md-12 fg-common-btm">
+                        <div class="panel-primary panel-bg">
+                            <div class="panel-heading fg-theme-head paneldisplay">
+                                <h3 class="panel-title pull-left">{%trans%}NEWSLETTER_HEAD_DRAFT{%endtrans%} </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 fg-common-btm">
+                        <div class="portlet-body new-table-height" id="tableWrapper-drafts">
+                            <div class="row">
+                                <table data-ajax-path="{{ path('newsletter_mailings_types',{'mail':'GENERAL', 'type':'draft' })}}"
+                                               class="fg-dev-communication-dataTable table   fg-icons-change
+                                               table-bordered
+                                               table-hover
+                                               table-condensed
+
+                                               dataTable-ajax
+                                               dataTable-rows
+                                               dataTable-scroll-x
+                                               dataTables_scrollBody
+                                               lastcolumn_sort dataTable-initialSort data-count fg-dev-no-paging fg-dev-colums-draft"  id="fg-dev-dataTable-drafts" xWidth="100" yHeight="300" data-table-name="dataTables" data_row_change="fgrowchange"   dataTable-hover="true" data-sort="0#desc" data-storage="communication_receiverlist" data-columnstorage="communication_receiverlist_column" data-column-def="true" data_table_type="recipient" data-update-flag="true">
+                                    <thead>
+                                        <tr>
+                                            <th >{%trans%}NEWSLETTER_DRAFT_LAST_EDITED{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_DRAFT_LAST_EDITED_BY{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_DRAFT_SUBJECT{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_DRAFT_CREATED{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_DRAFT_CREATED_BY{%endtrans%}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>   
+                    </div>
+                </div>
+            </div>
+            <div class="fg-dev-dataTable-hide-wrapper" style="display:none;">
+                <div class="row">
+                    <div class="col-md-12 fg-common-btm">
+                        <div class="panel-primary panel-bg">
+                            <div class="panel-heading fg-theme-head paneldisplay">
+                                <h3 class="panel-title pull-left">{%trans%}NEWSLETTER_HEAD_PLANNED{%endtrans%} </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 fg-common-btm">
+                        <div class="portlet-body new-table-height" id="tableWrapper-planned">
+                            <div class="row">
+                                <table data-ajax-path="{{ path('newsletter_mailings_types',{'mail':'GENERAL','type':'scheduled' })}}"
+                                               class="fg-dev-communication-dataTable table  fg-icons-change 
+                                               table-bordered
+                                               table-hover
+                                               table-condensed
+
+                                               dataTable-ajax
+                                               dataTable-rows
+                                               dataTable-scroll-x
+                                               dataTables_scrollBody
+                                               lastcolumn_sort dataTable-initialSort data-count fg-dev-no-paging fg-dev-colums-planned"  id="fg-dev-dataTable-planned" xWidth="100" yHeight="300" data-table-name="dataTables" data_row_change="fgrowchange"   dataTable-hover="true" data-sort="0#desc" data-storage="communication_receiverlist" data-columnstorage="communication_receiverlist_column" data-column-def="true" data_table_type="recipient" data-update-flag="true">
+                                    <thead>
+                                        <tr>
+                                            <th >{%trans%}NEWSLETTER_PLANNED_PLANNED_FOR{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_DRAFT_LAST_EDITED_BY{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_DRAFT_SUBJECT{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_PLANNED_TYPE{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_PLANNED_SENDER_MAIL{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_PLANNED_RECIEPIENTS{%endtrans%}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+            <div class="fg-dev-dataTable-hide-wrapper" style="display:none;">
+                <div class="row">
+                    <div class="col-md-12 fg-common-btm">
+                        <div class="panel-primary panel-bg">
+                            <div class="panel-heading fg-theme-head paneldisplay">
+                                <h3 class="panel-title pull-left">{%trans%}NEWSLETTER_HEAD_SENDING{%endtrans%} </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 fg-common-btm">
+                        <div class="portlet-body new-table-height" id="tableWrapper-sending">
+                            <div class="row">
+                                <table data-ajax-path="{{ path('newsletter_mailings_types',{'mail':'GENERAL','type':'sending' })}}"
+                                               class="fg-dev-communication-dataTable table   fg-icons-change
+                                               table-bordered
+                                               table-hover
+                                               table-condensed
+
+                                               dataTable-ajax
+                                               dataTable-rows
+                                               dataTable-scroll-x
+                                               dataTables_scrollBody
+                                               lastcolumn_sort dataTable-initialSort data-count fg-dev-no-paging fg-dev-colums-sending"  id="fg-dev-dataTable-sending" xWidth="100" yHeight="300" data-table-name="dataTables" data_row_change="fgrowchange"   dataTable-hover="true" data-sort="0#desc" data-storage="communication_receiverlist" data-columnstorage="communication_receiverlist_column" data-column-def="true" data_table_type="recipient" data-update-flag="true">
+                                    <thead>
+                                        <tr>
+                                            <th>{%trans%}NEWSLETTER_SENDING_SENDING_DATE{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_DRAFT_LAST_EDITED_BY{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_DRAFT_SUBJECT{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_PLANNED_TYPE{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_PLANNED_SENDER_MAIL{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_PLANNED_RECIEPIENTS{%endtrans%}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="fg-dev-dataTable-hide-wrapper" style="display:none;">                        
+                <div class="row">
+                    <div class="col-md-12 fg-common-btm">
+                        <div class="panel-primary panel-bg">
+                            <div class="panel-heading fg-theme-head paneldisplay has-searchbox">
+                                <h3 class="panel-title pull-left">{%trans%}NEWSLETTER_HEAD_SEND{%endtrans%} </h3>
+                                <div data-subscriber="subscriber" class="col-xs-7 col-lg-6  col-md-8 col-sm-10 fg-contact-searchbox pull-right fg-sent-area">                                    
+                                    <div class="btn-group pull-right">
+                                        <div class="input-icon fg-search-div"> <i class="fa fa-search"></i>
+                                        <input type="text" placeholder="{{'SEARCH_TABLE'|trans}}" class="form-control input-sm" id="searchbox">
+                                    </div>
+                                        <button class="btn tableactionright" data-toggle="dropdown" data-rel="tooltip" title="{%trans%}NEWSLETTER_TABLE_PROPERTIES{%endtrans%}"> <i class="fa fa-table fa-2x" ></i> </button>
+                                        <ul class="dropdown-menu pull-right fg-drpmenu-new dropdown-menu-form padinten hold-on-click">
+                                            <li></li>
+                                            <li><div id="fgrowchange" ></div></li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 fg-common-btm">
+                        <div class="portlet-body new-table-height" id="tableWrapper-send">
+                            <div class="row">
+                                <table data-ajax-path="{{ path('newsletter_mailings_types',{'mail':'GENERAL','type':'sent' })}}"
+                                               class="fg-dev-communication-dataTable table   fg-icons-change
+                                               table-bordered
+                                               table-hover
+                                               table-condensed
+                                               
+                                               dataTable-ajax
+                                               dataTable-rows
+                                               dataTable-scroll-x
+                                               dataTables_scrollBody
+                                               lastcolumn_sort dataTable-initialSort data-count fg-dev-colums-send"  id="fg-dev-dataTable-send" xWidth="100" yHeight="300" data-table-name="dataTables" data_row_change="fgrowchange"   dataTable-hover="true" data-sort="0#desc" data-storage="communication_receiverlist" data-columnstorage="communication_receiverlist_column" data-column-def="true" data_table_type="recipient" data-update-flag="true">
+                                    <thead>
+                                        <tr>
+                                            <th>{%trans%}NEWSLETTER_SEND_SEND_DATE{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_DRAFT_LAST_EDITED_BY{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_DRAFT_SUBJECT{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_PLANNED_TYPE{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_PLANNED_SENDER_MAIL{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_PLANNED_RECIEPIENTS{%endtrans%}</th>
+                                            <th>{%trans%}NEWSLETTER_SENDING_OPENINGS{%endtrans%}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END PAGE CONTENT-->
+            <div id="callPopupFunction"></div>
+                <!-- Connection Popup -->
+                <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+                    <div class="modal-dialog modal-wide">
+                        <div class="modal-content fg-popup-wrap" id="popup_contents">
+                        </div>
+                    </div>
+                </div>
+
+        <!-- END CONTENT -->
+        <!-- END PAGE CONTENT-->
+    {% endblock %}
+    {% block javascripts %}
+    <script src="{{ asset('fgcustom/js/datetime-moment.js')}}" type="text/javascript"></script> 
+    <script src="{{ asset('fgcustom/js/fg-nullsort-handle-dataTable.js')}}" type="text/javascript"></script> 
+    <script>
+     //FgMoreMenu.initServerSide('data-tabs');
+    var draftDataTableName = '';
+    var plannedDataTableName = '';
+    var deleted = "{{delete}}";
+    var move = "{{move}}";
+    var duplicate = "{{duplicate}}";
+    var contactId = {{contact}};
+    var clubId = {{clubId}};
+    var from = 'mailings';
+    var saveNextPreviousPath = '{{path("backend_nextprevious_save")}}';
+    var saveNextPreviousKey = clubId+'_NEWSLETTER';
+    var currentDateFormat = FgLocaleSettingsData.momentDateTimeFormat;
+
+    var columnDrafts=[{ "name": "last_updated",   "targets": 0 ,"type":"moment-"+currentDateFormat , data:function(row, type, val, meta){
+                            return  row[0]=='' || row[0] == null ? '-':row[0];  
+                        }},
+                        { "name": "updated_by",  "targets": 1, data:function(row, type, val, meta){
+                            return  row[1]=='' || row[1] == null ? '-':row[1]; 
+                        } },
+                        { "name": "subject", "targets": 2, data:function(row, type, val, meta){
+                            return  row[2]=='' || row[2] == null ? '-':'<a href="'+row[6]+'">'+row[2]+'</a>'; 
+                        } },
+                        { "name": "created_at",  "targets": 3, "type":"moment-"+currentDateFormat, data:function(row, type, val, meta){
+                            return  row[3]=='' || row[3] == null ? '-':row[3]; 
+                        } },
+                        { "name": "created_by",  "targets": 4, data:function(row, type, val, meta){
+                            return  row[4]=='' || row[4] == null ? '-':row[4]; 
+                        } },
+                        { "name":"", orderable: false, targets: 5, data:function(row, type, val, meta){
+                            return '<a href="#" title ="'+deleted+'" data-url="'+row[5]+'" onClick="javascript:popUp(this);return false;" class="pull-right fg-mailings-icon"><i class="fa fa-times-circle fa-2x"></i></a>';
+                        } }
+                        
+                    ];
+                    
+    var columnPlanned=[{ "name": "send_date",   "targets": 0 , "type":"moment-"+currentDateFormat, data:function(row, type, val, meta){
+                            return  row[0]=='' || row[0] == null ? '-':row[0];  
+                        }},
+                        { "name": "updated_by",  "targets": 1, data:function(row, type, val, meta){
+                            return  row[1]=='' || row[1] == null ? '-':row[1]; 
+                        } },
+                        { "name": "subject", "targets": 2, data:function(row, type, val, meta){
+                            return  row[2]=='' || row[2] == null ? '-':'<a href="'+row[7]+'">'+row[2]+'</a>'; 
+                        } },
+                        { "name": "publish_type",  "targets": 3, data:function(row, type, val, meta){
+                            return  row[3]=='' || row[3] == null ? '-':row[3]; 
+                        } },
+                        { "name": "sender_email",  "targets": 4, data:function(row, type, val, meta){
+                            return  row[4]=='' || row[4] == null ? '-':row[4]; 
+                        } },
+                        { "name": "recepient_count",  "targets": 5, data:function(row, type, val, meta){
+                            return  row[5]=='' || row[5] == null ? '-':'<a href="'+row[8]+'">'+row[5]+'</a>';
+                        } },
+                        { "name":"", orderable: false, targets: 6, data:function(row, type, val, meta){
+                            return '<a href="#" title="'+move+'" data-url="'+row[6]+'" onClick="javascript:popUp(this);return false;" class="pull-right fg-mailings-icon"><i class="fa fa-step-backward fa-2x"></i></a>';
+                        } }
+                        
+                    ];
+    var columnSending=[{ "name": "send_date",   "targets": 0 , "type":"moment-"+currentDateFormat, data:function(row, type, val, meta){
+                            return  row[0]=='' || row[0] == null ? '-':row[0];  
+                        }},
+                        { "name": "updated_by",  "targets": 1, data:function(row, type, val, meta){
+                            return  row[1]=='' || row[1] == null ? '-':row[1]; 
+                        } },
+                        { "name": "subject", "targets": 2, data:function(row, type, val, meta){
+                            return  row[2]=='' || row[2] == null ? '-':'<a href="'+row[7]+'">'+row[2]+'</a>'; 
+                        } },
+                        { "name": "publish_type",  "targets": 3, data:function(row, type, val, meta){
+                            return  row[3]=='' || row[3] == null ? '-':row[3]; 
+                        } },
+                        { "name": "sender_email",  "targets": 4, data:function(row, type, val, meta){
+                            return  row[4]=='' || row[4] == null ? '-':row[4]; 
+                        } },
+                        { "name": "receicerCount",  "targets": 5, data:function(row, type, val, meta){
+                            return  row[5]=='' || row[5] == null ? '-':'<a href="'+row[8]+'">'+row[5]+'</a>';
+                        } },
+                        { "name":"", orderable: false, targets: 6, data:function(row, type, val, meta){
+                            return '<a href="#"  title="'+duplicate+'" data-url="'+row[6]+'" onClick="javascript:popUp(this);return false;" class="pull-right fg-mailings-icon"><i class="fa fa-files-o fa-2x"></i></a>';
+                        } }
+                        
+                    ];
+    var columnSend=[{ "name": "send_date",   "targets": 0 , "type":"moment-"+currentDateFormat, data:function(row, type, val, meta){
+                            return  row[0]=='' || row[0] == null ? '-':row[0];  
+                        }},
+                        { "name": "updated_by",  "targets": 1, data:function(row, type, val, meta){
+                            return  row[1]=='' || row[1] == null ? '-':row[1]; 
+                        } },
+                        { "name": "subject", "targets": 2, "data":null,"render": { "_": function(row){ return row[2];},"display": function(row){ return '<a href="'+row[10]+'">'+row[2]+'</a>';}}
+                        },
+                        { "name": "publish_type",  "targets": 3, data:function(row, type, val, meta){
+                            return  row[3]=='' || row[3] == null ? '-':row[3]; 
+                        } },
+                        { "name": "sender_email",  "targets": 4, data:function(row, type, val, meta){
+                            return  row[4]=='' || row[4] == null ? '-':row[4]; 
+                        } },
+                        { "name": "receicerCount",searchable: false, className:"fg-dev-mailings-align-right",  "targets": 5, data:function(row, type, val, meta){
+                            return  row[5]=='' || row[5] == null ? '-': (row[6] >= 1 && row[12] == 0) ? '<i data-content="{{'MAILINGS_TOOPTIP_NOT_SENT'|trans}}" data-original-title="" data-trigger="hover" data-placement="bottom"  class="fa fa-warning fg-dev-Popovers fg-warning-mailings"></i> <a href="'+row[11]+'">'+row[5]+'</a>':'<a href="'+row[11]+'">'+row[5]+'</a>';
+                        } },
+                        { "name": "openings", className:"fg-dev-mailings-align-right" , "targets": 6, data:function(row, type, val, meta){
+                            return  row[7]=='' || row[7] == null ? '-':row[7]+'<span class="fg-mail-badge">'+row[8]+'%</span>'; 
+                        } },
+                        { "name":"", orderable: false, searchable: false, targets: 7, data:function(row, type, val, meta){
+                            return '<a href="#" title="'+duplicate+'" data-url="'+row[9]+'" onClick="javascript:popUp(this);return false;" class="pull-right fg-mailings-icon"><i class="fa fa-files-o fa-2x"></i></a>';
+                        } }
+                    ];
+    </script>
+    <script src="{{ asset('fgcustom/js/sidebar.js') }}" type="text/javascript"></script>    
+    <script src="{{ asset('fgcustom/js/page/fg_mailings_dataTable.js')}}" type="text/javascript"></script> 
+    <script>
+       
+        function popUp(t){
+           var htmlgetPath= $(t).attr( "data-url" );
+           $(t).parent().parent().addClass('fg-dev-row-selected');
+             $.get(htmlgetPath, function(data) {
+                $('#popup_contents').html(data);
+                $('#popup').modal('show');
+             });
+        }
+        /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                     title: true
+             });  
+    </script>
+    {% endblock %}

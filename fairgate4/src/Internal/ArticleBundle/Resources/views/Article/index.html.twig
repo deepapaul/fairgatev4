@@ -1,0 +1,77 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = articleTitle  %}
+{% set nextPrevDetail = fgclub.getNextPrevious(articleId,clubId~'_ARTICLE_OVERVIEW','internal_article_details_view','articleId') %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+    <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+    <div class="row">
+        <div class="col-md-12">
+        <!-- BREADCRUMB STARTS -->
+        {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+        <!-- BREADCRUMB ENDS -->
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <article class="fg-news-detail-wrapper fg-layout3 row">
+    <div id="editorial-content"></div>
+    <div class="clearfix"></div>
+    <div id="article-comment"></div>  
+    </article>    
+     
+        
+        
+{% endblock %}
+{% block underscoretemplate %}
+        {% include 'InternalArticleBundle:EditorialDetails:templateArticleDetails.html.twig' %} 
+        {% include 'InternalArticleBundle:EditorialDetails:templateArticleMedia.html.twig' %} 
+        {% include 'InternalArticleBundle:EditorialDetails:templateArticleText.html.twig' %} 
+        {% include 'InternalArticleBundle:EditorialDetails:templateArticleLink.html.twig' %} 
+        {% include 'InternalArticleBundle:EditorialDetails:templateArticleSlider.html.twig' %} 
+        {% include 'InternalArticleBundle:EditorialDetails:templateArticleComments.html.twig' %} 
+{% endblock %}
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/global/js/unitegallery-master/package/unitegallery/css/unite-gallery.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('fgassets/internal/css/timeline.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgassets/internal/js/fg_tab_selection_process.js') }}" type="text/javascript"></script>
+    <script>
+        var downloadPath = "{{path('article_details_download_attachments')}}";
+    </script>
+    <script src="{{ asset('fgassets/internal/js/page/FgEditorialDetails.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/assets/global/plugins/ckeditor/ckeditor.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/ckEditor-config.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/internal/js/page/ForumCkEditorBBCodeConfig.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/unitegallery-master/package/unitegallery/js/unitegallery.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/unitegallery-master/package/unitegallery/themes/slider/ug-theme-slider.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/unitegallery-master/source/unitegallery/themes/tilesgrid/ug-theme-tilesgrid.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/internal/js/thumbnail.js') }}" type="text/javascript"></script>
+    <script src="{{asset('fgassets/global/js/unitegallery-master/package/unitegallery/themes/tiles/ug-theme-tiles.js')}}" type="text/javascript"></script>
+    
+    <script>
+        //initial setting of tabs 
+        var contactId = '{{ contactId }}';
+        var clubId = '{{ clubId }}';
+        var commentSavePath= '{{path('internal_article_editorial_details_comments_save')}}';
+        var deleteConfirmationPath = '{{path('internal_article_editorial_details_comments_delete_popup')}}';
+        var defaultClubLang = '{{defaultClubLang}}';
+        $(document).ready(function() {
+            var option = { 
+                    page : 'details',
+                    contactId : contactId,
+                    currentClubId : clubId,
+                    articleDataUrl : '{{ url('internal_article_editorial_create_json', {'pagetype':'article'})}}',
+                    articleCommentsUrl:'{{ url('internal_article_editorial_details_comments_data', {'articleId':articleId})}}',
+                    articleId   : '{{articleId}}',
+                    articleCommentDiv :'#article-comment',
+                    commentAreaType:'articleDetails'
+                };
+                FgEditorialDetails.init(option);
+                FgEditorialDetails.renderArticle();
+                FgEditorialDetails.renderArticleComments();
+         
+        });
+    </script>
+{% endblock %}

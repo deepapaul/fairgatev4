@@ -1,0 +1,68 @@
+<!-- begin og variables -->
+{% set pageOgJson = (pagecontentData.og.opengraph is defined) ? pagecontentData.og.opengraph : ''  %}
+{% set metaDetails = (metaDetails is defined) ? metaDetails : ''  %}
+{% set imagePath = (pagecontentData.og.imagePath is defined) ? pagecontentData.og.imagePath : ''  %}
+{% set pageType = (pagecontentData.page.page.pageType is defined) ? pagecontentData.page.page.pageType : ''  %}
+{% set ogflag = (pagecontentData.og.ogEnabled is defined) ? pagecontentData.og.ogEnabled : 0  %}
+<!-- END og variables -->
+<!-- begin favicon -->
+{% set favicon32 = (fgclub.get('favIcon32'))? fgclub.get('favIcon32'):'' %}
+{% set favicon16 = (fgclub.get('favIcon16'))? fgclub.get('favIcon16'):'' %}
+{% set msapplication = (fgclub.get('msapplication'))? fgclub.get('msapplication'):'' %}
+{% set manifest = (fgclub.get('manifest'))? fgclub.get('manifest'):'' %}
+{% set appleIcon = (fgclub.get('appleIcon'))? fgclub.get('appleIcon'):'' %}
+{% set mstile = (fgclub.get('mstile'))? fgclub.get('mstile'):'' %}
+{% set andriodChrome192 = (fgclub.get('andriodChrome-192'))? fgclub.get('andriodChrome-192'):'' %}
+{% set andriodChrome384 = (fgclub.get('andriodChrome-384'))? fgclub.get('andriodChrome-384'):'' %}
+{% set favicon = (fgclub.get('favIcon'))? fgclub.get('favIcon'):asset('fgassets/global/img/favicon.ico') %}
+<!-- END favicon -->
+<!-- begin meta -->
+{% set title = (metaData.metaTitle is defined) ? metaData.metaTitle : pageTitle   %}
+{% set metaDesc =  (metaData.metaDescription is defined) ? metaData.metaDescription : ''   %}
+<!-- END meta -->
+<!-- begin meta -->
+<meta charset="utf-8"/>
+ <meta http-equiv="content-language" content="{{defaultlang}}">
+
+<title>{{title}} | {{fgclub.get('title')}}</title>
+<meta property="og:title" content="{{title}}" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+{% if (metaDesc != '') %}
+    <meta property="og:description" content="{{metaDesc|raw}}" />
+    <meta content="{{metaDesc|raw}}" name="description"/>
+{% endif %}
+<!-- END meta -->
+ <!-- begin favicon -->
+
+<link rel="shortcut icon" href="{{favicon  }}" />
+{% if (favicon32 != '') %}
+<link rel="icon" type="image/png" href="{{favicon32}}" sizes="32x32">
+{% endif %}
+{% if (favicon16 != '') %}
+<link rel="icon" type="image/png" href="{{favicon16}}" sizes="16x16">
+{% endif %}
+{% if (appleIcon != '') %}
+<link rel="apple-touch-icon" sizes="180x180" href="{{appleIcon}}">
+{% endif %}
+{% if (andriodChrome192 != '') %}
+<link rel="icon" sizes="192x192" href="{{andriodChrome192}}">
+{% endif %}
+{% if (andriodChrome384 != '') %}
+<link rel="icon" sizes="384x384" href="{{andriodChrome384}}">
+{% endif %}
+{% if (mstile != '') %}
+<link rel="icon" sizes="150x150" href="{{mstile}}">
+{% endif %}
+{% if (manifest != '') %}
+<link rel="manifest" href="{{manifest}}">
+{% endif %}
+{% if (msapplication != '') %}
+<meta name="msapplication-config" content="{{msapplication}}">
+{% endif %}
+<meta name="theme-color" content="#ffffff">
+ <!-- END favicon -->
+
+ <!-- begin og -->
+{{ include('::website/og.html.twig',{'pageOgJson':pageOgJson,'imagePath':imagePath,'pageType':pageType,'ogflag':ogflag}) }}
+<!-- END og  -->

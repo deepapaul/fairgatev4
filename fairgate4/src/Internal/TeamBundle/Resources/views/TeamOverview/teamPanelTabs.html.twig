@@ -1,0 +1,29 @@
+<div class="row">   
+    <div class="col-md-12 fg-common-btm">
+        <div class="fg-title-first-block fg-text-block">
+            <h3 class="page-title">
+                {{ tabTitle }}  
+            </h3>
+        </div>
+        {% if (roleCount > 1) %}    
+            {% set litagdata =''%}
+            {% set morelitagdata =''%}
+            {% for tab in tabs %}
+                {% set litagdata = litagdata ~ '<li name="fg-dev-team-'~tab.roleId~'-tab" data-target="'~loop.index~'" class="'~(loop.index == 1 ? 'active' : '')~'" > <a  href="'~path("team_get_member_data",{"memberId":tab.roleId,"memberCategory": contactId,"membertype":memberType})~'" >'~tab.roleTitle~'</a> </li>' %}
+                {% set morelitagdata = morelitagdata ~ '<li name="fg-dev-team-'~tab.roleId~'-tab" data-target="'~loop.index~'" class="'~(loop.index == 1 ? 'active':'')~'"> <a  href="'~path("team_get_member_data",{"memberId":tab.roleId,"memberCategory": contactId,"membertype":memberType})~'" tabindex="-1" >'~tab.roleTitle~'</a> </li>' %}
+            {% endfor %}
+            <div class="fg-tab-block">
+                <div class="col-md-height col-bottom fg-nav-tab-border">
+                    <ul id="paneltab" class="nav fg-nav-links data-more-tab fg-visibility-hidden">
+                        {{litagdata|raw}} 
+                        <li name="fg-dev-more-tab" class="datahideshow dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ 'MORE'|trans }} <i class="fa fa-angle-down"></i></a>
+                            <ul class="dropdown-menu fg-dropdown-more pull-right">
+                                {{morelitagdata|raw}}
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+    </div>  
+</div>

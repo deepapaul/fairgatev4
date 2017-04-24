@@ -1,0 +1,38 @@
+        <table cellpadding="0" cellspacing="0" style="border-collapse: collapse;" border="0" width="100%">
+            <tr>
+                <td> <h3 style="font-size: 14px; padding-top:5px;display: inline-block; width:100%">{%trans%}PANEL_TABS_SEVICES{%endtrans%} ({{label}}) </h3></td>
+            <td><span style="font-size: 12px; text-align: right;display: inline-block;width: 100%">{%trans%}EXPORT_DATE{%endtrans%}: {{today}} </span> </td>
+            </tr>
+        </table>
+    <table cellpadding="0" cellspacing="0" style="border-collapse: collapse;" border="0" width="100%">
+        <thead>
+            <tr>
+                <th style="border-bottom: 1px solid #999; background:#ddd; padding-left: 5px; font-size: 14px; height: 30px;text-align:left">{%trans%}SERVICE_CATEGORY{%endtrans%}</th>
+                <th style="border-bottom: 1px solid #999; background:#ddd; padding-left: 5px; font-size: 14px; height: 30px;text-align:left">{%trans%}SA_SERVICE{%endtrans%}</th>
+                <th style="border-bottom: 1px solid #999; background:#ddd; padding-right: 5px; font-size: 14px; height: 30px;text-align:right">{%trans%}SA_SPONSORS{%endtrans%}</th>
+                <th style="border-bottom: 1px solid #999; background:#ddd; padding-right: 5px; font-size: 14px; height: 30px;text-align:right">{%trans%}SA_PAYMENTS{%endtrans%}</th>
+                <th style="border-bottom: 1px solid #999; background:#ddd; padding-right: 5px; font-size: 14px; height: 30px;text-align:right">{%trans%}SA_TOTAL_AMOUNT{%endtrans%} ({{currency}})</th>
+            </tr>
+            {% set totalAmt = 0 %}
+            {% for key,result in results %}
+            <tr>
+                 <td style="padding-left: 5px;text-align:left;font-size: 13px;  padding-top: 5px; padding-bottom: 5px;">{{result.category}}</td>
+                 <td style="padding-left: 5px;text-align:left;font-size: 13px;  padding-top: 5px; padding-bottom: 5px;">{{result.service}}</td>
+                 <td style="padding-right: 5px;text-align:right;font-size: 13px; padding-top: 5px; padding-bottom: 5px;">{{result.sponsors|default(0)}}</td>
+                 <td style="padding-right: 5px;text-align:right;font-size: 13px; padding-top: 5px; padding-bottom: 5px;">{{result.payments|default(0)}}</td>
+                 {% set totalAmt = totalAmt+result.amt %}
+                     <td style="padding-right: 5px;text-align:right;font-size: 13px; padding-top: 5px; padding-bottom: 5px;">{{fgclub.formatNumber(result.amt|default(0))}}</td>
+            </tr>
+             {% endfor %}
+             
+        </thead>
+        <tfoot>
+            <tr>
+                <th  style="border-bottom: 1px solid #999;border-top: 1px solid #999;text-align:left;font-size: 14px; height: 30px;padding-left: 5px; margin-top: 10px;border-bottom: double; ">{%trans%}TOTAL{%endtrans%}</th>
+                <th  style="border-bottom: 1px solid #999;border-top: 1px solid #999;text-align:left;font-size: 14px; height: 30px;border-bottom: double;"></th>
+                <th  style="border-bottom: 1px solid #999;border-top: 1px solid #999;text-align:right;font-size: 14px; height: 30px;border-bottom: double;"></th>
+                <th  style="border-bottom: 1px solid #999;border-top: 1px solid #999;text-align:right;font-size: 14px; height: 30px;border-bottom: double;"></th>
+                <th  style="border-bottom: 1px solid #999;border-top: 1px solid #999;text-align:right;font-size: 14px; height: 30px;border-bottom: double;padding-right:5px;">{{fgclub.formatNumber(totalAmt|number_format(2, '.', ''))}}</th>
+            </tr>
+        </tfoot>
+    </table>

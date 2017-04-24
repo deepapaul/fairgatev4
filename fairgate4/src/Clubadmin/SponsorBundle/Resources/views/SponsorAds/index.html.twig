@@ -1,0 +1,126 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = contactData['contactname'] %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet-body fg-theme-yellow">
+                        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                        {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+
+                        {#{% include 'clubadmin/sponsor-panel-tabs.html.twig' with {'contactName': contactData['contactname'], 'contactId': contactData['id'], 'active': 'ads', 'contactType': type, 'contactTab': 'ads'} %}
+                        #}
+                        <div class="row">
+                        {% set page_settings = { 'pagetitle':'true','tabs':'true'}  %}
+                        {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': contactData['contactname'] , 'page_settings': page_settings, 'tabs': tabs, 'type':'overview', 'hrefLink' : true, 'url':"#",'contactType':type} %} 
+                     </div>
+                        <div id="data-tabs-content">
+                            <div class="fg-common-btm hide" data-upload-doc-area="CONTACT">
+                                <form id="upload-form" skipDirtyCheck autocomplete="off" novalidate="novalidate" data-url="{{path('document_save', {'documentType':'CONTACT'}) }}" name="upload-form" method="post">
+                                    {% include 'ClubadminSponsorBundle:SponsorAds:adsUpload.html.twig' %}
+                                    {% include 'ClubadminSponsorBundle:SponsorAds:uploadTemplate.html.twig' with {'contactName':contactData['contactname'], 'contactId': contactData['id']} %}
+                                </form>
+                            </div>
+                                {% if isReadOnly|default(false) == false %}
+                                <div id="add-ads">
+                                    <a id="pencil" href="#basic" data-toggle="modal">
+                                        <i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> 
+                                        <span class="fg-add-text">{{'SM_ADD_SPONSOR_ADS'|trans}}</span>
+                                    </a>
+                                </div>
+                                {% endif %}
+                            <!-- END PAGE HEADER-->
+                            <div id="sudscriber-tab" class="tab-pane">
+                                <div class="row fg-common-top">
+                                    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                                    <div id="callPopupFunction"></div>
+                                    <!-- Upload Popup -->
+                                    <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+                                        <div class="modal-dialog modal-wide">
+                                            <div class="modal-content fg-popup-wrap" id="popup_contents">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END EXAMPLE TABLE PORTLET-->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END PAGE TITLE & BREADCRUMB-->
+
+                        <form id="sponsoradslist" class="form-horizontal" action="sponsoradslist" onSubmit="return false;">
+                            <!-- FORM ERROR DISPLAY STARTS-->
+                            <div class="alert alert-danger display-hide">
+                                <button class="close" data-close="alert"></button>
+                                <span>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+                            </div>
+                            <!-- FORM ERROR DISPLAY ENDS -->
+                            <div class="fg-clear"></div>
+                            <div class="row fg-common-top">
+                                <div class="col-md-12">
+                                    <div data-list-wrap class="portlet-body dragndrop excludejs" id="sortads">
+                                        <!-- SPONSOR ADS LISTING HERE -->
+                                    </div>
+                                </div>
+                            </div>
+                            {% include 'clubadmin/savebutton.html.twig' with {'settings':'settings'} %}
+                        </form>
+                    </div>
+                    <!-- End area -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- UNDERSCORE TEMPLATES -->
+{% include 'ClubadminSponsorBundle:SponsorAds:sponsorAdsTemplate.html.twig' %}
+<div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+    <div class="modal-dialog modal-wide">
+        <div class="modal-content fg-popup-wrap" id="popup_contents">
+        </div>
+    </div>
+</div>
+{% include 'ClubadminContactBundle:Archive:mergeContact.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+    {% if not (app.request.xmlHttpRequest) %}
+        <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/sidebar.js') }}" type="text/javascript"></script>
+    {% endif %}
+    <script src="{{ asset('fgcustom/js/dirtyfields/jquery.dirtyFields.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_dirtyfields.js') }}" type="text/javascript"></script>
+    <script>
+        
+         $(document).ready(function() {
+            FgPageTitlebar.init({
+                title       : true,
+                tab       : true,
+                search     :false,
+                actionMenu  : false,
+                tabType  :'server'
+               
+            }); 
+       }); 
+    
+        FgMoreMenu.initServerSide('paneltab');
+        var sponsorAdVars = {
+            'sponsorId': '{{contactData['id']}}',
+            'pathSponsorAds': '{{path("get_sponsor_ads", {'contact': contactData['id']})}}',
+            'saveAction': '{{path("update_sponsor_ads")}}'
+        };
+        FgUtility.changeColorOnDelete();
+        //handle  reactivate click 
+        reactivateOverviewPath = "{{path('get_all_contactids_reactivate')}}";
+        reactivateOverviewPopup = "{{path('get_reactivate_popup')}}";
+        reactivateSavePath = "{{ path('save_reactivate_contact')}}";
+        reactivateOerviewContactId = {{contactData['id']}};
+    
+    </script>
+    {% if not (app.request.xmlHttpRequest) %}
+        <script src="{{ asset('fgcustom/js/jquery-fileupload/jquery.fileupload.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/listRow.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/page/sponsor-aads.js') }}" type="text/javascript"></script>
+    {% endif %}
+{% endblock %}

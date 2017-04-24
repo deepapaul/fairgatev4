@@ -1,0 +1,187 @@
+<%  var articleSettings = (typeof data.article == 'undefined') ? {} : data.article.settings; %>
+<%  var articleLevel = (typeof data.article == 'undefined') ? '' : data.article.level; %> {#draft/planned/archived#}
+<div class="form-body">    
+    <div class="form-group col-md-12 required fg-clear fg-v-middle" >
+        <label class="col-md-2 control-label fg-marg-top-5 fg-pad-top-0 text-right" for="from-date">{{ 'ARTICLE_PUBLICATION_DATE'|trans }}</label>  
+        <div class="col-md-8 col-lg-5 fg-expiredate-wrapper">
+            <div class="radio-block">
+                <label for="articlePublicationNow" >
+                    <input type="radio" name="articlePublication" id="articlePublicationNow" value="now" data-key="article.settings.publication" <% if(editorialMode == 'duplicate') { %> checked <% }%>>
+                    {{ 'ARTICLE_NOW'|trans }}
+                </label>
+            </div>
+            <div class="radio-block">
+                <label for="articlePublicationPlanned" class="fg-active-IB fg-marg-right-10 fg-marg-top-5">
+                    <input type="radio" name="articlePublication" id="articlePublicationPlanned" value="planned" data-key="article.settings.publication" <% if(mode == 'edit' && editorialMode == '') { %> checked <% }%> >
+                    {{ 'ARTICLE_PLANNED'|trans }}:
+                </label>
+                <div class="input-group date fg-date fg-active-IB ">
+                    <% var disableType = {'class' : 'fg-datetimepicker-icon' } ; %>
+                    <input type="text" name="articlePublicationDate" id="articlePublicationDate" class="form-control datetimepicker" data-key="article.settings.publicationdate" value="<% if((typeof articleSettings.publicationdate != 'undefined') && editorialMode == '') { %><%- (articleSettings.publicationdate) %><% } %>" <% if((mode == 'create') || (editorialMode == 'duplicate')) {  disableType = {'class' : 'fg-datetimepicker-icon-disabled' }; %> disabled <% }%> >
+                    <div class="input-group-addon <%-disableType.class%>">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="form-group fg-clear fg-v-middle col-md-12 " >
+        <label class="col-md-2 control-label fg-marg-top-5 fg-pad-top-0 text-right" for="from-date">{{ 'ARTICLE_ARCHIVING_DATE'|trans }}</label>  
+        <div class="col-md-8 col-lg-5 fg-expiredate-wrapper">
+            
+            <div class="radio-block">
+                <label for="articleArchivingNever">
+                    <input type="radio" name="articleArchiving" id="articleArchivingNever" value="never" data-key="article.settings.archive" <% if((mode == 'edit' && (typeof articleSettings.expirydate != 'undefined') && articleSettings.expirydate == '' ) || (editorialMode == 'duplicate') ) { %> checked <% }%> >
+                    {{ 'ARTICLE_NEVER'|trans }}
+                </label>
+            </div>
+            <div class="radio-block">
+                <label for="articleArchivingPlanned" class="fg-active-IB fg-marg-right-10 fg-marg-top-5">
+                    <input type="radio" name="articleArchiving" id="articleArchivingPlanned" value="planned" data-key="article.settings.archive" <% if((mode == 'edit' && (typeof articleSettings.expirydate != 'undefined') && articleSettings.expirydate != '' ) && (editorialMode == '')) { %> checked <% }%> >
+                    {{ 'ARTICLE_PLANNED'|trans }}:
+                </label>
+                <div class="input-group date fg-date fg-active-IB ">                    
+                    <% var disableType = {'class' : 'fg-datetimepicker-icon' } ; %>
+                    <input type="text" name="articleExpiryDate" id="articleExpiryDate" class="form-control datetimepicker" data-key="article.settings.expirydate" <% if ((mode == 'edit' && (typeof articleSettings.expirydate != 'undefined') && articleSettings.expirydate == '' ) || mode=='create' || editorialMode == 'duplicate' ) { disableType = {'class' : 'fg-datetimepicker-icon-disabled' } ; %> disabled <% }%>
+                           value="<% if((typeof articleSettings.expirydate != 'undefined') && editorialMode == '') { %><%- (articleSettings.expirydate) %><% } %>" >
+                    <div class="input-group-addon <%-disableType.class%>">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <% var assignedTeams = $.parseJSON( data.assignedTeams ); %> 
+    <% var assignedWorkgroups = $.parseJSON( data.assignedWorkgroups ); %>          
+    <%  
+        var areaHide = {'class' : 'hide area-only-one' }; // in case of only one area 
+        if(_.size(assignedTeams)+_.size(assignedWorkgroups) + ((data.clubTerminology != null)?1:0) > 1) {
+            var areaHide = {'class' : '' }; 
+        }
+    %>              
+    <div class="form-group  required fg-clear col-md-12 <%-areaHide.class%> " >
+        <label class="col-md-2 control-label fg-marg-top-5 fg-pad-top-0 text-right" >{{ 'ARTICLE_AREAS'|trans }}</label>  
+        <div class="col-md-8  col-lg-5 ">                                  
+            <select name="articleAreas" id="articleAreas" class="form-control selectpicker fg-event-areas" required multiple data-key="article.settings.areas">
+                <% if(data.clubTerminology !='' && data.clubTerminology != null) { 
+                     var selectType =''; 
+                     var shareDisable = 'disabled';
+                     if( (typeof articleSettings.areas != 'undefined') && ($.inArray(data.clubTerminology , articleSettings.areas )) >= 0  ) { selectType = 'selected'; shareDisable = ''; } %>
+                   <option value="Club" <%-selectType%>  ><%- data.clubTerminology %></option>
+                <% } %>
+                <% if(_.size(assignedTeams) > 0) { %>
+                    <optgroup label="{{fgtwig.getTerminolgyName('Team',plural)}}">
+                        <% _.each(assignedTeams,function(val,key){ %>
+                        <% selectType =''; 
+                        if( (typeof articleSettings.areas != 'undefined') && ($.inArray( key, articleSettings.areas )) >= 0  ) { selectType = 'selected' } %>
+                        <option value="<%- key %>" <%-selectType%>   ><%- val %></option>
+                        <% }); %>     
+                    </optgroup>
+                <% } %>
+                <% if(_.size(assignedWorkgroups) > 0) { %>
+                    <optgroup label="{% trans %}WORKGROUP{% endtrans %}">
+                        <% _.each(assignedWorkgroups,function(val,key){ %>
+                            <% selectType ='';
+                            if( (typeof articleSettings.areas != 'undefined') && ($.inArray( key, articleSettings.areas )) >= 0  ) { selectType = 'selected' } %>
+                            <% if(val==='Executive Board'){ %>
+                                <option value="<%- key %>" <%-selectType%>  >{{fgtwig.getTerminolgyName('Executive Board',singular)}}</option>
+                            <% } else { %>
+                                <option value="<%- key %>" <%-selectType%>  ><%- val %></option>
+                            <% } %>
+                        <% }); %>     
+                    </optgroup>
+                <% } %>
+            </select> 
+        </div>
+        <div class="clearfix"></div>                 
+        <% if((data.clubType != 'sub_federation_club') && (data.clubType != 'federation_club') && (data.clubType != 'standard_club')){ %>
+        <% checkType ='';
+            if( (typeof articleSettings.share != 'undefined') && articleSettings.share == 1  ) { checkType = 'checked' } %>
+            
+            <div class=" fg-marg-top-10px col-md-10 col-md-offset-2 ">
+                <label ><input type="checkbox" name="show_to_lower_level" <%-checkType%> <% if(mode == 'create') { %> disabled <% } else { %> <%-shareDisable%> <%}%> id="show_to_lower_level" class="fg-check-share-lower" data-key="article.settings.share"> 
+                                                       <span class="" >{% trans %}EVENT_SHOW_IN_LOWER_LEVEL{% endtrans %}</span></label>
+            </div>
+        <% } %>
+    </div>
+    <div class="form-group  required fg-clear col-md-12 " >
+        <label class="col-md-2 control-label fg-marg-top-5 text-right fg-pad-top-0" >{{ 'ARTICLE_CATEGORIES'|trans }}</label>  
+        <div class="col-md-8 col-lg-5 ">
+            <select name="articleCategory" id="ajaxLoadSelectpicker" class="form-control selectpicker fg-event-categories" required multiple="multiple" data-key="article.settings.categories">
+                <% var articleCategories = $.parseJSON( data.category );  %>                                                 
+                <% _.each(articleCategories,function(catArray){ %>
+                    <% selectType = '';  
+                        if( (typeof articleSettings.categories != 'undefined') && ($.inArray( String(catArray['id']), articleSettings.categories )) >= 0  ) { selectType = 'selected' } %>                        
+                    <option value="<%- catArray['id'] %>" <%-selectType%> ><%- catArray['title'] %></option>
+                <% }); %>
+            </select>   
+        </div>
+        <% if(isCluborSuperAdmin == '1' || isClubArticleAdmin == '1') { %>
+        <div class="fg-extra-col fg-active-IB fg-marg-top-5 ">
+            <a href="javascript:void(0)" class="fg-choose-ind-color fg-new-article-cat ">{{ 'ARTICLE_CATEGORIES_CREATE'|trans }}</a>   
+        </div>
+        <% } %>
+    </div>
+
+    <div class="form-group fg-clear col-md-12 " >
+        <label class="col-md-2 control-label fg-marg-top-5 text-right fg-pad-top-0" for="articleAuthor"><span data-content="{% trans %}ARTICLE_AUTHOR_TOOLTIP{% endtrans %}" class="fg-dotted-br fg-custom-popovers">{{ 'ARTICLE_AUTHOR'|trans }}</span></label>  
+        <div class="col-md-6 col-lg-5 ">
+            <input name="articleAuthor" id="articleAuthor" type="text"  class="form-control" data-key="article.settings.author" <% if(typeof articleSettings.author != 'undefined') { %> value="<%- articleSettings.author%>" <% }%> >
+            
+        </div>
+    </div>
+    <div class="form-group fg-clear col-md-12 ">
+        <label class="col-md-2 control-label text-right" fg-pad-top-0 for="radios"><span data-content="{% trans %}ARTICLE_SCOPE_TOOLTIP{% endtrans %}" class="fg-dotted-br fg-custom-popovers"> {{ 'ARTICLE_SCOPE'|trans }}</span></label>
+        <div class="col-md-10 fg-pad-left-0">             
+            <label class="radio-inline" for="articleScopePublic">
+                <% checkType ='';
+                if( (typeof articleSettings.scope != 'undefined') && articleSettings.scope == 'PUBLIC'  ) { checkType = 'checked' } %>
+                <input type="radio" id="articleScopePublic" name="articleScope" value="PUBLIC" data-key="article.settings.scope" <%-checkType%> >
+                {{ 'SCOPE_PUBLIC'|trans }}
+            </label> 
+            <label class="radio-inline" for="articleScopeInternal">
+                <% checkType ='';
+                if( (typeof articleSettings.scope != 'undefined') && articleSettings.scope == 'INTERNAL'  ) { checkType = 'checked' } %>
+                <input type="radio" id="articleScopeInternal" name="articleScope" value="INTERNAL" data-key="article.settings.scope" <%-checkType%> >
+                {{ 'SCOPE_INTERNAL'|trans }}
+            </label> 
+
+        </div>
+        <div class="clearfix"></div>
+    </div>
+     
+    <% if(data.commentActive == 1) { %>
+    <div class="form-group fg-clear col-md-12 ">
+        <label class="col-md-2 control-label text-right fg-pad-top-0" for="radios"><span data-content="{% trans %}ARTICLE_COMMENT_TOOLTIP{% endtrans %}" class="fg-dotted-br fg-custom-popovers"> {{ 'ARTICLE_ALLOW_COMMENTS'|trans }}</span></label>
+        <div class="col-md-10 fg-pad-left-0"> 
+            <label class="radio-inline" for="articleComment0">
+                <% checkType ='';
+                if( (typeof articleSettings.allowcomment != 'undefined') && articleSettings.allowcomment == '0'  ) { checkType = 'checked' } %>
+                <input type="radio" id="articleComment0" name="articleComment" value="0" data-key="article.settings.allowcomment" <%-checkType%> >
+                {{ 'ARTICLE_NO'|trans }}
+            </label> 
+            <label class="radio-inline" for="articleComment1">
+                <% checkType ='';
+                if( (typeof articleSettings.allowcomment != 'undefined') && articleSettings.allowcomment == '1'  ) { checkType = 'checked' } %>
+                <input type="radio" id="articleComment1" name="articleComment" value="1" data-key="article.settings.allowcomment" <%-checkType%> >
+                {{ 'ARTICLE_COMMENT_LOGIN_USER'|trans }}
+            </label> 
+            <% if(data.isFrontend2Booked == 1){ %>
+                <label class="radio-inline" for="articleComment2">
+                    <% checkType ='';
+                if( (typeof articleSettings.allowcomment != 'undefined') && articleSettings.allowcomment == '2'  ) { checkType = 'checked' } %>
+                <input type="radio" id="articleComment2" name="articleComment" value="2" data-key="article.settings.allowcomment" <%-checkType%> >
+                {{ 'ARTICLE_COMMENT_EVERYBODY'|trans }}
+            </label> 
+            <% } %>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <% } %>
+</div>
+<input type="text" class="hide" value="" id="article-isdraft" data-key="article.settings.isDraft" name="article-isdraft" >  
+<input type="hidden" class="hide" value="<%-articleLevel%>" id="article-level"  name="article-level" >  

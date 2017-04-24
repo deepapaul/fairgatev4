@@ -1,0 +1,576 @@
+security:
+    encoders:
+        FOS\UserBundle\Model\UserInterface: sha512
+
+    providers:
+        fos_userbundle:
+            id: fg.security.authentication.userprovider
+     
+    firewalls:
+        backend:
+          pattern:    /(backend|files|help)/.*
+          provider:   fos_userbundle
+          anonymous: ~   
+          context: fairgate_security_context
+          form_login:
+              check_path: fairgate_user_security_check
+              login_path: %fg_backend_login_path%
+              success_handler: fg.login_success_handler
+              username_parameter: _username
+              password_parameter: _password
+              csrf_parameter: _csrf_token
+              csrf_token_id: authenticate               
+              post_only: true
+              #remember_me: true
+              use_referer: false
+
+              default_target_path: %fg_backend_default_target_path%
+          logout:
+              path:   fairgate_user_security_logout
+              target: fos_user_security_login
+              success_handler: fg.logout_success_handler
+              invalidate_session: false
+              delete_cookies:
+                  a: { path: null, domain: null }
+                  b: { path: null, domain: null }
+          remember_me:
+            secret:      "%secret%"
+            lifetime: 31536000 # 365 days in seconds
+            path:     ~
+            domain:   ~ 
+            user_provider: fos_userbundle
+        internal:
+          pattern:    /.*
+          provider:   fos_userbundle
+          anonymous: ~
+          context: fairgate_security_context
+          form_login:
+              check_path: internal_user_security_check
+              login_path: %internal_user_login_path%    
+              success_handler: fg.login_success_handler
+              username_parameter: _username
+              password_parameter: _password
+              csrf_parameter: _csrf_token
+              csrf_token_id: authenticate               
+              post_only: true
+              remember_me: true
+              use_referer: false
+              default_target_path: %internal_default_target_path%
+          logout:
+              path:   %internal_user_logout_path%
+              target: %internal_user_login_path%   
+              success_handler: fg.logout_success_handler
+              invalidate_session: false
+              delete_cookies:
+                  a: { path: null, domain: null }
+                  b: { path: null, domain: null }
+          remember_me:
+            secret:      "%secret%"
+            lifetime: 31536000 # 365 days in seconds
+            path:     ~
+            domain:   ~ 
+            name: INTERNAL_REMEMBERME            
+            remember_me_parameter: _remember_me
+            user_provider: fos_userbundle
+
+    access_control:    
+        fg_backend_public:
+            path: /backend/public/.*
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY]
+        document_download:
+            path: /public/document/download/.*
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY]     
+        fg_filemanager_view_datatable:
+            path: /files/filemanager/list.*
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_COMMUNICATION,ROLE_CALENDAR_ADMIN,ROLE_GROUP_ADMIN,ROLE_CALENDAR,ROLE_FED_ADMIN,ROLE_ARTICLE,ROLE_ARTICLE_ADMIN]
+            
+        fg_filemanager_view_popup:
+            path: /files/filemanager/view.*
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_COMMUNICATION,ROLE_CALENDAR_ADMIN,ROLE_GROUP_ADMIN,ROLE_CALENDAR,ROLE_FED_ADMIN,ROLE_ARTICLE,ROLE_ARTICLE_ADMIN]
+            
+        fg_filemanager_upload_check:
+            path: /files/filemanager/fileUploadCheck.*
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_COMMUNICATION,ROLE_CALENDAR_ADMIN,ROLE_GROUP_ADMIN,ROLE_CALENDAR,ROLE_FED_ADMIN,ROLE_ARTICLE,ROLE_ARTICLE_ADMIN]
+            
+        fg_filemanager_upload:
+            path: /files/filemanager/upload.*
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_COMMUNICATION,ROLE_CALENDAR_ADMIN,ROLE_GROUP_ADMIN,ROLE_CALENDAR,ROLE_FED_ADMIN,ROLE_ARTICLE,ROLE_ARTICLE_ADMIN]
+            
+        fg_filemanager_downloadzip:
+            path: /files/filemanager/downloadzip.*
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_COMMUNICATION,ROLE_CALENDAR_ADMIN,ROLE_GROUP_ADMIN,ROLE_CALENDAR,ROLE_FED_ADMIN,ROLE_ARTICLE,ROLE_ARTICLE_ADMIN]
+            
+        fg_filemanager_rename:
+            path: /files/filemanager/rename.*
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_COMMUNICATION,ROLE_CALENDAR_ADMIN,ROLE_GROUP_ADMIN,ROLE_CALENDAR,ROLE_FED_ADMIN,ROLE_ARTICLE,ROLE_ARTICLE_ADMIN]
+            
+        fg_filemanager_replace:
+            path: /files/filemanager/replace.*
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_COMMUNICATION,ROLE_CALENDAR_ADMIN,ROLE_GROUP_ADMIN,ROLE_CALENDAR,ROLE_FED_ADMIN,ROLE_ARTICLE,ROLE_ARTICLE_ADMIN]
+            
+        fg_filemanager_markdel:
+            path: /files/filemanager/markDelete.*
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_COMMUNICATION,ROLE_CALENDAR_ADMIN,ROLE_GROUP_ADMIN,ROLE_CALENDAR,ROLE_FED_ADMIN,ROLE_ARTICLE,ROLE_ARTICLE_ADMIN]
+            
+        fg_filemanager_restore:
+            path: /files/filemanager/restore.*
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_COMMUNICATION,ROLE_CALENDAR_ADMIN,ROLE_GROUP_ADMIN,ROLE_CALENDAR,ROLE_FED_ADMIN,ROLE_ARTICLE,ROLE_ARTICLE_ADMIN]
+            
+        fg_filemanager_log:
+            path: /files/filemanager/log.*
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_COMMUNICATION,ROLE_CALENDAR_ADMIN,ROLE_GROUP_ADMIN,ROLE_CALENDAR,ROLE_FED_ADMIN,ROLE_ARTICLE,ROLE_ARTICLE_ADMIN]    
+        
+        fg_filemanager_download:
+            path: /files/filemanager/download/.*
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY]                    
+            
+        fg_filemanager_list:
+            path: /files/filemanager/.*
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN]
+            
+        fos_user_security_login:
+            path: /backend/signin
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY,IS_AUTHENTICATED_REMEMBERED]
+            
+        fos_user_resetting:
+            path: /backend/request
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY]
+            
+        fos_user_security_check:
+            path: /backend/login_check
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY]
+            
+        fos_user_resetting_send_email:
+            path: /backend/send-email
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY]
+            
+        fos_user_resetting_check_email:
+            path: /backend/check-email
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY]
+            
+        fos_user_resetting_reset:
+            path: /backend/reset/.*
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY]
+            
+        fos_user_resetting:
+            path: /backend/request
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY]
+            
+        fos_user_activateaccount:
+            path: /backend/activateaccount
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY]
+            
+        executive_board_settings:
+            path: /settings/editexecutiveboardmembers
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_CONTACT,ROLE_FED_ADMIN]
+            
+        executive_board_settings:
+            path: /settings/editexecutiveboardmembers
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_CONTACT,ROLE_FED_ADMIN]
+            
+        executive_board_settings_updates:
+            path: /settings/updateexecutiveboardmembers
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_CONTACT,ROLE_FED_ADMIN]
+            
+        executive_board_settings_contactnames:
+            path: /settings/contactnames/.*
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_CONTACT,ROLE_FED_ADMIN]
+
+        fairgate_dashboard:
+            path: /backend/dashboard
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_COMMUNICATION,ROLE_DOCUMENT,ROLE_CONTACT,ROLE_SPONSOR,ROLE_READONLY_SPONSOR,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+
+        communication_admin_pages:
+            path: /backend/communication/.*
+            roles: [ROLE_COMMUNICATION,ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN]
+            
+        club_overview_pages:
+            path: /backend/club
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN]   
+            
+        document_upload_save:
+            path: /backend/document/save/.*
+            roles: [ROLE_DOCUMENT,ROLE_SUPER,ROLE_USERS,ROLE_CONTACT,ROLE_FED_ADMIN]   
+       
+        document_upload_rights:
+            path: /backend/document/upload/.*
+            roles: [ROLE_DOCUMENT,ROLE_SUPER,ROLE_USERS,ROLE_CONTACT,ROLE_FED_ADMIN] 
+            
+        document_admin_pages:
+            path: /backend/document/.*
+            roles: [ROLE_DOCUMENT,ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN]
+            
+# Contact area with readonly access  
+        contact_userights_list:
+            path: /backend/contact/userrights/.*
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN]
+            
+        contact_listing_page:
+            path: /backend/contact/list
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        contact_export:
+            path: /backend/contact/export/.*
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+        
+        contact_export_data:
+            path: /backend/contact/exportdata
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        contact_missing_assignments:
+            path: /backend/contact/sidebar/missingassignments
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        contact_sidebar_count:
+            path: /backend/contact/sidebarCounts
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        contact_column_settings:
+            path: /backend/contact/columnsettings/.*
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        contact_admin_autocomplete:
+            path: /backend/contact/autocomplete/.*
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        contact_column_settings_save_update:
+            path: /backend/contact/updatecolumnsettings
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        contact_column_settings_delete:
+            path: /backend/contact/deleteColumnsettings
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        contact_column_settings_fields:
+            path: /backend/contact/getTableSettingFields
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        archive_listing:
+            path: /backend/contact/contactarchive
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        former_federation_listing:
+            path: /backend/contact/formerfederationmember
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        contact_overview_page:
+            path: /backend/contact/overviewcontact/.*
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        contact_data_page:
+            path: /backend/contact/data/.*
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        contact_connection_page:
+            path: /backend/contact/connection/.*
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        contact_assignments_page:
+            path: /backend/contact/assignments/.*
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        contact_document_page:
+            path: /backend/contact/documents/.*
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        contact_assignments_select_values:
+            path: /backend/contact/getassignmentselectvalues
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+        
+        contact_list_all_assignments:
+            path: /backend/contact/listallAssignments
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        contact_notes:
+            path: /backend/contact/contactnote/.*
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        contact_logs:
+            path: /backend/contact/logListing/.*
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        contact_log_datas:
+            path: /backend/contact/contactlogdatas/.*
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+  
+        contact_list_contact:
+            path: /backend/contact/listcontact/.*
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        contact_filter:
+            path: /backend/contact/filter/.*
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_COMMUNICATION,ROLE_FED_ADMIN,ROLE_READONLY_SPONSOR]
+            
+        contact_bookmark:
+            path: /backend/contact/bookmark
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        contact_bookmark_pages:
+            path: /backend/contact/bookmark/.*
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+            
+        confirmations_mutations:  
+            path: /backend/contact/mutations
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN] 
+            
+        confirmations_creations:   
+            path: /backend/contact/creations
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN] 
+        
+        confirmation_changes:
+            path: /backend/contact/confirmationchanges/.*
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN]
+
+        list_changes_to_confirm:
+            path: /backend/contact/listchangestoconfirm
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN]
+
+        list_confirmation_log:
+            path: /backend/contact/listconfirmationlog
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN]
+            
+        contact_admin_pages:
+            path: /backend/contact/.*
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN]
+            
+        contact_admin_landing:
+            path: /backend/contact
+            roles: [ROLE_CONTACT,ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN]
+            
+# Sponsor area with readonly access    
+              
+        sponsor_admin_landing_list:
+            path: /backend/sponsor/list
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_admin_filter_data:
+            path: /backend/sponsor/filter/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_admin_sidebar_count:
+            path: /backend/sponsor/sidebar/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_admin_autocomplete:
+            path: /backend/sponsor/autocomplete/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_assignmentoverview_export_pages:
+            path: /backend/sponsor/assignmentoverview.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+ 
+        sponsor_service_export_pages:
+            path: /backend/sponsor/exportservice.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+        
+        sponsor_admin_analysis_pages:
+            path: /backend/sponsor/analysis/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+        
+        sponsor_admin_analysis:
+            path: /backend/sponsor/analysis
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+        
+        sponsor_admin_analysis_list:
+            path: /backend/sponsor/serviceanalysis/list/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_admin_export:
+            path: /backend/sponsor/export/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_admin_servicelistdata:
+            path: /backend/sponsor/getaads 
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+
+        sponsor_admin_columnsettings:
+            path: /backend/sponsor/columnsettings/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_admin_columnsettings_update:
+            path: /backend/sponsor/updatecolumnsettings
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_admin_columnsettings_delete:
+            path: /backend/sponsor/deletecolumnsettings
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_admin_overview:
+            path: /backend/sponsor/overviewsponsor/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+           
+        sponsor_admin_services_overview:
+            path: /backend/sponsor/services/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_admin_getservices:
+            path: /backend/sponsor/getservices/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_admin_data:
+            path: /backend/sponsor/data/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_admin_documents_download:
+            path: /backend/document/download/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_admin_documents:
+            path: /backend/sponsor/documents/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_admin_connection:
+            path: /backend/sponsor/connection/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_admin_note:
+            path: /backend/sponsor/note/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_admin_log:
+            path: /backend/sponsor/log/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_admin_log_datas:
+            path: /backend/sponsor/sponsorlogdatas/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_admin_ads:
+            path: /backend/sponsor/ads/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+
+        sponsor_get_sponsor_ads:
+            path: /backend/sponsor/getads/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_bookmark:
+            path: /backend/sponsor/bookmark
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_bookmark_pages:
+            path: /backend/sponsor/bookmark/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+        sponsor_archived_page:
+            path: /backend/sponsor/archivedsponsor
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN] 
+            
+        sponsor_overview_get_data:
+            path: /backend/sponsor/assignmentdata/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]     
+
+        sponsor_admin_pages:
+            path: /backend/sponsor/.*
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_COMMUNICATION,ROLE_FED_ADMIN]
+            
+        sponsor_admin_landing:
+            path: /backend/sponsor
+            roles: [ROLE_SPONSOR,ROLE_SUPER,ROLE_USERS,ROLE_READONLY_SPONSOR,ROLE_FED_ADMIN]
+            
+            
+        admin_settings_pages:
+            path: /backend/settings/*
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN]
+        
+            
+        fairgate_dashboard_page:
+            path: /backend/
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_COMMUNICATION,ROLE_DOCUMENT,ROLE_CONTACT,ROLE_SPONSOR,ROLE_READONLY_SPONSOR,ROLE_READONLY_CONTACT,ROLE_FED_ADMIN]
+
+        super_admin_pages:
+            path: /backend/.*
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN] 
+            
+#        internal_pages
+        fg_internal_public:
+            path: /public/.*
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY]
+            
+        fg_internal_login:
+            path: /internal/signin
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_REMEMBERED]
+            
+        fg_internal_login_check:
+            path: /internal/login_check
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY]
+            
+        fg_internal_forgotpassword:
+            path: /internal/forgotpassword
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY]
+            
+        fg_internal_checkmail:
+            path: /internal/checkmail
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY]   
+            
+        fg_internal_sendmail:
+            path: /internal/sendmail
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY] 
+            
+        fg_internal_reset_password:
+            path: /internal/reset/.*
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY]  
+            
+        fg_internal_activateaccount:
+            path: /internal/activateaccount
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY] 
+       
+        fg_internal_area_colours:
+           path: /calendar/areacolours
+           roles: [ROLE_SUPER,ROLE_USERS,ROLE_CALENDAR,ROLE_FED_ADMIN]
+           
+        fg_internal_article_settings:
+           path: /internal/article/settings/
+           roles: [ROLE_SUPER,ROLE_USERS,ROLE_ARTICLE,ROLE_FED_ADMIN]
+           
+        fg_internal_gallery_browser:
+            path: /internal/gallery/browser
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_COMMUNICATION,ROLE_CALENDAR_ADMIN,ROLE_GROUP_ADMIN,ROLE_CALENDAR,ROLE_FED_ADMIN,ROLE_ARTICLE,ROLE_ARTICLE_ADMIN,ROLE_PAGE_ADMIN,ROLE_CMS_ADMIN]    
+        
+        fg_internal_gallery_details:
+            path: /internal/gallery/gallerydetails
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_COMMUNICATION,ROLE_CALENDAR_ADMIN,ROLE_GROUP_ADMIN,ROLE_CALENDAR,ROLE_FED_ADMIN,ROLE_ARTICLE,ROLE_ARTICLE_ADMIN,ROLE_PAGE_ADMIN,ROLE_CMS_ADMIN]    
+        
+        fg_internal_security_pages:
+            path: /internal/
+            roles: [ROLE_USER]
+            
+        fg_internal_security_page:
+            path: /internal/.*
+            roles: [ROLE_USER]
+            
+#        web_cms_pages        
+        web_cms_inquiries_list_form:
+            path: /website/cms/forminquiries/.*
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN,ROLE_CMS_ADMIN] 
+        web_cms_navigation_list:
+            path: /website/cms/listNavigationPoints
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN,ROLE_CMS_ADMIN]  
+        web_cms_settings:
+            path: /website/cms/websitesettings
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN,ROLE_CMS_ADMIN]  
+        web_cms_settings_form:
+            path: /website/cms/websitesettings/.*
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN,ROLE_CMS_ADMIN]  
+        website_cms_inquiriy_attachment_download:
+            path: /website/cms/inquiry/downloadAttachment/.*
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY] 
+        web_cms_pages:
+            path: /website/.*
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN,ROLE_CMS_ADMIN,ROLE_PAGE_ADMIN]              
+        fg_external_application:
+            path: /externalApplication
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY] 
+            
+        fg_external_application_save:
+            path: /externalApplicationSave
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY]
+            
+        web_cms_pagelist:
+            path: /website/cms/pagelist
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN,ROLE_CMS_ADMIN,ROLE_PAGE_ADMIN] 
+        website_cms_listpages:
+            path: /website/cms/listpages
+            roles: [ROLE_SUPER,ROLE_USERS,ROLE_FED_ADMIN,ROLE_CMS_ADMIN,ROLE_PAGE_ADMIN] 
+        web_public_page:
+            path: /.*
+            roles: [IS_AUTHENTICATED_ANONYMOUSLY]

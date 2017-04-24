@@ -1,0 +1,71 @@
+<script type="text/template" id="template-display-assignmentfields">
+    <h4 class="fg-cols-fsz">{% trans %}GN_ASSIGNMENTS{% endtrans %}</h4>
+    <% prevCatId = '' %>
+    <% prevFunctionAssign = '' %>
+    <% _.each(assignmentFields, function(assignmentField) { %>
+        <% catId = assignmentField.categoryId %>
+        <% isFedCat = assignmentField.isFedCat %>
+        <% teamCatId = assignmentField.teamCatId %>
+        <% catClubId = assignmentField.catClubId %>
+        <% functionAssign = assignmentField.functionAssign %>
+        <% roleId = assignmentField.roleId %>
+        <% if (catId == clubTeamId) {
+            categoryName = '{{fgtwig.getTerminolgyName('Team',plural,'UCF')}}';
+        } else if (catId == clubWorkgroupId) {
+            categoryName = '{{'WORKGROUPS'|trans}}';
+        } else {
+            categoryName = assignmentField.categoryTitle;
+        }
+        if (roleId == clubExecutiveBoardId) {
+            roleName = '{{fgtwig.getTerminolgyName('Executive Board',singular,'UCF')}}'
+        } else {
+            roleName = assignmentField.roleTitle
+        } %>
+
+        <% if (catId != prevCatId) { %>
+            <% if (prevCatId != '') { %>
+                </optgroup></select></div>
+                <% if (prevFunctionAssign != 'none') { %>
+                    <div class="fg-function-txt">
+                        <label><input type="checkbox" data-catid="<%- prevCatId %>" disabled="true" class="fg-dev-int-col-func-chkbx" /><span onclick="$('input[data-catid=<%- catId %>]').click">{{'FUNCTIONS'|trans}}</span></label>
+                    </div>
+                <% } %>
+                </div>
+            <% } %>
+        <div class="fg-clear"></div>
+            <div class="col-md-12">
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <div class="checkbox-list">
+                        <label class="fg-col-settings-label">
+                            <i class="fa fg-plus-circle fa-2x pull-left selectitem disabled" id="<%- catId %>" data-catid="<%- catId %>" type="R" club_id="<%- catClubId %>" data-is-fed-cat="<%- isFedCat %>">
+                            <span class="fg-label-inner" data-label-id="R<%- catId %>" data-catid="<%- catId %>"><%- categoryName %>
+                            <%  var fedIcon = {{fgclub.get('federation_icon')|json_encode()|raw}};  %>
+                            <% if (isFedCat == '1') { %><img src="<%- fedIcon[catClubId] %>" /><% } %></span></i>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-12 fg-dropdown-blue">
+                    <select class="bs-select form-control fg-select-font selectpicker" multiple data-catid="<%- catId %>">
+                        <% if ((catId == clubTeamId) || (catId == clubWorkgroupId)) { %>
+                            <option value="all" class="single fg-arrow-all">{{'ALL'|trans}} <%- categoryName %></option>
+                        <% } else { %>
+                            <option value="all" class="single fg-arrow-all">{{'ALL_ROLES'|trans}}</option>
+                        <% } %>
+                        <option value="selectall" class="selectall fg-arrow-all">{{'SELECT_ALL'|trans}}</option>
+                        <optgroup label="">
+        <% } %>
+        <option value="<%- roleId %>" class="multiple" data-teamcatid="<%- teamCatId %>"><%- roleName %></option>
+
+        <% prevCatId = catId %>   
+        <% prevFunctionAssign = functionAssign %>
+    <% }); %>
+    <% if (Object.keys(assignmentFields).length) { %>
+        </optgroup></select></div>
+        <% if (functionAssign != 'none') { %>
+            <div class="fg-function-txt">
+                <label><input type="checkbox" data-catid="<%- prevCatId %>" disabled="true" class="fg-dev-int-col-func-chkbx" /><span onclick="$('input[data-catid=<%- catId %>]').click">{{'FUNCTIONS'|trans}}</span></label>
+            </div>
+        <% } %>
+            </div>
+    <% } %>
+</script>

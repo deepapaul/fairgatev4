@@ -1,0 +1,35 @@
+Common\UtilityBundle\Entity\FgEmCalendarSelectedAreas:
+    type: entity
+    table: fg_em_calendar_selected_areas
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        isClub:
+            type: boolean
+            nullable: false
+            column: is_club
+    manyToOne:
+        calendarDetails:
+            targetEntity: FgEmCalendarDetails
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                calendar_details_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        role:
+            targetEntity: FgRmRole
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                role_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,52 @@
+<script type="text/template" id="form_field_templates_date">
+
+    <div class="fg-collapsed-content-wrapper">
+
+        <div class="form-group">
+            <label class="col-md-3 col-sm-4 control-label" for="<%- data.formId %>.<%- data.formFieldId %>_isRequired">{{'CMS_FORM_REQUIRED'|trans}}</label>
+            <div class="col-sm-4">
+                <label for="<%- data.formId %>.<%- data.formFieldId %>_isRequired" class="fg-checkbox">
+                    <input type="checkbox" class="fg-dev-newfield" id="<%- data.formFieldId %>_isRequired" data-key="<%- data.formId %>.<%- data.formFieldId %>.isRequired" name="<%- data.formFieldId %>_isRequired" <%= (($.trim(data.isRequired) == '1' || data.isRequired === true) ? 'checked' :'') %>/>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-3 col-sm-4 control-label" for="<%- data.formId %>.<%- data.formFieldId %>_minValue">{{'CMS_FORM_MINVALUE'|trans}}</label>
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input type="text" class="form-control fg-dev-newfield" id="formElement_date_minValue_<%- data.formFieldId %>" data-key="<%- data.formId %>.<%- data.formFieldId %>.dateMin" value="<%- data.dateMin %>" name="<%- data.formFieldId %>_minValue %>"/>
+                    <div class="input-group-addon fg-cursr-pointer">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-3 col-sm-4 control-label" for="<%- data.formId %>.<%- data.formFieldId %>_maxValue">{{'CMS_FORM_MAXVALUE'|trans}}</label>
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input type="text" class="form-control fg-dev-newfield" id="formElement_date_maxValue_<%- data.formFieldId %>" data-key="<%- data.formId %>.<%- data.formFieldId %>.dateMax" value="<%- data.dateMax %>" name="<%- data.formFieldId %>_maxValue %>"/>
+                    <div class="input-group-addon fg-cursr-pointer">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-3 col-sm-4 control-label" for="textarea">{{'CMS_FORM_FIELD_TOOLTIP'|trans}}</label>
+            <div class="col-sm-4">
+            <% _.each(data.clubLanguages, function(clubLang) { %>
+                <textarea maxlength="160" class="form-control fg-textarea fg-dev-newfield <%- clubLang != data.clubDefaultLanguage ? 'hide':''  %>" data-key="<%- data.formId %>.<%- data.formFieldId %>.tooltip.<%- clubLang %>" 
+                        <% var placeholderDefaultValue = (_.contains(_.keys(data.tooltip),data.clubDefaultLanguage)) ? data.tooltip[data.clubDefaultLanguage]:'' %>
+                        placeholder="<%- (clubLang != data.clubDefaultLanguage)?placeholderDefaultValue:'' %>"
+                        name="<%- data.formFieldId %>_tooltip_<%- clubLang %>"  id="<%- data.formFieldId %>_tooltip_<%- clubLang %>"><%= (_.contains(_.keys(data.tooltip),clubLang)) ? $.trim(data.tooltip[clubLang]):'' %></textarea>
+            <% }); %>
+            </div>
+        </div>
+
+    </div>
+
+</script>

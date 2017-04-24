@@ -1,0 +1,36 @@
+Common\UtilityBundle\Entity\FgCmsArticleSelectedareas:
+    repositoryClass: Common\UtilityBundle\Repository\Article\FgCmsArticleSelectedareasRepository
+    type: entity
+    table: fg_cms_article_selectedareas
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        isClub:
+            type: boolean
+            nullable: true
+            column: is_club
+    manyToOne:
+        role:
+            targetEntity: FgRmRole
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                role_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        article:
+            targetEntity: FgCmsArticle
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                article_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

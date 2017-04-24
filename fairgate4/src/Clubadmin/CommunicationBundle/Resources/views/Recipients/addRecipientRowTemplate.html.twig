@@ -1,0 +1,90 @@
+<script type="text/template" id="addRecipientRow">
+    <% index=1 %>
+    <% _.each(data, function(item,key){ %>
+        <% 
+        recipientListIds.push(item.id);
+        exceptionsData[item.id] = {'included_contacts': [], 'excluded_contacts': []};
+        %>
+    <div class="row fg-border-line sortables fg-sort-drag-hover recipient-list-rows" id="<%- item.id %>">
+        <div class="fg-col-first-icon fg-sort-drag"><i class="fa fa fg-sort ui-draggable handle"></i></div>
+        <div class="col-md-12 fg-col-hack">
+            <div class="row">
+                <div class="col-lg-3 col-sm-3 col-xs-12 fg-clear-left">
+                    <div class="fg-form-group">
+                        <input type="text" id="new_<%- item.id %>_name" name="new_<%- item.id %>_name" data-key="new.<%- item.id %>.name" class="form-control input-sm fg-dev-newfield" placeholder="{{'RECEIVER_LIST'|trans}}" value="<%- item.name %>" required />
+                    </div>
+                </div>
+                <div class="col-md-9 col-sm-9 col-xs-12 fg-dev-rowactions">
+                    <div class="col-lg-3 col-sm-3 col-xs-12"> <a href="#" class="fg-recipients-active fg-fa-plus-anchor" data-fn="filter" data-toggle="collapse" data-target="#data-<%- item.id %>" data-id="<%- item.id %>" data-val="<%- item.filterData %>"><i class="fa fa-plus-square-o"></i> {{'LISTING_FILTER'|trans}}</a><i class="fa fa-warning fg-warning fg-broken-filter hide"></i></div>
+                    <div class="col-lg-3 col-sm-3 col-xs-12"> <a href="#" class="fg-recipients-active fg-fa-plus-anchor" data-fn="openExceptions" data-toggle="collapse" data-target="#data-exception-<%- item.id %>" data-id="<%- item.id %>"><i class="fa fa-plus-square-o"></i> {{'LISTING_EXCEPTIONS'|trans}} <span class="badge">0</span></a></div>
+                    <div class="col-lg-3 col-sm-3 col-xs-12"> <a href="#" class="fg-recipients-active fg-fa-plus-anchor" data-toggle="collapse" data-fn="emailerField" data-target="#data-email-<%- item.id %>" data-id="<%- item.id %>"><i class="fa fa-plus-square-o"></i> {{'EMAIL_FIELDS'|trans}}</a><i class="fa fa-warning fg-warning fg-broken-filter hide"></i></div>
+                </div>
+            </div>
+        </div>
+        <input type="text" data-key="new.<%- item.id %>.sort_order" name="new_<%- item.id %>_sort_order" class="sort-val fg-dev-newfield hide" id="new_<%- item.id %>_sort_order" value="<%- index %>" data-element="sortorder" data-sort-parent="recipients_list" />
+        <input type="text" data-key="new.<%- item.id %>.included_contacts" name="new_<%- item.id %>_included_contacts" id="new_<%- item.id %>_included_contacts" value="<%- item.includedContacts %>" class="fg-dev-newfield hide" />
+        <input type="text" data-key="new.<%- item.id %>.excluded_contacts" name="new_<%- item.id %>_excluded_contacts" id="new_<%- item.id %>_excluded_contacts" value="<%- item.excludedContacts %>" class="fg-dev-newfield hide" />
+        <div class="fg-col-last-icon">
+            <div class="closeico">
+                <input type="checkbox" data-key="new.<%- item.id %>.is_deleted" name="new_<%- item.id %>_is_deleted" id="new_<%- item.id %>_is_deleted" class="make-switch" value="0" data-inactiveblock="changecolor" data-parentid="<%- item.id %>">
+                <label for="<%- item.id %>_is_deleted"></label>
+            </div>
+        </div>
+        <div class="collapse" id="data-<%- item.id %>">
+            <div class="fg-filter-blk">
+            <div id="filter-<%- item.id %>" class="fg-filter-blk-open fg-filter-blk-wrapper"></div>
+            <div class="row">
+                <div class="col-md-5 fg-add-criteria fg-common-btm pull-left">
+                    <a class="add-<%- item.id %>" href="#"><i class="fa fg-plus-circle fa-2x pull-left"></i> <span class="fg-add-text">{{'SAVED_FILTER_ADD_CRITERION'|trans}}</span></a>
+                </div>
+            </div>
+            </div>
+            <input type="text" data-key="new.<%- item.id %>.filter_data" name="<%- item.id %>_filter_data" id="filter_data_<%- item.id %>" value="<%- item.filterData %>" class="fg-dev-newfield hide recipient-list-filters" />
+        </div>
+        <div class="collapse" id="data-exception-<%- item.id %>">
+        <div class="col-md-12 fg-control-aranew fg-filter-role" id="open-exceptions-<%- item.id%>">
+            <div class="include-filter">
+                <dl>
+                    <dt>{{'INCLUDED_CONTACTS'|trans}}</dt><dd><div class="fg-autocomplete-div"><input type="text" id="<%- item.id %>_contacts_included" value="" data-autocomplete-id="<%- item.id %>" data-type="included_contacts" data-hidden-field-id="new_<%- item.id %>_included_contacts" placeholder="{{'AUTOCOMPLETE_ADD_CONTACT'|trans}}" class="dirtyExclude" /></div></dd>
+                    <dt>{{'EXCLUDED_CONTACTS'|trans}}</dt><dd><div class="fg-autocomplete-div"><input type="text" id="<%- item.id %>_contacts_excluded" value="" data-autocomplete-id="<%- item.id %>" data-type="excluded_contacts" data-hidden-field-id="new_<%- item.id %>_excluded_contacts" placeholder="{{'AUTOCOMPLETE_ADD_CONTACT'|trans}}" class="dirtyExclude" /></div></dd>
+                </dl>
+            </div>
+        </div>
+        </div>
+        <div class="collapse" id="data-email-<%- item.id %>">
+            <div class="col-md-12 fg-control-aranew">
+                <div class="alert alert-info alert-dismissable fg-common-top-btm"><button data-close="alert" class="close"></button>
+                    <span>{{'RECIPIENTS_EMAIL_SETTINGS_INFO_MESSAGE'|trans}}.</span>
+                </div>
+
+                <dl>
+                    <dt>{{'EMAIL_ADDRESSES'|trans}}</dt>
+                    <dd>
+                            <% selectedEmails = ['3'] %>
+                            <div class="fg-form-group">
+                                <select class="bs-select form-control fg-select-font selectpicker select-<%- item.id %> fg-dev-newfield recipient-list-email-fields" multiple data-key="new.<%- item.id %>.email.main" id="new_<%- item.id %>_email_main" name="new_<%- item.id %>_email_main" required>
+                                    <% _.each(emailFields, function(emailField, emKey) { %>
+                                        <% selectedAtr = ($.inArray(emailField.id, selectedEmails) != -1) ? " selected=selected " : "" %>
+                                        <option value="<%- emailField.id %>" <%- selectedAtr %> class="multiple opt"><%- emailField.title %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                    </dd>
+                    <dt>{{'RECEIVER_LIST_EMAIL_SUBSTITUTE'|trans}}</dt>
+                    <dd>
+                        <select class="bs-select form-control select-two-<%- item.id %> fg-dev-newfield" data-key="new.<%- item.id %>.email.substitute" id="new_<%- item.id %>_email_substitute" name="new_<%- item.id %>_email_substitute">
+                            <option value="">{{'SELECT_DROPDOWN'|trans}}</option>
+                            <% _.each(emailFields, function(emailField, emKey) { %>
+                                <% selectedAtr = (emailField.id == item.substituteEmailId) ? " selected=selected " : "" %>
+                                <option value="<%- emailField.id %>" <%- selectedAtr %>><%- emailField.title %></option>
+                            <% }); %>
+                        </select>
+                    </dd>
+                </dl>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <%  }); %>
+</script>

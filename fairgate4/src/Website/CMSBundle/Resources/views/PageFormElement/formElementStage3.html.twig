@@ -1,0 +1,29 @@
+<script type="text/template" id="formElementStage3">
+    <form class="form-horizontal fg-marg-top-20" id="form-field-elements-form-stage3">
+        <div id="form-tab3" method="post" data-url="" class="form-horizontal">
+            <div class="fg-tab-list fg-nl-lang-drop">
+                <h3 class="block">{{'CMS_FORM_COMPLETION_PROMPT'|trans}}</h3>
+                <div class="fg-clear">
+                    <div class="alert alert-info">{{'CMS_FORM_COMPLETION_PROMPT_MESSAGE'|trans}}</div>
+                    <% var defaultMessage =  '{{'CMS_FORM_INQUIRY_SUCCESS_MESSAGE'|trans}}'%>
+                    <% var defaultLanguageMessage = (_.contains(_.keys(form.successmessage),clubDefaultLang) && form.successmessage[clubDefaultLang] != null)?form.successmessage[clubDefaultLang]:defaultMessage%>
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-4 control-label">{{'CMS_FORM_MESSAGE_TEXT'|trans}}</label>
+                        <div class="col-sm-8">
+                            <% _.each(clubLanguages, function(clubLang) { %>
+                                <% var currentLanguageMessage =  (_.contains(_.keys(form.successmessage),clubLang) && form.successmessage[clubLang] != null)?form.successmessage[clubLang]:''%>
+                                <div dataerror-group="" data-lang="<%- clubLang %>" class="<%- clubLang != clubDefaultLang ? 'hide':''  %>">
+                                    <textarea class="form-control fg-dev-newfield <%- clubLang != clubDefaultLang ? 'hide':''  %>" id="<%- formId %>_successmessage_<%- clubLang %>" 
+                                                data-lang="<%- clubLang %>" data-key="<%- formId %>.successmessage.<%- clubLang %>" name="successmessage_<%- clubLang %>" 
+                                                placeholder="<%-(clubLang == clubDefaultLang)?'':defaultLanguageMessage %>"
+                                                <%- (currentLanguageMessage == '' && clubLang == clubDefaultLang)?'data-set-value="true"':''%>
+                                                <%=(clubLang == clubDefaultLang) ? 'required="required" data-required="true"':'' %>><%- (currentLanguageMessage != '')?currentLanguageMessage: (clubLang == clubDefaultLang)?(' '+defaultLanguageMessage):''%></textarea>
+                                </div>
+                            <% }); %>
+                        </div>
+                    </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </form>
+</script>

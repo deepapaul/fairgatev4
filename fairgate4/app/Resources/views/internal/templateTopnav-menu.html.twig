@@ -1,0 +1,85 @@
+<script type="text/template" id="template_top_navigation">
+    <div class="page-header navbar navbar-inverse navbar-fixed-top fg-page-header">
+        <!-- BEGIN TOP NAVIGATION BAR -->
+        <div class="header-inner">
+            <!-- BEGIN LOGO -->
+            <a class="navbar-brand fg-navbar-brand" href="{{ path('show_internal_dashboard') }}"> <img src="{{ asset('fgassets/global/img/fairgate-small-logo.jpg') }}" alt="logo" class="img-responsive"/> </a>
+            <!-- END LOGO -->
+
+            <% 
+            _.each(topNavArr,function(topMenuArr, key){
+                if (key == 'switch') { %>
+                    <!-- BEGIN DROPDOWN -->
+                    <div class="fg-dropdown-nav">
+                        <ul id="fg-top-nav-app-switch" class="nav navbar-nav">
+                            <li class="dropdown">
+                                <a href="#" data-toggle="dropdown" class="fg-dropdown-head">{{ 'INTERNAL'|trans }}<i class="fa fa-angle-down"></i></a>
+                                <ul class="dropdown-menu animated" data-animation="fadeIn">
+                                    <% 
+                                    _.each(topMenuArr,function(menuArr){ %>
+                                        <li class="<%- ((menuArr.class) ? menuArr.class : '') %>"><a href="<%- menuArr.url %>" ><%- menuArr.title %></a></li>
+                                    <% }); %>    
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- END DROPDOWN -->
+                <% } else if (key == 'leftmenu') {  %>
+                    <!-- BEGIN HORIZANTAL LEFT MENU -->
+                    <div class="hor-menu hidden-sm hidden-xs">
+                        <ul class="nav navbar-nav">
+                            <% 
+                            _.each(topMenuArr,function(mainMenu){ %>
+                                <li class="<%- mainMenu.class %>"> <a data-toggle="dropdown" data-hover="dropdown" data-close-others="true" href="<%- mainMenu.url %>"> <%- mainMenu.title %> <i class="fa fa-angle-down"></i><span class="selected"> </span> </a> </li>
+                           <% }); %>
+                        </ul>
+                    </div>
+                    <!-- END HORIZANTAL LEFT MENU -->
+                <% } else if (key == 'rightmenu') {  %>
+                    <!-- BEGIN HORIZANTAL RIGHT MENU -->
+                    <div class="hor-menu hidden-sm hidden-xs fg-block-right pull-right">
+                        <ul class="nav navbar-nav">
+                            <% 
+                            _.each(topMenuArr,function(mainMenu){ %>
+                                <% if (mainMenu.url != 'search') { %>
+                                    <li class="<%- mainMenu.class %>"> <a data-toggle="dropdown" data-hover="dropdown" data-close-others="true" href="<%- mainMenu.url %>" data-title="<%- mainMenu.breadcrumbTitle %>"> <%- mainMenu.title %> <i class="fa fa-angle-down"></i><span class="selected"> </span> </a>
+                                        <ul class="dropdown-menu hold-on-click pull-right">
+                                            <% 
+                                            _.each(mainMenu.submenu,function(subMenu){ %>
+                                                <li class="<%- subMenu.class %>"> <a id="<%- subMenu.id %>" href="<%- subMenu.url %>" data-toggle="<%- subMenu.toggle %>" data-title="<%- subMenu.breadcrumbTitle %>"><%- subMenu.title %> <% if (subMenu.badge) { %> <span class="badge fg-badge-blue badge-round badge-important" id="fg-dev-internal-docs-count"> <%- subMenu.count %> </span>  <% } %></a> 
+                                                    <% if (!(_.isUndefined(subMenu.subMenu))) { %>
+                                                        <ul class="dropdown-menu  hold-on-click">
+                                                            <% 
+                                                            _.each(subMenu.subMenu,function(subSubMenu){ %>
+                                                                <li class="<%- subSubMenu.class %>"> <a id="<%- subSubMenu.id %>" href="<%- subSubMenu.url %>" data-toggle="<%- subSubMenu.toggle %>" data-title="<%- subSubMenu.breadcrumbTitle %>"><%- subSubMenu.title %></a> </li>
+                                                            <% }); %> 
+                                                        </ul>
+                                                    <% } %>
+                                                </li>
+                                            <% }); %>  
+                                        </ul>
+                                    </li>
+                                <% } else { %>
+                                    <li>
+                                        <!-- BEGIN HEADER SEARCH BOX -->
+                                        <div class="search-form">
+                                            <div class="input-group">
+                                                <input type="text" name="query" placeholder="<%- mainMenu.title %>" id="internalTopNavSearch" class="form-control fg-internal-top-nav-search">
+                                                <span class="input-group-btn">
+                                                    <a class="btn submit" href="#"><i class="icon-magnifier"></i></a>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <!-- END HEADER SEARCH BOX -->
+                                    </li>
+                                <% } %>
+                           <% }); %>
+                           <li> <a href="{{ path('internal_user_security_logout') }}" class="fg-logout-icon"><i class="fa fg-fa-sign-in"></i></a></li>
+                        </ul>
+                    </div>
+                    <!-- END HORIZANTAL RIGHT MENU -->
+                <% } %>
+           <%  }); %>        
+        </div>
+    </div>
+</script>

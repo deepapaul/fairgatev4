@@ -1,0 +1,34 @@
+<script type="text/template" id="template_membership_add">
+
+    <%  data.rnad = Math.round(+new Date()/1000) %>
+
+	<div class="row fg-border-line sortables fg-sort-drag-hover" id="<%- data.rnad %>">
+         <div class="fg-col-first-icon fg-sort-drag">
+            <i class="fa fg-sort ui-draggable handle"  data-toggle="tooltip"></i>
+        </div>
+        <div class="col-md-12 fg-col-hack">
+            <div class="row">
+                <div class="col-sm-6 col-lg-4 col-md-4 col-xs-11 fg-clear-left">
+                            <div class="fg-txt-area fg-form-group">
+                                {% for langKey,languagelist in clubLanguages  %}
+                                    <input type="text" class="form-control input-sm {{languagelist}} " name="new_<%- data.rnad %>_i18n_{{languagelist}}_titleLang" data-key="new.<%- data.rnad %>.i18n.{{languagelist}}.titleLang" id="new_<%- data.rnad %>_{{languagelist}}_title" {% if clubDefaultLang== languagelist  %} required="true" {% endif %} data-lang="{{languagelist}}" />
+                                {% endfor %}
+                            </div>
+                        <div class="bookmark fg-bkmrk-icon fg-bkmrk-ico-new">
+                            <div class="bookmark pull-left"><input id="box<%- data.rnad %>" type="checkbox" class="make-switch" data-key="new.<%- data.rnad %>.book_marked" name="new_<%- data.rnad %>_book_marked"/> <label for="box<%- data.rnad %>"><i class="fa fa-bookmark"></i></label></div>
+                        </div>
+                    </div>
+
+                <!--  bookmark include area  -->
+            </div>
+				  </div>
+                <div class="fg-col-last-icon">
+                    <div class="closeico">
+                        <input type="checkbox" data-key="new.<%- data.rnad %>.is_deleted" name="new_<%- data.rnad %>_is_deleted" id="new_<%- data.rnad %>_is_deleted" class="make-switch" value="0" />
+                        <label for="new_<%- data.rnad %>_is_deleted"></label>
+                    </div>
+                </div>
+                <input type="text" data-key="new.<%- data.rnad %>.sort_order" name="new_<%- data.rnad %>_sort_order" class="sort-val fg-dev-newfield hide" id="new_<%- data.rnad %>_sort_order" value="1" data-element="sortorder" data-sort-parent="membershiplist_sort" />
+        </div>
+
+</script>

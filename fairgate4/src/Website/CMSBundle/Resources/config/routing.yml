@@ -1,0 +1,470 @@
+website_cms_dashboard:
+    path:     /
+    defaults: { _controller: WebsiteCMSBundle:Dashboard:index, module: website }
+
+website_cms_listnavigations:
+    path:     /cms/listNavigationPoints
+    defaults: { _controller: WebsiteCMSBundle:NavigationPoints:listNavigationPoints, module: cms, level1: navigation }
+    
+website_cms_getnavigations:
+    path:     /cms/getNavigationPoints
+    defaults: { _controller: WebsiteCMSBundle:NavigationPoints:getNavigationPointDetails, module: cms }
+    
+website_cms_savenavigations:
+    path:     /cms/saveNavigationPoints
+    defaults: { _controller: WebsiteCMSBundle:NavigationPoints:saveNavigationPointDetails, module: cms }
+    
+website_cms_listpages:
+    path:     /cms/listpages
+    defaults: { _controller: WebsiteCMSBundle:Page:listAllPages, module: cms, level1: navigation }
+    
+website_cms_userrights: 
+    path: /cms/userrights
+    defaults: { _controller: WebsiteCMSBundle:CMSUserrights:displayCmsUserright , module: cms, level1:userrights }
+    
+website_cms_create_page: 
+    path: /cms/savePageDetails
+    defaults: { _controller: WebsiteCMSBundle:Page:savePageDetails }
+
+website_cms_userrights_save: 
+    path: /cms/userrights/save
+    defaults: { _controller: WebsiteCMSBundle:CMSUserrights:saveUserRights }
+
+website_cms_assign_existing: 
+    path: /cms/assignPopup
+    defaults: { _controller: WebsiteCMSBundle:Page:assignPage }
+    
+website_cms_assign_existing_save:
+    path: /cms/assignPopupSave
+    defaults: { _controller: WebsiteCMSBundle:Page:assignPopupSave }
+
+website_cms_page_edit: 
+    path: /cms/editpage/{pageId}
+    defaults: { _controller: WebsiteCMSBundle:Page:editPageContent ,module: cms, level1: navigation}    
+    
+website_cms_page_list: 
+    path: /cms/pagelist
+    defaults: { _controller: WebsiteCMSBundle:Page:getPageList }
+   
+website_cms_get_sidebar_data: 
+    path:     /cms/getSidebarData
+    defaults: { _controller: WebsiteCMSBundle:Page:getSidebarDetails }      
+    
+website_cms_page_delete_popup: 
+    path:     /cms/deletePagePopup
+    defaults: { _controller: WebsiteCMSBundle:Page:deletePagePopup }    
+    
+website_cms_page_delete: 
+    path:     /cms/deletePage
+    defaults: { _controller: WebsiteCMSBundle:Page:delete } 
+    
+website_cms_editpage_preview: 
+    path:     /cms/editpagepreview/{pageId}
+    defaults: { _controller: WebsiteCMSBundle:Page:getPagePreviewContent, module: cms, level1: navigation }
+website_cms_content_save: 
+    path:     /cms/savecontentcontainer
+    defaults: { _controller: WebsiteCMSBundle:PageContent:savePageContainer }
+    
+website_cms_update_sidebar_data: 
+    path:     /cms/updateSidebarElements
+    defaults: { _controller: WebsiteCMSBundle:Page:getDataToUpdateSidebar }
+    
+website_cms_add_new_element_footer: 
+    path:     /cms/addNewFooterElement
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:addNewElement ,module: cms, level1: footer}
+    
+website_cms_add_new_element: 
+    path:     /cms/addNewElement
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:addNewElement ,module: cms, level1: navigation}
+
+website_cms_add_new_element: 
+    path:     /cms/addNewElement
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:addNewElement ,module: cms, level1: navigation}
+    
+website_cms_save_header_element: 
+    path:     /cms/saveHeaderElement
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:saveHeaderElement }
+    
+website_cms_save_calendar_element: 
+    path:     /cms/calendarElement/save
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:saveCalendarElement }  
+    
+website_cms_element_log_data: 
+    path:     /cms/elementlog/data
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:getLogDetails }   
+    
+website_cms_text_element_save: 
+    path:     /cms/teaxtelement/save/{pageId}/{boxId}/{sortOrder}/{elementId}
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:saveTextElement }  
+    
+website_cms_text_element_create_json:
+    path:     /cms/teaxtelement/getData/{type}/{element}
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:getData }
+
+website_cms_edit_pagetitle_popup: 
+    path:     /cms/editpagetitle/popup
+    defaults: { _controller: WebsiteCMSBundle:Page:editPageTitlePopup }    
+
+website_cms_save_pagetitle: 
+    path:     /cms/savepagetitle
+    defaults: { _controller: WebsiteCMSBundle:Page:savePageTitle }
+    
+website_cms_save_article_element: 
+    path:     /cms/articleElement/save
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:saveArticleElement }  
+    
+website_cms_content_sidebar: 
+    path:     /cms/excludeSidecolumn
+    defaults: { _controller: WebsiteCMSBundle:PageContent:excludeSidecolumn }
+    
+website_cms_content_sidebar_edit: 
+    path: /cms/editsidebar/{pageId}/{fromList}
+    defaults: { _controller: WebsiteCMSBundle:Page:editSidecolumn ,module: cms, level1: navigation,fromList: false} 
+   
+website_cms_text_element_history: 
+    path:     /cms/teaxtelement/history/{elementId}
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:textElementHistory }  
+
+website_cms_calendar_get_content_data: 
+    path:     /cms/calendarElement/getContent/{elementId}/{pageId}
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:getCalendarElementDetails ,module: cms }  
+    
+website_cms_article_get_content_data: 
+    path: /cms/articleElement/getContent/{elementId}/{pageId}
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:getArticleElementDetails ,module: cms} 
+    
+website_cms_image_get_content_data: 
+    path: /cms/imageElement/getContent/{elementId}/{pageId}
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:getImageElementDetails ,module: cms}
+    
+website_cms_save_map_element: 
+    path:     /cms/mapElement/save
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:saveMapElement } 
+    
+website_cms_save_image_element: 
+    path:     /cms/imageElement/save
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:saveImageElement }
+    
+website_text_element_revision_update:
+    path: /cms/versionupdate/{textelement}/{version}
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:revisionUpdateTextElement}
+    
+website_cms_edit_global_footer: 
+    path:     /cms/edit/footer
+    defaults: { _controller: WebsiteCMSBundle:Page:editFooterContent ,module: cms, level1: footer }
+    
+website_cms_footer_preview: 
+    path:     /cms/footerpreview/{pageId}
+    defaults: { _controller: WebsiteCMSBundle:Page:getPagePreviewContent, module: cms, level1: footer }
+    
+website_cms_save_iframe_element: 
+    path:     /cms/saveiframeElement
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:saveIframeElement }
+      
+website_cms_preview_text_element:
+    path: /cms/previewtextelement/{elementId}/{pageId}
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:previewTextElement}
+      
+website_cms_create_gallery_page_popup:
+    path: /cms/creategallery/popup
+    defaults: { _controller: WebsiteCMSBundle:SpecialPage:createGalleriesPage}
+
+website_special_page_create_popup:
+    path: /cms/specialpage/create/popup
+    defaults: { _controller: WebsiteCMSBundle:SpecialPage:specialPageCreatePopup}
+       
+website_theme_configuration_list:
+    path: /cms/themeconfiguration/list
+    defaults: { _controller: WebsiteCMSBundle:ThemeConfigurationList:configurationListings, module: cms, level1: design }  
+  
+website_theme_configuration_create:
+    path: /cms/themeconfiguration/create
+    defaults: { _controller: WebsiteCMSBundle:ThemeConfigurationCreation:themeSelection, module: cms, level1: design }
+    
+    
+website_cms_create_gallery_save:
+    path: /cms/gallerypage/save
+    defaults: { _controller: WebsiteCMSBundle:SpecialPage:createGalleriesPageSave}
+    
+website_cms_gallery_page_details:
+    path: /cms/gallerypage/details
+    defaults: { _controller: WebsiteCMSBundle:SpecialPage:galleriesPageEdit}
+    
+website_cms_edit_gallery_save:
+    path: /cms/editgallerypage/save
+    defaults: { _controller: WebsiteCMSBundle:SpecialPage:galleriesPageEditSave}
+
+website_theme_background_update:
+    path: /cms/themeconfiguration/background/{configId}
+    defaults: { _controller: WebsiteCMSBundle:ThemeConfigurationUpdate:backgroundList,module: cms, level1: design}
+
+website_theme_font_update:
+    path: /cms/themeconfiguration/font/{configId}
+    defaults: { _controller: WebsiteCMSBundle:ThemeConfigurationUpdate:fontConfiguration, module: cms, level1: design}
+    
+website_theme_font_save:
+    path: /cms/themeconfiguration/fontConfig/save
+    defaults: { _controller: WebsiteCMSBundle:ThemeConfigurationUpdate:fontConfigurationSave}
+    
+website_theme_color_update:
+    path: /cms/themeconfiguration/color/{configId}
+    defaults: { _controller: WebsiteCMSBundle:ThemeConfigurationUpdate:listAllColorSchemes, module: cms, level1: design}
+    
+website_theme_color_get_list:
+    path: /cms/themeconfiguration/colorGetList
+    defaults: { _controller: WebsiteCMSBundle:ThemeConfigurationUpdate:getColorSchemesList}
+
+website_theme_configuration_duplicate:
+    path: /cms/themeconfiguration/duplicate
+    defaults: { _controller: WebsiteCMSBundle:ThemeConfigurationList:duplicateConfiguration }  
+
+website_theme_configuration_delete:
+    path: /cms/themeconfiguration/delete
+    defaults: { _controller: WebsiteCMSBundle:ThemeConfigurationList:deleteConfiguration }  
+
+website_theme_configuration_delete_popup:
+    path: /cms/themeconfiguration/deletePopup
+    defaults: { _controller: WebsiteCMSBundle:ThemeConfigurationList:deleteConfigurationPopup }  
+
+website_theme_configuration_activate:
+    path: /cms/themeconfiguration/activate
+    defaults: { _controller: WebsiteCMSBundle:ThemeConfigurationList:activateConfiguration }  
+    
+website_cms_article_n_calendar_special_page_save:
+    path: /cms/specialpage/save
+    defaults: { _controller: WebsiteCMSBundle:SpecialPage:articleAndCalendarPageSave}
+
+website_cms_background_image_save:
+    path: /cms/themeconfiguration/backgroundImage/save
+    defaults: { _controller: WebsiteCMSBundle:ThemeConfigurationUpdate:backgroundSave}
+    
+website_theme_configuration_create_save:
+    path: /cms/themeconfiguration/create/save
+    defaults: { _controller: WebsiteCMSBundle:ThemeConfigurationCreation:saveThemeConfiguration}
+    
+website_theme_configuration_color_activate:
+    path: /cms/themeconfiguration/colorscheme/{type}
+    defaults: { _controller: WebsiteCMSBundle:ThemeConfigurationUpdate:actionsInColorScheme}
+    
+website_cms_article_and_calendar_special_page_edit:
+    path: /cms/specialpage/edit
+    defaults: { _controller: WebsiteCMSBundle:SpecialPage:articleAndCalendarPageEdit}
+    
+website_cms_article_and_calendar_special_page_edit_save:
+    path: /cms/specialpage/savepage
+    defaults: { _controller: WebsiteCMSBundle:SpecialPage:articleAndCalendarPageEditSave}
+    
+website_theme_configuration_color_create:
+    path: /cms/themeconfiguration/colorschemecreate/save
+    defaults: { _controller: WebsiteCMSBundle:ThemeConfigurationUpdate:colorSchemeCreate}
+    
+website_theme_configuration_title_edit:
+    path: /cms/themeconfiguration/pagetitle/edit
+    defaults: { _controller: WebsiteCMSBundle:ThemeConfigurationUpdate:pageTitleEdit}
+website_theme_header_update:
+    path: /cms/themeconfiguration/header/{configId}
+    defaults: { _controller: WebsiteCMSBundle:ThemeConfigurationUpdate:headerEdit, module: cms, level1: design}
+website_theme_header_save:
+    path: /cms/themeconfiguration/editheaders
+    defaults: { _controller: WebsiteCMSBundle:ThemeConfigurationUpdate:headerSave, module: cms, level1: design}
+    
+website_cms_save_supplementary_element: 
+    path:     /cms/supplementaryMenu/save
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:saveSupplementaryMenuElement }     
+    
+website_theme_preview_page:
+    path: /themepreview
+    defaults: { _controller: WebsiteCMSBundle:Website:navigationLanding}
+    
+website_theme_preview_page_menu: 
+    path:     /themepreview/{menu}
+    defaults: { _controller: WebsiteCMSBundle:Website:navigationLanding }
+
+website_cms_get_supplementary_element_data:
+    path:     /cms/supplementaryMenu/getContent/{pageId}
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:getSupplementaryElementData ,module: cms } 
+website_page_preview: 
+    path:     /getPagePreview/{pageId}
+    defaults: { _controller: WebsiteCMSBundle:PagePreview:displayPagePreview}
+website_update_page_title:
+    path: /updatepagetitle
+    defaults: { _controller: WebsiteCMSBundle:Page:updateDisplayPageTitle}
+website_cms_save_content_json: 
+    path: /cms/savejson
+    defaults: { _controller: WebsiteCMSBundle:Page:saveJsonContent }  
+    
+website_cms_form_element_create:
+    path: /cms/formelement/create
+    defaults: { _controller: WebsiteCMSBundle:PageFormElement:createFormField, module: cms, level1: navigation, event: create}
+website_cms_form_element_edit:
+    path: /cms/form/edit/{formId}
+    defaults: { _controller: WebsiteCMSBundle:PageFormElement:editFormField, module: cms, level1: navigation, source: list}
+website_cms_form_element_edit_frompage:
+    path: /cms/formelement/edit/{formId}
+    defaults: { _controller: WebsiteCMSBundle:PageFormElement:editFormField, module: cms, level1: navigation, source: page} 
+website_cms_form_element_log_list:
+    path: /cms/formelement/log/{formId}
+    defaults: { _controller: WebsiteCMSBundle:PageFormElement:formElementLog, module: cms, level1: navigation} 
+website_cms_form_inquiry_form:
+    path:  /cms/formelement/inquirylist/{formId}
+    defaults: { _controller: WebsiteCMSBundle:PageFormElement:inquiryList, module: cms, level1: navigation}
+website_cms_form_element_save:
+    path: /cms/formelement/save
+    defaults: { _controller: WebsiteCMSBundle:PageFormElement:saveFormElement} 
+website_cms_form_element_create:
+    path: /cms/formelement/create
+    defaults: { _controller: WebsiteCMSBundle:PageFormElement:createFormField, module: cms, level1: navigation, event: create}  
+website_cms_form_getdata:
+    path: /cms/formelement/data
+    defaults: { _controller: WebsiteCMSBundle:PageFormElement:getFormData}    
+website_cms_form_stage2_save:
+    path: /cms/stage2/save
+    defaults: { _controller: WebsiteCMSBundle:PageFormElement:saveFormStage2} 
+website_cms_form_stage3_save:
+    path: /cms/stage3/save
+    defaults: { _controller: WebsiteCMSBundle:PageFormElement:saveFormStage3}
+   
+    
+website_cms_form_inquiry:
+    path:     /cms/forminquiries/list
+    defaults: { _controller: WebsiteCMSBundle:FormElementInquiries:listFormInquiries ,module: cms, level1: forminquiry }
+website_cms_form_get_inquiries:
+    path:     /cms/forminquiries/getdatas
+    defaults: { _controller: WebsiteCMSBundle:FormElementInquiries:getFormInquiries }    
+website_cms_get_inquiries_form:
+    path:     /cms/forminquiries/getdatas/{elementId}
+    defaults: { _controller: WebsiteCMSBundle:FormElementInquiries:getFormInquiries }  
+website_cms_get_inquiries_form_data:
+    path:     /cms/forminquiries/getdata/{inquiryId}
+    defaults: { _controller: WebsiteCMSBundle:FormElementInquiries:getFormInquiryDatas }   
+website_cms_download_inquiries_form_attachments:
+    path:     /cms/listforminquiries/downloadformattachments/{elementId}
+    defaults: { _controller: WebsiteCMSBundle:FormElementInquiries:downloadFormAttachments }    
+website_cms_delete_inquiry:
+    path:     /cms/forminquiry/deleteinquiry
+    defaults: { _controller: WebsiteCMSBundle:FormElementInquiries:deleteInquiry }    
+website_cms_get_sidebar_updatedata:
+    path:     /cms/forminquiries/updateSidebarData
+    defaults: { _controller: WebsiteCMSBundle:FormElementInquiries:getSidebarData }      
+website_cms_edit_inquiries_form:
+    path:     /cms/editinquiries/getdatas/{elementId}
+    defaults: { _controller: WebsiteCMSBundle:FormElementInquiries:getFormInquiries }  
+website_cms_listadditionalnavigations:
+    path:     /cms/listadditionalNavigation
+    defaults: { _controller: WebsiteCMSBundle:NavigationPoints:listAdditionalNavigation, module: cms,level1: navigation }
+website_cms_inquiriy_attachment_download:
+    path:     /cms/inquiry/downloadAttachment/{fileName}
+    defaults: { _controller: WebsiteCMSBundle:FormElementInquiries:downloadFiles }    
+    
+website_cms_page_get_form_element:
+    path:     /cms/getformelement/{elementId}
+    defaults: { _controller: WebsiteCMSBundle:Page:getFormElement, module: cms, level1: navigation }
+website_cms_save_sposnor_ad_element: 
+    path:     /cms/sponsorAdElement/save
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:saveSponsorAdElement }        
+website_cms_sponsor_ad_get_content_data: 
+    path:     /cms/sponsorAdElement/getContent/{elementId}/{pageId}
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:getSponsorAdElementDetails ,module: cms } 
+website_cms_contact_app_save: 
+    path:     /cms/contactAppElement/save/{pageId}/{boxId}/{sortOrder}/{formId}/{countForm}
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:insertContactForm  } 
+    
+website_cms_contacts_table_element_create:
+    path: /cms/contactsTableElement
+    defaults: { _controller: WebsiteCMSBundle:ContactsTableElement:contactsTableStage1, module: cms, level1: navigation, event: create, elementType: table } 
+website_cms_get_contact_filters: 
+    path:     /cms/contactsTableElement/getFilters
+    defaults: { _controller: WebsiteCMSBundle:ContactsTableElement:getFilters }  
+website_cms_save_contacts_table_step1:
+    path:     /cms/contactsTableElement/saveStep1
+    defaults: { _controller: WebsiteCMSBundle:ContactsTableElement:saveTableContacts } 
+website_cms_page_get_contact_table: 
+    path:     /cms/getContactTableElement/{elementId}
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:getContactTableElement, module: cms, level1: navigation }
+website_cms_get_contact_table_data_stage1: 
+    path:     /cms/getContactTableElementContactData
+    defaults: { _controller: WebsiteCMSBundle:ContactsTableElement:contactsTableGetStage1, module: cms, level1: navigation }
+website_cms_get_contact_table_data_stage2: 
+    path:     /cms/getContactTableElementColumnData
+    defaults: { _controller: WebsiteCMSBundle:ContactsTableElement:contactsTableGetStage2, module: cms, level1: navigation }
+website_cms_save_contacts_table_step2:
+    path:     /cms/contactsTableElement/saveStep2
+    defaults: { _controller: WebsiteCMSBundle:ContactsTableElement:saveTableColumns } 
+website_cms_get_contact_table_data_stage3: 
+    path:     /cms/getContactTableElementFilterData
+    defaults: { _controller: WebsiteCMSBundle:ContactsTableElement:contactsTableGetStage3, module: cms, level1: navigation }
+website_cms_save_contacts_table_step3:
+    path:     /cms/contactsTableElement/saveStep3
+    defaults: { _controller: WebsiteCMSBundle:ContactsTableElement:saveTableFilters, elementType: table }
+website_cms_get_contact_table_data_stage4: 
+    path:     /cms/getContactTableElementAppearanceData
+    defaults: { _controller: WebsiteCMSBundle:ContactsTableElement:contactsTableGetStage4, module: cms, level1: navigation } 
+website_cms_save_contacts_table_step4:
+    path:     /cms/contactsTableElement/saveStep4
+    defaults: { _controller: WebsiteCMSBundle:ContactsTableElement:saveTableAppearance }
+website_cms_contacttable_element_log_list:
+    path:     /cms/contactsTableElement/log/{elementId}
+    defaults: { _controller: WebsiteCMSBundle:ContactsTableElement:contacttableElementLog, module: cms, level1: navigation, elementType: table }
+    
+website_cms_contactportrait_element_log_list:
+    path:     /cms/contactPortraitsElement/log/{elementId}
+    defaults: { _controller: WebsiteCMSBundle:ContactsTableElement:contacttableElementLog, module: cms, level1: navigation, elementType: portrait }
+    
+website_cms_subscriptionform_view:
+    path:     /cms/subscriptionform/view/{elementId}
+    defaults: { _controller: WebsiteCMSBundle:Newsletter:subscriptionForm, module: cms, level1: navigation,event: edit }
+    
+website_cms_settings:
+    path: /cms/websitesettings
+    defaults: { _controller: WebsiteCMSBundle:Settings:settingsView, module: cms, level1: settings }
+
+website_cms_settings_save:
+    path: /cms/websitesettings/save
+    defaults: { _controller: WebsiteCMSBundle:Settings:saveSettings } 
+    
+website_theme_settings_favicon_generator:
+    path: /cms/websitesettings/savefavicon
+    defaults: { _controller: WebsiteCMSBundle:Settings:saveFavIcon, module: cms, level1: settings }  
+    
+website_cms_settings_details:
+    path: /cms/websitesettings/getdetails
+    defaults: { _controller: WebsiteCMSBundle:Settings:getSettings }  
+    
+website_cms_save_twitter_element: 
+    path:     /cms/TwitterElement/save
+    defaults: { _controller: WebsiteCMSBundle:PageContentElements:saveTwitterElement }    
+
+website_cms_portrait_element_create:
+    path: /cms/contactPortraitsElement
+    defaults: { _controller: WebsiteCMSBundle:ContactsTableElement:contactsTableStage1, module: cms, level1: navigation, event: create, elementType: portrait }
+website_cms_get_portrait_data_stage3:
+    path: /cms/getStage3data
+    defaults: { _controller: WebsiteCMSBundle:PortraitElement:portraitGetStage3, module: cms, level1: navigation, event: create, elementType: portrait }     
+    
+website_cms_get_portrait_data_stage2: 
+    path:     /cms/contactPortraitsElementDisplay
+    defaults: { _controller: WebsiteCMSBundle:PortraitElement:portraitsElementDisplay, module: cms, level1: navigation }   
+    
+website_cms_save_portrait_element_step2:
+    path:     /cms/contactPortraitsElementDisplay/save
+    defaults: { _controller: WebsiteCMSBundle:PortraitElement:saveElementDisplay }  
+    
+website_cms_save_portrait_element_step3:
+    path:     /cms/contactPortraitsElement/saveStep3
+    defaults: { _controller: WebsiteCMSBundle:PortraitElement:savePortraitDisplay } 
+    
+website_cms_save_contacts_portrait_step4:
+    path:     /cms/contactsPortraitElement/saveStep4
+    defaults: { _controller: WebsiteCMSBundle:ContactsTableElement:saveTableFilters, elementType: portrait }    
+    
+website_cms_content_delete_box:
+    path:     /cms/saveboxdelete
+    defaults: { _controller: WebsiteCMSBundle:PageContent:saveBoxDelete }
+    
+website_cms_preview_portrait_element_step3: 
+    path:     /cms/contactPortraitsElement/previewStep3
+    defaults: { _controller: WebsiteCMSBundle:PortraitElement:getPortraitElementPreview }     
+    
+website_cms_resave_content_json_allpage: 
+    path: /cms/resavejson/allpage
+    defaults: { _controller: WebsiteCMSBundle:Page:saveJsonContentTemp } 

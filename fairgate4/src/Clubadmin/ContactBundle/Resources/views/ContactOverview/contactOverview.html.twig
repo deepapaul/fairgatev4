@@ -1,0 +1,97 @@
+<script type="text/template" id="overviewSettingsBoxContent"> 
+    <% 
+    var fieldSettings = overviewSettings.fields[fieldSettingsKey];
+    var getAllCatDetails = settings.roleCategory.categoryData;
+    %>
+    <div class="form-group fg-dev-ov-settings">
+        <dl>
+            <dt>
+                <%- fieldSettings.fieldName %>
+                <% _.each(getAllCatDetails,function(fedVal,fedKey){
+                    if(overviewSettings.settingsType=="roleCategory" && fedVal["rmCatId"]==fieldSettings.fieldId && fedVal["is_fed_category"]==1) { %>
+                        <img src="<%- fedVal["fedicon"]%>" />
+                    <% }
+                }); 
+                if(fedIconFlag!=0) { %>
+                      <%  var fedIcon = {{fgclub.get('federation_icon')|json_encode()|raw}};  %> 
+                    <img src="<%- fedIcon[fedIconFlag] %>" />
+                <% } %>
+            </dt>
+            <dd>
+                <% if(fieldSettings.hasOwnProperty("fieldId")) { 
+                    if(overviewSettings.hasOwnProperty("attributeSetId")) { 
+                        var displayFlagIdentifier = overviewSettings.attributeSetId+".fields."+fieldSettings["fieldId"]+".displayFlag";
+                        var emptyFlagIdentifier = overviewSettings.attributeSetId+".fields."+fieldSettings["fieldId"]+".emptyFlag";
+                        var fieldIdIdentifier = overviewSettings.attributeSetId+".fields."+fieldSettings["fieldId"]+".fieldId";
+                        var fieldNameIdentifier = overviewSettings.attributeSetId+".fields."+fieldSettings["fieldId"]+".fieldName";
+                    }else{
+                        var displayFlagIdentifier = overviewSettings.settingsType+".fields."+fieldSettings["fieldId"]+".displayFlag";
+                        var emptyFlagIdentifier = overviewSettings.settingsType+".fields."+fieldSettings["fieldId"]+".emptyFlag";
+                        var fieldIdIdentifier = overviewSettings.settingsType+".fields."+fieldSettings["fieldId"]+".fieldId";
+                        var fieldNameIdentifier = overviewSettings.settingsType+".fields."+fieldSettings["fieldId"]+".fieldName";
+                    } %>
+                    <label class="switch-light switch-light-sm switchhwd" onClick="">
+                        <input name="<%- displayFlagIdentifier %>" data-key="<%- displayFlagIdentifier %>" data-element="<%- displayFlagIdentifier %>" id="<%- displayFlagIdentifier %>" type="checkbox" class="make-switch fg-dev-ov-settings-onOff" <% if(fieldSettings.displayFlag ==1) { %> checked <% } %> >
+                        <span> <span>{{'ON'|trans}}</span><span>{{'OFF'|trans}}</span></span> <a class="btn btn-primary"></a> 
+                    </label>
+                    <div class="fg-dev-overview-empty-optn">
+                        <input name="<%- emptyFlagIdentifier %>" id="<%- emptyFlagIdentifier %>" data-key="<%- emptyFlagIdentifier %>" data-element="<%- emptyFlagIdentifier %>" type="checkbox" <% if(fieldSettings.displayFlag != 1) { %> disabled <% } if(fieldSettings.emptyFlag ==1) { %> checked <% } %> />
+                        <label for="<%- emptyFlagIdentifier %>" class="<% if(fieldSettings.displayFlag !=1) { %>fg-overview-disable<% } %>">{{'CONTACT_OVERVIEW_SETTINGS_HIDE_NO_CONTENT'|trans}}</label>
+                    </div>
+                    <input type="hidden" name="<%- fieldIdIdentifier %>" id="<%- fieldIdIdentifier %>" value="<%-fieldSettings["fieldId"] %>" data-key="<%- fieldIdIdentifier %>" />
+                    <input type="hidden" name="<%- fieldNameIdentifier %>" id="<%- fieldNameIdentifier %>" value="<%-fieldSettings["fieldName"] %>" data-key="<%- fieldNameIdentifier %>" />
+                <% } %>
+            </dd>
+        </dl>
+    </div>
+</script>
+<script type="text/template" id="overviewSettingsBox">	
+    <div class="portlet box sortable" <%- loopAttr %>="<%- loopValue %>">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row"> 
+                    <div class="col-md-9 col-sm-9 col-xs-8"> <div class="fg-head-ovr-txt"><i class="fa fa-arrows fg-arrows catHandle"  data-toggle="tooltip"></i>
+                        <h3 class="panel-title"><%- data.title %></h3></div>
+                    </div>
+                    <div class="col-sm-3 col-md-3">
+                        <label class="switch-light switch-light-sm switchhwd pull-right" onClick="">
+
+                            <% if(data.hasOwnProperty("attributeSetId")) { %> 
+                                <input data-key="<%- data.attributeSetId %>.displayFlag" name="<%- data.attributeSetId %>.displayFlag" data-element="<%- data.attributeSetId %>.displayFlag" id="<%- data.attributeSetId %>.displayFlag" type="checkbox" class="make-switch" <% if(data.displayFlag ==1) { %> checked <% } %> >
+                            <% } else { %>
+                                <input data-key="<%- data.settingsType %>.displayFlag" name="<%- data.settingsType %>.displayFlag" data-element="<%- data.settingsType %>.displayFlag" id="<%- data.settingsType %>.displayFlag" type="checkbox" class="make-switch" <% if(data.displayFlag ==1) { %> checked <% } %> >
+                            <% } %>
+
+                            <span> <span>{{'ON'|trans}}</span><span>{{'OFF'|trans}}</span> </span> <a class="btn btn-primary"></a> 
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <% if(data.hasOwnProperty("attributeSetId")) { %>
+                <input type="hidden" name="attributeSetId_<%- data.attributeSetId %>" id="attributeSetId_<%- data.attributeSetId %>" value="<%- data.attributeSetId %>" data-key="<%- data.attributeSetId %>.attributeSetId" />
+                <input type="hidden" name="settingsType_<%- data.settingsType %>" id="settingsType_<%- data.settingsType %>" value="<%- data.settingsType %>" data-key="<%- data.attributeSetId %>.settingsType" />
+                
+                <input type="hidden" class="displayArea" name="displayArea_<%- data.displayArea %>" id="displayArea_<%- data.displayArea %>" value="<%- data.displayArea %>" data-key="<%- data.attributeSetId %>.displayArea" />
+                <input type="hidden" name="sort_<%- data.attributeSetId %>" id="sort_<%- data.attributeSetId %>" class="overviewOrder" value="<%- data.sortorder %>" data-key="<%- data.attributeSetId %>.sortorder" />
+            <% } else { %>
+                <input type="hidden" name="settingsType_<%- data.settingsType %>" id="settingsType_<%- data.settingsType %>" value="<%- data.settingsType %>" data-key="<%- data.settingsType %>.settingsType" />
+                
+                <input type="hidden" class="displayArea" name="displayArea_<%- data.displayArea %>" id="displayArea_<%- data.displayArea %>" value="<%- data.displayArea %>" data-key="<%- data.settingsType %>.displayArea" />
+                <input type="hidden" name="sort_<%- data.settingsType %>" id="sort_<%- data.settingsType %>" class="overviewOrder" value="<%- data.sortorder %>" data-key="<%- data.settingsType %>.sortorder" />
+            <% } %>
+
+            <div class="row">
+                <div class="col-md-12 fg-common-top">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-body">
+                            <%= content %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

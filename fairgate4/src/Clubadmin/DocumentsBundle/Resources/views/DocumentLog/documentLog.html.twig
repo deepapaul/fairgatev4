@@ -1,0 +1,45 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = documentName %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet-body fg-theme-yellow">
+                        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                        {% include 'clubadmin/breadcrumb.html.twig' with {'breadCrumb' :  {'back' : back }} %}
+                       {# <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <h3 class="page-title fg-inner-title">{{ 'LOG_OF_DOCUMENT' |trans ({'%documentName%': documentName}) }}</h3>
+                            </div>
+                        </div>#}
+                       <div class="row">
+                        {% set page_Title =  'LOG_OF_DOCUMENT' |trans ({'%documentName%': documentName}) %}
+                        {% set page_settings = { 'pagetitle':'true' }  %}
+                        {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle':page_Title, 'page_settings': page_settings } %}     
+                        <!-- END PAGE TITLE & BREADCRUMB-->
+                        </div>
+                        <div class="portlet-body tab-pane new-table-height" id="log-table_{{ documentId }}">
+                            {% include 'ClubadminDocumentsBundle:DocumentLog:logList.html.twig' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+<script src="{{ asset('fgcustom/js/page/documentLog.js') }}" type="text/javascript"></script>
+<script type="text/javascript">
+    var overViewPath = '{{ path('render_contact_overview', {'offset' : 0, 'contact' : '**dummy**' }) }}';
+    FgDocumentLog.setVariables({{ documentId }});
+    /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                    
+                     title: true
+
+             });
+</script>
+{% endblock %}    

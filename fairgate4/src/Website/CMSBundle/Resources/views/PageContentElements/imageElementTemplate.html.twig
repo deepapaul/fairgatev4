@@ -1,0 +1,31 @@
+{%if(imageData|length > 0) %}
+    {% if(imageData.0.image_element_display_type == 'column' or imageData.0.image_element_display_type == 'row') %}
+        <div id="{{(imageData.0.image_element_display_type == 'column') ? 'column-gallery-'~elementId : 'row-gallery-'~elementId}}" style="display:none;">
+        {% for key, data in imageData %}
+            {% set imagePath = (data.type == 'VIDEO') ? data.video_thumb_url : data.filepath %}
+            <a href="">
+                <img alt=""
+                     src="/uploads/{{club_id}}/gallery/{{imageWidth}}/{{imagePath}}"
+                     data-image="/uploads/{{club_id}}/gallery/width_1920/{{imagePath}}"
+                     data-description=""
+                     style="display:none;">
+            </a>
+        {% endfor %}
+        </div>
+    {% elseif(imageData.0.image_element_display_type == 'slider') %}
+        <div id="slider-gallery-{{elementId}}" style="display:none;" data-slider-time="{{imageData.0.image_element_slider_time}}" data-image_view_type ="{{imageData.0.image_element_click_type}}">
+            {% for key, data in imageData %}
+                {% set imagePath = (data.type == 'VIDEO') ? data.video_thumb_url : data.filepath %}
+                <img alt=""
+                     src="/uploads/{{club_id}}/gallery/{{imageWidth}}/{{imagePath}}"
+                     data-image="/uploads/{{club_id}}/gallery/width_1920/{{imagePath}}"
+                     data-description=""
+                     style="display:none;">
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% else %}
+    <div class="fg-cms-empty-box-wrapper">
+        <p class="text-center">{{'NO_IMAGE_MESSAGE'|trans}}</p>
+    </div>  
+{% endif %}

@@ -1,0 +1,239 @@
+<script type="text/template" id="template_admin_top_navigation_lg">
+    <% if(intranetAccess != 0){ %>
+    <div class="page-header navbar navbar-inverse navbar-fixed-top fg-page-header fg-page-header-large" id="fg-dev-admin-top-navigation">
+        <!-- BEGIN TOP NAVIGATION BAR -->
+        <div class="header-inner">
+            <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+                <a href="javascript:;" class="navbar-toggle fg-admin-nav-icon" data-toggle="collapse" data-target=".navbar-collapse"> <img src="{{ asset('fgassets/global/img/menu-toggler.png') }}" alt=""/> </a>
+            <!-- END RESPONSIVE MENU TOGGLER -->
+            <% 
+            _.each(topNavArr,function(topMenuArr, key){
+                if (key == 'switch') { %>
+                    <!-- BEGIN LOGO -->
+                        <a class="navbar-brand fg-navbar-brand" href="{{ path('website_public_home_page') }}"> <img src="{{ asset('fgassets/global/img/fairgate-small-logo.jpg') }}" alt="logo" class="img-responsive"/> </a>
+                    <!-- END LOGO -->
+                    <!-- BEGIN DROPDOWN -->
+                    <div class="fg-dropdown-nav">
+                        <ul id="fg-top-nav-app-switch" class="nav navbar-nav">
+                            <li class="dropdown">
+                                <a href="#" data-toggle="dropdown" class="fg-dropdown-head">{{'TOP_NAV_WEBSITE'|trans}}<i class="fa fa-angle-down"></i></a>
+                                <ul class="dropdown-menu animated" data-animation="fadeIn">
+                                    <% 
+                                    _.each(topMenuArr,function(menuArr){ %>
+                                        <li class="<%- ((menuArr.title == 'WEBSITE') ? 'active' : '') %>"><a href="<%- menuArr.url %>" ><%- menuArr.title %></a></li>
+                                    <% }); %>    
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- END DROPDOWN -->
+                <% } else if (key == 'logo') {  %>
+                    <%
+                    _.each(topMenuArr,function(menuArr){ %>
+                        <a class="<%- ((menuArr.class) ? menuArr.class : '') %>" href="<%- menuArr.url %>"> <img src="{{ asset('fgassets/internal/img/logo.png') }}" alt="logo" class="img-responsive"/> </a>
+                    <% }); %>
+                <% } else if (key == 'leftmenu') {  %>
+                    <!-- BEGIN HORIZANTAL LEFT MENU -->
+                    <div class="hor-menu">
+                        <ul class="nav navbar-nav">
+                            <% 
+                            _.each(topMenuArr,function(mainMenu){ %>
+                                <%  if ((_.isUndefined(mainMenu.submenu)) && (mainMenu.url != '#') ) { %>
+                                    <li class="<%- mainMenu.class %>"> <a href="<%- mainMenu.url %>"> <%- mainMenu.title %></a>
+                                <% } else { %>
+                                    <li class="<%- mainMenu.class %>"> <a data-toggle="dropdown" data-hover="dropdown" data-close-others="true" href="<%- mainMenu.url %>"> <%- mainMenu.title %> <%  if (!(_.isUndefined(mainMenu.submenu))) { %><i class="fa fa-angle-down"></i> <% } %></a>
+                                <% } %>
+                                    <ul class="dropdown-menu hold-on-click">
+                                        <% 
+                                        _.each(mainMenu.submenu,function(subMenu){ %>
+                                            <li class="<%- subMenu.class %> <%- (!_.isUndefined(subMenu.sidebarClass) ? subMenu.sidebarClass : '') %>"> <a id="<%- subMenu.id %>" href="<%- subMenu.url %>"  data-toggle="<%- subMenu.toggle %>" <% if (!_.isUndefined(subMenu.sidebarType)) { %> data-sidebarType = "<%- subMenu.sidebarType %>" <% } %>><%- subMenu.title %><% if (subMenu.showNewBadge) { %> <span id="<%- subMenu.newBadgeId %>" class="badge fg-badge-blue badge-round badge-important <%- ((subMenu.newCount > 0) ? '' : 'hide') %>" data-count="<%- subMenu.newCount %>"> {{ 'INTERNAL_TOP_NAV_NEW'|trans }} </span>  <% } %></a> 
+                                                <%  if (!(_.isUndefined(subMenu.subMenu))) { %>
+                                                    <ul class="dropdown-menu hold-on-click">
+                                                        <% 
+                                                        _.each(subMenu.subMenu,function(subSubMenu){ %>
+                                                            <li class="<%- subSubMenu.class %>"> <a id="<%- subSubMenu.id %>" href="<%- subSubMenu.url %>" data-toggle="<%- subSubMenu.toggle %>"><%- subSubMenu.title %></a> </li>
+                                                        <% }); %> 
+                                                    </ul>
+                                                <% } %>
+                                            </li>
+                                        <% }); %>  
+                                    </ul>
+                                </li>
+                           <% }); %>
+                        </ul>
+                    </div>
+                    <!-- END HORIZANTAL LEFT MENU -->
+                <% } else if (key == 'rightmenu') {  %>
+                    <!-- BEGIN HORIZANTAL RIGHT MENU -->
+                    <div class="hor-menu fg-block-right pull-right">
+                        <ul class="nav navbar-nav">
+    {#                          RIGHT MENU BLOCK HTML FOR LARGE RESOLUTIONS STARTS #}
+                            <% 
+                            _.each(topMenuArr,function(mainMenu){ %>
+                                <% if (mainMenu.url != 'search') { %>
+                                    <ul class="fg-right-area-block nav navbar-nav">
+                                        <li class="<%- mainMenu.class %>"> <a data-toggle="dropdown" data-hover="dropdown" data-close-others="true" href="<%- mainMenu.url %>"> <%- mainMenu.title %> <i class="fa fa-angle-down"></i> </a>
+                                            <ul class="dropdown-menu hold-on-click pull-right">
+                                                <% 
+                                                _.each(mainMenu.submenu,function(subMenu){ %>
+                                                    <li class="<%- subMenu.class %>"> <a id="<%- subMenu.id %>" href="<%- subMenu.url %>"  data-toggle="<%- subMenu.toggle %>"><%- subMenu.title %><% if (subMenu.showNewBadge) { %> <span id="<%- subMenu.newBadgeId %>" class="badge fg-badge-blue badge-round badge-important <%- ((subMenu.newCount > 0) ? '' : 'hide') %>" data-count="<%- subMenu.newCount %>"> {{ 'INTERNAL_TOP_NAV_NEW'|trans }} </span>  <% } %></a> 
+                                                        <% if (!(_.isUndefined(subMenu.subMenu))) { %>
+                                                            <ul class="dropdown-menu hold-on-click">
+                                                                <% 
+                                                                _.each(subMenu.subMenu,function(subSubMenu){ %>
+                                                                    <li class="<%- subSubMenu.class %>"> <a id="<%- subSubMenu.id %>" href="<%- subSubMenu.url %>" data-toggle="<%- subSubMenu.toggle %>"><%- subSubMenu.title %></a> </li>
+                                                                <% }); %> 
+                                                            </ul>
+                                                        <% } %>
+                                                    </li>
+                                                <% }); %>  
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                <% } else { %>
+                                    <li>
+                                        <!-- BEGIN HEADER SEARCH BOX -->
+                                        <div class="search-form">
+                                            <div class="input-group">
+                                                <input type="text" name="query" placeholder="<%- mainMenu.title %>" id="internalTopNavSearch" class="form-control fg-internal-top-nav-search">
+                                                <span class="input-group-btn">
+                                                    <a class="btn submit" href="#"><i class="icon-magnifier"></i></a>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <!-- END HEADER SEARCH BOX -->
+                                    </li>
+                                <% } %>
+                            <% }); %>
+    {#                          RIGHT MENU BLOCK HTML FOR LARGE RESOLUTIONS ENDS #} 
+
+            {#      RIGHT MENU BLOCK HTML FOR MEDIUM RESOLUTIONS STARTS #}
+                            <ul class="fg-mega-series nav navbar-nav">
+                                <li class="mega-menu-dropdown <%- rightMegaMenu.class %>"><a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="<%- rightMegaMenu.url %>" class="dropdown-toggle" data-title="<%- rightMegaMenu.breadcrumbTitle %>"> <%- rightMegaMenu.title %> <i class="fa fa-angle-down"></i> </a>
+                                    <ul class="dropdown-menu pull-right fg-megamenu">
+                                        <li>
+                                            <div class="mega-menu-content">
+                                                <div class="row">
+                                                    <% 
+                                                    _.each(rightMegaMenu.submenu,function(subMenu){ %>
+                                                        <ul class="col-md-4 mega-menu-submenu">
+                                                            <li class="<%- subMenu.class %>" data-title="<%- subMenu.breadcrumbTitle %>"> <h3><%- subMenu.title %></h3> </li>
+                                                            <% 
+                                                            _.each(subMenu.submenu,function(subSubMenu){ %>
+                                                                <li class="<%- subSubMenu.class %> <%-((_.isUndefined(subSubMenu.subMenu)) ? '' : 'fg-sub-icon-off') %>"> <a id="<%- subSubMenu.id %>" href="<%- subSubMenu.url %>" data-toggle="<%- subSubMenu.toggle %>"> <i class="fa fa-angle-right"></i> <%- subSubMenu.title %> <% if (subSubMenu.showNewBadge) { %> <span id="<%- subSubMenu.newBadgeId %>" class="badge fg-badge-blue badge-round badge-important <%- ((subSubMenu.newCount > 0) ? '' : 'hide') %>" data-count="<%- subSubMenu.newCount %>"> {{ 'INTERNAL_TOP_NAV_NEW'|trans }} </span> <% } %></a> 
+                                                                    <% if (!(_.isUndefined(subSubMenu.subMenu))) { %>
+                                                                        <ul class="dropdown-menu hold-on-click">
+                                                                            <% 
+                                                                            _.each(subSubMenu.subMenu,function(submenu){ %>
+                                                                                <li class="<%- submenu.class %>"> <a id="<%- submenu.id %>" href="<%- submenu.url %>" data-toggle="<%- submenu.toggle %>"> <i class="fa fa-angle-right"></i> <%- submenu.title %> </a> </li>
+                                                                            <% }); %> 
+                                                                        </ul>
+                                                                    <% } %>
+                                                                </li>
+                                                            <% }); %>  
+                                                        </ul>
+                                                    <% }); %>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+            {#      RIGHT MENU BLOCK HTML FOR MEDIUM RESOLUTIONS ENDS #}
+                    
+                            <li> <a href="javascript:void(0)" class="fg-logout-icon fg-dev-logout-btn"><i class="fa fa-sign-in"></i></a></li>
+                        </ul>
+                    </div>
+                    <!-- END HORIZANTAL RIGHT MENU -->
+                <% } %>
+           <%  }); %>        
+        </div>
+    </div>
+    <% } %>
+</script>
+
+<script type="text/template" id="template_admin_top_navigation_xs">
+    <% if(intranetAccess != 0){ %>
+    <div class="page-header navbar navbar-inverse navbar-fixed-top fg-page-header fg-page-header-small" id="fg-dev-admin-top-navigation">
+        <!-- BEGIN TOP NAVIGATION BAR -->
+        <div class="header-inner">
+            <div class="fg-admin-nav-top-bar">
+                <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+                    <a href="javascript:;" class="navbar-toggle  fg-admin-nav-icon" data-toggle="collapse" data-target=".navbar-collapse"> <img src="{{ asset('fgassets/global/img/menu-toggler.png') }}" alt=""/> </a>
+                <!-- END RESPONSIVE MENU TOGGLER -->
+                <% 
+                _.each(topNavArr,function(topMenuArr, key){
+                    if (key == 'switch') { %>
+                        <!-- BEGIN LOGO -->
+                            <a class="navbar-brand fg-navbar-brand" href="{{ path('website_public_home_page') }}"> <img src="{{ asset('fgassets/global/img/fairgate-small-logo.jpg') }}" alt="logo" class="img-responsive"/> </a>
+                        <!-- END LOGO -->
+                        <!-- BEGIN DROPDOWN -->
+                        <div class="fg-dropdown-nav">
+                            <ul id="fg-top-nav-app-switch" class="nav navbar-nav">
+                                <li class="dropdown">
+                                    <a href="#" data-toggle="dropdown" class="fg-dropdown-head">{{'TOP_NAV_WEBSITE'|trans}}<i class="fa fa-angle-down"></i></a>
+                                    <ul class="dropdown-menu animated" data-animation="fadeIn">
+                                        <% 
+                                        _.each(topMenuArr,function(menuArr){ %>
+                                            <li class="<%- ((menuArr.title == 'WEBSITE') ? 'active' : '') %>"><a href="<%- menuArr.url %>" ><%- menuArr.title %></a></li>
+                                        <% }); %>    
+                                    </ul>
+                                </li>
+                            </ul>
+
+                        </div>
+                        <a href="javascript:void(0)" class="fg-logout-icon fg-dev-logout-btn"><i class="fa fa-sign-in"></i></a>
+                        <!-- END DROPDOWN -->
+                </div>
+                <% } else if (key == 'logo') {  %>
+                    <%
+                    _.each(topMenuArr,function(menuArr){ %>
+                        <a class="<%- ((menuArr.class) ? menuArr.class : '') %>" href="<%- menuArr.url %>"> <img src="{{ asset('fgassets/internal/img/logo.png') }}" alt="logo" class="img-responsive"/> </a>
+                    <% }); %>
+                <% } else if (key == 'combinedMenu') {  %>
+                    <div class="hor-menu fg-web-admin-mob-menu-wrapper navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <% 
+                            _.each(topMenuArr,function(mainMenu){ %>
+                                <% if (mainMenu.url != 'search') { %>
+                                    <li class="<%- mainMenu.class %>"> <a data-toggle="dropdown" data-hover="dropdown" data-close-others="true" href="<%- mainMenu.url %>"><% if (!_.isUndefined(mainMenu.submenu)) { %><i class="fa fa-angle-right"></i><% } %> <%- mainMenu.title %>  </a>
+                                        <ul class="dropdown-menu hold-on-click ">
+                                            <% 
+                                            _.each(mainMenu.submenu,function(subMenu){ %>
+                                                <li class="<%- subMenu.class %>"> <a id="<%- subMenu.id %>" href="<%- subMenu.url %>"  data-toggle="<%- subMenu.toggle %>"><%- subMenu.title %><% if (subMenu.showNewBadge) { %> <span id="<%- subMenu.newBadgeId %>" class="badge fg-badge-blue badge-round badge-important <%- ((subMenu.newCount > 0) ? '' : 'hide') %>" data-count="<%- subMenu.newCount %>"> {{ 'INTERNAL_TOP_NAV_NEW'|trans }} </span>  <% } %></a> 
+                                                    <% if (!(_.isUndefined(subMenu.subMenu))) { %>
+                                                        <ul class="dropdown-menu hold-on-click">
+                                                            <% 
+                                                            _.each(subMenu.subMenu,function(subSubMenu){ %>
+                                                                <li class="<%- subSubMenu.class %>"> <a id="<%- subSubMenu.id %>" href="<%- subSubMenu.url %>" data-toggle="<%- subSubMenu.toggle %>"><%- subSubMenu.title %></a> </li>
+                                                            <% }); %> 
+                                                        </ul>
+                                                    <% } %>
+                                                </li>
+                                            <% }); %>  
+                                        </ul>
+                                    </li>
+                                <% } else { %>
+                                    <li>
+                                        <!-- BEGIN HEADER SEARCH BOX -->
+                                        <div class="search-form">
+                                            <div class="input-group">
+                                                <input type="text" name="query" placeholder="<%- mainMenu.title %>" id="internalTopNavSearch" class="form-control fg-internal-top-nav-search">
+                                                <span class="input-group-btn">
+                                                    <a class="btn submit" href="#"><i class="icon-magnifier"></i></a>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <!-- END HEADER SEARCH BOX -->
+                                    </li>
+                                <% } %>
+                            <% }); %>
+                            
+                        </ul>
+                    </div>
+                <% } %>
+           <%  }); %>        
+        </div>
+    </div>
+    <% } %>
+</script>

@@ -1,0 +1,44 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::website/layout.html.twig' %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+
+{% endblock %}
+
+{% block underscoretemplate %}
+    {% include 'WebsiteCMSBundle:Website:displayContentUnderscore.html.twig' %}    
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset('fgassets/global/js/flaviusmatis-simplePagination/jquery.simplePagination.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('fgassets/website/js/fg-cms-frontend-portrait.js')}}"></script>
+    <script>
+        var sitekeys = '{{ pagecontentData.googleCaptchaSitekey }}';
+        var pageTitle = '{{pageTitle}}';
+        var contactLang ='{{contactLang}}';
+        var portUploadPath = {{uploadPath|json_encode()|raw }};
+        var notApplicable =  '{{'PORTRAIT_NOT_APPLICABLE_VALUE'|trans}}';
+        var mainPageId = '{{ mainPageId }}';
+        var hideTitle = ({{pagecontentData.hidePageTitle}} == 1)?false:true;
+        var contactTableListUrl = '{{path('website_list_contacts',{'contactType':'dummyType'})}}';
+        var ogTagUpdateUrl = '{{path('website_cms_ogtag_update')}}';
+
+        var fileDownloadPath = "{{url('website_download_contact_files', {'module':'contact','source':'**source**', 'name':'**name**','clubId':'**clubId**'})}}";
+        var uploadPath = '/uploads/**clubId**/';
+        var titleOptions = {
+            titleBar: hideTitle,
+            title: pageTitle
+
+        };
+        var FgWebsitePageTitleBarObj = new FgWebsitePageTitleBar('fg-dev-pagetitle-container', titleOptions);
+        var portraitElementSettings = {{ pagecontentData.portraitElementSettings|json_encode()|raw }};
+        
+        if(typeof portraitElementSettings == 'object') {
+            var portContactNameTmplte = _.template($('#templateContactName').html());
+            var portEmailTmplte = _.template($('#templateEmail').html());
+            var portImageUpldTmplte = _.template($('#porttemplateImage').html());
+            var portDefaultTmplte = _.template($('#defaultTemplate').html());
+            var portFileUploadTemplate = _.template($('#portFileUploadTemplate').html());
+            var portProfilepicTemplate = _.template($('#portProfilepicTemplate').html());
+        }        
+    </script>
+{% endblock %}

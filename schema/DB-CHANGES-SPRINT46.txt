@@ -1,0 +1,131 @@
+FAIR 2230
+../web/bundles/commonHelp/js/FgVideos.js - MERGE THIS FILE TILL LIVE
+
+
+INSERT INTO `fg_rm_role` (`id`, `category_id`, `title`, `is_active`, `is_executive_board`, `sort_order`, `club_id`, `team_category_id`, `description`, `image`, `type`, `filter_id`, `filter_updated`, `is_deactivated_forum`, `calendar_color_code`) 
+VALUES 
+('1', '1', 'federation', '0', '0', '0', '1', NULL, NULL, NULL, 'G', NULL, NULL, '0', NULL), 
+('2', '1', 'sub-federation', '0', '0', '0', '1', NULL, NULL, NULL, 'G', NULL, NULL, '0', NULL),
+('3', '1', 'club', '0', '0', '0', '1', NULL, NULL, NULL, 'G', NULL, NULL, '0', NULL);
+
+====================================================================================================================================================================================
+CREATE TABLE `fg_cms_page_content_element_area` (
+  `id` int(11) NOT NULL,
+  `element_id` int(11) NOT NULL,
+  `role_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+ALTER TABLE `fg_cms_page_content_element_area`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `element_id` (`element_id`),
+  ADD KEY `role_id` (`role_id`);
+
+ALTER TABLE `fg_cms_page_content_element_area`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `fg_cms_page_content_element_area`
+  ADD CONSTRAINT `fg_cms_page_content_element_area_ibfk_1` FOREIGN KEY (`element_id`) REFERENCES `fg_cms_page_content_element` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fg_cms_page_content_element_area_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `fg_rm_role` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  
+===============================================================================================================================================================================================
+CREATE TABLE `fg_cms_page_content_element_calendar_category` (
+  `id` int(11) NOT NULL,
+  `element_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+ALTER TABLE `fg_cms_page_content_element_calendar_category`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `element_id` (`element_id`),
+  ADD KEY `category_id` (`category_id`);
+
+
+ALTER TABLE `fg_cms_page_content_element_calendar_category`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `fg_cms_page_content_element_calendar_category`
+  ADD CONSTRAINT `fg_cms_page_content_element_calendar_category_ibfk_1` FOREIGN KEY (`element_id`) REFERENCES `fg_cms_page_content_element` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fg_cms_page_content_element_calendar_category_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `fg_em_calendar_category` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+===============================================================================================================================================================================================
+CREATE TABLE `fg_cms_page_content_element_article_category` (
+  `id` int(11) NOT NULL,
+  `element_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+ALTER TABLE `fg_cms_page_content_element_article_category`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `element_id` (`element_id`),
+  ADD KEY `category_id` (`category_id`);
+
+
+ALTER TABLE `fg_cms_page_content_element_article_category`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `fg_cms_page_content_element_article_category`
+  ADD CONSTRAINT `fg_cms_page_content_element_article_category_ibfk_1` FOREIGN KEY (`element_id`) REFERENCES `fg_cms_page_content_element` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fg_cms_page_content_element_article_category_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `fg_cms_article_category` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+===============================================================================================================================================================================================
+ALTER TABLE  `fg_cms_page_content_element` DROP FOREIGN KEY  `fg_cms_page_content_element_ibfk_5` ;
+ALTER TABLE `fg_cms_page_content_element` DROP `role_id`;
+ALTER TABLE `fg_cms_page_content_element` DROP `category_id`;
+===============================================================================================================================================================================================
+ALTER TABLE `fg_cms_page_container_column` CHANGE `width_value` `width_value` TINYINT(1) NOT NULL;
+===============================================================================================================================================================================================
+ALTER TABLE `fg_cms_page_content_text_element` CHANGE `version_id` `version_id` INT(11) NULL;
+
+
+================================================================================================================================================================================
+ INSERT INTO `fg_cms_page_content_type` (`id`, `type`, `logo_name`, `label`, `table_name`, `sort_order`) VALUES (7, 'map', 'fa-map-o', 'CMS_MAP', NULL, '7');
+
+================================================================================================================================================================================
+UPDATE `fg_club_terminology_i18n` SET `singular_lang` = 'Verbandsmitgliedschaft ' WHERE `fg_club_terminology_i18n`.`id` = 462 AND `fg_club_terminology_i18n`.`lang` = 'de';
+UPDATE `fg_club_terminology_i18n` SET `plural_lang` = 'Verbandsmitgliedschaften' WHERE `fg_club_terminology_i18n`.`id` = 462 AND `fg_club_terminology_i18n`.`lang` = 'de';
+
+
+UPDATE `fg_club_terminology_i18n` SET `singular_lang` = 'Federation membership' WHERE `fg_club_terminology_i18n`.`id` = 462 AND `fg_club_terminology_i18n`.`lang` = 'fr';
+UPDATE `fg_club_terminology_i18n` SET `plural_lang` = 'Federation memberships' WHERE `fg_club_terminology_i18n`.`id` = 462 AND `fg_club_terminology_i18n`.`lang` = 'fr';
+
+
+UPDATE `fg_club_terminology_i18n` SET `singular_lang` = 'Federation membership' WHERE `fg_club_terminology_i18n`.`id` = 462 AND `fg_club_terminology_i18n`.`lang` = 'it';
+UPDATE `fg_club_terminology_i18n` SET `plural_lang` = 'Federation memberships' WHERE `fg_club_terminology_i18n`.`id` = 462 AND `fg_club_terminology_i18n`.`lang` = 'it';
+
+===========================================================================================================================================================================
+DB CHANGE SPRINT-46 ( FAIR-2061 ) - SWETHA
+===========================================================================================================================================================================
+ALTER TABLE `fg_cm_fedmembership_confirmation_log` ADD `is_merging` INT(1) NOT NULL DEFAULT '0' AFTER `status`;
+===========================================================================================================================================================================
+ALTER TABLE `fg_cms_page_content_element` CHANGE `deleted_at` `deleted_at` DATETIME NULL DEFAULT NULL;
+ALTER TABLE `fg_cms_page` ADD `content_update_time` DATETIME NOT NULL AFTER `edited_at`;
+ALTER TABLE `fg_cms_page_content_element` ADD `image_element_click_type` ENUM('detail','link') NULL DEFAULT NULL AFTER`image_element_slider_time`; 
+ALTER TABLE `fg_cms_page_content_element` ADD `is_all_category` tinyint(1) DEFAULT NULL AFTER`image_element_click_type`;
+ALTER TABLE `fg_cms_page_content_element` ADD `is_all_area` tinyint(1) DEFAULT NULL AFTER`is_all_category`;
+===========================================================================================================================================================================
+INSERT INTO `fg_cms_page_content_type` (`id`, `type`, `logo_name`, `label`, `table_name`, `sort_order`) VALUES
+(1, 'header', 'fa-text-height', 'CMS_HEADER', NULL, 1),
+(2, 'text', 'fa-align-left', 'CMS_HEADER_TEXT', NULL, 2),
+(3, 'image', 'fa-image', 'CMS_IMAGE_VIDEO', NULL, 3),
+(4, 'articles', 'fa-newspaper-o', 'CMS_ARTICLES', NULL, 4),
+(5, 'calendar', 'fa-calendar', 'CMS_CALENDAR', NULL, 5),
+(6, 'login', 'fa-sign-in', 'CMS_LOGIN', NULL, 6),
+(7, 'map', 'fa-map-o', 'CMS_MAP', NULL, 7),
+(8, 'iframe', 'fa fa-globe', 'CMS_IFRAME', NULL, 8);
+
+ALTER TABLE  `fg_cms_page_content_element` DROP FOREIGN KEY  `fg_cms_page_content_element_ibfk_4` ;
+ALTER TABLE `fg_cms_page_content_element`
+  DROP `image_element_link_type`,
+  DROP `image_element_external_link`,
+  DROP `navigation_id`;
+
+ALTER TABLE `fg_cms_page_content_media` ADD `image_element_link_type` enum('internal','external') COLLATE utf8mb4_unicode_ci DEFAULT NULL AFTER `element_id`;
+ALTER TABLE `fg_cms_page_content_media` ADD `image_element_external_link` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL AFTER `image_element_link_type`;
+ALTER TABLE `fg_cms_page_content_media` ADD `navigation_id` int(11) DEFAULT NULL AFTER `image_element_external_link`;  
+
+
+ALTER TABLE `fg_gm_items` CHANGE `source` `source` ENUM('gallery','newsletter-image','newsletter-articleimage','article','cmstextelement','cmsimageelement') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'gallery';
+ALTER TABLE  `fg_cms_page_content_media` CHANGE  `text_element_id`  `text_element_id` INT( 11 ) NULL DEFAULT NULL ;

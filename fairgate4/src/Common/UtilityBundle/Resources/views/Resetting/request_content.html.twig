@@ -1,0 +1,62 @@
+
+
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout_login.html.twig' %}
+{% set pageTitle = 'RESET_PASSWORD_PAGE_TITLE'|trans %}
+{% block logincontent %}
+
+<div class="content">
+    <!-- BEGIN LOGIN FORM -->
+    {% if error is defined %}
+        <div class="alert alert-danger display-show">
+            <button class="close" data-close="alert"></button>
+            {{ error|trans}}
+        </div>
+    {% endif %}
+    <!-- END LOGIN FORM -->
+    <!-- BEGIN FORGOT PASSWORD FORM -->
+    <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" skipDirtyCheck class="fos_user_resetting_request forget-form" novalidate="novalidate" style="display:block;">
+        <h3>{% trans %}FORGOT_TITLE{% endtrans %}</h3>
+        <p>{% trans %}FORGOT_SUB_TITLE{% endtrans %}</p>
+        <div class="form-group">
+            <div class="input-icon">
+                <i class="fa fa-envelope"></i>
+                <input type="text" id="username" name="username" required="required" placeholder="{% trans %}FORGOT_EMAIL{% endtrans %}" autocomplete="off" class="form-control placeholder-no-fix">
+            </div>
+        </div>
+        {#  google recaptcha #}
+        <div class="form-group">
+            <div class="g-recaptcha" id="fg-captcha"></div>
+        </div>
+        <div class="form-actions">
+            <button class="btn" id="back-btn" onclick="window.location.href='{{ path('fos_user_security_login') }}'" type="button">
+                <i class="m-icon-swapleft"></i> {% trans %}FORGOT_BACK_TO_LOG{% endtrans %}</button>
+            <button class="btn blue pull-right" type="submit" id="_submit" disabled >
+                {% trans %}FORGOT_SUBMIT_BTN{% endtrans %} <i class="m-icon-swapright m-icon-white"></i>
+            </button>
+        </div>
+    </form>
+    <!-- END FORGOT PASSWORD FORM -->
+    <!-- BEGIN REGISTRATION FORM -->
+
+    <!-- END REGISTRATION FORM -->
+</div>
+
+{% endblock %}
+{% block javascripts %}
+{# for google captcha in login internal #}
+<script type="text/javascript">   
+    var sitekey = '{{ googleCaptchaSitekey }}';
+    var verifyCallback = function(response) {
+          $('#_submit').removeAttr('disabled');
+    };
+    var onloadCallback = function() {                
+          grecaptcha.render('fg-captcha', {
+            'sitekey' : sitekey,
+            'callback' : verifyCallback,
+          });
+    };
+</script>
+<script src='https://www.google.com/recaptcha/api.js?hl={{ fgclub.get('default_system_lang') }}&onload=onloadCallback&render=explicit'></script>
+{% endblock %}
+

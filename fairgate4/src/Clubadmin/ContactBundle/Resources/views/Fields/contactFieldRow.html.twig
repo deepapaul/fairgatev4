@@ -1,0 +1,120 @@
+    <div class="row fg-border-line sortables fg-sort-drag-hover" data-fieldsortorder="{{loop.index}}" id="{{fieldValue.attrId}}">
+        <div class="fg-col-first-icon fg-sort-drag" name="fg-dev-sorting">
+            <input type="hidden" name="sort_{{fieldDetail.catId}}_{{fieldValue.attrId}}" id="sort_{{fieldDetail.catId}}_{{fieldValue.attrId}}" class="order" value="{{loop.index}}" data-key="{{fieldDetail.catId}}.fields.{{fieldValue.attrId}}.sort" />
+            <i class="fa fa fg-sort ui-draggable handle" data-toggle="tooltip"></i>
+        </div>
+        <div class="col-md-12 fg-col-hack fg-fields-wrap">
+            <div class="row">
+            {% if clubId == fieldValue.createdBy%}
+                {%for languages in clubIdArray.clubLanguages %}
+                    <div data-lang="{{languages}}" dataerror-group class="col-md-2 col-sm-3 col-xs-12 fg-clear-left hide">
+                        <input type="text" data-required-lang id="title_{{languages}}_{{fieldDetail.catId}}_{{fieldValue.attrId}}" {% if (attrTitles[fieldValue.attrId][languages]) is not defined %}placeholder="{{fieldValue.fieldname}}" {% endif %} data-lang="{{languages}}" name="title_{{languages}}_{{fieldDetail.catId}}_{{fieldValue.attrId}}" class="form-control input-sm wd76 pull-left {% if clubIdArray.sysLang!=languages %}hide{% else %}" required="true{% endif %}" value="{% if (attrTitles[fieldValue.attrId][languages]) is defined %}{{attrTitles[fieldValue.attrId][languages]}}{% endif %}" data-key="{{fieldDetail.catId}}.fields.{{fieldValue.attrId}}.title.{{languages}}">
+                    </div>
+                {% endfor %} 
+            {% else %}
+                <div dataerror-group class="col-md-2 col-sm-3 col-xs-12 fg-clear-left">                
+                {% if fieldValue.isSystemField==1 or fieldValue.isFairgateField==1 %}
+                    <div class="fg-textalign">{{ ((attrTitles[fieldValue.attrId][clubIdArray.defSysLang]) is defined) ? attrTitles[fieldValue.attrId][clubIdArray.defSysLang] : fieldValue.fieldname}}</div>
+                {% else %}
+                    <div class="fg-textalign">{{ ((attrTitles[fieldValue.attrId][clubIdArray.sysLang]) is defined) ? attrTitles[fieldValue.attrId][clubIdArray.sysLang] : fieldValue.fieldname}}</div>
+                {% endif %}
+                </div>
+            {% endif %}              
+            <div class="col-md-3 col-sm-4 col-xs-12 admin-txtdetails propertiblk fg-textalign">
+                <div class="icondivarea">{% if fieldValue.isPersonal==1 %}<i class="fa fa-user pull-left userblk fg-contact-Popovers" data-content="{%trans%}FOR_SINGLE_PERSONS{%endtrans%}" ></i>{% endif %}</div>
+                  <div class="icondivarea">{% if fieldValue.isCompany==1 %}<i class="fa fa-building-o fg-contact-Popovers" data-content="{%trans%}FOR_COMPANIES{%endtrans%}"></i>{% endif %}</div>
+                    {{fieldList[fieldValue.inputType] is defined ? fieldList[fieldValue.inputType] :fieldValue.inputType}}
+                    {% if fieldValue.attrId in systemFields.address %}
+                    <i class="fa fa-envelope-o popovers" data-html="true" data-trigger="hover" data-placement="auto" data-content="<div class='fg-popover-address'><strong>{{'ADDRESS_POPOVER_SINGLEPERSON_SCHEME'|trans}}</strong><p>[{{'ADDRESS_POPOVER_SHORTSALUTATION'|trans}}]</p><p>[{{'ADDRESS_POPOVER_TITLE'|trans}}] [{{'ADDRESS_POPOVER_FIRSTNAME'|trans}}] [{{'ADDRESS_POPOVER_LASTNAME'|trans}}]</p><p>[{{'ADDRESS_POPOVER_STREET'|trans}}]</p><p>[{{'ADDRESS_POPOVER_POBOX'|trans}}]</p><p>[{{'ADDRESS_POPOVER_ZIPCODE'|trans}}] [{{'ADDRESS_POPOVER_LOCATION'|trans}}]</p><p>[{{'ADDRESS_POPOVER_COUNTRY'|trans}}]</p><strong>{{'ADDRESS_POPOVER_COMPANY_SCHEME'|trans}}</strong><p>[{{'ADDRESS_POPOVER_COMPANY'|trans}}]</p><p>[{{'ADDRESS_POPOVER_SHORTSALUTATION'|trans}}] [{{'ADDRESS_POPOVER_TITLE'|trans}}] [{{'ADDRESS_POPOVER_FIRSTNAME'|trans}}] [{{'ADDRESS_POPOVER_LASTNAME'|trans}}]</p><p>[{{'ADDRESS_POPOVER_STREET'|trans}}]</p><p>[{{'ADDRESS_POPOVER_POBOX'|trans}}]</p><p>[{{'ADDRESS_POPOVER_ZIPCODE'|trans}}] [{{'ADDRESS_POPOVER_LOCATION'|trans}}]</p><p>[{{'ADDRESS_POPOVER_COUNTRY'|trans}}]</p></div><div class='fg-popover-address'><strong>{{'ADDRESS_POPOVER_SINGLEPERSON_EXAMPLE'|trans}}</strong><p>Herr</p><p>Dr. Hans Muster</p><p>Musterstrasse 10</p><p>Postfach 5</p><p>1234 Musterheim</p><p>Schweiz</p><strong>{{'ADDRESS_POPOVER_COMPANY_EXAMPLE'|trans}}</strong><p>Muster & Söhne GmbH</p><p>Herr Dr. Hans Muster</p><p>Musterstrasse 10</p><p>Postfach 5</p><p>1234 Musterheim</p><p>Schweiz</p></div>" data-original-title="{{'CF_TOOLTIP_ADDRESS'|trans}}"></i>
+                    {% endif %}
+             {% if fieldValue.attrId in systemFields.mobile %}
+                <i class="fa fa-envelope-o fa-crosshairs tooltips" data-original-title="{{'CF_TOOLTIP_MOBILE'|trans}}" data-placement="bottom" data-container="body"></i>
+             {% endif %}
+             {% if fieldValue.attrId in systemFields.parentEmail %}
+                <i class="fa fa-envelope-o fa-crosshairs tooltips" data-original-title="{{'CF_TOOLTIP_PARENT_EMAIL'|trans}}" data-placement="bottom" data-container="body"></i>
+             {% endif %}
+             {% if fieldValue.attrId in systemFields.primaryEmail %}
+                <i class="fa fa-envelope-o fa-crosshairs tooltips" data-original-title="{{'CF_TOOLTIP_PRIMARY_EMAIL'|trans}}" data-placement="bottom" data-container="body"></i>
+                <i data-original-title="{{'CF_TOOLTIP_USER_NAME'|trans}}" data-placement="bottom" data-container="body" class="fa fa-sign-in tooltips"></i>
+             {% endif %}
+             {% if clubIdArray.federationId == fieldValue.createdBy  %}  
+                  {% set fedIcon = fgclub.get('federation_icon')|raw %} 
+                <img class ="fg-global-fed-icon" src="{{fedIcon[clubIdArray.federationId]}}"/>
+              {% elseif clubIdArray.subFederationId == fieldValue.createdBy%}
+                  {% set fedIcon = fgclub.get('federation_icon')|raw %}
+                <img class ="fg-global-fed-icon" src="{{fedIcon[clubIdArray.subFederationId]}}"/>
+                {% elseif clubIdArray.clubId == fieldValue.createdBy and clubIdArray.clubType == 'sub_federation' %}
+                  {% set fedIcon = fgclub.get('federation_icon')|raw %}
+                <img class ="fg-global-fed-icon" src="{{fedIcon[clubIdArray.clubId]}}"/>
+              {% endif %}
+              
+            </div>
+            <div class="col-md-3 col-sm-5 col-xs-12 fg-req-new fg-textalign">
+                    <label class="pull-left fg-required-label">{%trans%}CF_REQUIRED_FOR{%endtrans%}</label>
+                    <div class="col-md-8 col-sm-8">
+                        <select style="visibility: hidden;" data-selected-text-format="count>1" name="required_{{fieldDetail.catId}}_{{fieldValue.attrId}}" id="required_{{fieldDetail.catId}}_{{fieldValue.attrId}}" {% if(fieldValue.attrId in systemFields.disabledFields ) %}disabled{% endif %} class="contact-field-selectpicker show-tick form-control input-sm fg-new-select" multiple data-key="{{fieldDetail.catId}}.fields.{{fieldValue.attrId}}.required">
+                            <option value="not_required" {% if((fieldValue.isRequiredType=='not_required') or (fieldValue.isRequiredType == 'selected_members' and memberships is empty) ) %}selected{% endif %} class="single fg-arrow-all">{{'CF_NO_REQUIRED_FIELD'|trans}}</option>
+                            <option value="all_contacts" {% if(fieldValue.isRequiredType=='all_contacts') %}selected{% endif %} class="single fg-arrow-all fg-option-mandatory">{{'CF_REQUIRED_FOR_ALL_CONTACTS'|trans}}</option>
+                            {% if clubIdArray.clubType == 'sub_federation' or clubIdArray.clubType == 'federation'  %} 
+                                <option value="all_fed_members" {% if(fieldValue.isRequiredType=='all_fed_members') %}selected{% endif %} class="single fg-arrow-all fg-option-mandatory">{{'CONTACT_ALL_FED_MEMBER'|trans}}</option>
+                            {% else %}
+                                {% if fgclub.get('clubMembershipAvailable') == 1  %}
+                                    <option value="all_club_contacts" {% if(fieldValue.isRequiredType=='all_club_members') %}selected{% endif %} class="single fg-arrow-all fg-option-mandatory">{{'CONTACT_ALL_CLUB_MEMBER'|trans}}</option>
+                                {% endif %}
+                                
+                                <option value="all_fed_members" {% if(fieldValue.isRequiredType=='all_fed_members') %}selected{% endif %} class="single fg-arrow-all fg-option-mandatory">{{'CONTACT_ALL_FED_MEMBER'|trans}}</option>
+                            {% endif %}
+                            
+                            <optgroup label="">
+                            {% for key,membership in memberships %}{% set iconShow=0 %}
+                                    <option value="{{key}}"
+                                     {% if((membership.clubId == clubIdArray.federationId) and ((fieldValue.isRequiredFedmemberClub==1 and clubIdArray.clubType != 'sub_federation'  ) or ( fieldValue.isRequiredFedmemberSubfed==1 and clubIdArray.clubType == 'sub_federation'))) %}{% set iconShow=1 %}disabled{% elseif((key in fieldValue.memberships) and fieldValue.isRequiredType == 'selected_members' ) %}selected{% endif %}  class="multiple {% if iconShow==1 %}checkedDefault{% endif %}" 
+                                     data-content='{% if iconShow==1 %}<i class="fa  fa-check"></i>{% endif %}
+                                     {{membership.titleLang}}<span class="fg-contact-mandatory"></span> 
+                                      {% if clubIdArray.federationId == membership.clubId  %}
+                                         {% set fedIcon = fgclub.get('federation_icon')|raw %} 
+                                        <img class ="fg-global-fed-icon" src="{{fedIcon[clubIdArray.federationId]}}"/>
+                                    {% elseif clubIdArray.subFederationId == membership.clubId%}
+                                        {% set fedIcon = fgclub.get('federation_icon')|raw %} 
+                                        <img class ="fg-global-fed-icon" src="{{fedIcon[clubIdArray.subFederationId]}}"/>
+                                     {% endif %}
+                                                                          
+                                     '>                                        
+                                    </option>
+                            {% endfor %}
+                             </optgroup>
+                            </select>
+                        </div>
+                </div>
+                <div class="col-md-2 col-sm-12 col-xs-12 popupClickArea fg-textalign">
+                    <div class="paddingzero propertiblk pull-left margin-right-10 propertyClick" name="fg-dev-properties" categoryId="{{fieldValue.catId}}" attributeId="{{fieldValue.attrId}}" propertyLoadedStatus="0"> <i class="fa fa-minus-square-o" style="display: none;"></i><i class="fa fa-plus-square-o"></i>{%trans%}CF_PROPERTIES{%endtrans%} </div>
+                </div>
+                
+                {% set hideActiveSWitch = ((fieldValue.isCrucialSystemField ==1 or (fieldValue.isSystemField ==0 and clubId != fieldValue.createdBy)) ? true :false) %}
+                {% if not hideActiveSWitch %}
+                    {% set isDisabled = ((fieldValue.isSystemField == 1 and (clubIdArray.clubType != 'federation' and clubIdArray.clubType != 'standard_club') and ((fieldValue.isRequiredFedmemberClub==1 and clubIdArray.clubType != 'sub_federation'  ) or ( fieldValue.isRequiredFedmemberSubfed==1 and clubIdArray.clubType == 'sub_federation'))) ? true :false) %}    
+                    <div class="col-md-2 col-sm-12 col-xs-12">
+                         <label class="switch-light switch-light-sm switchhwd {% if isDisabled %}fg-switch-inactive{% endif %}" onClick="">
+                             <input {% if isDisabled %}disabled{% endif %} {% if fieldValue.isActive==1 %}checked{% endif %} type="checkbox" class="make-switch" name="isActive_{{fieldDetail.catId}}_{{fieldValue.attrId}}" id="isActive_{{fieldDetail.catId}}_{{fieldValue.attrId}}" data-key="{{fieldDetail.catId}}.fields.{{fieldValue.attrId}}.isActive" />
+                             <span name="fg-dev-active"> <span>{{'ON'|trans}}</span><span>{{'OFF'|trans}}</span>	</span>
+                             <a class="btn btn-primary {% if isDisabled %}disable-field{% endif %}"></a> 
+                         </label>
+                    </div>
+                {% endif %}
+            </div>        
+        </div>
+        <div class="fg-col-last-icon" name="fg-dev-close-icon">
+            <div class="col-md-2 pull-right deletediv "> 
+                <div class="closeico">
+                    {% if (fieldValue.isSystemField ==1 or clubId != fieldValue.createdBy) %}
+                        <i class="fa fa-lock fa-2x ash"></i>
+                    {% else %}
+                        <input type="checkbox" class="make-switch" data-key="{{fieldDetail.catId}}.fields.{{fieldValue.attrId}}.isDeleted" name="isDeleted_{{fieldDetail.catId}}_{{fieldValue.attrId}}" id="isDeleted_{{fieldDetail.catId}}_{{fieldValue.attrId}}" data-inactiveblock="changecolor" data-parentid="{{fieldValue.attrId}}" />
+                        <label for="isDeleted_{{fieldDetail.catId}}_{{fieldValue.attrId}}"></label>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="fg-clear"></div>        
+        <div class="row fg-common-top popupDivContent propSection" id="propertiesSection{{fieldValue.attrId}}" style="display:none;"></div>
+   </div>

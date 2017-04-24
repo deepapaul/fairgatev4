@@ -1,0 +1,42 @@
+<div class="fg-common-top">
+    <div class="row">
+        <div class="date-filter col-md-12 fg-doc-log" id="date_filter_{{ filemanagerId }}">
+            <div class="pull-left">
+                <label for="filter_start_date" class="filter-log-from"><span>{{ 'FILE_LOG ENTRIES FROM'|trans }}</span></label>
+                <div class='input-group date datepicker'>
+                    <input type="date_range" name="filter_start_date" id="filter_start_date_{{ filemanagerId }}" value="" class="form-control filter-log-input" data-event="{{ filemanagerId }}"/>
+                    <span class="input-group-addon cal filter-log-date"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+            <div class="pull-left">
+                <label for="filter_end_date" class="filter-log-from"><span>{{ 'FILE_LOG_TO'|trans }}</span></label>
+                <div class='input-group date datepicker'>
+                    <input type="date_range" name="filter_end_date" id="filter_end_date_{{ filemanagerId }}" value="" class="form-control filter-log-input" data-event="{{ filemanagerId }}"/>
+                    <span class="input-group-addon cal filter-log-date"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+            <!-- Date filter error message-->        
+            <div class="col-sm-3 has-error fg-log-error">
+                <span class="help-block fg-error-hide" id="log_date_error_{{ filemanagerId }}"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <table
+               class="dataTable
+                    table
+                    table-bordered
+                    table-hover
+                    table-condensed fg-brdr-btm-1 fg-no-table-border-bottom" id="dataTable-file-log">
+            <thead>
+                <tr>
+                    <th>{{ 'FILE_LOG_DATE'|trans }}</th>
+                    <th>{{ 'FILE_LOG_OPTION'|trans }}</th>
+                    <th>{{ 'FILE_LOG_BEFORE'|trans }}</th>
+                    <th>{{ 'FILE_LOG_AFTER'|trans }}</th>
+                    <th>{{ 'FILE_LOG_EDITED_BY'|trans }}</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>

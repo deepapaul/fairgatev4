@@ -1,0 +1,80 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">{{'EXPORT_TEAM_MEMBERS_TITLE'|trans({ '%teamname%':teamName, '%type%':type, '%count%':count })}} </h4>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="{{ path('clubrole_export') }}" method="POST"   autocomplete="off" class="form-horizontal form-row-sepe" id="exportform">
+                    <div class="form-body fg-csv-expt fg-exprt">
+                        <div class="form-group ">
+                            <label class="control-label col-md-4">{%trans%}CSV TYPE{%endtrans%}</label>
+                            <div class="col-sm-4  col-xs-12">
+                                <label class="fg-cursor">
+                                    <input type="radio" name="CSVtype" value="colonSep" checked>
+                                    {%trans%}SEMICOLON SEPERATED{%endtrans%}
+                                </label>
+                            </div>
+                            <div class="col-sm-4  col-xs-12">
+                                <label class="fg-cursor">   
+                                    <input type="radio" name="CSVtype" value="commaSep" >                       
+                                    {%trans%}COMMA SEPERATED{%endtrans%}
+                                </label>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <input type="hidden" name="columns" id="exp_columns" value=""  />
+                            <input type="hidden" name="order" id="exp_order" value=""  />
+                            <input type="hidden" name="search" id="exp_search" value=""  />
+                            <input type="hidden" name="tableField" id="exp_tableField" value=""  />
+                            <input type="hidden" name="memberId" id="exp_memberId" value="3457"  />
+                            <input type="hidden" name="memberType" id="exp_memberType" value=""  />
+                            <input type="hidden" name="tableTitle" id="exp_tableTitle" value=""  />
+                            <input type="hidden" name="checkedIds" id="exp_checkedIds" value=""  />
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="form-actions fluid"> 
+            <div class="col-sm-12">
+                
+                <button data-url="{#{{ backLink }}#}" onclick='FgModelbox.hidePopup();' class="btn default" type="button">{%trans%}CANCEL{%endtrans%}</button>
+                <input type="button" id="exportsubmit" value="{%trans%}EXPORT{%endtrans%}" class="btn green" >
+            </div>  
+        </div>
+    </div> 
+</div>
+
+
+{% block javascripts %}
+    <script>
+        $('#exportsubmit').on('click', function () {
+            var dataTableStorage = 'DataTables_memberlisttable' + window.location.pathname;
+            var dataTableSettings = JSON.parse(localStorage.getItem(dataTableStorage));
+            var teamtableTitle = (memberType === 'team') ? 'teamtableTitle_' + clubId + '_' + contactId : 'workgrouptableTitle_' + clubId + '_' + contactId;
+            var roleId = $.parseJSON(localStorage.getItem(tablocalstorageName)).id;
+            var checkedIds = localStorage.getItem('checkedIds');
+            // alert(checkedIds);
+            $('#exp_columns').val(localStorage.getItem(tableColumnTitleStorageExport));
+            $('#exp_order').val(JSON.stringify(dataTableSettings.order));
+            $('#exp_search').val(dataTableSettings.search.search);
+            $('#exp_tableField').val(localStorage.getItem(tableSettingValueStorage));
+            $('#exp_memberId').val(roleId);
+            $('#exp_memberType').val(memberType);
+            $('#exp_tableTitle').val(localStorage.getItem(teamtableTitle));
+            $('#exp_checkedIds').val(checkedIds);
+
+            $('#exportform').submit();
+            FgModelbox.hidePopup();
+        });
+
+    </script>
+{% endblock %}

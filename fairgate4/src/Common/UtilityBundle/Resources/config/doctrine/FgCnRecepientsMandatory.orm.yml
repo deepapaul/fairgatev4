@@ -1,0 +1,71 @@
+Common\UtilityBundle\Entity\FgCnRecepientsMandatory:
+    type: entity
+    table: fg_cn_recepients_mandatory
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        emailType:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: email_type
+        email:
+            type: string
+            length: 160
+            fixed: false
+            nullable: false
+        salutation:
+            type: string
+            length: 250
+            fixed: false
+            nullable: false
+        corresLang:
+            type: string
+            length: 2
+            fixed: false
+            nullable: false
+            column: corres_lang
+    manyToOne:
+        emailField:
+            targetEntity: FgCmAttribute
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                email_field_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        linkedContact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                linked_contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        recepientList:
+            targetEntity: FgCnRecepients
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                recepient_list_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

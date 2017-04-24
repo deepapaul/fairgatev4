@@ -1,0 +1,179 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">{{ title }}</h4>
+    </div>
+      
+    <div class="portlet-body form">
+        <!-- BEGIN FORM-->
+        <div class="form-body">                                        
+                {% if (modalType == 'CHANGE_SORT') %} {#change sort type of album items#}
+                    <div class="form-group fg-clear-marg">
+                    <div class="radio-list">
+                        <div class="fg-news-radio">                                   
+                           <label class="propertyClick" for="reverseCurrentSort"><input type="radio" class="fg-gallery-scope" value="REV_CURRENT" id="reverseCurrentSort" name="galleryItemSort" >{{'GALLERY_REV_CURRENT_SORTING'|trans}} </label>
+                        </div>
+                        <div class="fg-news-radio">                                  
+                           <label class="propertyClick" for="oldestImageTop"><input type="radio" class="fg-gallery-scope" value="OLDEST_TOP" id="oldestImageTop" name="galleryItemSort" >{{'GALLERY_SORT_OLDEST_IMAGE_TOP'|trans}}</label>
+                        </div>
+                        <div class="fg-news-radio">          
+                           <label class="propertyClick" for="newestImageTop"><input type="radio" class="fg-gallery-scope" value="NEWEST_TOP" id="newestImageTop" name="galleryItemSort" checked="checked">{{'GALLERY_SORT_NEWEST_IMAGE_TOP'|trans}}</label>
+                        </div>
+                     </div>
+                    </div>
+                {% elseif (modalType == 'CHANGE_SCOPE') %} {#change scope of album items#}
+                    <div class="form-group fg-clear-marg">
+                    <div class="radio-list">
+                        <div class="fg-news-radio">
+                           <label class="propertyClick" for="scopePublic"><input type="radio" class="fg-gallery-scope" value="PUBLIC" id="scopePublic" {% if(params.currentScope == 'PUBLIC') %} checked {% endif%} name="galleryItemScope">{{'GALLERY_SCOPE_PUBLIC'|trans}} </label>
+                        </div>
+                        <div class="fg-news-radio">                                   
+                           <label class="propertyClick" for="scopeInternal"><input type="radio" class="fg-gallery-scope" value="INTERNAL" id="scopeInternal" {% if(params.currentScope == 'INTERNAL') %} checked {% endif%}  name="galleryItemScope">{{'GALLERY_SCOPE_INTERNAL'|trans}}</label>
+                        </div>
+                     </div>
+                    </div>
+                {% elseif (modalType == 'MOVETO_ALBUM' or modalType == 'ASSIGNTO_ALBUM') %} {#move items to another album#}
+                    <div class="form-group fg-clear">
+                        <label class="control-label text-right fg-label-valign col-lg-3 col-md-3">{{'GALLERY_GALLERY'|trans}}<span aria-required="true" class="required"> * </span></label>
+                        <div class="col-lg-9 col-md-8">
+                            <select class="form-control select2" name='movegallery' id='movegallery'> 
+                                <option value="" > {{'GALLERY_SELECT'|trans}}</option>
+                                {% for galleryDetail in params.galleryDetails %}
+                                    <option value="{{ galleryDetail.id }}" {% if(params.galleryId is defined ) %} {% if(params.galleryId ==  galleryDetail.id) %} selected {% endif %} {% endif %} > {{ galleryDetail.title|raw }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group fg-clear">
+                        <label class="control-label text-right fg-label-valign col-lg-3 col-md-3">{{'GALLERY_ALBUM'|trans}}<span aria-required="true" class="required"> * </span></label>
+                        <div class="col-lg-9 col-md-8">
+                            <select class="form-control select2" name='movealbum' id='movealbum'>  
+                                <option value="" > {{'GALLERY_SELECT'|trans}}</option>
+                                {% set selectedGalleryId = (params.galleryId is defined ) ? params.galleryId : ''%}
+                                {% if(selectedGalleryId != '' ) %}
+                                    {% for galleryDetail in params.galleryDetails[selectedGalleryId].entry %}
+                                        <option value="{{ galleryDetail.id }}" {% if(params.albumId is defined ) %} {% if(params.albumId ==  galleryDetail.id) %} selected {% endif %} {% endif %} > {{ galleryDetail.title|raw }}</option>
+                                        {% if(galleryDetail.input is defined ) %}
+                                            {% for subalbum in galleryDetail.input %}
+                                                <option value="{{ subalbum.id }}" {% if(params.albumId is defined ) %} {% if(params.albumId ==  subalbum.id) %} selected {% endif %} {% endif %} >&nbsp;&nbsp;&nbsp; {{ subalbum.title|raw }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                           </select>
+                        </div>
+                    </div>
+                {% else %}  {#here modalType can be 'REMOVE_IMAGE' OR 'DELETE_IMAGE' #}
+                    <div class="form-group">
+                    <label class="col-lg-12 col-md-12 col-xs-12">
+                        {{ text }}
+                    </label>   
+                    </div>
+                {% endif %}                                                              
+        </div>
+        <!-- END FORM-->
+    </div>        
+   
+    {% set button_val = (button_val is not defined) ? 'SAVE'|trans : button_val%}
+    {% include 'internal/savebuttonPopup.html.twig' with { 'button_val' : button_val } %}
+</div>
+<script type="text/javascript"> 
+    var checkedIds = '{{ checkedIds|raw }}';
+    var modalType = '{{ modalType }}';
+    FgFormTools.handleSelect2();
+    //trim space in subalbums
+    if(modalType == 'MOVETO_ALBUM' || modalType == 'ASSIGNTO_ALBUM') {
+        $('#s2id_movealbum .select2-chosen').html($('#s2id_movealbum .select2-chosen').html().replace('&nbsp;&nbsp;&nbsp;', ''));
+    }
+    
+    $(document).off('click', '#savePopup');
+    $(document).on('click', '#savePopup', function() {
+        if(modalType == 'CHANGE_SORT'){
+            var sortingType = $('input[name=galleryItemSort]:checked').val();
+            var albumId = localStorage.getItem(FgLocalStorageNames.gallery.selectedAlbum);
+            FgGalleryView.saveSortType(sortingType, albumId);
+        }else if(modalType == 'CHANGE_SCOPE') {
+           var scope = $('[name=galleryItemScope]:checked').val();
+           FgGalleryView.saveScope(checkedIds, scope);
+        }     
+        if(modalType == 'REMOVE_IMAGE') {
+           FgGalleryView.removeItems(checkedIds);
+        }
+        if(modalType == 'DELETE_IMAGE') {
+           FgGalleryView.deleteItems(checkedIds);
+        }
+        if(modalType == 'SET_COVER_IMAGE') {
+           FgGalleryView.setCoverImage(checkedIds);
+        }
+        if(modalType == 'MOVETO_ALBUM' || modalType == 'ASSIGNTO_ALBUM') {
+            var albumId = $('[name=movealbum]').val();
+            FgGalleryView.moveToAlbum(checkedIds, albumId);
+        }
+    });
+    
+    //disable enable buttons according to condition
+    if(modalType == 'CHANGE_SCOPE') {
+        $('#savePopup').attr('disabled',true);       
+        var params = {{ paramsJson|raw }};
+        var currentScope = params.currentScope;
+        $(document).off('click', '.fg-gallery-scope');
+        $(document).on('click', '.fg-gallery-scope', function() {   
+            if(this.value == currentScope) {
+                $('#savePopup').attr('disabled',true);
+            } else {
+                $('#savePopup').attr('disabled',false);
+            }
+        });
+    }
+    
+    //select album onbchanging gallery in MOVETO_ALBUM/modalType == 'ASSIGNTO_ALBUM'
+    if(modalType == 'MOVETO_ALBUM' || modalType == 'ASSIGNTO_ALBUM') {
+         var params = {{ paramsJson|raw }};
+         $('#movegallery').change(function() {
+            $('select').select2("destroy"); //uniform select2
+            
+            $('#movealbum').find('option:gt(0)').remove();
+            selectedVal = this.value;  
+            if(selectedVal ) {                
+                if(_.size(params.galleryDetails[selectedVal].entry) > 0) {
+                    for(albumkey in params.galleryDetails[selectedVal].entry ) {
+                        var albumDetail = params.galleryDetails[selectedVal].entry;                    
+                        $('#movealbum').append(
+                            $('<option />')
+                                .html(albumDetail[albumkey].title)
+                                .val(albumDetail[albumkey].id)
+                        );
+                        if(albumDetail[albumkey].input !== 'undefined') {
+                            for(subalbumkey in albumDetail[albumkey].input ) {
+                                var subalbumDetail = albumDetail[albumkey].input;                            
+                                $('#movealbum').append(
+                                    $('<option />')
+                                        .html('&nbsp;&nbsp;&nbsp;'+subalbumDetail[subalbumkey].title)
+                                        .val(subalbumDetail[subalbumkey].id)
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+            FgFormTools.handleSelect2(); //uniform select2            
+        });
+        
+        // handle save buttons
+        var selectedAlbumId = $('[name=movealbum]').val();
+        if(selectedAlbumId == '') {
+            $('#savePopup').attr('disabled', true);
+        }
+        $('#movealbum, #movegallery').change(function() {
+            selectedAlbumId = $('[name=movealbum]').val();
+            if(selectedAlbumId == '') {
+                $('#savePopup').attr('disabled',true);
+            } else {
+                $('#savePopup').attr('disabled',false);
+            }
+            //trim space in subalbums
+            $('#s2id_movealbum .select2-chosen').html($('#s2id_movealbum .select2-chosen').html().replace('&nbsp;&nbsp;&nbsp;', ''));
+        });
+    }
+    
+</script>    

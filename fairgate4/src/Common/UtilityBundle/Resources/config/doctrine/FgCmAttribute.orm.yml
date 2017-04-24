@@ -1,0 +1,113 @@
+Common\UtilityBundle\Entity\FgCmAttribute:
+    repositoryClass: Common\UtilityBundle\Repository\FgCmAttributeRepository
+    type: entity
+    table: fg_cm_attribute
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        fieldname:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        fieldnameShort:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: fieldname_short
+        inputType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: input_type
+        fieldtype:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+        isSystemField:
+            type: boolean
+            nullable: true
+            column: is_system_field
+        isCrucialSystemField:
+            type: boolean
+            nullable: false
+            column: is_crucial_system_field
+        isFairgateField:
+            type: boolean
+            nullable: true
+            column: is_fairgate_field
+        isCompany:
+            type: boolean
+            nullable: true
+            column: is_company
+        isPersonal:
+            type: boolean
+            nullable: true
+            column: is_personal
+        predefinedValue:
+            type: text
+            nullable: true
+            column: predefined_value
+        isSingleEdit:
+            type: boolean
+            nullable: true
+            column: is_single_edit
+        addresType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: addres_type
+        fedProfileStatus:
+            type: boolean
+            nullable: true
+            column: fed_profile_status
+        availabilitySubFed:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: availability_sub_fed
+        availabilityClub:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: availability_club
+    manyToOne:
+        attributeset:
+            targetEntity: FgCmAttributeset
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                attributeset_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        address:
+            targetEntity: FgCmAttribute
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                address_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

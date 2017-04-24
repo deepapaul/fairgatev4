@@ -1,0 +1,20 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::website/layout.html.twig' %}
+{% block websiteCustomContentArea %}
+    <div class="clearfix"> </div>
+    <div class="fg-gallery-special-page-wrapper" id="gallery-specialpage-wrapper">
+        
+    
+    </div>
+{% endblock %}
+{% block underscoretemplate %}
+    {% include 'WebsiteCMSBundle:Gallery:Theme2/templateGallerySpecialPage.html.twig' %}
+    {% include 'WebsiteCMSBundle:Website:displayContentUnderscore.html.twig' %} 
+{% endblock %}
+
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/internal/css/timeline.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block javascripts %}
+    {% include 'WebsiteCMSBundle:Gallery:gallerySpecialPageJS.html.twig' %}
+{% endblock %}

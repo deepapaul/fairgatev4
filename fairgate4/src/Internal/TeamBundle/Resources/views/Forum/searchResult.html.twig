@@ -1,0 +1,140 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = (grp == 'team') ? 'FORUM_SEARCH_TEAM'|trans : 'FORUM_SEARCH_WORKGROUP'|trans %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTAINER -->
+    <div class="fg-page-container">
+        <div>
+            <div class="fg-theme-green">
+                <!-- BEGIN BREADCRUMB-->
+                <div class="row">
+                    <div class="col-lg-12">
+                        {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+                    </div>
+                </div>
+                <!-- END BREADCRUMB-->
+
+                    <div class="row ">
+                        <div class="col-md-12 fg-common-btm fg-action-menu-wrapper fg-has-tab">
+                            <div class="fg-title-first-block fg-test-block  fg-action-title fg-active-IB">
+                                <h3 class="page-title">{{ 'FORUM_SEARCH_TITLE'|trans }} '<span id="search-term"></span>' </h3>
+                            </div>
+
+                            <div class="fg-search-last-block fg-action-search">
+                                <div class="input-icon fg-input-icon ">
+                                    <i class="fa fa-search"></i>
+                                    <input type="text" placeholder="{{'FORUM_SEARCH_PLACEHOLDER'|trans}}" class="form-control control2" id="fg_dev_member_search">
+                                </div>
+                                
+                            </div>
+                           
+                        </div>
+                    </div>
+                    <!-- BEGIN CONTENT -->
+                    <div class="row fg-forum-overview-wrapper">
+                        
+                       <div class="col-md-12">
+                            <!-- BEGIN SAMPLE TABLE PORTLET-->
+                            <div class="">
+                                <div class="portlet-body">
+                                    <div id="search-content" class="fg-forum-search-resluts-wrapper"></div>
+                                </div>
+                            </div>
+                            <!-- END SAMPLE TABLE PORTLET-->
+                            <div class="fg-forum-topic-footer">
+                                <div class="FR" id = "pagination-search">
+                                    
+                                </div>
+                                
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+ {% endblock %}
+ {% block underscoretemplate %} 
+    <script type="text/template" id="display_search">
+        <%  i = (curPage-1)*dpp;
+        if(_.size(data) == 0){ %>
+             <div class="fg-forum-search-reslut fg-clear">
+                <div class="fg-forum-result-content fg-clear"><div class= "fg-no-result"><%- noResult %></div></div>
+             </div>
+        <% }
+        _.each(data,function(value){ 
+            if(i<(curPage*dpp) && i<_.size(data)){ %>
+                <div class="fg-forum-search-reslut fg-clear">
+                    <div class="fg-forum-result-title">
+                         <% var topicUrl =  data[i].topic_url.replace('dummyTopic',data[i].forumId); %>
+                        <a href="<%- topicUrl %>" class=""> <%- data[i].title %> </a>
+                    </div>
+            <% 
+            data[i].first_post_content = data[i].first_post_content.replace(/<\/?[^>]+(>|$)/g, "");
+            if(data[i].first_post_content.length <160){  %>
+                    <div class="fg-forum-result-content fg-clear"><%= data[i].first_post_content %>  </div>
+                    <% } else{ %>
+                    <div class="fg-forum-result-content fg-clear"> <%= data[i].first_post_content.substring(0,160) %> &hellip; </div>
+                    <% } %>
+                        <div class="fg-forum-result-footer">
+                       <% var dummyUrl =  data[i].contact_overview_url.replace('dummyId',data[i].createdAuthor); %>
+                       <% createdAt = FgLocaleSettings.formatDate( data[i].createdAt, 'datetime', 'YYYY-MM-DD HH:mm:SS') %>
+                        <%- createdBy%> <% if(data[i].createdAuthor != 1){ %><a href="<%- dummyUrl %>" class="fg-forum-author"><% } %><%- data[i].author %><% if(data[i].createdAuthor != 1){ %> </a> <% } %> <%- on %> <%- createdAt %>
+                    </div>
+                </div>
+        <% } 
+        i++;
+    }); %>
+    </script>
+    <script type="text/template" id="fg-forum-pagination-search">
+        <% if(totalCnt > 0) { %>
+        <ul class="pagination pagination-sm fg-dev-posts-pagination fg-pagination">
+            <% var pages = _.range(1,(Math.ceil(totalCnt/dpp)+1),1); %>
+           
+            <li>
+                <a href="javascript:;" data-page="1">
+                    <i class="fa fa-angle-double-left"></i>
+                </a>
+            </li>
+            {#<li>
+                <a href="javascript:;" data-page="<%- page - 1 %>">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            </li>#}
+            <% _.each(pages,function(pg) { %>
+                <li class="<%- (page == pg) ? 'selected' : '' %>">
+                    <a href="javascript:;" data-page="<%- pg %>"> <%- pg %> </a>
+                </li>
+            <% }); %>
+           {# <li>
+                <a href="javascript:;" data-page="<%- page + 1 %>">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>#}
+            <li>
+                <a href="javascript:;" data-page="<%- _.size(pages) %>">
+                    <i class="fa fa-angle-double-right"></i>
+                </a>
+            </li>
+        </ul>
+        <% } %>
+    </script>
+ {% endblock %}
+ {% block javascripts %}
+     
+     <script>
+         var groupId = "{{groupId}}";
+         var groupCategory = "{{grp}}";
+         var search = "{{search}}";
+         var dataUrl = "{{dataPath}}";
+         var dataF ;
+         var totalCnt = 0;
+         var dpp = '{{perPage}}';
+         var curPage = 1;
+         var i = 0;
+         var noResult = "{{noResult}}";
+         var createdBy = "{{createdBy}}";
+         var on = "{{on}}";
+     </script>
+     <script src="{{ asset('fgassets/internal/js/page/fgForumTopic.js')}}" type="text/javascript"></script> 
+     <script>
+          FgForumSearchTopic.initDocumentReady();
+     </script>
+ {% endblock %}

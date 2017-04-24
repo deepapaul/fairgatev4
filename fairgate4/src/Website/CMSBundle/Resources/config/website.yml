@@ -1,0 +1,185 @@
+website_public_home_page: 
+    path:     /
+    defaults: { _controller: WebsiteCMSBundle:Website:navigationLanding }
+    
+website_public_sitemap: 
+    path:     /sitemap.xml
+    defaults: { _controller: WebsiteCMSBundle:Sitemaps:sitemapDisplay }
+    
+website_public_page_menus: 
+    path:     /{menu}
+    defaults: { _controller: WebsiteCMSBundle:Website:navigationLanding }
+    
+website_public_page_get_calendar_events: 
+    path:     /getCalendarEvents/{elementId}/{pageId}
+    defaults: { _controller: WebsiteCMSBundle:Calendar:getCalendarElementEvents } 
+    
+website_header_nav:
+    path: /themeheader/1
+    defaults: { _controller: WebsiteCMSBundle:Website:websiteHeaderNav }
+    
+website_theme_preview_header_nav:
+    path: /themeheader/themepreview/1
+    defaults: { _controller: WebsiteCMSBundle:Website:websiteHeaderNav }
+    
+website_public_page_get_image_details: 
+    path:     /getImageElementDetails/1
+    defaults: { _controller: WebsiteCMSBundle:Website:getImageElement }
+    
+website_public_page_article_element_data: 
+    path:     /getArticleElementData/{elementId}/{pageId}
+    defaults: { _controller: WebsiteCMSBundle:Website:getArticleElementDetails }  
+    
+website_public_page_text_element_data: 
+    path:     /getTextElementData/1
+    defaults: { _controller: WebsiteCMSBundle:Website:getTextElementDetails }
+
+website_user_login:
+    path: getElements/signin
+    defaults: { _controller: WebsiteCMSBundle:Website:getLoginElement } 
+
+no_nav_error_page:
+    path : /nonav/1
+    defaults: { _controller: WebsiteCMSBundle:Website:getNoPagePreview }
+website_promobox:
+    path : /promo/content
+    defaults: { _controller: WebsiteCMSBundle:Website:getPromoBoxContent }
+    
+website_promobox_cookie:
+    path : /promo/cookie
+    defaults: { _controller: WebsiteCMSBundle:Website:setPromoCookie }
+    
+website_reset_password:
+    path : /reset/{token}
+    defaults: { _controller: InternalUserBundle:Resetting:reset , applicationArea: website }   
+    
+website_public_page_get_supplementary_element_data: 
+    path:     /getSupplementaryMenuDetails/{currentNavigationId}/{elementId}
+    defaults: { _controller: WebsiteCMSBundle:Website:getSupplementaryElementData } 
+  
+website_article_details_page:
+    path : /{menu}/detailview/{type}/{id}/{encodedString}
+    defaults: { _controller: WebsiteCMSBundle:Article:articleDetailsPageForWebsite }   
+    
+website_get_article_data:
+    path : /article/getData
+    defaults: { _controller: WebsiteCMSBundle:Article:getArticleData }  
+    
+website_get_article_comments_data:
+    path : /article/getComments/{articleId}
+    defaults: { _controller: WebsiteCMSBundle:Article:getArticleComments }  
+    
+website_save_article_comments:
+    path : /article/saveComments
+    defaults: { _controller: WebsiteCMSBundle:Article:saveArticleComments } 
+    
+website_download_article_attachment:
+    path : /article/downloadAttachment
+    defaults: { _controller: WebsiteCMSBundle:Article:downloadArticleAttachment } 
+      
+website_article_list:
+    path : /article/list
+    defaults: { _controller: WebsiteCMSBundle:Article:articlelist }
+    
+website_gallery_list:
+    path : /gallery/list
+    defaults: { _controller: WebsiteCMSBundle:Gallery:gallerySpecialPage }
+    
+website_special_page_gallery_details:
+    path:     /specialpage/gallery/details
+    defaults: { _controller: WebsiteCMSBundle:Gallery:gallerySpecialPageAjax  }
+
+website_calendar_appointment_details:
+    path: /{navIdentifier}/detailview/calendar/{eventId}/{startTimeStamp}/{endTimeStamp}
+    defaults: { _controller: InternalCalendarBundle:AppointmentDetails:details, module : calendar, applicationArea : website }
+    
+website_calendar_appointment_details2:
+    path: /{navIdentifier}/detailview/calendar/{eventId}
+    defaults: { _controller: InternalCalendarBundle:AppointmentDetails:details, module : calendar, applicationArea : website }
+    
+website_calendar_appointment_details_download_attachments:
+    path: /calendar/appointment/downloadFile
+    defaults: { _controller: InternalCalendarBundle:AppointmentDetails:downloadCalendarAttachment }
+
+website_public_page_get_form_element:
+    path:     /getformelement/{elementId}
+    defaults: { _controller: WebsiteCMSBundle:Page:getFormElement }
+    
+website_public_file_upload_check:
+    path:     /fileUploadCheck/{type}
+    defaults: { _controller: CommonFilemanagerBundle:FileUpload:fileUploadCheck }
+    
+website_public_save_form_inquiry:
+    path:     /forminquiry/save
+    defaults: { _controller: WebsiteCMSBundle:FrontendView:saveFormInquiry }
+
+website_calendar_list:
+    path : /events
+    defaults: { _controller: WebsiteCMSBundle:Calendar:calendarSpecialPage }
+    
+website_calendar_getevents:
+    path : /events/getevents
+    defaults: { _controller: WebsiteCMSBundle:Calendar:getEvents }
+    
+website_additional_navigation_list:
+    path:     /navigation/additionalmenu
+    defaults: { _controller: WebsiteCMSBundle:Website:showAdditionalMenu } 
+
+website_appointment_details_ajax:
+    path: /events/appointment/detailsAjax/{eventId}/{startTimeStamp}/{endTimeStamp}
+    defaults: { _controller: InternalCalendarBundle:AppointmentDetails:getEventData } 
+website_change_cmsjson_path:
+    path:     /changeJsonpath/1
+    defaults: { _controller: WebsiteCMSBundle:Website:changeUrlJsonData }    
+website_public_page_get_sponsor_data: 
+    path:     /getSponsorData/{elementId}/{pageId}
+    defaults: { _controller: WebsiteCMSBundle:Website:getSponsorData }   
+   
+contact_application_save:
+    path:     /contactapplicationreg/save
+    defaults: { _controller: CommonUtilityBundle:ContactApplication:contactApplicationSave } 
+contact_table_initial_data:
+    path:     /contacttable/initialdata/{elementId}
+    defaults: { _controller: WebsiteCMSBundle:ContactTable:getTableInitialData }
+website_list_contacts:
+    path:  /contacttable/listcontacts/{contactType}
+    defaults: { _controller:  WebsiteCMSBundle:ContactTable:listcontact }
+website_download_contact_files:
+    path:     /contacttable/downloadFiles/{module}/{source}/{name}/{clubId}
+    defaults: { _controller: WebsiteCMSBundle:Website:downloadFiles }
+
+website_subscriptionform_view:
+    path:     /subscriptionform/view/{elementId}
+    defaults: { _controller: WebsiteCMSBundle:Newsletter:subscriptionForm}
+website_subscriptionform_save:
+    path:     /subscriptionform/save
+    defaults: { _controller: WebsiteCMSBundle:Newsletter:saveSubscriptionForm}
+website_public_page_newsletter_activation_link:
+    path:     /subscription/activation/{code}
+    defaults: { _controller: WebsiteCMSBundle:Newsletter:activateSubscription}
+website_public_page_newsletter_subscribeform:
+    path:     /subscribe/newsletter
+    defaults: { _controller: WebsiteCMSBundle:Newsletter:subscribe}
+website_public_page_newsletter_subscribeform_save:
+    path:     /subscribe/newsletter/save
+    defaults: { _controller: WebsiteCMSBundle:Newsletter:saveSubscriptionForm}
+website_cms_newsletter_archive_data:
+    path:     /newsletterarchive/initialdata/{elementId}
+    defaults: { _controller: WebsiteCMSBundle:NewsletterArchive:getTableInitialData }
+newsletterarchive_list:
+    path:  /newsletterarchive/listnewsletter
+    defaults: { _controller:  WebsiteCMSBundle:NewsletterArchive:listnewsletter }
+website_public_page_newsletter_archive_preview:
+    path:     /archive/newsletterpreview/{newsletterid}
+    defaults: { _controller: WebsiteCMSBundle:NewsletterArchive:newsletterPreview}
+    
+create_custom_image:   
+    path: /public/image/{width}/{height}/{text}
+    defaults: { _controller: ClubadminCommunicationBundle:Preview:creatImage}
+website_cms_ogtag_update:
+    path: /cms/websitesettings/ogtagupdate
+    defaults: { _controller: WebsiteCMSBundle:Website:updateOgTag, module: cms }
+    
+portrait_element_contact_details:   
+    path: /portraitelement/getContactdetails
+    defaults: { _controller: WebsiteCMSBundle:PortraitElement:getPortraitContactDetails }

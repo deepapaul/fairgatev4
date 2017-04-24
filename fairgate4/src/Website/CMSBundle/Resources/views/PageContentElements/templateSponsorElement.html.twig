@@ -1,0 +1,114 @@
+{% if sponsorAds['adDetails']|length > 0 %}
+
+    {% if sponsorAds['displayType'] != 'fader' %}
+        {% if sponsorAds['displayType'] == 'vertical' %}
+            <div class="fg-sponsor-ads-widget fg-sponsor-ads-vertical">
+            {% else %}
+                <div  class="fg-sponsor-ads-widget fg-sponsor-ads-horizontal {{sponsorAds['horizontalWidth']}}">       
+                {% endif %}  
+                {% for adDetails in sponsorAds['adDetails'] %}
+                    {% if(adDetails['isDefault'] == 1) %}
+                        {% if(adDetails['contactDetails']['Iscompany'] == 1) %}                    
+                            {% if(adDetails['contactDetails']['companyLogo'] is empty) %}
+                                <div class="fg-sponsor-block"> 
+                                    {% if (adDetails['contactDetails']['website']) %}
+                                        <a href="{{ adDetails['contactDetails']['website'] }}" class="fg-ad-wrap" target="_blank">  
+                                        {% endif %} 
+                                        <label class="fg-placeholder" data-toggle="tooltip" title="{{ adDetails['contactDetails']['contactname'] }}">{{ adDetails['contactDetails']['contactname'] }}</label>
+                                        {% if (adDetails['contactDetails']['website']) %}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <div class="fg-sponsor-block">  
+                                    {% if (adDetails['contactDetails']['website']) %}
+                                        <a href="{{ adDetails['contactDetails']['website'] }}" class="fg-ad-wrap" target="_blank">  
+                                        {% endif %} 
+                                        <img class="hide faderImg faderImgLogo"  data-src="{{ adDetails['contactDetails']['companyLogo'] }}"  alt="" data-toggle="tooltip" title="{{ adDetails['contactDetails']['contactname'] }}"/>
+                                        {% if (adDetails['contactDetails']['website']) %}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% endif %} 
+                        {% else %}
+                            <div class="fg-sponsor-block">   
+                                {% if (adDetails['contactDetails']['website']) %}
+                                    <a href="{{ adDetails['contactDetails']['website'] }}" class="fg-ad-wrap" target="_blank">  
+                                    {% endif %} 
+                                    <label class="fg-placeholder" data-toggle="tooltip" title="{{ adDetails['contactDetails']['lastname'] }}">{{ adDetails['contactDetails']['contactname'] }}</label>
+                                    {% if (adDetails['contactDetails']['website']) %}
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% endif %}                
+
+
+                    {% else %}
+                        <div class="fg-sponsor-block">
+                            {% if (adDetails['url'] is not empty) %}
+                                <a href="{{ (adDetails['url'] is not empty) ? adDetails['url'] }}" class="fg-ad-wrap" target="_blank" >
+                                {% endif %} 
+                                <img class="hide faderImg faderImgAd" data-src="{{adDetails['image']}}" data-toggle="tooltip" title="{{ adDetails['contactDetails']['lastname'] }}">
+                                {% if (adDetails['url'] is not empty) %}
+                                </a>
+                            {% endif %}   
+                        </div>
+
+                    {% endif %}      
+                {% endfor %}
+                {% if sponsorAds['displayType'] == 'vertical' %}
+                </div>
+            {% else %}
+            </div>
+        {% endif %}  
+    {% else %}
+        {# slider begins#}
+        <div id="slider_{{sponsorAds['elementId']}}" class="slideshow fg-sponsor-ads-widget fg-fader fg-visible-hidden" interval = "{{sponsorAds['faderInterval']}}">
+            {% for adDetails in sponsorAds['adDetails'] %}
+                {% if(adDetails['isDefault'] == 1) %}
+                    {% if(adDetails['contactDetails']['Iscompany'] == 1) %}                    
+                        {% if(adDetails['contactDetails']['companyLogo'] is empty) %}
+                            <div class="slider">
+                                {% if (adDetails['contactDetails']['website']) %}
+                                    <a href="{{ adDetails['contactDetails']['website'] }}" class="fg-ad-wrap" target="_blank">{% endif %} 
+                                        <label class="fg-placeholder slide" data-toggle="tooltip" title="{{ adDetails['contactDetails']['contactname'] }}">{{ adDetails['contactDetails']['contactname'] }}</label>
+                                        {% if (adDetails['contactDetails']['website']) %} </a>{% endif %}
+                                </div>
+                            {% else %}
+                                <div class="slider"> 
+                                    {% if (adDetails['contactDetails']['website']) %}
+                                        <a href="{{ adDetails['contactDetails']['website'] }}" class="fg-ad-wrap" target="_blank">{% endif %} 
+                                            <img class="faderImg faderImgLogo slide"  data-src="{{ adDetails['contactDetails']['companyLogo'] }}"  alt="" data-toggle="tooltip" title="{{ adDetails['contactDetails']['contactname'] }}"/>
+                                            {% if (adDetails['contactDetails']['website']) %} </a>{% endif %}
+                                    </div>
+                                {% endif %} 
+                            {% else %}
+                                <div class="slider"> 
+                                    {% if (adDetails['contactDetails']['website']) %}
+                                        <a href="{{ adDetails['contactDetails']['website'] }}" class="fg-ad-wrap" target="_blank">{% endif %} 
+                                            <label class="fg-placeholder slide" data-toggle="tooltip" title="{{ adDetails['contactDetails']['lastname'] }}">{{ adDetails['contactDetails']['contactname'] }}</label>
+                                            {% if (adDetails['contactDetails']['website']) %} </a>{% endif %}
+                                    </div>
+                                {% endif %}                
+                            {% else %}
+                                <div class="slider">
+                                    {% if (adDetails['url'] is not empty) %}
+                                        <a href="{{ (adDetails['url'] is not empty) ? adDetails['url'] }}" class="fg-ad-wrap" target="_blank" >
+                                        {% endif %}  
+                                        <img class="faderImg faderImgAd slide" data-src="{{adDetails['image']}}" data-toggle="tooltip" title="{{ adDetails['contactDetails']['lastname'] }}"> 
+                                        {% if (adDetails['url'] is not empty) %}
+                                        </a>
+                                    {% endif %}  
+                                </div> 
+                            {% endif %} 
+              {% endfor %}
+           </div>
+               {# slider ends#}
+        {% endif%}
+    {% else %}
+        {% if sponsorAds['view'] is defined %}
+        <div> 
+            {{ 'NO_SPONSOR_ASSIGNED'|trans }}
+        </div>
+       {% endif%}  
+  {% endif%}

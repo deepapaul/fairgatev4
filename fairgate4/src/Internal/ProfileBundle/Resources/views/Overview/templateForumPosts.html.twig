@@ -1,0 +1,25 @@
+<script type="text/template" id="overviewForumsBox">
+    <ul>
+        <% _.each(settings.forums,function(entry,key){  %>   
+            <li>
+                <span class="fg-forum-blk">
+                    <a href="<%=entry.topicLink%>">
+                        <% if(entry.isUnread == "1") { %><strong><%= entry.title %></strong><% } else { %><%= entry.title %><% } %></a>
+                    <% if(!settings.role) { %>
+                        <a href="<%=entry.forumLink%>">
+                            <span class="fg-note-block"><%= entry.roleTitle %></span>
+                        </a>
+                    <% } %>                       
+                </span>
+                <div class="fg-doc-right-blk">
+                    <a href="<%=entry.topicPostLink%>" class="fg-birthname"><%= entry.updatedAt %></a> by 
+                    <% if(entry.contactLink == "") { %>
+                        <%= entry.forumCreatedby %>
+                    <% } else { %>
+                        <a href="<%=entry.contactLink%>" class="fg-birthname"><%= entry.forumCreatedby %></a>
+                    <% } %>
+                </div>
+            </li>
+        <% });%>                
+    </ul>
+</script>

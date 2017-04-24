@@ -1,0 +1,59 @@
+<table data-ajax-path="{{path('log_contact_datas',{'contact':contactData['id'],'fed_contact_id':contactData['fed_contact_id'],'subfed_contact_id':contactData['subfed_contact_id']})}}" class= "table 
+              table-bordered 
+               table-hover
+               table-condensed
+               dataTable-scroll-y
+               dataTable-rows
+               dataTable-scroll-x
+               dataTables_scrollBody
+               lastcolumn_sort dataTable-initialSort dataTable-log" xWidth="100" yWidth="300" data-id={{typeId}} data-tab={{activeTab}} data-table-name="dataTables" id="log_display_{{contactData['id']}}_{{typeId}}" data-sort="0#desc">
+    <thead>
+        {% if (activeTab=='data')%}
+        <tr>
+            <th>{%trans%}LOG_DATE{%endtrans%}</th>
+            <th>{%trans%}LOG_CONTACT_FIELDS{%endtrans%}</th>
+            <th>{%trans%}LOG_BEFORE{%endtrans%}</th>
+            <th>{%trans%}LOG_AFTER{%endtrans%}</th>
+            <th>{%trans%}LOG_EDITED_BY{%endtrans%}</th>
+        </tr>
+        {% elseif(activeTab == 'connections' or activeTab =='assignments' or activeTab == 'system') %}
+         <tr>
+            <th>{{ 'LOG_DATE'|trans }}</th>
+            {% set columnHead2 = (activeTab == 'connections') ? 'LOG_CONNECTION' : ((activeTab == 'assignments') ? 'LOG_CATEGORY' : 'LOG_TYPE') %}
+            <th>{{ columnHead2|trans }}</th>
+            {% set columnHead3 = (activeTab == 'connections') ? 'LOG_CONTACT' : ((activeTab == 'assignments') ? 'LOG_ASSIGNMENT' : 'LOG_VALUE/ACTION') %}
+            <th>{{ columnHead3|trans }}</th>
+            <th>{{ 'LOG_EDITED_BY'|trans }}</th>
+        </tr>
+         {% elseif(activeTab == 'notes')%}
+         <tr>
+            <th>{%trans%}LOG_DATE{%endtrans%}</th>
+            <th>{%trans%}LOG_ACTION{%endtrans%}</th>
+            <th>{%trans%}LOG_BEFORE{%endtrans%}</th>
+            <th>{%trans%}LOG_AFTER{%endtrans%}</th>
+            <th>{%trans%}LOG_EDITED_BY{%endtrans%}</th>
+         </tr>
+         {% elseif(activeTab == 'communication')%}
+         <tr>
+             <th>{{'LOG_DATE'|trans}}</th>
+            <th>{{'LOG_TYPE'|trans}}</th>
+            <th>{{'LOG_SENDING'|trans}}</th>
+            <th>{{'LOG_EDITED_BY'|trans}}</th>
+         </tr>
+        {% else %}
+            <tr>
+                <th>{%trans%}LOG_FROM{%endtrans%}</th>
+                <th>{%trans%}LOG_TO{%endtrans%}</th>
+                <th>{%if(activeTab == 'fed_membership')%}{%trans%}LOG_FEDMEMBERSHIP{%endtrans%}{% else %}{%trans%}LOG_MEMBERSHIP{%endtrans%}{% endif %}</th>
+                <th>{%trans%}LOG_EDITED_BY{%endtrans%}</th>
+                {% if ((isMembershipEditable and activeTab == 'membership') or (activeTab == 'fed_membership' and fedmembershipEdit)) %}
+                    <th class="no-sort"></th>
+                {% endif %}
+            </tr>
+        {% endif %}
+        
+    </thead>
+    
+</table>
+           
+    

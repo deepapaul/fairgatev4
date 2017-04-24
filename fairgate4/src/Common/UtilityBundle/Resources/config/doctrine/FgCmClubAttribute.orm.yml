@@ -1,0 +1,97 @@
+Common\UtilityBundle\Entity\FgCmClubAttribute:
+    repositoryClass: Common\UtilityBundle\Repository\FgCmClubAttributeRepository
+    type: entity
+    table: fg_cm_club_attribute
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        isSetPrivacyItself:
+            type: boolean
+            nullable: true
+            column: is_set_privacy_itself
+        privacyContact:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: privacy_contact
+        isConfirmContact:
+            type: boolean
+            nullable: true
+            column: is_confirm_contact
+        isMandatory:
+            type: boolean
+            nullable: true
+            column: is_mandatory
+        isEdited:
+            type: boolean
+            nullable: true
+            column: is_edited
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: sort_order
+        isRequiredType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: is_required_type
+        profileStatus:
+            type: boolean
+            nullable: true
+            column: profile_status
+        isConfirmTeamadmin:
+            type: boolean
+            nullable: true
+            column: is_confirm_teamadmin
+        isRequiredFedmemberSubfed:
+            type: boolean
+            nullable: true
+            column: is_required_fedmember_subfed
+        isRequiredFedmemberClub:
+            type: boolean
+            nullable: true
+            column: is_required_fedmember_club
+        availabilityContact:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: availability_contact
+        availabilityGroupadmin:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: availability_groupadmin
+        isActive:
+            type: boolean
+            nullable: true
+            column: is_active
+    manyToOne:
+        attribute:
+            targetEntity: FgCmAttribute
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                attribute_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

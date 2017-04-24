@@ -1,0 +1,36 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel-primary panel-bg"> 
+            <div class="panel-heading fg-theme-head paneldisplay">
+                <button class="btn tableaction fg-file-doc-button fgContactdrop" data-toggle="dropdown" data-type="active" data-menu-type="single"><i class="fa fa-bars fa-2x"></i></button>
+                <ul class="dropdown-menu pull-left fg-doc-dropdown" id="fgdropmenu" data-document-id="{{ documentId }}">
+                </ul> 
+                <h3 class="panel-title pull-left fg-doc-pannel-text">{{ 'DOCUMENT_PREVIOUS_VERSIONS'|trans }}</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="fg-common-top">
+                <table data-ajax-path="{{ path('document_version_list', {'documentId': documentId}) }}"
+                       class="table dataTable-version-list
+                       table-bordered
+                       table-hover
+                       table-condensed
+                       dataTable-scroll-y
+                       dataTable-ajax
+                       dataTable-rows
+                       dataTable-scroll-x
+                       dataTables_scrollBody" xWidth="100" yHeight="300" data-table-name="dataTables" id="document-version-list" dataTable-popover="true" dataTable-hover="true">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" class="dataTable_checkall fg-dev-avoidicon-behaviour dFExclude" id="check_all" name="check_all"><i class="chk_cnt"></i></th>
+                            <th>{{ 'DOCUMENT_VERSION'|trans }}</th>
+                            <th>{{ 'DOCUMENT_SIZE'|trans }}</th>
+                            <th>{{ 'DOCUMENT_UPLOADED_ON'|trans }}</th>
+                            <th>{{ 'DOCUMENT_UPLOADED_BY'|trans }}</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,85 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">
+        {% if action == 'discard' %}
+            {{ selActionType=='selected'? 'DISCARD_SELECTED_APPLICATION_TITLE'|trans : 'DISCARD_ALL_APPLICATION_TITLE'|trans }}
+        {% else %}
+            {{ selActionType=='selected'? 'CONFIRM_SELECTED_APPLICATION_TITLE'|trans:'CONFIRM_ALL_APPLICATION_TITLE'|trans }}
+        {% endif %}
+    </h4>
+</div>
+
+<div class="modal-body fg-modal-text row">
+    <div class="col-md-12">
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <form action="{{ path("do_confirm_or_discard") }}" class="form-horizontal form-row-sepe" id="confirmdiscard">
+                    <div class="clearfix">
+                        <p style='padding-bottom: 2%'>
+                            {% if action == 'discard' %}
+                                {{ selActionType=='selected'? 'DISCARD_SELECTED_APPLICATION'|trans:'DISCARD_ALL_APPLICATION'|trans }}
+                            {% else %}
+                                {{ selActionType=='selected'? 'CONFIRM_SELECTED_APPLICATION'|trans:'CONFIRM_ALL_APPLICATION'|trans }}
+                            {% endif %}
+                        </p>
+                    </div>
+                <input type="hidden" name="selectedId" id="selectedId" value="" />
+                <!--input type="hidden" name="action" id="action" value="{{ action }}" /-->
+            </form>
+            <!-- END FORM-->
+        </div>
+    </div>
+</div>
+{% include 'clubadmin/savebuttonpopup.html.twig' with {'save_button_val': ((action == 'confirm') ? 'BUTTON_CONFIRM'|trans : 'BUTTON_DISCARD'|trans)}  %}
+
+<script type="text/javascript">
+     
+    $(document).off('click', 'button[data-function=save], button[data-function=cancel]');
+    $(document).on('click', 'button[data-function=save], button[data-function=cancel]', function () {
+        var buttonId = this.id;
+        if (buttonId == 'save') {
+            confirmOrDiscardChanges();
+        }
+    });
+    function confirmOrDiscardChanges() {
+        var selConfirmIds = [];
+        var selectionClass = ('{{ selActionType }}' == 'selected') ? 'dataClass:checked' : 'dataClass';
+        $("input." + selectionClass).each(function () {
+            var confirmId = $(this).attr('id');
+            if ($.inArray(confirmId, selConfirmIds) == -1) {
+                selConfirmIds.push(confirmId);
+            }
+        });
+        data = {}
+        data.selectedId = JSON.stringify(selConfirmIds);       
+        data.action = '{{ action }}'; 
+        data.page = '{{ page }}'; 
+        if ($('#contact_assign_membership_list').length > 0) {
+            data.membership = $('#contact_assign_membership_list').val();
+        }
+        $('#popup').modal('hide');
+        FgXmlHttp.post('{{ path("update_applications") }}', data, '', function(data){FgFormTools.handleUniform();  confirmOrDiscardCallback(data.count, data.page)});
+    }
+    
+    function confirmOrDiscardCallback(updatedCount, page)
+    {
+        FgPageTitlebar.setMoreTab();
+        var actionMenuText = {'active' : {'none': actionMenuNoneSelectedText, 'single': actionMenuSingleSelectedText, 'multiple': actionMenuMultipleSelectedText}};
+        FgSidebar.dynamicMenus.push({actionmenu: actionMenuText});
+        Breadcrumb.load([]);
+        var navigationBadgeId = (page == 'mergeapplication') ? '#fg-dev-topnav-confirmmergeapplications-count' : '#fg-dev-topnav-confirmfedmemberships-count';
+        var tabCount = $(navigationBadgeId).html();
+        tabCount = ((tabCount - updatedCount) < 0) ? 0 : (tabCount - updatedCount);
+        $('#fg_tab_0 a span.badge').html(tabCount);
+        var navBadgeCount = $(navigationBadgeId).html();
+        navBadgeCount = ((navBadgeCount - updatedCount) < 0) ? 0 : (navBadgeCount - updatedCount);
+        $(navigationBadgeId).html(navBadgeCount); 
+        var remFedApplnTopNavCount = (page == 'mergeapplication') ? $('#fg-dev-topnav-confirmfedmemberships-count').html() : $('#fg-dev-topnav-confirmmergeapplications-count').html();
+        var clubAssignmentTopNavCount = $('#fg-dev-topnav-confirmclubassignment-count').html();
+        var totalConfirmCount = (parseInt(navBadgeCount) + parseInt(remFedApplnTopNavCount) + parseInt(clubAssignmentTopNavCount));
+        if (totalConfirmCount == 0) {
+            $('.fg-dev-application-warning').hide();
+        }
+    }
+
+</script>

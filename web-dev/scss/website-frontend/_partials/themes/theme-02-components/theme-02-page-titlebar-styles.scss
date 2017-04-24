@@ -1,0 +1,239 @@
+/* --------------------------------------------------------------------
+* Page titlebar related styles
+* 01 - Pagetitlebar common styles
+* 02 - Page title block
+* 03 - button/icon styles
+* 04 - breadcrumbs styles
+* 05 - 
+* 06 - 
+-----------------------------------------------------------------------*/
+
+
+/* -------------------------------------------------------------------------
+* 01 - Pagetitlebar common styles
+-----------------------------------------------------------------------------*/
+.fg-web-page-title-bar{
+	position      : relative;
+	padding       : 40px 0 15px 0;		
+	margin-bottom : 20px;	
+	.container{
+		@include bpMax('991px') {		
+				
+			width : auto;
+		}
+
+	}
+	.fg-web-titlebar-left-col{
+		outline        : none;
+		position       : relative;
+	}
+	.fg-web-titlebar-right-col{	
+		a{
+			&:hover{
+				text-decoration: none;
+			}
+		}
+	}
+	.fg-titlebar-block{
+		display        : inline-block;
+		vertical-align : middle;
+		margin-right   : 10px;
+
+	}
+
+	.fg-web-page-title{
+		font-size      : 50px;
+		margin         : 0;
+		text-shadow    : 0 5px 5px #555;
+		line-height	   : .9;
+		@include break-hyphens;
+
+	}
+	&:not(.has-breadcrumbs){
+		min-height : 75px;
+	}
+	&.has-close-btn{
+
+		.fg-web-titlebar-left-col{
+			width          : calc(100% - 185px);	
+			display        : inline-block;
+			float          : none !important;
+			vertical-align : top;
+			&.close-btn-only{
+				width : calc(100% - 65px);	
+				+.fg-web-titlebar-right-col{
+					.fg-page-close{
+						margin  : 0;				
+					}
+					+.fg-web-title-filter-wrapper{
+						display : none;
+					}
+					
+				}
+			}
+			@include bpMax('767px') {
+				width : calc(100% - 60px);	
+			}
+
+			
+		}
+		.fg-web-titlebar-right-col{
+		    display        : inline-block;
+		    float          : none !important;
+		    vertical-align : middle;
+		    line-height    : 1.0;
+		}
+	}
+	input[type="text"]{		
+		padding      : 6px 10px;
+	}
+	input[type="text"],.bootstrap-select{
+		height       : 50px;
+		outline      : none;
+		border       : 1px solid;
+		width        : 100% !important;
+	}
+	.fg-page-search{
+		margin-right : 0;
+		width        : 160px;
+	}
+	.fg-page-timeperiod{
+		width        : 160px;
+	}
+	.fg-page-timeperiod-input{
+
+	}
+	.bootstrap-select .selectpicker{
+		height       : 34px;
+		border       : 0;
+		font-size    : 15px;
+		@include box-shadow(none);
+	}
+	.bootstrap-select .dropdown-menu li a{
+		outline      : none;
+	}
+	.bootstrap-select .dropdown-menu li a span.text{
+		margin-right : 5px;
+	}
+	.fg-web-title-filter-wrapper{
+
+		>.fg-titlebar-block{
+			width : 220px;
+		}
+		@include bpMax('767px') {
+
+			float : none !important;
+			width : 100%;
+			clear : both;
+			>.fg-titlebar-block{
+				width  : 49%;
+				margin : 0;
+				&.fg-page-search{
+					width : 100%;
+				}
+			}
+		}
+		@include bpMax('375px') {
+
+			>.fg-titlebar-block{
+				width  :100%;
+				margin : 5px 0 5px 0;
+			}
+		}
+		.bootstrap-select{
+			 .dropdown-menu{
+			 	padding : 0;
+			 	margin  : 0;
+			 }
+			.selectpicker{
+
+				height     : 100%;
+				max-height : 250px !important;
+			}
+		} 
+	}
+}
+/* -------------------------------------------------------------------------
+* 02 - Page title block
+-----------------------------------------------------------------------------*/
+.fg-web-page-title-bar{
+	.fg-web-page-title-block{
+
+	}
+}
+/* -------------------------------------------------------------------------
+* 03 - button/icon styles
+-----------------------------------------------------------------------------*/
+.fg-web-page-title-bar{
+
+	[class^='fg-icon'], div[class*=' fg-icon'] {
+		cursor: pointer;
+	}
+	.fg-icon-bg{
+		.fg-icon{			
+			
+    		display: block;
+			font-size: 56px;
+
+		}
+		&.fg-page-prev,
+		&.fg-page-next{
+			display: none;
+		}
+		&.fg-page-close{
+
+			.fg-icon{	
+				&:hover{
+				}
+			}
+		}
+
+	}
+}
+
+/* -------------------------------------------------------------------------
+* 04 - breadcrumbs styles
+-----------------------------------------------------------------------------*/
+.fg-web-page-title-bar.has-breadcrumbs{
+	.fg-web-titlebar-left-col.has-breadcrumb{
+		@include bpMin('768px') {
+			max-width: calc(100% - 180px);
+		}
+		@include bpMax('767px') {
+			max-width: calc(100% - 60px);
+		}
+		.fg-breadcrumb-block{
+			  @include bpMax('767px') {
+					position: static;
+			  }
+			.fg-breadcrumbs{
+				list-style-type: none;
+				padding: 0;
+				margin: 0;
+				font-size: 15px;
+				li{
+					display: inline-block;
+					a{
+						text-decoration: none;
+					}
+					&:after{
+						content:"\f105";
+						font-family:  FontAwesome !important;
+						margin: 0 3px 0 8px;
+						display: inline-block;
+					}
+					&:last-child{
+
+						&:after{
+							display: none;
+						}
+					}
+				}
+			}
+		}
+		   
+	}
+	.fg-web-titlebar-right-col{
+		 line-height: 55px;
+	}
+}

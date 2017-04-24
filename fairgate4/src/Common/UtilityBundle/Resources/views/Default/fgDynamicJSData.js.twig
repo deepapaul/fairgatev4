@@ -1,0 +1,249 @@
+var fgLocalStorageNames = {
+    'contact' : 
+        { 
+            'active' : 
+            {
+                "filterStorage": "contactfilter-contact{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "sidebarActiveMenu" : "activeContactMenu{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "sidebarActiveSubMenu" : "activeContactSubMenu{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "ActiveMenuDetVar" : "contact_active_menu_det{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "functionshowVar"  :"showfunction_{{fgclub.get('id')}}-{{fgclub.get('contactId')}}"
+            }
+        }, 
+    'club' : 
+        { 
+            'active' : 
+            {
+                "filterStorage": "clubfilter{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "sidebarActiveMenu" : "activeMenu{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "sidebarActiveSubMenu" : "activeSubMenu{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "ActiveMenuDetVar" : "club_active_menu_det{{fgclub.get('id')}}-{{fgclub.get('contactId')}}"
+            }, 
+            'id' : {{fgclub.get('id')}}
+        }, 
+    'sponsor' : 
+        { 
+            'active' : 
+            {
+                "filterStorage": "sponsorfilter-sponsor{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "sidebarActiveMenu" : "activeSponsorMenu{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "sidebarActiveSubMenu" : "activeSponsorSubMenu{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "ActiveMenuDetVar" : "sponsor_active_menu_det{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "listDetails" : "sponsorlist{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "serviceTab" : "serviceselectedTab_{{fgclub.get('id')}}_{{fgclub.get('contactId')}}",
+            }
+        },         
+    'document' : 
+        {        
+            'club' : 
+            {
+                "filterStorage": "documentfilter_CLUB-{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "sidebarActiveMenu" : "activeMenu-CLUB-{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "sidebarActiveSubMenu" : "activeSubMenu-CLUB-{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "ActiveMenuDetVar" : "document_active_menu_det_CLUB-{{fgclub.get('id')}}-{{fgclub.get('contactId')}}"
+            },
+            'team' : 
+            {
+                "filterStorage": "documentfilter_TEAM-{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "sidebarActiveMenu" : "activeMenu-TEAM-{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "sidebarActiveSubMenu" : "activeSubMenu-TEAM-{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "ActiveMenuDetVar" : "document_active_menu_det_TEAM-{{fgclub.get('id')}}-{{fgclub.get('contactId')}}"
+            },
+            'workgroup' : 
+            {
+                "filterStorage": "documentfilter_WORKGROUP-{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "sidebarActiveMenu" : "activeMenu-WORKGROUP-{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "sidebarActiveSubMenu" : "activeSubMenu-WORKGROUP-{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "ActiveMenuDetVar" : "document_active_menu_det_WORKGROUP-{{fgclub.get('id')}}-{{fgclub.get('contactId')}}"
+            },
+            'contact' : 
+            {
+                "filterStorage": "documentfilter_CONTACT-{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "sidebarActiveMenu" : "activeMenu-CONTACT-{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "sidebarActiveSubMenu" : "activeSubMenu-CONTACT-{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+                "ActiveMenuDetVar" : "document_active_menu_det_CONTACT-{{fgclub.get('id')}}-{{fgclub.get('contactId')}}"
+            }
+        },    
+};
+
+var Sprint ={'currentSprint':"{{fgclub.get('currentSprint')}}"};
+
+var jstranslations = {
+    'VALIDATION_THIS_FIELD_REQUIRED' : "{{ 'VALIDATION_THIS_FIELD_REQUIRED'|trans }}",    
+    'ACTION_NOT_ALLOWED' : "{{ 'ACTION_NOT_ALLOWED'|trans }}",  
+    'invalidFormat':"{{'FG_INVALID_FORMAT'|trans}}",
+    'validateMaxLength' : "{{ 'VALIDATE_MAXLENGTH_MSG'|trans }}",
+    'chars':"{{ 'ARTICLE_CHARS'|trans }}"
+};
+var datatabletranslations = {
+    'row' : "{{ 'ROW'|trans }}",
+    'data_Search' : "{{ 'DATA_SEARCH'|trans }}",
+    'data_showing' : "{{ 'DATA_SHOW'|trans }}",
+    'data_to' : "{{ 'DATA_TO'|trans }}",
+    'data_of' : "{{ 'DATA_OF'|trans }}",
+    'data_entries' : "{{ 'DATA_ENTRIES'|trans }}",
+    'contact_name' : "{{ 'CONTACT_NAME'|trans }}",
+    'archived_On' : "{{ 'CONTACT_ARCHIVED'|trans }}",
+    'Function' : "{{ 'CONTACT_FUNCTION'|trans }}",
+    'club_name' : "{{ 'CLUB_NAME'|trans }}",
+    'Resigned_on' : "{{ 'RESIGNED_ON'|trans }}",
+    'Log_date_filter_err_msg1' : "{{ 'LOG_DATE_FILTER_ERR_MSG1'|trans }}",
+    'Log_date_filter_err_msg2' : "{{ 'LOG_DATE_FILTER_ERR_MSG2'|trans }}",
+    'Log_date_filter_err_msg3' : "{{ 'LOG_DATE_FILTER_ERR_MSG3'|trans }}",
+    'Log_date_filter_err_msg4' : "{{ 'LOG_DATE_FILTER_ERR_MSG4'|trans }}",
+    'no_matching_records' : "{{ 'LOADING'|trans }}",
+    'no_record' : "{{ 'NO_RECORD'|trans }}",
+    'filtered_from' : "{{ 'FILTERED_FROM'|trans }}",
+    'total_entries' : "{{ 'TOTAL_ENTRIES'|trans }}",
+    'Joining_Date' : "{{ 'JOINING_DATE'|trans }}",
+    'Leaving_Date' : "{{ 'LEAVING_DATE'|trans }}",
+    'noneSelectedText' : "{{ 'NONE'|trans }}",
+    'countSelectedText' : "{{ 'COUNT_SELECTED_TEXT'|trans }}",
+    'loadingVar' : "{{ 'COMMON_LOADING_VAR'|trans }}",
+    'Reg' : "{{ 'CL_INVOICE'|trans }}",
+    'Korr' : "{{ 'CL_CORRESPONDENCE'|trans }}",
+    'countSelectedMembership' : "{0} {{ 'CF_SELECTED_MEMBERSHIP'|trans }}",
+    'countSelectedFedMembership' : "{0} {{fgtwig.getTerminolgyName('Fed membership',plural)}}",
+    'VALIDATION_THIS_FIELD_REQUIRED' : "{{ 'VALIDATION_THIS_FIELD_REQUIRED'|trans }}",
+    'More' : "{{ 'CM_MORE'|trans }}",
+    'Select' : "{{ 'SELECT_DROPDOWN'|trans }}",
+    'localeName' : '{{fgclub.get('default_system_lang')}}',       
+    'dateRangeAnd' : "{{ 'AND'|trans }}",
+    'dirtyformAlert' : "{{ 'DIRTYFORM_ALERT_DID_U_FORGET_TO_SAVE_FIRST_FORM'|trans }}",
+    'dirtyformConfirm' : "{{ 'DIRTY_FORM_CONFIRM'|trans }}",
+    'Archive_contact_old_leavingdate' : "{{ 'ARCHIVE_CONTACT_INPUT_SET_LEAVING_DATE_OLD'|trans }}",
+    'Archive_contact_future_leavingdate' : "{{ 'ARCHIVE_CONTACT_INPUT_SET_LEAVING_DATE_FUTURE'|trans }}",
+    'EMAIL_VALIDATION' : "{{ 'EMAIL_VALIDATION'|trans }}",
+    'invalidurl' : "{{ 'INVALID_URL'|trans }}",
+    'documentname' : "{{ 'DC_DOCUMENT_NAME'|trans }}",
+    'size' : "{{ 'DC_DOCUMENT_SIZE'|trans }}",
+    'uploaded' : "{{ 'DC_DOCUMENT_UPLOADED'|trans }}",
+    'last_updated' : "{{ 'DC_DOCUMENT_LAST_UPDATE'|trans }}",
+    'author' : "{{ 'DC_DOCUMENT_AUTHOR'|trans }}",
+    'description' : "{{ 'DC_DOCUMENT_DESCRIPTION'|trans }}",
+    'visibletocontact' : "{{ 'DC_DOCUMENT_VISIBLE_TO_CONTACT'|trans }}",
+    'depositedwith' : "{{ 'DC_DOCUMENT_DEPOSITED_WITH'|trans }}",
+    'visibletoworkgroup' : "{{ 'DC_DOCUMENT_VISIBLE_TO_WORKGROUP'|trans }}",
+    'visibleto' : "{{ 'DC_DOCUMENT_VISIBLE_TO'|trans }}",
+    'mb' : "{{ 'DC_MB'|trans }}",
+    'contacts' : "{{ 'contacts'|trans }}",
+    'workgroups' : "{{ 'WORKGROUPS'|trans }}",
+    'On' : "{{ 'ON'|trans }}",
+    'Off' : "{{ 'OFF'|trans }}",
+    'other_contact' : "{{ 'CONTACTDOCUMENT_OTHER_CONTACT'|trans }}", 
+    'other_club' : "{{ 'CONTACTDOCUMENT_OTHER_CLUB'|trans ({'%club%': fgtwig.getTerminolgyName('Club', singular)}) }}",
+    'other_contacts' : "{{ 'CONTACTDOCUMENT_OTHER_CONTACTS'|trans }}", 
+    'other_clubs' : "{{ 'CONTACTDOCUMENT_OTHER_CLUBS'|trans ({'%clubs%': fgtwig.getTerminolgyName('Club', plural)}) }}",
+    'missingFedSubFedRoleAssignments' : "{{ 'MISSING_REQ_FED_SUBFED_ROLE_ASSIGNMENTS'|trans }}",
+    'nothingSelectedText' : "{{'NOTHING_SELECTED'|trans}}",
+    'validateMax':"{{'GN_VALIDATE_MAX_LIMIT'|trans}}",
+    'validateMin':"{{'GN_VALIDATE_MIN_LIMIT'|trans}}",
+    'All'        :"{{'SM_All'|trans}}",
+    'TeamTitle'  :"{{fgtwig.getTerminolgyName('Team', plural)}}",
+    'Payments'   :"{{'SM_PAYMENTS'|trans}}",
+    'Payment'   :"{{'SM_PAYMENT'|trans}}",
+    'custom'    :"{{'SM_CUSTOM'|trans}}",
+    'none'      :"{{'SM_NONE'|trans}}",
+    'regular'      :"{{'SM_REGULAR'|trans}}",
+    'every_months' :"{{'SM_EVERY_MONTHS'|trans({'%month%':'%month%'})}}",
+    'every_month'  :"{{'SM_EVERY_MONTH'|trans({'%month%':'%month%'})}}",
+    'INVALID_FILE_TYPE'  :"{{'CM_IMAGEDROP_INVALID_FILE_TYPE'|trans}}",
+};
+
+var dataTopNavigationSearch = {    
+    'searchPath' : {
+                        'contact' : "{{ path('menu_autocomplete_contacts') }}", 
+                        'club' : "{{ path('menu_autocomplete_clubs') }}",
+                        'document' : "{{ path('menu_autocomplete_documents') }}",
+                        'sponsor' : "{{ path('menu_autocomplete_sponsors') }}"
+                    },
+    'overviewPath' : {
+                        "club" : "{{ path('club_overview', {offset: 'OFFSET', clubId:'CLUB'}) }}",
+                        "document":{
+                                "contact" : "{{ path('document_settings_contact', {documentId: 'DOCID', offset:'OFFSET'}) }}",
+                                "club" : "{{ path('document_settings_club', {documentId: 'DOCID', offset:'OFFSET'}) }}",
+                                "team" : "{{ path('document_settings_team', {documentId: 'DOCID', offset:'OFFSET'}) }}",
+                                "workgroup" : "{{ path('document_settings_workgroup', {documentId: 'DOCID', offset:'OFFSET'}) }}"
+                                }
+                     }
+};
+{# Conditions for filter with translation #}
+FgFilterSettings = {
+    filterCondition: {
+        defaults:[{title: "{{'CM_AND'|trans}}",id: 'and'},{title: "{{'CM_OR'|trans}}",id: 'or'}],
+        date: [
+            {title: "{{'CM_IS'|trans}}",id: 'is'},
+            {title: "{{'CM_ISNOT'|trans}}",id: 'is not'},
+            {title: "{{'CM_IS_BETWEEN'|trans}}",id: 'is between',multiple: 1},
+            {title: "{{'CM_IS_NOTBETWEEN'|trans}}",id: 'is not between',multiple: 1}
+            ],
+        number: [
+            {title: "{{'CM_IS'|trans}}",id: 'is'},
+            {title: "{{'CM_ISNOT'|trans}}",id: 'is not'},
+            {title: "{{'CM_IS_BETWEEN'|trans}}",id: 'is between',multiple: 1},
+            {title: "{{'CM_IS_NOTBETWEEN'|trans}}",id: 'is not between',multiple: 1}
+        ],
+        select: [{title: "{{'CM_IS'|trans}}",id: 'is'}, {title: "{{'CM_ISNOT'|trans}}",}],
+        text: [
+            {title: "{{'CM_CONTAINS'|trans}}",id: 'contains'},
+            {title: "{{'CM_NOTCONTAINS'|trans}}",id: 'contains not'},
+            {title: "{{'CM_BEGINSWITH'|trans}}",id: 'begins with'},
+            {title: "{{'CM_NOTBEGINSWITH'|trans}}",id: 'begins not with'},
+            {title: "{{'CM_ENDWITH'|trans}}",id: 'end with'},
+            {title: "{{'CM_NOTENDWITH'|trans}}",id: 'end not with'}
+        ]
+    },
+    {# Used only in sponsor filter   #}
+    sponsorOnly:{assignments: [
+        {title: "{{'CM_HAS_ACTIVE_ASSIGNMENTS'|trans}}",id: 'has active assignments'},
+        {title: "{{'CM_HAS_NOACTIVE_ASSIGNMENTS'|trans}}",id: 'has no active assignment'},
+        {title: "{{'CM_HAS_PAST_ASSIGNMENTS'|trans}}",id: 'has past assignment'},
+        {title: "{{'CM_HAS_NOPAST_ASSIGNMENTS'|trans}}",id: 'has no past assignment'},
+        {title: "{{'SPONSOR_HAS_FUTURE_ASSIGNMENTS'|trans}}",id: 'has future assignment'},
+        {title: "{{'SPONSOR_HAS_NOFUTURE_ASSIGNMENTS'|trans}}",id: 'has no future assignment'}
+        ]},
+    FgFilterCondition : {},
+    FgSponsorCondition: {}
+}
+FgFilterSettings.FgFilterCondition = FgFilterSettings.filterCondition;
+FgFilterSettings.FgSponsorCondition = $.extend(FgFilterSettings.filterCondition, FgFilterSettings.sponsorOnly);
+
+FgLocaleSettingsData = {
+    jqueryDateFormat: "{{fgclub.get('jquerydate')}}",
+    jqueryDateTimeFormat: "{{fgclub.get('jquerydatetime')}}",
+    jqueryTimeFormat: "{{fgclub.get('jquerytime')}}",
+    momentDateFormat: "{{fgclub.get('momentdate')}}",
+    momentDateTimeFormat: "{{fgclub.get('momentdatetime')}}",
+    momentTimeFormat: "{{fgclub.get('momenttime')}}",
+    currency : '{{fgclub.get('clubCurrency')}}',
+    currencyPosition : '{{fgclub.get('clubCurrencyPosition')}}',
+    decimalMark:'{{fgclub.get('decimalmarker')}}',
+    thousendSeperator:'{{fgclub.get('thousandseperator')}}'
+}
+
+globalForbiddenfiles = '{{ forbiddenFiletypes }}';
+FgTooltipTextArray = {
+   'fa-male' : "{{'TOOLTIP_MALE'|trans({}, 'tooltip')}}",
+   'fa-home' : "{{'TOOLTIP_HOME_ICON'|trans({}, 'tooltip')}}",
+   'fa-table' : "{{'TOOLTIP_TABLE_SETTINGS'|trans({}, 'tooltip')}}",
+   'fa-cog' : "{{'TOOLTIP_SIDEBAR_SETTINGS'|trans({}, 'tooltip')}}",
+   'fg-sort': "{{'TOOLTIP_DRAG_DROP'|trans({}, 'tooltip')}}",
+   'fa-refresh': "{{'TOOLTIP_SIDEBAR_FILTER_REFRESH'|trans({}, 'tooltip')}}",
+   'fg-broken-filter':"{{'TOOLTIP_SIDEBAR_BROKEN_FILTER'|trans({}, 'tooltip')}}",
+   'fg-filter-check-icon':"{{'TOOLTIP_TABLE_FILTER'|trans({}, 'tooltip')}}",
+   'fa-arrows': "{{'TOOLTIP_DRAG_DROP'|trans({}, 'tooltip')}}",
+   'fg-fa-contact' : "{{'TOOLTIP_USERRIGHT_CONTACT'|trans({}, 'tooltip')}}",
+   'fg-fa-document' : "{{'TOOLTIP_USERRIGHT_DOCUMENT'|trans({}, 'tooltip')}}",
+   'fg-fa-communication' : "{{'TOOLTIP_USERRIGHT_COMMUNICATION'|trans({}, 'tooltip')}}",
+   'fg-fa-sign-in' : "{{'TOOLTIP_LOG_OUT'|trans({}, 'tooltip')}}",
+   'fa-calendar' : "{{'TOOLTIP_USERRIGHT_CALENDAR'|trans({}, 'tooltip')}}",
+   'fg-fa-sponsor' : "{{'TOOLTIP_USERRIGHT_SPONSOR'|trans({}, 'tooltip')}}",
+   'fg-log-filter' : "{{'TOOLTIP_LOG_FILTER'|trans({}, 'tooltip')}}",
+   'fg-col-settings' : "{{'TOOLTIP_TABLE_SETTINGS'|trans({}, 'tooltip')}}",
+   'logtableFilter' : "{{'TOOLTIP_TABLE_SETTINGS'|trans({}, 'tooltip')}}",
+   'fg-quickwindow-check' : "{{'TOOLTIP_HELP_CHECKBOX'|trans({}, 'tooltip')}}",
+   'fa-image' : "{{'TOOLTIP_USERRIGHT_GALLERY'|trans({}, 'tooltip')}}",
+   'team-lock-icon' : "{{'TEAM_LOCK_ICON_TOOLTIP'|trans}}",
+   'workgroup-lock-icon' : "{{'WORKGROUP_LOCK_ICON_TOOLTIP'|trans}}",
+   'fa-newspaper-o' : "{{'TOOLTIP_USERRIGHT_ARTICLE'|trans({}, 'tooltip')}}",   
+}

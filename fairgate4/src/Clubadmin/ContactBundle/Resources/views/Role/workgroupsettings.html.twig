@@ -1,0 +1,124 @@
+{# src/Clubadmin/ContactBundle/Resources/views/Role/workgroupsettings.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'WORKGROUPS'|trans %}
+{% block pagecontent %}
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <!-- BREADCRUMB STARTS -->
+            {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+            <!-- BREADCRUMB ENDS -->
+     <div class="fg-theme-panel">
+            <!-- BEGIN FORM-->
+            <form id="categorysettings" class="form-horizontal fg-categorysettings-frm" method="post" skipDirtyCheck onsubmit="return false;" novalidate="novalidate">
+                <!-- LANGUAGE SWITCH & TITLE STARTS -->
+               {# {% include 'clubadmin/language_swtich.html.twig' with {'clubLanguages': clubLanguages, 'title': 'WORKGROUPS'|trans, 'clubDefaultLang': clubDefaultLang} %}#}
+               <div class="row">
+                 {% set page_settings = { 'pagetitle':'true','languageswitch':'true' }  %}
+                 {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': 'WORKGROUPS'|trans, 'page_settings': page_settings,'clubLanguages': clubLanguages,'clubDefaultLang': clubDefaultLang  } %}    
+                </div>
+                 <!-- LANGUAGE SWITCH & TITLE ENDS -->
+                <div class="alert alert-danger display-hide">
+                    <button class="close" data-close="alert"></button>
+                    <span>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+                </div>
+                   <div class="row ">
+                       <div class="col-md-12">
+                        <div class="fg-settings-block dragndrop" id="sortrole"></div>
+                       </div>
+                           </div>
+                <div class="row">
+                    <div class="col-md-12 fg-common-top"><a id="addrow" href="#basic" data-toggle="modal" data-parentdiv-id="sortrole" data-add-type="role"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text">{%trans%}ADD_WORKGROUP{%endtrans%} </span></a></div>
+                </div>
+
+                <!-- ADD ROW TEMPLATES STARTS -->
+                <div id="divTemplates">
+                    {# template for adding new role #}
+                    {% include 'ClubadminContactBundle:Role:addrole.html.twig' %}
+
+                    {# template for adding new function #}
+                    {% include 'ClubadminContactBundle:Role:addfunction.html.twig' %}
+
+                    {# template for listing the log for workgroup and function #}
+                    {% include 'ClubadminContactBundle:Role:logdisplay.html.twig' %}
+                    {# userirghts templates #}
+                    {% include 'ClubadminContactBundle:Role:userrightsExistingUnderscore.html.twig' %}
+                    {% include 'ClubadminContactBundle:Role:new-userrights.html.twig' %}
+                </div>
+                <!-- ADD ROW TEMPLATES ENDS -->
+
+                <!--  Partial twig for savebutton-->
+                {% include 'clubadmin/savebutton.html.twig' %}
+            </form>
+            <!-- END FORM-->
+     </div>
+        </div>
+
+    </div>
+    <!-- END PAGE CONTENT-->
+{% endblock %}
+{% block javascripts %}
+    {% if not (app.request.xmlHttpRequest) %}
+        <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/page/fg_userrights.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/dirtyfields/jquery.dirtyFields.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/fg_dirtyfields.js') }}" type="text/javascript"></script>
+    {% endif %}
+    <script type="text/javascript">
+        var filterStorage = 'documentfilter_WORKGROUP-{{fgclub.clubId}}-{{contactId}}';
+        var ActiveMenuDetVar = 'document_active_menu_det_WORKGROUP-{{fgclub.clubId}}-{{contactId}}';
+        var ActiveMenuVar = 'activeMenu_WORKGROUP-{{fgclub.clubId}}-{{contactId}}';
+        var ActiveSubMenuVar = 'activeSubMenu-WORKGROUP-{{fgclub.clubId}}-{{contactId}}';
+        var defaultLang = '{{clubDefaultLang}}';
+        var wgId = '{{wgId}}';
+        var execbrdId = '{{execbrdId}}';
+        var pageVars = {
+            contactNameUrl:'{{contactNameUrl}}',
+            workgroupDataPath: '{{path('workgroupdetails')}}',
+            userrightsCountPath: '{{path('role_userrights_count',{})}}',
+            catId: {{catId}},
+            clubType: '{{clubType}}',
+            role_section: 'workgroup',
+            selectedLang: '{{clubDefaultLang}}',
+            function_assign: 'individual',
+            clubLanguages: {{clubLanguages|json_encode|raw}},
+            executiveBoardId: {{executiveBoardId}},
+            saveAction: "{{path('update_role_function')}}",
+            formerror: '{{'FORM_ERROR_DISPLAY'|trans}}',
+            nofunctionerror: '{{'NO_FUNCTION_ERROR'|trans}}',
+            addFunctionText: '{{'ADD_FUNCTION'|trans}}',
+            userrightsPath: '{{path('role_userrights',{})}}',
+            contactOverviewPath: '{{path('render_contact_overview',{'offset':0,'contact': 'dummyContactId'})}}',
+            clubUrlIdentifier: '{{ fgclub.clubUrlIdentifier }}',
+            saveUserrightsPath: "{{path('save_role_user_rights')}}",
+            initialHtml: ''
+        };
+        var rowFunctionVariables = {
+            logDataPath: '{{path('log_data',{})}}'
+        };
+        FgUtility.changeColorOnDelete();
+        FgUtility.startPageLoading();
+        
+        /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                    
+                     title: true,
+                     languageSettings: true
+                    
+
+             });
+    </script>
+    <script src="{{ asset('fgassets/backend/js/page/row-functions.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/backend/js/page/workgroupsettings.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/tokenfield/js/bootstrap-tokenfield.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fgrole.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/sidebarfilter.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js')}}" type="text/javascript"></script>
+    <script>
+        var cancelTrans = '{{'CANCEL'|trans}}';
+        var confirmTrans = '{{'CONFIRM'|trans}}';
+        var confirmNote = '{{'WORKGROUP_DELETE_CONFIRM_NOTE'|trans}}';
+    </script>
+{% endblock %}

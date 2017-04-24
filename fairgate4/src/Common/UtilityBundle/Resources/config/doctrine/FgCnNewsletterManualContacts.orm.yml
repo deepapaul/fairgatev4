@@ -1,0 +1,32 @@
+Common\UtilityBundle\Entity\FgCnNewsletterManualContacts:
+    repositoryClass: Common\UtilityBundle\Repository\FgCnNewsletterManualContactsRepository
+    type: entity
+    table: fg_cn_newsletter_manual_contacts
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        newsletter:
+            targetEntity: FgCnNewsletter
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                newsletter_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

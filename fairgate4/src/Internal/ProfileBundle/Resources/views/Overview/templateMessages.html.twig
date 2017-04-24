@@ -1,0 +1,36 @@
+<script type="text/template" id="overviewMessagesBox">
+    <div >
+        <div class="col-lg-12 <% if (_.isEmpty(settings)) { %>fg-empty-box<% } %>  ">  
+            <ul class="chats">
+           <% if (!_.isEmpty(settings)) { %>
+            <%   _.each(settings,function(value,key){ %>
+                
+                    <li class="in">
+                    
+                    <div class="fg-avatar-default fg-profile-img-blk45 fg-round-img " style="background-image:url('<%- (value.imageLink != '') ? value.imageLink : '' %>')">
+                    </div>
+            
+                    <div class="message">
+                        <span class="arrow">
+                        </span>
+                <% if(value.stealthmode != 1) { %>   <a href="<%= value.profileLink %>" class="name">
+                            <%= value.senderName %></a>  <% } else { %> <%= value.senderName %> <% } %>
+                      {{'PERSONAL_OVERVIEW_MESSAGE_BLOCK_ON_TEXT'|trans}}
+                        <span class="datetime">
+                            <%= value.msgDate %> <%= value.msgTime %> {{'DASHBOARD_MESSAGES_ABOUT_TEXT'|trans}}  </span>
+                        <a href="<%= value.conversationLink %>" class="name">
+                            <%= value.subject %> </a>
+                        <div class="fg-messages-limit">
+                            <span> <%= value.message %> </span>
+                            </div>
+                    </div>
+                </li>          
+                <%   }); %>
+            <% } else { %>
+            <span class="arrow"><em>{{'DASHBOARD_NO_NEW_MESSAGES'|trans}}</em></span
+                 <% } %>                     
+            </ul>
+            
+        </div>
+    </div><div class="fg-msg-link"> <a href="{{path('internal_message_inbox')}}"><i class="fa fa-arrow-circle-right"></i>{{'DASHBOARD_INBOX_LINK'|trans}}...</a></div>
+</script>

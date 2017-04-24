@@ -1,0 +1,27 @@
+<script type="text/template" id="template-display-contactfields">
+    <%
+    var terminologyObj = {
+        '%Club%': '{{fgtwig.getTerminolgyName('Club',singular,'UCF')}}',
+        '%Team%': '{{fgtwig.getTerminolgyName('Team',singular,'UCF')}}'
+    };
+    %>
+    <% prevCatId = '' %>
+    <% _.each(contactFields, function(contactField) { %>
+        <% if (contactField.catId != prevCatId) { %>
+            <% if (prevCatId != '') { %>
+                    </div>
+                </div>
+            <% } %>
+            <div class="form-group">
+                <h4 class="fg-cols-fsz"> <% if (contactField.catId == corrAddrCatId) { %>  <%- addressTrans %> <% } else { %><%- contactField.selectgroup %> <% } %></h4>
+                <div class="checkbox-list">
+        <% } %>
+        <% if (contactField.catId == corrAddrCatId) { %>
+            <% corrAddrFieldIds.push(contactField.id); %>
+        <% } %>
+        <label class="fg-col-settings-label">
+            <i class="fa fg-plus-circle fa-2x pull-left selectitem" id="<%- contactField.id %>" type="CF" club_id="<%- clubId %>"> <span class="fg-label-inner" data-label-id="CF<%- contactField.id %>"><%- contactField.title.replace(/%Club%|%Team%/gi, function(matched){ return terminologyObj[matched]; }) %></span></i>
+           </label>
+        <% prevCatId = contactField.catId %>
+    <% }); %>
+</script>

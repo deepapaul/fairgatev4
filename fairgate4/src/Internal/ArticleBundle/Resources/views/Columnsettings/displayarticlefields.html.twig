@@ -1,0 +1,51 @@
+<script type="text/template" id="template-display-settings-options">
+    <% //settingsOptions
+if(!_.isNull(settingsOptions)){
+    %>
+    <h4 class="fg-cols-fsz"> <%- settingsOptions['title'] %></h4>
+    <% _.each(settingsOptions.entry, function(settingsOption) { %>
+        <div class="form-group">
+            <div class="checkbox-list fg-full-width">
+                <label class="fg-col-settings-label">
+                    <i class="fa fg-plus-circle fa-2x pull-left selectitem" id="<%- settingsOption.id %>" type="AS" >
+                    <span class="fg-label-inner" data-label-id="AS_<%- settingsOption.id %>"><%- settingsOption.title %></span></i>
+                </label>
+            </div>
+    <% });
+} %>
+        </div>
+</script>
+<script type="text/template" id="template-display-editing-options">
+ <% //editingOptions
+if(!_.isNull(editingOptions)){
+    %>
+    <h4 class="fg-cols-fsz"> <%- editingOptions['title'] %></h4>
+    <% _.each(editingOptions.entry, function(editingOption) { %>
+        <div class="form-group">
+            <div class="checkbox-list fg-full-width">
+                <label class="fg-col-settings-label">
+                    <i class="fa fg-plus-circle fa-2x pull-left selectitem" id="<%- editingOption.id %>" type="AE" >
+                    <span class="fg-label-inner" data-label-id="AE_<%- editingOption.id %>"><%- editingOption.title %></span></i>
+                </label>
+            </div>
+    <% });
+} %>
+        </div>
+</script>
+<script type="text/template" id="template-display-content-options">
+  <% //contentOptions
+if(!_.isNull(contentOptions)){
+    %>
+    <h4 class="fg-cols-fsz"> <%- contentOptions['title'] %></h4>
+    <% _.each(contentOptions.entry, function(contentOption) { %>
+        <div class="form-group">
+            <div class="checkbox-list fg-full-width">
+                <label class="fg-col-settings-label">
+                    <i class="fa fg-plus-circle fa-2x pull-left selectitem" id="<%- contentOption.id %>" type="AC" >
+                    <span class="fg-label-inner" data-label-id="AC_<%- contentOption.id %>"><%- contentOption.title %></span></i>
+                </label>
+            </div>
+    <% });
+} %>
+        </div>
+</script>

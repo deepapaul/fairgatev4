@@ -1,0 +1,69 @@
+Common\UtilityBundle\Entity\FgClubNotes:
+    repositoryClass: Common\UtilityBundle\Repository\FgClubNotesRepository
+    type: entity
+    table: fg_club_notes
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        editedOn:
+            type: datetime
+            nullable: true
+            column: edited_on
+        note:
+            type: text
+            nullable: true
+        date:
+            type: datetime
+            nullable: true
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdByContact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by_contact:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdByClub:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by_club:
+                    referencedColumnName: id
+            orphanRemoval: false
+        editedByClub:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                edited_by_club:
+                    referencedColumnName: id
+            orphanRemoval: false
+        editedByContact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                edited_by_contact:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,25 @@
+<ul class="page-breadcrumb breadcrumb fg-brdcrb-left">
+    
+    {% if nextPrevDetail is defined %}
+        <li id="" class="fg-breadcrumb-arrows">
+            {% if ((nextPrevDetail.prev is defined) and (nextPrevDetail.prev != '')) %}
+                <a href="{{nextPrevDetail.prev}}"><i class="fa fa-chevron-up"></i></a>
+             {% else %}
+                <a href="#"><i class="fa fa-chevron-up fg-arrow-disabled"></i></a>
+             {% endif %}
+            
+            {% if ((nextPrevDetail.next is defined) and (nextPrevDetail.next != '')) %}
+                <a href="{{nextPrevDetail.next}}"><i class="fa fa-chevron-down"></i></a>
+             {% else %}
+                <a href="#"><i class="fa fa-chevron-down fg-arrow-disabled"></i></a>
+            {% endif %}
+            
+        </li>
+    {% endif %}
+    
+    {% if (breadCrumb.back is defined) %}
+        <li class="btn-group backtop">
+            <button type="button" class="btn default btnpadnew bckid" data-hover="dropdown" data-auto="back_button_top" data-url="{{breadCrumb.back}}"><i class="fa fg-chevron-left"></i> <span class="fg-backbtn-device">{%trans%}BACK{%endtrans%} </span></button>
+        </li>
+    {% endif %}
+</ul>

@@ -1,0 +1,175 @@
+<script type="text/template" id="templateFormField">
+<form class="form-horizontal" id="<%- $.now() %>" onsubmit="return false;" data-url="{{path('website_public_save_form_inquiry')}}">
+    <% buttonText= 'Save'; %>
+    <% showHeading= true; %>
+    <% hasCaptcha= false; %>
+    
+    <div class="alert alert-success hide">
+        <a class="close closeIt" title="close" href="#">×</a>
+        <span><%- (formMessage['successmessage'][defLang]=='' || _.isUndefined(formMessage['successmessage'][defLang])) ? formMessage['successmessagemain']:formMessage['successmessage'][defLang] %></span>
+    </div>
+    <div class="alert alert-danger hide">
+        <a class="close closeIt" title="close" href="#">×</a>
+        <span data-virmsg="{{'VIRUS_FILE_CONTACT'|trans}}" data-error="{{'FORM_ERROR_DISPLAY'|trans}}">{{'FORM_ERROR_DISPLAY'|trans}}</span>
+    </div>
+    <fieldset>
+    <% var fieldCount = 0 %>
+    <% _.each(formDetails,function(fieldDetails,fieldId){  %>
+        <% fieldCount = fieldCount + 1 %>
+        <% if(fieldDetails.fieldType=='singleline') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8">
+                  <input id="textinput<%- fieldDetails.formFieldId %>" data-key="<%- fieldDetails.formElementId+'.'+fieldDetails.formFieldId %>" name="textinput<%- fieldDetails.formFieldId %>" type="text" placeholder="<%- fieldDetails['placeholder'][defLang]=='' ? fieldDetails['placeholderValue'] : fieldDetails['placeholder'][defLang] %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> value="<%- fieldDetails['predefined'][defLang]=='' ? fieldDetails['predefinedValue']:fieldDetails['predefined'][defLang] %>" class="form-control input-md">
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='select') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="selectbasic<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8">
+                  <select id="selectbasic<%- fieldDetails.formFieldId %>" <%- fieldDetails.isMultiSelectable==1 ? 'multiple':'' %> data-none-selected="{{'SELECT_DEFAULT'|trans}}" data-key="<%- fieldDetails.formElementId+'.'+fieldDetails.formFieldId %>" name="selectbasic<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> class="form-control bs-select">
+                  <% if(fieldDetails.isMultiSelectable !=1){ %><option data-showTick="false" class="fg-select-hide-icon" value="">{{'SELECT_DEFAULT'|trans}}</option><% } %>
+                  <% _.each(fieldDetails.options,function(fieldOptions,optionId){  %>
+                    <option value="<%- fieldOptions.id %>"><%- (fieldOptions['value'][defLang]==''|| _.isUndefined(fieldOptions['value'][defLang])) ? fieldOptions['selectionValueName']:fieldOptions['value'][defLang] %></option>
+                  <% }); %>
+                  </select>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='radio') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="radios<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label fg-pad-top-0">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8 fg-radio-wrapper" id="check-wrap-<%- fieldDetails.formFieldId %>">
+                <% _.each(fieldDetails.options,function(fieldOptions,optionId){  %>
+                    <% if(fieldDetails['showInline']==0) { %><div class="radio-block"><% } %>  
+                    <label for="radios-<%- fieldDetails.formFieldId %>-<%- optionId %>" <% if(fieldDetails['showInline']==1) { %>class="radio-inline"<% } %> >
+                        <input id="radios-<%- fieldDetails.formFieldId %>-<%- optionId %>" data-error-container="#check-wrap-<%- fieldDetails.formFieldId %>" data-key="<%- fieldDetails.formElementId+'.'+fieldDetails.formFieldId %>" type="radio" name="radios<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> value="<%- fieldOptions.id %>" ><%- (fieldOptions['value'][defLang]==''|| _.isUndefined(fieldOptions['value'][defLang])) ? fieldOptions['selectionValueName']:fieldOptions['value'][defLang] %>
+                    </label>
+                    <% if(fieldDetails['showInline']==0) { %></div><% } %>
+                <% }); %>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='checkbox') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="checkboxes"  class="col-sm-4 control-label  fg-pad-top-0">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8 fg-checkbox-wrapper" id="check-wrap-<%- fieldDetails.formFieldId %>">
+                    <% _.each(fieldDetails.options,function(fieldOptions,optionId){  %>
+                    <% if(fieldDetails['showInline']==0) { %><div class="checkbox-block"><% } %>    
+                        <label for="checkboxes-<%- fieldDetails.formFieldId %>-<%- optionId %>" <% if(fieldDetails['showInline']==1) { %>class="checkbox-inline"<% } %>>
+                          <input id="checkboxes-<%- fieldDetails.formFieldId %>-<%- optionId %>" data-error-container="#check-wrap-<%- fieldDetails.formFieldId %>" data-key="<%- fieldDetails.formElementId+'.'+fieldDetails.formFieldId %>.<%- fieldOptions.sortOrder %>" type="checkbox" <%- (fieldDetails.isRequired==1) ? 'required':'' %> name="checkboxes<%- fieldDetails.formFieldId %>" value="<%- fieldOptions.id %>"><%- (fieldOptions['value'][defLang]==''|| _.isUndefined(fieldOptions['value'][defLang])) ? fieldOptions['selectionValueName']:fieldOptions['value'][defLang] %>
+                        </label>
+                    <% if(fieldDetails['showInline']==0) { %></div><% } %>
+                    <% }); %>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='multiline') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textarea<%- fieldDetails.formFieldId %>" class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8">
+                    <textarea id="textarea<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> data-key="<%- fieldDetails.formElementId+'.'+fieldDetails.formFieldId %>" placeholder="<%- fieldDetails['placeholder'][defLang]=='' ? fieldDetails['placeholderValue']:fieldDetails['placeholder'][defLang] %>" name="textarea<%- fieldDetails.formFieldId %>" class="form-control"><%- fieldDetails['predefined'][defLang]=='' ? fieldDetails['predefinedValue']:fieldDetails['predefined'][defLang] %></textarea>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='email') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput<%- fieldDetails.formFieldId %>" class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8">
+                  <input id="textinput<%- fieldDetails.formFieldId %>" data-key="<%- fieldDetails.formElementId+'.'+fieldDetails.formFieldId %>" name="textemail<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> type="email" placeholder="<%- fieldDetails['placeholder'][defLang]=='' ? fieldDetails['placeholderValue'] : fieldDetails['placeholder'][defLang] %>"  class="form-control input-md">
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='number') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8">
+                    <div class="fg-input-plus-minus">
+                        <button data-field="columnCount<%- fieldDetails.formFieldId %>" data-type="minus" onClick="return false;" class="left minus form-control FL selectButton btn-number">-</button>
+                        <input name="number<%- fieldDetails.formFieldId %>" id="columnCount<%- fieldDetails.formFieldId %>" data-key="<%- fieldDetails.formElementId+'.'+fieldDetails.formFieldId %>" type="text" <%- (fieldDetails.isRequired==1) ? 'required':'' %> min="<%- fieldDetails.minValue %>" <% if(fieldDetails.maxValue!=='0.00' && fieldDetails.maxValue!==null ) { %>max="<%- fieldDetails.maxValue %>"<% } %> stepto="<%- fieldDetails.stepValue %>" data-rule-min="<%- fieldDetails.minValue %>" <% if(fieldDetails.maxValue!=='0.00' && fieldDetails.maxValue!==null ) { %>data-rule-max="<%- fieldDetails.maxValue %>"<% } %> data-rule-number="true" data-msg-min="<%- "{{'GN_VALIDATE_MIN_LIMIT'|trans}}".replace('{0}',FgClubSettings.formatDecimalMark(fieldDetails.minValue)) %>" data-msg-max="<%- "{{'GN_VALIDATE_MAX_LIMIT'|trans}}".replace('{0}',FgClubSettings.formatDecimalMark(fieldDetails.maxValue)) %>" class="form-control FL number input-number">
+                        <button data-field="columnCount<%- fieldDetails.formFieldId %>" data-type="plus" onClick="return false;" class="right plus form-control FL selectButton btn-number">+</button>
+                    </div>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='date') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput"  class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8">
+                  <div class="input-group date fg-datepicker1" data-startDate="<%- _.isUndefined(fieldDetails.dateMin) ? '':fieldDetails.dateMin %>" data-endDate="<%- _.isUndefined(fieldDetails.dateMax) ? '':fieldDetails.dateMax %>">
+                    <input type="text" id="<%- fieldDetails.formFieldId %>" data-key="<%- fieldDetails.formElementId+'.'+fieldDetails.formFieldId %>" name="datefield<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> class="form-control">
+                    <div class="input-group-addon"><i class="fg-icon-calendar"></i></div>
+                  </div>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='time') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput<%- fieldDetails.formFieldId %>" class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8">
+                    <div id="timepickerWrap<%- fieldDetails.formFieldId %>" type="text" class="input-group bootstrap-timepicker timepicker timepicker-24">
+                        <input id="timepicker<%- fieldDetails.formFieldId %>" data-timepic data-key="<%- fieldDetails.formElementId+'.'+fieldDetails.formFieldId %>"  name="timepicker<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> class="form-control timeclick">
+                            <div class="input-group-addon open-timepicker">
+                                <i class="fg-icon-clock-o"></i>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='url') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput<%- fieldDetails.formFieldId %>" class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8">
+                  <input id="textinput<%- fieldDetails.formFieldId %>" name="textinput<%- fieldDetails.formFieldId %>" data-key="<%- fieldDetails.formElementId+'.'+fieldDetails.formFieldId %>" type="url" <%- (fieldDetails.isRequired==1) ? 'required':'' %> placeholder="<%- fieldDetails['placeholder'][defLang]=='' ? fieldDetails['placeholderValue'] : fieldDetails['placeholder'][defLang] %>"  value="<%- fieldDetails['predefined'][defLang]=='' ? fieldDetails['predefinedValue']:fieldDetails['predefined'][defLang] %>" class="form-control input-md fg-urlmask ">
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='fileupload') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8">
+                    <div class="fg-web-fileupload-wrapper" data-file-wrap>
+                      <input type="text" name="uploadFile<%- fieldDetails.formFieldId %>" class="hide" data-file id="formfile<%- fieldDetails.formFieldId %>" data-key="<%- fieldDetails.formElementId+'.'+fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %>>
+                      <input type="file" data-exceedmsg="{{'SIZE_EXCEED'|trans}}" data-fieldid="<%- fieldDetails.formFieldId %>" name="file-uploader" id="forminput<%- fieldDetails.formFieldId %>" data-url="{{path('website_public_file_upload_check',{'type':'form'})}}" style="position: absolute; clip: rect(0px, 0px, 0px, 0px);"  data-buttonText="{%trans%}CONTACT_FIELDS_SELECT_FILE{%endtrans%}"  class="filestyle">
+                        <div class="bootstrap-filestyle input-group">
+                            <input type="text" data-file-name disabled="" placeholder="" class="form-control "> 
+                            <span class="group-span-filestyle input-group-btn" tabindex="0">
+                            <label class="btn fg-upload-btn " for="forminput<%- fieldDetails.formFieldId %>">
+                                <span class="icon-span-filestyle fg-icon-file"></span> 
+                                <span class="buttonText">{%trans%}CONTACT_FIELDS_SELECT_FILE{%endtrans%}</span>
+                            </label>
+                            </span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+        <% } else if(fieldDetails.fieldType=='button') {  %> <% buttonText = (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang]; %>
+        <% } else if(fieldDetails.fieldType=='captcha') { showCaptcha = true; hasCaptcha = true; %><% if(showHeading==true) { showHeading=false; %></fieldset><% } %>
+           <fieldset>
+           {% include formCaptchaTemplate %}
+        <% } else if(fieldDetails.fieldType=='heading') { %>
+            <% if(showHeading== true && fieldCount > 1) { %></fieldset><% } %>
+          <% if( fieldCount > 1) { %> <fieldset> <% } %>
+            <% headingLabel = (fieldDetails['label'][defLang]=='' || _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %>
+            <% if(headingLabel != '' && headingLabel != null ) { %><legend><%- headingLabel %> </legend> <span class="fg-hidden-span"></span> <% } %>
+        <% showHeading = true; } %>
+    <% }); %>
+    <% if(showHeading==true) { showHeading=false; %></fieldset><% } %>
+    <%  if(hasCaptcha == false) { %> <fieldset> <% } %>
+    {% include submitButtonTemplate %}
+    </fieldset>
+</form>
+</script>

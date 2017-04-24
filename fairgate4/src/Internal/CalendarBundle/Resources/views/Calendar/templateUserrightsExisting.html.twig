@@ -1,0 +1,58 @@
+<script type="text/template" id="fg-dev-internal-calendar-userrights"> 
+<%    calendarAdmin = FgInternal.groupByMulti(calendarAdmin, ['contact_id']);    %>
+    
+<div class="row">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12 fg-common-top">
+                <div class="panel-heading fg-theme-head">
+                    <h3 class="fg-panel-title">
+                            {{'USER_RIGHTS_CALENDAR_ADMINISTRATOR'|trans }}
+                    </h3>
+                </div> 
+            </div>
+            <div class="col-md-12 fg-user-div fg-common-top fg-dev-user-rights-elements">
+                <% if(calendarAdmin.length!=0) { %>  
+                <%  var teamsAdmin = [];        
+                    _.each(calendarAdmin,function(contentVal1,contentKey1){ 
+                         teamsAdmin.push(contentKey1);        
+                %>
+                         <% var contactName = '';var createdAt = '';var stealth=0;  %>
+                        
+                         <div class="row fg-border-line sortables" id="fg-clrChangeBlk_<%- contentKey1 %>" >
+                            <div class="col-md-5 col-sm-5 col-xs-8">
+                                 <% if(contentVal1[0]['stealth'] == 0) { 
+                                     var communityLink = communityPath.replace("dummyContactId", contentKey1); %>
+                                    <a target="_blank" href="<%- communityLink %>"> 
+                                 <% }%>
+                                    <%- contentVal1[0]['contactname'] %> 
+                                <% if(stealth == 0) { %>
+                                    </a> 
+                                    <% }%>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <i>{{'SINCE'|trans}} <%- contentVal1[0]['createdAt'] %></i>
+                            </div>
+                            <div class="fg-last-icon">
+                                <% if(contentKey1 == loggedContactId ) { %>
+                                    <i class="fa fa-lock fa-2x ash"></i>
+                                <% } else { %>
+                                <div class="closeico">
+                                    <input type="checkbox" class="make-switch" id="contact_<%- contentVal1[0]['user_id'] %>_is_deleted" data-key="calendar.delete.<%- contentVal1[0]['user_id'] %>"  name="contact_<%- contentVal1[0]['user_id'] %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- contentKey1 %>">
+                                    <label for="contact_<%- contentVal1[0]['user_id'] %>_is_deleted"></label>
+                                </div>
+                                <% } %>
+                            </div>
+                            <div class="random" data-id="{{random()}}"></div>
+                        </div>
+                <% }); }%>
+            </div>
+            <div class="fg-clear"></div>
+      
+            <div class="col-lg-12  fg-common-add-item"><a class="fg-dev-add-calendar-admin" data-toggle="modal" href="#basic" id="pencil"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text">{{'USER_RIGHTS_CALENDAR_ADD_LINK'|trans}}</span></a></div> 
+       
+        </div>    
+        
+    </div>
+    
+</script>

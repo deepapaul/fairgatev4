@@ -1,0 +1,155 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = contactName %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+    {% set federationTerminology = fgtwig.getTerminolgyName('Federation',singular)%}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body fg-theme-green">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                {% include 'clubadmin/breadcrumb.html.twig' with {'breadCrumb':{'back': path('contact_index') }} %}
+                
+                <!-- Error on missing req fed role - starts -->
+                {% if missingAssgnment > 0 and isReadOnlyContact == 0 %}
+                    <div id="MissingReqAssgmtError" class="alert alert-warning alert-dismissable ">
+                        <button class="close" data-close="alert"></button>
+                        <strong>{{'ATTENTION'|trans}}! </strong><span>{% trans with {'%fedmember%':  federationTerminology,'%a%':"<a href='"~path('contact_assignments',{'offset':offset,'contact':contactId})~"'>",'%b%':"</a>"} %}REQ_FED_SUBFED_ROLE_MISSING_ASSIGNMT_CONTACT{% endtrans %} </span>
+                    </div>
+                {% endif %}
+                <!-- Error on missing req fed role - ends -->
+                
+              {#  {% include 'clubadmin/panel-tabs.html.twig' with {'contactName':displayedUserName,'contactId':contactId,'active':'overview','tabs':tabs, 'documentsCount': documentsCount,'missingReqAssgment':missingAssgnment} %}#}
+              <div class="row"> 
+                 {% set page_settings = { 'pagetitle':'true','tabs':'true'}  %}
+                 {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': displayedUserName ,'page_settings': page_settings, 'tabs': tabs, 'type':'overview', 'hrefLink' : true, 'url':"#" } %}
+               </div>
+                 <!-- END PAGE TITLE & BREADCRUMB-->
+                <!-- ERROR MESSAGE-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="tab-content">
+                            <div class="tab-pane fade active in" id="tab_1_1">
+                                <div id="overviewDiv">
+                                    <div class="row">
+                                        <div class="col-md-2 profile">
+                                        </div>
+                                        <div class="col-md-5 left">
+                                        </div>
+                                        <div class="col-md-5 right">
+                                        </div>
+                                    </div>									
+                                </div>
+                            </div>
+                            <div class="tab-pane fade in" id="tab_1_2"> Test </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+                        <div class="modal-dialog modal-wide">
+                            <div class="modal-content fg-popup-wrap" id="popup_contents">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div id="divTemplates">
+		{% include 'ClubadminContactBundle:ContactOverview:displayOverviewUnderscore.html.twig' %}
+                {% include 'ClubadminContactBundle:Archive:mergeContact.html.twig' %}
+	</div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>  
+    <script src="{{ asset('fgcustom/js/fg_overview.js') }}" type="text/javascript"></script>  
+    <script src="{{ asset('fgcustom/js/inline-edit.js')}}" type="text/javascript"></script>
+    <script>
+        $(document).ready(function() {
+            FgPageTitlebar.init({
+                title       : true,
+                tab       : true,
+                search     :false,
+                actionMenu  : false,
+                tabType  :'server' 
+            }); 
+            
+            clubType = '{{clubType}}';
+            var contactId = '{{contactId}}';
+            var contactName= '{{contactName|escape('js')}}';
+            allMembershipLogs = {{allMembershipLogs | raw}} ;
+            createdClubId = {{createdClubId}};
+            createdClubType = '{{createdClubType}}'
+            contactClubId = {{ contactClubId }},
+            FgMoreMenu.initServerSide('paneltab');
+            FgPopOver.customPophover('.fg-dev-tabicon-right-Popovers');
+            inlineEditMembershipPath = '{{ path('inlineedit_membership',{'contact':contactId}) }}';
+            fedmemConfirmTootipMsg = '{{'CONTACT_FED_MEMBER_TOOLTIP' | trans}}';
+            isFedMemberConfirmed = '{{isFedMemberConfirmed}}';
+            fedMembershipMandatory = '{{fedMembershipMandatory}}';
+            clubMembershipAvailable = '{{clubMembershipAvailable}}'
+            currentClubTitle = '{{clubTitle}}';
+            var options = {
+                    contactOverviewSettings     : 	{{ contactOverview|raw }},
+                    contactOverviewData		: 	{{fieldResultArray|raw}},
+                    contactClubId               : 	{{ contactClubId }},
+                    mainClubId			:	{{ mainClubId }},
+                    languages			:	{{ languages| raw }},
+                    countryList			:	{{ countryList| raw }},
+                    contactType			:	{{ contactType }},
+                    notes			:	{
+                                                            data: {{ getAllNotes| raw }},
+                                                            title: '{%trans%}CONTACT_OVERVIEW_TITLE_NOTES{%endtrans%}',
+                                                            path: '{{path('contact_note',{'offset':offset,'contactid': contactId})}}'
+                                                        },
+                    fedmembership			: 	{ 
+                                                            data            :	allMembershipLogs.fedmembership,
+                                                            logListingPath  :	'{{path('log_listing',{'offset':offset,'contact': contactId})}}'
+                                                        },
+                    clubmembership			: 	{ 	
+                                                            title           :	'{%trans%}CONTACT_OVERVIEW_SETTINGS_MEMBERSHIPS{%endtrans%}',
+                                                            data            :	allMembershipLogs.clubmembership,
+                                                            logListingPath  :	'{{path('log_listing',{'offset':offset,'contact': contactId})}}'
+                                                        },
+                    addressBlock		: 	{ 	
+                                                            dataCorrespondence  :	{{addressBlockCorrespondence|raw}}
+                                                        },
+                    connections			: 	{ 	
+                                                            mainContact	:	{{ getAllMainContact| raw }},
+                                                            contactPath	:	'{{path('render_contact_overview',{'offset':0,'contact': 'dummyContactId'})}}',
+                                                            otherConnections : {{ allOtherConnections| raw }},
+                                                            connectionVisibility : '{{connectionVisibility}}'
+                                                        },
+                    roleCategory		: 	{ 	
+                                                            categoryData    :	{{ getAllCatDetails| raw }}
+                                                        },
+                    federationInfo		: 	{ 	
+                                                            data	:	{{getMembershipDetails|raw}},
+                                                            clubAssignments :   {{getClubAssignments | raw}},
+                                                            subfederations  :   {{getSubfederations | raw}},
+                                                            path  : '{{ path('club_overview',{'offset':0,'clubId': 'dummyClubId'}) }}',
+                                                            activeAssignmentcount : {{clubAssignmentCount}}
+                                                        },
+                    sponsored                   :       {
+                                                            data  : {{ sponsoredByDetails|raw }},
+                                                            title : '{{ 'CONTACT_OVERVIEW_SETTINGS_SPONSORED_BY'|trans }}',
+                                                            path  : '{{ path('render_contact_overview',{'offset':0,'contact': 'dummyContactId'}) }}',
+                                                        },
+                    profileBlock                :       {
+                                                            dataUrl  : '{{ path('contact_profile_settings_data',{'contact': contactId, 'module': 'contact'}) }}',
+                                                            title : '',
+                                                            contactId : {{contactId |raw}},
+                                                            clubMembershipId : '{{clubMembershipId|raw|default('')}}',
+                                                            fedMembershipId : '{{fedMembershipId|raw|default('')}}'
+                                                        }                                     
+            };
+                        
+            FgOverview.contactPage(options);
+	    FgPopOver.init(".fg-dev-Popovers", true);
+            
+            
+        });
+
+    </script>
+{% endblock %} 

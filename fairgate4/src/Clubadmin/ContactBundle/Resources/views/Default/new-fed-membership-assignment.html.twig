@@ -1,0 +1,64 @@
+<script type="text/template" id="newFedMemberCategory"> 
+    <%  arrayCategoryName = FgUtility.groupByMulti(normalArray, ['catId']);
+
+        var previousCatId='';
+        var previousRole='';
+        var loopFlag=0;
+        var preCatIds = [];
+        var fedId = {{federationId}};
+        var SubfedId = {{subfederationId}};
+        _.each(normalArray,function(normalArrayValue,normalArrayKey){
+            if(filterArray[normalArrayValue['catId']] != undefined ) { 
+                if ($.inArray(normalArrayValue['catId'], preCatIds) == -1) {
+                    preCatIds.push(normalArrayValue['catId']);
+                    previousCatId=normalArrayValue['catId'];
+                    loopFlag=1; %>
+                    <div class="row">
+                        <div class="fg-dev-fed-wrap col-md-12 col-sm-12 col-xs-12">
+                            <div class="col-md-3 col-sm-12 col-xs-12 fg-left-zero">
+                                <select class="bs-select form-control fg-select-font fg-dev-right-spacer" disabled>
+                                    <% if(finalFederation[normalArrayValue['catId']] != undefined) { %>
+                                       <%  var fedIcon = {{fgclub.get('federation_icon')|json_encode()|raw}};  %>
+                                           <option data-content="{{fgtwig.getTerminolgyName('Federation',singular,'UCF')}} {%trans%}ASSIGNMENT_ROLES{%endtrans%} <img src= '<%- fedIcon[fedId] %>' /> ">{{fgtwig.getTerminolgyName('Federation',singular,'UCF')}} {%trans%}ASSIGNMENT_ROLES{%endtrans%}</option>
+                                    <% } else if(finalSubfederation[normalArrayValue['catId']] != undefined) { %>
+                                     <%  var fedIcon = {{fgclub.get('federation_icon')|json_encode()|raw}};  %>
+                                <option data-content="{{fgtwig.getTerminolgyName('Sub-federation',singular,'UCF')}} {%trans%}ASSIGNMENT_ROLES{%endtrans%} <img src= '<%- fedIcon[SubfedId] %>' />">{{fgtwig.getTerminolgyName('Sub-federation',singular,'UCF')}} {%trans%}ASSIGNMENT_ROLES{%endtrans%}</option>
+                                    <% } %>
+                                </select>
+                            </div>
+                            <div class="col-md-3 col-sm-12 col-xs-12 fg-left-zero">
+                                <select class="bs-select form-control fg-select-font" disabled>
+                                    <option><%- arrayCategoryName[normalArrayValue['catId']][0]['catTitle'] %></option>
+                                </select>
+                            </div>
+                        
+
+
+                            <% filterDummyArray=filterArray[previousCatId];
+
+                            arrayRoleName = FgUtility.groupByMulti(normalArray, ['roleId']);  %>
+
+                            <div class="col-md-3 col-sm-12 col-xs-12 fg-left-zero roleDp">
+                                <select insert-flag="0" class="bs-select form-control fg-select-font roleDropDown">
+                                    <option value="" option-text-role="1">{%trans%}ASSIGNMENT_SELECT_DROPDOWN{%endtrans%}</option>
+                                    <% dummyRolesArray = _(normalArray).filter(function (x) { return (x['catId'] ==previousCatId ) ;});
+                                    var previousRoleId = [];  
+                                    _.each(dummyRolesArray,function(arrayNormalRolesValue,arrayNormalRolesKey){ 
+                                        if(filterDummyArray[arrayNormalRolesValue['roleId']] != undefined ) { 
+                                            if($.inArray(arrayNormalRolesValue['roleId'], previousRoleId) == -1) {
+                                                previousRoleId[loopFlag] = arrayNormalRolesValue['roleId']; 
+                                                loopFlag = loopFlag+1;%>
+                                                <option name="<%- previousCatId %>_role_<%- arrayNormalRolesValue['roleId'] %>" id="<%- previousCatId %>_role_<%- arrayNormalRolesValue['roleId'] %>" data-key="<%- previousCatId %>.role.<%- arrayNormalRolesValue['roleId'] %>" element-type="<%- elementtype %>" category="<%- previousCatId %>" value="<%- arrayNormalRolesValue['roleId'] %>"><%- arrayRoleName[arrayNormalRolesValue['roleId']][0]['roleTitle'] %></option>
+                                            <% }
+                                        }
+                                    }); %>
+                                </select>
+                            </div> 
+                            <input type="hidden" data-type="key_element" />
+                        </div>
+                    </div>
+                <% } 
+            } 
+        }); 
+    %>     
+</script>

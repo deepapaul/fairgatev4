@@ -1,0 +1,57 @@
+Common\UtilityBundle\Entity\FgClubClassLog:
+    type: entity
+    table: fg_club_class_log
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        clubId:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: club_id
+        classId:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: class_id
+        date:
+            type: datetime
+            nullable: true
+        kind:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+        field:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        valueBefore:
+            type: text
+            nullable: true
+            column: value_before
+        valueAfter:
+            type: text
+            nullable: true
+            column: value_after
+        changedByContact:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: changed_by_contact
+        changedByClub:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: changed_by_club
+        isHistorical:
+            type: boolean
+            nullable: true
+            column: is_historical
+    lifecycleCallbacks: {  }

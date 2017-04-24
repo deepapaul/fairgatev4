@@ -1,0 +1,77 @@
+<script type="text/template" id="newContactField">
+<div data-row id="<%- content.addCount %>" class="row fg-border-line sortables fg-sort-drag-hover newRow">
+    <div name="fg-dev-sorting" class="fg-col-first-icon fg-sort-drag">
+        <input type="hidden" data-key="<%- content.catId %>.fields.<%- content.addCount %>.sort" id="<%- content.catId %>_<%- content.addCount %>_sort" name="<%- content.catId %>_<%- content.addCount %>_sort" value="1" class="order ">
+        <i class="fa fa fg-sort ui-draggable handle"  data-toggle="tooltip"></i>
+                        
+    </div>
+    <div class="col-md-12 fg-col-hack fg-fields-wrap">
+        <div class="row">
+                {%for languages in clubIdArray.clubLanguages %}
+                    <div dataerror-group data-lang="{{languages}}" class="col-md-2 col-sm-3 col-xs-12 hide fg-clear-left">
+                        <input type="text" data-lang="{{languages}}" id="title_{{languages}}_<%- content.catId %>_<%- content.addCount %>" name="title_{{languages}}_<%- content.catId %>_<%- content.addCount %>" class="form-control  input-sm wd76 pull-left {% if languages!=clubIdArray.sysLang %}hide{% else %}" required="true{% endif %}" value="" data-key="<%- content.catId %>.fields.<%- content.addCount %>.title.{{languages}}">
+                    </div>
+                {% endfor %} 
+                <div class="col-md-3 col-sm-4 col-xs-12 admin-txtdetails propertiblk fg-textalign">
+                    <div class="icondivarea"><% if(content.catId != '3'){ %><i class="fa fa-user pull-left userblk fg-contact-Popovers" data-content="{%trans%}FOR_SINGLE_PERSONS{%endtrans%}"></i><% } %></div> 
+                    <div class="icondivarea"><i class="fa fa-building-o  fg-contact-Popovers" data-content="{%trans%}FOR_COMPANIES{%endtrans%}"></i></div>
+                    {%trans%}CONTACT_PROPERTIES_FIELDTYPE_SINGLE{%endtrans%}
+                </div>
+                <div class="col-md-3 col-sm-5 col-xs-12 fg-req-new fg-textalign">
+                        <label class="pull-left fg-required-label">{%trans%}CF_REQUIRED_FOR{%endtrans%}</label>
+                        <div class="col-md-8 col-sm-8">
+                            <select id="required_<%- content.catId %>_<%- content.addCount %>" data-key="<%- content.catId %>.fields.<%- content.addCount %>.required" name="required_<%- content.catId %>_<%- content.addCount %>" data-selected-text-format="count>1" class="contact-field-selectpicker  show-tick form-control input-sm fg-new-select" multiple >
+                                <option value="not_required" class="single fg-arrow-all">{{'CF_NO_REQUIRED_FIELD'|trans}}</option>
+                                <option value="all_contacts" class="single fg-arrow-all fg-option-mandatory">{{'CF_REQUIRED_FOR_ALL_CONTACTS'|trans}}</option>
+                        
+                                {% if clubIdArray.clubType == 'sub_federation' or clubIdArray.clubType == 'federation'  %} 
+                                    <option value="all_fed_members" class="single fg-arrow-all fg-option-mandatory">{{'CONTACT_ALL_FED_MEMBER'|trans}}</option>
+                                {% else %}
+                                    {% if fgclub.get('clubMembershipAvailable') == 1  %}
+                                        <option value="all_club_contacts" class="single fg-arrow-all fg-option-mandatory">{{'CONTACT_ALL_CLUB_MEMBER'|trans}}</option>
+                                    {% endif %}
+                                    <option value="all_fed_members" class="single fg-arrow-all fg-option-mandatory">{{'CONTACT_ALL_FED_MEMBER'|trans}}</option>
+                                {% endif %}
+                               
+                                <optgroup label="">
+                                    {% for key,membership in memberships %}
+                                        <option value="{{key}}" class="multiple" data-content='
+                                                {{membership.titleLang}}<span class="fg-contact-mandatory"></span> 
+                                                {% if clubIdArray.federationId == membership.clubId  %} 
+                                                     {% set fedIcon = fgclub.get('federation_icon')|raw %}   
+                                                    <img class="fg-global-fed-icon" src="{{fedIcon[clubIdArray.federationId]}}"/>
+                                                {% elseif clubIdArray.subFederationId == membership.clubId%}
+                                                    {% set fedIcon = fgclub.get('federation_icon')|raw %} 
+                                                    <img class="fg-global-fed-icon" src="{{fedIcon[clubIdArray.subFederationId]}}"/>
+                                                {% endif %}
+                                                
+                                                '></option>
+                                    {% endfor %}
+                                </optgroup>
+                            </select>
+                        </div>
+                </div>
+                <div class="col-md-2 col-sm-12 col-xs-12 popupClickArea fg-textalign">
+                    <div name="fg-dev-properties" propertyloadedstatus="0" attributeid="<%- content.addCount %>" categoryid="<%- content.catId %>" class="paddingzero propertiblk pull-left margin-right-10 propertyClick"> <i class="fa fa-minus-square-o" style="display: none;"></i><i class="fa fa-plus-square-o"></i>{%trans%}CF_PROPERTIES{%endtrans%} </div>  
+               </div> 
+                <div class="col-md-2 col-sm-12 col-xs-12">
+                        <label class="switch-light switch-light-sm switchhwd">
+                            <input type="checkbox" data-key="<%- content.catId %>.fields.<%- content.addCount %>.isActive" class="make-switch " checked="">
+                            <span name="fg-dev-active"> <span>{{'ON'|trans}}</span><span>{{'OFF'|trans}}</span>	</span>
+                            <a class="btn btn-primary"></a> 
+                        </label>
+                </div>
+
+        </div>
+    </div>
+    <div class="fg-col-last-icon" name="fg-dev-close-icon">
+        <div class="closeico">
+            <input type="checkbox" class="make-switch newRowDelete" data-parentid="<%- content.addCount %>" data-key="<%- content.catId %>.fields.<%- content.addCount %>.isDeleted" name="<%- content.addCount %>_is_deleted" id="<%- content.addCount %>_is_deleted" data-inactiveblock="changecolor" />
+            <label for="<%- content.addCount %>_is_deleted"></label>
+        </div>
+    </div>
+    <div class="fg-clear"></div>     
+    <div style="display:none;" class="row fg-common-top popupDivContent propSection" id="propertiesSection<%- content.addCount %>"></div>
+</div>
+</script>
+

@@ -1,0 +1,97 @@
+<script type="text/template" id="fg-privacy-settings-underscore"> 
+    <% fieldDetailsArray=FgInternal.groupByMulti(fieldDetails, ['dummyId','catId','']); 
+    var catFlag=0 %>
+    
+    <% _.each(fieldDetailsArray,function(value,key){ catFlag=0; %>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="portlet box fg-portlet-ash">
+                    <div class="portlet-title ">
+                        <div class="caption">
+                            <% _.each(value,function(cattitlevalue,catTitlekey){
+                                _.each(cattitlevalue,function(fieldTitleDetails,fieldTitleKey){ 
+                                    if(catFlag==0) { %>
+                                        <%- fieldTitleDetails[0]['title'] %>
+                                        <% catFlag=1; 
+                                    } 
+                                });
+                            }); %>
+                            
+                        </div>
+                    </div>
+                    <div class="portlet-body fg-margin-top-20px">
+                        <div class="row">
+                            <div class="col-lg-12 col-sm-12">
+                                <% _.each(value,function(catvalue,catkey){ 
+                                    _.each(catvalue,function(fieldDetails,fieldKey){ 
+                                        _.each(fieldDetails,function(fieldVal,fKey){ %>
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 fg-swith-block-div">
+                                                <div class="fg-privacy-switch-text">
+                                                    <%- fieldVal.fieldname %>
+                                                </div>
+                                                <div class="fg-privacy-switch">
+                                                    <div class="switch-toggle switch-3 switch-fg switch-multi-color">
+                                                        <input data-key="privacy.catId.<%- fieldVal.catId %>.fieldId.<%- fieldVal.attrId %>" id="community_<%- fieldVal.catId %>_<%- fieldVal.attrId %>" value="community" name="privacy_<%- fieldVal.catId %>_<%- fieldVal.attrId %>" type="radio" <% if(fieldVal.privacySettings =='community') { %> checked <% } %> class="make-switch">
+                                                        <label title="{{ 'INTERNAL_PRIVACY_SETTINGS_PRIVACY_ALL'|trans }}" for="community_<%- fieldVal.catId %>_<%- fieldVal.attrId %>" onClick=""><div>{{ 'INTERNAL_PRIVACY_SETTINGS_PRIVACY_ALL'|trans }}</div></label>
+                                                        <input data-key="privacy.catId.<%- fieldVal.catId %>.fieldId.<%- fieldVal.attrId %>" id="team_<%- fieldVal.catId %>_<%- fieldVal.attrId %>" value="team" name="privacy_<%- fieldVal.catId %>_<%- fieldVal.attrId %>" type="radio" <% if(fieldVal.privacySettings =='team') { %> checked <% } %> class="make-switch">
+                                                        <label title="{{ 'INTERNAL_PRIVACY_SETTINGS_PRIVACY_TEAM'|trans }}" for="team_<%- fieldVal.catId %>_<%- fieldVal.attrId %>" onClick=""><div>{{ 'INTERNAL_PRIVACY_SETTINGS_PRIVACY_TEAM'|trans }}</div></label>
+                                                        <input data-key="privacy.catId.<%- fieldVal.catId %>.fieldId.<%- fieldVal.attrId %>" id="private_<%- fieldVal.catId %>_<%- fieldVal.attrId %>" value="private" name="privacy_<%- fieldVal.catId %>_<%- fieldVal.attrId %>" type="radio" <% if(fieldVal.privacySettings =='private') { %> checked <% } %> class="make-switch">
+                                                        <label title="{{ 'INTERNAL_PRIVACY_SETTINGS_PRIVACY_NONE'|trans }}" for="private_<%- fieldVal.catId %>_<%- fieldVal.attrId %>" onClick=""><div>{{ 'INTERNAL_PRIVACY_SETTINGS_PRIVACY_NONE'|trans }}</div></label>
+                                                        <a class="btn btn-primary"></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% }); 
+                                    }); 
+                                }); %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% }); %>
+    
+</script>
+
+{#template for language settings#}
+<script type="text/template" id="fg-language-settings-underscore"> 
+    <div class="row">
+        <div class="col-md-12">                                                               
+            <div class="fg-clear form-group">
+                <label class="control-label  col-sm-4 col-md-2 text-right">{{'INTERNAL_SETTINGS_LANGUAGES'|trans}}</label>
+                <div class="col-sm-8 col-md-4 fg-lang-select">
+                    <select class="form-control fg-select-font select2 "  name="languageSettings" id="languageSettings" data-key="languageSettings">  
+                        <% _.each(defaultLanguages,function(value,key) { %>                                     
+                             <% if(contactSystemLang == key) { %>  
+                                <option value= "<%- key %>" selected ><%- value %></option>             
+                            <% } else { %> 
+                                <option value= "<%- key %>" ><%- value %></option>   
+                            <% } %>                                        
+                       <% }); %>
+                    </select>
+                </div>
+            </div>          
+        </div>
+    </div> 
+</script>   
+
+{#template for newsletter subscription settings#}
+<script type="text/template" id="fg-newsletter-settings-underscore"> 
+    <div class="row">
+        <div class="col-md-12">                                                               
+            <div class="fg-clear form-group">
+                <label class="control-label  col-sm-4 col-md-2 text-right">{{'INTERNAL_SETTINGS_NEWSLETTER'|trans}}</label>
+                <div class="col-sm-8 col-md-4 fg-newsletter-subscript">
+                    <div class="fg-width-150 switch-toggle switch-2 switch-fg">
+                        <input id="subscriberSetting1" name="subscriberSetting" type="radio" data-key="subscriberSetting" <% if(is_subscriber == '1') { %> checked <% } %> class="make-switch" value="1">
+                        <label for="subscriberSetting1">{{ 'INTERNAL_SETTINGS_ON'|trans }}</label>
+                        <input id="subscriberSetting0" name="subscriberSetting" type="radio" data-key="subscriberSetting" <% if(is_subscriber != '1') { %> checked <% } %> class="make-switch" value="0">
+                        <label for="subscriberSetting0">{{ 'INTERNAL_SETTINGS_OFF'|trans }}</label>
+                        <a class="btn btn-primary"></a>
+                    </div>
+                </div>
+            </div>          
+        </div>
+    </div>   
+</script>    

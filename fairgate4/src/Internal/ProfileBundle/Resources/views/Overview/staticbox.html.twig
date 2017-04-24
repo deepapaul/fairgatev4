@@ -1,0 +1,28 @@
+{% set boxTitle = (overviewType == 'personal') ? 'PERSONAL_OVERVIEW_STATIC_BOX_TITLE'|trans : ((overviewType == 'team') ? 'TEAM_OVERVIEW_STATIC_BOX_TITLE'|trans :  'WORKGROUP_OVERVIEW_STATIC_BOX_TITLE'|trans ) %}
+{% set boxImg = (overviewType == 'personal') ? 'raiffeisen-personaldashboard.jpg' : ((overviewType == 'team') ? 'raiffeisen-team.jpg' :  'raiffeisen-workgroup.jpg' ) %}        
+{% set boxTeaserText = (overviewType == 'personal') ? 'PERSONAL_OVERVIEW_STATIC_BOX_TEASERTEXT'|trans : '' %} 
+    
+{% set boxContent = (overviewType == 'personal') ? 'PERSONAL_OVERVIEW_STATIC_BOX_MAINTEXT'|trans : ((overviewType == 'team') ? 'TEAM_OVERVIEW_STATIC_BOX_MAINTEXT'|trans :  'WORKGROUP_OVERVIEW_STATIC_BOX_MAINTEXT'|trans ) %}
+{% set boxContentMoreText = (overviewType == 'personal') ? 'Weitere Informationen' : ((overviewType == 'team') ? 'Weitere Details' : '') %}
+{% set boxContentMoreLink = (overviewType == 'personal') ? 'http://memberplus.raiffeisen.ch/de/' : ((overviewType == 'team') ? 'https://www.raiffeisen.ch/web/youngmemberplus' : '') %}   
+   {# fg-dashboard-static-img
+    fg-dashboard-static-inline-img#}
+<div class="portlet box fg-portlet-ash-green fg-box-style-01">
+    <div class="portlet-title">
+        <div class="caption"> <span class="step-title">{{ boxTitle }} </span> </div>
+    </div>
+    <div class="portlet-body">
+        <div class="portlet-body fg-dashboard-static-wrap">
+            {% if (overviewType == 'team') %}
+                <div class="fg-dashboard-static-img-only"><img src="{{ asset('fgassets/global/img/overview/'~boxImg) }}" />  </div>                                     
+                <div>  {{ boxContent|raw }} {% if (boxContentMoreText != '') %} <a href="{{boxContentMoreLink}}" target="_blank">{{ boxContentMoreText }}</a> {% endif %}</div>                
+            {% elseif (overviewType == 'workgroup' or overviewType == 'personal') %}
+                <div class="fg-dashboard-static-inline-img"><img src="{{ asset('fgassets/global/img/overview/'~boxImg) }}" /> 
+                    {% if (boxTeaserText != '') %} {{ boxTeaserText }} <br/> <br/>{% endif %}
+                    <span>  {{ boxContent }} </span>
+                    {% if (boxContentMoreText != '') %} <a href="{{boxContentMoreLink}}" target="_blank">{{ boxContentMoreText }}</a> {% endif %}
+                </div>      
+            {% endif %}
+        </div>
+    </div>
+</div>

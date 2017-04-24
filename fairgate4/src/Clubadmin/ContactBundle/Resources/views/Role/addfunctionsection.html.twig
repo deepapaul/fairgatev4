@@ -1,0 +1,53 @@
+<script type="text/template" id="template-function-section-add">
+    <% sectionHeading = '' %>
+    <% roleKey = '' %>
+    <% roleName = '' %>
+    <% parentDiv = 'categoryfunctions' %>
+    <% if ((roleId != null) && (roleId != 'null') && (roleId != 0)) { %>
+        <% parentDiv = 'functions_' + roleId %>
+        <% if (isRoleNew) { %>
+            <% sectionHeading = ' - <span id="change_title" data-role-id="' + roleId + '">' + 'Role' + '</span>' %>
+            <% roleKey = '.role.new.' + roleId %>
+            <% roleName = '_role_new_' + roleId %>
+        <% } else { %>
+            <% if (roleId.indexOf('newrole') != -1) { %>
+                <% originalRoleId = roleId.replace('newrole', ''); %>
+                <% sectionHeading = ' - <span id="change_title" data-role-id="' + originalRoleId + '">' + originalRoleId + '</span>' %>
+                <% roleKey = '.role.' + 'new.' + originalRoleId %>
+                <% roleName = '_role_' + 'new_' + originalRoleId %>
+                <% parentDiv = 'functions_' + originalRoleId %>
+            <% } else { %>
+                <% sectionHeading = ' - <span id="change_title" data-role-id="' + roleId + '">' + roleId + '</span>' %>
+                <% roleKey = '.role.' + roleId %>
+                <% roleName = '_role_' + roleId %>
+            <% } %>
+        <% } %>
+    <% } %>
+
+    <div class="row" data-rl-id="<%- catId + roleName %>">
+        <div class="col-md-12">
+            <div class="panel panel-primary panel-bg">
+                <div class="panel-heading fg-theme-head paneldisplay">
+                    <h3 class="panel-title pull-left">{%trans%}FUNCTIONS{%endtrans%} <%= sectionHeading %></h3>
+                </div>
+            </div>
+            <div class="row fg-common-top">
+                <div class="col-md-12">
+                    <div class="fg-settings-block dragndrop" id="<%- parentDiv %>">
+                        {# <!-- FUNCTION LISTING --> #}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 fg-common-top fg-common-btm pull-left">
+                            <% if ((roleId != null) && (roleId != 'null') && (roleId != 0)) { %>
+                                <a id="addrow" href="#basic" data-toggle="modal" data-parentdiv-id="<%- parentDiv %>" data-add-type="function" data-parent="<%- roleId %>">
+                            <% } else { %>
+                                <a id="addrow" href="#basic" data-toggle="modal" data-parentdiv-id="<%- parentDiv %>" data-add-type="function">
+                            <% } %>
+                            <i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text"> {%trans%}ADD_FUNCTION{%endtrans%}</span> </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

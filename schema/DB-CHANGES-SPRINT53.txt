@@ -1,0 +1,146 @@
+
+******************************************************* existing newsletter article ***************************************************
+
+ALTER TABLE `fg_cn_newsletter_content` CHANGE `content_type` `content_type` ENUM('INTRO','CLOSING','EXISTING_ARTICLE','ARTICLE','IMAGE','OTHER','SPONSOR','SPONSOR ABOVE','SPONSOR BOTTOM') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+
+ALTER TABLE `fg_cn_newsletter_content` CHANGE `news_id` `article_id` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `fg_cn_newsletter_content` ADD INDEX(`article_id`);
+
+ALTER TABLE `fg_cn_newsletter_content` ADD CONSTRAINT `fk_fg_cn_newsletter_content_fg_cms_article1` FOREIGN KEY (`article_id`) REFERENCES `fg_cms_article`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+ALTER TABLE `fg_cn_newsletter_content` ADD `include_attachments` BOOLEAN NULL DEFAULT TRUE AFTER `items_id`;
+
+***************************************************************************************************************************************
+
+
+
+
+******************************************************* contact table element ***************************************************
+
+
+INSERT INTO `fg_cms_page_content_type` (`id`, `type`, `logo_name`, `label`, `table_name`, `sort_order`) VALUES (NULL, 'contacts-table', 'fa-list', 'CMS_CONTACTS_TABLE', '', '13');
+
+CREATE TABLE `fg_cms_contact_table` (
+  `id` int(11) NOT NULL,
+  `club_id` int(11) NOT NULL,
+  `filter_id` int(11) NOT NULL,
+  `include_contacts` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `exclude_contacts` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `column_data` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `filter_data` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stage` enum('stage1','stage2','stage3','stage4') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'stage1',
+  `created_at` date NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `updated_at` date DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0'
+);
+
+
+CREATE TABLE `fg_cms_contact_table_columns` (
+  `id` int(11) NOT NULL,
+  `table_id` int(11) NOT NULL,
+  `column_type` enum('contact_name','contact_field','membership_info','fed_membership_info','analysis_field','team_assignments','team_functions','workgroup_assignments','workgroup_functions','role_category_assignments','common_role_functions','individual_role_functions','filter_role_assignments','fed_role_category_assignments','common_fed_role_functions','individual_fed_role_functions','sub_fed_role_category_assignments','common_sub_fed_role_functions','individual_sub_fed_role_functions') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attribute_id` int(11) DEFAULT NULL,
+  `role_id` int(11) DEFAULT NULL,
+  `role_category_id` int(11) DEFAULT NULL,
+  `column_subtype` enum('membership','member_years','age','year_birth') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `function_ids` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `show_profile_picture` tinyint(1) DEFAULT '0',
+  `sort_order` int(11) NOT NULL,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0'
+);
+
+
+CREATE TABLE `fg_cms_contact_table_columns_i18n` (
+  `id` int(11) NOT NULL,
+  `lang` char(2) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title_lang` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+);
+
+
+CREATE TABLE `fg_cms_contact_table_filter` (
+  `id` int(11) NOT NULL,
+  `table_id` int(11) NOT NULL,
+  `filter_type` enum('contact_fields','memberships','fed_memberships','filter_roles','workgroups','team_category','role_category','fed_role_category') NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `attribute_id` int(11) DEFAULT NULL,
+  `filter_subtype_ids` varchar(255) DEFAULT NULL,
+  `sort_order` int(11) NOT NULL,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0'
+);
+
+
+CREATE TABLE `fg_cms_contact_table_filter_i18n` (
+  `id` int(11) NOT NULL,
+  `lang` char(2) NOT NULL,
+  `title_lang` varchar(255) NOT NULL
+);
+
+
+ALTER TABLE `fg_cms_contact_table`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `club_id` (`club_id`),
+  ADD KEY `fliter_id` (`filter_id`),
+  ADD KEY `updated_at` (`updated_at`),
+  ADD KEY `created_by` (`created_by`),
+  ADD KEY `updated_by` (`updated_by`);
+
+ALTER TABLE `fg_cms_contact_table_columns`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `table_id` (`table_id`),
+  ADD KEY `cf_id` (`attribute_id`),
+  ADD KEY `role_id` (`role_id`),
+  ADD KEY `role_category_id` (`role_category_id`);
+
+ALTER TABLE `fg_cms_contact_table_columns_i18n`
+  ADD PRIMARY KEY (`id`,`lang`),
+  ADD KEY `id` (`id`),
+  ADD KEY `lang` (`lang`);
+
+ALTER TABLE `fg_cms_contact_table_filter`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `table_id` (`table_id`),
+  ADD KEY `attribute_id` (`attribute_id`);
+
+ALTER TABLE `fg_cms_contact_table_filter_i18n`
+  ADD PRIMARY KEY (`id`,`lang`),
+  ADD KEY `id` (`id`),
+  ADD KEY `lang` (`lang`);
+
+ALTER TABLE `fg_cms_contact_table` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+ALTER TABLE `fg_cms_contact_table_columns` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+ALTER TABLE `fg_cms_contact_table_filter` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `fg_cms_contact_table`
+  ADD CONSTRAINT `fg_cms_contact_table_ibfk_1` FOREIGN KEY (`club_id`) REFERENCES `fg_club` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fg_cms_contact_table_ibfk_2` FOREIGN KEY (`filter_id`) REFERENCES `fg_filter` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fg_cms_contact_table_ibfk_3` FOREIGN KEY (`created_by`) REFERENCES `fg_cm_contact` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fg_cms_contact_table_ibfk_4` FOREIGN KEY (`updated_by`) REFERENCES `fg_cm_contact` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+ALTER TABLE `fg_cms_contact_table_columns`
+  ADD CONSTRAINT `fg_cms_contact_table_columns_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `fg_rm_role` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fg_cms_contact_table_columns_ibfk_2` FOREIGN KEY (`role_category_id`) REFERENCES `fg_rm_category` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fg_cms_contact_table_columns_ibfk_3` FOREIGN KEY (`table_id`) REFERENCES `fg_cms_contact_table` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fg_cms_contact_table_columns_ibfk_4` FOREIGN KEY (`attribute_id`) REFERENCES `fg_cm_attribute` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+
+ALTER TABLE `fg_cms_contact_table_columns_i18n`
+  ADD CONSTRAINT `fg_cms_contact_table_columns_i18n_ibfk_1` FOREIGN KEY (`id`) REFERENCES `fg_cms_contact_table_columns` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+ALTER TABLE `fg_cms_contact_table_filter`
+  ADD CONSTRAINT `fg_cms_contact_table_filter_ibfk_1` FOREIGN KEY (`table_id`) REFERENCES `fg_cms_contact_table` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fg_cms_contact_table_filter_ibfk_2` FOREIGN KEY (`attribute_id`) REFERENCES `fg_cm_attribute` (`id`);
+
+ALTER TABLE `fg_cms_contact_table_filter_i18n`
+  ADD CONSTRAINT `fg_cms_contact_table_filter_i18n_ibfk_1` FOREIGN KEY (`id`) REFERENCES `fg_cms_contact_table_filter` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  
+ALTER TABLE `fg_cms_page_content_element` ADD `table_id` INT(11) NULL DEFAULT NULL AFTER `form_id`;
+ALTER TABLE `fg_cms_page_content_element` ADD INDEX(`table_id`);
+ALTER TABLE `fg_cms_page_content_element` ADD CONSTRAINT `fg_cms_page_content_element_ibfk_9` FOREIGN KEY (`table_id`) REFERENCES `fg_cms_contact_table`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+***************************************************************************************************************************************
+
+ALTER TABLE `fg_cms_contact_table_columns` CHANGE `column_subtype` `column_subtype` ENUM('membership','member_years','age','birth_year') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;

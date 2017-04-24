@@ -1,0 +1,424 @@
+
+@import 'utilities/variables'; // added variables and functions
+/*
+*01 - Metronic Global elements
+	//01-A-buttons
+	//01-B-Portlet box
+	//01-C-breadcrumb
+	//01-D-Select box
+	//01-E-input icon
+	//01-F-Form sticky area
+	//01-G-Dropdown
+	//01-H-Autocomplete dropdown
+	//01-I-Popover design
+	//01-J-Modal design------------------------
+	//01-K Datepicker overide----------------
+	//01-L Drag drop global styles----------------
+*02 - Global Classes
+*03 - Data table override
+*04 - Sidebar override
+*05 - header override
+*06 - Plugins-override
+* 999 - Pages
+*/
+
+
+/* =============================================================================
+*01 - Metronic Global elements
+========================================================================== */
+body{
+	font-size: 13px;
+}
+body.page-header-fixed.page-full-width {
+    background: $clrWhite;
+}
+ p {
+    margin: 0 0 10px;
+}
+
+.login {
+	.present-by{
+		color: #999;
+		font-size: 13px;
+		width: 360px;
+		margin: 0 auto;
+		padding-top: 10px;
+		padding-bottom: 15px;
+		padding-right: 0px;
+	}
+}
+//------------------------Form elements--------------------------------
+
+.form-control,
+.input-group-addon{
+	border-color: $clrGreyBtnBg;
+}
+.form-control[disabled] {
+	cursor: not-allowed;
+	background-color: $clrDarkWhite;
+}
+.form-control[readonly] {
+	cursor: not-allowed;
+	background-color: $clrDarkWhite;
+}
+fieldset[disabled] .form-control {
+	cursor: not-allowed;
+	background-color: $clrDarkWhite;
+}
+
+label {
+    font-weight: 400;
+    font-size: 14px;
+}
+.control-label .required, 
+.form-group .required{
+	    color: $clrPrimaryBlack;
+	    font-size: 14px;
+}
+//01-A-buttons------------------------
+a.btn{
+	border-width: 0;
+}
+.green.btn {
+	color: $clrWhite;
+	background-color: $clrGreen;
+	border-color: "";
+	&:hover {
+		color: $clrWhite;
+		background-color: $clrDarkGreen;
+	}
+	&:focus {
+		color: $clrWhite;
+		background-color: $clrDarkGreen;
+	}
+	&:active {
+		color: $clrWhite;
+		background-color: $clrDarkGreen;
+	}
+	&.active {
+		color: $clrWhite;
+		background-color: $clrDarkGreen;
+	}
+}
+.btn.green.disabled:hover:not(.btn-outline), 
+.btn.green.disabled:focus:not(.btn-outline), 
+.btn.green.disabled.focus:not(.btn-outline), 
+.btn.green[disabled]:hover:not(.btn-outline), 
+.btn.green[disabled]:focus:not(.btn-outline), 
+.btn.green.focus[disabled]:not(.btn-outline), 
+.btn.green.focus:not(.btn-outline), 
+fieldset[disabled] .btn.green:hover:not(.btn-outline), 
+fieldset[disabled] .btn.green:focus:not(.btn-outline), 
+fieldset[disabled] .btn.green.focus:not(.btn-outline),
+.btn.green:focus:not(.btn-outline), 
+.btn.green.focus:not(.btn-outline){
+	color: $clrWhite;
+	background-color: $clrDarkGreen !important;
+	border-color: $clrGreen !important;
+
+}
+
+.btn.default {
+	color: $clrGrey2;
+	background-color: $clrGreyBtnBg;
+	&:not(.btn-outline) {
+		color: $clrGrey2;
+		background-color: $clrGreyBtnBg;
+		border: none;
+		&:hover {
+			color: $clrPrimaryBlack;
+			background-color: $clrGreyBtnBgHvr;			
+		}
+	}
+
+	&:hover, 
+	&:active, 
+	&.active {
+			color: $clrPrimaryBlack !important;
+			background-color: $clrGreyBtnBgHvr !important;		
+	}
+}
+.btn.green:not(.btn-outline) {
+	color: $clrWhite !important;
+	background-color: $clrGreen;
+	border-color: $clrDarkGreen;
+	&:hover {
+		color: $clrWhite !important;
+		background-color: $clrDarkGreen !important;
+		border-color: $clrGreen !important;
+	}
+}
+input[type="text"].fg-inline-override {
+    height: 31px;
+    text-indent: 3px !important;
+}
+.dataTable .editable-container .popover-content .editable-input input{
+	border: 1px solid #ddd;
+}
+.editable-buttons{
+	vertical-align: middle !important;
+	line-height: 31px;
+	.btn{		
+		border:none;
+    	padding: 0;
+	    font-size: 18px;
+		&.default:not(.btn-outline) {
+			background: none;
+		}
+		&.blue.editable-submit{
+	    	margin-right: 5px;
+	    	background: none !important;
+	    	.fa {
+	    		color: $clrPrimaryBlack;
+	    	}
+		}
+
+	}	
+	.btn.blue.editable-submit:hover,
+	.btn.default.editable-cancel:hover{
+		background: none !important;
+    	.fa-check {
+    		color: $clrGreen;
+    	}
+    	.fa-times{
+    		color: $clrRed;
+
+    	}
+	}
+}
+.error .bootstrap-select .btn {
+    border: 1px solid #b94a48 !important;
+}
+.login .content .form-actions .btn#back-btn{
+    background-color: #DDDDDD;
+}
+
+.form{
+	.form-actions{
+		.btn{
+			@include bpMax('480px'){
+				margin-bottom: 4px;
+			}
+		}
+		&.right{
+			.btn{
+				margin-left: 5px;
+			}
+		}
+	}
+} 
+
+//01-B-Portlet box------------------------
+
+.portlet.box > .portlet-title {
+	margin-bottom: 0;
+    min-height: 31px;
+	padding: 10px 10px 4px 10px;
+	> .caption {
+		margin: 0 0 6px;
+		line-height: 15px;
+		padding: 0;
+	}
+}
+.fg-box-style-01.portlet.box > .portlet-title > .caption{	
+	line-height: 20px;
+}
+
+
+//01-C-breadcrumb------------------------
+.breadcrumb>li+li:before{
+	display: none;
+}
+li.btn-group.backtop{
+	position: absolute;
+	left:auto;
+}
+
+//01-D-Select box------------------------
+.open .btn-default.dropdown-toggle,
+.open .btn-default.dropdown-toggle:hover{
+    background-color: $clrLightGrey;
+}
+
+//01-E-input icon------------------------
+#contact_connections .fg-content-minarea.input-icon > i{
+	left: 7px;
+	top: 9px;
+}
+
+//01-F-Form sticky area------------------------
+.page-footer-fixed .backend-sticy-area:not(.fg-sticky-block){
+	margin-top: 10px;
+}
+
+
+
+//01-G-Dropdown------------------------
+.dropdown-menu li > a{
+	&:hover{		
+		font-weight: normal;
+		color: $clrPrimaryBlack;
+	}
+	font-weight: normal;
+	color: $clrPrimaryBlack;
+}
+
+.dropdown > .dropdown-menu {
+	margin-top: 0;
+	&.pull-right {
+		&:before {
+			display: none !important;
+		}
+		&:after {
+			display: none !important;
+		}
+	}
+
+}
+.dropdown-toggle > .dropdown-menu {
+	margin-top: 0;
+	&.pull-right {
+		&:before {
+			display: none !important;
+		}
+		&:after {
+			display: none !important;
+		}
+	}
+}
+.btn-group > .dropdown-menu {
+	margin-top: 0;
+	&.pull-right {
+		&:before {
+			display: none !important;
+		}
+		&:after {
+			display: none !important;
+		}
+	}
+}
+
+.dropdown > .dropdown-menu.pull-left:before,
+.dropdown-toggle > .dropdown-menu.pull-left:before,
+.btn-group > .dropdown-menu.pull-left:before,
+.dropdown > .dropdown-menu.pull-left:after,
+.dropdown-toggle > .dropdown-menu.pull-left:after,
+.btn-group > .dropdown-menu.pull-left:after,
+.dropdown > .dropdown-menu:before, 
+.dropdown-toggle > .dropdown-menu:before, 
+.btn-group > .dropdown-menu:before,
+.dropdown > .dropdown-menu:after, 
+.dropdown-toggle > .dropdown-menu:after, 
+.btn-group > .dropdown-menu:after {
+  display: none !important;
+}
+//fix click position of radio button
+div.radio input[type=radio], 
+div.radio-inline input[type=radio] {
+    margin-left: -11px;
+    width: 22px;
+    height: 22px;
+    margin-top: -2px;
+}
+
+//01-I-Popover design------------------------
+.popover.fa, .tooltip.fa{
+
+    font: normal normal normal 14px/1 FontAwesome;
+}
+
+//01-J-Modal design------------------------
+.modal-body{
+	font-size: 14px;
+}
+//01-K Datepicker overide----------------
+
+.datepicker table td{
+	cursor: pointer;
+}
+//01-L Drag drop global styles----------------------------
+.fg-sidebar-drag-active{
+	.DTFC_ScrollWrapper {
+    	overflow: inherit;
+    	top: 1px;
+	}
+	.page-sidebar{
+		.page-sidebar-menu{
+
+			.fg-sidebar-hover{
+				a{
+					cursor: -moz-grabbing !important;
+					cursor: -webkit-grabbing !important;
+					cursor: grabbing !important;
+					cursor: url("../../internal/img/closedhand.cur.ico"), move !important; /* for ie fix*/
+				}
+			}
+			.nav-item{
+				> a.non-dropable{
+					cursor:no-drop !important;
+				}
+			}
+			.sub-menu{
+				.nav-item:not(.active){
+
+					> a.non-dropable{
+						color: #222222 !important;
+						background: none !important;
+						&:hover{
+
+							color: #222222 !important;
+							background: none !important;
+							.title,.arrow:before,i{
+								color: #222222 !important;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+/* =============================================================================
+*02 - Global Classes
+========================================================================== */
+.text-yellow {
+    color: $clrLightYellow;
+}
+.text-grey {
+    color: $clrcommonGrey;
+}
+
+
+
+
+/* =============================================================================
+*03 - Data table override
+========================================================================== */
+@import 'partials/data-tables-override'; // Data table style   
+
+/* =============================================================================
+*04 - Sidebar override
+========================================================================== */
+
+@import 'partials/sidebar-override'; // Sidebar style  
+@import 'partials/_new-sidebar-style'; // New Sidebar style   
+
+/* =============================================================================
+*05 - header override
+========================================================================== */
+
+@import 'partials/header-override'; // Header override style   
+
+
+
+/* =============================================================================
+*06 - Plugins-override
+========================================================================== */
+
+@import 'partials/plugins-override'; // Plugins override style   
+
+
+
+/* =============================================================================
+* 999 - Pages
+========================================================================== */

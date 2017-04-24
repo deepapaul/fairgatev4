@@ -1,0 +1,33 @@
+<div class="btn-group col-md-12 col-sm-12 col-xs-12 fg-left-zero">
+ <button class="btn tableaction fgContactdrop" data-toggle="dropdown" data-type="activeservice" data-menu-type="multiple"> <i class="fa fa-bars fa-2x"></i></button>
+    <ul class="dropdown-menu pull-left fgdropmenu" ></ul>
+    <div class="fg-title-wrapper fg-subscriber-list fg-service-title" id="data-tabs-content">
+        <h3 class="page-title fg-page-title"><div class="page-title-sub">{{ title }} </div>  </h3>
+            <div class="fg-sponsor-service-tab">
+            <ul id="data-tabs" class="nav nav-tabs data-more-tab fg_sponsor_nav_tab">
+                <li class="show active" id="activeservice-tab-li" data-type="activeservice">
+                    <a href="#fg_dev_activeservice"  data-toggle="tab" aria-controls="fg_dev_activeservice">{%trans%}SM_ACTIVE_SERVICE{% endtrans%} <span id="fg-active-service-count" class="badge">{{activeserviceCount|default('0')}}</span></a>
+                </li> 
+                <li class="show" id="futureservice-tab-li" data-type="futureservice">
+                    <a href="#fg_dev_futureservice" data-toggle="tab" aria-controls="fg_dev_futureservice">{% trans%}SM_FUTURE_SERVICE{% endtrans%} <span id="fg-future-service-count" class="badge">{{futureserviceCount|default('0')}}</span></a>
+                </li> 
+                <li class="show" id="formerservice-tab-li" data-type="formerservice">
+                    <a href="#fg_dev_formerservice" data-toggle="tab" aria-controls="fg_dev_formerservice">{% trans%}SM_FORMER_SERVICE{% endtrans%} <span id="fg-former-service-count" class="badge">{{formerserviceCount|default('0')}}</span></a>
+                </li> 
+                <li class="datahideshow dropdown hidden" style=""><a data-toggle="dropdown" class="dropdown-toggle" id="fg-contact-more-tab" href="#">{% trans%}MORE{% endtrans%}<i class="fa fa-angle-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li class="hidden active" id="activeservice-tab-li" data-type="activeservice"> 
+                            <a href="#fg_dev_activeservice"  data-toggle="tab" aria-controls="fg_dev_activeservice" >{%trans%}SM_ACTIVE_SERVICE{% endtrans%} ({{activeserviceCount|default('0')}})</a>
+                        </li> 
+                        <li class="hidden" id="futureservice-tab-li" data-type="futureservice">
+                            <a href="#fg_dev_futureservice"  data-toggle="tab" aria-controls="fg_dev_futureservice" >{% trans%}SM_FUTURE_SERVICE{% endtrans%} {{futureserviceCount|default('0')}}</a>
+                        </li> 
+                        <li class="hidden" id="formerservice-tab-li" data-type="formerservice">
+                            <a href="#fg_dev_formerservice"  data-toggle="tab" aria-controls="fg_dev_formerservice" >{% trans%}SM_FORMER_SERVICE{% endtrans%} {{formerserviceCount|default('0')}}</a>
+                        </li> 
+                    </ul>
+                </li>
+            </ul>
+            </div>             
+    </div>
+</div>

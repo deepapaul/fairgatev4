@@ -1,0 +1,26 @@
+HOTFIX TASK
+==============
+V4createClub
+
+ALTER TABLE fg_cn_newsletter_sidebar CHANGE sponsor_ad_area_id sponsor_ad_area_id int(11) null;
+
+UPDATE `fg_club_settings` SET `fiscal_year` = '2015-01-01';
+
+
+ALTER TABLE `fg_cn_newsletter_content` DROP FOREIGN KEY `fk_fg_cn_newsletter_content_fg_sm_ad_area1`; 
+ALTER TABLE `fg_cn_newsletter_content` ADD CONSTRAINT `fk_fg_cn_newsletter_content_fg_sm_ad_area1` FOREIGN KEY (`sponsor_ad_area_id`) REFERENCES `fg_sm_ad_area`(`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
+
+ALTER TABLE `fg_cn_newsletter_sidebar` DROP FOREIGN KEY `fk_fg_cn_newsletter_sidebar_fg_sm_ad_area1`; 
+ALTER TABLE `fg_cn_newsletter_sidebar` ADD CONSTRAINT `fk_fg_cn_newsletter_sidebar_fg_sm_ad_area1` FOREIGN KEY (`sponsor_ad_area_id`) REFERENCES `fg_sm_ad_area`(`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
+
+UPDATE fg_sm_ad_area SET title= 'Allgemein' WHERE is_system = 1
+UPDATE fg_sm_ad_area SET is_system=0 WHERE is_system=1 
+
+new sql fn - (Function_contactNameNoSort) committed- stored procedures folder
+
+ALTER TABLE `fg_sm_sponsor_ads` DROP FOREIGN KEY `fk_fg_sm_sponsor_ads_fg_sm_ad_area1`; 
+ALTER TABLE `fg_sm_sponsor_ads` ADD CONSTRAINT `fk_fg_sm_sponsor_ads_fg_sm_ad_area1` FOREIGN KEY (`ad_area_id`) REFERENCES `fg_sm_ad_area`(`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
+
+SPRINT TASK
+================
+contactNameNoSort

@@ -1,0 +1,32 @@
+Common\UtilityBundle\Entity\FgCmsPageContentElementSponsorServices:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPageContentElementSponsorServicesRepository
+    type: entity
+    table: fg_cms_page_content_element_sponsor_services
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        element:
+            targetEntity: FgCmsPageContentElement
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                element_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        service:
+            targetEntity: FgSmServices
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                service_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

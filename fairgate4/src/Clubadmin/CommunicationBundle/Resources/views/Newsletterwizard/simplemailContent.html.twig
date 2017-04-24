@@ -1,0 +1,233 @@
+{% extends 'ClubadminCommunicationBundle:Newsletterwizard:newsletterWizard.html.twig' %}
+{% block wizardstep3 %}
+<form data-post-type="json" skipDirtyCheck autocomplete="off" action="#" class="form-horizontal" id="form-tab3"  data-url="{{path('simplemail_save_content',{'newsletterId':newsletterId})}}" novalidate="novalidate" enctype="multipart/form-data">
+    <div class="excludejs ui-sortable" id="membershiplist_sort">
+        <div data-list-wrap></div>
+        <script type="text/template" id="newsletterContentlistWrap">
+         <% var key = 0%>
+         <% var newsletterId = 0%>
+         <%  _.each(data,function(item, key) { %>
+            <%  _.each(item,function(values) { %>  
+                <% key = values.id   %>
+                <% newsletterId = values.newsletterId   %>
+             <% if(values.type=='salutation') { %>
+            <div id="<%- key%>" class="row sortables">
+                <div class="col-md-12">
+                    <div class="row">
+                        <label class="col-md-3 col-sm-3 col-xs-12"><span class="fg-simplemail-label">{% trans %}NL_SALUTATION{% endtrans %}</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12"> <span class="fg-salutation-text"><%- values.text%></span> </div>
+                    </div>
+                </div>
+            </div>
+            <% } else if(values.type=='content') {  %>
+            <% newsletterId = values.newsletterId   %>
+            <div id="<%- key%>" class="row  sortables">
+                <div id="<%- key%>" class="form-body ">
+                    <div class="form-group last">
+                        <label class="col-md-3 col-sm-3 col-xs-12">
+                            <span class="fg-simplemail-label">{% trans %}NL_MAINCONTENT{% endtrans %}</span>
+                        </label>
+                            <div class="cktext" data-fn="editor.init" data-id="<%- key %>" ></div>
+                        <div  id="data-<%- key %>" class="col-md-9 form-body">
+                            <textarea class="ckeditor form-control basic" data-key="content" name="editor-<%- key%>" rows="6" data-type="simple" id="editor-<%- key%>"><%- values.content%></textarea>
+                            <div class="fg-smaple-editor fg-editor-<%- key%>">
+                                <a href="#" class="fg-advanced-editor">
+                                    <i class="fa fa-caret-square-o-down"></i><span>{% trans %}NL_ADVANCED_EDITER{% endtrans %}</span>
+                                </a>
+                                <a href="#" class="fg-simple-editor">
+                                    <i class="fa fa-caret-square-o-up"></i><span>{% trans %}NL_SIMPLE_EDITOR{% endtrans %}</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } else if(values.type=='signature') {  %>
+             <% newsletterId = values.newsletterId   %>
+            <div id="<%- key%>" class="row  sortables">
+                <div class="fg-tab-ckedit">
+                     
+                     <div class="col-md-4 col-sm-4 col-xs-12 pull-right">
+                        <div class="cktext" data-fn="editor.init" data-id="<%- key %>" data-target="#data-<%- key %>" data-toggle="collapse" ></div>
+                     </div>
+                </div>
+                                
+                <div id="data-<%- key %>" class="form-body collapse">
+                    <div class="form-group last">
+                        <label class="col-md-3 col-sm-3 col-xs-12">
+                            <span class="fg-salutation-sign-text fg-simplemail-label" >{% trans %}NL_SIGNATURE{% endtrans %}</span>
+                            <span class="fg-simplemail-label"><select class="form-control select2 dynamic-templates"   id="dynamic-select-<%- key%>" data-url="{{path('simplemail_editor_content',{'type':'other','newsletterId':newsletterId})}}" data-fn-init="editor.getTemplate" data-id="<%- key%>"></select></span>
+                         </label>
+                  
+                    <div class="col-md-9 col-sm-9 col-xs-12">            
+                        <textarea class="ckeditor form-control basic" name="editor-<%- key%>" data-key="signature" rows="6" data-type="simple" id="editor-<%- key%>"><%- values.signature %></textarea>
+                        <div class="fg-smaple-editor fg-editor-<%- key%>">
+                            <a href="#" class="fg-advanced-editor">
+                                <i class="fa fa-caret-square-o-down"></i><span>{% trans %}NL_ADVANCED_EDITER{% endtrans %}</span>
+                            </a>
+                            <a href="#" class="fg-simple-editor">
+                                <i class="fa fa-caret-square-o-up"></i><span>{% trans %}NL_SIMPLE_EDITOR{% endtrans %}</span>
+                            </a>
+                        </div>
+                        <div class="fg-save-template" data-id="<%- key%>">
+                            <div class="fg-save-template-btn template-action-btn-<%- key%>">
+                                <a href="#">
+                                    <i class="fa fa-check-circle"></i>{% trans %}NL_SAVE_SIGNATURE{% endtrans %}
+                                </a>
+                            </div>
+                            <div class="fg-name-template" data-id="<%- key%>">
+                                <input type="text" class="fg-template-name-<%- key%>" data-type="other">
+                                <a href="#" data-redirect-url="{{path('simplemail_editor_content',{'type':'other','newsletterId':newsletterId})}}" data-url="{{path('simpleemail_save_editorcontent',{'from':'save','wordType':'other'})}}"  class="fg-name-template-save-<%- key%>" data-check="true"><i class="fa fa-check"></i></a>
+                                <a href="#" class="fg-name-template-close"><i class="fa fa-times"></i></a>
+                            </div>
+                        </div>
+                        <div class="fg-delete-template fg-delete-template-<%- key%> hidden"><a data-toggle="modal" href="#" data-url="{{path('simpleemail_delete_editorcontent')}}"  data-type="other"><i class="fa fa-times-circle"></i>{{'NL_DELETE_SIGNATURE'|trans}}</a></div>
+                 </div>
+                    </div>
+                  </div>
+           
+            <div aria-hidden="true" role="basic" tabindex="-1" id="basic3-<%- key%>" class="modal fade">
+                <div class="modal-dialog modal-wide">
+                    <div class="modal-content fg-popup-wrap">
+                        <div class="modal-header fg-modal-header">
+                            <button aria-hidden="true" data-dismiss="modal" class="close" type="button"></button>
+                            <h4 class="modal-title">{% trans %}NL_OVERWRITE_EXISTING{% endtrans %}</h4>
+                        </div>
+                        <div class="modal-body fg-modal-text">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="portlet-body form">
+                                        <!-- BEGIN FORM-->
+                                        <form class="form-horizontal form-row-sepe" action="#">
+                                            <input type="hidden" id="signatureOverwriteText" class="ignore fg-dev-overwrite-text" value="{{'NL_OVERWRITE_SIGNATURE_TEXT'|trans}}" />
+                                            <div class="form-body"><p class="fg-dev-confirm-text"></p> </div>                     
+                                        </form>
+                                        <!-- END FORM-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer form-actions fg-modal-footer">
+                            <button data-dismiss="modal" class="btn default" type="button">{{'Cancel'|trans}}</button>
+                            <a href="#" data-redirect-url="{{path('simplemail_editor_content',{'type':'other','newsletterId':newsletterId})}}" data-url="{{path('simpleemail_save_editorcontent',{'from':'overwrite','wordType':'default'})}}"  class="btn green fg-name-template-save-<%- key%>">{{'OK'|trans}}</i></a>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <div aria-hidden="true" role="basic" tabindex="-1" id="basic2-<%- key%>" class="modal fade">
+                <div class="modal-dialog modal-wide">
+                    <div class="modal-content fg-popup-wrap">
+                        <div class="modal-header fg-modal-header">
+                            <button aria-hidden="true" data-dismiss="modal" class="close" type="button"></button>
+                            <h4 class="modal-title">{% trans %}NL_DELETE_SIGNATURE{% endtrans %}</h4>
+                        </div>
+                        <div class="modal-body fg-modal-text">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="portlet-body form">
+                                        <!-- BEGIN FORM-->
+                                        <form class="form-horizontal form-row-sepe" action="#">
+                                            <input type="hidden" id="signatureDeleteText" class="ignore fg-dev-delete-text" value="{{'NL_DELETE_SIGNATURE_TEXT'|trans}}" />
+                                            <div class="form-body"><p class="fg-dev-confirm-text"></p> </div>                     
+                                        </form>
+                                        <!-- END FORM-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer form-actions fg-modal-footer">
+                            <button data-dismiss="modal" class="btn default" type="button">{{'Cancel'|trans}}</button>
+                            <a href="#" data-redirect-url="{{path('simplemail_editor_content',{'type':'other','newsletterId':newsletterId})}}" data-url="{{path('simpleemail_delete_editorcontent',{'type':'other'})}}"  class="btn green fg-remove-template-<%- key%>">{{'OK'|trans}}</i></a>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+                </div>
+            </div>
+            <% } else if(values.type=='filename') { %>    
+                <div class="cktext" data-fn="imageUploader.init" data-id="<%- key%>" data-target="#image-<%- key%>" ></div>
+                <div class="row">
+                <div id="image-<%- key%>" class="form-body ">
+                    <div class="form-group last">
+                        <label class="col-md-3 col-sm-3 col-xs-12">
+                             <span class="fg-simplemail-label">{% trans %}NL_ATTACHMENTS{% endtrans %}</span>
+                        </label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <div id="<%- key%>" class="fg-createmail-fileupload fg-nl-attachment">
+                               
+                                <form  class=" fg-nl-form" id="upload-<%- key%>" skipDirtyCheck data-name="images" data-totalsize="<%- values.totalsize%>"  method="post" action="{{path('tmp_upload_file',{'type':'simplemail'})}}" enctype="multipart/form-data">
+                                     <div class="drop btn default">
+                                        {% trans %}NL_FILE_UPLOAD_TEXT{% endtrans %}
+                                        <input type="file" class="ignore" name="upl" multiple />
+                                    </div>
+                                    <button class="btn default fg-cal-browse-server" type="button">{% trans %}BROWSE_SERVER{% endtrans %}</button>
+                                    <ul>
+                                        <%  _.each(values.files,function(media,key1){ 
+                                                var url ="{{path('filemanager_download',{'file': '|VIRTUALNAME|' })}}";
+                                                %>
+                                                <li class="">
+                                                    <input type="hidden" class="ignore" data-key="images.<%- media.docId%>.filename" value="">
+                                                    <div class="row"><div class="col-sm-9"><a target="_blank" href="<%- url.replace('|VIRTUALNAME|',media.virtualname)%>"><%- media.fileTitle %></a></div><div class="col-sm-3"><span class="fg-bytes"><%- media.size %></span></div></div>
+                                                    <div class="pull-right removeUpload ">
+                                                        <div class="closeico">
+                                                            <input type="checkbox" id="images_<%- media.docId%>_isDeleted" data-inactiveblock="changecolor" name="images_<%- media.docId%>_isDeleted" data-key="images.<%- media.docId%>.isDeleted" class="make-switch">
+                                                            <label  for="images_<%-media.docId %>_isDeleted"></label>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                        <% }); %>
+                                    </ul>
+                                </form>
+                             </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                                        </div>
+            <%  } %>
+         <%  }); %>
+     <%  }); %>
+       
+     
+     
+        </script>
+    </div>
+</form>
+<script type="text/template" id="fileUploadError">
+    <p><span class="help-block">
+        <% if (error == 0) { %> {{'FILEMANAGER_UPLOAD_FILETYPE_ERROR'|trans}} 
+        <% } else if (error == 1) { %> {{'FILEMANAGER_UPLOAD_VIRUS_ERROR'|trans}} 
+        <% } else if (error == 2) { %> {{'VIRUS_FILE_CONTACT'|trans}} 
+        <% } else { %> <%- error %> <% } %></span></p>
+</script>
+{% endblock %}
+{% block wizardscriptinit %}
+    <script>
+        var newsletterType = 'simpleemail';
+        var transTo = '{% trans %}NL_OF{% endtrans %}';
+        var fileSize=[];
+        var toaddFile=0;
+        $(document).ready(function(){
+           $('form').on('click', 'input[data-inactiveblock=changecolor]', function() {
+               var currentId = $(this).attr('id');
+               $("#"+currentId).parent().closest('li').toggleClass('inactiveblock');
+           });
+        });
+        var filemanagerImageBrowse = "{{path('filemanager_view', {'type' : 'image', 'module' : app.request.attributes.get('level1') } )}}";
+        var filemanagerDocumentBrowse = "{{path('filemanager_view', {'type' : 'document', 'module' : app.request.attributes.get('level1') } )}}";
+    </script>
+    
+    <script src="{{ asset('fgassets/assets/global/plugins/ckeditor/ckeditor.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/jquery-fileupload/jquery.ui.widget.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/jquery-fileupload/jquery.iframe-transport.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/jquery-fileupload/jquery.fileupload.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/listRow.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/ckEditor-config.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/commonFilemanager/js/FgFileManagerUploader.js')}}" type="text/javascript"></script> 
+    <script src="{{ asset('fgcustom/js/page/newsletter-steps.js')}}" type="text/javascript"></script>   
+{% endblock %}
+{% block wizardscriptend %}
+{% endblock %}    

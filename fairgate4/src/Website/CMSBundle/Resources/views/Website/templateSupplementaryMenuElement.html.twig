@@ -1,0 +1,23 @@
+{% if(navDet|length > 0) %} 
+        <div id="accordion1_{{elementId}}" class="panel-group">
+            <div class="panel">
+                {% for keyVal, detail in navDet %}
+                    <div class="panel-heading {% if ((keyVal == active) or ( detail.child is defined and active in detail.child|keys)) %} active {% endif %}">
+                        <h4 class="panel-title fg-title " ><a href=" {% if (detail.parentUrl is not empty)%}{{detail.parentUrl}} {% else %} {{detail.navigationUrl}} {% endif%}" {% if (detail.parentUrlType == 'external') %} target = "_blank" {% endif %}>{{ detail.parentTitle }}</a>
+                            {% if detail.child is defined %}<i data-toggle="collapse" data-parent="#accordion1" data-target="#collapse_{{ keyVal }}_{{elementId}}" class="fa fa-angle-down fg-arrow {% if not(keyVal == active or (detail.child is defined and active in detail.child|keys)) %} collapsed {% endif %}"></i>{% endif %} </h4>
+                    </div>
+                    {% if detail.child is defined %}
+                        <div id="collapse_{{ keyVal }}_{{elementId}}" class="panel-collapse collapse {% if (keyVal == active or ( active in detail.child|keys)) %} in {% endif %}">
+                            <div class="panel-body">
+                                <ul class="fg-menu-links">
+                                    {% for key, childData in detail.child %}     
+                                        <li {% if (key == active)  %} class="active" {% endif %} ><a href="{% if (childData.url is not empty)%}{{ childData.url }}{% else %} {{childData.navigationUrl}} {% endif%}" {% if (childData.childUrlType == 'external') %} target = "_blank" {% endif %}>{{ childData.title }}</a></li>
+                                        {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    {% endif %}       
+                {% endfor %}
+            </div>
+        </div>
+{% endif %}

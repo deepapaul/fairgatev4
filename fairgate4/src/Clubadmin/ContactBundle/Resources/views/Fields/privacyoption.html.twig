@@ -1,0 +1,49 @@
+<div class="col-md-12">
+    {% set availabilitySubFed = (fieldValue.isCrucialSystemField or fieldValue.isSystemField)?'changable':fieldValue.availabilitySubFed %}
+    {% set availabilityClub = (fieldValue.isCrucialSystemField or fieldValue.isSystemField)?'changable':fieldValue.availabilityClub %}
+    {% if (clubIdArray.clubType == 'federation' and clubIdArray.hasSubfederation == 1)%}
+        <div class="row form-group fg-dev-availibility-subfed">
+            <label class="col-sm-3 control-label text-right fg-marg-top-5">{{'LEVEL'|trans}} {{terminologyArray.subfederation}}</label>
+            <div class="col-sm-4" >
+                <div class="switch-toggle switch-3  switch-multi-color {{(fieldValue.isCrucialSystemField or fieldValue.isSystemField)?'fg-switch-inactive' : ''}}">
+                    <input type="radio" data-key="{{catId}}.fields.{{fieldValue.attrId}}.availabilitySubfed" id="subfed_changable_{{catId}}_{{fieldValue.attrId}}" name="subfed_{{catId}}_{{fieldValue.attrId}}" value="changable" class="make-switch" {{ (availabilitySubFed == 'changable') ? 'checked="checked"' : '' }}>
+                    <label for="subfed_changable_{{catId}}_{{fieldValue.attrId}}" onclick="" title="Changeable"><div>{{'CONTACTFIELDS_SETT_CHANGABLE_OPTION'|trans}}</div></label>
+                    <input type="radio" data-key="{{catId}}.fields.{{fieldValue.attrId}}.availabilitySubfed" id="subfed_visible_{{catId}}_{{fieldValue.attrId}}" name="subfed_{{catId}}_{{fieldValue.attrId}}" value="visible" class="make-switch" {{ (availabilitySubFed == 'visible') ? 'checked="checked"' : '' }}>
+                    <label for="subfed_visible_{{catId}}_{{fieldValue.attrId}}" onclick="" title="Visible"><div>{{'CONTACTFIELDS_SETT_VISIBLE_OPTION'|trans}}</div></label>
+                    <input type="radio" data-key="{{catId}}.fields.{{fieldValue.attrId}}.availabilitySubfed" id="subfed_notavailable_{{catId}}_{{fieldValue.attrId}}" name="subfed_{{catId}}_{{fieldValue.attrId}}" value="not_available" class="make-switch" {{ (availabilitySubFed == 'not_available') ? 'checked="checked"' : '' }}>
+                    <label for="subfed_notavailable_{{catId}}_{{fieldValue.attrId}}" onclick="" title="Not available"><div>{{'CONTACTFIELDS_SETT_NOTAVAILABLE_OPTION'|trans}}</div></label>
+                    <a class="btn btn-primary"></a> 
+                </div>
+            </div>
+            <div class="col-sm-4  fg-marg-top-5 fg-dev-required-wrapper" {{ (availabilitySubFed != 'changable') ? 'style="display: none;"' : '' }}>
+                <label class="checkbox-inline fg-pad-left-0">
+                  <input type="checkbox" class="fg-dev-confirmation" data-key="{{catId}}.fields.{{fieldValue.attrId}}.isSubFedRequired" id="is_subfed_required_{{catId}}_{{fieldValue.attrId}}" value="1" name="is_subfed_required_{{catId}}_{{fieldValue.attrId}}" {{ (fieldValue.isRequiredFedmemberSubfed) ? 'checked="checked"' : '' }}>
+                  {{'CONTACT_REQUIRED_FIELD'|trans}}
+                </label>
+            </div>
+        </div>
+    {% endif %}
+    
+    <div class="row form-group fg-dev-availibility-club">
+         <label class="col-sm-3 control-label text-right fg-marg-top-5">{{'LEVEL'|trans}} {{terminologyArray.club}}</label>
+         <div class="col-sm-4">
+             <div class="switch-toggle switch-3  switch-multi-color {{(fieldValue.isCrucialSystemField or fieldValue.isSystemField)?'fg-switch-inactive' : ''}}">
+                 <input type="radio" data-key="{{catId}}.fields.{{fieldValue.attrId}}.availabilityClub" id="club_changable_{{catId}}_{{fieldValue.attrId}}" name="club_{{catId}}_{{fieldValue.attrId}}" checked="checked" value="changable" class="make-switch" {{ (availabilityClub == 'changable') ? 'checked="checked"' : '' }} >
+                 <label for="club_changable_{{catId}}_{{fieldValue.attrId}}" onclick="" title="Changeable"><div>{{'CONTACTFIELDS_SETT_CHANGABLE_OPTION'|trans}}</div></label>
+                 <input type="radio" data-key="{{catId}}.fields.{{fieldValue.attrId}}.availabilityClub" id="club_visible_{{catId}}_{{fieldValue.attrId}}" name="club_{{catId}}_{{fieldValue.attrId}}" value="visible" class="make-switch" {{ (availabilityClub == 'visible') ? 'checked="checked"' : '' }}>
+                 <label for="club_visible_{{catId}}_{{fieldValue.attrId}}" onclick="" title="Visible"><div>{{'CONTACTFIELDS_SETT_VISIBLE_OPTION'|trans}}</div></label>
+                 <input type="radio" data-key="{{catId}}.fields.{{fieldValue.attrId}}.availabilityClub" id="club_notavailable_{{catId}}_{{fieldValue.attrId}}" name="club_{{catId}}_{{fieldValue.attrId}}" value="not_available" class="make-switch" {{ (availabilityClub == 'not_available') ? 'checked="checked"' : '' }}>
+                 <label for="club_notavailable_{{catId}}_{{fieldValue.attrId}}" onclick="" title="Not available"><div>{{'CONTACTFIELDS_SETT_NOTAVAILABLE_OPTION'|trans}}</div></label>
+                 <a class="btn btn-primary"></a> 
+             </div>
+         </div>
+
+         <div class="col-sm-4  fg-marg-top-5 fg-dev-required-wrapper" {{ (availabilityClub != 'changable') ? 'style="display: none;"' : '' }}>
+             <label class="checkbox-inline fg-pad-left-0">
+                <input type="checkbox" class="fg-dev-confirmation" data-key="{{catId}}.fields.{{fieldValue.attrId}}.isClubRequired" id="is_club_required_{{catId}}_{{fieldValue.attrId}}" value="1" name="is_club_required_{{catId}}_{{fieldValue.attrId}}" {{ (fieldValue.isRequiredFedmemberClub) ? 'checked="checked"' : '' }}>
+                {{'CONTACT_REQUIRED_FIELD'|trans}}
+             </label>
+         </div>
+     </div>
+    <div class="clearfix"></div>
+</div>    

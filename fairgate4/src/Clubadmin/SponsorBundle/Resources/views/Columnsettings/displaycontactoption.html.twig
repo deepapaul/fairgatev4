@@ -1,0 +1,19 @@
+<script type="text/template" id="template-display-contactoptions">
+          <% //CONTACT OPTION
+    %>
+    <h4 class="fg-cols-fsz"> <%- contactOptions['title'] %></h4>
+    <% _.each(contactOptions.entry, function(contactOption) { %>
+        <% if (contactOption.id=='membership' || contactOption.id=='fed_membership') { %>           
+         
+        <div class="form-group">                
+            <div class="checkbox-list">       
+                <label class="fg-col-settings-label">
+                    <i class="fa fg-plus-circle fa-2x pull-left selectitem" id="<%- contactOption.id %>" type="CO" >
+                    <span class="fg-label-inner" data-label-id="CO<%- contactOption.id %>"><%- contactOption.title %></span></i>
+                </label>           
+            </div>
+       <% } %>
+    <% }); %>
+        </div>
+</script>
+

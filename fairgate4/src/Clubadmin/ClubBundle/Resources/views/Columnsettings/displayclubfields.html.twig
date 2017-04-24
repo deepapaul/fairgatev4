@@ -1,0 +1,25 @@
+<script type="text/template" id="template-display-clubfields">
+    <%  //CLUB FIELDS FILTERED BY SELECT GRP 
+    %>
+    <% prevSelectGrp = '' %>
+    <% _.each(clubFields, function(clubField) { %>
+        <% if (clubField.selectgroup != prevSelectGrp) { %>
+            <% if (prevSelectGrp != '') { %>
+                    </div>
+                </div>
+            <% } %>
+            <div class="form-group">
+                <h4 class="fg-cols-fsz"><%- clubField.selectgroup %></h4>
+                <div class="checkbox-list">
+        <% } %>
+    <% if (clubField.grp == 'correspondence') { %>
+            <% corrAddrField.push(clubField.id); %>
+        <% } else if (clubField.grp == 'invoice') { %>
+            <% invAddrField.push(clubField.id); %>
+        <% } %>
+        <label class="fg-col-settings-label">
+            <i class="fa fg-plus-circle fa-2x pull-left selectitem" id="<%- clubField.id %>" type="CF" club_id="<%- clubId %>" >
+            <span class="fg-label-inner" data-label-id="CF<%- clubField.id %>"><%- clubField.title %></span></label></i>
+        <% prevSelectGrp = clubField.selectgroup %>
+    <% }); %>
+</script>

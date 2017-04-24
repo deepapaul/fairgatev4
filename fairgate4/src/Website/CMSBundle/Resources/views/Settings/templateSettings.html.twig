@@ -1,0 +1,205 @@
+<script type="text/template" id="templateSettings">   
+    <div id="failcallbackClientSide" class="alert alert-danger hide" >
+        <button class="close" data-close="alert"></button>
+        <span>{{'FORM_ERROR_DISPLAY'|trans}} </span>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group" >
+            <label class="col-sm-4 control-label fg-marg-top-5 text-right" for=""><span data-content='{% trans %}DEFAULT_LOGO_TOOLTIP{% endtrans %}' class="fg-dotted-br fg-custom-popovers">{{'DEFAULT_LOGO'|trans}}</span></label>  
+            <div class="col-sm-8 ">
+                <div class="">
+                    <div class="fg-custom-dropzone-wrapper">
+                        <div data-auto="design_template_dropzone"  id="fg-default-logo-wrapper" class="fg-dropzone-area mydropzonedata " >
+                            <div class="fg-messages">
+                                <h3>{{'DROPZONE_DROP_IMAGE'|trans}}</h3>
+                                <p> ({{'DROPZONE_DROP_IMAGE_OR_CLICK'|trans}})</p>                                                
+                            </div>
+                            <button type="button" class="fg-invisible-button"  id="triggerLogoUpload"></button>
+                            <input type="file" id="image-uploader" name="image-uploader" style="height:0px;width:0px;visibility: hidden" />
+                            
+                            <% if(data.defaultLogo ) { %>
+                                <div id="<%-data.settingsId%>1" class="fg-dev-dropzone-preview" > 
+                                    <div class="fg-dropzone-preview ">
+                                        <div class="fg-thumb-wrapper" id="fg-dropzone-thumb-wrapper"><img class="fg-thumb" src="<%-data.websettingsFolder%>/<%-data.defaultLogo%>"></div>
+                                        <button class="btn btn-sm btn-block dz-remove fg-del-close fg-dev-removelogo" id="fg-del-close"> {{'DROPZONE_REMOVE_FILE'|trans}}</button>                                        
+                                    </div>
+                                </div>
+                            <% } %>
+                    
+                        </div>                        
+                    </div>
+                    <input type="text" class="hide imagefield-req " data-key="logo_name" id="logo_name" name="logo_name" value=""  >
+                    <input type="text" data-key="logo_originalname" class="hide imagefield-file" id="logo_originalname" name="logo_originalname" value="<%-data.defaultLogo%>">  
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" >
+            <div class="col-sm-8 col-sm-offset-4">
+                <% defaultLogo = (data.defaultLogo )?('{{ baseUrl }}' + data.websettingsFolder + '/' + data.defaultLogo):''  %>
+                <input type="hidden" id="faviconFilePath" class="faviconFilePath" value="<%-defaultLogo%>" >
+                <button onclick="FgWebsiteSettingsObj.generateFavIcon()" <% if(defaultLogo == '') { %> disabled <% } %> class="btn default" id="btn-favicongenerator"> {{'GENERATE_ICONS'|trans}}</button>
+            </div>
+        </div>
+        <div class="form-group" >
+            <label class="col-sm-4 control-label fg-marg-top-5 text-right" for=""><span data-content='{% trans %}FAVICON_TOOLTIP{% endtrans %}' class="fg-dotted-br fg-custom-popovers">{{'FAVICONS_LOGO'|trans}}</span></label>  
+            <div class="col-sm-8 ">
+                <div class="">
+                    <div class="fg-custom-dropzone-wrapper">
+                        <div data-auto="design_template_dropzone"  id="fg-favicon-wrapper" class="fg-dropzone-area mydropzonedata " >
+                            <div class="fg-messages">
+                                <h3>{{'DROPZONE_DROP_IMAGE'|trans}}</h3>
+                                <p> ({{'DROPZONE_DROP_IMAGE_OR_CLICK'|trans}})</p>                                                
+                            </div>
+                            <button type="button" class="fg-invisible-button"  id="triggerFaviconUpload"></button>
+                            <input type="file" id="favicon-uploader" name="favicon-uploader" style="height:0px;width:0px;visibility: hidden" />
+                            
+                            <% if(data.favicon ) { %>
+                                <div id="<%-data.settingsId%>2" class="fg-dev-dropzone-preview"> 
+                                    <div class="fg-dropzone-preview ">
+                                        <div class="fg-thumb-wrapper" id="fg-dropzone-thumb-wrapper"><img class="fg-thumb" src="<%-data.faviconsFolder%>/<%-data.favicon%>"></div>
+                                        <button class="btn btn-sm btn-block dz-remove fg-del-close" id="fg-del-close"> {{'DROPZONE_REMOVE_FILE'|trans}}</button>                                        
+                                    </div>
+                                </div>
+                            <% } %>
+                        </div>                        
+                    </div>
+                    <input type="text" class="hide imagefield-req " data-key="favicon_name" id="favicon_name" name="favicon_name" value=""  >
+                    <input type="text" data-key="favicon_originalname" class="hide imagefield-file" id="favicon_originalname" name="favicon_originalname" value="<%-data.favicon%>">
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" >
+            <label class="col-sm-4 control-label fg-marg-top-5 text-right" for="">{{'OGIMAGE_LOGO'|trans}}</label>  
+            <div class="col-sm-8 ">
+                <div class="">
+                    <div class="fg-custom-dropzone-wrapper">
+                        <div data-auto="design_template_dropzone"  id="fg-ogimg-wrapper" class="fg-dropzone-area mydropzonedata " >
+                            <div class="fg-messages">
+                                <h3>{{'DROPZONE_DROP_IMAGE'|trans}}</h3>
+                                <p> ({{'DROPZONE_DROP_IMAGE_OR_CLICK'|trans}})</p>                                                
+                            </div>
+                            <button type="button" class="fg-invisible-button"  id="triggerOGImageUpload"></button>
+                            <input type="file" id="ogimg-uploader" name="ogimg-uploader" style="height:0px;width:0px;visibility: hidden" />
+                            
+                            <% if(data.fallbackImage ) { %>
+                                <div id="<%-data.settingsId%>3" class="fg-dev-dropzone-preview"> 
+                                    <div class="fg-dropzone-preview ">
+                                        <div class="fg-thumb-wrapper" id="fg-dropzone-thumb-wrapper"><img class="fg-thumb" src="<%-data.websettingsFolder%>/<%-data.fallbackImage%>"></div>
+                                        <button class="btn btn-sm btn-block dz-remove fg-del-close" id="fg-del-close"> {{'DROPZONE_REMOVE_FILE'|trans}}</button>                                        
+                                    </div>
+                                </div>
+                            <% } %>
+                        </div>                        
+                    </div>
+                    <input type="text" class="hide imagefield-req " data-key="ogimg_name" id="ogimg_name" name="ogimg_name" value=""  >
+                    <input type="text" data-key="ogimg_originalname" class="hide imagefield-file" id="ogimg_originalname" name="ogimg_originalname" value="<%-data.fallbackImage%>">   
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-sm-6">
+        <!-- Textarea -->
+        <div class="form-group">
+            <label class="col-sm-4 control-label" for="textarea"><span data-content='{% trans %}SITE_DESC_TOOLTIP{% endtrans %}' class="fg-dotted-br fg-custom-popovers">{{'SITE_DESCRIPTION'|trans}}</span></label>
+            <div class="col-sm-8">                     
+                {% for clubLanguage in clubLanguageArr %}
+                    <div >
+                    <textarea maxlength="250" class="form-control  no-resize {{ (defaultClubLang != clubLanguage) ? 'hide' : '' }} " 
+                        placeholder="<% if(typeof data.siteDescription['{{ clubLanguage }}'] == 'undefined') { %><%- (data.siteDescription['default']) %><% } %>"
+                        name="siteDesc-{{ clubLanguage }}" id="siteDesc-{{ clubLanguage }}" 
+                        data-key="siteDesc.{{ clubLanguage }}"  data-lang="{{ clubLanguage }}" ><% if(typeof data.siteDescription['{{ clubLanguage }}'] != 'undefined') { %><%- (data.siteDescription['{{ clubLanguage }}']) %><% } %></textarea>
+                    <p id="siteDesc-remain-{{ clubLanguage }}" class="text-grey-dark fg-remain-character fg-clear-marg {{ (defaultClubLang != clubLanguage) ? 'hide' : '' }}" data-lang="{{ clubLanguage }}" > <span>250</span> {{ 'ARTICLE_CHARS'|trans }}.</p>    
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- File Button --> 
+        <div class="form-group">
+            <label class="col-sm-4 control-label" for="domainverification"><span data-content='{% trans %}DOMAIN_VERIFICATION_TOOLTIP{% endtrans %}' class="fg-dotted-br fg-custom-popovers">{{'DOMAIN_VERIFICATION_FILE'|trans}}</span></label>
+            <div class="col-sm-8">
+                <div class="fg-custom-dropzone-wrapper">
+                    <div data-auto="design_template_dropzone"  id="" class="" >                        
+                        <div class="fg-button-wrapper  fg-dis-IB fg-v-middle">
+                            <button type="button" class="btn default" id="triggerVerificFileUpload">{% trans %}CREATE_EVENT_FILEUPLOAD{% endtrans %}</button>
+                            <input type="file" id="file-uploader" name="file-uploader" style="height:0px;width:0px;visibility: hidden;display: none;" upload-attr="true">
+                        </div>
+                        <div id="fg-html-wrapper" class=" fg-dis-IB fg-v-middle fg-pad-10">
+                        <% if(data.domainVerificationFilename) { %>
+                            <div id="<%-data.settingsId%>3">
+                                <span><span class="fileinput-filename"><%-data.domainVerificationFilename%></span>&nbsp;<a id="fg-del-close" class="close fg-del-close fg-marg-left-5  fg-marg-top-5"></a></span>
+                            </div>
+                        <% } %>    
+                        </div>
+                    </div>                    
+                </div>
+                <input type="text" class="hide imagefield-req " data-key="html_name" id="html_name" name="html_name" value=""  >
+                <input type="text" data-key="html_originalname" class="hide imagefield-file" id="html_originalname" name="html_originalname" value="<%-data.domainVerificationFilename%>">   
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-sm-4 control-label fg-pad-top-0 " for="textinput1">{{'GOOGLE_ANALYTICS_TRACKER'|trans}}
+            <br/><a href='#' target="_blank">{{ 'GOOGLE_ANALYTICS_INSTRUCTIONS'|trans }}</a>
+            </label>  
+            <div class="col-sm-8">
+                <input type="text" name="g-analytics" id="g-analytics" value="<%-data.googleAnalyticsTrackid%>" data-key="g-analytics"  data-notrequired="true" class="form-control input-md" >                
+                <span id="g-analytics-error" class="help-block"></span>
+            </div>
+        </div>
+
+    </div>
+</script>
+
+<script type='template' id='dropzone-img-upload'>
+    <div id="<%- id %>" class="fg-dev-dropzone-preview" > 
+        <div class="fg-dropzone-preview ">
+            <div class="fg-upload-progress" style="display: block;">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                    </div>
+                </div>
+            </div>
+            <div class="fg-thumb-wrapper" id="fg-dropzone-thumb-wrapper"><span class="fg-dropzone-error-msg fg-replacewith-errormsg"></span></div>   
+            <button  class="btn btn-sm btn-block dz-remove fg-del-close" id="fg-del-close" > {{'DROPZONE_REMOVE_FILE'|trans}}</button>    
+        </div>      
+    </div> 
+</script> 
+
+<script type='template' id='dropzone-image-upload'>
+    <div id="<%- id %>" class="fg-dev-dropzone-preview"> 
+        <div class="fg-dropzone-preview ">
+            <div class="fg-upload-progress" style="display: block;">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                    </div>
+                </div>
+            </div>
+            <div class="fg-thumb-wrapper" id="fg-dropzone-thumb-wrapper"><span class="fg-dropzone-error-msg fg-replacewith-errormsg"></span></div>   
+            <button  class="btn btn-sm btn-block dz-remove fg-del-close fg-dev-removelogo" id="fg-del-close" > {{'DROPZONE_REMOVE_FILE'|trans}}</button>    
+        </div>      
+    </div> 
+</script> 
+
+<script type='template' id='dropzone-html-upload'>
+    <div id="<%- id %>" > 
+      <span class=" fg-replacewith-errormsg"></span>
+   </div> 
+</script>
+
+<script type="text/template" id="fileUploadError">
+    <span class="help-block">
+    <% if (error == 0 || error == 1) { %> {{'FILEMANAGER_UPLOAD_FILETYPE_ERROR'|trans}}   
+    <% } else { %> <%- error %> <% } %></span>
+</script>
+<script type="text/template" id="DomainVerificationUploadError">
+    <span class="help-block">
+    <% if (error == 0) { %> {{'FILEMANAGER_UPLOAD_FILETYPE_ERROR'|trans}}
+    <% } else if (error == 1) { %> {{'FILESIZE_ERROR'|trans}}
+    <% } else { %> <%- error %> <% } %></span>
+</script>

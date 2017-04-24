@@ -1,0 +1,37 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">{{'EDITORIAL_DELETE_COMMENT_POPUP_HEADER'|trans}}</h4>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">                    
+                    <div class="form-group">
+                        <label class="col-lg-12 col-md-12 col-xs-12">
+                            {{'EDITORIAL_DELETE_COMMENT_POPUP_TEXT'|trans}}
+                        </label>                                
+                    </div>                                             
+                </div>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+    {% include 'internal/removebuttonPopup.html.twig' %}
+</div>
+   
+<script type="text/javascript"> 
+    var commentId = {{ commentId|raw }};
+    var deletePath = "{{ path('internal_article_editorial_details_comments_delete') }}";
+    $(document).off('click', '#removePopup');
+    $(document).on('click', '#removePopup', function() {
+          FgXmlHttp.post(deletePath, {'commentId':commentId}, false, callback(commentId));
+          FgModelbox.hidePopup();
+    });
+    
+    function callback(commentId){
+        $('#comments-li-data_'+commentId).remove();
+        FgArticleCommentsCountUpdate.updateCount('delete');
+    }
+</script>    

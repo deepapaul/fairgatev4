@@ -1,0 +1,22 @@
+<div class="modal fade" id="deleteFormPopup" tabindex="-1" role="basic" aria-hidden="true">
+    <div class="modal-dialog modal-wide">
+        <div class="modal-content fg-popup-wrap" id="popup_contents">
+            <div class="modal-header fg-modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">{{'DELETE_FORM_CONFIRM_MESSAGE_TITLE'|trans}}</h4>
+            </div>
+
+            <div class="modal-body fg-modal-text row">
+                <div class="col-md-12">
+                    <div class="portlet-body form">
+                        <!-- BEGIN FORM-->
+                        {{'DELETE_FORM_CONFIRM_MESSAGE_CONTENT'|trans}}
+                        <!-- END FORM-->
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="formIdHidden">            
+            {% include 'clubadmin/savebuttonpopup.html.twig' with {'save_button_val': 'DELETE'|trans, 'save_button_id':'delete_form' }  %}
+        </div>
+    </div>
+</div>

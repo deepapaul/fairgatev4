@@ -1,0 +1,26 @@
+Common\UtilityBundle\Entity\FgCmsPageContentTextElementHistoryI18n:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPageContentTextElementHistoryI18nRepository
+    type: entity
+    table: fg_cms_page_content_text_element_history_i18n
+    fields:
+        lang:
+            id: true
+            type: string
+            length: 2
+            fixed: true
+            nullable: false
+        textLang:
+            type: text
+            nullable: false
+            column: text_lang
+    oneToOne:
+        id:
+            targetEntity: FgCmsPageContentTextElementHistory
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

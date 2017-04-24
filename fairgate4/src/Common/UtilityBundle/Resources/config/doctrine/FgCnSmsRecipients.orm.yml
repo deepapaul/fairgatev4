@@ -1,0 +1,57 @@
+Common\UtilityBundle\Entity\FgCnSmsRecipients:
+    type: entity
+    table: fg_cn_sms_recipients
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        contactId:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: contact_id
+        createdAt:
+            type: datetime
+            nullable: false
+            column: created_at
+        smsId:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sms_id
+        status:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+        statusMessage:
+            type: text
+            nullable: true
+            column: status_message
+        actualSmsContent:
+            type: text
+            nullable: true
+            column: actual_sms_content
+        jobId:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: job_id
+        phoneNumber:
+            type: string
+            length: 45
+            fixed: false
+            nullable: true
+            column: phone_number
+        fieldName:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: field_name
+    lifecycleCallbacks: {  }

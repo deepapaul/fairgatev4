@@ -1,0 +1,41 @@
+Common\UtilityBundle\Entity\FgCmsArticleClubsetting:
+    repositoryClass: Common\UtilityBundle\Repository\Article\FgCmsArticleClubsettingRepository
+    type: entity
+    table: fg_cms_article_clubsetting
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        commentActive:
+            type: smallint
+            nullable: true
+            column: comment_active
+        showMultilanguageVersion:
+            type: smallint
+            nullable: true
+            column: show_multilanguage_version
+        timeperiodStartDay:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: timeperiod_start_day
+        timeperiodStartMonth:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: timeperiod_start_month
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

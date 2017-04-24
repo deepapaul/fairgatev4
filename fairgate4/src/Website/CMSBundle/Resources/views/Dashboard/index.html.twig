@@ -1,0 +1,35 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+
+{% block pagecontent %}
+
+<div id="10" class="row">
+        
+</div>
+
+{% endblock %}
+
+
+
+{% block underscoretemplate %}
+    {% include 'website/templatePagetitlebar.html.twig' %}
+{% endblock %}
+
+
+{% block javascripts %}
+    <script>
+        var options = {
+            titleBar: true,
+            title: 'Team 1',
+            breadcrumb: false,
+            breadcrumbData: ['Our Galleries','Team'],
+            nextPrevious: true,
+            hideNextPreviousOnSmallDevices: true,
+            nextPreviousLinks: ['/detail/100','/detail/103'],
+            backButton: true,
+            hideBackOnSmallDevices: true,
+            backButtonData: '/list',
+        };
+        var FgWebsitePageTitleBarObj = new FgWebsitePageTitleBar('10', options);
+
+    </script>
+{% endblock %}

@@ -1,0 +1,88 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title"></h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="{{path("do_confirm_or_discard")}}" class="form-horizontal form-row-sepe" id="confirmdiscard">
+                    <div class="form-body fg-csv-expt fg-exprt">
+                        <div class="form-group ">
+                            {% if (action == 'confirm') %}
+                                {% if (selActionType == 'selected') %}
+                                    <p>{{'CONFIRM_SELECTED_CHANGES_TEXT'|trans}}</p>
+                                {% else %}
+                                    <p>{{'CONFIRM_ALL_CHANGES_TEXT'|trans}}</p>
+                                {% endif %}
+                            {% else %}
+                                {% if (selActionType == 'selected') %}
+                                    <p>{{'DISCARD_SELECTED_CHANGES_TEXT'|trans}}</p>
+                                {% else %}
+                                    <p>{{'DISCARD_ALL_CHANGES_TEXT'|trans}}</p>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <input type="hidden" name="selectedId" id="selectedId" value="" />
+                    <input type="hidden" name="actionType" id="actionType" value="{{actionType}}" />
+                    <input type="hidden" name="action" id="action" value="{{action}}" />
+                    <input type="hidden" name="csvType" id="csvType" value="" /> 
+                    <input type="hidden" name="subscriberType" id="subscriberType" value="" />
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'clubadmin/savebuttonpopup.html.twig' with {'save_button_val': ((action == 'confirm') ? 'BUTTON_CONFIRM'|trans : 'BUTTON_DISCARD'|trans)}  %}
+
+<script type="text/javascript">
+    var action = '{{action}}';
+    var actionType = '{{actionType}}';
+    var selActionType = '{{selActionType}}';
+    var selContIds = [];
+    
+    if (selActionType == 'selected') {
+        $("input.dataClass:checked").each(function () {
+            var contactId = $(this).attr('id');
+            if ($.inArray(contactId, selContIds) == -1) {
+                selContIds.push(contactId);
+            }
+        });
+    }
+    FgFormTools.handleUniform();
+    displayTitle();
+    $(document).off('click', 'button[data-function=save], button[data-function=cancel]');
+    $(document).on('click', 'button[data-function=save], button[data-function=cancel]', function () {
+        var buttonId = this.id;
+        if (buttonId == 'save') {
+            confirmOrDiscardChanges();
+        }
+    });
+    function confirmOrDiscardChanges() {
+        var selectedId = JSON.stringify(selContIds);
+        $('#selectedId').val(selectedId);
+        $('#popup').modal('hide');
+        FgXmlHttp.post('{{path("do_confirm_or_discard")}}', $("#confirmdiscard").serialize(), function(data){console.log('aaa');}, callBackFn );
+    }
+    function callBackFn(resultParms) {
+        FgMoreMenu.initServerSide('paneltab');
+        if (!$.isEmptyObject(oTable)) {
+            oTable.draw();
+        } else {
+            FgTable.init();
+        }
+    }
+    function displayTitle() {
+        var selectedText = (action == 'confirm') ? '{{'CONFIRM_SELECTED_CHANGES'|trans}}' : '{{'DISCARD_SELECTED_CHANGES'|trans}}';
+        var allText = (action == 'confirm') ? '{{'CONFIRM_ALL_CHANGES'|trans}}' : '{{'DISCARD_ALL_CHANGES'|trans}}';
+        if (selActionType == 'selected') {
+            $('h4').text(selectedText);
+        } else {
+            $('h4').text(allText);
+        }
+    }
+
+</script>

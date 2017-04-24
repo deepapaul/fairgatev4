@@ -1,0 +1,231 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'TITLE_SAVED_FILTER'|trans %}
+{% block pagecontent %}
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row" id="bookmark_form">
+        <div class="col-md-12">
+            <!-- BREADCRUMB STARTS -->
+            {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+            <!-- BREADCRUMB ENDS -->
+            {#<div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3 class="page-title fg-inner-title">{%trans%}TITLE_SAVED_FILTER {%endtrans%}</h3>
+                        </div>
+
+                    </div>
+                </div>
+            </div> #}
+            <!-- TITLE BAR STARTS -->
+            <div class="row">
+            {% set page_settings = { 'pagetitle':'true'}  %}
+            {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': 'TITLE_SAVED_FILTER'|trans, 'page_settings': page_settings  } %}    
+            </div>
+            <!-- TITLE BAR  STARTS -->
+            <!-- BEGIN FORM-->
+            <form id="formFilter" class="form-horizontal" action="{{ path('update_filter_settings')}}" novalidate="novalidate" onSubmit="return false;" autocomplete="off">            
+                <div class="alert alert-danger display-hide">
+                    <button class="close" data-close="alert"></button>
+                    {%trans%}SAVED_FILTER_ERROR_DISPLAY{%endtrans%}
+                    
+                </div>
+                <div id="savedfilterlist_sort" class="excludejs fg-saved-filter-new">
+                    <!--  STARTS LISTING FOR SAVED FILTER, IF EXIST-->
+                    {% set i=1 %}
+                    {% for attributes,savedFilterDetails in allSavedFilter %}
+                        <div class="row fg-border-line sortables fg-sort-drag-hover" id="{{savedFilterDetails.id}}">
+                            <div class="fg-col-first-icon fg-sort-drag">
+                                <i class="fa fa fg-sort ui-draggable handle"></i>                               
+                            </div>
+                            <div class="col-md-12 fg-col-hack">
+                                <div class="row" id="{{savedFilterDetails.id}}">
+                                    <div class="col-sm-3 col-lg-3 col-xs-12" dataerror-group> 
+
+                                        <input type="text" class="form-control input-sm fg-input-area" name="{{savedFilterDetails.id}}_title" value="{{savedFilterDetails.title}}" data-key="{{savedFilterDetails.id}}.name" id="{{i}}_title" required="true" />
+                                        <span id="saved-filter-title" for="{{i}}_title" class="help-block"></span>
+                                    </div>
+                                    <div class="bookmark fg-bkmrk-ico-new pull-left"><input id="box{{i}}" type="checkbox" {% if savedFilterDetails.bookmarkid != '' %}checked {% endif %} class="make-switch" data-key="{{savedFilterDetails.id}}.book_marked" name="{{savedFilterDetails.id}}_bookmarked" id="{{i}}_book_marked" />  <label for="box{{i}}"><i class="fa fa-bookmark"></i></label></div>   
+                                    <div class="col-sm-6 col-lg-6 padding-tp-3"> <a href="#" class="clubfilterCount replaceFilterClass{{savedFilterDetails.id}}" filter_id="{{savedFilterDetails.id}}" status="calculate" url="{{ path('update_club_filter_count')}}"> {{ 'LISTING_CALCULATE_NUMBER_OF_CLUBS'|trans({'%Clubs%' :  fgtwig.getTerminolgyName('Club',plural) }) }}</a> </div>    
+                                    <div class="col-sm-2 col-lg-2 padding-tp-3"> <a href="javascript:void(0)" class="openfilterClass"  filter_id="{{savedFilterDetails.id}}" data-toggle="collapse" data-target="#open-json{{savedFilterDetails.id}}"><i class="fa fa-plus-square-o"></i> {%trans%}LISTING_FILTER{%endtrans%}</a> </div>    
+                                    <input type="hidden" class="sorthidden"  data-key="{{savedFilterDetails.id}}.sort_order" name="{{savedFilterDetails.id}}_sort_order" id="{{savedFilterDetails.id}}_sort_order" value="{{i}}" data-sort-parent="savedfilterlist_sort" />
+                                    <input type="hidden" class="jsonDatahidden"  data-key="{{savedFilterDetails.id}}.filter_data" name="{{savedFilterDetails.id}}_jsonData" id="{{savedFilterDetails.id}}_jsonData" value="{{savedFilterDetails.filterData}}" data-sort-parent="savedfilterlist_jsonData" />
+                                    <input type="hidden" id="{{savedFilterDetails.id}}_is_broken" data-key="{{savedFilterDetails.id}}.is_broken" name="{{savedFilterDetails.id}}_isBroken" value="{{savedFilterDetails.isBroken}}"/>
+                                    <input type="hidden" class="bookmarkhidden"  data-key="{{savedFilterDetails.id}}.book_marked" name="{{savedFilterDetails.id}}_book_marked" id="{{savedFilterDetails.id}}_book_marked" value="{{i}}"/>
+                                    <div id="{{savedFilterDetails.id}}_doNotSumbmit" ></div>
+                                </div>
+                            </div>
+                            <div class="fg-col-last-icon">
+                                <div class="pull-right deletediv "> <div class="closeico"> <input id="select{{i}}" data-deletable="checknew" type="checkbox" class="make-switch" data-key="{{savedFilterDetails.id}}.is_deleted" name="{{savedFilterDetails.id}}_is_deleted" data-inactiveblock="changecolor" data-parentid="{{savedFilterDetails.id}}"/>  <label for="select{{i}}"></label></div></div>
+                            </div>
+                            <div id="open-json{{savedFilterDetails.id}}" class="collapse"> 
+                                <div class="fg-filter-blk" style="display:none">
+                                <div id="open{{savedFilterDetails.id}}" class="fg-filter-blk-open fg-filter-blk-wrapper"></div>
+                                <div class="btn-group col-blue fg-common-top-btm col-sm-4  col-xs-12">
+                                    <a class="fg-saved-filter-add-criteria" id="accCriteria{{savedFilterDetails.id}}" href="#basic" data-toggle="modal"><i class="fa fa-plus-circle fa-2x"></i><span class="fg-left-move"> {%trans%}SAVED_FILTER_ADD_CRITERION{%endtrans%}</span></a></div>
+                                </div>    
+                            </div>
+
+                        </div>
+
+                        {% set i=i+1 %}
+                    {% endfor %}
+                </div>
+                <div id="filter_html" class="hide"></div>
+                <div id="callSaveFunction" class="hide"></div>
+                <input type="hidden" value="0" id="editedFilter" name="editedFilter">
+
+                <!--  ENDs LISTING FOR SAVED FILTER, IF EXIST-->
+                {#<input type="hidden" name="sortOrderData" id="sortOrderData" value="{{bookMarkIds}}" />#}
+                <!--  Partial twig for savebutton-->          
+                {% include 'clubadmin/savebutton.html.twig' with  {'backLink': breadCrumb.back} %}
+            </form>
+            <!-- END FORM-->
+        </div>
+    </div>
+
+
+<!-- END PAGE CONTENT-->
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/search-filter.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/filter-settings.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/sidebarfilter.js')}}" type="text/javascript"></script>
+    <script>
+        var contactId='{{contactId}}';
+        var clubId='{{fgclub.clubId}}';
+        var clubDataSingleUrl='{{url('filter_club_data_single')}}';
+        var filterClubDataUrl='{{url('filter_club_data')}}';
+        var brokenUrl='{{url('filter_club_update_broken')}}';
+        var requestType=0;
+        var filterTarget= new Array();
+        var filterCondition = FgFilter.getCondition('{{'CM_AND'|trans}}', '{{'CM_OR'|trans}}', '{{'CM_IS'|trans}}', '{{'CM_ISNOT'|trans}}', '{{'CM_IS_BETWEEN'|trans}}', '{{'CM_IS_NOTBETWEEN'|trans}}', '{{'CM_CONTAINS'|trans}}', '{{'CM_NOTCONTAINS'|trans}}', '{{'CM_BEGINSWITH'|trans}}' , '{{'CM_NOTBEGINSWITH'|trans}}', '{{'CM_ENDWITH'|trans}}', '{{'CM_NOTENDWITH'|trans}}'); 
+        var CRITERIA='{{'CM_CRITERIA'|trans}}';
+        var SELECTTYPE= '{{'CM_SELECT_TYPE'|trans}}';
+        var filterType='club';
+        var filterCount = saveCount = 0;
+        var filterIds = [];
+        var filterId = '';
+        </script>
+    {% if app.request.xmlHttpRequest %}
+        <script>requestType = 1;</script>
+    {% else %}
+         <script src="{{ asset('fgcustom/js/savedClubFilterClick.js')}}" type="text/javascript"></script>
+    {% endif %}
+    <script type="text/javascript">
+        var initialOrderArray = new Array();
+        var filter_html = $('#savedfilterlist_sort').html();
+
+        $(document).ready(function() {
+            initialOrderArray = FgUtility.getOrderOfChildElements('#savedfilterlist_sort');
+            FgDirtyForm.init();
+            FgDirtyForm.disableButtons();
+            FgDragAndDrop.sortWithOrderUpdation('#savedfilterlist_sort', false);
+            FgUtility.changeColorOnDelete();
+            var resetSections = {
+                '0': {
+                    'parentElement': '#savedfilterlist_sort',
+                    'initialOrder': initialOrderArray,
+                    'addClass': false,
+                    'className': 'blkareadiv'
+                }
+            };
+            FgResetChanges.init(resetSections);
+            FormValidation.init('formFilter', 'callSaveFunction', 'errorHandler');
+        });
+
+        function callbackfn() {
+            FgApp.init();
+            FgDragAndDrop.sortWithOrderUpdation('#savedfilterlist_sort', false);
+        }
+        $('#formFilter').off('click', '.clubfilterCount');
+        $('#formFilter').on('click', '.clubfilterCount', function() {
+            var status = $(this).attr('status')
+            var filter_id = $(this).attr('filter_id');
+            if(status=='calculate')
+            {
+                var replacediv = '.replaceFilterClass' + $(this).attr('filter_id');
+                var url = $(this).attr('url');
+                $(this).attr('status','clubfilter')
+                $.post(url, {filter_id: filter_id}, function(data) { 
+                    if(data=='-1')
+                        $(replacediv).html('<i class="fa fa-warning fg-warning"></i>'); 
+                    else
+                        $(replacediv).html(data);
+                });
+                return false;
+            }
+            else
+            {
+                handleCountOrSidebarClick.updateFilter('FILTER', 'clubfilterdisplayflag_{{fgclub.clubId}}-{{contactId}}', '', '{{fgclub.clubId}}', '{{contactId}}', '', '', '{{fgclub.clubUrlIdentifier}}', 'count', '', '', '', '', 'club', '', $('#'+filter_id+'_jsonData').val(), filter_id, '');
+            }
+        });
+        /* Open the filter block Starts here */
+{#                                $('#formFilter').off('click', '.openfilterClass');
+        #}
+        /* Open the filter block Ends here */
+        /* This function is used to add data in to DB  Starts here*/
+        {#$('#formFilter').off('click', '.openfilterClass');#}
+
+        function callSaveFunction() {
+            var objectGraph = {};
+            $("#formFilter :input").each(function() {
+                if ($(this).hasClass("fairgatedirty")) {
+                    var inputVal = ''
+                    if ($(this).attr('type') == 'checkbox') {
+                        inputVal = $(this).attr('checked') ? 1 : 0;
+                    } else {
+                        inputVal = $(this).val();
+                    }
+                    if (inputVal !== '') {
+                        if ($(this).attr('data-key')) {
+                            converttojson(objectGraph, $(this).attr('data-key').split('.'), inputVal);
+                        }
+                    }
+                }
+            });
+            if ($('.doNotSumbmit').length == 0) {
+                var filterArr = JSON.stringify(objectGraph);
+                //console.log(filterArr);
+                FgXmlHttp.post("{{ path('update_club_filter_settings')}}", {
+                    'filterArr': filterArr
+                }, false, callbackfn);
+            }
+        }
+        function errorHandler() {
+        }
+        $('#formFilter').off('click', '#save_changes');
+        $('#formFilter').on('click', '#save_changes', function() {
+            {#firstTime = false;
+            if ($('.FilterDataExist').length === 0) {
+                callSaveFunction();
+            }#}
+            $(filterIds).each(function(fky, id) {
+                filterId = id;
+                $('#save_' + filterId).trigger('click');
+            });
+            setTimeout(function() {
+                if (filterCount == saveCount) {
+                    saveCount = 0;
+                } else {
+                    return false;
+                }
+            }, 50);
+        });
+        /* This function is used to add data in to DB  Ends here*/
+        /* Discard function starts */
+        $('#reset_changes').live('click', function() {
+            $('#savedfilterlist_sort').html(filter_html);
+            $('.alert').addClass('display-hide');
+            FgDirtyForm.rescan('formFilter');
+            FgDragAndDrop.sortWithOrderUpdation('#savedfilterlist_sort', false);
+        })
+        /* Discard function Ends */
+         /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                     title: true
+
+             }); 
+    </script>
+{% endblock %}

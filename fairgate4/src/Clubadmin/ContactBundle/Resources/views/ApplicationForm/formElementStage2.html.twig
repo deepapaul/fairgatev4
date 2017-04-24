@@ -1,0 +1,207 @@
+<script type="text/template" id="formElementStage2">
+    <% var defaultEmailId = 'noreply@fairgate.ch' %>
+    <form class="form-horizontal fg-marg-top-20" id="form-field-elements-form-stage2">
+        <div id="form-tab2" method="post" data-url="" class="form-horizontal">
+            <div class="fg-tab-list fg-width-P fg-nl-lang-drop">
+                <h3 class="block">{{ 'CMS_CONTACT_FORM_CONFIRMATION_MAIL'|trans }}</h3>
+                <div class="alert alert-info">{{ 'CMS_CONTACT_FORM_CONFIRMATION_MAIL_HINT_TEXT'|trans }}</div>
+                <div class="form-group required">
+                    <label class="col-md-3 col-sm-4 control-label">{{ 'CMS_CONTACT_FORM_CONFIRMATION_SENDER_EMAIL'|trans }}</label>
+                    <div class="col-sm-4">
+                        <input type="email" class="form-control fg-dev-newfield " <%- (form.confirmationSenderEmail == defaultEmailId) ? 'disabled':''  %> value="<%- form.confirmationSenderEmail %>" id="formelement_stage2_senderemail" data-key="<%- formId %>.confirmationEmailSender" required="required">
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="formelement_stage2_reply" class="fg-pad-top-7">
+                            <input type="checkbox" name="checkboxes" id="formelement_stage2_reply" <%- (form.confirmationSenderEmail == defaultEmailId) ? 'checked="checked"':''  %> value="1" data-key="<%- formId %>.confirmationEmailReply" class="fg-dev-newfield">
+                            {{ 'NOTIFICATION_MAIL_USE'|trans }} <span id="formelement_stage2_senderemail_default"><%- defaultEmailId %></span>
+                        </label>
+                    </div>
+                </div>
+                <% _.each(clubLanguages, function(clubLang) { %>
+                    <div class="form-group <%- clubLang != clubDefaultLang ? 'hide' : 'required'  %>" data-lang="<%- clubLang %>">
+                        <label class="col-md-3 col-sm-4 control-label " >{{'CMS_CONTACT_FORM_CONFIRMATION_SUBJECT'|trans}}</label>
+                        <div class="col-sm-4">
+                            <div dataerror-group="">
+                                <input type="text" class="form-control fg-dev-newfield <%- clubLang != clubDefaultLang ? 'hide':''  %>" id="formelement_stage2_subject_<%- clubLang %>" 
+                                        data-lang="<%- clubLang %>" data-key="<%- formId %>.confirmationEmailSubject.<%- clubLang %>" name="subject_<%- clubLang %>"
+                                        <%= (clubLang == clubDefaultLang) ? 'required="required" data-required="true"':'' %>
+                                        placeholder="<%- (_.contains(_.keys(form.confirmationSubject),clubDefaultLang) && clubLang != clubDefaultLang) ? form.confirmationSubject[clubDefaultLang] : '' %>" 
+                                        value="<%- (formStage == 'stage1') ? (defaultTranslations[clubLang]['confirmationMailSubject']) : ((_.contains(_.keys(form.confirmationSubject),clubLang)) ? form.confirmationSubject[clubLang] : '') %>"
+                                        />
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+                <% _.each(clubLanguages, function(clubLang) { %>
+                    <div class="form-group <%- clubLang != clubDefaultLang ? 'hide':'required'  %>" data-lang="<%- clubLang %>">
+                        <label class="col-md-3 col-sm-4 control-label " >{{ 'CMS_CONTACT_FORM_CONFIRMATION_CONTENT'|trans }}</label>
+                        <div class="col-sm-8">
+                            <div dataerror-group="">
+                                <textarea class="form-control fg-dev-newfield <%- clubLang != clubDefaultLang ? 'hide':''  %>" id="formelement_stage2_content_<%- clubLang %>" 
+                                            data-lang="<%- clubLang %>" data-key="<%- formId %>.confirmationEmailContent.<%- clubLang %>" name="content_<%- clubLang %>" 
+                                            placeholder="<%- (_.contains(_.keys(form.confirmationContent),clubDefaultLang) && clubLang != clubDefaultLang) ? form.confirmationContent[clubDefaultLang]:'' %>"
+                                            <%= (clubLang == clubDefaultLang) ? 'required="required" data-required="true"' : '' %>><%- (formStage == 'stage1') ? (defaultTranslations[clubLang]['confirmationMailContent']) : ((_.contains(_.keys(form.confirmationContent),clubLang)) ? form.confirmationContent[clubLang] : '') %></textarea>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-4 control-label">{{ 'CMS_CONTACT_FORM_APPLICATION_DETAILS'|trans }}</label>
+                    <div class="col-sm-8 fg-pad-top-7">
+                        <em>{{ 'CMS_CONTACT_FORM_APPLICATION_DETAILS_TEXT'|trans }}</em>
+                    </div>                        
+                </div>
+                <div class="form-group  fg-marg-top-10">
+                    <label class="col-md-3 col-sm-4 control-label">{{ 'CMS_CONTACT_FORM_SIGNATURE'|trans }}</label>
+                    <div class="col-sm-8 fg-pad-top-5">
+                        {{ fgclub.get('signature')|nl2br }}
+                    </div>                        
+                </div>
+                <% if ( hasAdminRights == 1) { %>
+                    <div class="form-group fg-marg-top-10">
+                        <div class="col-sm-8 fg-pad-top-5 col-md-offset-3 col-sm-offset-4">
+                            <p class=""><a href="<%- editSignaturePath %>" target="_blank">{{ 'CMS_CONTACT_FORM_EDIT_SIGNATURE'|trans }}</a></p>
+                        </div>                        
+                    </div>
+                <% } %>
+
+                <h3 class="block">{{'CMS_CONTACT_FORM_NOTIFICATION_MAIL'|trans}}</h3>
+                <div class="alert alert-info">{{'CMS_CONTACT_FORM_NOTIFICATION_MAIL_HINT_TEXT'|trans}}</div>
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-4 control-label " >{{'CMS_CONTACT_FORM_NOTIFICATION_RECIPIENTS'|trans}}</label>
+                    <div class="col-sm-6 fg-autocomplete-parent">
+                        <div>
+                            <input type="text" class="form-control" placeholder="{{ 'CMS_NOTIFICATION_PLACEHOLDER'|trans }}" id="<%- formId %>_recipients"></input>
+                            <input type="text" class="form-control hide fg-dev-newfield" id="<%- formId %>_recipients_data" value="<%- form.recipients %>" data-key="<%- formId %>.notificationEmailRecipients"></input>
+                        </div>
+                    </div>
+                </div>
+        
+                <h3 class="block">
+                    {{'CMS_CONTACT_FORM_ACCEPTANCE_MAIL'|trans}}
+                        <label for="formelement_stage2_acceptance_is_active_mail" class="pull-right">
+                            <input type="checkbox" name="checkboxes" id="formelement_stage2_acceptance_is_active_mail" <%- (form.isAcceptanceEmailActive == 1) ? '' : 'checked="checked"'  %> value="1" data-key="<%- formId %>.deactivateAcceptanceEmail" class="fg-dev-newfield">
+                            {{'CMS_CONTACT_FORM_DEACTIVATE_ACCEPTANCE_MAIL'|trans}}
+                        </label>        
+                </h3>
+                <div class="alert alert-info">{{'CMS_CONTACT_FORM_ACCEPTANCE_MAIL_HINT_TEXT'|trans}}</div>
+                <div class="form-group required">
+                    <label class="col-md-3 col-sm-4 control-label">{{'CMS_CONTACT_FORM_ACCEPTANCE_SENDER_EMAIL'|trans}}</label>
+                    <div class="col-sm-4">
+                        <input type="email" name="formelement_stage2_acceptance_senderemail" class="form-control fg-dev-newfield " <%- (form.acceptanceSenderEmail == defaultEmailId || form.isAcceptanceEmailActive == 0) ? 'disabled' : ''  %> value="<%- form.acceptanceSenderEmail %>" id="formelement_stage2_acceptance_senderemail" data-key="<%- formId %>.acceptanceEmailSender" <%- (form.isAcceptanceEmailActive == 0) ? '' : 'required = "required"'  %> >
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="formelement_stage2_acceptance_reply" class="fg-pad-top-7">
+                            <input type="checkbox" name="checkboxes" id="formelement_stage2_acceptance_reply" <%- (form.acceptanceSenderEmail == defaultEmailId) ? 'checked="checked"':''  %> value="1" data-key="<%- formId %>.acceptanceEmailReply" class="fg-dev-newfield" <%- (form.isAcceptanceEmailActive == 0) ? 'disabled':''  %>>
+                            {{ 'NOTIFICATION_MAIL_USE'|trans }} <span id="formelement_stage2_acceptance_senderemail_default"><%- defaultEmailId %></span>
+                        </label>
+                    </div>
+                </div>
+                <% _.each(clubLanguages, function(clubLang) { %>
+                    <div class="form-group <%- clubLang != clubDefaultLang ? 'hide' : 'required'  %>" data-lang="<%- clubLang %>">
+                        <label class="col-md-3 col-sm-4 control-label " >{{'CMS_CONTACT_FORM_ACCEPTANCE_SUBJECT'|trans}}</label>
+                        <div class="col-sm-4">
+                            <div dataerror-group="">
+                                <input type="text" class="form-control fg-dev-newfield <%- clubLang != clubDefaultLang ? 'hide' : '' %>" id="formelement_stage2_acceptance_subject_<%- clubLang %>" 
+                                        data-lang="<%- clubLang %>" data-key="<%- formId %>.acceptanceEmailSubject.<%- clubLang %>" name="acceptancesubject_<%- clubLang %>"
+                                        <%- (clubLang == clubDefaultLang && form.isAcceptanceEmailActive == 1) ? 'required="required" data-required="true"' : '' %>
+                                        placeholder="<%- (_.contains(_.keys(form.acceptanceSubject),clubDefaultLang) && clubLang != clubDefaultLang) ? form.acceptanceSubject[clubDefaultLang]:'' %>" 
+                                        value="<%- (formStage == 'stage1') ? (defaultTranslations[clubLang]['acceptanceMailSubject']) : ((_.contains(_.keys(form.acceptanceSubject),clubLang)) ? form.acceptanceSubject[clubLang] : '') %>" <%- (form.isAcceptanceEmailActive == 0) ? 'disabled' : ''  %>
+                                        />
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+                <% _.each(clubLanguages, function(clubLang) { %>
+                    <div class="form-group <%- clubLang != clubDefaultLang ? 'hide':'required'  %>" data-lang="<%- clubLang %>">
+                        <label class="col-md-3 col-sm-4 control-label " >{{'CMS_CONTACT_FORM_ACCEPTANCE_CONTENT'|trans}}</label>
+                        <div class="col-sm-8">
+                            <div dataerror-group="">
+                                <textarea class="form-control fg-dev-newfield <%- clubLang != clubDefaultLang ? 'hide':''  %>" id="formelement_stage2_acceptance_content_<%- clubLang %>" <%- (form.isAcceptanceEmailActive == 0) ? 'disabled' : '' %> 
+                                            data-lang="<%- clubLang %>" data-key="<%- formId %>.acceptanceEmailContent.<%- clubLang %>" name="acceptance_content_<%- clubLang %>" 
+                                            placeholder="<%- (_.contains(_.keys(form.acceptanceContent),clubDefaultLang) && clubLang != clubDefaultLang) ? form.acceptanceContent[clubDefaultLang] : '' %>"
+                                            <%= (clubLang == clubDefaultLang && form.isAcceptanceEmailActive == 1) ? 'required="required" data-required="true"' : '' %>><%- (formStage == 'stage1') ? (defaultTranslations[clubLang]['acceptanceMailContent']) : ((_.contains(_.keys(form.acceptanceContent),clubLang)) ? form.acceptanceContent[clubLang] : '') %></textarea>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+                <div class="form-group  fg-marg-top-10">
+                    <label class="col-md-3 col-sm-4 control-label">{{ 'CMS_CONTACT_FORM_SIGNATURE'|trans }}</label>
+                    <div class="col-sm-8 fg-pad-top-5">
+                        {{ fgclub.get('signature')|nl2br }}
+                    </div>                        
+                </div>
+                <% if ( hasAdminRights == 1) { %>
+                    <div class="form-group fg-marg-top-10">
+                        <div class="col-sm-8 fg-pad-top-5 col-md-offset-3 col-sm-offset-4">
+                            <p class=""><a href="<%- editSignaturePath %>" target="_blank">{{ 'CMS_CONTACT_FORM_EDIT_SIGNATURE'|trans }}</a></p>
+                        </div>                        
+                    </div>
+                <% } %>
+            
+                <h3 class="block">
+                    {{'CMS_CONTACT_FORM_DISMISSAL_MAIL'|trans}}
+                    <label for="formelement_stage2_dismissal_is_active_mail" class="pull-right">
+                        <input type="checkbox" name="checkboxes" id="formelement_stage2_dismissal_is_active_mail" <%- (form.isDismissalEmailActive == 1) ? '' : 'checked="checked"' %> value="1" data-key="<%- formId %>.deactivateDismissalEmail" class="fg-dev-newfield"/>
+                        {{'CMS_CONTACT_FORM_DEACTIVATE_DISMISSAL_MAIL'|trans}}
+                    </label> 
+                </h3>
+                <div class="alert alert-info">{{'CMS_CONTACT_FORM_DISMISSAL_MAIL_HINT_TEXT'|trans}}</div>
+                <div class="form-group required">
+                    <label class="col-md-3 col-sm-4 control-label">{{'CMS_CONTACT_FORM_DISMISSAL_SENDER_EMAIL'|trans}}</label>
+                    <div class="col-sm-4">
+                        <input type="email" class="form-control fg-dev-newfield " <%- (form.dismissalSenderEmail == defaultEmailId || form.isDismissalEmailActive == 0) ? 'disabled' : '' %> value="<%- form.dismissalSenderEmail %>" id="formelement_stage2_dismissal_senderemail" name="formelement_stage2_dismissal_senderemail" data-key="<%- formId %>.dismissalEmailSender" <%- (form.isDismissalEmailActive == 0) ? '' : 'required="required"' %>>
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="formelement_stage2_dismissal_reply" class="fg-pad-top-7">
+                            <input type="checkbox" name="checkboxes" id="formelement_stage2_dismissal_reply" <%- (form.dismissalSenderEmail == defaultEmailId) ? 'checked="checked"':''  %> value="1" data-key="<%- formId %>.dismissalEmailReply" class="fg-dev-newfield" <%- (form.isDismissalEmailActive == 0) ? 'disabled':''  %> >
+                            {{ 'NOTIFICATION_MAIL_USE'|trans }} <span id="formelement_stage2_dismissal_senderemail_default"><%- defaultEmailId %></span>
+                        </label>
+                    </div>
+                </div>
+                <% _.each(clubLanguages, function(clubLang) { %>
+                    <div class="form-group <%- clubLang != clubDefaultLang ? 'hide':'required'  %>" data-lang="<%- clubLang %>">
+                        <label class="col-md-3 col-sm-4 control-label " >{{'CMS_CONTACT_FORM_DISMISSAL_SUBJECT'|trans}}</label>
+                        <div class="col-sm-4">
+                            <div dataerror-group="">
+                                <input type="text" class="form-control fg-dev-newfield <%- clubLang != clubDefaultLang ? 'hide':''  %>" id="formelement_stage2_dismissal_subject_<%- clubLang %>" 
+                                        data-lang="<%- clubLang %>" data-key="<%- formId %>.dismissalEmailSubject.<%- clubLang %>" name="dismissal_subject_<%- clubLang %>"
+                                        <%= (clubLang == clubDefaultLang && form.isDismissalEmailActive == 1) ? 'required="required" data-required="true"' : '' %>
+                                        placeholder="<%- (_.contains(_.keys(form.dismissalSubject),clubDefaultLang) && clubLang != clubDefaultLang) ? form.dismissalSubject[clubDefaultLang] : '' %>" 
+                                        value="<%- (formStage == 'stage1') ? (defaultTranslations[clubLang]['dismissalMailSubject']) : ((_.contains(_.keys(form.dismissalSubject),clubLang)) ? form.dismissalSubject[clubLang] : '') %>" <%- (form.isDismissalEmailActive == 0) ? 'disabled' : '' %> 
+                                        />
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+                <% _.each(clubLanguages, function(clubLang) { %>
+                    <div class="form-group <%- clubLang != clubDefaultLang ? 'hide' : 'required'  %>" data-lang="<%- clubLang %>">
+                        <label class="col-md-3 col-sm-4 control-label " >{{'CMS_CONTACT_FORM_DISMISSAL_CONTENT'|trans}}</label>
+                        <div class="col-sm-8">
+                            <div dataerror-group="">
+                                <textarea class="form-control fg-dev-newfield <%- clubLang != clubDefaultLang ? 'hide':''  %>" id="formelement_stage2_dismissal_content_<%- clubLang %>" <%- (form.isDismissalEmailActive == 0) ? 'disabled' : '' %> 
+                                            data-lang="<%- clubLang %>" data-key="<%- formId %>.dismissalEmailContent.<%- clubLang %>" name="dismissal_content_<%- clubLang %>" 
+                                            placeholder="<%- (_.contains(_.keys(form.dismissalContent),clubDefaultLang) && clubLang != clubDefaultLang) ? form.dismissalContent[clubDefaultLang]:'' %>" 
+                                            <%= (clubLang == clubDefaultLang && form.isDismissalEmailActive == 1) ? 'required="required" data-required="true"' : '' %>><%- (formStage == 'stage1') ? (defaultTranslations[clubLang]['dismissalMailContent']) : ((_.contains(_.keys(form.dismissalContent),clubLang)) ? form.dismissalContent[clubLang] : '') %></textarea>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+                <div class="form-group  fg-marg-top-10">
+                    <label class="col-md-3 col-sm-4 control-label">{{ 'CMS_CONTACT_FORM_SIGNATURE'|trans }}</label>
+                    <div class="col-sm-8 fg-pad-top-5">
+                        {{ fgclub.get('signature')|nl2br }}
+                    </div>                        
+                </div>
+                <% if ( hasAdminRights == 1) { %>
+                    <div class="form-group fg-marg-top-10">
+                        <div class="col-sm-8 fg-pad-top-5 col-md-offset-3 col-sm-offset-4">
+                            <p class=""><a href="<%- editSignaturePath %>" target="_blank">{{ 'CMS_CONTACT_FORM_EDIT_SIGNATURE'|trans }}</a></p>
+                        </div>                        
+                    </div>
+                <% } %>
+            <div class="clearfix"></div>
+            </div>
+        </div>
+    </form>
+</script>

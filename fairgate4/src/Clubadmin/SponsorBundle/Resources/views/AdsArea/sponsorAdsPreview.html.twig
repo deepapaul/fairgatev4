@@ -1,0 +1,49 @@
+<div  class="fg-ad-preview-block">
+    {% if sponsorAds|length > 0 %}
+        {% for sponsorAd in sponsorAds %}
+            {% if(sponsorAd.isDefault == 1) %}
+                {% if (sponsorAd['contactDetails']['website']) %}
+                    <a href="{{ sponsorAd['contactDetails']['website'] }}" class="fg-ad-preview-wrap" target="_blank">  
+                {% else %}
+                    <span class="fg-ad-preview-wrap">
+                {% endif %}                                              
+                    {% if(sponsorAd['contactDetails']['Iscompany'] == 1) %}                    
+                        {% if(sponsorAd['contactDetails']['companyLogo'] is empty) %}
+                            <div class="fg-ad-preview-{{ sponsorAd.width }}">   
+                                <span>{{ sponsorAd['contactDetails']['contactname'] }}</span>
+                            </div>
+                        {% else %}
+                            <div class="fg-ad-preview-{{ sponsorAd.width }} fg-thumb">   
+                                <img  src="{{ sponsorAd['contactDetails']['companyLogo'] }}"  alt="" />
+                            </div>
+                        {% endif %} 
+                    {% else %}
+                        <div class="fg-ad-preview-{{ sponsorAd.width }}">   
+                            <span>{{ sponsorAd['contactDetails']['contactname'] }}</span>
+                        </div>
+                    {% endif %}                
+                {% if (sponsorAd['contactDetails']['website']) %}
+                    </a>
+                {% else %}
+                    </span>
+                {% endif %}
+            {% else %}
+                {% if (sponsorAd.url) %}
+                    <a href="{{ (sponsorAd.url is not empty) ? sponsorAd.url }}" class="fg-ad-preview-wrap" target="_blank" >
+                {% else %}
+                    <span class="fg-ad-preview-wrap">
+                {% endif %}                
+                    <div class="fg-ad-preview-{{ sponsorAd.width }} fg-thumb">
+                        <img  src="{{ sponsorAd.image }}" alt="" />
+                    </div>                
+                {% if (sponsorAd.url) %}
+                    </a>
+                {% else %}
+                    </span>
+                {% endif %}       
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {{ 'NL_NO_PREVIEWS'|trans }}
+    {% endif %}    
+</div>

@@ -1,0 +1,133 @@
+{# src/Clubadmin/SponsorBundle/Resources/views/Service/servicesettings.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = result_data.title %}
+{% block pagecontent %}
+     <!-- BREADCRUMB STARTS -->
+    {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+    <!-- BREADCRUMB ENDS -->
+    <div class="fg-theme-blue fg-theme-panel">
+        <!-- BEGIN PAGE CONTENT-->
+        <form id="servicesettings" class="form-horizontal" action="servicecategorysettings" onSubmit="return false;">
+            <!-- CATEGORY DATA SECTION STARTS -->
+            <div class="row">
+                <div class="col-md-12">
+                    {#<div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6 col-sm-6 col-xs-12 fg-left-zero">
+                               <input type="text" data-key="{{result_data.id}}.title" name="{{result_data.id}}_title" id="{{result_data.id}}_title" class="form-control input-lg page-title" placeholder="{{'SERVICE_CATEGORY_PLACEHOLDER'|trans}}"  value="{{result_data.title}}" required="true" />
+                            </div>
+                            <div class="btn-toolbar fg-lang-top-btm pull-left">
+                                <div class="btn-group fg-br-lang-bar">
+                                    {% if (clubLanguages|length > 1) %}
+                                        {% for clubLang in clubLanguages %}
+                                            <button type="button" class="btn {{(clubLang == clubDefaultLang) ? 'adminbtn-ash' : 'fg-lang-switch-btn'}}" data-selected-lang="{{clubLang}}" data-elem-function="switch_lang">{{clubLang|upper}}</button>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>#}
+                    <div class="row"> 
+                     {% set page_settings = { 'input_language_switch':'true','languageswitch':'true' }  %}
+                     {% include 'clubadmin/page-title-bar.html.twig' with { 'page_settings': page_settings,'clubLanguages': clubLanguages, 'result_data':result_data,'clubDefaultLang':clubDefaultLang,'placeholder':'SERVICE_CATEGORY_PLACEHOLDER'|trans  } %}               
+                   </div>  
+               </div>
+            </div>
+            <!-- CATEGORY DATA SECTION ENDS -->
+            <!-- ERROR DISPLAY STARTS-->
+            <div class="alert alert-danger display-hide">
+                <button class="close" data-close="alert"></button>
+                <span>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+            </div>
+            <!-- ERROR DISPLAY ENDS -->
+            <!-- DISPLAY STARTS -->
+            <div id="service_settings">
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- PANEL HEADING STARTS-->
+                        <div class="panel panel-primary panel-bg">
+                            <div class="panel-heading fg-theme-head paneldisplay">
+                                <h3 class="panel-title pull-left">{%trans%}SM_SERVICES_HEADING{%endtrans%}</h3>
+                            </div>
+                        </div>
+                        <!-- PANEL HEADING ENDS -->
+                        <!-- SERVICE DISPLAY STARTS-->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div data-list-wrap class="admin-fontsize filterrole-list dragndrop excludejs" id="sortservices">
+                                        <!-- SPONSOR SERVICES LISTING -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- ADD SERVICE DISPLAY STARTS-->
+                            <div class="row">
+                                <div class="col-md-5 fg-common-top fg-common-btm pull-left">
+                                    <a id="addrow" href="#basic" data-toggle="modal" data-parentdiv-id="sortservices" data-add-type="service">
+                                        <i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text"> {%trans%}ADD_SERVICE{%endtrans%}</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- ADD SERVICE DISPLAY ENDS-->
+
+                        <!-- SERVICE DISPLAY ENDS-->
+                    </div>
+                </div>
+            </div>
+            <!-- DISPLAY ENDS -->
+            <!-- SAVE SECTION STARTS -->
+            <div class="row">
+                <div class="col-md-12">
+
+                  <!--  Partial twig for savebutton-->
+                 {% include 'clubadmin/savebutton.html.twig' with {'backLink': backLink} %}
+
+                </div>
+            </div>
+            <!-- SAVE SECTION ENDS -->
+        </form>
+    </div>
+    <!-- UNDERSCORE TEMPLATES STARTS -->
+    <div id="divTemplates">
+        {# template for listing services #}
+        {% include 'ClubadminSponsorBundle:Service:serviceTemplate.html.twig' %}
+        {# template for adding new service #}
+        {% include 'ClubadminSponsorBundle:Service:addservice.html.twig' %}
+        {# template for listing the log for services #}
+        {% include 'ClubadminContactBundle:Role:logdisplay.html.twig' %}
+    </div>
+    <!-- UNDERSCORE TEMPLATES ENDS -->
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    var contactid = '{{contactId}}';
+    var clubid ='{{clubId}}';
+    var serviceSettingVars = {
+        'catId': {{result_data.id}},
+        'selectedLang': '{{clubDefaultLang}}',
+        'defaultLang': '{{clubDefaultLang}}',
+        'clubLanguages': {{clubLanguages|json_encode|raw}},
+        'pathServiceList': '{{path('list_services', {'catId': result_data.id})}}',
+        'pathLog': '{{path('service_log', {'serviceId': 'serviceId'})}}',
+        'saveAction': '{{path('update_services')}}'
+    };
+    var extraBreadcrumbTitle = {text: '{{'BREADCRUMB_TITLE_SPONSORCATEGORY'|trans}}', link: '{{path('sponsor_category_edit')}}'};
+    FgUtility.changeColorOnDelete();
+    function assignmentClick(_this){
+        FgSponsor.handlesidebarclick(_this,'{{path('clubadmin_sponsor_homepage')}}',contactid,clubid);
+    }
+     /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                     title: true,
+                     languageSettings: true
+
+             }); 
+</script>
+
+{% if not (app.request.xmlHttpRequest) %}
+    <script src="{{ asset('fgcustom/js/dirtyfields/jquery.dirtyFields.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_dirtyfields.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/listRow.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/sponsor-servicelist.js') }}" type="text/javascript"></script>
+{% endif %}
+{% endblock %}

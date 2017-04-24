@@ -1,0 +1,46 @@
+Common\UtilityBundle\Entity\FgTmThemeColorScheme:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgTmThemeColorSchemeRepository
+    type: entity
+    table: fg_tm_theme_color_scheme
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        colorSchemes:
+            type: text
+            nullable: false
+            column: color_schemes
+        cssFilename:
+            type: string
+            length: 50
+            fixed: false
+            nullable: true
+            column: css_filename
+        isDefault:
+            type: boolean
+            nullable: true
+            column: is_default
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        theme:
+            targetEntity: FgTmTheme
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                theme_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

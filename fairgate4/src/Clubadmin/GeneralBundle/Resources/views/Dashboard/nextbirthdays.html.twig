@@ -1,0 +1,54 @@
+<script type="text/template" id="template-next-birthdays">
+        <ul>
+        <% if (!_.isEmpty(data.birthdayDetails)) { %>
+        <% _.each(data.birthdayDetails,function(entry,key){  %>                
+        <li><span class="fg-birthdate"><%- entry.nextBirthDay %>:</span>
+            <% i = 0; %>
+            <% c = 0; %>
+            <div class="fg-dashboard-birthday">
+                <span class="fg-bithday-contact1"> 
+                    <% _.each(entry.contacts,function(contact,keycontact) {  %> 
+                        <% if( c < 5 ) { %>
+                            <% if(entry.contactRights == 1) { %>
+                            <a href="<%= contact.path %>"><%= contact.name %></a>  
+                            <% } else { %>
+                            <%= contact.name %>  
+                            <% } %>                    
+                            <% if( (c+1) == entry.contactsNumber || (c+1) == 5) { %>
+                                <%= "(" + contact.age + ")" %>
+                                <% } else { %>
+                                <%= "(" + contact.age + "), " %>
+                                <% } %>
+                            <% c++; %>   
+                        <% } %>
+                    <% }); %>
+                </span>
+                <% if( entry.contactsNumber > 5) { %>
+                    <span class="fg-bithday-contact hide"> 
+                        <% _.each(entry.contacts,function(contact,keycontact) {  %>                                         
+                            <% if(entry.contactRights == 1) { %>
+                            <a href="<%= contact.path %>"><%= contact.name %></a>  
+                            <% } else { %>
+                            <%= contact.name %>  
+                            <% } %>                    
+                            <% if( (i+1) == entry.contactsNumber) { %>
+                                <%= "(" + contact.age + ")" %>
+                                <% } else { %>
+                                <%= "(" + contact.age + "), " %>
+                                <% } %>
+                            <% i++; %>                    
+                        <% }); %>
+                    </span>
+                <% } %>
+                <% if (i > 5 ) { %>
+                <a class="fg-plus-click"><%= data.textShowAll %></a><a class="fg-minus-click hide"><%= data.textShowLess %></a>
+                <% } %>
+            </div>
+        </li>
+        <% }); %>   
+    <% } else { %>
+            <li><span class="fg-birthdate">{{'DASHBOARD_NO_BIRTHDAYS'|trans}}</span></li>
+       <% } %>
+        </ul>   
+</script>
+

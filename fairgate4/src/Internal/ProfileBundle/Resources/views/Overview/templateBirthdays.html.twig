@@ -1,0 +1,50 @@
+<script type="text/template" id="overviewNextBirthdaysBox">
+        <div>
+        <ul>      
+        <% if (!_.isEmpty(data.birthdayDetails)) { %>
+        <% _.each(data.birthdayDetails,function(entry,key){  %>  
+        <li><span class="fg-birthdate"><%- entry.nextBirthDay %>:</span>
+            <% i = 0; %>
+            <% c = 0; %>
+            <div class="fg-dashboard-birthday">
+                <span class="fg-bithday-contact1"> 
+                    <% _.each(entry.contacts,function(contact,keycontact) {  %> 
+                        <% if( c < 5 ) { %>
+                            <% if (contact.isStealthMode == 0) { %> <a href="<%= contact.path %>"> <% } %> <%= contact.name %> <% if (contact.isStealthMode == 0) { %> </a> <% } %> 
+                            <% if( (c+1) == entry.contactsNumber || (c+1) == 5) { %>
+                                <% if( data.roleType != '' ) { %> <%= "(" + contact.age + ")" %>  <% } else { %>  <% } %>
+                                <% } else { %>
+                               <% if( data.roleType != '' ) { %> <%= "(" + contact.age + "), " %> <% } else { %>, <% } %>
+                                <% } %>
+                            <% c++; %> 
+                            <% } %>
+                        
+                    <% }); %>
+                </span>
+                <% if( entry.contactsNumber > 5) { %>
+                    <span class="fg-bithday-contact hide"> 
+                        <% _.each(entry.contacts,function(contact,keycontact) {  %>                                         
+                            
+                            <% if (contact.isStealthMode == 0) { %> <a href="<%= contact.path %>"> <% } %> <%= contact.name %> <% if (contact.isStealthMode == 0) { %> </a> <% } %>             
+                            <% if( (i+1) == entry.contactsNumber) { %>
+                                <% if( data.roleType != '' ) { %> <%= "(" + contact.age + ")" %> <% } else { %>  <% } %>
+                                <% } else { %>
+                                <% if( data.roleType != '' ) { %> <%= "(" + contact.age + "), " %> <% } else { %>, <% } %>
+                                <% } %>
+                            <% i++; %>                    
+                        <% }); %>
+                    </span>
+                <% } %>
+                <% if (i > 5 ) { %>
+                <a class="fg-plus-click"><%= data.textShowAll %></a>
+                <a class="fg-minus-click hide"><%= data.textShowLess %></a>
+                <% } %>
+            </div>
+        </li>
+        <% }); %>   
+    <% } else { %>
+            <li><span>{{'DASHBOARD_NO_BIRTHDAYS'|trans}}</span></li>
+       <% } %>
+        </ul> 
+</div>
+</script>

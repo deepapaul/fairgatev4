@@ -1,0 +1,87 @@
+{% extends 'InternalMessageBundle:MessageWizard:messagewizard.html.twig' %}
+
+{% block wizardstage %}
+    <h3 class="block fg-strong-4">{%trans%}MESSAGE_STEP3_TEXT{%endtrans%}</h3>
+    <div class="row">
+        <div class="portlet-body new-table-height fg-datatable-wrapper fg-datatable-no-fixed">
+            <table data-contacts="receiverList"  class="table dataTable
+                   table-bordered
+                   table-condensed
+                   table-hover"  id="fg-dev-dataTable-receiver" xWidth="100" yHeight="300" data-table-name="dataTables" dataTable-hover="true" data-sort="0#desc" data-storage="message_receiverlist" data-columnstorage="message_receiverlist_column" data-column-def="true">
+                <thead>
+                    <tr>
+                        <th >{%trans%}CONTACT{%endtrans%}</th>
+                            {% if(isAdmin) %}
+                                {% for key,id in emailAttrIds %}
+                                <th>
+                                    <label class="checkbox" for="check_all_attr_{{id}}">{% if(id != 3) %}    
+                                        
+                                            <input type='checkbox' data-attr-id="{{id}}" name='check_all_attr_{{id}}' id='check_all_attr_{{id}}' class='data_checkall' />
+                                                               {% endif %}
+                                            {{ id=='parent' ? 'PRIMARY_EMAIL_PARENT'|trans:contactFields[id]['title']}}
+                                        </label>
+                                        {% endfor %}
+                                            {% else %}
+                                            <th>{{contactFields.3.title}}</th>
+                                                {% endif %}
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                            {% endblock %}
+
+                                {% block wizardprogressstage %}
+                                    <ul class="nav nav-pills nav-justified steps">
+                                        <li class="done"> <a class="step" href="{{path('internal_edit_message_step1', {'messageId':messageDetailArray.id})}}" aria-expanded="true"> <span class="number"> 1 </span> <span class="desc"> <i class="fa fa-check"></i>&nbsp;&nbsp;{{'MESSAGEWIZARD_GENERAL'|trans}}</span> </a> </li>
+                                        <li class="done"> <a class="step" href="{{path('internal_edit_message_step2', {'messageId':messageDetailArray.id})}}"> <span class="number"> 2 </span> <span class="desc"> <i class="fa fa-check"></i>&nbsp;&nbsp;{{'MESSAGEWIZARD_MESSAGE'|trans}}</span> </a> </li>
+                                        <li class="active"> <a class="step active" href="javascript:void(0)"> <span class="number"> 3 </span> <span class="desc"> <i class="fa fa-check"></i>{{'MESSAGEWIZARD_NOTIFICATION'|trans}}</span> </a> </li>                                     
+                                    </ul>
+                                    <div role="progressbar" class="progress progress-striped" id="bar">
+                                        <div class="progress-bar progress-bar-warning" style="width: 100%;;"> </div>
+                                    </div>
+                                {% endblock %}
+
+
+
+                                {% block wizardscript %}
+                                    <script src="{{ asset('fgassets/internal/js/page/fgMessageSending.js') }}" type="text/javascript"></script>  
+                                    <script type="text/javascript">
+                                                var dataPath = '{{path('internal_get_contacts_for_notif',{'messageId':messageId})}}';
+                                                var pathSending = '{{path('internal_message_send',{'messageId':messageId})}}';
+                                                var backStep2Path = '{{path('internal_edit_message_step2', {'messageId':messageDetailArray.id})}}';
+                                                var contactsData;
+                                                /**
+                                                 * Function to define column definition of datatables
+                                                 */
+                                                        function setColumnDef(){
+                                                        var contactProfile = "{{path('internal_community_profile',{'contactId':'CONTACT_ID'})}}";
+                                                                columnDefs = [
+                                                                {"name": "contactname", orderable: true, "width": "10%", "targets": 0, data: function (row, type, val, meta) {
+                                                                return row['is_stealth'] == '1' ? row['contactname']: '<a href="' + contactProfile.replace('CONTACT_ID', row['id']) + '" >' + row['contactname'] + '</a>';
+                                                                } },
+                                        {% if(isAdmin) %}    
+                                            {% for key,id in emailAttrIds %}
+                                                                        {"name": "{{id}}", orderable: false, "targets":{{key+1}}, data: function (row, type, val, meta) {
+                                                                        var checkedVal = row['{{id}}_checked'] == 1 ? 'checked':'';
+                                                                                var colValue = (row['{{id}}'] != '' && row['{{id}}'] != null) ? '<input class="attrbChecker" ' + checkedVal + ' type="checkbox" data-contact="' + row['id'] + '" data-attr="{{id}}" id="{{ key }}_{{id}}" name="check_{{id}}_{{key}}" value="1">':'';                                                {% if(isAdmin > 1) %}
+                                                                                                                    if (row['isAdmin'] != '1'){
+                                                                                                            colValue = ('{{id}}' != '3') ? '' :(row['3'] == '') ? '<div class="checker"><i class="fa fa-times-circle text-red"></i></div>':'<div class="checker"><i class="fa fa-check-circle text-green"></i></div>';
+                                                                                                            }
+                                                {% endif %}
+                                                                            if ('{{id}}' == '3'){ //FAIR-1309
+                                                                            colValue = (row['3'] == '') ? '<div class="checker"><i class="fa fa-times-circle text-red"></i></div>':'<i class="fa fa-check-circle text-green"></i><input class="hide" checked type="checkbox" data-contact="' + row['id'] + '" data-attr="{{id}}" id="{{ key }}_{{id}}" name="check_{{id}}_{{key}}" value="1"/>';
+                                                                            }
+                                                                            return colValue;
+                                                                            } },                                            {% endfor %}
+                                        {% else %}
+                                                                    {"name": "3", orderable: false, "targets": 1, data: function (row, type, val, meta) {
+                                                                    var iconClass = (row['3'] == '') ? 'fa-times-circle text-red':'fa-check-circle text-green';
+                                                                            return '<div class="checker"><i class="fa ' + iconClass + '"></i></div>';
+                                                                    } }
+                                        {% endif %}    
+                                                                    ];
+                                                                    return columnDefs;
+                                                            }
+                                    </script>    
+                                {% endblock %}   

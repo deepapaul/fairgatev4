@@ -1,0 +1,89 @@
+Common\UtilityBundle\Entity\FgRmCategory:
+    repositoryClass: Common\UtilityBundle\Repository\FgRmCategoryRepository
+    type: entity
+    table: fg_rm_category
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        contactAssign:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: contact_assign
+        roleAssign:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: role_assign
+        functionAssign:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: function_assign
+        isActive:
+            type: boolean
+            nullable: true
+            column: is_active
+        isTeam:
+            type: boolean
+            nullable: false
+            column: is_team
+        isWorkgroup:
+            type: boolean
+            nullable: false
+            column: is_workgroup
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sort_order
+        isAllowedFedmemberSubfed:
+            type: boolean
+            nullable: false
+            column: is_allowed_fedmember_subfed
+        isAllowedFedmemberClub:
+            type: boolean
+            nullable: false
+            column: is_allowed_fedmember_club
+        isRequiredFedmemberSubfed:
+            type: boolean
+            nullable: false
+            column: is_required_fedmember_subfed
+        isRequiredFedmemberClub:
+            type: boolean
+            nullable: false
+            column: is_required_fedmember_club
+        isFedCategory:
+            type: boolean
+            nullable: false
+            column: is_fed_category
+        calendarColorCode:
+            type: string
+            length: 10
+            fixed: false
+            nullable: true
+            column: calendar_color_code
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

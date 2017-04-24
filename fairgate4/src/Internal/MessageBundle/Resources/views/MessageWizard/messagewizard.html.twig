@@ -1,0 +1,78 @@
+{% extends '::internal/layout.html.twig' %}
+
+{% block pagecontent %}
+<!-- BEGIN BREADCRUMB-->
+   <div class="row">
+       <div class="col-lg-12">
+           {% include 'internal/breadcrumb.html.twig' with {'breadCrumb':{'back':path('internal_message_inbox')}} %}
+       </div>
+   </div>
+   <!-- END BREADCRUMB-->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="fg-border-wrap no-border">           
+            <div class="fg-title-first-block fg-text-block">
+                <h3 class="page-title">{{'MESSAGEWIZARD_STAGE1_HEADER'|trans}}</h3>
+            </div>       
+        </div> 
+    </div>
+</div>
+
+<div class="row fg-message-wrapper">
+    <div class="col-md-12 fg-theme-green">
+        <div id="form_wizard_1" class="portlet box fg-theme-head">
+            <div class="portlet-title">
+                <div class="caption"> <span class="step-title"> {{'IMPORT_STEP'|trans}} {{step}} {{'IMPORT_STEP_OF'|trans}} 3 </span> </div>
+            </div>  
+            
+            <div class="portlet-body form">
+                <form id="submit_form" class="form-horizontal" action="#" novalidate="novalidate">
+                  <div class="form-wizard">
+                    <div class="form-body">
+                        
+                        {% block wizardprogressstage %}{% endblock %}
+                        
+                      <div class="tab-content">
+                        <div class="alert alert-danger display-none">
+                          <button data-dismiss="alert" class="close"></button>
+                          {{'FORM_ERROR_DISPLAY'|trans}}
+                        </div>
+                        <div class="alert alert-success display-none">
+                          <button data-dismiss="alert" class="close"></button>
+                          {{'NL_VALIDATION_SUCCESS'|trans}}
+                        </div> 
+                          
+                        {% block wizardstage %} {% endblock %}
+                          
+                      </div>
+                    </div>
+                      
+                    <div class="form-actions right">
+                        <div class="row">
+                          <div class="col-md-12">
+                            {% if(step>1) %}
+                            <a class="btn default  fg-display" id="message_wizard_discard" href="#"> {{'BACK'|trans}} </a>
+                            {% endif  %}
+                            <a class="btn green button-next" id="message_wizard_save" href="javascript:void(0)"> {{ step==3 ? 'NLW_SEND'|trans:'SM_CONTINUE'|trans}} </a>
+                          </div>
+                        </div>
+                    </div>
+                    
+                  </div>
+                </form>
+              </div>
+        </div>
+    </div>
+</div>        
+{% endblock %}
+
+
+{% block javascripts %}
+<script src="{{ asset('fgassets/internal/js/page/fgMessageWizard.js')}}" type="text/javascript"></script>
+<script src="{{ asset('fgassets/global/js/fg_dirtyfields.js') }}" type="text/javascript"></script>
+{% block wizardscript %}{% endblock %}
+{% endblock %}
+
+{% block customstylesheets %}
+<link href="{{ asset('fgassets/global/css/fbautocomplete.css')}}" type="text/css" rel="stylesheet" />
+{% endblock %}

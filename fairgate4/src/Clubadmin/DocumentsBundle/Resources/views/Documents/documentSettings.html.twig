@@ -1,0 +1,292 @@
+{# src/Clubadmin/DocumentsBundle/Resources/views/Documents/documentSettings.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = dataSet.name %}
+{% block customstylesheets %}
+    <link href="{{ asset('fgcustom/css/jquery-ui.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('fgcustom/css/fbautocomplete.css')}}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+{% block pagecontent %}
+    
+<!-- BREADCRUMB STARTS -->
+<div class="row">
+    <div class="col-md-12">
+        {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+    </div>
+</div>
+<!-- BREADCRUMB ENDS -->
+<!-- BEGIN PAGE CONTENT-->
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet-body fg-theme-blue fg-document-edit-wrapper">
+                    <form id="documentsettings" skipDirtyCheck class="form-horizontal" action="documentsettings" autocomplete="off" onSubmit="return false;">
+                        <!-- DOCUMENT DATA SECTION STARTS -->
+                        
+                            <div class="col-md-9 col-sm-12 col-xs-12 fg-left-zero">
+                                <div class="btn-group pull-left fg-common-btn-lang-top">
+                                    <button class="btn tableaction" data-toggle="dropdown"><i class="fa fa-bars fa-2x"></i></button>
+                                    <ul class="dropdown-menu pull-left">
+                                        {% set logPath = ['document_log_', documentType]|join %}
+                                        <li><a href="{{ path('document_download', {'docId' : documentId, 'versionId': dataSet.versionId }) }}">{{ 'DOWNLOAD'|trans }}</a></li>
+                                        <li><a href="{{ path(logPath, {'documentId' : documentId }) }}">{{ 'LOG'|trans }}</a></li>
+                                        <li><a data-id="{{ dataSet.id }}" class="fg-docDelete" data-url="{{ path('document_settings_edit_delete_popup') }}" data-action-type= "editdocumentdelete" href="#">{{ 'DELETE'|trans }}</a></li>
+                                    </ul>                 
+                                </div>
+                                <div  class="col-md-6 col-sm-6 col-xs-12 fg-doc-title-area"> 
+                                    {% for clubLang in clubLanguages %}
+                                        <div dataerror-group data-lang="{{ clubLang }}">
+                                            <input type="text" data-key="{{ dataSet.id }}.i18n.{{ clubLang }}.name" name="{{ dataSet.id }}_i18n_{{ clubLang }}_name" id="{{ dataSet.id }}_i18n_{{ clubLang }}_name" data-lang="{{ clubLang }}" class="form-control input-lg page-title {{ (clubLang == clubDefaultLang) ? '' : 'hide' }}" placeholder="{{ dataSet.name }}" value="{{ (dataSet['nameLang'][clubLang] is defined) ? dataSet['nameLang'][clubLang] : ''}}" {{ (clubLang == clubDefaultLang) ? 'required="true"' : '' }}>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="btn-toolbar fg-lang-tab col-md-4 col-sm-4 col-xs-12 fg-left-zero">
+                                    <div class="btn-group fg-lang-btn-group fg-common-btn-lang-top">
+                                        {% if (clubLanguages|length > 1) %}
+                                            {% for clubLang in clubLanguages %}
+                                                <button type="button" id = "{{ clubLang }}" class="btn btlang {{ (clubLang == clubDefaultLang) ? 'adminbtn-ash' : 'fg-lang-switch-btn' }}" data-selected-lang="{{ clubLang }}" data-elem-function="switch_lang">{{ clubLang|upper }}</button>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="fg-clear"></div>       
+                        <div class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            <span>{{ 'FORM_ERROR_DISPLAY'|trans }}</span>
+                        </div>
+<!--                        DELETE POP UP STARTS-->
+                        <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+                            <div class="modal-dialog modal-wide">
+                                <div class="modal-content fg-popup-wrap" id="popup_contents">
+                                </div>
+                            </div>
+                        </div>
+<!--                        DELETE POP UP ENDS-->
+                        <div class="fg-clear"></div>  
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel-primary panel-bg">
+                                    <div class="panel-heading fg-theme-head paneldisplay">
+                                        <h3 class="panel-title pull-left">{{ 'PROPERTIES'|trans }}</h3>
+                                    </div>
+                                </div>
+                                <!-- EDIT DOCUMENT TEMPLATE SECTION STARTS -->
+                                {% include 'ClubadminDocumentsBundle:Documents:documentEditTemplate.html.twig' with {'documentId' : documentId, 'documentType' : documentType, 'subCategories' : subCategories} %}
+                                <!-- EDIT DOCUMENT TEMPLATE SECTION ENDS -->    
+                            </div>
+                        </div>
+                        <!-- DOCUMENT DATA SECTION ENDS -->
+
+                        <!-- VERSION LISTING SECTION STARTS -->
+                        {% include 'ClubadminDocumentsBundle:Documents:versionList.html.twig' with {'documentId' : documentId} %}
+                        <!-- VERSION LISTING SECTION ENDS -->
+
+                        <!-- RENEW DOCUMENT SECTION STARTS -->
+                        {% include 'ClubadminDocumentsBundle:Documents:renewDocument.html.twig' with {'documentId' : documentId} %}
+                        <!-- RENEW DOCUMENT SECTION ENDS -->
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% include 'clubadmin/savebutton.html.twig' with {'backLink': backLink} %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT-->
+{% endblock %}
+{% block javascripts %}   
+<script src="{{ asset('fgcustom/js/sidebar.js') }}" type="text/javascript"></script>    
+<script type="text/javascript">
+    var selectedLang = defaultLang = '{{ clubDefaultLang }}';
+    var pathFilterData = "{{ path('document_filter_contact_data') }}";
+    var type='{{ documentType|upper }}';
+    var cm_criteria = '{{ 'CM_CRITERIA'|trans }}: ';
+    var removestring = "{{ 'NL_AUTOCOMPLETE_REMOVE'|trans }}";
+    var contactUrl= "{{ path('document_collect_contactname') }}";
+    {% if(documentType=='club') %}
+        var clubs ={{subclubs|json_encode()|raw }} ; 
+    {% elseif(documentType=='contact')%}
+        selectedContacts={{contactSelected|json_encode()|replace({'contactid':'id','contactNameYOB':'title'})|raw }}
+        contactExcluded={{contactExcluded|json_encode()|replace({'contactid':'id','contactNameYOB':'title'})|raw }}
+    {% endif %}
+    var docType = '{{ documentType|default('club') }}';
+    var offset = '{{ offset }}';
+    var rowid = '{{ documentId }}';
+    var saveAction = "{{ path('document_update', {'documentType' :  documentType, 'documentId' : documentId, 'offset' : offset, 'module' : module }) }}";
+    var saveClicked=0;
+    var filterCondition = '';
+    var formerror = '{{ 'FORM_ERROR_DISPLAY'|trans }}';
+    var filterData="{{(dataSet.filterData|default('') is empty or dataSet.filterData|default('')=='NULL') ? '{}':dataSet.filterData|escape('js')|raw}}";
+    var selectType='{{'CM_SELECT_TYPE'|trans}}';
+    var clubId = '{{ clubId }}';
+    var contactId = '{{ contactId }}';
+    var clubType = '{{ clubType }}';
+    var all = '{{'ALL'|trans}}';
+    var none = '{{'NONE'|trans}}';
+    var actionMenuNoneSelectedText = {
+        'documentOldVersionDelete' : {'title' : "{{'DELETE_ALL'|trans}}", 'dataUrl' : '{{ path('document_settings_delete_popup') }}'},
+    };
+    var filterStorage = 'documentfilter_' + type + '-' + clubId + '-' + contactId;
+    var ActiveMenuDetVar = 'document_active_menu_det_' + type + '-' + clubId + '-' + contactId;
+    var ActiveMenuVar = 'activeMenu_' + type + '-' + clubId + '-' + contactId;
+    var ActiveSubMenuVar = 'activeSubMenu-' + type + '-' + clubId + '-' + contactId;
+    var actionMenuSingleSelectedText = {
+        'documentDownload' : {'title' : "{{'DOWNLOAD'|trans}}", 'dataUrl' : '{{ path('document_download', {'docId' : documentId, 'versionId': 'versionId' }) }}'}, 
+        'documentVersionDelete' : {'title' : "{{'DELETE'|trans}}", 'dataUrl' : '{{ path('document_settings_delete_popup') }}'},
+    };
+    var actionMenuMultipleSelectedText = {
+        'documentVersionDelete' : {'title' : "{{'DELETE'|trans}}", 'dataUrl' : '{{ path('document_settings_delete_popup') }}'},       
+    };      
+    var deletedocumentPath = '{{ path('document_settings_delete_popup') }}';
+    var columnDefs = [
+                        { type : "checkbox", "width": "2%", orderable : false, targets : 0, data : function(row, type, val, meta) {
+                            return "<input type='checkbox' class='dataClass fg-dev-avoidicon-behaviour dFExclude' id='"+row[0]+"' name='check'>";
+                        }},
+                        { "name" : "version", "targets": 1, data : function(row, type, val, meta) {
+                            var versionText = '';
+                            if (row[1] == '' || row[1] == null) {
+                                versionText = '-';
+                            } else {
+                                var downloadPath = '{{ path('document_download', {'docId' : documentId, 'versionId': 'versionId' }) }}';
+                                downloadPath = downloadPath.replace('versionId', row[0]);
+                                versionText = (type === 'display') ? '<a href="'+downloadPath+'" target="_blank">'+'{{ 'VERSION'|trans }} '+row[1]+'</a>' : row[1];
+                            }
+                            return versionText;
+                        }},
+                        { "name" : "size", "targets" : 2, data : function(row, type, val, meta) {
+                            var sizeText = '',
+                                sizeInMB = '';
+                            if (row[2] == '' || row[2] == null) {
+                                sizeText = '-';
+                            } else {
+                                sizeInMB = (row[2])/(1024*1024);
+                                sizeInMB = sizeInMB.toFixed(1);
+                                sizeInMB = (sizeInMB == '0.0') ? '< '+FgClubSettings.formatNumber(0.1)+' MB' : FgClubSettings.formatNumber(sizeInMB)+' MB';
+                                sizeText = (type === 'display') ? sizeInMB : row[2];
+                            }
+                            return sizeText; 
+                        }},
+                        { "name" : "uploaded_on", "targets" : 3, data : function(row, type, val, meta) {
+                            return row[3] == '' || row[3] == null ? '-' : row[3]; 
+                        }},
+                        { "name" : "uploaded_by", "targets" : 4, data : function(row, type, val, meta) {
+                            return row[4] == '' || row[4] == null ? '-' : row[4]; 
+                        }}
+                     ]; 
+                 {#    var logPath = ['document_log_', documentType]|join
+                      var actionMenuNoneSelectedText = {
+                        'download': {'title': "{{ 'DOWNLOAD'|trans}}", 'dataUrl': '{{ path('document_download', {'docId' : documentId, 'versionId': dataSet.versionId }) }}'},
+                         'log': {'title': "{{  'LOG'|trans }}", 'dataUrl': '{{  path(logPath, {'documentId' : documentId }) }}'},
+                         'delete': {'title': "{{'DELETE'|trans }}", 'dataUrl': '{{  path('document_settings_edit_delete_popup') }}'}  
+                             };
+                var actionMenuText = {'active' : {'none': actionMenuNoneSelectedText}};
+                FgSidebar.dynamicMenus.push({actionmenu: actionMenuText}); #}    
+     
+    $(document).ready(function() {
+        FgUtility.showTranslation(selectedLang); 
+        /* function to show data in different languages on switching language */
+        $('form').on('click', 'button[data-elem-function=switch_lang]', function() {
+            selectedLang = $(this).attr('data-selected-lang');
+            FgUtility.showTranslation(selectedLang);
+        });    
+        $.uniform.restore('form input[type=radio]');
+        FgDirtyFields.init('documentsettings', {
+            dirtyFieldSettings :{dirtyFormClass : "isDirty"}, 
+            enableDragDrop : false, 
+            enableUpdateSortOrder : false, 
+            initCompleteCallback : function () {
+                fileUploader.init({id:'upload-1'});
+                if (type === 'CONTACT') {
+                    localStorage.setItem('filter'+rowid, filterData);
+                    filterCondition = FgFilter.getCondition('{{'CM_AND'|trans}}', '{{'CM_OR'|trans}}', '{{'CM_IS'|trans}}', '{{'CM_ISNOT'|trans}}', '{{'CM_IS_BETWEEN'|trans}}', '{{'CM_IS_NOTBETWEEN'|trans}}', '{{'CM_CONTAINS'|trans}}', '{{'CM_NOTCONTAINS'|trans}}', '{{'CM_BEGINSWITH'|trans}}', '{{'CM_NOTBEGINSWITH'|trans}}', '{{'CM_ENDWITH'|trans}}', '{{'CM_NOTENDWITH'|trans}}');
+                    documentupload.handleContactsAuto(rowid);
+                    documentupload.handleFilter(rowid);
+                } else if (type === 'CLUB') {
+                    documentupload.handleAutoComplete(rowid);
+                }
+                documentupload.handleDepositedSelection();                
+                FormValidation.init('documentsettings','');
+                documentupload.handleDeleteSingleFile();
+                FgVersionList.initDatatable();
+                $('form input[type=radio]').uniform();
+            },
+            discardChangesCallback : function () {
+                $('#documentsettings').find('.bootstrap-select').remove();
+                $('#documentsettings').find('.bs-select').selectpicker('refresh');
+                if ((type === 'TEAM') || (type === 'WORKGROUP')) {
+                    FgColumnSettings.handleSelectPicker();
+                }
+                FgPageTitlebar.checkMissingTranslation(defaultLang);
+            }
+        });
+        if ((type === 'TEAM') || (type === 'WORKGROUP')) {
+            FgColumnSettings.handleSelectPicker();
+        }
+                FgPageTitlebar.checkMissingTranslation(defaultLang);
+    });
+    $('body').on('click', '#save_changes', function() {
+        $('span[for='+$('input[data-club]').attr('id')+']').hide();
+        var isValid = 1;
+        if (docType == 'club') { 
+            if ((clubType == 'federation') || (clubType == 'sub_federation')) { 
+                var radioSelection = $('input[data-deposited]:checked').val();
+                var selectedClubString = '';
+                if (radioSelection == 'SELECTED') {
+                    selectedClubString = $('input[name='+rowid+'_depositedWithSelection]').val();
+                    if (selectedClubString == '[""]' || selectedClubString == '[]' || selectedClubString == ''){
+                        $('input[data-selected]').val('');
+                    }
+                } 
+            }
+        } else if (docType == 'contact') {
+            $('#save_filter').click();
+            isValid = $('#filterError').val();
+        }
+
+        if ($('#documentsettings').valid() && isValid !== '0') {
+            if(saveClicked===0) {
+                saveClicked=1;
+                FgDirtyFields.removeAllDirtyInstances();
+                documentupload.handleEditDocumentSave();
+            }
+            return false;
+        } else {
+           FgUtility.showTranslation(defaultLang);
+           $('div.alert-danger span').html(formerror);
+           return false;
+        }
+    });
+{#     For resetting the changes (add row, sorting) done in the page on 'discard_changes'#}
+{#    $('#reset_changes').click(function() {
+{#        FgDirtyFields.removeAllDirtyInstances();#}
+{#        document.location = document.location.href;  #}
+{#    });#}
+    </script>
+    <script src="{{ asset('fgcustom/js/dirtyfields/jquery.dirtyFields.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_dirtyfields.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/search-filter.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/filter-settings.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/jquery-fileupload/jquery.fileupload.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fbautocomplete/fbautocomplete.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/custom-fileupload.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/documentUpload.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/fg_version_list.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/count-update.js')}}" type="text/javascript"></script> 
+    
+<script type="text/javascript"> 
+    var editdocumentdeletePath = '{{ path('document_settings_edit_delete_popup') }}';
+    var docType = '{{ documentType }}';
+    $(document).on('click', '.fg-docDelete', function() {
+        var actionType = $(this).attr('data-action-type');
+        var dataUrl = $(this).attr('data-url');
+        var dataType='selected';
+        var docId = $(this).attr('data-id');
+        showPopup('editdocumentdelete', { 'actionType': actionType, 'selActionType' :dataType,'docid':docId,'docType':docType });
+    }); 
+</script>
+{% endblock %}

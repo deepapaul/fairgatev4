@@ -1,0 +1,32 @@
+Common\UtilityBundle\Entity\FgCmsPortraitContainer:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPortraitContainerRepository
+    type: entity
+    table: fg_cms_portrait_container
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        size:
+            type: integer
+            unsigned: false
+            nullable: false
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sort_order
+    manyToOne:
+        portrait:
+            targetEntity: FgCmsContactTable
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                portrait_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

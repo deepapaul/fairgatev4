@@ -1,0 +1,248 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = 'CALENDAR_TITLE'|trans %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTAINER -->
+
+    <!-- BEGIN BREADCRUMB-->
+    <div class="row">
+        <div class="col-lg-12">
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+        </div>
+    </div>
+    <!-- END BREADCRUMB-->
+
+
+
+    <!-- BEGIN CONTENT -->
+    <div class="row fg-forum-overview-wrapper">
+        <div class="fg-calendar-viewlist-wrapper  col-lg-12 fg-filterblock" style="display:none">
+            <div class="fg-calendar-view-filter-wrapper ">
+                <div class="fg-calendar-filter-search input-icon">                                        
+                    <i class="fa fa-search"></i>
+                    <input type="text" placeholder="{{'CALENDAR_SEARCH_PLACEHOLDER'|trans}}" class="form-control control2" id="fg_dev_member_search">
+                </div>
+                <h2 class="fg-calendar-filter-title">{{'CALENDAR_FILTER'|trans}}</h2>
+                <div  class="fg-calendar-filter-list">
+                    <ul >
+                        <li class="has-parent has-child">
+                            <div class="fg-filter-menu fg-clear {% if (sidebaractionMenuFlag != 1) %}fg-no-action{%endif%}">
+                                {% if (areaExist == 1) %}
+                                    <span><input type="checkbox" name="" class="fg-filter-checkbox fg-allday"> </span>
+                                {% endif %}
+                                <a  class="fg-filter-menu-option active">{{'CALENDAR_AREAS'|trans}}</a> 
+                                <a href="javascript:void(0)" class="fg-filter-menu-option fg-filtermenu" data-value="own" id="fg-own-event">{{'CALENDAR_OWN'|trans}}</a> 
+                                <a href="javascript:void(0)" class="fg-filter-menu-option fg-filtermenu" data-value="all">{{'CALENDAR_ALL'|trans}}</a> 
+                                {% if (sidebaractionMenuFlag==1) %}
+                                <div class="btn-group">
+                                    <button data-toggle="dropdown" class="btn"> <i class="fa fa-bars"></i> </button>
+                                    <ul class="dropdown-menu dropdown-menu-align-left pull-right drpmenu-new fg-marg-top-0">
+                                        <li> <a href="{{ path('area_colours_view') }}" >{{'AREA_COLORS_LINK'|trans}}</a> </li>
+                                    </ul>
+                                </div>
+                                {%endif%}
+                            </div>
+                            <ul class="fg-filter-items">                                               
+                                <li id="fg-general-filter" class="has-child"></li>
+                                
+                            </ul>
+
+                        </li>
+                        <li id="fg-category-filter" class="has-child">
+                            <div class="fg-filter-menu fg-clear {% if (sidebaractionMenuFlag != 1) %}fg-no-action{%endif%}">
+                                  {% if (categoryExist == 1) %}
+                                    <span><input type="checkbox" name="" class="fg-filter-checkbox"> </span>
+                                  {% endif %}                                  
+                                  <a href="javascript:void(0)" class="fg-filter-menu-option active">{{'CALENDAR_CATEGORIES'|trans}}</a> 
+                                  {% if (sidebaractionMenuFlag==1) %} 
+                                  <div class="btn-group">
+                                      <button data-toggle="dropdown" class="btn"> <i class="fa fa-bars"></i> </button>
+                                      <ul class="dropdown-menu dropdown-menu-align-left pull-right drpmenu-new fg-marg-top-0">
+                                          <li> <a href="javascript:void(0)" url="#" class="fg-add-category"> {{ 'SIDEBAR_ADD_CATEGORY_POPOVER'|trans }}</a> </li>  
+                                          <li> <a href= '{{ path('internal_calendar_editcategory') }}' url="#">{{ 'MANAGE_CATEGORY_LINK_TEXT'|trans }}</a> </li>                                                                  
+
+                                      </ul>
+                                  </div>
+                                  {%endif%}
+                              </div>                                                                       
+                        </li>
+                        {#  class="hide"#}
+                        <li id="fg-time-filter" class="fg-time-filter-hide">
+                             <div class="fg-filter-menu fg-clear fg-no-action">
+                                <a href="javascript:void(0)" class="fg-filter-menu-option active">{{'CALENDAR_TIME_PERIOD'|trans}}</a> 
+                             </div>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </div>
+            <div class="fg-calendar-view-content-wrapper">
+                <div class="fg-calendar-view-content-wrapper-child">
+
+                    <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+                    {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'contactId': '', 'tabs': '', 'roleCount' : '' , 'type':'', 'url' : '','columnsUrl':''} %}
+                    <!-- END PAGE TITLE AND PANEL TABS -->
+
+                    <div class="clearfix"></div>
+
+                    <!-- CALENDAR LIST VIEW -->
+                    <div id="fg-calendar" class="fg-calendar-popup"></div>
+                    <div id="fg-calendar-list" class="fg-calendar-popup"></div>
+                    <!-- CALENDAR LIST VIEW -->
+
+                    <!-- CALENDAR LIST VIEW -->
+                    <div id="calendarList"></div>
+                    <!-- CALENDAR LIST VIEW -->
+
+                </div> 
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- END CONTENT -->
+{% endblock %}
+
+{% block underscoretemplate %}    
+    {% include 'InternalCalendarBundle:Default:templateCalendarList.html.twig' %}
+    {% include 'InternalCalendarBundle:Default:templateCalendarView.html.twig' %}
+{% endblock %}
+
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/global/css/fullcalendar.css')}}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('fgassets/global/js/fullcalendar.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/fullcalendar-lang.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/internal/js/FgFullCalendar.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/internal/js/calenderSidebar.js') }}" type="text/javascript"></script>
+    <script>
+        var sidebarOptions = {{ (sidebarOptions|json_encode()|raw ) }};
+        var clubTitles = {{ (clubTitles|escape('js')|json_encode()|raw ) }};
+        var clubLogoUrl = '{{clubLogoUrl}}'; 
+        var filterData = '';
+        var searchTitle ='{{'CALENDAR_SEARCH_TITLE'|trans}}';
+        var pageTitle ='{{pageTitle}}';
+        var clubId ='{{clubId}}';
+        var contactId ='{{contactId}}';
+        var filterStoragename = 'calenderfilter-'+clubId+'-'+contactId;
+        var calendarviewStoragename = 'calenderview-'+clubId+'-'+contactId;
+        var isAdmin = ({{adminFlag}} == 1)?true:false;
+        var actionMenuForList ={{actionMenu|raw}};
+        var actionMenuForOthers =JSON.parse(JSON.stringify(actionMenuForList));
+        var isSidebarFlag = ({{sidebaractionMenuFlag}}==1)?true:false;
+        var searchLocalStorage = 'calendersearch-'+clubId+'-'+contactId;
+      {#if(isAdmin== 1){
+            actionMenuForOthers.active.none.calendarExport.isActive="false";    
+        }#}
+        var calendarCategorySave = '{{ path('calendar_category_save') }}';
+        var defaultlanguage = '{{clubDefaultLang|raw}}';
+        var translationText = {'WithoutArea':'{{'CALENDAR_WITHOUT_AREA'|trans}}',
+                            'Withoutcategory':'{{'CALENDAR_WITHOUT_CATEGORY'|trans}}'                
+                           };  
+        var todayText = '{{'CREATE_CALENDAR_SWITCH_TODAY'|trans}}';
+        var roleadminFlag = '{{roleadminFlag}}';
+        var detailJsonUrlPath = "{{path('calendar_appointment_details_ajax',{'eventId':'dummyId', 'startTimeStamp':'**startTime**', 'endTimeStamp':'**endTime**'})}}";
+        $(document).ready(function () {
+            //for set the search value 
+           var searchvalue = localStorage.getItem(searchLocalStorage);
+           if( searchvalue != 'undefined' && searchvalue !=null && searchvalue !='') {
+               $('#fg_dev_member_search').val(searchvalue);
+           }
+            $(".fg-action-menu-wrapper").FgPageTitlebar({
+                actionMenu: isAdmin,
+                title: true,
+                calendarSwitch: true,
+                export      :true,
+            });
+            //action menu init area
+            scope = angular.element($("#BaseController")).scope();
+            window.actionMenuTextDraft = actionMenuForOthers;
+            scope.$apply(function () {
+                scope.menuContent = window.actionMenuTextDraft;
+            });
+            FgActionmenuhandler.init();
+            
+            var calendarSettings = {
+                        dataurl: "{{path('calendar_get_events')}}",
+                        createurl: "{{path('calendar_appointment_create')}}",
+                        editurl: "{{path('calendar_appointment_save')}}",
+                        editpageurl: "{{path('calendar_appointment_edit', {'eventId':'dummyId'})}}",
+                        detailpageurl: "{{path('calendar_appointment_details',{'eventId':'dummyId','startTimeStamp':'**startTime**', 'endTimeStamp':'**endTime**'})}}",
+                        detailJsonUrl : "{{path('calendar_appointment_details_ajax',{'eventId':'dummyId', 'startTimeStamp':'**startTime**', 'endTimeStamp':'**endTime**'})}}",
+                        calendarElement: '#fg-calendar',
+                        calendarListElement: '#calendarList',
+                        weekButton: '#week',
+                        monthButton: '#month',
+                        listButton: '#list',
+                        eventLimitText: '{{'CREATE_CALENDAR_LIMIT_TEXT'|trans}}',
+                        adminFlag: isAdmin,
+                        eventStartEditable: isAdmin,
+                        lang: '{{ defaultSysLang }}',
+                    };
+            var options = {
+                container: '.fg-dev-calender-filter',
+                jsonData: $.parseJSON(sidebarOptions),
+                localStorageName:filterStoragename,
+                clubType: '{{clubType}}',
+                adminFlag: isSidebarFlag,
+                roleadminFlag:roleadminFlag,
+                translations:translationText,
+                initCompleteCallback: function () {
+                     FgFullCalendar.initialize(calendarSettings,this);
+                     FgCalenderSidebar.setTristate();
+                      if(typeof searchvalue != 'undefined' && searchvalue !=null && searchvalue !='') {
+                        $('.page-title .page-title-text').html(searchTitle.replace('%searchval%',searchvalue));
+                      }
+                }
+            }
+
+            FgCalenderSidebar.initialize(options);
+            FgActionmenuhandler.init();
+            
+            /* show/hide export button whenever the tabs are changed */
+            var viewType = localStorage.getItem(calendarviewStoragename);
+            if(viewType=='list')
+                $('.fg-action-export').removeClass('fg-dis-none').addClass('fg-active-IB');
+            else
+                $('.fg-action-export').addClass('fg-dis-none').removeClass('fg-active-IB');           
+            });
+        
+        //Remove the tooltip onscroll
+        {#$(window) .on( "scroll", function() {
+            $('.popover').popover('destroy');
+        });#}
+        $(document).on('click','.fg-calender-attachment',function(e){
+            e.preventDefault();
+            var filename =  $(this).attr('data-filename');
+            var encryptedname =  $(this).attr('data-encrypted');
+            var eventclubId =  $(this).attr('data-clubid');
+            var downloadPath = "{{path('calendar_appointment_details_download_attachments')}}";
+            $('#calendarAttachmentForm').remove();
+            $form = $("<form id='calendarAttachmentForm' method='post' action="+downloadPath+"></form>");
+            $form.append('<input type="hidden" id="filename" name="filename">');
+            $form.append('<input type="hidden" id="encrypted" name="encrypted">');
+            $form.append('<input type="hidden" id="eventclubId" name="eventclubId">');
+            $('body').append($form);
+            $('#filename').val(filename); 
+            $('#encrypted').val(encryptedname); 
+            $('#eventclubId').val(eventclubId); 
+            $form.submit();
+
+        });   
+        $(document).on('mouseleave','.popover',function(){
+            $('.popover').popover('destroy');
+        });
+       
+
+        var deleteAppPath = "{{ path('calendar_appointment_delete') }}";
+        var exportPopupPath = "{{ path('calendar_appointment_export_popup')}}";
+        var editMultiEditPath = "{{path('calendar_multi_edit_app')}}";
+        var editDuplicatePath = "{{path('calendar_edit_duplicate',{'eventId':'dummyId'})}}";
+        var editSinglePath = "{{path('calendar_appointment_edit',{'eventId':'dummyId'})}}";
+    </script>
+
+{% endblock %}

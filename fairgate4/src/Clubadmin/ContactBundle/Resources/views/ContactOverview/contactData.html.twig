@@ -1,0 +1,347 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% form_theme form  'CommonUtilityBundle:Form:data.html.twig' %}
+{% set pageTitle = displayContactName %}
+    {% block customstylesheets %}
+        <link href="{{ asset('fgcustom/css/jquery-ui.min.css')}}" rel="stylesheet" type="text/css"/>
+        <link href="{{ asset('fgcustom/css/fbautocomplete.css')}}" rel="stylesheet" type="text/css"/>
+    {% endblock %}  
+    {% block pagecontent %}
+        <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+        <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+        <!-- BEGIN PAGE HEADER-->
+        {% set federationTerminology = fgtwig.getTerminolgyName('Federation',singular)%}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet-body {% if showContent == 1%} hide {%endif%}" id="fg-contact-data">
+                    <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                    {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+                    {% if missingReqAssgment|default(0) > 0 and isReadOnlyContact == 0 %}
+                        <div id="MissingReqAssgmtError" class="alert alert-warning alert-dismissable ">
+                            <button class="close" data-close="alert"></button>
+                            <strong>{{'ATTENTION'|trans}}! </strong><span>{% trans with {'%fedmember%':  federationTerminology,'%a%':"<a href='"~path('contact_assignments',{'offset':offset,'contact':contact})~"'>",'%b%':"</a>"} %}REQ_FED_SUBFED_ROLE_MISSING_ASSIGNMT_CONTACT{% endtrans %} </span>
+                        </div>
+                    {% endif %}
+                   {# {% if pageType == 'sponsor' %}
+                    {% include 'clubadmin/sponsor-panel-tabs.html.twig' with {'contactName':displayContactName,'contactId':contact,'active':'data', 'contactType':currentcontactType, 'tabs':tabs, 'documentsCount':documentsCount|default(0), 'servicesCount':servicesCount|default(0), 'adsCount':adsCount|default(0)} %}
+                    {% else %}#}
+                 {#   {% include 'clubadmin/panel-tabs.html.twig' with {'contactName':displayContactName,'contactId':contact,'active':'data', 'contactType' :currentcontactType,'tabs':tabs, 'documentsCount':documentsCount|default(0)} %}#}
+                 <div class="row">
+                 {% set page_settings = { 'pagetitle':'true','tabs':'true'}  %}
+                 {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': displayContactName ,'page_settings': page_settings, 'tabs': tabs, 'contactType' :archiveType,'type':'overview', 'hrefLink' : true, 'url':"#"} %}
+                 </div>
+                 {#   {% endif %}#}
+                    <!-- END PAGE TITLE & BREADCRUMB-->
+                    <!-- ERROR MESSAGE-->
+                    <div class="alert alert-danger {{ isError|default(0) ? '':'display-hide' }}"> {{'FORM_TAB_ERROR_DISPLAY'|trans}}
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                    </div>
+                    <!-- END ERROR MESSAGE-->
+
+                    {{ form_start(form, { 'attr': {'name':'form1', 'id': 'form1' ,'enctype' :'multipart/form-data','class': 'form-horizontal fg-contact-data-wrapper','action':'metronic_form_submit','autocomplete':'off','novalidate':'novalidate', 'onSubmit': 'return false;'} }) }}
+                    <div class="row fg-common-top">
+                        <div class="col-md-12">
+                            {#% if(isArchive!=1 and pageType == 'contact') %}
+                            <div class="col-md-4 col-sm-4 col-xs-12 fg-left-zero">
+                                <div class="col-md-12 fg-left-zero">
+                                    <select id="membership" name="membership" class="form-control bs-select fg-option-left" data-fieldname=" {%trans%}MEMBER_CATEGORY{%endtrans%}" data-attrid="membership">
+                                        <option value="">{{'NO_MEMBERSHIP'|trans}}</option>
+                                        {% for memberships in memberships_array %}
+                                            <optgroup label="">
+                                            {% for key,membership in memberships %}
+                                                <option  data-content="{%if key in fedmembership%} {{membership}} <img class='fa-envelope-o' src='{{fedlogoPath}}' /> {% else %} {{membership}}{% endif %}" value="{{key}}"{{(key == selectedMembership)?'selected = selected':''}}   {{membership}}</option>
+                                            {% endfor %}
+                                            </optgroup>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            {% endif %#}
+                            {% if(isArchive!=1) %}
+                                <input type="hidden" name="membership" id="clubMembership" value="{{selectedMembership.club|default('')}}" />
+                                <input type="hidden" name="fedMembership" id="fedMembership" value="{{selectedMembership.fed|default('')}}" />
+                            {% endif %} 
+                            <div class="col-md-5 fg-data-checker">
+                                {% if (fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) and pageType !='sponsor' %}
+                                      {#   <label class="radio-inline ">
+                                             <input type="checkbox" id="attribute_0" name="attribute[]" value="Sponsor" {{(is_sponsor)?'checked=checked':''}}>
+                                             {{'SPONSOR'|trans}}
+                                         </label>#}
+                                         <input type="hidden" id="attribute_0" name="attribute[]" value="{{(is_sponsor) ? 'Sponsor' : ''}}">
+                                 {% endif %}
+                                 {% if pageType == 'sponsor' %}
+                                       <input type="hidden" id="attribute_0" name="attribute[]" value="Sponsor">
+                                 {% endif %}
+                                 {#  only when frontend 1 is booked #}
+                                  {% if (fgtwig.inArray('frontend1',fgclub.get('bookedModulesDet'))) %}
+                                         {#% if (pageType == 'contact') %}
+                                            <label class="radio-inline fg-custom-popovers" data-content="{{'ACCESS_TOOLTIP'|trans|raw}}"><input type="checkbox" id="attribute_1" name="attribute[]" value="Intranet access" {{(intranet_access == '1')?'checked=checked':''}}>
+                                                <span class="fg-dotted-br">{{ 'INTRANET_ACCESS'|trans}}</span>
+                                            </label>
+                                            <label class="radio-inline fg-custom-popovers" data-content="{{'STEALTH_TOOLTIP'|trans|raw}}">
+                                               <input type="checkbox" id="attribute_2" name="attribute[]" value="Stealth mode" {{(is_stealth_mode)?'checked=checked':''}}>
+                                                <span class="fg-dotted-br">{{'STEALTH_MODE'|trans}}</span>
+                                            </label>
+                                        {% else %}
+                                            <input type="hidden" id="attribute_1" name="attribute[]" value="{{(intranet_access == '1') ? 'Intranet access' : '0'}}" />
+                                            <input type="hidden" id="attribute_2" name="attribute[]" value="{{(is_stealth_mode) ? 'Stealth mode' : '0'}}" />
+                                        {% endif %#}
+                                         
+                                      <input type="hidden" id="attribute_1" name="attribute[]" value="{{(intranet_access == '1') ? 'Intranet access' : '0'}}" />
+                                      <input type="hidden" id="attribute_2" name="attribute[]" value="{{(is_stealth_mode) ? 'Stealth mode' : '0'}}" />
+                                  {% endif %}                                    
+                             </div>                             
+                            
+                        </div>
+
+                    </div>
+                    <div class="row fg-contact-data">
+                        <div class="col-md-12">
+                            <div class="portlet-body">
+                                <div class="tabbable-custom ">
+                                    {# for more tab #}
+                                    <ul  class="nav nav-tabs data-more-tab fg-visibility-hidden" id="data-tabs">
+                                        {% set ul_li_var = '' %}
+                                            {% set i = 1 %}
+
+                                                {% for key,value in catTitlesarray %}
+                                                    {% if key !='137' %}
+                                                    {% if (key == activeTab) %}
+                                                        {% set active = 'active' %}
+                                                            {% else %}
+                                                                {% set active = '' %}    
+                                                                    {% endif %}
+                                                    {% if (value.fedFlag == 1) %}
+                                                             {% set upload = '<img class="fa-envelope-o" src="'~fedlogoPath~'" />'  %}    
+                                                                 {% elseif (value.subfedFlag == 1) %}
+                                                                      {% set upload = '<img class="fa-envelope-o" src="'~subfedlogoPath~'" />'  %} 
+                                                                    {% else %}
+                                                                      {% set upload = '' %}
+                                                                 {% endif %}
+                                                                        {% set li_var = '<li id="data_li_'~key~'" data-type="'~key~'" class="'~active~'">
+                                                    <a data-toggle="tab" href="#fg_field_category_'~key~'">
+                                                        '~value.title~' '~upload~' <i class="fa fa-exclamation-triangle fg-data-error"></i></a>
+                                                </li>' %}
+
+                                                                        {% set ul_li_var = ul_li_var ~ li_var %}
+                                                                            {{li_var|raw}}
+
+                                                                            {% set i=i+1 %}
+                                                                                {% endif %}
+                                                                                {% endfor %}   
+                                                                                    <li class="datahideshow dropdown" ><a href="#"  id="fg-contact-more-tab" class="dropdown-toggle" data-toggle="dropdown">{%trans%}MORE{%endtrans%} <i class="fa fa-angle-down"></i><i class="fa fa-exclamation-triangle fg-data-error"></i> </a>
+                                                                                        <ul class="dropdown-menu">
+                                                                                            {{ul_li_var|raw}}
+                                                                                        </ul>
+                                                                                    </li>    
+                                                                                </ul>
+                                                                                <div class="fg-clear"></div>
+                                                                                {# ends#}
+
+
+                                                                                <div id="data-tabs-content" class="tab-content">   
+                                                                                    {{ form_rest(form) }}
+                                                                                    <input type="hidden" name="mainContactId" id="mainContactId" value="{{mainContactClubId}}" />
+                                                                                    <input type="hidden" name="deletedFiles" id="deletedFiles" value="" />
+                                                                                    <input type="hidden" name="deleteddragFiles" id="deleteddragFiles" value="" />
+                                                                                    <input type="hidden" name="membership_hidden" id="membership_hidden" value="{{selectedMembership}}" />
+                                                                                    <input type="hidden" name="active_tab" id="active_tab" value="{{activeTab}}" />
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>  
+                                                                 {% if (currentcontactType !='formerfederationmember')%}                   
+                                                                {% include 'clubadmin/savebutton.html.twig'  with {'backLink': breadCrumb.back} %}
+                                                                {% endif %}
+                                                                {{ form(form) }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                          
+                                                    <!-- END PAGE HEADER-->
+                                                    <!-- <!-- <!-- BEGIN PAGE CONTENT-->
+
+                                                    <!-- Connection Popup -->
+                                                        <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+                                                            <div class="modal-dialog modal-wide">
+                                                                <div class="modal-content fg-popup-wrap" id="popup_contents">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% include 'ClubadminContactBundle:Archive:mergeContact.html.twig' %}
+                                                    {% block underscoretemplate %}
+                                                    {% include 'ClubadminCommunicationBundle:Template:newsletterimage.html.twig'  %}
+                                                    {% endblock %}     
+
+    {% endblock %}
+                                                    
+   
+{% block javascripts %}
+    {% if (not(isAjax))%}
+        <script>  
+        readOnlyCont = '{{isReadOnlyContact}}';      
+        $(window).load(function() {
+        
+            if(readOnlyCont==1){
+                     $('#fg-contact-data').removeClass('hide');
+            }else{
+                 contactEdit.preValidate()
+            }
+            
+        });
+      </script> 
+        <script src="{{ asset('fgcustom/js/fg_more_menu.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/fbautocomplete/fbautocomplete.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.ui.widget.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.iframe-transport.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.fileupload.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/internal/js/thumbnail.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/global/js/FgFileUpload.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/page/imageUploader.js')}}" type="text/javascript"></script>
+   {% endif %}
+
+    <script type="text/javascript">
+        var pageType = '{{pageType}}';
+    </script>
+    <script src="{{ asset('fgcustom/js/page/contactDataEdit.js')}}" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            FgPageTitlebar.init({
+                title       : true,
+                tab       : true,
+                search     :false,
+                actionMenu  : false,
+                tabType  :'server'
+               
+            }); 
+       });
+        var profilePicture = '{{contactDetails[0]['21']}}'; // Profile picture name
+        var teamPicture = '{{contactDetails[0]['5']}}'; // Team picture name
+        var compantLogo = '{{contactDetails[0]['68']}}'; // Company logo
+        var isCompany = '{{contactDetails[0]['is_company']}}'; // contact type
+        var contactClubId = '{{contactDetails[0]['created_club_id']}}'; // Contact club id
+        var path21 =   '{{fgavatar.getContactfieldPath(21,true,"original")}}' + '/';
+        var path68 =   '{{fgavatar.getContactfieldPath(68,true,"original")}}' + '/';
+        //alert(imageName);
+        FgPopOver.customPophover('.fg-dev-tabicon-right-Popovers');
+        fedMembers = '{{fedMembers}}';
+        path = (pageType == 'sponsor')? "{{ path('sponsor_contact_data',{'offset':offset ,'contact': contact})}}": "{{ path('contact_data',{'offset':offset ,'contact': contact})}}";
+        var contactUrl = (pageType == 'sponsor') ? "{{path('search_sponsorname')}}" : "{{path('search_contactname')}}";
+        var removestring = "{{ 'NL_AUTOCOMPLETE_REMOVE'|trans }}";
+        var mcSelected='';
+        var offSet='{{offset}}';
+        var mainContactLink = {{ (mainContactVisible) ? 'true':'false'}};
+        var autosuggestLinkUrl='{{ (mainContactVisible) ? url('render_contact_overview',{'offset':0 ,'contact': 'dummyContact'}) :''}}';
+        indexPath= (pageType == 'sponsor')? "{{path('clubadmin_sponsor_homepage')}}" : "{{path('contact_index')}}";
+        var contactType ="{{currentcontactType}}";
+        clubId = '{{clubId}}';
+        var club_id = '{{clubId}}';
+        globalDefaultMessage = '{{'DATA_DROP_IMAGE'|trans}}';
+        globalClickMessage = '{{'DATA_DROP_IMAGE_CLICK'|trans}}';
+        globalRemoveFile = '{{'DATA_DROP_IMAGE_REMOVE'|trans}}';
+        globalInvalidFile = '{{'DATA_DROP_IMAGE_INVALID'|trans}}'; 
+        globaldictFileTooBig = '{{'DATA_DROP_IMAGE_FILESIZE_EXCEED'|trans}}';
+         var  imageElementUploaderOptions = {
+            fileListTemplate: 'dropzone-img-upload',
+            dropZoneElement: '#fg-files-uploaded-lists-wrapper',
+            fileListTemplateContainer: '#fg-files-uploaded-lists-wrapper',
+            progressBarContainer: '.fg-upload-progress',
+            progressBarElement: '.progress-bar',
+            removeElement: '.removeUploadedFile',
+            uploadUrl: '{{path('backend_tmp_upload_file',{'type':'dropzone'})}}',
+            extraDataToTemplate: {},
+            onFileUploadSuccess: 'ImagesUploader.setThumbnail',
+            onFileListAdd: 'ImagesUploader.addImgCallback',
+            onFileUploadError:'ImagesUploader.setErrorMessage',
+            errorContainer: '#image-upload-error-container',
+            errorListTemplate: 'image-uploader-errorlist-template',
+            fileListTemplatePlacement: 'html',
+            previewClass:'.fg-dropzone-preview',
+            updateFormstate:0,
+            removefileobj:'#deleteddragFiles',
+            singleFile:true,
+            removeElementdirty:0,
+            enableButton:1,
+            contactType:'{{contactDetails[0]['is_company']}}',
+            pageName:'mydata',
+            callbacks :
+                {
+                 fileuploadadd: 'ImagesUploader.updateSingleView',
+                 fileuploadfailed:'ImagesUploader.setErrorMessage',
+                },
+            validations: {
+                fileType: 'image',
+                forbiddenFiletypes: globalForbiddenfiles,
+            },
+        };
+
+  
+      ImagesUploader.deleteElement();
+         var contactId = '{{contactDetails[0]['id']}}'; // Profile picture name
+                
+        var path21 =   '{{fgavatar.getContactfieldPath(21, true, "original")}}' + '/';
+        var path68 =   '{{fgavatar.getContactfieldPath(68, true, "original")}}' + '/';
+    
+        jQuery(function() {
+            {#$('#fg-contact-data').removeClass('hide');#}
+            if(contactType == 'formerfederationmember') {
+                $("#form1 :input").attr('readonly', true);
+                $('select').select2().enable(false); 
+                $( "form input:radio" ).attr('disabled',true);
+                $( "form input:checkbox").attr('disabled',true);
+                $.uniform.update();
+            }
+            if('{{mainContactId}}' !='' && $('#fg_field_category_1_mainContactName').val() !='' ){
+                mcSelected=[{id:'{{mainContactId}}',title:$('#fg_field_category_1_mainContactName').val(), link:'{{ path('render_contact_overview',{'offset':offset ,'contact': contact})}}'}];
+            }
+            contacttype = $('div[data-attrid="contactType"] input').val();
+            FgMoreMenu.initClientSide('data-tabs', 'data-tabs-content', 'data');
+            contactEdit.showDropzonePreview('{{ (contact and not(ownClub)) ? contactClubId :clubId}}');
+            setTimeout(function(){ //update uniform
+                FgMoreMenu.initServerSide('paneltab');
+                contactEdit.handletabs();
+                $("#fg_field_category_21").children().removeClass();
+            },200);
+            {% if(contact) %}
+                if(pageType == 'contact') {
+                    memberId = $('select[data-attrId=membership]').val();
+                } else {
+                    memberId=$('input[id=membership]').val();
+                }
+                if (memberId) {
+                    contactEdit.handleRequiredToggle(memberId);
+                }
+            {% endif %}
+            {% if contact and not(mainContactVisible) %}
+                contactEdit.handleOtherClubContact();
+            {% endif %}
+            contactEdit.pageInit();
+              //handle  reactivate click 
+            reactivateOverviewPath = "{{path('get_all_contactids_reactivate')}}";
+            reactivateOverviewPopup = "{{path('get_reactivate_popup')}}";
+            reactivateSavePath = "{{ path('save_reactivate_contact')}}";
+            reactivateOerviewContactId = {{contact}};
+
+            if($('body').hasClass('fg-readonly-contact')){
+                $('#fg-dev-reactivate').remove();
+            }
+            
+            
+            // $(".datemask").inputmask(FgLocaleSettingsData.jqueryDateFormat, 
+            //                         { placeholder: '', showMaskOnFocus : false, showMaskOnHover : false });
+
+            $('page-container').append('<div class="custom-popup" style="margin-top:20px"><div class="popover bottom"><div class="arrow"></div><div class="popover-content"></div></div></div>');
+            FgUtility.toolTipInit();
+            var contryListPath = "{{path('country_list')}}";
+            FgFormTools.select2ViaAjax(contryListPath, 0);
+        });
+        
+        //B31384: Issue:2
+        $("input").keypress(function (event) {
+            if (event.which == 13) {
+                event.preventDefault();
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,31 @@
+Common\UtilityBundle\Entity\FgWebSettingsI18n:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgWebSettingsI18nRepository
+    type: entity
+    table: fg_web_settings_i18n
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        descriptionLang:
+            type: text
+            nullable: false
+            column: description_lang
+        lang:
+            type: string
+            unsigned: false
+            nullable: false
+    manyToOne:
+        settings:
+            targetEntity: FgWebSettings
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                settings_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

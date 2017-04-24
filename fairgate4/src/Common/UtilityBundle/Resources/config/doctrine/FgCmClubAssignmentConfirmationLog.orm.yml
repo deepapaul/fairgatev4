@@ -1,0 +1,78 @@
+Common\UtilityBundle\Entity\FgCmClubAssignmentConfirmationLog:
+    repositoryClass: Common\UtilityBundle\Repository\FgCmClubAssignmentConfirmationLogRepository
+    type: entity
+    table: fg_cm_club_assignment_confirmation_log
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        existingClubIds:
+            type: string
+            length: 45
+            fixed: false
+            nullable: true
+            column: existing_club_ids
+        modifiedDate:
+            type: datetime
+            nullable: true
+            column: modified_date
+        decidedDate:
+            type: datetime
+            nullable: true
+            column: decided_date
+        status:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        federationClub:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                federation_club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        fedContact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                fed_contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        modifiedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                modified_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        decidedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                decided_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,29 @@
+Common\UtilityBundle\Entity\FgApiColumns:
+    repositoryClass: Common\UtilityBundle\Repository\Api\FgApiColumnsRepository
+    type: entity
+    table: fg_api_columns
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        fieldName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: field_name
+    manyToOne:
+        apiType:
+            targetEntity: FgApis
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                api_type:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

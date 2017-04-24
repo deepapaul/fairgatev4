@@ -1,0 +1,60 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::website/layout.html.twig' %}
+
+{% block websiteContentArea %}  
+{% endblock %}
+
+{% block websiteCustomContentArea %}
+    <div class="fg-article-special-contents-wrapper" id='fg-article-container'>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript" src="{{ asset('fgassets/global/js/flaviusmatis-simplePagination/jquery.simplePagination.js')}}"></script>
+<script type="text/javascript" src="{{ asset('fgassets/website/js/FgWebsiteArticle.js')}}"></script>
+<script type="text/javascript" src="{{ asset('fgassets/website/js/fg-cms-frontend-portrait.js')}}"></script>
+<script>
+    var articleSpecialPageTitle = "{{articlePageTitle}}";
+    var options = {
+        titleBar: true,
+        title: articleSpecialPageTitle,
+        searchBox: true,
+        searchBoxType: 'article',
+        timeperiod: true,
+        timeperiodData: {{timeperiod|json_encode()|raw}},
+    };
+    var FgWebsitePageTitleBarObj = new FgWebsitePageTitleBar('fg-dev-pagetitle-container', options);
+
+    var articleListPath = "{{path('website_article_list')}}";
+    var contactTableListUrl = '{{path('website_list_contacts',{'contactType':'dummyType'})}}';
+    var articleDetPath = "{{articleDetailLink}}";
+    var areaTranslation = '{{'AR_AREAS'|trans}}';
+    var categoryTranslation = '{{'AR_CATEGORIES'|trans}}'
+    var articleEmptyMessage = '{{'NO_ARTICLE_MESSAGE'|trans}}'
+    var clubId = '{{clubId}}';
+    var articleSpecialPageId = '{{pageId}}';
+    var clubTitles = '{{clubTitles|json_encode()|raw}}';
+    var contactLang ='{{contactLang}}';
+    var portUploadPath = {{uploadPath|json_encode()|raw }};
+    var notApplicable =  '{{'PORTRAIT_NOT_APPLICABLE_VALUE'|trans}}';
+    var portraitElementSettings = {{ pagecontentData.portraitElementSettings|json_encode()|raw }};  
+    if(typeof portraitElementSettings == 'object') {
+        var portContactNameTmplte = _.template($('#templateContactName').html());
+        var portEmailTmplte = _.template($('#templateEmail').html());
+        var portImageUpldTmplte = _.template($('#porttemplateImage').html());
+        var portDefaultTmplte = _.template($('#defaultTemplate').html());
+        var portFileUploadTemplate = _.template($('#portFileUploadTemplate').html());
+        var portProfilepicTemplate = _.template($('#portProfilepicTemplate').html());
+    }
+    $( document ).ready(function() { 
+        var websiteArticleObj = new FgWebsiteArticle();
+        websiteArticleObj.renderArticleList();
+    });
+</script>
+{% endblock %}
+    
+{% block underscoretemplate %}
+{% include 'WebsiteCMSBundle:Website:displayContentUnderscore.html.twig' %} 
+{% include listTemplate %}
+{% endblock %}
+

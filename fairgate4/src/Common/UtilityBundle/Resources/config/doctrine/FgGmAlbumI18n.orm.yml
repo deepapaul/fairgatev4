@@ -1,0 +1,32 @@
+Common\UtilityBundle\Entity\FgGmAlbumI18n:
+    repositoryClass: Common\UtilityBundle\Repository\Gallery\FgGmAlbumI18nRepository
+    type: entity
+    table: fg_gm_album_i18n
+    fields:
+        lang:
+            id: true
+            type: string
+            length: 2
+            fixed: true
+            nullable: false
+        nameLang:
+            type: string
+            length: 45
+            fixed: false
+            nullable: true
+            column: name_lang
+        isActive:
+            type: boolean
+            nullable: true
+            column: is_active
+    oneToOne:
+        id:
+            targetEntity: FgGmAlbum
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

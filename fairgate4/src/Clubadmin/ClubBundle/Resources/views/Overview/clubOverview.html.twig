@@ -1,0 +1,93 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = clubName %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body fg-theme-green">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                {% include 'clubadmin/breadcrumb.html.twig'  with {'breadCrumb':{'back': path('club_homepage') }} %}
+                {#{% include 'ClubadminClubBundle:ClubList:panel-tabs.html.twig' with {'offset':offset,'clubName':clubName,'clubId':clubId,'active':'cluboverview','documentsCount':documentsCount,'asgmntsCount':asgmntsCount,'notesCount':notesCount} %} 
+                #}
+                <div class="row">
+                {% set page_settings = { 'pagetitle':'true','tabs':'true'}  %}
+                {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': clubName ,'page_settings': page_settings, 'tabs': tabs, 'type':'overview', 'hrefLink' : true, 'url':"#"} %}            
+                </div>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+                <!-- ERROR MESSAGE-->
+                <div class="row fg-common-top">
+                    <div class="col-md-12">
+                        <div class="tab-content">
+                            <div class="tab-pane fade active in" id="tab_1_1">
+                                <div id="overviewDiv">
+                                    <div class="row">
+                                        <div class="col-md-6 left">
+                                        </div>
+                                        <div class="col-md-6 right">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="divTemplates">
+        {% include 'ClubadminClubBundle:Overview:displayOverview.html.twig' %}
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_overview.js') }}" type="text/javascript"></script> 
+    <script>
+        
+         $(document).ready(function() {
+            FgPageTitlebar.init({
+                title       : true,
+                tab       : true,
+                search     :false,
+                actionMenu  : false,
+                tabType  :'server'
+               
+            }); 
+       });
+        overviewBlockIdArray=new Array();
+        FgMoreMenu.initServerSide('paneltab');
+        var assignment = {{assignment|raw}};
+        assignment = FgUtility.groupByMulti(assignment, ['classificationTitle']);
+        overviewClubType='{{overviewClubType}}';
+        terminologyTerms={{terminologyTerms|raw}};
+        if(overviewClubType == 1) { 
+            clubInfoTitle = terminologyTerms['subfederation'] + ' {{'CL_INFO'|trans}}';
+        } else {
+            clubInfoTitle = terminologyTerms['club'] + ' {{'CL_INFO'|trans}}';
+        }
+        var options = {
+            clubName     : 	'{{clubName}}',
+            clubType		: 	'{{clubType}}',
+            allNotes               : 	{{ getAllNotes| raw }},
+            notePath			:	"{{ path('club_note',{ 'offset':offset,'clubid':clubId })}}",
+            overviewContents			:	{{ overviewContent| raw  }},
+            terminologyTerms			:	{{terminologyTerms|raw}},
+            assignment			:	assignment,
+            overviewClubType			:	'{{overviewClubType}}',
+            activeContact			: 	{{activeContact}},
+            clubAdmin		: 	{{clubAdmin}},
+            clubExecBoardData			: 	{{clubExecBoardData|raw}},
+            overviewPath            :   '{{path('render_contact_overview', {'offset':0, 'contact': 'dummyContactId'})}}',
+            clubInfoTitle           : clubInfoTitle,
+            contactTitle            :'{{'CLUBOVERVIEW_CONTACTS'|trans}}',
+            systemInfoTitle         :'{{'CLUBOVERVIEW_SYSTEMINFO'|trans}}',
+            classificationTitle     :'{{'CLUBOVERVIEW_CLASSIFICATION'|trans}}',
+            addressBlockTitle       :'{{'CLUBOVERVIEW_ADDRESS_BLOCK'|trans}}',
+            notesTitle              :'{{'CLUBOVERVIEW_NOTES'|trans}}'
+        };
+        FgOverview.clubOverview(options);
+    </script>
+{% endblock %} 

@@ -1,0 +1,703 @@
+{#   Conteainer template area #}         
+<script type="text/template" id="containerBox">
+                 
+               <div class="fg-cms-page-elements-block-row fg-clear row-eq-height contentRow columnboxsortable" id="<%- containerid %>" page-id=<%- pageId %> container-id=<%- details.containerId %>>
+               <ul class="fg-cms-elements-row-option no-style">
+                                    <li><i class="fa fa-2x fa-ellipsis-v fg-container-sortable"></i> </li>
+                                    <li class='editContainerpopup' container-id="<%- containerid %>" container-page-id=<%- pageId %> container-type="containerEdit"><i class="fa fa-2x fa-columns"  data-toggle="modal"></i> </li>
+                                    <li class="fg-dev-delete" container-id=<%- details.containerId %> page-id=<%- pageId %>><i class="fa fa-2x fa-times-circle fg-container-delete-img"></i></li>
+                                </ul>
+               <%= columnDetails %>
+                 
+               </div>
+       
+</script>
+{#Column template#}
+<script type="text/template" id="columnBox">
+    <%
+         var expandVlaue=2;
+         var widthValue=2;
+        if(settingDetails.containerType =='sidebar') {
+            expandVlaue=6;  
+        }
+        if(settingDetails.containerType =='content' && settingDetails.data.sidebar.size =='wide') { 
+           widthValue = details.widthValue*3;
+        }  else if(settingDetails.containerType =='content' && settingDetails.data.sidebar.size =='small') { 
+           widthValue = details.widthValue*2;
+        } else if(settingDetails.containerType =='content' && ((settingDetails.data.sidebar.size =='')||settingDetails.data.sidebar.size ==null) ) { 
+           widthValue = details.widthValue*2;
+        } else if(settingDetails.data.sidebar.size =='wide') {
+           widthValue = details.widthValue*2;
+        }  else if(settingDetails.data.sidebar.size =='small') {
+            widthValue =details.widthValue*2;
+       
+        }       
+  
+    %>
+
+    <div class="col-sm-<%- widthValue %> columWidth fg-page-elements-block-col fg-dev-page-elements-block rowColumn fg-col-<%- details.widthValue %> fg-grid-col-<%- details.widthValue %>" id="<%- columnid  %>" column-width=<%- widthValue %> column-size=<%- details.widthValue %> column-id=<%- details.columnId %>>
+    <%= boxDetails %>    
+    <a href="javascript:void(0)" class="fg-dev-add-box fg-add-box" columnId=<%- details.columnId %> ><i class="fa-plus-circle fa fa-2x"></i>{{'CMS_ADD_BOX'|trans}} </a>
+    <div class="fg-block-width-controls">
+        <a href="javascript:void(0)" class="fg-left fg-dev-width-adjust" width-change='dec' columnId=<%- details.columnId %> ><i class="fa fa-2x fa-long-arrow-left"></i></a>
+         <a href="javascript:void(0)" class="fg-right right fg-dev-width-adjust" width-change='inc' columnId=<%- details.columnId %>><i class="fa fa-2x fa-long-arrow-right"></i></a>
+    </div>
+    </div>
+
+
+</script>
+{#Box template#}
+<script type="text/template" id="Box">
+    <% 
+    nullClass = "";
+    if (elementDetails =='') { 
+        nullClass = "fg-empty-drop-holder";
+    }  %>
+        
+        
+    <div class="fg-drop-holder columnBox <%- nullClass %>" id="<%- boxid  %>" box-id="<%- details.boxId %>">                
+        <% if (elementDetails =='') { %>
+           <span class='fg-dev-drop-box-comment'> {{'CMS_DROP_BOX_COMMENT'|trans}}</span>
+                          <div class="fg-widget-hover-column-wrapper">
+                                            <ul class="fg-items">                                                
+                                                <li class='fg-dev-box-remove' box-id="<%- details.boxId %>" box-identifier="<%- boxid  %>"><a href="javascript:void(0)" ><i class="fa fa-2x fa-times-circle"></i></a></li>
+                                            </ul>
+                                        </div>
+        <% } else { %> 
+        <div class="fg-widget-hover-column-wrapper">
+                                            <ul class="fg-items">
+                                                <li class='fg-dev-box-draggable'><a href="javascript:void(0)" class="fg-widget-block-options" data-id="id3459"><i class="fa fa-2x fa-ellipsis-v"></i></a></li>
+                                                <li class='fg-dev-box-remove' box-id="<%- details.boxId %>" box-identifier="<%- boxid  %>"><a href="javascript:void(0)" ><i class="fa fa-2x fa-times-circle"></i></a></li>
+                                            </ul>
+                                        </div>   
+              <%= elementDetails %>  
+              
+                  
+              
+         <% } %>
+
+    </div>   
+
+</script>
+
+{#Header template#}
+<script type="text/template" id="templateHeader">
+
+    <div  id="<%- elementid  %>"  class='fg-header-widget fg-widget-block fg-dev-element-box elementBox' element-id=<%- details.elementId %> >
+    <% 
+    elementValue ='';
+    elemTitle = _.escape(details.elementTitle)
+    switch(details.headerElementSize){
+    case 'large': 
+    elementValue = '<h2 class="col-md-12">'+elemTitle+'</h2>';
+    break;
+    case 'medium': 
+    elementValue = '<h3 class="col-md-12">'+elemTitle+'</h3>';
+    break;
+    case 'small': 
+    elementValue = '<h4 class="col-md-12">'+elemTitle+'</h4>';
+    break;
+    case 'mini': 
+    elementValue = '<h5 class="col-md-12">'+elemTitle+'</h5>';
+    break;
+    case 'nano': 
+    elementValue = '<h6 class="col-md-12">'+elemTitle+'</h6>';
+    break;                                        
+    }
+    %>
+
+    <%= elementValue %>
+    
+       <div class="fg-widget-hover-elements-wrapper">
+         <ul class="fg-items">
+            <li class='fg-dev-elementbox-draggable'><a href="javascript:void(0)" ><i class="fa fa-2x fa-ellipsis-v"></i></a></li>
+            <li class="fg-dev-edit-element" element-Id=<%- details.elementId %> page-id=<%- settingDetails.data.page.id %> element-type='<%- details.elementType  %>'><a href="javascript:void(0)" ><i class="fa fa-2x fa-pencil-square-o"></i></a></li>
+            <li element-Id='<%- details.elementId %>' class="fg-widget-block-options"><a href="javascript:void(0)"  data-id="id3459"><i class="fa fa-2x fa-bars"></i></a></li>
+         </ul>
+       </div>
+      <span class="fg-elementtype-class hide"><i class="fa <%- details.logo  %>"></i><div class="fg-text">{{'CMS_HEADER'|trans}}</div></span>
+    </div>	
+</script>
+
+{#Article template#}
+<script type="text/template" id="templateArticle">
+
+    <div  id="<%- elementid  %>"  class='fg-article-widget fg-widget-block fg-dev-element-box elementBox' element-id=<%- details.elementId %>>
+  {#  DISPLAY CONTEN HERE#}
+       <div class="fg-widget-hover-elements-wrapper">
+         <ul class="fg-items">
+            <li class='fg-dev-elementbox-draggable'><a href="javascript:void(0)" ><i class="fa fa-2x fa-ellipsis-v"></i></a></li>
+            <li class="fg-dev-edit-element" element-Id=<%- details.elementId %> page-id=<%- settingDetails.data.page.id %> element-type='<%- details.elementType  %>'><a href="javascript:void(0)" ><i class="fa fa-2x fa-pencil-square-o"></i></a></li>
+            <li element-Id='<%- details.elementId %>' class="fg-widget-block-options"><a href="javascript:void(0)"  data-id="id3459"><i class="fa fa-2x fa-bars"></i></a></li>
+         </ul>
+       </div>
+      <span class="fg-elementtype-class hide"><i class="fa <%- details.logo  %>"></i><div class="fg-text">{{'CMS_ARTICLES'|trans}}</div></span>
+    </div>	
+</script>
+
+{#Article template#}
+<script type="text/template" id="templateLogin">
+
+    <div  id="<%- elementid  %>"  class='fg-login-widget fg-widget-block fg-dev-element-box elementBox' element-id=<%- details.elementId %>>
+    <form class="form-horizontal">
+        <div class="form-group fg-input-box-left">
+          <input id="dummyText" name="dummyText" type="text" placeholder="{{'RL_EMAIL_ADDRESS'|trans}}" class="form-control input-md">
+        </div>
+        <div class="form-group fg-input-box-right">
+            <input id="dummyPwd" name="dummyPwd" placeholder="{{'GN_PASSWORD'|trans}}" class="form-control input-md">
+        </div>
+       <div class="form-group fg-button-block">
+            <div class="fg-checkbox">
+                    <label class="radio-inline" for="loggedIn">
+                        <input type="checkbox" id="loggedIn" name="loggedIn" value="1">
+                       {{'KEEP_ME_LOGGED_IN'|trans}}
+                    </label>            
+            </div>
+            <div class="fg-button">
+                <button id="singlebutton" name="singlebutton" class="btn btn-primary fg-submit">{{'LOGIN_LOGIN_BTN'|trans}}</button>
+            </div>
+            <div class="clearfix"></div>
+       </div>
+       <div class="fg-footer-block">
+          <div class="fg-first">
+            <p>
+                <a id="forget-password" href="javascript:void(0)" class="fg-dev-forgot-password"><i class="fa fa-arrow-circle-right"></i>{{'LOST_PASSWORD'|trans}}</a> 
+            </p>
+          </div>
+          <div class="fg-last">
+            <p><a id="activate-login" href="javascript:void(0)" class="fg-dev-activate-login" ><i class="fa fa-arrow-circle-right"></i>{{'BACKEND_LOGIN_FIRST_TIME'|trans}}</a> </p>
+          </div>
+        </div>
+    </form>
+  {#  DISPLAY CONTEN HERE#}
+       <div class="fg-widget-hover-elements-wrapper">
+         <ul class="fg-items">
+            <li class='fg-dev-elementbox-draggable'><a href="javascript:void(0)" ><i class="fa fa-2x fa-ellipsis-v"></i></a></li>
+            <li element-Id='<%- details.elementId %>' class="fg-widget-block-options"><a href="javascript:void(0)"  data-id="id3459"><i class="fa fa-2x fa-bars"></i></a></li>
+         </ul>
+       </div>
+      <span class="fg-elementtype-class hide"><i class="fa <%- details.logo  %>"></i><div class="fg-text">{{'CMS_LOGIN'|trans}}</div></span>
+            </div>	
+</script>
+
+{#Article template#}
+<script type="text/template" id="templateCalendar">
+
+    <div  id="<%- elementid  %>"  class='fg-calendar-event-widget fg-widget-block fg-dev-element-box elementBox' element-id=<%- details.elementId %>>
+  {#  DISPLAY CONTEN HERE#}
+       <div class="fg-widget-hover-elements-wrapper">
+         <ul class="fg-items">
+            <li class='fg-dev-elementbox-draggable'><a href="javascript:void(0)" ><i class="fa fa-2x fa-ellipsis-v"></i></a></li>
+            <li class="fg-dev-edit-element" element-Id=<%- details.elementId %> page-id=<%- settingDetails.data.page.id %> element-type='<%- details.elementType  %>'><a href="javascript:void(0)" ><i class="fa fa-2x fa-pencil-square-o"></i></a></li>
+            <li element-Id='<%- details.elementId %>' class="fg-widget-block-options"><a href="javascript:void(0)"  data-id="id3459"><i class="fa fa-2x fa-bars"></i></a></li>
+         </ul>
+       </div>
+<span class="fg-elementtype-class hide"><i class="fa <%- details.logo  %>" aria-hidden="true"></i><div class="fg-text">{{"CMS_CALENDAR"|trans}}</div></span>
+    </div>	
+</script>
+
+{#Image template#}
+<script type="text/template" id="templateImage">
+
+    <div  id="<%- elementid  %>"  class='fg-image-gallery-widget fg-widget-block fg-dev-element-box elementBox' element-id=<%- details.elementId %>>
+  {#  DISPLAY CONTEN HERE#}
+       <div class="fg-widget-hover-elements-wrapper">
+         <ul class="fg-items">
+            <li class='fg-dev-elementbox-draggable'><a href="javascript:void(0)" ><i class="fa fa-2x fa-ellipsis-v"></i></a></li>
+            <li class="fg-dev-edit-element" element-Id=<%- details.elementId %> page-id=<%- settingDetails.data.page.id %> element-type='<%- details.elementType  %>'><a href="javascript:void(0)" ><i class="fa fa-2x fa-pencil-square-o"></i></a></li>
+            <li element-Id='<%- details.elementId %>' class="fg-widget-block-options"><a href="javascript:void(0)"  data-id="id3459"><i class="fa fa-2x fa-bars"></i></a></li>
+         </ul>
+       </div>
+<span class="fg-elementtype-class hide"><i class="fa <%- details.logo  %>" aria-hidden="true"></i><div class="fg-text">{{"CMS_IMAGE_VIDEO"|trans}}</div></span>
+    </div>	
+</script>
+
+
+<script type="text/template" id="editcontainerpopup">
+       <form id="editContainer" method="post" onsubmit="return false;" novalidate="novalidate">
+   <div class="modal-header fg-modal-has-languagebar">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                            <h4 class="modal-title fg-modal-title"><%- headerTitle %></h4>                                     
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group fg-clear">
+                                                <label class="control-label text-right fg-label-valign col-sm-4">{{'CMS_NUMBER_COLUMS'|trans}}</label>
+                                                <div class="col-sm-8">
+                                              
+                                                    <div class="fg-input-plus-minus">
+                                                        <button class="left minus form-control FL selectButton btn-number" data-field='columnCount' data-type='minus'>-</button>
+                                                        <input type="number" disabled min="1" class="form-control FL number input-number" max='<%- maxColumnCount %>' name='columnCount'  value="<%- defaultColumnCount%>" oldCount="<%- defaultColumnCount%>" id="columnCount" container-type="<%- containerType %>">
+                                                        <input type="hidden" value="<%- pageId %>" name="currentPage" >
+                                                        <input type="hidden" value="<%- containerId %>" name="currentContainer" >
+                                                        
+                                                        <% if (containerType !='containerAdd') { %>
+                                                        <input type="hidden" value="0" name='addCount' data-key="page.<%- pageId %>.container.<%- containerId %>.column.new.addCount">
+                                                        <input type="hidden" value="0" name='deleteCount' data-key="page.<%- pageId %>.container.<%- containerId %>.column.delete.newCount">
+                                                        <% } else { %>
+                                                            <input type="hidden"  name="containerpopupType" id="containerpopupType" value="<%- containerType %>" data-key="page.<%- pageId %>.container.new.columnCount">
+                                                        <% } %>
+                                                        <button class="right plus form-control FL selectButton btn-number" data-field='columnCount' data-type='plus'>+</button>
+                                                    </div>
+                                            
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn default" data-dismiss="modal">{{'CMS_CANCEL'|trans}}</button>
+                                            <input type="submit" class="btn green fg-dev-datasave" value="{{'CMS_SAVE'|trans}}" id="save_changes">
+                                        </div>
+    </form>
+</script>
+{#map template#}
+<script type="text/template" id="templateMap">
+      <div  id="<%- elementid  %>"  class='fg-map-widget fg-widget-block fg-dev-element-box elementBox fg-dev-map-element' element-id=<%- details.elementId %>>
+      
+       <div id="googleMap-<%- details.elementId %>" class="fg-map-wrapper" style="height:<%- details.mapElementHeight %>px;"></div>
+
+     
+        <input type="hidden" id="mapDisplay-<%- details.elementId %>" value="<%- details.mapElementDisplayStyle %>">
+        <input type="hidden" id="latitude-<%- details.elementId %>" value="<%- details.mapElementLatitude %>">
+        <input type="hidden" id="longitude-<%- details.elementId %>" value="<%- details.mapElementLongitude %>">
+        <input type="hidden" id="mapMarker-<%- details.elementId %>" value="<%- details.mapElementShowMarker %>">
+        <input type="hidden" id="mapZoom-<%- details.elementId %>" value="<%- details.mapElementZoomValue %>">
+  {#  DISPLAY CONTEN HERE#}
+       <div class="fg-widget-hover-elements-wrapper">
+         <ul class="fg-items">
+            <li class='fg-dev-elementbox-draggable'><a href="javascript:void(0)" ><i class="fa fa-2x fa-ellipsis-v"></i></a></li>
+            <li class="fg-dev-edit-element" element-id=<%- details.elementId %> page-id=<%- settingDetails.data.page.id %> element-type='<%- details.elementType  %>'><a href="javascript:void(0)" ><i class="fa fa-2x fa-pencil-square-o"></i></a></li>
+            <li element-Id='<%- details.elementId %>' class="fg-widget-block-options"><a href="javascript:void(0)"  data-id="id3459"><i class="fa fa-2x fa-bars"></i></a></li>
+         </ul>
+       </div>
+<span class="fg-elementtype-class hide"><i class="fa <%- details.logo  %>" aria-hidden="true"></i><div class="fg-text">{{"CMS_MAP"|trans}}</div></span>
+    </div>  
+    
+</script>
+
+
+<script type="text/template" id="deletePopup">
+    
+   <form id="deletePagePopup" method="post" onsubmit="return false;" novalidate="novalidate">
+<input type="hidden" name="deleteInput" data-key="<%- dataKey  %>" value="<%- deleteId %>" id="deleteInput" >
+
+<% elementIds = elementIds.split(','); %>
+<% var i = 0; %>
+<% _.each(elementIds, function(elementId) { %>
+    <input type="hidden" class="fg-dev-elements" name="elements[]" value="<%- elementId %>" data-key="page.<%-pageId%>.removeElements.<%-i%>.elementId" id="<%-elementId%>" >
+    <input type="hidden" class="fg-dev-elements" name="elements[]" value="<%- deleteId %>" data-key="page.<%-pageId%>.removeElements.<%-i%>.boxId" id="<%-deleteId%>" >
+    <% i++; %>
+<% }); %>
+   <div class="modal-header fg-modal-has-languagebar">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                            <h4 class="modal-title fg-modal-title"><%- headerTitle %></h4>                                     
+                                        </div>
+                                        <div class="modal-body">
+                                              <div class="fg-clear">
+                                              
+                                               <span>
+                                                     <%- displaymessage %>
+                                               </span>    
+                                            
+                                                </div>
+                                           
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn default" data-dismiss="modal">{{'CMS_CANCEL'|trans}}</button>
+                                            <% if(actionType == 'deleteBox' ) { %>
+                                            <input type="submit" class="btn green fg-dev-mov2clip" value="{{'CMS_MOVE_TO_CLIP'|trans}}" id="fg-dev-mov2clip">
+                                            <% } %>
+                                            <input type="submit" class="btn green fg-dev-datasave" value="<% if(actionType == 'deleteBox' ) { %>{{'CMS_DELETE_PERMENENT'|trans}}<% } else { %>{{'CMS_DELETE'|trans}}<% } %>" id="fg-dev-container-delete">                                                
+                                        </div>
+    </form>
+</script>
+<script type="text/template" id="templateText">
+
+<div  id="<%- elementid  %>"  class='fg-text-widget fg-widget-block fg-dev-element-box elementBox' element-id=<%- details.elementId %>>
+  {#  DISPLAY CONTEN HERE#}
+       <div class="fg-widget-hover-elements-wrapper">
+         <ul class="fg-items">
+            <li class='fg-dev-elementbox-draggable'><a href="javascript:void(0)" ><i class="fa fa-2x fa-ellipsis-v"></i></a></li>
+            <li class="fg-dev-edit-element" element-Id=<%- details.elementId %> page-id=<%- settingDetails.data.page.id %> element-type='<%- details.elementType  %>'><a href="javascript:void(0)" ><i class="fa fa-2x fa-pencil-square-o"></i></a></li>
+            <li element-Id='<%- details.elementId %>' class="fg-widget-block-options"><a href="javascript:void(0)"  data-id="id3459"><i class="fa fa-2x fa-bars"></i></a></li>
+         </ul>
+       </div>
+<span class="fg-elementtype-class hide"><i class="fa <%- details.logo  %>" aria-hidden="true"></i><div class="fg-text">{{"CMS_HEADER_TEXT"|trans}}</div></span>
+    </div>	
+</script>
+
+{#iframe template#}
+<script type="text/template" id="templateIframe">
+    <div  id="<%- elementid  %>" data-id="<%- elementid  %>" class='fg-iframe-widget fg-iframe-parent fg-widget-block fg-dev-element-box elementBox' element-id='<%- details.elementId %>' style='height:<%- details.iframeHeight %>px'>
+        <iframe class="fg-iframe" src="" data-url="<%- details.iframeUrl %>" allowTransparency="true" onload="FgIframeSettings.loadIframe(this)"></iframe>
+        <div class="fg-widget-hover-elements-wrapper">
+         <ul class="fg-items">
+            <li class='fg-dev-elementbox-draggable'><a href="javascript:void(0)" ><i class="fa fa-2x fa-ellipsis-v"></i></a></li>
+            <li class="fg-dev-edit-element" element-Id=<%- details.elementId %> page-id=<%- settingDetails.data.page.id %> element-type='<%- details.elementType  %>'><a href="javascript:void(0)" ><i class="fa fa-2x fa-pencil-square-o"></i></a></li>
+            <li element-Id=<%- details.elementId %> class="fg-widget-block-options"><a href="javascript:void(0)"  data-id="id3459"><i class="fa fa-2x fa-bars"></i></a></li>
+         </ul>
+       </div>
+<span class="fg-elementtype-class hide"><i class="fa <%- details.logo  %>" aria-hidden="true"></i><div class="fg-text">{{"CMS_IFRAME"|trans}}</div></span>
+    </div>
+</script>
+{#supplementaryMenu element template#}
+<script type="text/template" id="templateSupplementary">   
+<div  id="<%- elementid  %>" data-id="<%- elementid  %>" class='fg-fa-sitemap fg-widget-block fg-dev-element-box elementBox' element-id='<%- details.elementId %>'>
+    {#  DISPLAY CONTEN HERE#}
+            <div class="fg-widget-hover-elements-wrapper">
+             <ul class="fg-items">
+                <li class='fg-dev-elementbox-draggable'><a href="javascript:void(0)" ><i class="fa fa-2x fa-ellipsis-v"></i></a></li>
+                <li element-Id='<%- details.elementId %>' class="fg-widget-block-options"><a href="javascript:void(0)"  data-id="id3459"><i class="fa fa-2x fa-bars"></i></a></li>
+             </ul>
+           </div>
+      <span class="fg-elementtype-class hide"><i class="fa <%- details.logo  %>"></i><div class="fg-text">{{'CMS_SUPPLEMENTARY_MENU'|trans}}</div></span>
+</div>
+</script>
+{#SponsorAd element template#}
+{#newsletter archive element template#}
+
+<script type="text/template" id="templateSponsorAd">
+    <div  id="<%- elementid  %>"  class='fg-sponsor-widget fg-widget-block fg-dev-element-box elementBox' element-id='<%- details.elementId %>'>
+       <div class="fg-widget-hover-elements-wrapper">
+         <ul class="fg-items">
+            <li class='fg-dev-elementbox-draggable'><a href="javascript:void(0)" ><i class="fa fa-2x fa-ellipsis-v"></i></a></li>
+            <li class="fg-dev-edit-element" element-Id=<%- details.elementId %> page-id=<%- settingDetails.data.page.id %> element-type='<%- details.elementType  %>'><a href="javascript:void(0)" ><i class="fa fa-2x fa-pencil-square-o"></i></a></li>
+            <li element-Id='<%- details.elementId %>' class="fg-widget-block-options"><a href="javascript:void(0)"  data-id="id3459"><i class="fa fa-2x fa-bars"></i></a></li>
+         </ul>
+       </div>
+<span class="fg-elementtype-class hide"><i class="fa <%- details.logo  %>" aria-hidden="true"></i><div class="fg-text">{{"CMS_SPONSOR_ADS"|trans}}</div></span>
+    </div>	
+</script>
+<script type="text/template" id="templateForm"> 
+<div  id="elementbox-<%- details.elementId  %>"  class='fg-form-widget fg-widget-block fg-dev-element-box elementBox' element-id=<%- details.elementId %>>
+        {#  DISPLAY CONTEN HERE#}
+        <div class="fg-widget-hover-elements-wrapper">
+          <ul class="fg-items">
+             <li class='fg-dev-elementbox-draggable'><a href="javascript:void(0)" ><i class="fa fa-2x fa-ellipsis-v"></i></a></li>
+            <% if((details.elementType == "contact-application-form" && hasContactModuleRights ) || (details.elementType == "form")){ %>
+                <li class="fg-dev-edit-element" element-Id=<% if(details.elementType == "contact-application-form"){ %> <%- details.formId %><% } else { %><%- details.elementId %> <% } %> page-id=<%- settingDetails.data.page.id %> element-type='<%- details.elementType  %>'><a href="javascript:void(0)" ><i class="fa fa-2x fa-pencil-square-o"></i></a></li>
+            <% } %>
+             <li element-Id='<%- details.elementId %>' class="fg-widget-block-options"><a href="javascript:void(0)"  data-id="id3459"><i class="fa fa-2x fa-bars"></i></a></li>
+          </ul>
+        </div>
+        <span class="fg-elementtype-class hide"><i class="fa <%- details.logo  %>" aria-hidden="true"></i><div class="fg-text"> <% if(details.elementType == "contact-application-form" && hasContactModuleRights ){ %> {{"CMS_CONTACT_APPLICATION_FORM"|trans}}<% }else{ %>{{"CMS_FORM"|trans}} <%}%> </div></span>
+    </div>	
+</script>
+{# For contact table element #}
+<script type="text/template" id="templateContactTableElement">
+<div  id="<%- elementid  %>" data-id="<%- elementid  %>" class='fg-contact-table-widget fg-widget-block fg-dev-element-box elementBox fg-datatable' element-id='<%- details.elementId %>' >
+    <div class="fg-widget-hover-elements-wrapper">
+        <ul class="fg-items">
+            <li class='fg-dev-elementbox-draggable'><a href="javascript:void(0)" ><i class="fa fa-2x fa-ellipsis-v"></i></a></li>
+            <% if( hasContactModuleRights && hasAdminRights ){ %> 
+            <li class="fg-dev-edit-element" element-Id=<%- details.elementId %> page-id=<%- settingDetails.data.page.id %> element-type='<%- details.elementType  %>'><a href="javascript:void(0)" ><i class="fa fa-2x fa-pencil-square-o"></i></a></li>
+            <% } %>
+            <li element-Id='<%- details.elementId %>' class="fg-widget-block-options"><a href="javascript:void(0)"  data-id="id3459"><i class="fa fa-2x fa-bars"></i></a></li>
+        </ul>
+    </div>
+    <span class="fg-elementtype-class hide"><i class="fa <%- details.logo  %>" aria-hidden="true"></i><div class="fg-text">{{ "CMS_CONTACTS_TABLE"|trans }}</div></span>
+
+    <div class="fg-contact-table-widget fg-widget-block">
+        <div class="fg-contact-table-header fg-has-export fg-has-search">
+            <div class="fg-left-col FL fg-contact-table-filter-<%- elementid  %>" id="fg-contact-table-filter-<%- elementid  %>">
+            </div>
+            <div class="fg-right-col FR" id="fg-contact-table-export-search-<%- elementid  %>">            
+            </div>
+        </div>
+        <table class="row-border nowrap" id="website-datatable-list-<%- elementid  %>"></table>
+        <div class="fg-cms-empty-box-wrapper fg-contact-table-empty-box hide">
+            <p class="text-center">{{"CMS_CONTACT_TABLE_EMPTY_MESSAGE"|trans}}</p>
+        </div>
+    </div>
+</div>
+</script>
+<script type="text/template" id="templateContactTableElementHeader">
+   <thead>
+        <tr>
+        <% if(settings.overflowBehavior == 'toggle'){ %>
+            <th></th>
+        <%  } %>
+            <% _.each(tableColumns, function(el,index){  %>
+                    <th class="<%- (index == 0 && settings.overflowBehavior == 'toggle' )?'all':'' %>"> <%- (el.title != '' && el.title != null)?el.title:el.defaultTitle %></th>
+           <%  });   %>
+        </tr>
+    </thead>
+</script>
+<script type="text/template" id="templateContactTableExportSearch">
+                <% if(data.tableExport =='1') { %>
+                    <div class="fg-btn-grey-icon fg-contact-export fg-export"><span data-toggle="dropdown" id="menu1">{{'EXPORT'|trans}}</span>
+                    <ul role="menu" aria-labelledby="menu1" class="dropdown-menu">
+                          <li><a href="#">{{'SEMICOLON_SEPERATED'|trans}}</a></li>
+                          <li><a href="#">{{'COMMA_SEPERATED'|trans}}</a></li>
+                    </ul></div>
+                <% } %>
+                <% if(data.tableSearch){ %>
+                    <div class="fg-table-search fg-dis-IB fg-v-middle">
+                        <input type="text" placeholder="Search..." id="<%- searchTextBoxId  %>" class="form-control">
+                    </div>
+                <% } %>    
+</script>
+<script type="text/template" id="templateContactTableFilter">
+    <% _.each(data, function(el,index){ %>
+   <div class="fg-dis-IB">
+        <select class="fg-marg-right-20 fg-contact-table-filter-selectbox" title="<%- el.title %>" multiple="multiple" data-id="<%- el.id %>"  data-type="<%- el.type %>">
+        <%  
+        if(typeof el.input != 'undefined') {
+            _.each(el.input, function(opt,i){  %>
+                <% if(opt.id != 'any' ){ %>
+                    <option value="<%- opt.id %>"><%- opt.title %></option>
+                <% } %>
+        <% });
+        }
+                %>    
+            
+        </select>
+    </div>
+   <% }); %> 
+</script>
+{# For contact table element #}
+<script type="text/template" id="templateFormField">
+    <% if(formStage != 'stage3'){ %>
+        <div class="fg-cms-empty-box-wrapper">
+            <p class="text-center">{{"CMS_FORM_EMPTY_MESSAGE"|trans}}</p>
+        </div>
+    <% } else { %>
+    
+<form class="form-horizontal">
+<% buttonText= 'Save'; %>
+    <% showHeading= false; %>
+    <% _.each(formDetails,function(fieldDetails,fieldId){  %>
+        <% if(fieldDetails.fieldType=='singleline') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8">
+                  <input id="textinput" name="textinput" type="text" placeholder="<%- fieldDetails['placeholder'][defLang]=='' ? fieldDetails['placeholderValue'] : fieldDetails['placeholder'][defLang] %>" required="" value="<%- fieldDetails['predefined'][defLang]=='' ? fieldDetails['predefinedValue']:fieldDetails['predefined'][defLang] %>" class="form-control input-md">
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='select') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="selectbasic<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-4">
+                  <select id="selectbasic" name="selectbasic" class="form-control bs-select">
+                  <% _.each(fieldDetails.options,function(fieldOptions,optionId){  %>
+                    <option value="<%- optionId %>"><%- (fieldOptions['value'][defLang]==''|| _.isUndefined(fieldOptions['value'][defLang])) ? fieldOptions['selectionValueName']:fieldOptions['value'][defLang] %></option>
+                  <% }); %>
+                  </select>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='radio') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="radios<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label fg-pad-top-0">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-4">
+                <% _.each(fieldDetails.options,function(fieldOptions,optionId){  %>
+                    <% if(fieldDetails['showInline']==0) { %><div class="radio-block"><% } %>  
+                    <label for="radios-4" <% if(fieldDetails['showInline']==1) { %>class="radio-inline"<% } %>>
+                        <input id="radios-4" type="radio" name="radios2" value="<%- optionId %>" ><%- (fieldOptions['value'][defLang]==''|| _.isUndefined(fieldOptions['value'][defLang])) ? fieldOptions['selectionValueName']:fieldOptions['value'][defLang] %>
+                    </label>
+                    <% if(fieldDetails['showInline']==0) { %></div><% } %>
+                <% }); %>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='checkbox') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="checkboxes"  class="col-sm-4 control-label  fg-pad-top-0">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-4">
+                    <% _.each(fieldDetails.options,function(fieldOptions,optionId){  %>
+                    <% if(fieldDetails['showInline']==0) { %><div class="checkbox-block"><% } %>    
+                        <label for="checkboxes-0" <% if(fieldDetails['showInline']==1) { %>class="checkbox-inline"<% } %>>
+                          <input id="checkboxes-0" type="checkbox" name="checkboxes" value="<%- optionId %>"><%- (fieldOptions['value'][defLang]==''|| _.isUndefined(fieldOptions['value'][defLang])) ? fieldOptions['selectionValueName']:fieldOptions['value'][defLang] %>
+                        </label>
+                    <% if(fieldDetails['showInline']==0) { %></div><% } %>
+                    <% }); %>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='multiline') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textarea<%- fieldDetails.formFieldId %>" class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-4">
+                    <textarea id="textarea<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> placeholder="<%- fieldDetails['placeholder'][defLang]=='' ? fieldDetails['placeholderValue']:fieldDetails['placeholder'][defLang] %>" name="textarea" class="form-control"><%- fieldDetails['predefined'][defLang]=='' ? fieldDetails['predefinedValue']:fieldDetails['predefined'][defLang] %></textarea>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='email') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput<%- fieldDetails.formFieldId %>" class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-4">
+                  <input id="textinput" name="textinput" type="text" placeholder="<%- fieldDetails['placeholder'][defLang]=='' ? fieldDetails['placeholderValue'] : fieldDetails['placeholder'][defLang] %>" required="" class="form-control input-md">
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='number') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-4">
+                    <div class="fg-input-plus-minus">
+                        <button data-field="columnCount" data-type="minus" class="left minus form-control FL selectButton btn-number">-</button>
+                        <input id="columnCount" type="number" disabled="" class="form-control FL number input-number">
+                        <button data-field="columnCount" data-type="plus" class="right plus form-control FL selectButton btn-number">+</button>
+                    </div>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='date') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput"  class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-4">
+                  <div data-provide="datepicker" class="input-group date">
+                    <input type="text" class="form-control">
+                    <div class="input-group-addon"><span class="fa fa-calendar"></span></div>
+                  </div>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='time') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput<%- fieldDetails.formFieldId %>" class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-4">
+                  <div data-provide="timepicker" data-minute-step="1" type="text" class="input-group bootstrap-timepicker timepicker">
+                    <input id="timepicker" class="form-control">
+                    <div class="input-group-addon"><span class="fa fa-clock-o"></span></div>
+                  </div>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='url') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput<%- fieldDetails.formFieldId %>" class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-4">
+                  <input id="textinput" name="textinput" type="text" placeholder="<%- fieldDetails['placeholder'][defLang]=='' ? fieldDetails['placeholderValue'] : fieldDetails['placeholder'][defLang] %>" required="" value="<%- fieldDetails['predefined'][defLang]=='' ? fieldDetails['predefinedValue']:fieldDetails['predefined'][defLang] %>" class="form-control input-md">
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='fileupload') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-4">
+                    <div class="fg-web-fileupload-wrapper" data-file-wrap>
+                      <input type="text" name="uploadFile" class="hide" data-file id="formfile<%- fieldDetails.formFieldId %>" data-key="<%- fieldDetails.formId+'.'+fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %>>
+                      <input type="file" data-exceedmsg="{{'SIZE_EXCEED'|trans}}" data-fieldid="<%- fieldDetails.formFieldId %>" name="file-uploader" id="forminput<%- fieldDetails.formFieldId %>" data-url="{{path('website_public_file_upload_check',{'type':'form'})}}" style="position: absolute; clip: rect(0px, 0px, 0px, 0px);"  data-buttonText="{%trans%}CONTACT_FIELDS_SELECT_FILE{%endtrans%}"  class="filestyle">
+                        <div class="bootstrap-filestyle input-group">
+                            <input type="text" data-file-name disabled="" placeholder="" class="form-control "> 
+                            <span class="group-span-filestyle input-group-btn" tabindex="0">
+                            <label class="btn btn-default" for="forminput<%- fieldDetails.formFieldId %>">
+                                <span class="icon-span-filestyle fa fa-file"></span> 
+                                <span class="buttonText">{%trans%}CONTACT_FIELDS_SELECT_FILE{%endtrans%}</span>
+                            </label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='button') {  %> <% buttonText = (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang]; %>
+        <% } else if(fieldDetails.fieldType=='captcha') { showCaptcha = true; %><% if(showHeading==true) { showHeading=false; %></fieldset><% } %>
+            <div class="form-group">
+                <div class="col-sm-4 col-md-offset-4">
+                    <div class="g-recaptcha" id="fg-captcha-elementbox-<%- elementId %>"></div>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='heading') { %>
+            <% headingLabel = (fieldDetails['label'][defLang]=='' || _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %>
+            <% if(showHeading==true) { %></fieldset><% } %>
+            <fieldset>
+            <% if(headingLabel != ''  && headingLabel != null){ %><legend><%- headingLabel %></legend><% } %>
+        <% showHeading = true; } %>
+    <% }); %>
+<% if(showHeading==true) { showHeading=false; %></fieldset><% } %>
+    <div class="form-group">
+        <div class="col-sm-4 col-sm-offset-4">
+          <input type="submit" class="btn btn-default" value="<%- _.isUndefined(buttonText) ? 'Save': buttonText %>">
+        </div>
+    </div>
+</form>
+    <% } %>
+</script>
+
+<script type="text/template" id="templateSubscriptionForm">
+    <div  id="<%- elementid  %>" data-id="<%- elementid  %>" class='fg-nl-subscription-widget fg-widget-block fg-dev-element-box elementBox' element-id='<%- details.elementId %>' >
+
+
+        <div class="fg-widget-hover-elements-wrapper">
+            <ul class="fg-items">
+                <li class='fg-dev-elementbox-draggable'><a href="javascript:void(0)" ><i class="fa fa-2x fa-ellipsis-v"></i></a></li>
+                <li element-Id='<%- details.elementId %>' class="fg-widget-block-options"><a href="javascript:void(0)"  data-id="id3459"><i class="fa fa-2x fa-bars"></i></a></li>
+            </ul>
+        </div>
+        <span class="fg-elementtype-class hide"><i class="fa <%- details.logo  %>"></i><div class="fg-text">{{'CMS_NEWSLETTER_SUBSCRIPTION'|trans}}</div></span>
+    </div>
+</script>
+<script type="text/template" id="templateNewsletterArchive">
+    <div  id="<%- elementid  %>" data-id="<%- elementid  %>" class='fg-nl-archive-widget fg-widget-block fg-datatable fg-dev-element-box elementBox fg-datatable-noheader' element-id='<%- details.elementId %>' >
+        <div class="fg-widget-hover-elements-wrapper">
+            <ul class="fg-items">
+                <li class='fg-dev-elementbox-draggable'><a href="javascript:void(0)" ><i class="fa fa-2x fa-ellipsis-v"></i></a></li>
+                
+                <li element-Id='<%- details.elementId %>' class="fg-widget-block-options"><a href="javascript:void(0)"  data-id="id3459"><i class="fa fa-2x fa-bars"></i></a></li>
+            </ul>
+        </div>
+        <table class="row-border nowrap" id="website-datatable-list-<%- elementid  %>">
+
+        </table>
+    </div>
+</script>
+<script type="text/template" id="templateNewsletterArchiveElementHeader">
+   <thead>
+        <tr>
+            <th></th>
+            <% _.each(tableColumns, function(el,index){  %>
+                    <th> <%- el %></th>
+           <%  });   %>
+        </tr>
+    </thead>
+</script>
+{#twitter element template#}
+<script type="text/template" id="templateTwitter">   
+  <div  id="<%- elementid  %>"  class='fg-twitter-event-widget fg-widget-block fg-dev-element-box elementBox' element-id=<%- details.elementId %>>
+  {#  DISPLAY CONTEN HERE#}
+       <a class="twitter-timeline" <% if(details.twitterContentHeight >= 0) { %> data-height="<%- details.twitterContentHeight %>" <% } %> data-dnt="true" href="https://twitter.com/<%- details.accountName %>">{{"CMS_TWEET_BY"|trans}} <%- details.accountName %></a>
+       <div class="fg-widget-hover-elements-wrapper">
+         <ul class="fg-items">
+            <li class='fg-dev-elementbox-draggable'><a href="javascript:void(0)" ><i class="fa fa-2x fa-ellipsis-v"></i></a></li>
+            <li class="fg-dev-edit-element" element-Id=<%- details.elementId %> page-id=<%- settingDetails.data.page.id %> element-type='<%- details.elementType  %>'><a href="javascript:void(0)" ><i class="fa fa-2x fa-pencil-square-o"></i></a></li>
+            <li element-Id='<%- details.elementId %>' class="fg-widget-block-options"><a href="javascript:void(0)"  data-id="id3459"><i class="fa fa-2x fa-bars"></i></a></li>
+         </ul>
+       </div>
+    <span class="fg-elementtype-class hide"><i class="fa <%- details.logo  %>" aria-hidden="true"></i><div class="fg-text">{{"CMS_TWITTER"|trans}}</div></span>
+    </div>
+</script>
+
+{# For portrait element #}
+<script type="text/template" id="templatePortraitElement">
+<div  id="<%- elementid  %>" data-id="<%- elementid  %>" class='fg-portrait-widget fg-widget-block fg-dev-element-box elementBox' element-id='<%- details.elementId %>'  element-type='portrait-element'>
+    <div class="fg-widget-hover-elements-wrapper">
+        <ul class="fg-items">
+            <li class='fg-dev-elementbox-draggable'><a href="javascript:void(0)" ><i class="fa fa-2x fa-ellipsis-v"></i></a></li>
+            <% if( hasContactModuleRights && hasAdminRights ){ %> 
+            <li class="fg-dev-edit-element" element-Id=<%- details.elementId %> page-id=<%- settingDetails.data.page.id %> element-type='<%- details.elementType  %>'><a href="javascript:void(0)" ><i class="fa fa-2x fa-pencil-square-o"></i></a></li>
+            <% } %>
+            <li element-Id='<%- details.elementId %>' class="fg-widget-block-options"><a href="javascript:void(0)"  data-id="id3459"><i class="fa fa-2x fa-bars"></i></a></li>
+        </ul>
+    </div>
+    <span class="fg-elementtype-class hide"><i class="fa <%- details.logo  %>" aria-hidden="true"></i><div class="fg-text">{{ "CMS_PORTRAIT-ELEMENT"|trans }}</div></span>
+        <div class="fg-portrait-header fg-has-export fg-has-search">
+        </div>
+        <div class="fg-cms-empty-box-wrapper fg-contact-portrait-empty-box hide">
+            <p class="text-center">{{"CMS_CONTACT_PORTRAIT_EMPTY_MESSAGE"|trans}}</p>
+        </div>
+</div>
+</script>
+{#twitter element template#}
+{% include 'WebsiteCMSBundle:Website:contactApplicationFormUnderscore.html.twig' %}

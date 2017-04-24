@@ -1,0 +1,31 @@
+{% set fairgateAnalyticScreenNameArray = fgclub.get('fairgateAnalyticScreenNameArray') %}
+{% set fairgateAnalyticScreenName = 'fairgate' %}
+{% set fairgateAnalyticModuleName = fgclub.get('module') %}
+{% if fgclub.get('applicationArea') == 'internal' %}
+    {% set fairgateAnalyticScreenName = fairgateAnalyticScreenNameArray.internal %}
+{% elseif fgclub.get('applicationArea') == 'website' %}
+    {% set fairgateAnalyticScreenName = fairgateAnalyticScreenNameArray.website %}
+{% elseif fairgateAnalyticModuleName is defined and  fairgateAnalyticScreenNameArray[fairgateAnalyticModuleName] is defined%}
+    {% set fairgateAnalyticScreenName = fairgateAnalyticScreenNameArray[fairgateAnalyticModuleName] %}
+{% elseif fgclub.get('applicationArea') == 'backend' %}
+    {% set fairgateAnalyticScreenName = fairgateAnalyticScreenNameArray.backend %}
+{% elseif fgclub.get('module') == fgclub.get('url_identifier')  %}
+    {% set fairgateAnalyticScreenName = fairgateAnalyticScreenNameArray.website %}    
+
+{% endif %}
+
+<!-- Google Analytics -->
+<script>
+    window.ga = window.ga || function () {
+        (ga.q = ga.q || []).push(arguments)
+    };
+    ga.l = +new Date;
+
+    ga('create', '{{fgclub.get('fairgateAnalyticKey')}}', 'auto');
+    ga('set', 'appName', 'modules-fairgate'); // App for modules category
+    ga('set', 'screenName', '{{fairgateAnalyticScreenName}}'); // Contains the currently viewed module
+    ga('send', 'pageview');
+
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->

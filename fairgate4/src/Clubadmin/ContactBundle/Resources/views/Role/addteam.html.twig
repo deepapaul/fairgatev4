@@ -1,0 +1,288 @@
+<script type="text/template" id="template-team-add">
+<% newClass = isNew ? 'addednew' : ''
+ newKey = isNew ? '.new' : ''
+ newVar = isNew ? '_new' : ''
+ roleType = 'team'
+ roleKey = ''
+ roleName = ''
+ forumCount = 0
+ toConfirmCount = 0
+ if (teamId.indexOf('newteam') != -1) {
+    teamId = teamId.replace('newteam', '');
+    roleKey = '.team' + newKey + '.' + teamId
+    roleName = '_team' + newVar + '_' + teamId
+ } else {
+    roleKey = '.team.' + teamId
+    roleName = '_team_' + teamId
+ }
+teamTitleMain = '{%trans with {'%team%': fgtwig.getTerminolgyName('Team', singular)}%}TEAMS_%team%{%endtrans%}';
+dataKeyVar = catId + roleKey
+dataNameVar = catId + roleName%>
+<div <% if (isNew) { %>style="display:none;"  <% } %> class="row fg-border-line sortables fg-sort-drag-hover <%- newClass %> " id="<%- dataNameVar %>">
+    <div class="fg-col-first-icon fg-sort-drag" name="fg-dev-sorting"><i class="fa fg-sort ui-draggable handle"  data-toggle="tooltip"></i></div>
+    <div class="col-md-12 fg-col-hack ">
+        <div class="row">
+            <div class="col-sm-5 col-lg-3 col-xs-12 col-md-3 fg-clear-left">
+                <div class="fg-input-div fg-field-pading">
+                    <% _.each(clubLanguages, function(clubLang) { %>
+                        <% teamTitleLang = ''; %>
+                        <% teamDescLang = ''; %>
+                        <% isRoleActive = true; %>
+                        <% bookMarkId = 0; %>
+                        <% if (typeof teamcontent_data !== 'undefined') { %>
+                            <% if (clubLang in teamcontent_data) { %>
+                                <% teamTitleLang = (teamcontent_data[clubLang][0]['rl_titleLang']!= "NULL")?teamcontent_data[clubLang][0]['rl_titleLang']:"" %>
+                                <% teamTitleMain = teamcontent_data[clubLang][0]['rl_title'] %>
+                                <% isRoleActive = teamcontent_data[clubLang][0]['rl_isActive']; %>
+                                <% bookMarkId = teamcontent_data[clubLang][0]['rl_bookMarkId']; %>
+                            <% } else { %>
+                                <% firstLang = FgUtility.getFirstKeyOfArray(teamcontent_data) %>
+                                <% teamTitleLang = "" %>
+                                <% teamTitleMain = teamcontent_data[firstLang][0]['rl_title'] %>
+                                <% isRoleActive = teamcontent_data[firstLang][0]['rl_isActive']; %>
+                                <% bookMarkId = teamcontent_data[firstLang][0]['rl_bookMarkId']; %>
+                            <% } %>
+                        <% } %>
+                    <div dataerror-group="" data-lang="<%- clubLang %>">
+                        <input type="text" data-key="<%- dataKeyVar %>.i18n.<%- clubLang %>.title" name="<%- dataNameVar %>_i18n_<%- clubLang %>_title" id="<%- dataNameVar %>_i18n_<%- clubLang %>_title" data-lang="<%- clubLang %>" data-roleid="<%- teamId %>" class="form-control input-sm" placeholder="<%- teamTitleMain %>" value="<%- teamTitleLang %>" data-property="change_title" <%- (clubLang == defaultLang) ? 'required=true' : "data-notrequired=true" %> >
+                    </div>
+                    <% }); %>
+                </div>
+                    <% _.each(clubLanguages, function(clubLang) { %>
+                    <% roleCount = ''; %>
+                    <% fnCount = ''; %>
+                    <% docCount = ''; %>
+                    <% roleId = ''; %>
+                    <% isActive = 0; %>
+                    <% visibleForAll = 0; %>
+                    <% if (typeof teamcontent_data !== 'undefined') { %>
+                        <% firstLang = FgUtility.getFirstKeyOfArray(teamcontent_data) %>
+                        <% if (clubLang in teamcontent_data) { %>
+{#                            <% teamDescLang = teamcontent_data[clubLang][0]['rl_descriptionLang'] %>#}
+                            <% roleCount = teamcontent_data[clubLang][0]['roleCount'] %>
+                            <% forumCount = teamcontent_data[clubLang][0]['forumCount'] %>
+                            <% toConfirmCount = teamcontent_data[clubLang][0]['toConfirmCount'] %>
+                            <% fnCount = teamcontent_data[clubLang][0]['fnCount'] %>
+                            <% docCount = teamcontent_data[clubLang][0]['docCount'] %>
+                            <% sponsorCount = teamcontent_data[clubLang][0]['sponsorCount'] %>
+                            <% isActive = teamcontent_data[clubLang][0]['rl_isActive'] %>
+                            <% visibleForAll = teamcontent_data[firstLang][0]['rl_visibleForAll'] %>
+                            <% roleId = teamcontent_data[clubLang][0]['rl_id'] %>
+                        <% } else { %>                            
+{#                            <% teamDescLang = teamcontent_data[firstLang][0]['rl_description'] %>#}
+                            <% roleCount = teamcontent_data[firstLang][0]['roleCount'] %>
+                            <% forumCount = teamcontent_data[firstLang][0]['forumCount'] %>
+                            <% toConfirmCount = teamcontent_data[firstLang][0]['toConfirmCount'] %>
+                            <% fnCount = teamcontent_data[firstLang][0]['fnCount'] %>
+                            <% docCount = teamcontent_data[firstLang][0]['docCount'] %>
+                            <% sponsorCount = teamcontent_data[firstLang][0]['sponsorCount'] %>
+                            <% isActive = teamcontent_data[firstLang][0]['rl_isActive'] %>
+                            <% visibleForAll = teamcontent_data[firstLang][0]['rl_visibleForAll'] %>
+                            <% roleId = teamcontent_data[firstLang][0]['rl_id'] %>
+                        <% } %>
+
+                    <% } %>
+{#                    <textarea rows="1" data-key="<%- dataKeyVar %>.i18n.<%- clubLang %>.description" name="<%- dataNameVar %>_i18n_<%- clubLang %>_description" class="auto-textarea form-control input-sm place-holder" id="<%- dataNameVar %>_i18n_<%- clubLang %>_description" maxlength="160" data-lang="<%- clubLang %>" data-roleid="<%- teamId %>" placeholder="{{'TEAMCATEGORY_SETTINGS_DESCRIPTION'|trans}}..." data-placeholder="exists"  data-property="change_description" ><%- teamDescLang %></textarea>#}
+                    <% }); %>
+
+                <div class="bookmark fg-bkmrk-icon fg-bkmrk-ico-new"  name="fg-dev-bookmark">
+                    <input type="checkbox" <% if (bookMarkId) { %> checked="" <% } %> class="make-switch" data-key="<%- dataKeyVar %>.book_marked" name="<%- dataNameVar %>_book_marked" id="<%- dataNameVar %>_book_marked" value="<%- bookMarkId %>">
+                           <label for="<%- dataNameVar %>_book_marked"><i class="fa fa-bookmark"></i></label>
+                </div>
+
+            </div>
+            <% if (isNew) { %>
+            <div class="col-sm-12 col-md-2 col-lg-1 col-xs-12 fg-dev-options" id = "<%- dataNameVar %>" name="fg-dev-option">
+                   <i class="fa fa-plus-square-o fg-plus-icon-mov" data-parent-div="<%- dataNameVar %>" data-id="<%- teamId %>" data-showstats="true" data-placeholder="option_<%- teamId %>" data-loaded="false" ><span class="fg-icon-span">{{'TEAM_SETTINGS_OPTIONS'|trans}} </span> </i>
+
+            </div>
+         <%  } %>
+            <% if (roleCount > 0  && isActive == 1 ) { %>
+                <% disableRow = true; %>
+            <% } else { %>
+                <% disableRow = false; %>
+            <% } %>
+            <% functionId = teamId; %>
+
+            <div class="col-sm-12 col-lg-1 col-md-2 col-xs-12 side-right-zro" name="fg-dev-cont-cnt"> <% if (!isNew) { %><a href="javascript:handleCountOrSidebarClick.updateFilter('<%- roleType %>', 'filterdisplayflag_contact{{fgclub.clubId}}-<%- {{contactId}} %>', '', '{{fgclub.clubId}}', '<%- {{contactId}} %>', '', '', '{{fgclub.clubUrlIdentifier}}', 'count', '', '', '', '', 'contact', '', '<%- catId %>', '<%- teamId %>', '')"><%if(roleCount == 1){ %> {%trans with {'%count%': 1}%}CONTACT_COUNT_SINGULAR{% endtrans %}<% }else if(roleCount > 1){ %> {% set contactCount = "<%- roleCount %>"%}  {%trans with {'%count%': contactCount }%}CONTACT_COUNT_PLURAL{% endtrans %} <% } else { %>  {%trans with {'%count%': 0}%}CONTACT_COUNT_PLURAL{% endtrans %}<% } %></a><%  } %> </div>
+
+            <div class="col-sm-12 col-md-2 col-lg-1 col-xs-12 fg-dev-options" id = "<%- dataNameVar %>" name="fg-dev-option">
+                <% if (!isNew) { %>    <i class="fa fa-plus-square-o fg-plus-icon-mov" data-parent-div="<%- dataNameVar %>" data-id="<%- teamId %>" data-showstats="true" data-placeholder="option_<%- teamId %>" data-loaded="false" ><span class="fg-icon-span">{{'TEAM_SETTINGS_OPTIONS'|trans}} </span> </i>
+                <% } %>
+            </div>
+            <div class="fg-team-visibility-status">
+                <% if (!isNew) { %>
+                <% if(( isActive == 0 )) { %>
+                <i class="fa fa-eye-slash fg-dev-team-popover popover" data-content="{{'TEAM_SETTINGS_POPOVER_INVISIBILE'|trans}}"></i>
+                <% } } %>
+            </div>
+             <div class="col-sm-12 col-md-1 col-lg-1 col-xs-12" id = "<%- dataNameVar %>" name="fg-dev-stats">
+                <% if (!isNew) { %>    <i class="fa fa-plus-square-o fg-plus-icon-mov" data-parent-div="<%- dataNameVar %>" data-id="<%- teamId %>" data-showstats="true" data-placeholder="stats_<%- teamId %>"   ><span class="fg-icon-span">{{'STATS'|trans}} </span> </i>
+                    <%  } %>
+            </div>
+            {% if fgtwig.inArray('sponsor', bookedModules) %}
+                <div class="col-sm-12 col-md-3 col-lg-2 col-xs-12 sponsor_team" name="fg-dev-sponsor" id = "<%- dataNameVar %>_sponsor">
+                    <% if (!isNew) { %>    <i class="fa fa-plus-square-o fg-plus-icon-mov" data-parent-div="<%- dataNameVar %>" data-id="<%- teamId %>" data-showsponsor="true" data-placeholder="sponsor_<%- teamId %>" data-loaded="false"><span class="fg-icon-span">{{'TEAMCATEGORY_SETTINGS_SPONSORED_BY'|trans}} </span></i>  <span class="badge badge-danger circle-no"> <%- sponsorCount %>  </span> <%  } %>
+                </div>
+            {% endif %}
+           {% if fgtwig.inArray('frontend1', bookedModules) %}
+                <div class="col-sm-12 col-lg-2 col-md-2 col-xs-12 side-right-zro " id = "<%- dataNameVar %>">
+                    <% if (!isNew) { %>   <i class="fa fa-plus-square-o fg-plus-icon-mov fg-admin" data-parent-div="<%- dataNameVar %>" data-id="<%- teamId %>" data-showadmin="true" data-placeholder="admin_<%- teamId %>"  ><span class="fg-icon-span">{{'TEAMCATEGORY_SETTINGS_ADMINISTRATORS'|trans}} </span></i>  <span class="badge badge-danger circle-no" id = "count_<%- dataNameVar %>"> 0 </span> <%  } %>
+                </div>
+            {% endif %}
+             {% if fgtwig.inArray('document', bookedModules)  %}
+            <div class="col-sm-12 col-lg-1 col-md-2 col-xs-12 side-right-zro" id = "<%- dataNameVar %>">
+                    <% if (!isNew) { %>   {% if(fgtwig.inArray('document',fgclub.get('allowedRights')))%}<a class ="sidebabar-link" href="javascript:handleCountOrSidebarClick.updateFilter('allActive','documentfilterdisplayflag_TEAM-{{fgclub.clubId}}-{{contactId}}','TEAM','{{fgclub.clubId}}','{{contactId}}','','','{{fgclub.clubUrlIdentifier}}','count','<%- roleId %>','','','_blank')">{%endif%} <% if (docCount== 1) { %>
+
+                          <span class="fg-icon-span fg-team-doc-link">{%trans%}DOCUMENT{%endtrans%}</span><span class="badge badge-danger circle-no"> 1 </span>
+                        <% } else if (docCount > 0) { %>
+
+                           <span class="fg-icon-span fg-team-doc-link">{%trans%}DOCUMENTS{%endtrans%}</span><span class="badge badge-danger circle-no">  <%- docCount %>   </span>
+                        <% } else { %>
+
+                            <span class="fg-icon-span fg-team-doc-link">{%trans%}DOCUMENTS{%endtrans%} </span><span class="badge badge-danger circle-no"> 0 </span>
+                        <% } %>   <%  } %> {% if(fgtwig.inArray('document',fgclub.get('allowedRights')))%}</a>{%endif%}
+                </div>
+             {% endif %}
+            <div class="col-sm-2 col-lg-1 col-xs-12  col-md-1 fg-mrg-top-area-tw log_team" name="fg-dev-log" id = "<%- dataNameVar %>_team">
+                <% if (!isNew) { %>
+                <i class="fa fa-plus-square-o fg-plus-icon-log" data-parent-div="<%- dataNameVar %>" data-id="<%- teamId %>" data-showlog="true"  data-placeholder="log_<%- teamId %>" data-loaded="false"><span class="fg-icon-span"> {%trans%}LOG{%endtrans%}</span> </i>
+                <% } %>
+            </div>
+
+            <input type="text" data-key="<%- dataKeyVar %>.sort_order" name="<%- dataNameVar %>_sort_order" id="<%- dataNameVar %>_sort_order" value="0" data-element="sortorder" class="hide sort-val <%- newClass %>" data-sort-parent="sortrole" />
+
+        </div>
+
+
+    </div>
+    <%if ((roleCount > 0) || (toConfirmCount > 0)) { %>
+        <div class="fg-col-last-icon" name="fg-dev-close-icon">
+            <i class="fa fa-lock fa-2x ash team-lock-icon" data-toggle="tooltip"></i>
+        </div>
+    <% } else { %>
+        <div class="fg-col-last-icon closeico" name="fg-dev-close-icon">
+            <input type="checkbox" data-key="<%- dataKeyVar %>.is_deleted" name="<%- dataNameVar %>_is_deleted" id="<%- dataNameVar %>_is_deleted" class="make-switch fgroledeletebutton" value="0" data-inactiveblock="changecolor" data-parentid="<%- dataNameVar %>" data-deletable="checknew" />
+            <label for="<%- dataNameVar %>_is_deleted"></label>
+        </div>
+    <% } %>
+
+    <div id="displaydetails_<%- dataNameVar %>"  class = "">
+    <div class="fg-pad-btm-20 ">
+        <div id="stats_<%- teamId %>" class="hide col-md-12 fg-category-settings-bg" showdetail="true">
+            <div class="col-sm-5 col-lg-2 col-md-2 col-xs-12 " name="fg-dev-fun-cnt">
+                            <div class="table-set-funct pull-left">  <% if (!isNew) { %> {{'TOTAL'|trans}}  <% } %></div>
+                            <div class="fg-txtarea-right table-set-rgt"> <% if (!isNew) { %><%if(roleCount == 1){ %> {%trans with {'%count%': 1}%}CONTACT_COUNT_SINGULAR{% endtrans %}  <% }else if(roleCount > 1){  %> {% set contactCount =  "<%- roleCount %>"%} {%trans with {'%count%': contactCount }%}CONTACT_COUNT_PLURAL{% endtrans %}  <% } else { %> {%trans with {'%count%': 0 }%}CONTACT_COUNT_PLURAL{% endtrans %}<% } %> <% } %> </div>
+
+                            <% if (typeof team_function !== 'undefined') { %>
+                                <% _.each(team_function, function(fn_team, teamId) {  %>
+                                    <% _.each(fn_team, function(function_team) {  %>
+                                        <div class="table-set-funct pull-left"><%- function_team[0]['f_title'] %></div>
+                                {% set contactCount =  "<%- function_team[0]['fnCount'] %>"%}
+                                        <div class="fg-txtarea-right table-set-rgt"> <%if(function_team[0]['fnCount'] == 1){ %> {%trans with {'%count%': 1}%}CONTACT_COUNT_SINGULAR{% endtrans %}  <% }else if( function_team[0]['fnCount'] > 1){ %>  {%trans with {'%count%': contactCount }%}CONTACT_COUNT_PLURAL{% endtrans %}  <% } else if( function_team[0]['fnCount'] == 0){ %>    {%trans with {'%count%': 0}%}CONTACT_COUNT_PLURAL{% endtrans %}<%} else if( _.isEmpty(function_team[0]['fnCount']) && function_team[0]['f_id'] > 0) { %>   {%trans with {'%count%': 0}%}CONTACT_COUNT_PLURAL{% endtrans %} <%  } %>  </div>
+                                    <% }); %>
+                                <% }); %>
+                            <% } else if(new_functions !== 'undefined') { %>
+                                <% _.each(new_functions, function(functions) {  %>
+                                <% if (!isNew) { %>
+                                    <div class="table-set-funct pull-left"><%- functions[0]['f_title'] %></div>
+                                    <div class="fg-txtarea-right table-set-rgt"> {%trans with {'%count%': 0}%}CONTACT_COUNT_PLURAL{% endtrans %}</div>
+                                <% } %>
+                                <% }); %>
+                            <% } %>
+                    </div>
+        </div>
+
+
+        <div id="sponsor_<%- teamId %>" class="hide col-md-12 fg-control-aranew fg-pad-0"  showdetail="true" style="display:none">
+            <div class="fg-pad-20"></div>
+        </div>
+        <div id="admin_<%- teamId %>" class="hide col-md-12 fg-control-aranew"  showdetail="true">
+            <div id="fg-dev-user-rights-div-<%- teamId %>" class = "fg-dropdown-wrapper" style="display:none;"></div>
+        </div>
+        <div id="log_<%- teamId %>" class="hide col-md-12 fg-control-aranew fg-pad-0"  showdetail="true"><div class="fg-pad-20"></div></div>
+
+     <div id="option_<%- teamId %>" class="hide col-md-12 fg-control-aranew"  showdetail="true">
+     <div class="row">
+         <div class="col-md-12">
+             <div class="form-body">
+
+             <div class="form-group">
+              <label class="control-label col-lg-3  col-sm-4 col-xs-12">
+                     <div class="fg-label-wrap">{%trans%}TEAM_SETTINGS_OPTIONS_CATEGORY{%endtrans%}</div>
+                </label>
+               <div class="col-md-4 col-sm-8 col-xs-12">
+                <select class="form-control input-sm bs-select" name="<%- dataNameVar %>_team_category_id" data-key="<%- dataKeyVar %>.team_category_id" id= "<%- dataNameVar %>_team_category_id">
+                    <% _.each(categories, function(catContent) { %>
+                        <% _.each(catContent, function(cat_option) { %>
+                            <% cat_selected = ''; %>
+                            <% cat_id = cat_option['id']; %>
+                            <% if (cat_id == catId) { %>
+                                <% cat_selected = 'selected'; %>
+                            <% } %>
+                            <% catTitleLang = cat_option['title'] %>
+                            <option  value="<%- cat_id %>" <%- cat_selected %> ><%- catTitleLang %></option>
+                        <% }); %>
+                    <% }); %>
+                </select>
+               </div>
+             </div>
+
+            <div class="form-group">
+                <label class="control-label col-lg-3 col-sm-4 col-xs-12"><div class="fg-label-wrap">{%trans%}TEAM_SETTINGS_OPTIONS_DESCRIPTION{%endtrans%}</div></label>
+                    <div class="col-md-4 col-sm-8 col-xs-12">
+                        <% _.each(clubLanguages, function(clubLang) { %>
+                        <% teamDescLang = ''; %>
+                        <% if (typeof teamcontent_data !== 'undefined') { %>
+                            <% if (clubLang in teamcontent_data) { %>
+                                <% teamDescLang = teamcontent_data[clubLang][0]['rl_descriptionLang'] %>
+
+                            <% } else { %>
+                                <% firstLang = FgUtility.getFirstKeyOfArray(teamcontent_data) %>
+                                <% teamDescLang = teamcontent_data[firstLang][0]['rl_description'] %>
+
+                            <% } %>
+                            <% if(teamDescLang == "NULL") {  %>
+                                <% teamDescLang =  "" ;%>
+                            <% } %>
+                        <% } %>
+                        <textarea rows="1" data-key="<%- dataKeyVar %>.i18n.<%- clubLang %>.description" name="<%- dataNameVar %>_i18n_<%- clubLang %>_description" class="auto-textarea form-control input-sm place-holder" id="<%- dataNameVar %>_i18n_<%- clubLang %>_description" maxlength="160" data-lang="<%- clubLang %>" data-roleid="<%- teamId %>" placeholder="{{'TEAMCATEGORY_SETTINGS_DESCRIPTION'|trans}}..." data-placeholder="exists"  data-property="change_description" ><%- teamDescLang %></textarea>
+                        <% }); %>
+                    </div>
+                </div>
+            {% if fgtwig.inArray('frontend1', bookedModules) %}
+                <div class="form-group">
+                    <label class="control-label col-lg-3 col-sm-4 col-xs-12">
+                        <div class="fg-label-wrap">{%trans%}TEAM_SETTINGS_IS_ACTIVE{%endtrans%}</div>
+                    </label>
+            <div class="col-md-2 col-sm-3 col-xs-5">
+                        <label class="switch-light switch-light-med" onClick="">
+                            <input type="checkbox" <% if((isActive == 1 || isNew )) {  %>  checked="checked" value="1" <% } else { %> value="0" <% } %> class="make-switch fg-dev-isactive" name="<%- dataKeyVar %>.is_active" id="is_active_<%- dataKeyVar %>" data-key="<%- dataKeyVar %>.is_active" />
+                            <span name="fg-dev-active"> <span>{{'ON'|trans}}</span><span>{{'OFF'|trans}}</span>	</span>
+                            <a class="btn btn-primary"></a>
+                        </label>
+                    </div>
+                </div>
+            {% endif %}
+            {% if fgtwig.inArray('frontend1', bookedModules)  %}   
+                <div class="form-group">
+                    <label class="control-label col-lg-3 col-sm-4 col-xs-12">
+                        <div class="fg-label-wrap">{%trans%}VISIBILITY_FOREIGN_CONTACTS{%endtrans%}</div>
+                    </label>
+                    <div class="col-md-2 col-sm-3 col-xs-5">
+                        <label class="switch-light switch-light-med" onClick="">
+                            <input type="checkbox" <% if(isNew || !visibleForAll ) {  %> value="0"  <% } else { %> checked="checked" value="1" <% } %> class="make-switch fg-dev-isactive" name="<%- dataKeyVar %>.visible_for_all" id="visible_for_all_<%- dataKeyVar %>" data-key="<%- dataKeyVar %>.visible_for_all" />
+                            <span name="fg-dev-foreign-visibility"> <span>{{'ON'|trans}}</span><span>{{'OFF'|trans}}</span>	</span>
+                            <a class="btn btn-primary"></a>
+                        </label>
+                    </div>
+                </div>
+            {% endif %}
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+    </div>
+</div>
+</script>

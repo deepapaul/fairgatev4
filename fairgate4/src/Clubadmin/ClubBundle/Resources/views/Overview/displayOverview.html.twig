@@ -1,0 +1,189 @@
+
+<script type="text/template" id="overviewBox"> 
+    <div class="panel panel-primary" >
+        <div class="panel-heading">
+            <h3 class="panel-title fg-panel-title-head"><%- title %></h3>
+            <%= titleRight %>
+        </div>                            
+        <div class="row fg-common-top">
+            <div class="col-md-12">
+                <form class="form-horizontal" role="form">
+                    <div class="form-body"> 
+                        <%= content %>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="clubOverviewAddressBlock">
+    <%  
+        var overviewContents = settings.overviewContents[0]; 
+    %>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-6 fg-other-conn fg-dev-overview-pre">
+                <span class="fg-contact-txt-head">{{'CLUB_PROPERTIES_CORRESPONDANCE_ADDRESS'|trans}}</span>
+                <p> {{ clubName }}</p>
+                <% if( overviewContents['CF_C_co'] != "" &&  overviewContents['CF_C_co']   != null ) { %> <p> <%- overviewContents['CF_C_co'] %> </p> <% } %>
+                <% if(( overviewContents['CF_C_street'] != "" &&  overviewContents['CF_C_street']   != null) || ( overviewContents['CF_C_pobox'] != "" &&  overviewContents['CF_C_pobox']   != null)) { %> <p> <%- overviewContents['CF_C_street'] %> <%- overviewContents['CF_C_pobox'] %> </p> <% } %>
+                <% if(( overviewContents['CF_C_zipcode'] != "" &&  overviewContents['CF_C_zipcode']   != null) || ( overviewContents['CF_C_city'] != "" &&  overviewContents['CF_C_city'] != null)) { %> <p> <%- overviewContents['CF_C_zipcode'] %>  <%- overviewContents['CF_C_city'] %>  </p> <% } %>
+                <% if(overviewContents['CF_C_country'] != "" &&  overviewContents['CF_C_country']   != null)  { %> <p> <%- overviewContents['CF_C_country'] %> </p>  <% }  %>                                
+            </div>
+            <div class="col-md-6 fg-other-conn fg-dev-overview-pre">
+                <span class="fg-contact-txt-head">{{'CLUB_PROPERTIES_INVOICE_ADDRESS'|trans}}</span>
+                <p> {{ clubName }}</p>
+                <% if( overviewContents['CF_I_co'] != "" &&  overviewContents['CF_I_co']   != null ) { %> <p> <%- overviewContents['CF_I_co'] %> </p> <% } %>
+                <% if(( overviewContents['CF_I_street'] != "" &&  overviewContents['CF_I_street']   != null) || ( overviewContents['CF_I_pobox'] != "" &&  overviewContents['CF_I_pobox']   != null)) { %> <p> <%- overviewContents['CF_I_street'] %> <%- overviewContents['CF_I_pobox'] %> </p> <% } %>
+                <% if(( overviewContents['CF_I_zipcode'] != "" &&  overviewContents['CF_I_zipcode']   != null) || ( overviewContents['CF_I_city'] != "" &&  overviewContents['CF_I_city'] != null)) { %> <p> <%- overviewContents['CF_I_zipcode'] %>  <%- overviewContents['CF_I_city'] %>  </p> <% } %>
+                <% if( overviewContents['CF_I_country'] != "" &&  overviewContents['CF_I_country']   != null)  { %> <p> <%- overviewContents['CF_I_country'] %>  </p>  <% }  %>                                
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/template" id="clubOverviewExecutiveBoard">
+
+    <div class="form-group fg-overview-list">
+        <dl>
+            {#<!-- Club Executive Board Functions and its Members Listing - starts -->#}
+            <% _.each(settings.clubExecBoardData, function(execBoardData, ebKey) { %>
+                <dt><%- execBoardData.title %></dt>
+                <dd>
+                    <% if ($.trim(execBoardData.asignedContactIds) == '') { %>
+                        -
+                    <% } else { %>
+                        <% execBrdContactIds = execBoardData.asignedContactIds.split(',') %>
+                        <% execBrdContactNames = execBoardData.asignedContactNames.split('#*#CONT_NAME#*#') %>
+                        <% _.each(execBrdContactNames, function(execBrdContactName, cnKey) { %>
+                            <% hasLink = false %>
+                            <% if (hasLink) { %>
+                                <% overviewLink = settings.overviewPath.replace("dummyContactId", execBrdContactIds[cnKey]); %>
+                                <a href="<%- overviewLink %>" target="_blank"><%- execBrdContactName %></a><% if (cnKey < (execBrdContactNames.length-1)) { %>, <% } %>
+                            <% } else { %>
+                                <%- execBrdContactName %><% if (cnKey < (execBrdContactNames.length-1)) { %>, <% } %>
+                            <% } %>
+                        <% }); %>
+                    <% } %>
+                </dd>
+            <% }); %>
+        </dl>
+    </div>
+</script>
+<script type="text/template" id="clubOverviewClassification">
+    <div class="form-group fg-overview-list">
+        <dl>
+            <% _.each(settings.assignment,function(fieldValue,fieldKey){ %>
+                <dt><%- fieldKey %></dt>
+                <dd>
+                     <% _.each(fieldValue,function(fieldValue1,fieldKey1){ %>
+                    <% if(fieldValue1['classTitle']!= "" && fieldValue1['classTitle'] != null ) { %> <%- fieldValue1['classTitle']%> <% if((fieldKey1 >= 0) && (fieldKey1 !=(_.last(_.keys(fieldValue))))) { %>, <% } } else { %> - <% } %>
+                    <% }); %>
+                </dd>
+            <% }); %>
+        </dl>
+    </div>
+</script>
+<script type="text/template" id="clubOverviewSystemInfos">
+    <%  
+        var overviewContents = settings.overviewContents[0]; 
+        var terminologyTerms = settings.terminologyTerms; 
+        siClubId = (_.isEmpty(overviewContents['SICLUB_ID']) || _.isUndefined(overviewContents['SICLUB_ID']))?'-':overviewContents['SICLUB_ID'];
+       
+        if(overviewContents['CF_domain_name']!=0){
+            
+            urlIdentifier = '<a href="'+overviewContents['CF_domain_name']+'/backend" target="_blank">'+overviewContents['CF_url_identifier']+'</a>';
+        }else{
+            urlIdentifier = (_.isEmpty(overviewContents['CF_url_identifier']) || _.isUndefined(overviewContents['CF_url_identifier']))?'-':'<a href="'+overviewContents['CF_base_url'] +'/'+overviewContents['CF_url_identifier']+'/backend" target="_blank">'+overviewContents['CF_url_identifier']+'</a>';
+         
+        }
+        createdAt = (_.isEmpty(overviewContents['CF_created_at']) || _.isUndefined(overviewContents['CF_created_at']))?'-':overviewContents['CF_created_at'];
+    %>
+    <div class="form-group fg-overview-list">
+        <dl>
+            <dt><%- terminologyTerms['club'] %> {{'CL_ID'|trans}} </label>
+            <dd><%- siClubId %></dd>
+            <dt>{{'CL_IDENTIFIER'|trans}} </dt>
+            <dd><%= urlIdentifier %></dd>
+            <dt>{{'CL_CREATED_AT'|trans}} </dt>
+            <dd><%- createdAt %></dd>
+        </dl>
+    </div>
+</script>
+<script type="text/template" id="clubOverviewContacts">
+    <div class="form-group fg-overview-list">
+    <%  
+        var overviewContents = settings.overviewContents[0]; 
+        lastAdminLogin = (_.isEmpty(overviewContents['SILAST_ADMIN_LOGIN']) || _.isUndefined(overviewContents['SILAST_ADMIN_LOGIN']))?'-':overviewContents['SILAST_ADMIN_LOGIN'];
+        lastContactEdit = (_.isEmpty(overviewContents['SILAST_CONTACT_EDIT']) || _.isUndefined(overviewContents['SILAST_CONTACT_EDIT']))?'-':overviewContents['SILAST_CONTACT_EDIT'];
+    %>
+    <dl>
+        <dt>{{'ACTIVE_CONTACTS'|trans}} </dt>
+        <dd><%- settings.activeContact %></dd>
+
+        <dt>{{'CLUB_ADMIN'|trans}} </dt>
+        <dd><%- settings.clubAdmin %></dd>
+
+        <dt>{{'LAST_ADMIN_LOGIN'|trans}} </dt>
+        <dd><%- lastAdminLogin %></dd>
+
+        <dt>{{'LAST_CONTACT_EDITING'|trans}} </dt>
+        <dd><%- lastContactEdit %></dd>
+    </dl>
+    </div>
+</script>
+<script type="text/template" id="clubOverviewNotes">
+    <%   
+        var noteCount=0;
+        var data = settings.allNotes;
+        var path = settings.notePath;
+        _.each(data,function(value,key){
+            if(noteCount < 3) { %>
+                <div class="col-md-12">
+                    <div class="fg-note-wrapper">
+                        <span class="fg-note-note-date"><label><a href="<%- path %>#<%- value.id %>"><%- value.ctdate %> <%- value.cttime %></a> {{'BY'|trans}} <%- value.createdname %></label></span>                                   
+                        <span class="fg-note-note-text"><label class="control-label fg-overview"><span><%- value.note %></span><i></i><a href="<%- path %>#<%- value.id %>"></a></label></span>
+                    </div>
+                </div>                                
+            <% }
+            noteCount=noteCount+1;
+        }); 
+    %>
+</script>
+
+<script type="text/template" id="clubInfos">
+    <div class="form-group fg-overview-list">
+        <%  var overviewContents = settings.overviewContents[0];
+            var terminologyTerms = settings.terminologyTerms; 
+            cfWebsite = (_.isEmpty(overviewContents['CF_website']) || _.isUndefined(overviewContents['CF_website']))?'-':'<a href="'+overviewContents['CF_website']+'" target="_blank"> '+overviewContents['CF_website']+'</a>';
+            cfEmail = (_.isEmpty(overviewContents['CF_email']) || _.isUndefined(overviewContents['CF_email']))?'-':'<a href="mailto:'+overviewContents['CF_email']+'" target="_top"> '+overviewContents['CF_email']+'</a>';
+            cfEstablish = (_.isEmpty(overviewContents['CF_establish']) || _.isUndefined(overviewContents['CF_establish']))?'-':overviewContents['CF_establish'];
+            cfLanguage = (_.isEmpty(overviewContents['CF_language']) || _.isUndefined(overviewContents['CF_language']))?'-':overviewContents['CF_language'];
+            COsubfed = (_.isEmpty(overviewContents['COsubfed']) || _.isUndefined(overviewContents['COsubfed']))?'-':overviewContents['COsubfed'];
+            fedMember = (_.isEmpty(overviewContents['SIFED_MEMBERS']) || _.isUndefined(overviewContents['SIFED_MEMBERS']))?'-':overviewContents['SIFED_MEMBERS'];
+            ownFedMember = (_.isEmpty(overviewContents['SIOWN_FED_MEMBERS']) || _.isUndefined(overviewContents['SIOWN_FED_MEMBERS']))?'-':overviewContents['SIOWN_FED_MEMBERS'];
+            cfNumber = (_.isEmpty(overviewContents['CF_number']) || _.isUndefined(overviewContents['CF_number']))?'-':overviewContents['CF_number'];
+        %>
+        <dl>
+            <dt>{{'CL_URL'|trans}} </dt>
+            <dd><%= cfWebsite %></dd>
+            <dt> {{'CL_EMAIL'|trans}} </dt>
+            <dd><%= cfEmail %></dd>
+            <dt>{{'CL_ESTABLISH'|trans}} </dt>
+            <dd><%- cfEstablish %></dd>
+            <dt>{{'CL_CORRESPOND_LANG'|trans}} </dt>
+            <dd><%- cfLanguage %></dd>
+            <dt><%- terminologyTerms['subfederation'] %> </dt>
+            <dd><%- COsubfed %></dd>
+            <dt>
+            <% if({{overviewClubType}}  == 1) {  %> Total <% }  %>  <%- terminologyTerms['federation'] %> {{'CL_MEMBERS'|trans}} </dt>
+            <dd><%- fedMember %></dd>
+            <% if({{overviewClubType}}  == 1) { %>
+            <dt>Own  <%- terminologyTerms['federation'] %> {{'CL_MEMBERS'|trans}}  </dt>
+            <dd><%- ownFedMember %></dd>
+            <% } %>
+            <dt>{{ 'CL_NUMBER'|trans ({ '%club%' : fgtwig.getTerminolgyName('Club', singular, 'UCF')}) }}</dt>
+            <dd><%- cfNumber %></dd>
+        </dl>
+    </div>
+</script>

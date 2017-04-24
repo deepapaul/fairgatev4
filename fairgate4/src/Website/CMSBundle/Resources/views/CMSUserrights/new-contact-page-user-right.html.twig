@@ -1,0 +1,41 @@
+<script type="text/template" id="fg-dev-add-new-team_admin"> 
+    <div class="row fg-border-line sortables fg-dev-new-contact-div" >
+        <div class="col-md-5 col-sm-8 col-xs-8 ">
+            <div class="input-icon"> <i class="fa fa-search"></i>
+            <input id="include-wg-admin-<%- randomNumber %>"  name="include-wg-admin-<%- randomNumber %>" type="text"  class="form-control input-sm dFExclude" placeholder = "{{'CHOOSE_CONTACT'|trans}}"/>
+            </div>
+        </div>
+            <input class="fg-dev-auto-complete-val hide" type="text"  name="new-include-wg-admin-<%- randomNumber %>" id="new-include-wg-admin-<%- randomNumber %>" value=""/>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <select id="pages_<%- roleType%>_<%- randomNumber %>"  title="{{'SELECT_DEFAULT'|trans}}" multiple name="pages_<%- roleType%>_<%- randomNumber %>" data-key="cms.<%- roleType%>.<%- randomNumber %>.pages" class="selectpicker form-control show-tick  ">
+                 <% _.each(pageList,function(team){ %> 
+                    <% var select= "multiple" ; %>
+                    <option value="<%- team.roleId %>" class=<%- select%> ><%- team.rTitle %></option>
+                <% }); %>
+            </select>   
+        </div>
+        <div class="fg-last-icon new_contact_team_right_rmv">
+            <div class="closeico">
+                <input type="checkbox" class="make-switch" id="select">
+                <label for="select"></label>
+            </div>
+        </div>
+    </div> 
+</script>
+<script type="text/template" id="fg-dev-add-new-contact"> 
+    <div class="row fg-border-line sortables fg-dev-new-contact-div" >
+                        
+        <div class="col-md-5 col-sm-8 col-xs-8">
+            <div class="input-icon"> <i class="fa fa-search"></i>
+                <input id="include-contacts-<%- randomNumber %>" type="text" name="include-contacts-<%- randomNumber %>"  class="form-control input-sm dFExclude" placeholder = "{{'CHOOSE_CONTACT'|trans}}"/>
+            </div>
+        </div>
+        <input class="fg-dev-auto-complete-val hide " type="text" id="new-include-contacts-<%- randomNumber %>" name="new-include-contacts-<%- randomNumber %>" value=""/>
+        <div class="fg-last-icon new_contact_right_rmv">
+            <div class="closeico">
+                <input type="checkbox" class="make-switch" id="select">
+                <label for="select"></label>
+            </div>
+        </div>
+    </div> 
+</script>

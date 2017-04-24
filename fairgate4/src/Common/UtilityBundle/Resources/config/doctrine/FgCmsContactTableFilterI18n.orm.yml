@@ -1,0 +1,28 @@
+Common\UtilityBundle\Entity\FgCmsContactTableFilterI18n:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsContactTableFilterI18nRepository
+    type: entity
+    table: fg_cms_contact_table_filter_i18n
+    fields:
+        lang:
+            id: true
+            type: string
+            length: 2
+            fixed: true
+            nullable: false
+        titleLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: title_lang
+    oneToOne:
+        id:
+            targetEntity: FgCmsContactTableFilter
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

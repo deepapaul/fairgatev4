@@ -1,0 +1,107 @@
+<div class="btn-group col-md-12 col-sm-12 col-xx-12 fg-left-zero">
+    {% set showAction = '1' %}
+    {% if (((listType|default('')=='confirmchanges') and (actionType|default('')=='log')) or fgtwig.inArray('readonly_contact',fgclub.get('allowedRights'))) %}
+        {% set showAction = '0' %}
+    {% endif %}
+    {% if (fgtwig.inArray('contact',fgclub.get('allowedRights'))) %}
+        {% set showAction = '1' %}
+    {% endif %}    
+    {% if((listType|default('')!='receipient') and (showAction == '1')) %}
+        <button data-auto="actionMenu" class="btn tableaction fgContactdrop" data-toggle="dropdown" data-type="{{menuType|default('active')}}" data-menu-type="{{actionMenuCount|default('single')}}" data-auto="actionmenu-{{actionMenuCount|default('single')}}"> <i class="fa fa-bars fa-2x"></i></button>
+        <ul class="dropdown-menu pull-left fgdropmenu" ></ul>
+    {% endif %}
+    <div class="fg-title-wrapper {% if(listType|default('')=='serviceType') %}panel-heading paneldisplay{% endif %} {% if(listType|default('')=='subscriber') %}fg-subscriber-list{% elseif (listType|default('')=='sponsoranalysis')%} id='data-tabs-contents' {% endif %}">
+        <h3 class="{% if(listType|default('')=='serviceType') %}panel-title pull-left {% else %}page-title fg-page-title{% endif %}">{% if(listType|default('')=='serviceType') %}{{ title }}{% else %}<div class="page-title-sub">{{ title }} {% if(listType|default('')=='subscriber') %}<span class="fg-total-subscriber-coufg-page-titlent-class" id="fg-total-subscriber-countfg-page-title">{{contactsCount+subscribers}}</span>{% endif %}</div>{% endif %}  </h3>
+        {% if(listType|default('')=='subscriber') %}
+            <ul id="data-tabs" class="nav nav-tabs data-more-tab">
+                <li class="show {{subscrbertype=='subscriber' ? 'active':'' }}" id="sudscriber-tab-li">
+                    <a href="#" data-url="{{path('subscriber_list')}}" data-toggle="tab">{%trans%}SUBSCRIBER_CONTACTS{% endtrans%} <span id="fg-subscriber-count" class="badge">{{subscribers|default('0')}}</span><i class="fa fa-exclamation-triangle fg-data-error"></i></a>
+                </li> 
+                <li class="show {{subscrbertype=='subscriber' ? '':'active' }}" id="own-sudscriber-tab-li">
+                    <a href="#" data-url="{{ path('subscriber_contact_list',{'subscriber': 'contact'})}}" data-toggle="tab">{% trans%}OWN_CONTACTS_WITH_SUBSCRIPTION{% endtrans%} <span id="fg-own-contact-count" class="badge">{{contactsCount|default('0')}}</span><i class="fa fa-exclamation-triangle fg-data-error"></i></a>
+                </li> 
+                <li class="datahideshow dropdown hidden" style=""><a data-toggle="dropdown" class="dropdown-toggle" id="fg-contact-more-tab" href="#">{% trans%}MORE{% endtrans%}<i class="fa fa-exclamation-triangle fg-data-error"></i><i class="fa fa-angle-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li class="hidden {{subscrbertype=='subscriber' ? 'active':'' }}" id="sudscriber-tab-li">
+                            <a href="#" data-url="{{path('subscriber_list')}}" data-toggle="tab">{%trans%}SUBSCRIBER_CONTACTS{% endtrans%} ({{subscribers|default('0')}})<i class="fa fa-exclamation-triangle fg-data-error"></i></a>
+                        </li> 
+                        <li class="hidden {{subscrbertype=='subscriber' ? '':'active' }}" id="own-sudscriber-tab-li">
+                            <a href="#" data-url="{{ path('subscriber_contact_list',{'subscriber': 'contact'})}}"  data-toggle="tab">{% trans%}OWN_CONTACTS_WITH_SUBSCRIPTION{% endtrans%} {{contactsCount|default('0')}}<i class="fa fa-exclamation-triangle fg-data-error"></i></a>
+                        </li> 
+                    </ul>
+                </li>
+            </ul>
+        {% elseif(listType|default('') == 'confirmchanges') %}
+            <ul id="data-tabs" class="nav nav-tabs data-more-tab">
+                <li class="show {{actionType=='changes' ? 'active' : '' }}" id="confirmationchanges-tab-li">
+                    <a href="#" data-url="{{path('confirmation_changes', {'type': 'changes'})}}" data-toggle="tab">{%trans%}CONFIRM_CHANGES{% endtrans%} <span id="fg-subscriber-count" class="badge">{{changesCount|default('0')}}</span></a>
+                </li> 
+                <li class="show {{actionType=='changes' ? '' : 'active' }}" id="confirmationlog-tab-li">
+                    <a href="#" data-url="{{path('confirmation_changes', {'type': 'log'})}}" data-toggle="tab">{% trans%}CONFIRM_LOG{% endtrans%}</a>
+                </li> 
+                <li class="datahideshow dropdown hidden" style=""><a data-toggle="dropdown" class="dropdown-toggle" id="fg-contact-more-tab" href="#">{% trans%}MORE{% endtrans%}<i class="fa fa-exclamation-triangle fg-data-error"></i><i class="fa fa-angle-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li class="hidden {{actionType=='changes' ? 'active':'' }}" id="confirmationchanges-tab-li">
+                            <a href="#" data-url="{{path('confirmation_changes', {'type': 'changes'})}}" data-toggle="tab">{%trans%}CONFIRM_CHANGES{% endtrans%} ({{changesCount|default('0')}})<i class="fa fa-exclamation-triangle fg-data-error"></i></a>
+                        </li> 
+                        <li class="hidden {{actionType=='changes' ? '':'active' }}" id="confirmationlog-tab-li">
+                            <a href="#" data-url="{{path('confirmation_changes', {'type': 'log'})}}" data-toggle="tab">{% trans%}CONFIRM_LOG{% endtrans%}<i class="fa fa-exclamation-triangle fg-data-error"></i></a>
+                        </li> 
+                    </ul>
+                </li>
+            </ul>
+        {% elseif ((listType|default('') == 'mutations') or (listType|default('') == 'creations')) %}
+            <ul id="data-tabs" class="nav nav-tabs data-more-tab">
+                <li class=" active" id="confirmations-list-tab-li">
+                    <a href="#confirmations-list-table-div" data-tabname="list" data-datatableid="confirmations-list-table" data-toggle="tab">{{ (listType == 'mutations') ? 'CONFIRM_MUTATIONS'|trans : 'CONFIRM_CREATIONS'|trans }} <span id="fg-mutations-count" class="badge">{{ confirmationsCount|default('0') }}</span></a>
+                </li> 
+                <li class="" id="confirmations-log-tab-li">
+                    <a href="#confirmations-log-table-div" data-tabname="log" data-datatableid="confirmations-log-table" data-toggle="tab">{{ 'CONFIRM_LOG'|trans }}</a>
+                </li> 
+                <li class="datahideshow dropdown hidden" style=""><a data-toggle="dropdown" class="dropdown-toggle" id="fg-contact-more-tab" href="#">{{ 'MORE'|trans }} <i class="fa fa-exclamation-triangle fg-data-error"></i><i class="fa fa-angle-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li class="hidden active" id="confirmations-list-tab-li">
+                            <a href="#confirmations-list-table-div" data-tabname="list" data-datatableid="confirmations-list-table" data-toggle="tab">{{ (listType == 'mutations') ? 'CONFIRM_MUTATIONS'|trans : 'CONFIRM_CREATIONS'|trans }} ({{ confirmationsCount|default('0') }})<i class="fa fa-exclamation-triangle fg-data-error"></i></a>
+                        </li> 
+                        <li class="hidden" id="confirmations-log-tab-li">
+                            <a href="#confirmations-log-table-div" data-tabname="log" data-datatableid="confirmations-log-table" data-toggle="tab">{{ 'CONFIRM_LOG'|trans }}<i class="fa fa-exclamation-triangle fg-data-error"></i></a>
+                        </li> 
+                    </ul>
+                </li>
+            </ul>
+        {% elseif(listType|default('') == 'sponsoranalysis') %}
+            <ul id="data-tabss" class="nav nav-tabs data-more-tab fg_sm_analysis_nav_tab">
+                {% for key,tab in tabs %}
+                    {% set tab1 = (key == 0) ? 'active': '' %}
+                    <li id="data_li_{{ key }}" class="show {{ tab1 }}">
+                        <a data-toggle="tab" data-startDate="{{tab.start}}" data-endDate="{{tab.end}}">{{ tab.label }}</a>
+                    </li> 
+                {% endfor %}  
+                <li class="datahideshow dropdown hidden" style=""><a data-toggle="dropdown" class="dropdown-toggle" id="fg-contact-more-tab" href="#">{% trans%}MORE{% endtrans%}<i class="fa fa-angle-down"></i></a>
+                    <ul class="dropdown-menu">
+                        {% for key,tab in tabs %}
+                            {% set tab1 = (key == 0) ? 'active': '' %}
+                            <li id="data_li_{{ key }}" class="show {{ tab1 }}">
+                                <a data-toggle="tab" data-startDate="{{tab.start}}" data-endDate="{{tab.end}}" >{{ tab.label }}</a>
+                            </li> 
+                        {% endfor %}  
+                    </ul>
+                </li>
+            </ul>
+           {% elseif((listType|default('')=='receipient')) %}  
+             <div class="fg-count-text-wrapper">
+            <div class="fg-count-text"><span id="langcount"></span></div> 
+            
+        </div>   
+               
+        {% elseif(showCount|default('true')=='true') %}
+            {% if (filterslash|default('true') == 'true') %}
+                <div class="fg-count-text-wrapper">
+                    <div class="fg-count-text"><span id="fcount"></span><small id="slash"> <span id="fg-slash">/</span> </small> <span id="tcount"></span></div> 
+                    <i class="fa fa-filter fg_dev_filter_show"></i>
+                </div>
+            {% endif %} 
+        
+        {% endif %} 
+    </div>
+</div>

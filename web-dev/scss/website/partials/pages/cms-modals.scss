@@ -1,0 +1,101 @@
+
+@import '../../../global/utilities/variables'; // added variables and functions
+
+/* ----------------------------------------
+CMS modal styles
+------------------------------------------- */
+.modal-dialog.modal-lg{
+
+    @include bpMin('768px') {   
+        min-width: 700px;
+    }
+
+}
+.fg-cms-create-modal {
+    .fg-side-col-wrapper {
+
+        list-style: none;
+        @extend %clearfix;
+        text-align: center;
+
+        .fg-side-col-layout {
+            float: left;
+            margin: 0 10px 10px 0;
+            cursor: pointer;
+
+            @include bpMax('480px') {             
+                margin-right: 5px;
+            } 
+
+            .fg-side-col-layout-inner{       
+                border: 1px solid $clrbrdrDflt;      
+                padding: 6px;   
+                &:hover {
+                    outline: 2px solid $clrLinkBlue;
+                }
+
+                &.active {
+                    outline: 2px solid $borderblue;
+                }
+            }
+            .fg-layout-title{
+                font-size: 12px;
+                color:#444444;
+                display: block;
+                padding: 5px 6px 0 6px;
+                font-style: italic;
+            }
+            .fg-layout-box {
+                width: 90px;
+                height: 90px;
+                background: $clrLightGrey1;
+                position: relative;
+
+            	&:after {
+				    position: absolute;
+				    top: 0;
+				    bottom: 0;
+				    height: 100%;
+				    content: '';
+					background: $clrGreen;
+				}
+
+                &.fg-layout-1{
+                	&:after{
+                	}
+                }
+                &.fg-layout-2{
+                	&:after{
+                		width:13px;
+                		border-left:3px solid $clrWhite;
+                		right:0;
+                	}                	
+                }
+                &.fg-layout-3{
+                	&:after{
+                		width:13px;
+                		border-right:3px solid $clrWhite;
+                		left:0;
+                	}   
+                	
+                }
+                &.fg-layout-4{
+                	&:after{
+                		width:26px;
+                		border-left:3px solid $clrWhite;
+                		right:0;
+                	}         
+                	
+                }
+                &.fg-layout-5{
+                	
+                	&:after{
+                		width:26px;
+                		border-right:3px solid $clrWhite;
+                		left:0;
+                	}   
+                }
+            }
+        }
+    }
+}

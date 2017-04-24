@@ -1,0 +1,113 @@
+<script type="text/template" id="editmultiApp">
+    <div class="row  fg-common-top">
+    <div class="form-body fg-create-calendar-appointment">
+        <div class="form-group col-md-12 fg-clear" >
+          <label class="col-md-2 control-label text-right" for="textinput">{% trans %}CREATE_EVENT_SCOPE{% endtrans %}</label>  
+          <div class="col-md-8 col-lg-5 ">
+                <div class="switch-toggle switch-3  switch-fg" >
+                    <input data-key="scope" id="public" value="PUBLIC" name="scope" type="radio" checked class="make-switch">
+                    <label for="public">{% trans %}SCOPE_PUBLIC{% endtrans %}</label>
+                    <input data-key="scope" id="internal" value="INTERNAL" name="scope" type="radio" class="make-switch">
+                    <label for="internal">{% trans %}SCOPE_INTERNAL{% endtrans %}</label>
+                    <input data-key="scope" id="group" value="GROUP" name="scope" type="radio" class="make-switch">
+                    <label for="group">{% trans %}SCOPE_GROUP{% endtrans %}</label>
+                    <a class="btn btn-primary"></a>
+                </div>
+
+          </div>
+        </div>
+
+            <% if(_.size(assignedTeams)+_.size(assignedWorkgroups) + ((clubTerminology !='')?1:0) > 1) { 
+                var type = 'multiple' ; 
+            } else { 
+                var type = 'single' ;
+            } %> 
+                    
+        <div class="form-group col-md-12 required fg-clear" id= "fg-event-areas-div" >
+          <label class="col-md-2 control-label text-right" for="fg-event-areas">{% trans %}CREATE_EVENT_AREAS{% endtrans %}</label>  
+          <div class="col-md-8 col-lg-5 " >
+             
+                   <select <% if(type == 'multiple') { %> title="{{'SELECT_DEFAULT'|trans}}" <% } %>  id="fg-event-areas" name="fg-event-areas" class="form-control selectpicker fg-event-areas" <%- type %> data-key="areas">
+                        <% if (type == 'single') { %> 
+                            <option value="">{{'SELECT_DEFAULT'|trans}}</option> 
+                            <% } %>
+                        <% if(clubTerminology !='') { %>
+                           <option value="Club"><%- clubTerminology %></option>
+                        <% } %>
+                        <% if(_.size(assignedTeams) > 0) { %>
+                            <optgroup label="{{fgtwig.getTerminolgyName('Team',plural)}}">
+                                <% _.each(assignedTeams,function(val,key){ %>
+                                    <option value="<%- key %>" ><%- val %></option>
+                                <% }); %>     
+                            </optgroup>
+                        <% } %>
+                        <% if(_.size(assignedWorkgroups) > 0) { %>
+                            <optgroup label="{% trans %}WORKGROUP{% endtrans %}">
+                                <% _.each(assignedWorkgroups,function(val,key){ %>
+                                    <% if(val==='Executive Board'){ %>
+                                        <option value="<%- key %>" >{{fgtwig.getTerminolgyName('Executive Board',singular)}}</option>
+                                    <% } else { %>
+                                        <option value="<%- key %>" ><%- val %></option>
+                                    <% } %>
+                                <% }); %>     
+                            </optgroup>
+                        <% } %>
+                       </select> 
+            <span class="help-block" for="fg-event-areas"></span>           
+          </div>
+        </div> 
+        
+         <% if(_.size(assignedTeams)+_.size(assignedWorkgroups) > 1) { %>
+            <% var countClass = '' ; 
+            } else{ 
+                var countClass = 'selected' ;
+            } %> 
+        <div class="form-group col-md-12 required fg-clear hide" id= "fg-event-areas-div-group" >
+            <label class="col-md-2 control-label text-right" for="fg-event-areas-group">{% trans %}CREATE_EVENT_AREAS{% endtrans %}</label>  
+            <div class="col-md-8 col-lg-5 " >
+            <%if(_.size(assignedTeams)+_.size(assignedWorkgroups) > 1) { %>
+                    <select id="fg-event-areas-group" name="fg-event-areas-group" class="form-control selectpicker fg-event-areas-group " data-key="areas-group">
+                    <option value="">{{'SELECT_DEFAULT'|trans}}</option> 
+                <% } else{ %>
+                    <select id="fg-event-areas-group" name="fg-event-areas-group" class="form-control selectpicker fg-event-areas-group fg-dev-newfield" disabled data-key="areas-group">
+                <% } %>
+                    <% if(_.size(assignedTeams) > 0) { %>
+                        <optgroup label="{{fgtwig.getTerminolgyName('Team',plural)}}">
+                            <% _.each(assignedTeams,function(val,key){ %>
+                                <option class="<%- countClass %>" value="<%- key %>" ><%- val %></option>
+                            <% }); %>     
+                        </optgroup>
+                    <% } %>
+                    <% if(_.size(assignedWorkgroups) > 0) { %>
+                        <optgroup label="{% trans %}WORKGROUP{% endtrans %}">
+                            <% _.each(assignedWorkgroups,function(val,key){ %>
+                                <% if(val==='Executive Board'){ %>
+                                    <option  class="<%- countClass %>" value="<%- key %>" >{{fgtwig.getTerminolgyName('Executive Board',singular)}}</option>
+                                <% } else { %>
+                                    <option  class="<%- countClass %>" value="<%- key %>" ><%- val %></option>
+                                <% } %>
+                            <% }); %>     
+                        </optgroup>
+                    <% } %>
+                </select> 
+                <span class="help-block" for="fg-event-areas"></span>           
+            </div>
+        </div>
+        <div class="form-group col-md-12 required fg-clear" id="fg-event-categories-div">
+          <label class="col-md-2 control-label text-right" for="ajaxLoadSelectpicker">{% trans %}CREATE_EVENT_CATEGORIES{% endtrans %}</label>  
+          <div class="col-md-8 col-lg-5 " >
+                
+                   <select  title="{{'SELECT_DEFAULT'|trans}}"  name="fg-event-categories" id= "ajaxLoadSelectpicker" class="form-control selectpicker fg-event-categories" multiple data-key="categories"> 
+                   </select>
+           <span class="help-block" for="ajaxLoadSelectpicker"></span>
+          </div>
+        <% if(isAdmin ) { %>
+          <div class="fg-extra-col fg-active-IB">
+               <a href="javascript:void(0)" class="fg-dev-cat">{% trans %}CREATE_NEW_CATEGORY{% endtrans %}</a>   
+          </div>
+  <% } %>
+        </div>
+        
+    </div>
+</div>
+</script>

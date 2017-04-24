@@ -1,0 +1,113 @@
+<script type="text/template" id="imageUploadArticle">
+    <li id="<%- id %>" class="fg-border-line working newFile clearfix"> 
+        <div class="col-md-4 col-sm-4 col-lg-2 col-xs-12 fg-left-zero"> 
+            <div data-image-area class="fg-upload-div"> </div></div>
+        <div class="col-md-8 col-lg-5 col-sm-8 col-xs-12 fg-left-zero">
+            <dl>
+            <dt class="fg-ck-caption-txt">{% trans %}DM_FILE_NAME{% endtrans %}<span class="required"> * </span></dt>
+                <dd><div dataerror-group><input type="text" value="<%- filenameReal %>" required data-key="<%- dataKey %>.i18n.{{clubDefaultLang}}.name" name="<%- dataKey %>_i18n_{{clubDefaultLang}}_name" class="form-control"></div></dd>
+                <dt>{% trans %}DM_DESCRIPTION{% endtrans %}</dt>
+                <dd><textarea data-key="<%- dataKey %>.i18n.{{clubDefaultLang}}.description" name="<%- dataKey %>_i18n_{{clubDefaultLang}}_description" rows="3" class="form-control fg-upload-description"></textarea></dd>
+               </dl>
+               <dl data-cat-area class="<% if(type !='allActive') { %>hide<% } %>">
+                    <dt>{% trans %}CONTACTDOCUMENT_CATEGORY{% endtrans %}</dt>
+                    <dd>
+                        <select data-subcategoryId name="<%- dataKey %>_subCategoryId" data-key="<%- dataKey %>.subCategoryId" class="selectpicker form-control show-tick">
+                            <% _.each(docCategory,function(catArray){ %>
+                                <% if(_.size(catArray['input'])) { %>
+                                    <optgroup data-id="<%- catArray.id %>" label="<%- catArray.title %>">
+                                        <% _.each(catArray['input'],function(subcat){ %>
+                                            <option value="<%- subcat.id %>" <% if(_.last(type)==subcat.id) { %>selected<% } %>><%- subcat.title %></option>
+                                        <% }); %>     
+                                    </optgroup>
+                                <% } %>
+                            <% }); %>   
+                        </select>
+                    </dd>
+                </dl>   
+            
+        </div>
+        <input type="hidden" value="" data-fileName="<%- filename %>" data-key="<%- dataKey %>.filename" class="ignore" />
+        <input type="hidden" value="" data-categoryId data-key="<%- dataKey %>.categoryId" class="ignore" />
+        <div class="col-md-8 col-sm-8 col-lg-5 col-md-offset-4 col-lg-offset-0 col-sm-offset-4  col-xs-12 fg-left-zero"><dl>
+                <dt>{% trans %}DM_AUTHOR{% endtrans %}</dt>
+                <dd><input type="text" value="{{contactName}}" name="<%- dataKey %>_i18n_{{clubDefaultLang}}_author" data-key="<%- dataKey %>.i18n.{{clubDefaultLang}}.author" class="form-control"></dd>
+                <dt>{% trans %}DM_DEPOSITED_WITH{% endtrans %}</dt>
+                <dd> 
+                    <div>
+                        <select name="<%- dataKey %>_depositedWith" data-key="<%- dataKey %>.depositedWith" multiple  class="selectpicker form-control show-tick">
+                        <option value="NONE" class="single fg-arrow-all">{% trans %}DOCUMENT_NONE{% endtrans %}</option>
+                        <option value="ALL" class="single fg-arrow-all">{% trans %}ALL_WORKGROUPS{% endtrans %}</option>
+                        <option value="" class="selectall fg-arrow-all">{% trans %}SELECT_ALL{% endtrans %}</option>
+                        <optgroup label="">
+                        {% for key,role in workgroups.roles %}
+                            <option value="{{key}}" class="multiple">{{role}}</option>
+                        {% endfor %}
+                        </optgroup>
+                        </select>
+                    </div>
+                </dd>
+                <dt>{% trans %}DM_FILE_SIZE{% endtrans %}</dt>
+                <dd><span data-filesize class="fg-upload-size-txt"></span>
+                    <div data-progress class="fg-upload-profgress">
+                        <div class="progress progress-striped active">
+                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-success">
+                                <span class="sr-only"></span>
+                            </div>
+                        </div>
+                    </div>
+                </dd>
+            </dl></div>
+            {% if(fgtwig.inArray('frontend1', fgclub.get('bookedModulesDet')))%}
+            <div class="col-md-12 col-sm-12 col-xs-12 fg-left-zero fg-upload-token">
+            <dl>   
+                <dt>{% trans %}DM_VISIBLE_TO_WORKGROUP{% endtrans %}</dt>
+                <dd>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <label class="radio-inline">
+                                <input type="radio" data-deposited name="<%- dataKey %>_visibleFor" data-key="<%- dataKey %>.visibleFor" id="optionsRadios27" value="workgroup"> 
+                                {{'DM_WORKGROUP_CONTACTS_AND_ADMIN'|trans }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <label class="radio-inline">
+                                <input type="radio" data-deposited name="<%- dataKey %>_visibleFor" data-key="<%- dataKey %>.visibleFor" id="optionsRadios27" value="workgroup_admin"> 
+                                {{'DM_WORKGROUP_ADMIN'|trans }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <label class="radio-inline">
+                                <input type="radio" data-deposited name="<%- dataKey %>_visibleFor" data-key="<%- dataKey %>.visibleFor" id="optionsRadios27" value="main_document_admin" checked> 
+                                {{'DM_WORKGROUP_MAIN_AND_DOC_ADMIN'|trans }}
+                            </label>
+                        </div>
+                    </div>
+                </dd>
+            </dl>
+            </div>
+        {% endif %}
+            <div class="col-md-12 col-sm-12 col-xs-12 fg-left-zero fg-upload-token">
+             <dl>    
+                  <dt>{% trans %}DM_PUBLIC_VISIBILITY{% endtrans %}</dt>
+                    <dd> 
+                        <div class="fg-upload-switch">
+                            <label onclick="" class="switch-light switch-light-sm">
+                                <input type="checkbox" id="<%- dataKey %>_isPublic" name="<%- dataKey %>_isPublic" data-key="<%- dataKey %>.isPublic" class="make-switch" >
+                                <span>                            
+                                    <span>{% trans %}ON{% endtrans %}</span>
+                                    <span>{% trans %}OFF{% endtrans %}</span>
+                                </span>
+                                <a class="btn btn-primary "></a>
+                            </label>
+                        </div>
+                    </dd>  
+                   </dl>
+            </div>
+        <div class="col-md-2 pull-right deletediv " > <div data-deletable="checknew" class="closeico"> <input id="select<%- id %>" type="checkbox" class="make-switch" name="<%- id %>_is_deleted" data-inactiveblock="changecolor" data-parentid="<%- id %>">  <label for="select<%- id %>"></label></div></div>
+    </li>
+    </script>                

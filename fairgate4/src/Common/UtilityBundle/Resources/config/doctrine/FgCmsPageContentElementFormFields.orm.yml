@@ -1,0 +1,165 @@
+Common\UtilityBundle\Entity\FgCmsPageContentElementFormFields:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPageContentElementFormFieldsRepository
+    type: entity
+    table: fg_cms_page_content_element_form_fields
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        formFieldType:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: form_field_type
+        isFieldHiddenWithDefaultValue:
+            type: boolean
+            nullable: true
+            column: is_field_hidden_with_default_value
+        fieldname:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        fieldType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: field_type
+        predefinedValue:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: predefined_value
+        placeholderValue:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: placeholder_value
+        tooltipValue:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: tooltip_value
+        isRequired:
+            type: boolean
+            nullable: true
+            column: is_required
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: sort_order
+        isActive:
+            type: boolean
+            nullable: true
+            column: is_active
+        createdAt:
+            type: datetime
+            nullable: true
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: true
+            column: updated_at
+        numberMinValue:
+            type: decimal
+            nullable: true
+            column: number_min_value
+        numberMaxValue:
+            type: decimal
+            nullable: true
+            column: number_max_value
+        numberStepValue:
+            type: decimal
+            nullable: true
+            column: number_step_value
+        dateMin:
+            type: date
+            nullable: true
+            column: date_min
+        dateMax:
+            type: date
+            nullable: true
+            column: date_max
+        showSelectionValuesInline:
+            type: boolean
+            nullable: true
+            column: show_selection_values_inline
+        isMultiSelectable:
+            type: boolean
+            nullable: true
+            column: is_multi_selectable
+        useMailForNotification:
+            type: boolean
+            nullable: true
+            column: use_mail_for_notification
+        isDeleted:
+            type: boolean
+            nullable: false
+            column: is_deleted
+        deletedAt:
+            type: datetime
+            nullable: true
+            column: deleted_at
+        clubMembershipSelection:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: club_membership_selection
+    manyToOne:
+        form:
+            targetEntity: FgCmsForms
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                form_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        defaultClubMembership:
+            targetEntity: FgCmMembership
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                default_club_membership:
+                    referencedColumnName: id
+            orphanRemoval: false
+        attribute:
+            targetEntity: FgCmAttribute
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                attribute_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        updatedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                updated_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

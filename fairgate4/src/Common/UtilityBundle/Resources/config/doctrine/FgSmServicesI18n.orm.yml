@@ -1,0 +1,36 @@
+Common\UtilityBundle\Entity\FgSmServicesI18n:
+    repositoryClass: Common\UtilityBundle\Repository\FgSmServicesI18nRepository
+    type: entity
+    table: fg_sm_services_i18n
+    fields:
+        lang:
+            id: true
+            type: string
+            length: 2
+            fixed: true
+            nullable: false
+        titleLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: title_lang
+        descriptionLang:
+            type: text
+            nullable: true
+            column: description_lang
+        isActive:
+            type: boolean
+            nullable: false
+            column: is_active
+    oneToOne:
+        id:
+            targetEntity: FgSmServices
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,37 @@
+<script type="text/template" id="template_header_navigation_level3">
+    <% if (item.page_id !== null || item.external_link !== null) { %>
+        <li class="<% if (item.navigation_url == levelObject.activeHeaderMenu) { %>active fg-dev-nav-active <% } %>">
+                <% if (item.external_link !== null) { %>
+                    <a data-id="<%- item.id %>" href = "<%- item.external_link %>" target="_blank">
+                <% } else { %>
+                    <a data-id="<%- item.id %>" href = "<%- levelObject.navPath.replace('**dummy**', item.navigation_url) %>">
+                <% } %>
+            <% var defaultTitle = (_.contains(item.langTitle, levelObject.clubLang)) ? (!_.isEmpty(item.langTitle[levelObject.clubLang].title_lang) ? item.langTitle[levelObject.clubLang].title_lang : item.title) : item.title;  %>
+            <%- (_.contains(item.langTitle, levelObject.lang)) ? (!_.isEmpty(item.langTitle[levelObject.lang].title_lang) ? item.langTitle[levelObject.lang].title_lang : defaultTitle) : defaultTitle %></a>
+        </li>
+    <% } %>
+</script>
+<script type="text/template" id="template_top_lang_navigation">
+ <div class="row fg-web-top-nav-wrapper">
+        <div class="container">
+          <div class="FR" id="fg-div-additional">
+           
+             <div class="fg-web-top-nav-languages"> </div>
+          </div>
+        </div>
+      </div> 
+</script>
+<script type="text/template" id="template_addition_navigation">
+     
+              <ul class="fg-web-top-nav-links list-inline">
+                  <% _.each(additionalNav,function(itemI,keyI){
+                       
+                %>
+                     <% if(itemI.externalLink !== null) { %>
+                          <li class="<% if (itemI.navigationUrl == activeMenu) { %>active <% } %> " ><a data-id="<%- itemI.id %>" href = "<%- itemI.externalLink %>" target="_blank"><%- itemI.title %> </a></li>
+                     <% } else { %>
+                 <li class="<% if (itemI.navigationUrl == activeMenu) { %>active <% } %> " ><a href="<%- (systemEnvironment=='domain') ? '/'+itemI.navigationUrl:'/'+systemClubUrlIdentifier+'/'+itemI.navigationUrl %>"><%- itemI.title %> </a></li>
+              <% } }); %>
+            </ul>
+  
+</script>

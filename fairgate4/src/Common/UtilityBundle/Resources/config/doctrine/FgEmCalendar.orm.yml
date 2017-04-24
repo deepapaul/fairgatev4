@@ -1,0 +1,79 @@
+Common\UtilityBundle\Entity\FgEmCalendar:
+    repositoryClass: Common\UtilityBundle\Repository\Calendar\FgEmCalendarRepository
+    type: entity
+    table: fg_em_calendar
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        scope:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+        shareWithLower:
+            type: boolean
+            nullable: false
+            column: share_with_lower
+        isAllday:
+            type: boolean
+            nullable: true
+            column: is_allday
+        isRepeat:
+            type: boolean
+            nullable: false
+            column: is_repeat
+        repeatUntillDate:
+            type: datetime
+            nullable: true
+            column: repeat_untill_date
+        createdAt:
+            type: datetime
+            nullable: true
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: true
+            column: updated_at
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        updatedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                updated_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        calendarRules:
+            targetEntity: FgEmCalendarRules
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                calendar_rules_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

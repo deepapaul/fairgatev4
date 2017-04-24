@@ -1,0 +1,65 @@
+Common\UtilityBundle\Entity\FgDmMediaManager:
+    type: entity
+    table: fg_dm_media_manager
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        directory:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        subDirectory:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: sub_directory
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        fileName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: file_name
+        size:
+            type: bigint
+            nullable: false
+        type:
+            type: string
+            length: 25
+            fixed: false
+            nullable: false
+        lastUpdated:
+            type: datetime
+            nullable: true
+            column: last_updated
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        author:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                author:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

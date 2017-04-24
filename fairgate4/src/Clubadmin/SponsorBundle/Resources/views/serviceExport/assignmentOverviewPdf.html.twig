@@ -1,0 +1,66 @@
+<style type="text/css">
+tr {
+page-break-inside: avoid;
+}
+
+
+</style>         
+<table cellpadding="0" cellspacing="0" style="border-collapse: collapse;" border="0" width="100%">
+    <tr>
+        <td> <h3 style="font-size: 13px; padding-top:5px;display: inline-block; width:100%">{{title}}</h3></td>
+    <td><span style="font-size: 12px; text-align: right;display: inline-block;width: 100%">{%trans%}EXPORT_DATE{%endtrans%}: {{today}} </span> </td>
+    </tr>
+</table>
+<table cellpadding="0" cellspacing="0" style="border-collapse: collapse;" border="0" width="100%">
+    <thead>
+        <tr>
+            <th style="border-bottom: 1px solid #999; background:#ddd; padding-left: 5px; font-size: 12px; height: 30px;text-align:left;min-width:8%;white-space: nowrap;margin-right:10px">{{'SM_START'|trans}}</th>
+            <th style="border-bottom: 1px solid #999; background:#ddd; padding-left: 10px; font-size: 12px; height: 30px;text-align:left;min-width:8%;white-space: nowrap;margin-right:10px">{{'SM_END'|trans}}</th>
+            <th style="border-bottom: 1px solid #999; background:#ddd; padding-left: 10px; font-size: 12px; height: 30px;text-align:left;min-width:17%;margin-right:10px">{{'SM_CONTACT'|trans}}</th>
+            <th style="border-bottom: 1px solid #999; background:#ddd; padding-right: 5px; font-size: 12px; height: 30px;text-align:left;white-space: nowrap;min-width:17%;">{{'SM_SERVICE'|trans}}</th>
+            <th style="border-bottom: 1px solid #999; background:#ddd; padding-right: 5px; font-size: 12px; height: 30px;text-align:left;white-space: nowrap;min-width:10%;">{{'SM_PAYMENT_PLAN'|trans}}</th>
+            {% if results[0]['SA_paymentDate'] is defined %}<th style="border-bottom: 1px solid #999; background:#ddd; padding-right: 5px; font-size: 12px; height: 30px;text-align:left;white-space: nowrap;min-width:10%;">{{'SM_NEXTPAYMENT_DATE'|trans}}</th>{% endif %}
+            <th style="border-bottom: 1px solid #999; background:#ddd; padding-left: 5px; font-size: 12px; height: 30px;text-align:left;white-space: nowrap;min-width:10%;">{{'SM_PAYMENTS_CURR'|trans({'%yr%': fiscalYear['current']['label']})}}</th>
+            {% if results[0]['SA_paymentNext'] is defined %}<th style="border-bottom: 1px solid #999; background:#ddd; padding-left: 5px; font-size: 12px; height: 30px;text-align:left;white-space: nowrap;min-width:10%;">{{'SM_PAYMENTS_NEX'|trans({'%yr%': fiscalYear['next']['label']})}}</th>{% endif %}
+            <th style="border-bottom: 1px solid #999; background:#ddd; padding-left: 5px; font-size: 12px; height: 30px;text-align:left;white-space: nowrap;min-width:10%;">{{'SM_TOTAL_PAYMENT'|trans}}</th>
+        </tr>
+    </thead>
+        {% set totalCurrAmt = 0 %}
+        {% set totalNextAmt = 0 %}
+        {% set totalCurrAmtfinal = 0 %}
+        {% set totalNextAmtfinal = 0 %}
+        {% for key,result in results %}
+            <tr>
+                {% if result['paymentplanDetails'] is defined and result['paymentplanDetails'] != '' %}{% set paymentplanDetailsArray = result.paymentplanDetails|split('|') %}{% endif %}
+                {% if result['SA_paymentDate'] is defined and result['SA_paymentDate'] != '' %}{% set paymentDateArray = result.SA_paymentDate|split('|') %}{% endif %}
+                <td style="padding-left: 5px;text-align:left;font-size: 10px;  padding-top: 5px; padding-bottom: 5px;">{{result.SA_paymentstartdate}}</td>
+                <td style="padding-left: 10px;text-align:left;font-size: 10px;  padding-top: 5px; padding-bottom: 5px;">{% if(result.SA_paymentenddate != 'null') %}{{result.SA_paymentenddate}}{% else %} - {% endif %}</td>
+                <td style="padding-left: 10px;text-align:left;font-size: 10px;  padding-top: 5px; padding-bottom: 5px;">{{result.contactname}}</td>
+                <td style="padding-left: 2px;text-align:left;font-size: 10px;  padding-top: 5px; padding-bottom: 5px;">{{result.SA_serviceName}}</td>
+                <td style="padding-left: 2px;text-align:left;font-size: 10px;  padding-top: 5px; padding-bottom: 5px;">{% if result['paymentplanDetails'] is defined and result['paymentplanDetails'] != '' %} {{paymentTranslateArray[paymentplanDetailsArray[0]]}} {% if (paymentplanDetailsArray[0] =='regular') %}{% if paymentplanDetailsArray[1] == 1 %} ({{'SM_EVERY_MONTH'|trans({'%month%': paymentplanDetailsArray[1]})}}  ) {% else %} ({{'SM_EVERY_MONTHS'|trans({'%month%': paymentplanDetailsArray[1]})}}){% endif %} {% else %}  {% if paymentplanDetailsArray[1] == 1 %}  ({{'SM_SERVICE_EXPORT_CUSTOM_PAYMENT_SINGULAR'|trans({'%count%': paymentplanDetailsArray[1]})}}) {% else %} ({{'SM_SERVICE_EXPORT_CUSTOM_PAYMENT_PLURAL'|trans({'%count%': paymentplanDetailsArray[1]})}}){% endif %}{% endif %}{% else %}{{'SM_NONE'|trans}}{% endif %}</td>
+                <td style="padding-right: 7px;text-align:left;font-size: 10px;  padding-top: 5px; padding-bottom: 5px;">{% if result['SA_paymentDate'] is defined and result['SA_paymentDate'] != '' %}{{paymentDateArray[0]}}{% if(paymentDateArray[1]!='') %} ({{fgclub.getAmountWithCurrency(paymentDateArray[1])}}){% endif %}{% else %}-{% endif %}</td>
+                <td style="padding-left: 5px;text-align:left;font-size: 10px;  padding-top: 5px; padding-bottom: 5px;">{% if(result.SA_paymentCurr !='') %}{{fgclub.getAmountWithCurrency(result.SA_paymentCurr)}}{% else %}-{% endif %}</td>
+                {% if result['SA_paymentNext'] is defined %}<td style="padding-left: 5px;text-align:left;font-size: 10px; padding-top: 5px; padding-bottom: 5px;">{% if(result.SA_paymentNext !='') %}{{fgclub.getAmountWithCurrency(result.SA_paymentNext)}}{% else %}-{% endif %}</td>{% endif %}
+                {# if payment end date and boking enddate are nul show infinity icon #}
+                <td style="padding-left: 10px;text-align:left;font-size: 10px; padding-top: 5px; padding-bottom: 5px;">{% if(((result.SA_paymentenddate == 'null' or result.SA_paymentenddate == '') and (result.SA_last_payment_date == 'null' or result.SA_last_payment_date == '')) and result['paymentplanDetails'] is defined and result['paymentplanDetails'] != '' and paymentplanDetailsArray[0] =='regular') %}{{fgclub.getAmountWithCurrency('&infin;') |raw}} {% else %}{% if(result.SA_totalPayment !='') %}{{fgclub.getAmountWithCurrency(result.SA_totalPayment)}}{% else %}-{% endif %}{% endif %}</td>
+                  {% set totalCurrAmt = totalCurrAmt+result.SA_paymentCurr %}
+                {% if result['SA_paymentNext'] is defined %}
+                  {% set totalNextAmt = totalNextAmt+result.SA_paymentNext %}
+                {% endif %}
+            </tr>
+        {% endfor %}
+        <tr>
+            <th  style="border-bottom: 1px solid #999;border-top: 1px solid #999;text-align:left;font-size: 12px; height: 30px;padding-left: 5px; margin-top: 10px;border-bottom: double; ">{%trans%}TOTAL{%endtrans%}</th>
+            <th  style="border-bottom: 1px solid #999;border-top: 1px solid #999;text-align:left;font-size: 14px; height: 30px;border-bottom: double;"></th>
+            <th  style="border-bottom: 1px solid #999;border-top: 1px solid #999;text-align:left;font-size: 14px; height: 30px;border-bottom: double;"></th>
+            <th  style="border-bottom: 1px solid #999;border-top: 1px solid #999;text-align:left;font-size: 14px; height: 30px;border-bottom: double;"></th>
+            <th  style="border-bottom: 1px solid #999;border-top: 1px solid #999;text-align:left;font-size: 14px; height: 30px;border-bottom: double;"></th>
+            <th  style="border-bottom: 1px solid #999;border-top: 1px solid #999;text-align:left;font-size: 14px; height: 30px;border-bottom: double;"></th>
+            <th  style="border-bottom: 1px solid #999;border-top: 1px solid #999;text-align:left;font-size: 11px;padding-left: 5px; height: 30px;border-bottom: double;">{{fgclub.getAmountWithCurrency(totalCurrAmt|number_format(2,'.',''))}}</th>
+            <th  style="border-bottom: 1px solid #999;border-top: 1px solid #999;text-align:left;padding-left: 5px;font-size: 11px; height: 30px;border-bottom: double;">{{fgclub.getAmountWithCurrency(totalNextAmt|number_format(2,'.',''))}}</th>
+            <th  style="border-bottom: 1px solid #999;border-top: 1px solid #999;text-align:left;font-size: 14px; height: 30px;border-bottom: double;"></th>
+        </tr>
+    
+</table>
+
+

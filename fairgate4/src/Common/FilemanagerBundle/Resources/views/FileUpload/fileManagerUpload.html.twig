@@ -1,0 +1,24 @@
+{% block pagecontent %}
+<form id='filemanager_uploader_form' action="">
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12 fg-upload-area fg-upload-area-div">
+        <input type="file" id="file-uploader" name="file-uploader" style="height:0px;width:0px;visibility: hidden" multiple="multiple"/>
+        <div id='filemanager_uploader_form-content'>
+        </div>
+        <input type="hidden" name="fileCount" id="imgCount" value=""/>
+        <input type="hidden" name="module" id='moduleName' value="{{module}}"/>
+    </div>
+</div> 
+<div class="portlet-body form hide" id='action-button-container'>
+    <div class="form-actions fg-upload-save fluid">
+        <div class="col-md-offset-0  col-md-12 col-sm-12 col-xs-12">
+            <a class="btn green" id="filemanager_upload_save" href="#">  {{'SAVE_FILES'|trans}} </a>
+            <a class="btn default" id="filemanager_upload_discard" href="javascript:void(0)"> {{'DISCARD_UPLOAD'|trans}} </a>
+        </div>  
+    </div>
+</div>
+</form>
+{% endblock %} 
+{% block underscoretemplate %}    
+    {% include 'CommonFilemanagerBundle:FileUpload:templateFileManagerUpload.html.twig' %}
+{% endblock %}

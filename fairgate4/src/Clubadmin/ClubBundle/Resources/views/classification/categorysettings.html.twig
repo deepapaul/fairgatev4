@@ -1,0 +1,277 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = result_data.title %}
+{% block pagecontent %}
+
+    <!-- BREADCRUMB STARTS -->
+    {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+    <!-- BREADCRUMB ENDS -->
+     <div class="fg-theme-blue fg-theme-panel">
+    <!-- BEGIN PAGE CONTENT-->
+    <form id="categorysettings" class="form-horizontal" action="categorysettings" onSubmit="return false;">
+        <!-- CATEGORY DATA SECTION STARTS -->
+       {# <div class="row">
+            <div class="col-md-12">
+             {% include 'clubadmin/inputbox_language_swtich.html.twig' with {'clubLanguages': clubLanguages, 'result_data':result_data,'clubDefaultLang':clubDefaultLang,'placeholder':'CL_MANAGE_CLASSIFICATION'} %}
+            </div>
+        </div>#}
+       <div class="row">
+       {% set page_settings = { 'input_language_switch':'true','languageswitch':'true' }  %}
+       {% include 'clubadmin/page-title-bar.html.twig' with { 'page_settings': page_settings,'clubLanguages': clubLanguages, 'result_data':result_data,'clubDefaultLang':clubDefaultLang,'placeholder':'CL_MANAGE_CLASSIFICATION','lang_switch_type':'club_manageclass'  } %}    
+       {% set disableSettings = '' %}
+        {% set disableLblClass = '' %}
+        {% if (result_data.clubCount > 0) %}
+            {% set disableSettings = ' disabled="" ' %}
+            {% set disableLblClass = ' fg-label-inactive ' %}
+        {% endif %}
+        </div>
+        <div class="alert alert-danger display-hide">
+            <button class="close" data-close="alert"></button>
+            {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel-primary panel-bg">
+                    <div class="panel-heading fg-theme-head paneldisplay">
+                        <h3 class="panel-title pull-left">{%trans%}PROPERTIES{%endtrans%}</h3>
+                    </div>
+                </div>
+                <div class="row fg-common-top">
+                    <div class="col-md-12">
+                        <div class="form-body">
+                            <div class="form-group" name="fg-multiple">
+                                <label class="col-md-2 control-label">{%trans%}MULTIPLE_ASSIGNMENT{%endtrans%}</label>
+                                <div class="col-md-10">
+                                    <div class="radio-list">
+                                        <label class="radio-inline {{disableLblClass}}"> <input type="radio" {{disableSettings}} data-key="{{result_data.id}}.class_assign" name="{{result_data.id}}_class_assign" id="{{result_data.id}}_role_assign1" value="multiple" {% if (result_data.classAssign == 'multiple') %} checked {% endif %} > {%trans%}YES{%endtrans%} </label>
+                                        <label class="radio-inline {{disableLblClass}}"> <input type="radio" {{disableSettings}} data-key="{{result_data.id}}.class_assign" name="{{result_data.id}}_class_assign" id="{{result_data.id}}_role_assign2" value="single" {% if (result_data.classAssign == 'single') %} checked {% endif %}> {%trans%}NO{%endtrans%} ({%trans%}ONLY_TO_ONE_CLASS{%endtrans%}) </label>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if(fgclub.get('hasSubfederation')==1) %}
+                            <div class="form-group" name="fg-subfed">
+                                <label class="col-md-2 control-label">{{ fgtwig.getTerminolgyName('Sub-federation', singular,'UCF')}}</label>
+                                <div class="col-md-10">
+                                    <div class="radio-list">
+                                        <label class="radio-inline {{disableLblClass}}"> <input type="radio" {{disableSettings}} data-elem-function="switch_assignment" data-key="{{result_data.id}}.sublevel_assign" name="{{result_data.id}}_sublevel_assign" id="{{result_data.id}}_sublevel_assign1" value="not visible" {% if (result_data.subLevelAssign == 'not visible') %} checked {% endif %} > {%trans%}NOT_VISIBLE_AT_ALL{%endtrans%} </label>
+                                        <label class="radio-inline {{disableLblClass}}"> <input type="radio" {{disableSettings}} data-elem-function="switch_assignment" data-key="{{result_data.id}}.sublevel_assign" name="{{result_data.id}}_sublevel_assign" id="{{result_data.id}}_sublevel_assign2" value="not assign" {% if (result_data.subLevelAssign == 'not assign') %} checked {% endif %} > {%trans with {'%a%': fgtwig.getTerminolgyName('Club', plural)}%}NOT_ALLOWED_TO_ASSIGN_%a%_TO_CLASS{%endtrans%} </label>
+                                        <label class="radio-inline {{disableLblClass}}"> <input type="radio" {{disableSettings}} data-elem-function="switch_assignment" data-key="{{result_data.id}}.sublevel_assign" name="{{result_data.id}}_sublevel_assign" id="{{result_data.id}}_sublevel_assign3" value="assign" {% if (result_data.subLevelAssign == 'assign') %} checked {% endif %} > {%trans with {'%a%': fgtwig.getTerminolgyName('Club', plural)}%}ALLOWED_TO_ASSIGN_%a%_TO_CLASS{%endtrans%} </label>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- CATEGORY DATA SECTION ENDS -->
+
+        <!-- ROLE SECTION STARTS -->
+        <div id="role_settings">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary panel-bg">                        
+                        <div class="panel-heading fg-theme-head paneldisplay">
+                            <h3 class="panel-title pull-left">{%trans%}CLASSES{%endtrans%}</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                            <div class="col-md-12">
+                            <div class="fg-settings-block dragndropwithchild hide" id="sortrole">
+                                <!-- ROLES LISTING -->
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5 fg-common-top fg-common-btm pull-left">
+                                    <a id="addrow" href="#basic" data-toggle="modal" data-parentdiv-id="sortrole" data-add-type="class">
+                                        <i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> 
+                                        <span class="fg-add-text"> {%trans%}ADD_CLASS{%endtrans%}</span> 
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ROLE SECTION ENDS -->
+
+        <!-- FUNCTION SECTION STARTS -->
+        <div id="function_settings">
+            <div id="child_sortrole">
+                <!-- FUNCTIONS LISTING -->
+            </div>
+        </div>
+        <!-- FUNCTION SECTION ENDS -->
+
+        <!-- ADD ROW TEMPLATES STARTS -->
+        <div id="divTemplates">
+           
+            {# template for adding new role #}
+            {% include 'ClubadminClubBundle:classification:addClass.html.twig' with {'contactId': contactId} %}
+
+
+            {# template for listing the log for role and function #}
+            {% include 'ClubadminContactBundle:Role:logdisplay.html.twig' %}
+        </div>
+        <!-- ADD ROW TEMPLATES ENDS -->
+
+        <div class="row">
+            <div class="col-md-12">
+
+              <!--  Partial twig for savebutton-->
+             {% include 'clubadmin/savebutton.html.twig' with {'backLink': backLink} %}
+
+            </div>
+        </div>
+
+    </form>
+    <!-- END PAGE CONTENT-->
+   </div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('fgcustom/js/fg_custom_dataTable.js') }}" type="text/javascript"></script>  
+<script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>  
+<script type="text/javascript">
+    var clubType = '{{clubType}}';
+    var role_section = 'class';
+    var catId = {{result_data.id}};
+    var contCount = {{result_data.contactCount}};
+    var selectedLang = defaultLang = '{{clubDefaultLang}}';
+    var function_assign = '{{result_data.subLevelAssign}}';
+    var clubLanguages = {{clubLanguages|json_encode|raw}};
+    var saveAction = "{{path('update_classes')}}";
+    var formerror = '{{'FORM_ERROR_DISPLAY'|trans}}';
+    FgUtility.showTranslation(selectedLang);
+    FgUtility.handleDelete();
+    var extraBreadcrumbTitle = {text:'{{'BREADCRUMB_TITLE_CLASSIFICATION_CATEGORY'|trans}}', link:'{{path('classification_list')}}'};
+    var pageVars = {
+        selectedLang: '{{clubDefaultLang}}',
+        role_section: 'class',
+        function_assign: '{{result_data.subLevelAssign}}',
+        catId: {{result_data.id}},
+        clubLanguages: {{clubLanguages|json_encode|raw}},
+        saveAction: "{{path('update_classes')}}",
+        formerror: '{{'FORM_ERROR_DISPLAY'|trans}}'
+    };
+    var rolePageSettings = {
+        /* function to show role titles on individual function section */
+        showRoleTitles: function() {
+            $('span[id=change_title]').each(function(){
+                var roleId = $(this).attr('data-role-id');
+                var roleTitle = $('input[data-roleid='+roleId+']:visible').val();
+                $(this).html(roleTitle);
+            });
+        }
+    };
+    $(document).ready(function() {
+        
+        /* function to disable 'required' checkbox on switching 'allowed' radio button to 'no' */
+        $('input[data-elem-function=check_allowed]:checked').each(function(){
+            checkRequiredAssignment(this);
+        });
+        /* to display roles and functions */
+        $.getJSON('{{path('club_get_classes',{'club_id': clubIdentifier, 'cat_id': result_data.id})}}', function(data) {
+            var role_result = FgUtility.groupByMulti(data, ['sort_order', 'id', 'lang']);
+            var jsonData = {catId: catId, clubLanguages: clubLanguages, isNew: false};
+            _.each(role_result, function(role_data, rl_sort_order) {
+                _.each(role_data, function(role_detail, roleId) {
+                    if ((roleId != null) && (roleId != 'null')) {
+                        jsonData['roleId'] = roleId;
+                        jsonData['rolecontent_data'] = role_detail;
+                        jsonData['roleType'] = 'class';
+                        $('#sortrole').removeClass('hide');
+                        renderNewRow('template-role-add', 'sortrole', jsonData, 'class', false);
+                    }
+                });
+            });
+            delete jsonData["rolecontent_data"];
+            initPageFunctions();
+            FgPageTitlebar.checkMissingTranslation(defaultLang);
+        });
+    });
+
+    /* function to change role title in individual function section on changing role title */
+    $('form').on('keyup', 'input[data-property=change_title]', function() {
+        $('span[data-role-id=' + $(this).attr('data-roleid') + ']').html($(this).val());
+    });
+    /* to initiate drag n drop */
+    function initiateDragAndDrop() {
+        FgDragAndDrop.sortWithOrderUpdation('.dragndropwithchild', true);
+        FgDragAndDrop.sortWithOrderUpdation('.dragndrop', false);
+    }
+    /* function to switch function assignment sction on switching 'function assignment' radio button */
+    $('input[data-elem-function=switch_assignment]').click(function() {
+        var functionAssign = $(this).val();
+    });
+    /* function to disable 'required' checkbox on switching 'allowed' radio button to 'no' */
+    $('form').on('click', 'input[data-elem-function=check_allowed]', function() {
+        checkRequiredAssignment(this);
+    });
+    /* function to disable 'required' checkbox on the basis of 'allowed' radio button value */
+    function checkRequiredAssignment(elem) {
+        FgInputTag.handleUniform();
+    }
+
+    function logdisplay(id, classtype){
+        var params = id.split('_');
+        var param = '?type=' +  params[3]+ '&CatId=' + params[0]+ '&classId='+ params[2];
+        var jsonlog = {type: params[1], typeId: params[2]};
+        var typeId = params[2];
+        
+        FgUtility.startPageLoading();
+        if($("#"+id).children().attr('data-loaded') == 'true') {
+            $(this).find('#displaydetails_'+id).removeClass('hide');
+            $("#log_"+typeId).removeClass('hide');
+            FgUtility.stopPageLoading();
+        } else {
+            $("#"+id).children().attr('data-loaded', 'true');
+            $.getJSON('{{path('club_class_logs')}}'+param, null,  function(data) {
+                var logdisplay = FgUtility.groupByMulti(data.logdisplay, ['tabGroups']);
+                var hierarchyClubIdArr = data.hierarchyClubIdArr;
+               
+                jsonlog['details'] = logdisplay;
+                jsonlog['hierarchyClubIdArr'] = hierarchyClubIdArr;
+                jsonlog['logTabs'] = data.logTabs;
+                jsonlog['activeTab'] = '1';
+                var html = FGTemplate.bind('log-listing', jsonlog);
+                $('#log_'+jsonlog['typeId']).children('.fg-pad-20').hide().append(html);
+                $('#log_'+jsonlog['typeId']).children('.fg-pad-20').slideDown(1000);
+                FgUtility.stopPageLoading();
+                $('div.date input:enabled').parent().datepicker(FgApp.dateFormat);
+                var logTabsLength = 2;
+                for (var i=1;i<=logTabsLength;i++) {
+                    FgUtility.displaylogsettings(typeId+'_'+i);
+                    logDateFilterSubmit('date_filter_'+typeId+'_'+i);
+                }
+                FgMoreMenu.initClientSideWithNoError('data-tabs_'+jsonlog['typeId'], 'data-tabs-content_'+jsonlog['typeId']);
+           });
+        }
+    }
+
+    $('#reset_changes').click(function() {
+        setTimeout(function() {
+            hideDivHavingNoRows();
+        }, 0);
+    });
+    $('form').on('click', '.fgContactLogFilter', function(){
+        var typeId = $(this).attr('data-typeId');
+        $('div[data-log-area="log-area_'+typeId+'"]').toggleClass('show');
+        var tableGroup = "log_display_"+typeId;
+        $('table.table[data-table-group="'+tableGroup+'"]').toggleClass('fg-common-top');
+        $('#fg-log-filter_'+typeId).toggleClass('fg-active-btn');
+    });
+    $('form').on('shown.bs.tab', '.data-more-tab li a[data-toggle="tab"]', function(){
+        var curDataTableId = $(this).attr('data-datatableid');
+        $('#'+curDataTableId).dataTable().api().draw();
+    });
+    /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                     title: true,
+                     languageSettings: true
+
+             }); 
+</script>
+<script src="{{ asset('fgcustom/js/fgrole.js') }}" type="text/javascript"></script>
+<script src="{{ asset('fgcustom/js/sidebarfilter.js') }}" type="text/javascript"></script>
+{% endblock %}

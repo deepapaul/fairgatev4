@@ -1,0 +1,52 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = 'MANAGE_ARTICLE_CATEGORIES'|trans %}
+
+{% block pagecontent %}
+    <!-- BEGIN PAGE CONTENT-->
+            <!-- BREADCRUMB STARTS -->
+            <div class="row">
+                <div class="col-lg-12">
+                    {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+                </div>
+            </div>
+            <!-- END BREADCRUMB-->
+            <!-- START PAGE TITLE-->
+                {% include 'global/page-title-bar.html.twig' with {'pageTitle':  pageTitle, 'tabs': {},'clubLanguages':clubLanguages, 'clubDefaultLang':clubDefaultLang} %}
+            <!-- END  PAGE TITLE-->
+            <div class="fg-theme-green fg-theme-panel">
+                <!-- BEGIN FORM-->
+                <form id="editArticleCategory" class="form-horizontal" method="post" onsubmit="return false;" novalidate="novalidate">
+                    <div class="alert alert-danger display-hide">
+                        <button class="close" data-close="alert"></button>
+                        {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+                    </div>
+                    <div class="excludejs" id="article_category_settings">
+                        <!-- Category listing here -->
+                    </div>
+                    <div class="btn-group  fg-common-add-item">
+                        <a href="javascript:void(0)" data-toggle="modal" class="add-album" id="addcategory"><i class="fa fa-plus-circle fa-2x"></i><span class="fg-left-move"> {%trans%}ADD_ARTICLE_CATEGORY{%endtrans%}</span></a>
+                    </div>
+                    <div class="clearfix">  </div>
+                    {% include 'internal/savebutton.html.twig' with {'backLink':backLink} %}
+                </form>
+                <!-- END FORM-->
+            </div>
+    <!-- END PAGE CONTENT-->
+{% endblock %}
+{% block underscoretemplate %}
+    {% include 'InternalArticleBundle:Category:templatecreate.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+        var clubLanguages = {{clubLanguages|json_encode|raw}};
+        var defaultLang = selectedLang = '{{clubDefaultLang}}';
+        var result_data = {{result_data|json_encode|raw}};
+        var clubId = {{clubId}};
+        var contactId = {{contactId}};
+        var saveArticleCategoryPath = "{{ path('internal_article_category_save') }}";
+        var articleListPath = "{{ path('internal_article_editorial_list') }}";
+        FgUtility.handleDelete();
+       
+</script>    
+<script src="{{ asset('fgassets/internal/js/page/fg-articleCategory.js') }}" type="text/javascript"></script>
+{% endblock %}

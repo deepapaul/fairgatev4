@@ -1,0 +1,64 @@
+Common\UtilityBundle\Entity\FgCnNewsletterLog:
+    repositoryClass: Common\UtilityBundle\Repository\FgCnNewsletterLogRepository
+    type: entity
+    table: fg_cn_newsletter_log
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        date:
+            type: datetime
+            nullable: false
+        subject:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        template:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        newsletterType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: newsletter_type
+        recepients:
+            type: integer
+            unsigned: false
+            nullable: true
+    manyToOne:
+        newsletter:
+            targetEntity: FgCnNewsletter
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                newsletter_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        sentBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                sent_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

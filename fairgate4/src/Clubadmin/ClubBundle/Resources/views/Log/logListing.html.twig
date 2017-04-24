@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="date-filter log-area col-md-12" id="date_filter_{{ clubId }}_{{ typeId }}">
+        <div class="pull-left">
+            <label for="filter_start_date" class="filter-log-from"><span>{{ 'LOG ENTRIES FROM'|trans }}</span></label>
+            <div class='input-group date'>
+                <input type="date_range" name="filter_start_date" id="filter_start_date_{{ clubId }}_{{ typeId }}" value="" class="form-control filter-log-input" data-event="{{ clubId }}_{{ typeId }}" data-tab="{{ activeTab }}"/>
+                <span class="input-group-addon cal filter-log-date"><span class="glyphicon glyphicon-calendar"></span></span>
+            </div>
+        </div>
+        <div class="pull-left">
+            <label for="filter_end_date" class="filter-log-from"><span>{{ 'LOG_TO'|trans }}</span></label>
+            <div class='input-group date'>
+                <input type="date_range" name="filter_end_date" id="filter_end_date_{{ clubId }}_{{ typeId }}" value="" class="form-control filter-log-input" data-event="{{ clubId }}_{{ typeId }}" data-tab="{{ activeTab }}"/>
+                <span class="input-group-addon cal filter-log-date"><span class="glyphicon glyphicon-calendar"></span></span>
+            </div>
+        </div>
+        <!-- Date filter error message-->        
+        <div class="col-sm-3 has-error fg-log-error">
+            <span class="help-block fg-error-hide" id="log_date_error_{{ clubId }}_{{ typeId }}"></span>
+        </div>
+    </div>
+</div>
+<div class="fg-clear"></div>
+<div class="row">
+    {% if activeTab == "data" %}
+        {% include 'ClubadminClubBundle:Log:logTemplateData.html.twig' with {'logEntries': logEntries['data'], 'activeTab' : 'data', 'typeId' : 1 } %}
+    {% elseif activeTab == "classifications" %}
+        {% include 'ClubadminClubBundle:Log:logTemplateData.html.twig' with {'logEntries': logEntries['classifications'], 'activeTab' : 'assignments', 'typeId' : 2 } %}
+    {% elseif activeTab == "notes" %}
+        {% include 'ClubadminClubBundle:Log:logTemplateNotes.html.twig' with {'logEntries': logEntries['notes'], 'activeTab' : 'notes', 'typeId' : 3 } %}
+    {% endif %}
+</div>

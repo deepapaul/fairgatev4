@@ -1,0 +1,220 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% if (elementId == 'new')%}
+    {% set pageTitle = 'CMS_ADD_CALENDAR_ELEMENT'|trans %}
+    
+{% else %}
+    {% set pageTitle = 'CMS_EDIT_CALENDAR_ELEMENT'|trans %}
+{% endif %}
+
+{% block pagecontent %}
+
+    <div class="row">
+        <div class="col-lg-12">
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <div id="failcallbackClientSide" class="alert alert-danger" style="display:none;">
+               <button class="close" data-close="alert"></button>
+               <span>{{'CMS_ELEMENT_FORM_ERROR'|trans}}</span>
+           </div>
+            <!-- PAGE TITLE -->
+            {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle , 'contactId': '', 'tabs': tabs, 'roleCount' : '' , 'type':'', 'url' : '' } %}
+            <!-- BEGIN CONTENT -->
+            <div class="row fg-cms-elements-head-edit-wrapper" id="elementCalendarWrapper">
+                <div class="col-md-12">
+                    <div class="form-body">
+                        <form id="cms_calendar_element" name="cms_calendar_element_data" class="form-horizontal" method="post" onsubmit="return false;" novalidate="novalidate">
+                            <div id="calendar_element_list" class="fg-cms-calendar-wrapper">
+                                <div class="form-group fg-clear" >
+                                    <label class="col-md-2 control-label fg-marg-top-5 text-right" for="areaTitle">{% trans %}CREATE_EVENT_AREAS{% endtrans %}</label>  
+                                    <div class="col-md-6  col-lg-5 ">
+                                        <select class="form-control selectpicker fg-event-areas" required multiple="multiple" name='calendarAreas' id="areaSelectpicker">
+                                            <optgroup label="">
+                                                {% if selectedAreasandCategories is not empty %}
+                                                    {% set selected = (fgtwig.inArray("ALL_AREAS", selectedAreasandCategories.areaIds)) ? 'selected' : ''  %}
+                                                {% endif %}
+                                                <option value="ALL_AREAS" {{selected|default('')}} class="single fg-arrow-all">{{'ALL_CALENDAR_AREAS'|trans }}</option>
+                                            </optgroup>
+                                            <optgroup label="">
+                                               {% if selectedAreasandCategories is not empty %}
+                                                       {% set selected = (selectedAreasandCategories.areaClub) ? 'selected' : ''  %}
+                                                 {% endif %}
+                                                 <option class="multiple" {{selected|default('')}} value="{{fgclub.get('id')}}">{{clubTitle}}</option>
+                                            </optgroup>
+                                            {% if areas.teams is not empty %}
+                                                <optgroup label="{{fgtwig.getTerminolgyName('Team',plural)}}">
+                                                    {% for key, data in areas.teams %}
+                                                        {% if selectedAreasandCategories is not empty %}
+                                                            {% set selected = (fgtwig.inArray(key, selectedAreasandCategories.areaIds)) ? 'selected' : ''  %}
+                                                        {% endif %}
+                                                        <option class="multiple" {{selected|default('')}} value="{{ key }}"  >{{ data }}</option>
+                                                    {% endfor %}
+                                                </optgroup>
+                                            {% endif %}
+                                            {% if areas.workgroups is not empty %}
+                                                <optgroup label="{% trans %}CMS_WORKGROUP{% endtrans %}">
+                                                    {% for key, data in areas.workgroups %}
+                                                        {% if selectedAreasandCategories is not empty %}
+                                                            {% set selected = (fgtwig.inArray(key, selectedAreasandCategories.areaIds)) ? 'selected' : ''  %}
+                                                        {% endif %}
+                                                        {% if (data=='Executive Board') %}
+                                                            <option class="multiple" {{selected|default('')}} value="{{ key }}">{{fgtwig.getTerminolgyName('Executive Board',singular)}}</option>
+                                                        {% else %} 
+                                                            <option class="multiple" {{selected|default('')}} value="{{ key }}" >{{ data }}</option>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </optgroup>
+                                            {% endif %}
+                                        </select>         
+                                    </div>
+                                </div>
+                                <div class="form-group fg-clear" >
+                                    <label class="col-md-2 control-label fg-marg-top-5  text-right" for="from-date">{% trans %}CREATE_EVENT_CATEGORIES{% endtrans %}</label>  
+                                    <div class="col-md-6  col-lg-5 ">
+                                        <select name="" id="catSelectpicker" class="form-control selectpicker fg-event-categories required" multiple="multiple" data-key="categories">
+                                            <optgroup label="">
+                                                {% if selectedAreasandCategories is not empty %}
+                                                    {% set selected = (fgtwig.inArray("ALL_CATS", selectedAreasandCategories.catIds)) ? 'selected' : ''  %}
+                                                {% endif %}
+                                                <option class="single fg-arrow-all" value="ALL_CATS" {{selected|default('')}} >{{'CMS_ALL_CATEGORIES'|trans }}</option>
+                                            </optgroup>
+                                            {% for catArray in category %}
+                                                {% if selectedAreasandCategories is not empty %}
+                                                    {% set selected = (fgtwig.inArray(catArray.id, selectedAreasandCategories.catIds)) ? 'selected' : ''  %}
+                                                {% endif %}
+                                                <option class="multiple" {{selected|default('')}} value="{{ catArray.id }}">{{ catArray.title }}</option>
+                                            {% endfor %}
+                                        </select>        
+                                    </div>
+                                </div>
+                               {% if (clubType != 'federation' and clubType != 'standard_club')%}         
+                            <div class="form-group fg-clear">
+                                <div class="col-md-6 col-sm-8 col-lg-5 col-md-offset-2">
+                                    <label class="checkbox-inline fg-pad-left-0 " for="fedShared">
+                                        <input data-id="" {%if isFedSharedEventsAvailable == 0 %} disabled {% endif %} type="checkbox" name="fedShared" id="fedShared" {%if selectedAreasandCategories.sharedClub is defined and selectedAreasandCategories.sharedClub is not empty and (fgtwig.inArray(fedId, selectedAreasandCategories.sharedClub)) %}{%if isFedSharedEventsAvailable > 0 %} checked {% endif %} {% endif %} class="uniform">
+                                        {{'CMS_FEDERATION_SHARED_EVENTS'|trans}}
+                                    </label>
+                                </div>
+                            </div>
+                                  {% if (clubType == 'sub_federation_club')%}     
+                            <div class="form-group fg-clear">
+                                <div class="col-md-6 col-sm-8 col-lg-5 col-md-offset-2">
+                                    <label class="checkbox-inline fg-pad-left-0 " for="subFedShared">
+                                        <input data-id="" {%if isSubFedSharedEventsAvailable == 0 %} disabled {% endif %} type="checkbox" name="subFedShared" id="subFedShared" {%if selectedAreasandCategories.sharedClub is defined and selectedAreasandCategories.sharedClub is not empty and (fgtwig.inArray(subFedId, selectedAreasandCategories.sharedClub))%} {%if isSubFedSharedEventsAvailable > 0 %} checked {% endif %}{% endif %} class="uniform">
+                                        {{'CMS_SUB_FEDERATION_SHARED_EVENTS'|trans}}
+                                    </label>
+                                </div>
+                            </div> 
+                                    {% endif %}   
+                              {% endif %}      
+                           </div>
+                            <div class="clearfix">  </div>
+                            {% if (elementId == 'new')%}
+                                  {% include 'internal/savebutton.html.twig' with {'save_button_id':'save_bac', 'save_button_val':'ADD'|trans, 'second_btn_val':'CANCEL'|trans, noDiscardChange:'1','backLink': backLink} %}
+                            {% else %}
+                               {% include 'internal/savebutton.html.twig' with {'save_button_val':'CMS_ELEMENT_SAVE_BUTTON'|trans,'second_btn_val':'CMS_ELEMENT_SAVE_AND_BACK_BUTTON'|trans, 'second_button_id':'save_bac', 'discard_button_val':'CMS_ELEMENT_DISCARD_BUTTON'|trans,'backLink': backLink } %}
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% include 'WebsiteCMSBundle:PageContentElements:cmsElementLogHeaderTemplate.html.twig' %}      
+        </div>
+    </div>
+    <!-- END CONTENT -->
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgassets/internal/js/fg_tab_selection_process.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/website/js/Fg_cms_calender.js') }}" type="text/javascript"></script>
+    <script type="text/javascript">
+            var category = '{{category|raw}}';
+            var defaultlanguage = '{{defLang|raw}}';
+            var pageId = '{{pageId}}';
+            var boxId = '{{boxId}}';
+            var elementId = '{{elementId}}';
+            var contactId = '{{contactId}}';
+            var clubId = '{{clubId}}'
+            var sortOrder = '{{sortOrder}}';
+            var fedId = '{{fedId}}';
+            var subFedId = '{{subFedId}}';
+            var type = 'calendarElement';
+            var tabheadingArray = {{ tabs|json_encode()|raw }};
+            var elementLogDetailsPath = "{{path('website_cms_element_log_data')}}";
+            var saveCalendarElementPath = "{{ path('website_cms_save_calendar_element') }}";
+            var contentEditPagePath = '{{path('website_cms_page_edit',{'pageId': pageId})}}';
+            var profilePath = "{{ path('internal_community_profile', {'contactId': "**placeholder**" }) }}";
+            statusTranslations = {
+                'added': "{{ 'LOG_FLAG_ADDED'|trans }}",
+                'changed': "{{ 'LOG_FLAG_CHANGED'|trans }}",
+                'removed': "{{ 'LOG_FLAG_REMOVED'|trans }}",
+                'select': "{{ 'DROPDOWN_SELECT_OPTION'|trans }}",
+                'page_assignment' :"{{ 'CMS_PAGE_ASSIGNMENT'|trans }}",
+                'element' : "{{ 'CMS_ELEMENT'|trans }}",
+            };
+           var CmsCalendarElement = new FgCmsCalendarElement();
+                        
+           $(document).ready(function () {
+                scope = angular.element($("#BaseController")).scope();
+                $(".fg-action-menu-wrapper").FgPageTitlebar({
+                    title: true,
+                    row2: true,
+                    tab: true,
+                    tabType: 'client'
+                });
+                $('select.selectpicker').selectpicker({noneSelectedText: statusTranslations['select']});
+                initPageFunctions();
+            });
+                    
+            function initPageFunctions() 
+            {
+                $('select.selectpicker').selectpicker();
+                var option = {
+                    pageType: 'cmsAddElement',
+                    contactId: contactId,
+                    currentClubId: clubId,
+                    localStorageName: type + '_' + clubId + '_' + contactId,
+                    tabheadingArray: tabheadingArray
+                };
+                Fgtabselectionprocess.initialize(option);
+                FgDirtyFields.init('cms_calendar_element', {saveChangeSelector: "#save_changes, #save_bac", discardChangesCallback:CmsCalendarElement.discardChangesCallback});
+                var CalendarElementLog = new FgCmsCalendarElementLog();
+                CalendarElementLog.init();
+                FgUtility.handleSelectPicker();
+                CmsCalendarElement.renderContent();
+            }
+            
+            $('body').on('click', '#preview', function (e) {
+             window.location.href = contentEditPagePath;
+            });
+
+            $('body').off('click', '#save_changes,#save_bac');
+            $('body').on('click', '#save_changes,#save_bac', function (e) {
+                
+                $('form#cms_calendar_element .help-block').remove();
+                $('form#cms_calendar_element .has-error').removeClass('has-error');
+                var currentSelectedButton = $(this).attr('id');
+                var isValid = CmsCalendarElement.validateForm();
+                if(isValid){
+                $("#failcallbackClientSide").addClass('hide');
+                var areas = $('.fg-event-areas').val();
+                var categories = $('.fg-event-categories').val();
+                var fedIdVal = ($("#fedShared").is(':checked')) ? fedId : '';
+                var subFedIdVal = ($("#subFedShared").is(':checked')) ? subFedId  : '';
+                $("#fedShared").attr('data-id', fedIdVal); 
+                $("#subFedShared").attr('data-id', subFedIdVal);
+                var isAllArea = '';
+                 var isAllCategories = '';
+                if(areas == 'ALL_AREAS'){
+                    var isAllArea = 1;
+                }
+                if(categories == 'ALL_CATS'){
+                    var isAllCategories = 1;
+                }
+                var saveType =  (currentSelectedButton == 'save_changes') ? 'save' : 'saveBack';
+                var param = {'categories': categories, 'areas': areas, 'pageId': pageId, 'boxId': boxId, 'elementId': elementId,'sortOrder':sortOrder,'isAllArea':isAllArea,'isAllCategories':isAllCategories, 'saveType': saveType,'fedSharedVal':fedIdVal, 'subFedSharedVal':subFedIdVal }
+                FgDirtyFields.removeAllDirtyInstances();
+                FgXmlHttp.post(saveCalendarElementPath, {'param': param}, false, CmsCalendarElement.saveElementCallback);
+                $('#save_changes,#save_bac').attr('disabled', 'disabled');
+            }
+            });
+    </script>
+
+{% endblock %}

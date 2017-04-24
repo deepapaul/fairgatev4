@@ -1,0 +1,48 @@
+<div class="modal-content">
+        <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title fg-clear fg-modal-has-languagebar"><span class="fg-modal-title">{{ title }}</span> <div class="fg-modal-language-switch">
+                    <div class="btn-toolbar fg-lang-tab ">
+                        <div class="btn-group">
+                            {% if (clubLanguages|length > 1) %}
+                                {% for clubLanguage in clubLanguages %}
+                                    <button type="button" id="{{clubLanguage}}"  lang="{{clubLanguage}}" class="btn  btlang {% if(clubLanguage == clubDefaultLang) %} active {% endif %}" data-elem-function="switch_lang" data-selected-lang="{{clubLanguage}}">{{clubLanguage|upper}}</button>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div></h4>
+
+        </div>
+        <div class="modal-body">
+            <form id="gallery_editdesc_form">
+                <div data-always-visible="1" data-rail-visible1="1">
+                    {% for itemId,descArr in descriptionArr %}
+                    <div class="row form-group" id="{{itemId}}">
+                        <div class="col-xs-4 " ><div class="fg-gallery-img-wrapper">{% if (descArr.0.type == 'IMAGE') %}<img src="/uploads/{{descArr.0.clubId}}/gallery/width_300/{{descArr.0.filepath}}">{% elseif (descArr.0.type == 'VIDEO') %}<img src="/uploads/{{descArr.0.clubId}}/gallery/width_300/{{descArr.0.videoThumbUrl}}">{% endif %}</div></div>
+                      <div class="col-xs-8 fg-edit-desc-wrapper">                     
+                        {% for clubLanguage in clubLanguages %}
+                            <textarea class="form-control fg-video-edit-desc {% if(clubDefaultLang!=clubLanguage) %} hide {% endif %}" id="desc_{{clubLanguage}}" data-lang="{{clubLanguage}}" name="imgDesc[{{itemId}}][{{clubLanguage}}]" data-key="editDesc.{{itemId}}.{{clubLanguage}}">{% for descLang in descArr %}{% if(clubLanguage==descLang['lang']|default('')) %}{{descLang['descriptionLang']|default('')}}{% endif %}{%endfor%}</textarea>
+                        {% endfor %}
+                      </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn default">{{'CANCEL'|trans}}</button>
+                <button type="button" class="btn green" id="editDescSave">{{'SAVE'|trans}}</button>
+        </div>
+</div>
+<script type="text/javascript"> 
+    fgGalleryUploader.dirtyInit('gallery_editdesc_form', false);
+    $(document).off('click', '#editDescSave');
+    $(document).on('click', '#editDescSave', function() {
+        var objectGalleryData = FgInternalParseFormField.fieldParse();
+        stringifyData = JSON.stringify(objectGalleryData);
+        
+        FgModelbox.hidePopup();
+        FgXmlHttp.post(galleryEditDescPath, {saveData: stringifyData}, false, function(){FgGalleryView.loadGallery();});
+    });
+</script>

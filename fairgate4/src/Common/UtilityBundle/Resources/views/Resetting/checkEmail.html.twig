@@ -1,0 +1,25 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout_login.html.twig' %}
+{% set pageTitle = pageTitle %}
+{% block logincontent %}
+<!-- BEGIN LOGO -->
+
+<!-- END SIDEBAR TOGGLER BUTTON -->
+<!-- BEGIN LOGIN -->
+<div class="content">
+    
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            {{ 'LOGGED_IN_AS'|trans({'%username%': app.user.username}) }} |
+            <a href="{{ path('fairgate_user_security_logout') }}">
+                    {% trans %}CHECKMAIL_LOGOUT_BTN{% endtrans %}
+            </a>
+            {% else %}
+            <h3 class="form-title">{{ pageFormTitle }}</h3>
+            <p>{{ pageFormMsg }}</p>
+            <a class="fg-reset-back-btn" href="{{ path('fos_user_security_login') }}">{% trans %}LOGIN_BACK_LINK{% endtrans %}</a>
+            {% endif %}
+ </div>
+
+{% endblock %}
+
+

@@ -1,0 +1,121 @@
+.fg-action-menu-wrapper.fg-has-tab
+  .fg-page-title-block-1.fg-active-IB
+    .fg-btn-first-block.fg-action-menu.fg-dis-none(style='')
+      button#fgContactdrop.btn.tableaction.fgContactdrop(data-toggle='dropdown')
+        i.fa.fa-bars.fa-2x
+      ul.dropdown-menu.pull-left.action-drop-menu
+        //
+          li ng-repeat="menuList in notSorted(menuFilteredData)" ng-init="menuListData = menuFilteredData[menuList]"  class=""  ng-class="{'disabled':menuListData.isActive=='false','fg-divider':menuListData.divider=='1','fg-action-menu-list':menuListData.hrefLink==null}">
+          <div></div>
+          <a  href="{[{(menuListData.hrefLink=='')?'#':menuListData.hrefLink}]}" data-url="{[{menuListData.dataUrl}]}" data-callback="{[{menuListData.dataCallback}]}"  data-menu-key="{[{menuList}]}" > {[{menuListData.title}]}</a>
+          </li
+        // ngRepeat: (key,menuList) in dataArray | orderBy:'menuList.sortOrder'
+        //
+          li ng-repeat="(key, value) in menuFilteredData">
+          <div> {[{key}]} --- {[{ value }]} </div>
+          </li
+    .fg-title-first-block.fg-test-block.fg-action-title.fg-dis-none
+      h3.page-title
+        span.page-title-text Files
+        span.fg-action-counter.fg-dis-none
+          small
+            .fg-count-text
+              span#fcount.hide
+              small#slash.hide
+                span#fg-slash /
+              span#tcount
+          span.fg-action-filter.fg-dis-none
+            i.fa.fa-filter
+    .fg-action-upload.fg-dis-none.fg-btn-grey-icon
+      span
+        i.fa.fa-upload.fa-2x
+        |  Upload
+    .fg-action-select-all.fg-btn-grey-icon.fg-dis-none
+      span
+        i.fa.fa-th.fa-2x
+        |  Select all
+    #fg_dev_internalTab.fg-tab-block.fg-action-tab.fg-dis-none
+      div
+        .col-bottom.fg-nav-tab-border
+          ul#paneltab.nav.fg-nav-links.data-more-tab.fg-visibility-hidden
+            li#fg_tab_overview.active(data-target='1', name='fg-dev-team-overview-tab')
+              a(data-toggle='tab', data_type='', data_id='overview', data_url='', href='')
+                span.fg-dev-tab-text Overview
+            li#fg_tab_admin(data-target='2', name='fg-dev-team-admin-tab')
+              a(data-toggle='tab', data_type='', data_id='admin', data_url='', href='/federation/backend/filemanager/listfiles/admin')
+                span.fg-dev-tab-text Administrative
+            li#fg_tab_contacts(data-target='3', name='fg-dev-team-contacts-tab')
+              a(data-toggle='tab', data_type='', data_id='contacts', data_url='', href='/federation/backend/filemanager/listfiles/contacts')
+                span.fg-dev-tab-text Contacts
+            li#fg_tab_content(data-target='4', name='fg-dev-team-content-tab')
+              a(data-toggle='tab', data_type='', data_id='content', data_url='', href='')
+                span.fg-dev-tab-text Content
+            li#fg_tab_documents(data-target='5', name='fg-dev-team-documents-tab')
+              a(data-toggle='tab', data_type='', data_id='documents', data_url='', href='/federation/backend/filemanager/listfiles/documents')
+                span.fg-dev-tab-text Documents
+            li#fg_tab_gallery(data-target='6', name='fg-dev-team-gallery-tab')
+              a(data-toggle='tab', data_type='', data_id='gallery', data_url='', href='')
+                span.fg-dev-tab-text Gallery
+            li#fg_tab_users(data-target='7', name='fg-dev-team-users-tab')
+              a(data-toggle='tab', data_type='', data_id='users', data_url='', href='/federation/backend/filemanager/listfiles/users')
+                span.fg-dev-tab-text Users
+            li.datahideshow.dropdown(name='fg-dev-more-tab')
+              a.dropdown-toggle(data-toggle='dropdown', href='#')
+                | More
+                i.fa.fa-angle-down
+              ul.dropdown-menu.fg-dropdown-more.pull-right
+                li#fg_tab_overview.active(data-target='1', name='fg-dev-team-overview-tab')
+                  a(data-toggle='tab', data_type='', data_id='overview', data_url='', tabindex='-1', href='')
+                    span.fg-dev-tab-text Overview
+                li#fg_tab_admin(data-target='2', name='fg-dev-team-admin-tab')
+                  a(data-toggle='tab', data_type='', data_id='admin', data_url='', tabindex='-1', href='/federation/backend/filemanager/listfiles/admin')
+                    span.fg-dev-tab-text Administrative
+                li#fg_tab_contacts(data-target='3', name='fg-dev-team-contacts-tab')
+                  a(data-toggle='tab', data_type='', data_id='contacts', data_url='', tabindex='-1', href='/federation/backend/filemanager/listfiles/contacts')
+                    span.fg-dev-tab-text Contacts
+                li#fg_tab_content(data-target='4', name='fg-dev-team-content-tab')
+                  a(data-toggle='tab', data_type='', data_id='content', data_url='', tabindex='-1', href='')
+                    span.fg-dev-tab-text Content
+                li#fg_tab_documents(data-target='5', name='fg-dev-team-documents-tab')
+                  a(data-toggle='tab', data_type='', data_id='documents', data_url='', tabindex='-1', href='/federation/backend/filemanager/listfiles/documents')
+                    span.fg-dev-tab-text Documents
+                li#fg_tab_gallery(data-target='6', name='fg-dev-team-gallery-tab')
+                  a(data-toggle='tab', data_type='', data_id='gallery', data_url='', tabindex='-1', href='')
+                    span.fg-dev-tab-text Gallery
+                li#fg_tab_users(data-target='7', name='fg-dev-team-users-tab')
+                  a(data-toggle='tab', data_type='', data_id='users', data_url='', tabindex='-1', href='/federation/backend/filemanager/listfiles/users')
+                    span.fg-dev-tab-text Users
+    .fg-search-last-block.fg-action-search.fg-dis-none(style='')
+      .input-icon.fg-input-icon
+        i.fa.fa-search
+        input#fg_dev_member_search.form-control.control2(type='text', placeholder='Search table')
+      button.btn.tableactionright.pull-left.fg-col-settings.fg-active-IB(data-toggle='dropdown')
+        i.fa.fa-table.fa-2x
+      ul.dropdown-menu.pull-right.drpmenu-new.dropdown-menu-form.padinten
+        li
+          a(href='  ') Column…
+        li
+          #fg_dev_memberlist_row_length
+    .fg-action-calendar-switch.fg-dis-none
+      .switch-toggle.switch-3.switch-fg
+        input#week.make-switch(type='radio', checked='', name='view-a')
+        label(onclick='', for='week') Week
+        input#month.make-switch(type='radio', name='view-a')
+        label(onclick='', for='month') Month
+        input#list.make-switch(type='radio', name='view-a')
+        label(onclick='', for='list') List
+        a.btn.btn-primary
+    .fg-action-export.fg-dis-none.fg-calendar-export-disable
+      i.fa.fa-download.fa-2x
+    .fg-action-thumb.fg-btn-grey-icon.fg-dis-none
+      span
+        i.fa.fa-image.fa-2x
+    .fg-action-gallery-scope.fg-dis-none.fg-btn-grey-icon
+      span
+        i.fa.fa-exchange.fa-2x
+        |  Switch scope
+    .fg-action-gallery-mode.fg-dis-none.fg-btn-grey-icon
+      span
+        i.fa.fa-sign-out.fa-2x
+        |  Leave admin mode
+  .clearfix

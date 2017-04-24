@@ -1,0 +1,57 @@
+    <div class="modal-header fg-modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">{{title}}</h4>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">                    
+                    <div class="form-group">
+                        <label class="col-lg-12 col-md-12 col-xs-12 pop-uptext">{{text}}
+                        </label>
+                    </div>
+                    <div id="fg-repeat" class="fg-calendar-popup"> 
+                        <div class="radio-list">
+                            <div class="fg-news-radio">
+                                     <label class="radio-inline">
+                                <input type="radio" name="publishType" id="mode" value="current"  checked>
+                                {{'ONLY_INSTANCE'|trans}}</label>
+                            </div>
+                            <div class="fg-news-radio">
+                                  <label class="radio-inline">
+                                <input type="radio" name="publishType" id="mode" value="following" >
+                                {{'ALL_FOLLOWING'|trans}}</label>
+                            </div> 
+                            <div class="fg-news-radio">
+                                  <label class="radio-inline">
+                                <input type="radio" name="publishType" id="mode" value="all" >
+                                {{'ALL_APP_SERIES'|trans}}</label>
+                            </div> 
+                        </div>
+                    </div>  
+                </div>                                             
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+    {% include 'internal/savebuttonPopup.html.twig' with {'button_val':button_val}  %}
+<script type="text/javascript"> 
+    var count = "{{count}}";
+    var editArr = {{resultArr|raw}};
+    $('.radio-inline #mode').uniform();
+    $(document).off('click', '#savePopup');
+    $(document).on('click', '#savePopup', function() {
+        var choice = $('#mode:checked').val(); 
+        if(count>1){ 
+            editArr ['edit_mode'] = choice;
+            FgMultiEditApp.saveChanges(JSON.stringify(editArr));
+        }else{
+            var otherDet = {'edit_mode':choice}
+            var mergedData = $.extend(editArr, otherDet);
+            CalendarSaveCancel.popupSave(JSON.stringify(mergedData));
+        }
+    });
+    
+</script>    
+{# empty Twig template #}

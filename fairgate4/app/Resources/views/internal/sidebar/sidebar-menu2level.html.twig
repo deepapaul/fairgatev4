@@ -1,0 +1,133 @@
+<script type="text/template" id="template_sidebar_menu2level"> 
+        <%  _.each(data.items,function(rowMenu,key){
+            var subMenu = {};
+            subMenu.input = {};
+            if(typeof rowMenu.input!== "undefined"){
+                subMenu.input = rowMenu.input;
+            }
+            subMenu.showLoading = data.showLoading;
+            subMenu.menuType = data.menuType;
+            subMenu.heiarchy = 1;
+            subMenu.parentMenuId = data.parent.id+'_'+rowMenu.id;   
+            subMenu.parentClickable = data.parent.isClickable;
+            subMenu.currentClickable = data.items.currentClickable;
+            subMenu.draggableClass = (rowMenu.draggable == 1) ? 'fg-dev-draggable' : ((FgSidebar.module == 'gallery' || (FgSidebar.module == 'article' && rowMenu.draggable == 0)) ? 'fg-dev-non-draggable' : '');
+            var submenuUlClass = (FgSidebar.module == 'cms') ? 'page-sidebar-menu sub-menu firstleval' : 'sub-menu sub-page-clickable';
+            if(typeof rowMenu.id !== 'undefined'){ %>
+                <li id="<%- subMenu.parentMenuId %>" class="<%- subMenu.draggableClass %> <% if(rowMenu.currentClickable){ %> subclass fg-sidebar-firstlevel-hover <% } %>" >
+                <% 
+                    if(_.size(subMenu.input) > 0 || rowMenu.currentClickable){
+                %>
+                    <a href="javascript:;" <% if (subMenu.parentClickable || rowMenu.currentClickable) { %> class="sidebabar-link" data-type="<%- rowMenu.itemType %>" data-id="<%- rowMenu.id %>" data-ExternalLink="<%- rowMenu.hasExLink %>" data-pageId="<%- rowMenu.pageId %>" <% } %>> 
+                    <% if(typeof rowMenu.nocount == "undefined" && rowMenu.currentClickable) { %>
+                        <% if (data.showLoading) { %>
+                            <span class="fg-sidebar-loading fa-spin"></span>
+                        <% } else if(!data.showCount && data.showIcon) {  %>
+                             <span class="fa fa-stop-circle-o"></span>
+                        <% } else {  %>
+                            <span class="badge badge-round fg-badge-blue badge-important">   <% if(rowMenu.count > 0){  %><%- rowMenu.count %>  <%  }else { %> 0  <%  } %> </span>
+                           <% } %>
+                    <% } %>
+                <%
+                    } else if (typeof rowMenu.bookMarkId === 'undefined'){
+                        %>
+                            <a href="javascript:;" <% if (subMenu.parentClickable) { %> class="fg-no-data-sidebar-sub  sidebabar-link"  data-type="<%- rowMenu.itemType %>" data-id="<%- rowMenu.id %>" <% } %> <% if (FgSidebar.module == 'cms') { %> data-ExternalLink="<%- rowMenu.hasExLink %>" data-pageId="<%- rowMenu.pageId %>" <% } %>> 
+                            <i class="fa fg-empty"></i>
+                        <%
+                    } else if(subMenu.parentClickable){
+                        if(rowMenu.bookMarkId=='' || rowMenu.bookMarkId==null){
+                            subMenu.bookMarkClass = 'fa-bookmark-o';
+                        }else{
+                            subMenu.bookMarkClass = 'fa-bookmark';
+                        }
+                 %>  
+                    
+                    <a href="javascript:;" <% if (subMenu.parentClickable) { %> class="fg-no-data-sidebar-sub  sidebabar-link"  data-type="<%- rowMenu.itemType %>" data-id="<%- rowMenu.id %>" <% } %>> 
+                    <i data-id="<%- rowMenu.id %>" data-bookmark-id="<%- subMenu.parentMenuId %>" id="bk_<%- subMenu.parentMenuId %>" data_type="<%- rowMenu.itemType %>" class="fa <%-  subMenu.bookMarkClass %>  bookmarkclick fa-bookmark"></i>
+                 <%
+                    } else{
+                %>
+                    <div class="fg-no-data-sidebar-sub">
+                <%
+                    }
+                %>
+                <span class="<% if(_.size(subMenu.input) > 0){ %> arrow pull-left <% } else{ %> fg-without-arrow <% } %>"></span>
+                <span class="title"> <%- rowMenu.title %></span>
+                <% if(rowMenu.hasWarning){ %>
+                    <i class="fa fa-warning" data-toggle="tooltip"></i>
+                <% } %>  
+                {#CMS sidebar needs separate icon handling#}    
+                <% if (FgSidebar.module == 'cms' && rowMenu.showIcon) { %>   
+                    <% if (!rowMenu.isActive) { %>
+                        <i class="fa fa-2x fa-eye-slash" data-placement="top" data-toggle="tooltip" title="{{ 'TOOLTIP_SIDEBAR_INACTIVE_NAVIGATION_POINT'|trans({}, 'tooltip') }}"></i>
+                    <% } %>
+                    <% if (!rowMenu.isPublic) { %>
+                        <i class="fa fa-2x fa-lock" data-placement="top" data-toggle="tooltip" title="{{ 'TOOLTIP_SIDEBAR_INTERNAL_NAVIGATION_POINT'|trans({}, 'tooltip') }}"></i>
+                    <% } %>
+                    <i class="fa fa-2x fg-assigned <%- (rowMenu.hasExLink == '1') ? 'fa-globe' : ((rowMenu.pageId) ? 'fa-dot-circle-o' : 'fa-circle-o') %>"></i>
+                <% } %>   
+                {#CMS sidebar needs separate icon handling#}    
+            
+                <%
+                if(_.size(subMenu.input) > 0 || rowMenu.currentClickable){
+                %>
+                    </a>
+                <% 
+                    }else if(subMenu.parentClickable){
+                 %>  
+                    </a>
+                <%
+                    }else{
+                %>
+                    </div>
+                <%
+                    }
+                %>
+                <% if( _.size(subMenu.input) > 0){ %>
+                    <ul class="<%- submenuUlClass %>"> 
+                        {{ include('::clubadmin/sidebar/sidebar-menu2level-level2-template.html.twig') }}                                              
+                    </ul>
+                <% } %>
+                <% 
+                var settings = {};
+                settings.menuId = rowMenu.id;
+                settings.target = '#'+subMenu.parentMenuId;
+                settings.hierarchy = 2;
+                settings.categoryId = rowMenu.id;
+                
+                settings.items = data.settings;
+                var showSettings = (typeof rowMenu.hasSettings !== "undefined")? false: true;
+                if(typeof rowMenu.hasSettings !== "undefined"){
+                    
+                }
+                if (showSettings && typeof data.settings!== "undefined"){
+                    /* FOR CONTACT SIDERBAR ONLY STARTS*/
+                    
+                    if(typeof rowMenu.functionAssign!== "undefined"){
+                        settings.functionCount = 0;
+                        settings.functionAssign = rowMenu.functionAssign;
+                        switch(rowMenu.functionAssign){
+                            case 'none':
+                                break;
+                            case 'same':                                                                
+                                try{
+                                    settings.functionCount = rowMenu.input[0]['input'].length;  
+                                }catch(err){
+                                }
+                                break;
+                            case 'individual':
+                                break;
+                                
+                        }                        
+                    } 
+                    
+                %>   
+                <% if(typeof rowMenu.adminPrivilege == "undefined" || rowMenu.albumPrivilege != 0) { %>
+                    {{ include('::clubadmin/sidebar/sidebar-settings-template.html.twig') }}
+                <% }%>
+                <%
+                }
+                %>        
+            </li>
+        <% } });%>
+</script>

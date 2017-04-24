@@ -1,0 +1,101 @@
+{# src/Clubadmin/ClubBundle/Resources/views/Columnsettings/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'DOCUMENTS_TABLE_COLUMNS'|trans %}
+
+{% block pagecontent %}
+
+    <!-- BEGIN CONTENT -->
+    <div class="fg-theme-panel">
+        <form id="tablesettings" action="tablesettings" onSubmit="return false;">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- PAGE TITLE & BREADCRUMB-->
+                    <!-- BREADCRUMB STARTS -->
+                     {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+                    <!-- BREADCRUMB ENDS -->
+                    {#<div class="row">
+                        <div class="col-md-12">
+                            <h3 class="page-title"> {{'DOCUMENTS_TABLE_COLUMNS'|trans}} </h3>
+                        </div>
+                    </div>#}
+                    <div class="row">
+                    {% set page_settings = { 'pagetitle':'true'}  %}
+                    {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': 'DOCUMENTS_TABLE_COLUMNS'|trans, 'page_settings': page_settings  } %}    
+                </div>
+                 </div>
+            </div>
+
+            <!-- BEGIN COLUMN AREA-->
+            <div class="row fg-contact-tables">
+                <div class="col-lg-8 col-md-7">
+                    <div class="portlet box blue">
+                        <div class="portlet-title">
+                            <div class="caption"> {{'ALL_COLUMNS'|trans}} </div>
+                        </div>
+                        <div class="portlet-body fg-portlet">
+                            <div class="row">
+                                <!-- displayFileOptions -->
+                                <div class="col-sm-4 col-xs-12" id="displayFileOptions"></div>
+                                <!-- displayDateOptions -->
+                                <div class="col-sm-4 col-xs-12" id="displayDateOptions"></div>
+                                <!-- displayUserOptions -->
+                                <div class="col-sm-4 col-xs-12" id="displayUserOptions"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                        
+                <div class="col-lg-4 col-md-5">
+                    
+                    <!-- Selected Columns box starts -->
+                    <div class="portlet box blue">
+                        <div class="portlet-title">
+                            <div class="caption"> {{'SELECTED_COLUMNS'|trans}} </div>
+                            <div class="fg-clear-area">
+                                <a href="#" id="clearselected">{{'CONTACT_FILTER_CLEAR'|trans}} 
+                                    <i class="fa fa-times-circle fa-1x"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body" id="displaySelectedColumns"> </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+                        
+        <!-- APPLY|CANCEL -->
+        <div class="row">
+            <div class="col-md-12 fg-form-submit-wrapper">
+                {% include 'clubadmin/savebutton.html.twig' with {'backLink':   path(redirect),'reset_button_id':'cancelsettings','reset_button_val':'CANCEL'|trans,'save_button_val':'APPLY'|trans ,'save_button_id':'applysettings','button_attr_type':'data-save-type','button_attr_val':"APPLY" } %}
+            </div>
+        </div>
+                    
+    </div>
+    <!-- END PAGE CONTENT-->
+    
+    <!-- ROW TEMPLATES STARTS -->
+    <div id="divTemplates">
+       
+        {# template for displaying selected columns #}
+        {% include 'ClubadminDocumentsBundle:Columnsettings:displayselectedcolumns.html.twig' %}
+        {# template for displaying static columns #}
+        {% include 'ClubadminDocumentsBundle:Columnsettings:displaydocumentfields.html.twig' %}
+    </div>
+    <!-- ROW TEMPLATES ENDS -->
+{% endblock %}
+
+{% block javascripts %}
+<script src = "{{ asset('fgcustom/js/documentscolumnsettings.js')}}" type = "text/javascript"></script>
+<script type = "text/javascript"> 
+    var clubId = {{clubData['clubId']}};
+    var contactId = {{clubData['contactId']}};
+    var filterDocData = "{{path('get_documents_data',{'type':type})}}";
+    var redirectPage = '{{path(redirect)}}';
+    var defaultSettingsArray = '{{defaultSettings|json_encode|raw}}';
+    var type = '{{type}}';
+    /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                     title: true
+             });  
+</script>
+{% endblock %}

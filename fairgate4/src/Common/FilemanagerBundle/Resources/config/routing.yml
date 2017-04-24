@@ -1,0 +1,151 @@
+filemanager_download:
+    path:     /filemanager/download/attachment/{file}
+    defaults: { _controller: CommonFilemanagerBundle:Default:download }
+
+filemanager_inline:
+    path:     /filemanager/download/inline/{file}
+    defaults: { _controller: CommonFilemanagerBundle:Default:download , downloadtype: inline}
+    
+filemanager_download_contact_application:
+    path:     /filemanager/download/contactapplication/{folder}/{file}
+    defaults: { _controller: CommonFilemanagerBundle:Default:downloadFromFolder}
+    
+filemanager_log:
+    path:     /filemanager/log/{filemanagerId}
+    defaults: { _controller: CommonFilemanagerBundle:FileLog:fileLog, module : filemanager, level1 : files }
+    
+filemanager_view: 
+    path:     /filemanager/view/{type}/{module}
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:fileManagerView }  
+
+filemanager_upload_save:
+    path:     /filemanager/upload
+    defaults: { _controller: CommonFilemanagerBundle:FileUpload:fileUploadSave }
+    
+filemanager_log_data:
+    path: /filemanager/getlogdata/{filemanagerId}
+    defaults: { _controller: CommonFilemanagerBundle:FileLog:getFileLogData} 
+    
+filemanager_datatable_list:
+    path:     /filemanager/list/{listType}
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:listFiledetails }
+    
+filemanager_shafilename_path:
+    path:     /filemanager/shaFilename
+    defaults: { _controller: CommonFilemanagerBundle:FileUpload:shaFilename }
+    
+public_file_upload_check:
+    path:     /filemanager/fileUploadCheck/{type}
+    defaults: { _controller: CommonFilemanagerBundle:FileUpload:fileUploadCheck }
+    
+filemanager_rename_popup:
+    path:     /filemanager/renamepopup
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:renameFilePopup }   
+    
+filemanager_rename_file:
+    path:     /filemanager/renamefile
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:renameFile }
+
+filemanager_listModuleFiles:
+    path:     /filemanager/listfiles
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:listModuleFiles, module : filemanager,level1 : files  } 
+
+filemanager_list:
+    path:     /filemanager/listfiles/{module}
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:filesList, module : filemanager,level1 : files }
+
+filemanager_dir_change:
+    path:     /filemanager/changedir
+    defaults: { _controller: CommonFilemanagerBundle:TempFileMove:changeFileStructure, module: users }  
+    
+filemanager_document_list:
+    path:     /filemanager/document/list/{listType}
+    defaults: { _controller: CommonFilemanagerBundle:FileDocuments:documentList }
+    
+filemanager_document_list_data:
+    path:     /filemanager/document/getData
+    defaults: { _controller: CommonFilemanagerBundle:FileDocuments:fileManagerDocumentsData }
+    
+filemanager_gallery_list_data:
+    path:     /filemanager/gallery/getData
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:fileManagerGalleryData }
+
+filemanager_totaloverview:
+    path: /filemanager/totaloverview
+    defaults: { _controller: CommonFilemanagerBundle:Default:getTotalOverview }
+    
+filemanager_sectionoverview:
+    path: /filemanager/sectionoverview
+    defaults: { _controller: CommonFilemanagerBundle:Default:getSectionOverview }
+
+filemanager_download_zip_popup:
+    path:     /filemanager/downloadzip/{type}
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:filedownloadZip } 
+    
+filemanager_modal_popup:
+    path: /filemanager/popup
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:modalPopup }    
+    
+filemanager_download_gallery:
+    path: /filemanager/downloadGallery
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:downloadGalleryFiles }
+           
+filemanager_zip_download:
+    path:     /filemanager/zipDownload
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:zipDownload }    
+    
+filemanager_download_files:
+    path:     /filemanager/downloadFiles/{module}/{source}/{name}
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:downloadFiles }   
+    
+filemanager_download_contact_files:
+    path:     /filemanager/downloadFiles/{module}/{source}/{name}/{filename}
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:downloadFiles }
+    
+filemanager_file_replace:
+    path: /filemanager/replace
+    defaults: { _controller: CommonFilemanagerBundle:FileUpload:replaceFile }
+    
+filemanager_download_admin:
+    path: /filemanager/downloadAdmin
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:downloadAdminFiles }
+  
+filemanager_download_zip_documents:
+    path: /filemanager/downloadDocsZip
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:documentsZip }
+    
+filemanager_mark_delete:
+    path: /filemanager/markDelete
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:markForDelete }
+    
+filemanager_restore_file:
+    path: /filemanager/restore
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:restoreFile } 
+    
+filemanager_delete_file_popup:
+    path: /filemanager/deletePopup
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:deleteFilePopup }
+    
+filemanager_delete_file:
+    path: /filemanager/deleteFile
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:deleteFile }
+    
+filemanager_dir_change_nl:
+    path:     /filemanager/changenldir
+    defaults: { _controller: CommonFilemanagerBundle:TempNewsletterMove:changeFileStructure, module: users }
+    
+filemanager_resize_gallery_nl:
+    path:     /filemanager/galleryResizing
+    defaults: { _controller: CommonFilemanagerBundle:TempNewsletterMove:galleryResizing }    
+
+filemanager_viruslog:
+    path:     /filemanager/viruslog
+    defaults: { _controller: CommonFilemanagerBundle:VirusLog:index, module : filemanager,level1 : files }    
+    
+filemanager_viruslog_list:
+    path:     /filemanager/viruslog/list
+    defaults: { _controller: CommonFilemanagerBundle:VirusLog:list }   
+    
+filemanager_viruslog_cron:
+    path:     /filemanager/viruslog/sendnotification
+    defaults: { _controller: CommonFilemanagerBundle:VirusLog:sendnotification }    

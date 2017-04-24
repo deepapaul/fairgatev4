@@ -1,0 +1,611 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : contacttype=='sponsor'? '::clubadmin/layout-sidebar.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set clubTerminolgy = fgtwig.getTerminolgyName('Club',plural)%}
+{% set subFederationTerminology = fgtwig.getTerminolgyName('Sub-federation',plural)%}
+{% set executiveboardTerminology = fgtwig.getTerminolgyName('Executive Board',plural)%}
+{% set federationmemberTerminology = fgtwig.getTerminolgyName('Federation member',plural)%}
+{% set federationTerminology = fgtwig.getTerminolgyName('Federation',singular)%}
+
+{% if ( contacttype == 'archive' ) %}
+    {% set title= 'ACTIVE_ARCHIVES'  %}
+{% elseif ( contacttype == 'formerfederationmember' )%}
+    {% set title= 'FORMER_FEDERATION_MEMBERS'  %}
+{% else %}
+    {% set title='ACTIVE_SPONSOR' %}
+{% endif %}
+{% set pageTitle = title|trans({'%fedmember%':federationmemberTerminology}) %}
+{% set title = title|trans({'%fedmember%':federationmemberTerminology}) %}
+
+{% block customstylesheets %}
+    <style>
+        .custom-popup {
+            width: 250px!important;
+        }
+    </style>
+{% endblock %}
+{% block pagecontent %}
+    <!-- BEGIN PAGE CONTENT-->
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+            {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+        </div>
+    </div>
+    <div class="row" >
+        <form method="POST" action= "" id="hiddenform">
+            <input type="hidden" name="selcontacthidden" value="" id="selcontacthidden" search-value="" />
+            <input type="hidden" name="searchhidden" value="" id="searchhidden" search-value="" />
+            <input type="hidden" name="counthidden" value="" id="counthidden" search-value="" />
+        </form>
+
+        {#<div class="col-lg-9 col-sm-9" id="fg-dev-dynamic-menu">#}
+ 
+             <div id="servicemenuBar" class="display-hide col-md-12">  
+                 <div class="row">
+               {% set page_settings = { 'pagetitle':'true','tabs':'true','searchbox':'true','actionmenu':'true' }  %}
+               {% include 'clubadmin/page-title-bar.html.twig' with {'page_settings': page_settings,'pageTitle': title|trans,'counter':1,'searchbox_id':'searchbox','assignmentsearch_id':'assignmentsearchbox','tabs':tabs,'serviceTabs':true,'hrefLink':true,'tabClass':true,'actionMenuCount':'multiple'} %}  
+              {#  {% include 'ClubadminSponsorBundle:SponsorList:dynamicMenubar.html.twig' with {'title':title|trans,'serviceType':'active','activeserviceCount':0,'futureserviceCount':0,'formerserviceCount':0} %}      
+          #}
+                </div>
+            </div>
+
+         <div id="normalmenuBar" class="display-hide col-md-12">  
+             <div class="row">
+           {% set columnsUrl = path('sponsor_columnsettings', {'settings_id': 0,'contacttype':contacttype}) %}
+           {% set defaultSettings_name = 'LOAD_COLUMN'|trans %}
+           {% set page_settings = { 'columnsettings':'true','pagetitle':'true','counter':'true','searchbox':'true','filter':'true','actionmenu':'true' }  %}
+           {% include 'clubadmin/page-title-bar.html.twig' with {'page_settings': page_settings,'pageTitle': title|trans, 'columnsUrl': columnsUrl,'defaultSettings':defaultSettings,'defaultSettings_name':defaultSettings_name,'allTableSettings':allTableSettings,'counter':1,'searchbox_id':'searchbox','assignmentsearch_id':'assignmentsearchbox'} %} 
+            </div>
+         </div>
+        </div>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+     <input type="hidden" name="defaultColumnStting" id="fg-dev-defaultcolumnsetting" value="{{defaultSettings}}"/>
+    {#</div>#}
+    <div class="alert alert-danger display-hide">
+        <button class="close" data-close="alert"></button>
+        {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+    </div>
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN FILTER AREA-->
+    <div class="filter-alert alert-block fade in space fg-marg-top-0">
+        <button  class="close fg_filter_hide" type="button" ></button>
+        <div class="row filter-pad">
+            <div id="target">
+            </div>
+        </div>
+        <div class="clearfix filter-pad addandsave fg-common-top-btm">
+            <a data-toggle="modal" href="#basic" id="addCriteria"><i class="fa fa-plus-circle fa-2x"></i><span class="fg-left-move"> {%trans%}SAVED_FILTER_ADD_CRITERION{%endtrans%}</span> </a>
+            <a id="saveFilter" href="javascript:void(0)" class="col-green fg-left-move"><i class="fa fa-check fa-2x col-green"></i><span class="fg-left-move">{%trans%}ACTIVE_CONTACT_LIST_SAVE_FILTER{%endtrans%}…</span></a>
+            <div id="filternameText" class="editable editable-click fg-filter-name btn-group"> </div>
+        </div>
+        <div class="portlet-body form">
+            <div class="form-actions fluid">
+                <div class="col-md-offset-0 col-md-10">
+                    <button type="submit" id="search" class="btn blue">{%trans%}CONTACT_FILTER_SEARCH{%endtrans%}</button>
+                    <button type="button" class="btn default remove-filter">{%trans%}CONTACT_FILTER_CLEAR{%endtrans%}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <!-- Sponsor table showing area -->
+        <div id="sponsorTable" class="display-hide">
+            {% if contacttype =='sponsor' %}
+                {% set draggable= 'dataTable-dragable dataTable-droppable'%}
+            {% else %}
+                {% set draggable= 'archive-border-remove fg-dev-sort-disable'%}
+            {% endif %}
+            <div class="portlet-body new-table-height fg-sponsorlist-table-wrapper" id="tableWrapper">
+                <table data-ajax-path="{{ path('list_sponsor')  }}"
+                       class="{% if (fgtwig.inArray('sponsor',fgclub.get('allowedRights'))) %} {{draggable}} {% endif %}
+                       sponsordataTable
+                       table
+                       table-bordered
+                       table-hover
+                       table-condensed
+                       dataTable-scroll-y
+                       dataTable-ajax
+                       dataTable-ajaxHeader
+                       dataTable-fixed
+                       dataTable-rows
+                       dataTable-scroll-x
+                       dataTables_scrollBody
+                       lastcolumn_sort dataTable-initialSort data-count dataTable-widthResize data-filter-count" xWidth="100" yHeight="300" data-table-name="sponsordataTable" document-parameter="true" data_row_change="fgrowchange" data-sort="1#asc" dataTable-popover="true" dataTable-hover="true"  document-parameter="true" data_serversideProcess="true" id="sponsordataTable">
+                </table>
+            </div>
+        </div> 
+        <!--  Service table show area -->      
+        <div id="serviceTable" class="tab-content display-hide">
+            <div class="fg_dev_service_tabs tab-pane active fg-active-table-wrapper" id="fg_dev_activeservice">
+                {% include 'ClubadminSponsorBundle:SponsorList:servicedatatableTemplate.html.twig' with { 'activeTab' : 'active','fiscalyear':fiscalYear,'tablename':'activeTable'} %}    
+            </div>
+            <div class="fg_dev_service_tabs tab-pane fg-futureservice-table-wrapper" id="fg_dev_futureservice">
+                {% include 'ClubadminSponsorBundle:SponsorList:servicedatatableTemplate.html.twig' with { 'activeTab' : 'future','fiscalyear':fiscalYear,'tablename':'futuretable'} %}  
+            </div>
+            <div class="fg_dev_service_tabs tab-pane fg-formerservice-table-wrapper" id="fg_dev_formerservice">
+                {% include 'ClubadminSponsorBundle:SponsorList:servicedatatableTemplate.html.twig' with { 'activeTab' : 'former','fiscalyear':fiscalYear,'tablename':'formertable'} %}   
+            </div>
+        </div>
+        <div id="fg_dev_assignmentTable" class="fg-common-top display-hide fg-assignment-table-wrapper">
+            {% include 'ClubadminSponsorBundle:SponsorList:assignmentdatatableTemplate.html.twig' with {'overviewtype' : 'assignment_active', 'fiscalyear':fiscalYear} %}     
+        </div>   
+
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+    <div id="callPopupFunction"></div>
+    <!-- Connection Popup -->
+    <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-content fg-popup-wrap" id="popup_contents">
+            </div>
+        </div>
+    </div>
+    <div id="fg-dev-reativateMsgBox" class="hide">
+        <input type="hidden" name="reactivateContactId" id="reactivateContactId" value="" />
+        <input type="hidden" name="reacivateRedirectPath" id="reacivateRedirectPath" value="" />
+    </div>
+    <!-- End Connection Popup -->
+    <!-- END PAGE CONTENT-->
+    <!-- END CONTENT -->
+    <!-- END PAGE CONTENT-->
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/page/filter-settings.js')}}" type="text/javascript"></script>
+    <script>
+                var currentClubType = '{{ currentClubType }}';
+                var filter;
+                var fedclubId={{fedClubId}};
+                var fedIcon = {{fgclub.get('federation_icon')|json_encode()|raw}};
+                var fedmemConfirmTootipMsg  ="{{'CONTACT_FED_MEMBER_TOOLTIP'|trans}}"
+                var filterdata = 'contact';
+                var filterStorage = 'sponsorfilter-{{contacttype}}{{clubId}}-{{contactId}}';
+                var filterName = 'sponsor_filter';
+                var totalCount = '';
+                var saveFilterPath = '{{path('contact_saved_filter_data')}}';
+                var saveFilterErrorPath = "{{url('filter_update_broken')}}";
+                var isFilterBroken = 0;
+                var jsonData = '';
+                var tableSettingValue = '';
+                var tableColumnTitle = [];
+                var clubId = '{{clubId}}';
+                var contactId = '{{contactId}}';
+                var contactType = '{{contacttype}}';
+                var connectionPath = '{{path('connect_contacts')}}';
+                var tableSettingValueStorage = 'tableSettingValue_{{contacttype}}{{clubId}}-{{contactId}}';
+                var tableColumnTitleStorage = 'tableColumnTitle_{{contacttype}}{{clubId}}-{{contactId}}';
+                var filterDisplayFlagStorage = 'filterdisplayflag_{{contacttype}}{{clubId}}-{{contactId}}';
+                var functionType = '';
+                var tableSettingIdStorage = 'SponsorSettingId_{{contacttype}}{{clubId}}-{{contactId}}';
+                var clubType = '{{clubType}}';
+                var selectTitileTrans = "{{'CM_SELECT_TYPE'|trans}}";
+                var criteriTitle = "{{'CM_CRITERIA'|trans}}";
+                var filterCondition = FgFilterSettings.FgSponsorCondition;
+                var sidebar_create_category = '{% trans %}SIDEBAR_CREATE_SPONSOR_CATEGORY{% endtrans %}';
+                var sidebar_category_settings = '{{'SIDEBAR_SPONSOR_CATEGORY_SETTINGS'|trans}}';
+                var sidebar_create_service = '{% trans %}SIDEBAR_CREATE_SPONSOR_SERVICE{% endtrans %}';
+                var sidebar_service_settings = '{{'SIDEBAR_SPONSOR_SERVICE_SETTINGS'|trans}}';
+                var ActiveMenuDetVar = fgLocalStorageNames.sponsor.active.ActiveMenuDetVar;
+                var contactDataTitle = '{{'SIDEBAR_SPONSORS'|trans}}';
+                var servicesTitle = '{{'SIDEBAR_SERVICES'|trans}}';
+                var bookmarkUpdateUrl = '{{path('sponsor_bookmark_create_delete')}}';
+                var filterTitle = '{{'SIDEBAR_FILTER'|trans}}';
+                var newElementLevel1 = '{{ include('::clubadmin/new-element-sidebar_level1.html.twig') }}';
+                var newElementLevel2 = '{{ include('::clubadmin/new-element-sidebar_level2.html.twig') }}';
+                var defaultTitle = '{{'ALL_SPONSORS'|trans}}';
+                var bookmarkTitle = '{{'SIDEBAR_BOOKMARKS'|trans}}';
+                var sortingTitle = '{{'SIDEBAR_SORTING'|trans}}';
+                var module = '{{fgclub.get('module')}}';
+                var jsonDataPath = '{{path('sponsor_filter_data',{'contacttype': contacttype})}}';
+                var newElementUrl = '{{path("sponsor_create_category")}}';
+                var stopservicePath = '{{path('sponsor_service_stop_popup')}}';
+                var manageCategoryPath = '{{ url('sponsor_category_edit') }}';
+                var manageServicesPath = '{{path('edit_services', {'catId': '|id|'})}}';
+                var bookMarkSortingPath = '{{ url('sponsor_bookmark') }}';
+                var sponsorImport = '{{ url('sponsor_import_file') }}';
+                //for calling popup for adding prospects from existing contacts
+                var sponsoraddpopup = '{{path('sponsor_add_from_existing_popup')}}';
+                var pathremoveprospect = '{{path('sponsor_remove_prospect_popup')}}';
+                var sponsorAssignPath = '{{path('sponsor_club_service')}}';
+                var getallSponsorContactIdsPath = '{{path('getall_sponsor_contactids')}}';
+                var sponsorEditLink = '{{path('edit_sponsor', {'contact':'CONTACT'} )}}';
+                var sponsorHomeLink = '{{path("clubadmin_sponsor_homepage")}}';
+                var listType = 'serviceList' //'sponsorlist';
+                var tabtype = 'activeservice';
+                var serviceexportcsvPath = '{{path('sponsor_service_export_popup')}}';
+                var assgnmentTitle = '{{'SIDEBAR_ASSIGNMENT_OVERVIEW'|trans}}';{# DEFINE DYNAMIC MENU TEXT HERE#}
+                var pathSponsorServiceSkip = '{{path("sponsor_service_skip")}}';
+                var assignmentoverviewTitles = {"activeAssignments":{'title':'{{'ACTIVE_ASSIGNMENTS'|trans}}'},
+                        "futureAssignments":{'title':'{{'FUTURE_ASSIGNMENTS'|trans}}'},
+                        "recentlyEnded":{'title':'{{'RECENTLY_ENDED'|trans}}'},
+                        "formerAssignments":{'title':'{{'FORMER_ASSIGNMENTS'|trans}}'}
+
+                }
+                var sponsorPageVars = {
+                    filterSave: "{{url('update_sposor_filter_data')}}",
+                    filterValidation: '{{'VALIDATION_THIS_FIELD_REQUIRED'|trans}}',
+                    filterSaveMsg: "{%trans%}CM_CONTACT_FILTER_SAVE_SUCCESS{%endtrans%}",
+                    filterTitle: '{{'SIDEBAR_FILTER'|trans}}',
+                    filterSettingsTitle: '{{'SIDEBAR_SAVEDFILTER_SETTINGS'|trans}}',
+                    filterSettingsUrl: '{{ url('sponsor_saved_filter_settings') }}',
+                    filterCountUrl: '{{path('update_sponsor_filter_count')}}',
+                    filterDataUrl: '{{path('contact_saved_filter_data', {'filterId': '|id|'})}}',
+                    bookemarkUpdateUrl: '{{url('create_delete_sponsor_bookmark')}}'
+                };
+        var addService = "{{'ADD_SERVICE'|trans}}";
+                var actionMenuNoneSelectedText = {
+        {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                    'export': {'title': "{{'SM_EXPORT_ACTION_MENU'|trans}}", 'dataUrl': '{{path('sponsor_export_file', {'contactType':contacttype} )}}', 'divider': '1'}
+        {% else %}
+                    'createExist': {'title': "{{'ACTION_MENU_CREATE_SPONSOR'|trans}}", 'dataUrl': sponsoraddpopup, 'hrefLink': '', 'visibleAlways': true},
+                            'import': {'title': "{{'IMPORT_PROP'|trans}}", 'hrefLink': sponsorImport, 'dataUrl': sponsorImport, 'visibleAlways': true, 'divider': '1'},
+                            'editSponsor': {'title': "{{'EDIT_SELECTED'|trans}}", 'appendSelectedId': '1'},
+                            'assignService': {'title': "{{'ASSIGN_ALL_SERVICE'|trans}}", 'dataUrl': '{{path('sponsor_club_service')}}', 'extraDataUrl': getallSponsorContactIdsPath, 'divider': '1'},
+                            'export': {'title': "{{'SM_EXPORT_ACTION_MENU'|trans}}", 'dataUrl': '{{path('sponsor_export_file', {'contactType':contacttype} )}}', 'divider': '1'},
+                            'removeProspect': {'title': "{{'REMOVE_ALL_PROSPECT'|trans }}", 'dataUrl': pathremoveprospect, 'extraDataUrl': getallSponsorContactIdsPath, 'hrefLink': ''}
+        {% endif %}
+                    };
+                    var actionMenuSingleSelectedText = {
+        {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                    'export': {'title': "{{'SM_EXPORT_ACTION_MENU'|trans}}", 'dataUrl': '{{path('sponsor_export_file', {'contactType':contacttype} )}}', 'divider': '1'}
+        {% else %}
+                    'createExist': {'title': "{{'ACTION_MENU_CREATE_SPONSOR'|trans}}"},
+                            'import': {'title': "{{'IMPORT_PROP'|trans}}", 'divider': '1'},
+                            'editSponsor': {'title': "{{'EDIT_SELECTED'|trans}}", 'dataUrl': sponsorEditLink, 'appendSelectedId': '1', 'visibleAlways': true, 'hrefLink': ''},
+                            'assignService': {'title': "{{'ASSIGN_TO_SERVICE'|trans}}", 'dataUrl': '{{path('sponsor_club_service')}}', 'divider': '1', 'visibleAlways': true},
+                            'export': {'title': "{{'SM_EXPORT_ACTION_MENU'|trans}}", 'dataUrl': '{{path('sponsor_export_file', {'contactType':contacttype} )}}', 'divider': '1'},
+                            'removeProspect': {'title': "{{'REMOVE_PROSPECT'|trans }}", 'dataUrl': pathremoveprospect, 'hrefLink': '', 'visibleAlways': true},{% endif %}
+                    };
+                    var actionMenuMultipleSelectedText = {
+            {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                        'export': {'title': "{{'SM_EXPORT_ACTION_MENU'|trans}}", 'dataUrl': '{{path('sponsor_export_file', {'contactType':contacttype} )}}', 'divider': '1'}
+            {% else %}
+                        'createExist': {'title': "{{'ACTION_MENU_CREATE_SPONSOR'|trans}}"},
+                                'import': {'title': "{{'IMPORT_PROP'|trans}}", 'divider': '1'},
+                                'editSponsor': {'title': "{{'EDIT_SELECTED'|trans}}", 'appendSelectedId': '1'},
+                                'assignService': {'title': "{{'ASSIGN_TO_SERVICE'|trans}}", 'dataUrl': '{{path('sponsor_club_service')}}', 'divider': '1', 'visibleAlways': true},
+                                'export': {'title': "{{'SM_EXPORT_ACTION_MENU'|trans}}", 'dataUrl': '{{path('sponsor_export_file', {'contactType':contacttype} )}}', 'divider': '1'},
+                                'removeProspect': {'title': "{{'REMOVE_PROP'|trans }}", 'dataUrl': pathremoveprospect, 'hrefLink': '', 'visibleAlways': true},{% endif %}
+                        };
+                        var actionMenuText = {'active': {'none': actionMenuNoneSelectedText, 'single': actionMenuSingleSelectedText, 'multiple': actionMenuMultipleSelectedText}};
+                        //FgSidebar.dynamicMenus.push({actionmenu: actionMenuText});
+                        //active service dynamic menu
+                        var actionMenuNoneSelectedText_1 = {
+                {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                            'exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_exportpdf')}}', 'visibleAlways': false},
+                                    'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': false},{% else %}
+                                    'editAssignment': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'visibleAlways': false},
+                                    'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'visibleAlways': false},
+                                    'stopservice': {'title': "{{'SM_ACTION_MENU_STOP_ASSIGNMENT'|trans}}", 'visibleAlways': false, 'divider': '1'},
+                                    'exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_exportpdf')}}', 'visibleAlways': false},
+                                    'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': false},
+                                    'deleteservice': {'title': "{{'SM_ACTION_DELETE'|trans}}", 'visibleAlways' : false}
+                {% endif %}
+                            };
+                            var actionMenuSingleSelectedText_1 = {
+                {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                            'exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_exportpdf')}}', 'visibleAlways': true},
+                                    'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},{% else %}
+                                    'editAssignment': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_edit_booking',{'bookingId':'BOOKINGID'})}}', 'visibleAlways': true},
+                                    'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'dataUrl':'{{path('sponsor_duplicate_assign')}}', 'visibleAlways': true},
+                                    'stopservice': {'title': "{{'SM_ACTION_MENU_STOP_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways': true, 'divider': '1'},
+                                    'exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_exportpdf')}}', 'visibleAlways': true},
+                                    'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},
+                                    'deleteservice': {'title': "{{'SM_ACTION_DELETE'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways' : true}
+                {% endif %}
+                            };
+                            var actionMenuMultipleSelectedText_1 = {
+                {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                            'exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_exportpdf')}}', 'visibleAlways': true},
+                                    'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},{% else %}
+                                    'editAssignment': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'visibleAlways': false},
+                                    'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'visibleAlways': false},
+                                    'stopservice': {'title': "{{'SM_ACTION_MENU_STOP_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways': true, 'divider': '1'},
+                                    'exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_exportpdf')}}', 'visibleAlways': true},
+                                    'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},
+                                    'deleteservice': {'title': "{{'SM_ACTION_DELETE'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways' : true}
+                {% endif %}
+                            };
+                            var actionMenuText_1 = {'activeservice': {'none': actionMenuNoneSelectedText_1, 'single': actionMenuSingleSelectedText_1, 'multiple': actionMenuMultipleSelectedText_1}};
+                            //future service dynamic menu 
+                            var actionMenuNoneSelectedText_2 = {
+                {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                            'exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_exportpdf')}}', 'visibleAlways': false},
+                                    'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': false},{% else %}
+                                    'editAssignment': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'visibleAlways': false},
+                                    'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'visibleAlways': false, 'divider': '1'},
+                                    'exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_exportpdf')}}', 'visibleAlways': false},
+                                    'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': false},
+                                    'deleteservice': {'title': "{{'SM_ACTION_DELETE'|trans}}", 'visibleAlways' : false}
+                {% endif %}
+                            };
+                            var actionMenuSingleSelectedText_2 = {
+                {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                            'exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_exportpdf')}}', 'visibleAlways': true},
+                                    'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},{% else %}
+                                    'editAssignment': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_edit_booking',{'bookingId':'BOOKINGID'})}}', 'visibleAlways': true},
+                                    'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'dataUrl':'{{path('sponsor_duplicate_assign')}}', 'visibleAlways': true, 'divider': '1'},
+                                    'exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_exportpdf')}}', 'visibleAlways': true},
+                                    'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},
+                                    'deleteservice': {'title': "{{'SM_ACTION_DELETE'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways' : true},{% endif %}
+                            };
+                            var actionMenuMultipleSelectedText_2 = {
+                    {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                                'exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_exportpdf')}}', 'visibleAlways': true},
+                                        'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},{% else %}
+                                        'editAssignment': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'visibleAlways': false},
+                                        'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'visibleAlways': false, 'divider': '1'},
+                                        'exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_exportpdf')}}', 'visibleAlways': true},
+                                        'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},
+                                        'deleteservice': {'title': "{{'SM_ACTION_DELETE'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways' : true}
+                    {% endif %}
+                                };
+                                var actionMenuText_2 = {'futureservice': {'none': actionMenuNoneSelectedText_2, 'single': actionMenuSingleSelectedText_2, 'multiple': actionMenuMultipleSelectedText_2}};
+                                //former service dynamic menu
+                                var actionMenuNoneSelectedText_3 = {
+                    {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                                'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': false},{% else %}
+                                        'editAssignment': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'visibleAlways': false},
+                                        'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'visibleAlways': false, 'divider': '1'},
+                                        'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': false},
+                                        'deleteservice': {'title': "{{'SM_ACTION_DELETE'|trans}}", 'visibleAlways' : false}
+                    {% endif %}
+                                };
+                                var actionMenuSingleSelectedText_3 = {
+                    {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                                'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},{% else %}
+                                        'editAssignment': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_edit_booking',{'bookingId':'BOOKINGID'})}}', 'visibleAlways': true},
+                                        'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'dataUrl':'{{path('sponsor_duplicate_assign')}}', 'visibleAlways': true, 'divider': '1'},
+                                        'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},
+                                        'deleteservice': {'title': "{{'SM_ACTION_DELETE'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways' : true}
+                    {% endif %}
+                                };
+                                var actionMenuMultipleSelectedText_3 = {
+                    {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                                'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},{% else %}
+                                        'editAssignment': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'visibleAlways': false},
+                                        'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'visibleAlways': false, 'divider': '1'},
+                                        'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},
+                                        'deleteservice': {'title': "{{'SM_ACTION_DELETE'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways' : true}
+                    {% endif %}
+                                };
+                                var actionMenuText_3 = {'formerservice': {'none': actionMenuNoneSelectedText_3, 'single': actionMenuSingleSelectedText_3, 'multiple': actionMenuMultipleSelectedText_3}};
+                                //active service assignments dynamic menu
+                                var actionMenuNoneSelectedText_11 = {
+                    {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                                'assignment_exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_assignment_overview_export_pdf')}}', 'visibleAlways': false},
+                                        'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': false},{% else %}
+                                        'editSponsor': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'visibleAlways': false},
+                                        'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'visibleAlways': false},
+                                        'stopservice': {'title': "{{'SM_ACTION_MENU_STOP_ASSIGNMENT'|trans}}", 'visibleAlways': false, 'divider': '1'},
+                                        'assignment_exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_assignment_overview_export_pdf')}}', 'visibleAlways': false},
+                                        'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': false},
+                                        'deleteservice': {'title': "{{'SM_ACTION_DELETE'|trans}}", 'visibleAlways' : false}
+                    {% endif %}
+                                };
+                                var actionMenuSingleSelectedText_11 = {
+                    {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                                'assignment_exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_assignment_overview_export_pdf')}}', 'visibleAlways': true},
+                                        'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},{% else %}
+                                        'editSponsor': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_edit_booking',{'bookingId':'CONTACT'})}}', 'visibleAlways': true},
+                                        'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'dataUrl':'{{path('sponsor_duplicate_assign')}}', 'visibleAlways': true},
+                                        'stopassignmentOverview': {'title': "{{'SM_ACTION_MENU_STOP_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways': true, 'divider': '1'},
+                                        'assignment_exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_assignment_overview_export_pdf')}}', 'visibleAlways': true},
+                                        'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},
+                                        'deleteservice': {'title': "{{'SM_ACTION_DELETE'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways' : true}
+                    {% endif %}
+                                };
+                                var actionMenuMultipleSelectedText_11 = {
+                    {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                                'assignment_exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_assignment_overview_export_pdf')}}', 'visibleAlways': true},
+                                        'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},{% else %}
+                                        'editSponsor': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'visibleAlways': false},
+                                        'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'visibleAlways': false},
+                                        'stopassignmentOverview': {'title': "{{'SM_ACTION_MENU_STOP_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways': true, 'divider': '1'},
+                                        'assignment_exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_assignment_overview_export_pdf')}}', 'visibleAlways': true},
+                                        'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},
+                                        'deleteservice': {'title': "{{'SM_ACTION_DELETE'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways' : true}
+                    {% endif %}
+                                };
+                                var actionMenuText_11 = {'activeassignments': {'none': actionMenuNoneSelectedText_11, 'single': actionMenuSingleSelectedText_11, 'multiple': actionMenuMultipleSelectedText_11}};
+                                //future service dynamic menu 
+                                var actionMenuNoneSelectedText_21 = {
+                    {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                                'assignment_exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_assignment_overview_export_pdf')}}', 'visibleAlways': false},
+                                        'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': false},{% else %}
+                                        'editSponsor': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'visibleAlways': false},
+                                        'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'visibleAlways': false, 'divider': '1'},
+                                        'assignment_exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_assignment_overview_export_pdf')}}', 'visibleAlways': false},
+                                        'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': false},
+                                        'deleteservice': {'title': "{{'SM_ACTION_DELETE'|trans}}", 'visibleAlways' : false}
+                    {% endif %}
+                                };
+                                var actionMenuSingleSelectedText_21 = {
+                    {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                                'assignment_exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_assignment_overview_export_pdf')}}', 'visibleAlways': true},
+                                        'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},{% else %}
+                                        'editSponsor': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_edit_booking',{'bookingId':'CONTACT'})}}', 'visibleAlways': true},
+                                        'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'dataUrl':'{{path('sponsor_duplicate_assign')}}', 'visibleAlways': true, 'divider': '1'},
+                                        'assignment_exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_assignment_overview_export_pdf')}}', 'visibleAlways': true},
+                                        'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},
+                                        'deleteservice': {'title': "{{'SM_ACTION_DELETE'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways' : true},{% endif %}
+                                };
+                                var actionMenuMultipleSelectedText_21 = {
+                        {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                                    'assignment_exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_assignment_overview_export_pdf')}}', 'visibleAlways': true},
+                                            'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},{% else %}
+                                            'editSponsor': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'visibleAlways': false},
+                                            'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'visibleAlways': false, 'divider': '1'},
+                                            'assignment_exportpdf': {'title': "{{'SM_ACTION_MENU_EXPORTPDF_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_assignment_overview_export_pdf')}}', 'visibleAlways': true},
+                                            'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},
+                                            'deleteservice': {'title': "{{'SM_ACTION_DELETE'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways' : true}
+                        {% endif %}
+                                    };
+                                    var actionMenuText_21 = {'futureassignments': {'none': actionMenuNoneSelectedText_21, 'single': actionMenuSingleSelectedText_21, 'multiple': actionMenuMultipleSelectedText_21}};
+                                    //former service dynamic menu
+                                    var actionMenuNoneSelectedText_31 = {
+                        {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                                    'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': false},{% else %}
+                                            'editSponsor': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'visibleAlways': false},
+                                            'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'visibleAlways': false, 'divider': '1'},
+                                            'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': false},
+                                            'deleteservice': {'title': "{{'SM_ACTION_DELETE'|trans}}", 'visibleAlways' : false}
+                        {% endif %}
+                                    };
+                                    var actionMenuSingleSelectedText_31 = {
+                        {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                                    'serviceexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},{% else %}
+                                            'editSponsor': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_edit_booking',{'bookingId':'CONTACT'})}}', 'visibleAlways': true},
+                                            'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'dataUrl':'{{path('sponsor_duplicate_assign')}}', 'visibleAlways': true, 'divider': '1'},
+                                            'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},
+                                            'deleteservice': {'title': "{{'SM_ACTION_DELETE'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways' : true}
+                        {% endif %}
+                                    };
+                                    var actionMenuMultipleSelectedText_31 = {
+                        {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                                    'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},{% else %}
+                                            'editSponsor': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'visibleAlways': false},
+                                            'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'visibleAlways': false, 'divider': '1'},
+                                            'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},
+                                            'deleteservice': {'title': "{{'SM_ACTION_DELETE'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways' : true}
+                        {% endif %}
+                                    };
+                                    var actionMenuText_31 = {'formerassignments': {'none': actionMenuNoneSelectedText_31, 'single': actionMenuSingleSelectedText_31, 'multiple': actionMenuMultipleSelectedText_31}};
+//recently added assignment dynamic menu
+                                    var actionMenuNoneSelectedText_4 = {
+                        {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                                    'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': false},{% else %}
+                                            'editSponsor': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'visibleAlways': false},
+                                            'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'visibleAlways': false, 'divider': '1'},
+                                            'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': false},
+                                            'skipAssignment': {'title': "{{'REMOVE_ALL_RECENT_ENDED'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways' : false}
+                        {% endif %}
+                                    };
+                                    var actionMenuSingleSelectedText_4 = {
+                        {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                                    'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},{% else %}
+                                            'editSponsor': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_edit_booking',{'bookingId':'CONTACT'})}}', 'visibleAlways': true},
+                                            'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'dataUrl':'{{path('sponsor_duplicate_assign')}}', 'visibleAlways': true, 'divider': '1'},
+                                            'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': true},
+                                            'skipAssignment': {'title': "{{'REMOVE_RECENT_ENDED'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways' : false}
+                        {% endif %}
+                                    };
+                                    var actionMenuMultipleSelectedText_4 = {
+                        {% if (not fgtwig.inArray('sponsor',fgclub.get('allowedRights')) and fgtwig.inArray('sponsor',fgclub.get('bookedModulesDet'))) %}
+                                    'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': false},{% else %}
+                                            'editSponsor': {'title': "{{'SM_ACTION_MENU_EDIT_ASSIGNMENT'|trans}}", 'visibleAlways': false},
+                                            'duplicateassignment': {'title': "{{'SM_ACTION_MENU_DUPLICATE_ASSIGNMENT'|trans}}", 'visibleAlways': false, 'divider': '1'},
+                                            'assignmentexportcsv': {'title': "{{'SM_ACTION_MENU_EXPORTCSV_ASSIGNMENT'|trans}}", 'dataUrl': '{{path('sponsor_service_export_popup')}}', 'visibleAlways': false},
+                                            'skipAssignment': {'title': "{{'REMOVE_RECENT_ENDED'|trans}}", 'dataUrl': '{{path('sponsor_service_stop_popup')}}', 'visibleAlways' : false}
+                        {% endif %}
+                                    };
+                                    var actionMenuText_4 = {'recentlydelete': {'none': actionMenuNoneSelectedText_4, 'single': actionMenuSingleSelectedText_4, 'multiple': actionMenuMultipleSelectedText_4}};
+                                    var menuArr = $.extend({}, actionMenuText, actionMenuText_1, actionMenuText_2, actionMenuText_3, actionMenuText_11, actionMenuText_21, actionMenuText_31, actionMenuText_4);
+                                    FgSidebar.dynamicMenus.push({actionmenu: menuArr});{# DEFINE DYNAMIC MENU TEXT HERE#}{# DEFINE CONTEXT MENU TEXT HERE#}
+                                    var contextMenuText = {
+                                    'context_assign_none_text': "{{'ASSIGN_CONTACT_TO_groupA'|trans ({'%groupA%' : '#groupA#'})}}",
+                                            'context_assign_singular_text': "{{'ASSIGN_CONTACT_TO_groupA'|trans ({'%groupA%' : '#groupA#'})}}",
+                                            'context_assign_plural_text': "{{'ASSIGN_CONTACTS_TO_groupA'|trans ({'%groupA%' : '#groupA#'})}}",
+                                            'context_move_none_text': "{{'MOVE_CONTACT_FROM_groupA_TO_groupB'|trans ({'%groupA%' : '#groupA#', '%groupB%' : '#groupB#'})}}",
+                                            'context_move_singular_text': "{{'MOVE_CONTACT_FROM_groupA_TO_groupB'|trans ({'%groupA%' : '#groupA#', '%groupB%' : '#groupB#'})}}",
+                                            'context_move_plural_text': "{{'MOVE_CONTACTS_FROM_groupA_TO_groupB'|trans ({'%groupA%' : '#groupA#', '%groupB%' : '#groupB#'})}}",
+                                    };
+                                    FgSidebar.dynamicMenus.push({context: contextMenuText});{# DEFINE CONTEXT MENU TEXT HERE#}
+                                    var assignmentPath = '{{path('update_assignments')}}';
+                                    var currentActiveMenu = '';
+                                    /* table title for general data */
+                                    var general_table_title_array = {contact_id: "{{'CONTACT_ID'|trans}}",
+                                            profile_company_pic: "{{'CM_PROFILE_IMG_SHORTNAME'|trans}}",
+                                            membership_category: "{{'CM_MEMBERSHIP'|trans}}",
+                                            age: "{{'AGE'|trans}}",
+                                            birth_year: "{{'YEAR_OF_BIRTH'|trans}}",
+                                            salutation_text: "{{'SALUTATION_TEXT'|trans}}",
+                                            no_of_logins: "{{'CONTACT_OVERVIEW_SETTINGS_NUMBER_OF_LOGIN'|trans}}",
+                                            members_years: "{{'MEMBERS_YEARS'|trans}}",
+                                            club: "{{clubTerminolgy}}",
+                                            sub_federation: "{{subFederationTerminology}}",
+                                    };
+                                    var corrAddrFieldIds = {{corrAddrFieldIds|json_encode|raw}};
+                                    var invAddrFieldIds = {{invAddrFieldIds|json_encode|raw}};
+                                    var archivePath = '{{path('move_to_archive')}}';
+                                    var permanentDeletePath = '{{path('permanent_delete_archive')}}';
+                                    var urlIdentifier = '{{urlIdentifier}}';
+                                    var sponsorSidebarCount = "{{url('sponsor_sidebar_count')}}";</script>
+                    <script src="{{ asset('fgcustom/js/search-filter.js')}}" type="text/javascript"></script>
+                    <script src="{{ asset('fgcustom/js/fg_contact_list.js')}}" type="text/javascript"></script>                                                                                        
+                    <script src="{{ asset('fgcustom/js/inline-edit.js')}}" type="text/javascript"></script>
+                    <script src="{{ asset('fgcustom/js/combodate/moment-with-locales.min.js')}}" type="text/javascript"></script>
+                    <script src="{{ asset('fgcustom/js/combodate/combodate.js')}}" type="text/javascript"></script>
+                    <script src="{{ asset('fgcustom/js/fg_sponsor_datatable.js')}}" type="text/javascript"></script>
+                    <script src="{{ asset('fgcustom/js/sidebarfilter.js')}}" type="text/javascript"></script>
+                    <script src="{{ asset('fgcustom/js/fg_filter_validate.js')}}" type="text/javascript"></script>
+                    <script src="{{ asset('fgcustom/js/page/fg_sponsor_list.js')}}" type="text/javascript"></script>
+                    <script src="{{ asset('fgcustom/js/page/fg_service_list.js')}}" type="text/javascript"></script>
+                    <script src="{{ asset('fgcustom/js/page/fg_assignmentoverview_list.js')}}" type="text/javascript"></script>
+                    <script src="{{ asset('fgcustom/js/page/fg_sponsor.js')}}" type="text/javascript"></script>  
+                    <script src="{{ asset('fgcustom/js/fg_more_menu.js')}}" type="text/javascript"></script> 
+                    <script src="{{ asset('fgcustom/js/fg-nullsort-handle-dataTable.js')}}" type="text/javascript"></script>
+                    <script src="{{ asset('fgcustom/js/page/fg_confirmstop.js')}}" type="text/javascript"></script>{#used in recently ended page#}
+                    <script>
+                                    $(function () {
+                                    var sponsorlistDet = localStorage.getItem(fgLocalStorageNames.sponsor.active.listDetails);
+                                            if (sponsorlistDet == null || sponsorlistDet == '' || sponsorlistDet == 'undefined') {
+                                    var defaultList = {type:'sponsor'};
+                                            sponsorlistDet = JSON.stringify(defaultList);
+                                            localStorage.setItem(fgLocalStorageNames.sponsor.active.listDetails, sponsorlistDet);
+                                    }
+                                    var sponsorListJson = JSON.parse(sponsorlistDet);
+                                            if (sponsorListJson.type == 'sponsor'){
+                                    FgSponsor.sponsorDatatableInit('sponsor');
+                                    } else if (sponsorListJson.type == 'overview') {
+                                    FgSponsor.serviceAssignmentTableInit(sponsorListJson.id);
+                                            FgSponsor.actionmenuSet(sponsorListJson.id)
+                                    } else {
+                                    localStorage.setItem(fgLocalStorageNames.sponsor.active.serviceTab, 'activeservice');
+                                            FgSponsor.sponsorserviceDatatableInit('service', sponsorListJson.id, sponsorListJson.serviceType);
+                                            var sponsorlistDet = localStorage.getItem(fgLocalStorageNames.sponsor.active.listDetails);
+                                            var serviceClickedTab = localStorage.getItem('clickedServiceTab-' + clubId + '-' + contactId);
+                                            if (serviceClickedTab == null || serviceClickedTab == '' || serviceClickedTab == 'undefined') {
+                                    serviceClickedTab = 'active';
+                                    }
+
+                                    if (sponsorListJson.serviceType == 'past' || serviceClickedTab == 'past') {
+                                    $(".fg-contact-searchbox").removeClass("fg-has-filter");
+                                            FgSponsor.showTablerowmenu();
+                                           
+                                            $('#data-tabs li:nth-child(3) a').tab('show');
+                                            $('.fgContactdrop').attr('data-type', 'formerservice');
+                                            $("#formerservice-tab-li").addClass("active");
+                                    } else if (sponsorListJson.serviceType == 'future' || serviceClickedTab == 'future') {
+                                    $('#data-tabs li:nth-child(2) a').tab('show');
+                                            FgSponsor.hideTablerowmenu();
+                                            $(".fg-contact-searchbox").removeClass("fg-has-filter");
+                                            $('.fgContactdrop').attr('data-type', 'futureservice');
+                                    } else  {
+                                    $('#data-tabs a:first').tab('show');
+                                            sponsorListJson.serviceType == 'active'
+                                            $('.fgContactdrop').attr('data-type', 'activeservice');
+                                            FgSponsor.hideTablerowmenu();
+                                    }
+                                    FgServiceList.handleMoreTabactiveMenu(sponsorListJson.serviceType);
+                                    }
+                                    $('.btn-group').removeClass('open');
+                                    var tabType = $('.fgContactdrop').attr('data-type');
+                                    $("#"+tabType+"-tab-li").addClass("active");
+                                    })
+                                    /*-------------- Page title bar configuration --------*/ 
+                                            FgPageTitlebar.init({
+                                                     actionMenu: true,
+                                                     title: true,
+                                                     counter: true,
+                                                     searchFilter: true,
+                                                     filter: true,
+                                                     search: true,
+                                                     colSetting: true
+
+                                             });
+
+                    </script>
+                    {% endblock %}

@@ -1,0 +1,625 @@
+extends _helpers/layout.jade
+
+block vars
+  - var bodyClass = 'fg-web-theme-01 ';
+block title
+    title Article Title
+
+block page-level-header
+      link(href='theme-based-styles/theme-01-color-schemes.css', rel='stylesheet', media='screen')
+      link(href='theme-based-styles/theme-01-color-schemes.css', rel='stylesheet', media='screen')
+      link(href='../../assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css', rel='stylesheet', media='screen')
+      link(href='../../assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css', rel='stylesheet', media='screen')
+block header
+    .row.fg-web-top-nav-wrapper
+        .container
+            .FR
+                ul.fg-web-top-nav-links.list-inline
+                    li
+                        a(href='#') FAQ
+                    li
+                        a(href='#') Contact
+                    li
+                        a(href='#') Map
+                ul.fg-web-top-nav-languages.list-inline
+                    li
+                        a(href='#') EN
+    .row.fg-web-main-nav-bar
+        .container
+            .fg-logo-wrapper
+                a(href='#').fg-logo
+                  img(src="http://www.fauchard.org/system/ckeditor_assets/pictures/101/content_pfa_portrait_logo-300print.jpg")
+            .fg-web-nav-icon.visible-xs
+                i.fa.fa-bars.fa-3x
+            nav.navbar.navbar-default.fg-web-main-nav
+                ul.nav.navbar-nav
+                    li.active                                    
+                        a(href='#') Home     
+                    li
+                        a(href='#') Club
+                    li
+                        a(href='#') Teams
+                    li
+                        a(href='#') News
+                    li.dropdown
+                        a(href='#')
+                            | Photos 
+                        span.caret.dropdown-toggle(href='#', data-toggle='dropdown', role='navigation', aria-haspopup='true', aria-expanded='true')
+                        ul.dropdown-menu
+                            li
+                                a(href='#') Second level menu
+                            li
+                                a(href='#') Second level menu
+                            li.dropdown-submenu
+                                a(href='#')
+                                    | Second level Dropdown Second level Dropdown 
+                                span.fg-dropdown-toggle
+                                ul.dropdown-menu.fg-web-open-right
+                                    li
+                                        a(href='#') Third level menu
+                                    li
+                                        a(href='#') Third level menu
+
+                                    li.dropdown-submenu
+                                        a(href='#')
+                                            | Third level Dropdown 
+                                        span.fg-dropdown-toggle
+                                        ul.dropdown-menu.fg-web-open-left
+                                            li
+                                                a(href='#') Fourth level menu
+                                            li
+                                                a(href='#') Fourth level menu
+                                            li
+                                                a(href='#') Fourth level menu
+                                            li
+                                                a(href='#') Fourth level menu
+                                    li
+                                        a(href='#') Third level menu
+                            li
+                                a(href='#') Second level menu
+                            li
+                                a(href='#') Second level menu
+              
+                    li
+                        a(href='#') Contact
+block content
+        .row.fg-web-page-title-bar
+            .container
+                .fg-web-titlebar-left-col.has-breadcrumb.pull-left
+
+                      .fg-web-page-title-block.fg-breadcrumb-block
+                          ul.fg-breadcrumbs
+                            li
+                              a(href='http://192.168.0.39:12004/auto/home') Title bar improvements
+                            li
+                              a(href='javascript:void(0);') CLUB
+
+                      .fg-titlebar-block.fg-web-page-title-block
+                          h1.fg-web-page-title
+                            | How to contact us
+
+                .fg-web-titlebar-right-col.pull-right
+
+                      .fg-titlebar-block.fg-icon-bg
+                            i.fg-icon.fg-page-prev
+
+                      .fg-titlebar-block.fg-icon-bg
+                            i.fg-icon.fg-page-close
+
+                      .fg-titlebar-block.fg-icon-bg
+                            i.fg-icon.fg-page-next
+                .clearfix
+
+        .container
+            .row.fg-web-page-container
+              .col-sm-12.fg-web-page-content-wrapper
+                  .row
+                      .col-sm-12.fg-grid-col-6
+                          .fg-form-widget.fg-widget-block
+                              form.form-horizontal
+                                  fieldset
+                                      legend Form Name
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Mandatory field 
+                                          .col-md-8
+                                              input#textinput.form-control.input-md(name='textinput', type='text', placeholder='', required='') 
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Field with tooltip
+                                          .col-md-8
+                                              input#textinput.form-control.input-md(name='textinput', type='text', placeholder='')
+     
+                                      .form-group
+                                          label.col-md-4.control-label(for='checkboxes') Checkbox group
+                                          .col-md-8
+                                              .checkbox-block
+                                                  label(for='checkboxes-0')
+                                                      input#checkboxes-0(type='checkbox', name='checkboxes', value='1')
+                                                      |       Option one
+                                              .checkbox-block
+                                                  label(for='checkboxes-1')
+                                                      input#checkboxes-1(type='checkbox', name='checkboxes', value='2')
+                                                      |       Option two
+       
+                                      .form-group
+                                          label.col-md-4.control-label(for='radios') Multiple Radios
+                                          .col-md-8
+                                              .radio-block
+                                                  label(for='radios-0')
+                                                      input#radios-0(type='radio', name='radios1', value='1', checked='checked')
+                                                      |       Option one
+                                              .radio-block
+                                                  label(for='radios-1')
+                                                      input#radios-1(type='radio', name='radios1', value='2')
+                                                      |       Option two
+        
+                                      .form-group
+                                          label.col-md-4.control-label(for='radios') Inline Radios
+                                          .col-md-8
+                                                label.radio-inline(for='radios-4')
+                                                    input#radios-4(type='radio', name='radios2', value='1', checked='checked')
+                                                    |       1
+                                                label.radio-inline(for='radios-5')
+                                                    input#radios-5(type='radio', name='radios2', value='2')
+                                                    |       2
+                                                label.radio-inline(for='radios-2')
+                                                    input#radios-2(type='radio', name='radios2', value='3')
+                                                    |       3
+                                                label.radio-inline(for='radios-3')
+                                                    input#radios-3(type='radio', name='radios2', value='4')
+                                                    |       4
+     
+                                  
+                                 
+
+                                  fieldset.fg-noseprator
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Field with placeholder
+                                          .col-md-8
+                                              input#textinput.form-control.input-md(name='textinput', type='text', placeholder='placeholder')
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Pre-filled field
+                                          .col-md-8
+                                              input#textinput.form-control.input-md(name='textinput', type='text', placeholder='')
+                                      .form-group
+                                          label.col-md-4.control-label(for='textarea') Multi-line field
+                                          .col-md-8
+                                              textarea#textarea.form-control(name='textarea') value
+                                      .form-group
+                                          label.col-md-4.control-label(for='selectbasic') Dropdown
+                                          .col-md-8
+                                              select#selectbasic.form-control(name='selectbasic')
+                                                  option(value='1') Option one
+                                                  option(value='2') Option two
+                                  fieldset
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Date field with picker
+                                          .col-md-8
+                                              .input-group.date(data-provide='datepicker')
+                                                  input.form-control(type='text')
+                                                  .input-group-addon
+                                                     span.fa.fa-calendar
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Time field with picker
+                                          .col-md-8
+                                              .input-group.bootstrap-timepicker.timepicker(data-provide='timepicker', data-minute-step='1',  type='text')
+                                                  input#timepicker.form-control
+                                                  .input-group-addon
+                                                     span.fa.fa-clock-o
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') Number field
+                                          .col-md-8
+                                              .fg-input-plus-minus
+                                                  button.left.minus.form-control.FL.selectButton.btn-number(data-field='columnCount', data-type='minus') -
+                                                  input#columnCount.form-control.FL.number.input-number(type='number', disabled='')
+                                                  button.right.plus.form-control.FL.selectButton.btn-number(data-field='columnCount', data-type='plus') +
+                                      .form-group
+                                          label.col-md-4.control-label(for='textinput') File field
+                                          .col-md-8
+                                              .fg-web-fileupload-wrapper
+                                                  input.filestyle(type="file", data-buttonText="Select file", data-buttonName="fg-upload-btn", data-iconName="fa fa-file")
+                                      .form-group
+                                          .col-md-8.col-md-offset-4
+                                              input(type="submit").btn.btn-default
+
+                      .col-sm-10.fg-grid-col-5
+                          .fg-form-widget.fg-widget-block.fg-dev-element-box.elementBox(element-id='3646')
+                              #elementbox-3646
+                                form#1474876931310.form-horizontal(onsubmit='return false;', data-url='/club111/forminquiry/save')
+                                  .alert.alert-success.hide
+                                    a.close.closeIt(title='close', href='#') ×
+                                    span The displayed message after the form is sent can be defined here.
+                                  .alert.alert-danger.hide
+                                    a.close.closeIt(title='close', href='#') ×
+                                    span You have some form errors. Please check below.
+                                  fieldset
+                                    .form-group
+                                      label.col-sm-4.control-label(for='textinput176')
+                                        span(data-content='') First Name
+                                      .col-sm-8
+                                        input#textinput176.form-control.input-md(data-key='3646.176', name='textinput', type='text', placeholder='', value='')
+                                    .form-group
+                                      label.col-sm-4.control-label(for='textarea177')
+                                        span.fg-custom-popovers.fg-dotted-br(data-content='Address tp') Address
+                                      .col-sm-8
+                                        textarea#textarea177.form-control(data-key='3646.177', placeholder='Address', name='textarea') TVC
+                                    .form-group
+                                      label.col-sm-4.control-label(for='textinput178')
+                                        span(data-content='') Email
+                                      .col-sm-8
+                                        input#textinput178.form-control.input-md(data-key='3646.178', name='textemail', type='email', placeholder='')
+                                    .form-group
+                                      label.col-sm-4.control-label(for='textinput179')
+                                        span(data-content='') Roll num
+                                      .col-sm-8
+                                        .fg-input-plus-minus
+                                          button.left.minus.form-control.FL.selectButton.btn-number(data-field='columnCount179', data-type='minus', onclick='return false;') -
+                                          input#columnCount179.form-control.FL.number.input-number(data-key='3646.179', type='text', min='10.00', max='1000.00', stepto='1.00', data-rule-min='10.00', data-rule-max='1000.00', data-rule-number='true', data-msg-min='Please enter a value greater than or equal to 10.00.', data-msg-max='Please enter a value less than or equal to 1000.00.')
+                                          button.right.plus.form-control.FL.selectButton.btn-number(data-field='columnCount179', data-type='plus', onclick='return false;') +
+                                    .form-group.required
+                                      label.col-sm-4.control-label(for='textinput180')
+                                        span(data-content='') website
+                                      .col-sm-8
+                                        input#textinput180.form-control.input-md(name='textinput', data-key='3646.180', type='url', required='', placeholder='', value='')
+                                    .form-group
+                                      label.col-sm-4.control-label(for='textinput')
+                                        span(data-content='') Dob
+                                      .col-sm-8
+                                        .input-group.date.fg-datepicker1(data-startdate='16.09.2016', data-enddate='19.10.2016')
+                                          input#181.form-control(type='text', data-key='3646.181', name='181')
+                                          .input-group-addon
+                                            i.fa.fa-calendar
+                                    .form-group
+                                      label.col-sm-4.control-label(for='textinput182')
+                                        span(data-content='') Time
+                                      .col-sm-8
+                                        #timepickerWrap182.input-group.bootstrap-timepicker.timepicker(data-timepick='', type='text')
+                                          input#timepicker182.form-control(data-key='3646.182', data-field='time', name='timepicker')
+                                          .fg-timepicker.fg-timepicker-frmt-1
+                                          .input-group-addon
+                                            i.fa.fa-clock-o
+                                    .form-group.required
+                                      label.col-sm-4.control-label.fg-pad-top-0(for='checkboxes')
+                                        span(data-content='') Qualification
+                                      #check-wrap-183.col-sm-8.fg-checkbox-wrapper
+                                        label.checkbox-inline(for='checkboxes-183-949')
+                                          #uniform-checkboxes-183-949.checker
+                                            span
+                                              input#checkboxes-183-949(data-error-container='#check-wrap-183', data-key='3646.183.949', type='checkbox', required='', name='checkboxes', value='949')
+                                          | MTech
+                                        label.checkbox-inline(for='checkboxes-183-950')
+                                          #uniform-checkboxes-183-950.checker
+                                            span
+                                              input#checkboxes-183-950(data-error-container='#check-wrap-183', data-key='3646.183.950', type='checkbox', required='', name='checkboxes', value='950')
+                                          | BTech
+                                        label.checkbox-inline(for='checkboxes-183-951')
+                                          #uniform-checkboxes-183-951.checker
+                                            span
+                                              input#checkboxes-183-951(data-error-container='#check-wrap-183', data-key='3646.183.951', type='checkbox', required='', name='checkboxes', value='951')
+                                          | BSc
+                                    .form-group
+                                      label.col-sm-4.control-label(for='selectbasic184')
+                                        span(data-content='') Gender
+                                      .col-sm-8
+                                        select#selectbasic184.form-control.bs-select(data-none-selected='- Select -', data-key='3646.184', name='selectbasic', style='display: none;')
+                                          option(value='') - Select -
+                                          option(value='1052') Male
+                                          option(value='1053') Female
+                                          option(value='1054') Lesbian
+                                        .btn-group.bootstrap-select.form-control.bs-select
+                                          button.btn.dropdown-toggle.selectpicker.btn-default(type='button', data-toggle='dropdown', data-id='selectbasic184', title='- Select -')
+                                            span.filter-option.pull-left - Select -
+                                            span.caret
+                                          .dropdown-menu.open
+                                            ul.dropdown-menu.inner.selectpicker(role='menu')
+                                              li.selected(rel='0')
+                                                a(tabindex='0', style='')
+                                                  span.text - Select -
+                                                  i.glyphicon.fa.fa-check.icon-ok.check-mark
+                                              li(rel='1')
+                                                a(tabindex='0', style='')
+                                                  span.text Male
+                                                  i.glyphicon.fa.fa-check.icon-ok.check-mark
+                                              li(rel='2')
+                                                a(tabindex='0', style='')
+                                                  span.text Female
+                                                  i.glyphicon.fa.fa-check.icon-ok.check-mark
+                                              li(rel='3')
+                                                a(tabindex='0', style='')
+                                                  span.text Lesbian
+                                                  i.glyphicon.fa.fa-check.icon-ok.check-mark
+                                    .form-group
+                                      label.col-sm-4.control-label.fg-pad-top-0(for='radios619')
+                                        span(data-content='') Gridding 
+                                      #check-wrap-619.col-sm-8.fg-radio-wrapper
+                                        .radio-block
+                                          label(for='radios-619-11163')
+                                            #uniform-radios-619-11163.radio
+                                              span
+                                                input#radios-619-11163(data-error-container='#check-wrap-619', data-key='3646.619', type='radio', name='radios619', value='11163')
+                                            | Radio 1
+                                        .radio-block
+                                          label(for='radios-619-11164')
+                                            #uniform-radios-619-11164.radio
+                                              span
+                                                input#radios-619-11164(data-error-container='#check-wrap-619', data-key='3646.619', type='radio', name='radios619', value='11164')
+                                            | Radio 2
+                                        .radio-block
+                                          label(for='radios-619-11165')
+                                            #uniform-radios-619-11165.radio
+                                              span
+                                                input#radios-619-11165(data-error-container='#check-wrap-619', data-key='3646.619', type='radio', name='radios619', value='11165')
+                                            | Radio 3
+                                    .form-group
+                                      label.col-sm-4.control-label.fg-pad-top-0(for='radios185')
+                                        span(data-content='') Send Notification
+                                      #check-wrap-185.col-sm-8.fg-radio-wrapper
+                                        label.radio-inline(for='radios-185-1255')
+                                          #uniform-radios-185-1255.radio
+                                            span
+                                              input#radios-185-1255(data-error-container='#check-wrap-185', data-key='3646.185', type='radio', name='radios185', value='1255')
+                                          | Yesasda sdadda
+                                        label.radio-inline(for='radios-185-1256')
+                                          #uniform-radios-185-1256.radio
+                                            span
+                                              input#radios-185-1256(data-error-container='#check-wrap-185', data-key='3646.185', type='radio', name='radios185', value='1256')
+                                          | No asdadsad
+                                    .form-group
+                                      label.col-sm-4.control-label(for='textinput186')
+                                        span(data-content='                    \
+                                        ') Profile logo
+                                      .col-sm-8
+                                        .fg-web-fileupload-wrapper(data-file-wrap='')
+                                          input#formfile186.hide(type='text', name='uploadFile', data-file='', data-key='3646.186')
+                                          input#forminput186.filestyle(type='file', data-exceedmsg='Size Exceeds', data-fieldid='186', name='file-uploader', data-url='/club111/fileUploadCheck/form', style='position: absolute; clip: rect(0px, 0px, 0px, 0px);', data-buttontext='Select file')
+                                          .bootstrap-filestyle.input-group
+                                            input.form-control(type='text', data-file-name='', disabled='', placeholder='')
+                                            span.group-span-filestyle.input-group-btn(tabindex='0')
+                                              label.btn.fg-upload-btn(for='forminput186')
+                                                span.icon-span-filestyle.fa.fa-file
+                                                span.buttonText Select file
+                                    .form-group
+                                      label.col-sm-4.control-label.fg-pad-top-0(for='checkboxes')
+                                        span.fg-custom-popovers.fg-dotted-br(data-content='tool') Job option
+                                      #check-wrap-620.col-sm-8.fg-checkbox-wrapper
+                                        .checkbox-block
+                                          label(for='checkboxes-620-1166')
+                                            #uniform-checkboxes-620-1166.checker
+                                              span
+                                                input#checkboxes-620-1166(data-error-container='#check-wrap-620', data-key='3646.620.1166', type='checkbox', name='checkboxes', value='1166')
+                                            | Full-time
+                                        .checkbox-block
+                                          label(for='checkboxes-620-2167')
+                                            #uniform-checkboxes-620-2167.checker
+                                              span
+                                                input#checkboxes-620-2167(data-error-container='#check-wrap-620', data-key='3646.620.2167', type='checkbox', name='checkboxes', value='2167')
+                                            | Part-time
+                                        .checkbox-block
+                                          label(for='checkboxes-620-3168')
+                                            #uniform-checkboxes-620-3168.checker
+                                              span
+                                                input#checkboxes-620-3168(data-error-container='#check-wrap-620', data-key='3646.620.3168', type='checkbox', name='checkboxes', value='3168')
+                                            | Permanent
+                                    .form-group
+                                      label.col-sm-4.control-label(for='textinput750')
+                                        span(data-content='') num de1
+                                      .col-sm-8
+                                        .fg-input-plus-minus
+                                          button.left.minus.form-control.FL.selectButton.btn-number(data-field='columnCount750', data-type='minus', onclick='return false;') -
+                                          input#columnCount750.form-control.FL.number.input-number(data-key='3646.750', type='text', min='0.00', max='', stepto='1.00', data-rule-min='0.00', data-rule-max='', data-rule-number='true', data-msg-min='Please enter a value greater than or equal to 0.00.', data-msg-max='Please enter a value less than or equal to 0,00.')
+                                          button.right.plus.form-control.FL.selectButton.btn-number(data-field='columnCount750', data-type='plus', onclick='return false;') +
+                                    .form-group
+                                      .col-sm-8.col-md-offset-4
+                                        input.btn.btn-default.fg-form-element-submit(type='submit', value='Save me')
+
+                      .col-sm-8.fg-grid-col-4
+                      .col-sm-6.fg-grid-col-3
+                      .col-sm-4.fg-grid-col-2
+                      .col-sm-2.fg-grid-col-1
+                        
+block footer
+    .container
+        .row
+            .col-sm-4.fg-grid-col-2
+                .fg-header-widget.fg-widget-block
+                    h3 VISUAL AND PRACMATIC
+                .fg-text-widget.fg-widget-block.fg-dev-element-box
+                      span.fg-elementtype-class.hide
+                        i.fa.fa-align-left(aria-hidden='true')
+                        .fg-text TEXT
+                      article.fg-text-widget-wrapper.fg-text-left-img
+                        .col-sm-4.fg-thumb
+                          figure
+                            img(src='http://192.168.0.39:12004/uploads/8762/gallery/width_300/hd.jpg ', alt='')
+                            figcaption 6
+                        p
+                          | All of the examples on this page will show a navigation bar that takes up too much space on small screens (however, the navigation bar will be on one single line on large screens - because Bootstrap is responsive). This problem (with the small screens) will be solved in the last example on this page.All of the examples on this page will show a navigation bar that takes up too much space on small screens (however, the navigation bar will be on one single line on large screens - because Bootstrap is responsive). This problem (with the small screens) will be solved in the last example on this page.All of the examples on this page will show a navigation bar that takes up too much space on small screens (however, the navigation bar will be on one single line on large screens - because Bootstrap is responsive). This problem (with the small screens) will be solved in the last example on this page.
+                        .clearfix
+
+            .col-sm-4.fg-grid-col-2
+                .fg-header-widget.fg-widget-block
+                    h3 VISUAL AND PRACMATIC
+                .fg-image-gallery-widget.fg-widget-block
+
+            .col-sm-4.fg-grid-col-2
+                .fg-header-widget.fg-widget-block
+                    h3 VISUAL AND PRACMATIC
+
+                .fg-login-widget.fg-widget-block.fg-dev-element-box.elementBox
+                  form.form-horizontal
+                    .form-group.fg-input-box-left
+                      input.form-control.input-md(name='dummyText', type='text', placeholder='E-mail address')
+                    .form-group.fg-input-box-right
+                      input.form-control.input-md(name='dummyPwd', placeholder='Password')
+                    .form-group.fg-button-block
+                      .fg-checkbox
+                        label.radio-inline(for='loggedIn')
+                          input#loggedIn(type='checkbox', name='loggedIn', value='1').uniform
+                          | Keep me logged in.
+                      .fg-button
+                        button#singlebutton.btn.btn-primary.fg-submit(name='singlebutton') Login
+                      .clearfix
+                    .fg-footer-block
+                      .fg-first
+                        h4 First time login?
+                        p
+                          a#forget-password(href='#') Click here
+                          |                     and active your account
+                      .fg-last
+                        h4 Lost password?
+                        p
+                          a#forget-password(href='#') Click here
+                          |                      to reset
+
+
+block after-footer
+    a(href='#').fg-web-go-top
+        i.fa.fa-arrow-circle-up
+    .fg-web-bg-wrapper
+        //-.fg-web-bg(style="background-image:url('http://www.sambeauvois.be/blog/wp-content/uploads/2010/06/bg.gif');z-index:1;")
+        //- .fg-web-bg.fg-web-bg-no-repeat.fg-web-pos-left(style="background-image:url('http://www.sambeauvois.be/blog/wp-content/uploads/2010/06/bg.gif');z-index:2;")
+        //- .fg-web-bg.fg-web-bg-no-repeat.fg-web-pos-right(style="background-image:url('http://school.esanpt1.go.th/wwk/VDO/images/BG-Top.gif');z-index:3;")
+        //-  .fg-web-bg.fg-web-bg-no-repeat.fg-web-pos-center.fg-web-pos-middle(style="background-image:url('http://media.treehugger.com/assets/images/2016/04/tracy-johnson-hummingbirds-1.jpg.662x0_q70_crop-scale.jpg');z-index:4;")
+        //-   .fg-web-bg.fg-web-bg-no-repeat.fg-web-pos-left.fg-web-pos-bottom(style="background-image:url('http://www.tipsquirrel.com/wp-content/uploads/2011/06/Background-small.jpg');z-index:5;") 
+        //.fg-web-bg(style="background-image:url('http://www.sambeauvois.be/blog/wp-content/uploads/2010/06/bg.gif');z-index:6;")
+
+
+    .fg-web-promobox-wrapper
+        .fg-web-promobox-header
+          .fg-web-promobox-caption
+            | Advertisment
+
+
+        .fg-web-promobox-body
+            .fg-web-promobox-content
+                h2.fg-web-promo-title Fairgate Verhuls
+                p Clicking on any of the buttons will let the box disappear completely on xs screens (use some slide-to-bottom animation), and replaced by a narrow tab on larger screens (use a slide-to-left animation). Only this will be replaced also after reloading the page, thus the state needs to be stored in a cookie.
+        .fg-web-promobox-footer
+            a(href='#').btn.fg-btn-link(type='button') MEHR INFO
+            a(href='#').btn.fg-btn-remove.fg-web-promo-toggle-btn(type='button',data-action="close") Don't display anymore
+        .fg-web-promo-drawer-wrapper.fg-web-promo-toggle-btn(data-action="open")
+            | Fairgate
+            i.fa.fa-angle-double-down.fg-arrow
+
+
+
+block page-level-footer
+    script(src='../../global/js/unitegallery-master/package/unitegallery/themes/slider/ug-theme-slider.js')
+    script(src='../../assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')
+    script(src='../../assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js')
+    script(src='../../global/js/bootstrap-filestyle/src/bootstrap-filestyle.min.js')
+    script.
+      jQuery(document).ready(function () {
+        $('#timepicker').timepicker();
+      });
+
+      $(window).load(function(){
+          //function for responsive nav open
+          $('.fg-web-nav-icon').click(function(){
+              if($('body').hasClass('fg-navbar-open')){
+                    $('body').removeClass('fg-navbar-open');
+                    $('.fg-web-main-nav').animate({
+                          'min-height':0
+                    },350);
+
+              }else{
+                  var ulHeight = $('.fg-web-main-nav > .navbar-nav').outerHeight();
+                  $('.fg-web-main-nav').animate({
+                        'min-height':ulHeight
+                  },350,function(){
+                        $('body').addClass('fg-navbar-open');
+                  });
+              }
+                
+          });
+           //function for responsive nav submenu open
+          $('.dropdown-submenu .fg-dropdown-toggle').on("click", function(e){
+            if($(window).width()<768){
+                $(this).parent('li').toggleClass('open'); 
+                $(this).toggleClass('open');  
+                e.stopPropagation();
+                e.preventDefault();
+            }
+          });
+
+
+          //function for fixing menubar overflow to viewport
+              $(".fg-web-main-nav .dropdown,.fg-web-main-nav .dropdown-submenu").on('mouseenter mouseleave tap', function (e) {
+                  
+                  if ($(this).children('ul').length) {
+                        var elm = $(this).children('ul');
+                        var off = elm.offset();
+                        var l = off.left;
+                        var w = elm.width();
+                        var docH = $(window).height();
+                        var docW = $(window).width();
+                        var isEntirelyVisible = (l + w <= docW);
+                        console.log(elm)
+                        if (!isEntirelyVisible) {
+                            
+                            elm.removeClass('fg-web-open-right').addClass('fg-web-open-left');
+
+                        } else {
+
+                           // $(this).removeClass('edge');
+                        }
+                  }
+              });
+        /* 
+        * Promo box relate script
+        */
+        $('.fg-web-promobox-wrapper').addClass('open');
+
+        $('.fg-web-promo-toggle-btn').click(function(e){
+            e.stopPropagation();
+            var action = $(this).attr('data-action');
+            console.log(action)
+            if(action == 'close'){
+                console.log('a')
+                $('.fg-web-promobox-wrapper').removeClass('open');
+            }else {
+                console.log('b')
+                $('.fg-web-promobox-wrapper').addClass('open');
+            }
+              
+        })
+
+
+        /*-------------------------------- Header and footer fix --------------*/
+
+        FgWebSetLayoutHeight = function (){
+            var setHeight  = function () {
+                console.log('a')
+                var hasAdmin = $('body').hasClass('fg-has-admin-nav'); // checking it page has admin nav
+                var hasFixedheader = $('body').hasClass('fg-header-sticky'); // checking page has fixed header
+                var headerHeight = $('.fg-web-page-header').outerHeight();
+                var contentHeight = $('.fg-web-main-content').outerHeight();
+                var footerHeight = $('.fg-web-page-footer').outerHeight();
+
+                var winHeight = $(window).height();
+
+                var totHeight = headerHeight + contentHeight + footerHeight;
+                if(winHeight > totHeight){
+                    var remaingHeight = winHeight - headerHeight - footerHeight; 
+                    if(hasAdmin){
+                        remaingHeight = remaingHeight-46;
+                    }
+                    $('.fg-web-main-content').css('min-height',remaingHeight);
+                }
+                if(hasFixedheader){
+                    var totHeaderHeight = headerHeight;                    
+                    if(hasAdmin){
+                        totHeaderHeight = totHeaderHeight + 46;
+                    }
+                    $('body').css('padding-top',totHeaderHeight)
+                }
+            }
+                  
+            return {
+                 init: function () {
+                    setHeight();
+                 }
+            }
+        }(); 
+
+
+      });

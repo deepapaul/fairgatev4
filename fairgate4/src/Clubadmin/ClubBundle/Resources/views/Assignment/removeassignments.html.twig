@@ -1,0 +1,183 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title"></h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <span id="remove_text">{{'DO_YOU_REALLY_WANT_TO_REMOVE'|trans}}</span>
+
+                <!-- NOT ALLOWED TO REMOVE ERROR STARTS -->
+                <div class="alert  alert-danger fg-poup-alert hide" id="notallowed_error">
+                    <p><strong>{{'ERROR'|trans}}: </strong><span>{{'NOT_ALLOWED_TO_REMOVE'|trans}}</span></p>
+                    <div class="fg-popup-link"></div>
+                </div>
+                <!-- NOT ALLOWED TO REMOVE ERROR ENDS -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer form-actions fg-modal-footer">
+    <button type="button" class="btn default" id="cancel" data-dismiss="modal">{{'CANCEL'|trans}}</button>
+    <button type="button" class="btn green" id="removeassignments">{{'REMOVE'|trans}}</button>
+</div>
+<script type="text/javascript">
+    var clubType = '{{clubType}}';
+    var selActionType = '{{selActionType}}';
+    var dragClfn = '{{dragClassification}}';
+    var dragClass = '{{dragClass}}';
+    var dragClfnName = '{{dragClfnName}}';
+    dragClfnName = $("<div/>").html(unescape($("<div/>").html(unescape(dragClfnName)).text())).text();
+    var dragClassName = '{{dragClassTitle}}';
+    dragClassName = $("<div/>").html(unescape($("<div/>").html(unescape(dragClassName)).text())).text();
+    var isAllowedAsgmnt = '{{isAllowedAsgmnt}}';
+    var removeAsgmntData = {};
+    var removeTxt = '';
+    var updateAssignmentPath = '{{path("update_club_assignments")}}';
+    var terminology = '{{clubterminology}}';
+    /* get details of selected clubs starts */
+    var selectedClubIds = [];
+    var selectedClubNames = [];
+    if (selActionType == 'all') {
+        var allClubData = $.parseJSON($('#selcontacthidden').val());
+        $.each(allClubData, function(cdKey, clubData) {
+            var clubId = clubData.id;
+            if ($.inArray(clubId, selectedClubIds) == -1) {
+                selectedClubIds.push(clubId);
+                selectedClubNames.push({'id': clubId, 'name': clubData.clubname});
+            }
+        });
+    } else {
+        $(".dataClass:checked").each(function() {
+            var clubId = $(this).attr('id');
+            if ($.inArray(clubId, selectedClubIds) == -1) {
+                selectedClubIds.push(clubId);
+                selectedClubNames.push({'id': clubId, 'name': $(this).parents('tr').find('.fg-dev-clubname').text()});
+            }
+        });
+    }
+    selectedClubNames = selectedClubNames.sort(function (a, b) {
+        return a.name.localeCompare( b.name );
+    });
+    displayPopupData();
+    /* get details of selected contacts ends */
+    $(document).off('click', '.modal-title .fg-dev-club-names');
+    $(document).on('click', '.modal-title .fg-dev-club-names', function(e) {
+        $(this).parent().toggleClass('fg-arrowicon');
+    });
+    //pop-up remove button click
+    $(document).off('click', '#removeassignments');
+    $(document).on('click', '#removeassignments', function() {
+        if (selectedClubIds.length <= 0) {
+            removeAsgmntData = {};
+            $('#popup').modal('hide');
+        } else {
+            removeAsgmntData = {};
+            $.each(selectedClubIds,function(key,clubId){
+                renderRemoveJson(clubId, dragClfn, dragClass, 'is_deleted');
+            });
+            var Arr = JSON.stringify(removeAsgmntData);
+            $('#popup').modal('hide');
+            var passingData = {'classificationArr': Arr, 'selCount': selectedClubIds.length, 'totalClubs': selectedClubIds.length, 'from': 'clublist', 'actionType': 'remove'};
+
+            };
+            saveAssignments(passingData);
+        });
+        
+   function saveAssignments(passingData) {
+        FgXmlHttp.post(updateAssignmentPath, passingData, false, callBackFn);
+         $('#popup').modal('hide');
+    }
+  
+
+    function displayPopupData() {
+        var singleHeadTxt = '{{'REMOVE_%clubname%_FROM_%dragclass%'|trans}}';
+        var multipleHeadTxt = '{{'REMOVE_%clubcount%_%CLUBS%_FROM_%dragclass%'|trans}}';
+        var singleRemoveTxt = '{{'DO_YOU_REALLY_WANT_TO_REMOVE_%clubname%_FROM_%dragclass%'|trans}}' + '?';
+        var multipleRemoveTxt = '{{'DO_YOU_REALLY_WANT_TO_REMOVE_%clubcount%_%CLUBS%_FROM_%dragclass%'|trans}}' + '?';
+     
+        if (selectedClubIds.length == 1) {
+            $('h4.modal-title').html('<div class="fg-popup-text" id="popup_head_text"></div>');
+            $('div#popup_head_text').text(singleHeadTxt.replace('%clubname%', selectedClubNames[0].name).replace('%dragclass%', dragClassName));
+            removeTxt = singleRemoveTxt.replace('%clubname%', selectedClubNames[0].name);
+        } else {
+            var popupHeadText = multipleHeadTxt.replace('%clubcount%', selectedClubIds.length).replace('%dragclass%', dragClassName).replace('%CLUBS%',terminology);
+             if(selectedClubIds.length <=0){
+            $('button#removeassignments').attr('disabled', 'true');
+             } 
+            if (selActionType == 'all') {
+                $('h4.modal-title').html('<div class="fg-popup-text" id="popup_head_text"></div>');
+                $('div#popup_head_text').text(popupHeadText);
+                removeTxt = multipleRemoveTxt;
+            } else {
+                var clubNameLinks = {};
+                var clubNamesHtml = '';
+                var i = 0;
+                $.each(selectedClubNames, function(ckey, selClubName) {
+                    i++;
+                    if (i == 11) {
+                        clubNamesHtml += '<li>&hellip;</li>';
+                        return false;
+                    } else {
+                        clubNameLinks[selClubName.id] = selClubName.name;
+                        clubNamesHtml += '<li><a href="club/overview/0/'+selClubName.id+'" target="_blank" data-cont-id="'+selClubName.id+'"></a></li>';
+                    }
+                });
+                $('h4.modal-title').html('<span class="fg-dev-club-names"><a href="#" class="fg-plus-icon"></a><a href="#" class="fg-minus-icon"></a></span><div class="fg-popup-text" id="popup_head_text"></div>\n\
+                    <div class="fg-arrow-sh"><ul>' + clubNamesHtml + '</ul></div>');
+                $('div#popup_head_text').text(popupHeadText);
+                displayClubNames(clubNameLinks);
+                removeTxt = multipleRemoveTxt;
+            }
+        }
+        
+        if ((isAllowedAsgmnt == 'not assign')) {
+            selectedClubIds = [];
+            var removeErrorTxt = '{{'%CLUBS%_ARE_NOT_ALLOWED_TO_REMOVE_FROM_%clfnname%'|trans}}.'.replace('%clfnname%', dragClfnName).replace('CLUBS',terminology);
+            showError(removeErrorTxt, '');
+        }
+    }
+    function renderRemoveJson(clbId, clfId, clsId, type) {
+          if (removeAsgmntData[clbId] == undefined) {
+            removeAsgmntData[clbId] = {};
+        }
+        if (clfId != '') {
+            if (removeAsgmntData[clbId][clfId] == undefined) {
+                removeAsgmntData[clbId][clfId] = {};
+            }
+            if (clsId != '') {
+                if (removeAsgmntData[clbId][clfId]['class'] == undefined) {
+                    removeAsgmntData[clbId][clfId]['class'] = {};
+                }
+                if (removeAsgmntData[clbId][clfId]['class'][clsId] == undefined) {
+                    removeAsgmntData[clbId][clfId]['class'][clsId] = {};
+                }
+                if (removeAsgmntData[clbId][clfId]['class'][clsId][type] == undefined) {
+                    removeAsgmntData[clbId][clfId]['class'][clsId][type] = {};
+                }
+                if(type == 'is_deleted'){
+                    removeAsgmntData[clbId][clfId]['class'][clsId][type] = 1;
+                }
+            }
+        }
+    }
+    function callBackFn() {
+        FgTable.init();
+    }
+    function showError(removeErrorTxt, errorClubsHtml) {
+        $('span#remove_text').text(removeTxt.replace('%clubcount%', selectedClubIds.length).replace('%dragclass%', dragClassName));
+        if (selectedClubIds.length <= 0) {
+            $('span#remove_text').remove();
+            $('button#removeassignments').attr('disabled', 'true');
+        }
+        $('div#notallowed_error p span').text(removeErrorTxt);
+        $('div#notallowed_error .fg-popup-link').html(errorClubsHtml);
+        $('div#notallowed_error').removeClass('hide');
+    }
+    function displayClubNames(clubNameLinks) {
+        $.each(clubNameLinks, function(selClubId, selClubName) {
+            $('a[data-cont-id='+selClubId+']').text(selClubName);
+        });
+    }
+</script>

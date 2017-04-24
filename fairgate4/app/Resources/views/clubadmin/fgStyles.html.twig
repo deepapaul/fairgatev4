@@ -1,0 +1,50 @@
+{% if (asseticEnv != 'dev') %}
+
+            <!-- BEGIN GLOBAL MANDATORY STYLES -->
+            {% stylesheets '@mandatoryCss' package="assetic" filter='cssrewrite' output='/css/mandatoryCss.css' %}
+            <link rel="stylesheet" href="{{ asset_url }}"/>
+            {% endstylesheets %}
+            <!-- END GLOBAL MANDATORY STYLES -->
+
+            <!-- BEGIN THEME STYLES -->
+            {% stylesheets '@themeCss' package="assetic" filter='cssrewrite' output='/css/themeCss.css' %}
+            <link rel="stylesheet" href="{{ asset_url }}"/>
+            {% endstylesheets %}
+            {% stylesheets '@fairgateCss' package="assetic" filter='cssrewrite' output='/css/fairgateCss.css' %}
+            <link rel="stylesheet" href="{{ asset_url }}"/>
+            {% endstylesheets %}
+            <!-- END THEME STYLES -->
+    
+{% else %}
+    
+            <!-- BEGIN GLOBAL MANDATORY STYLES -->
+            <link href="{{ asset('fgassets/assets/global/plugins/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/global/plugins/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/global/plugins/uniform/css/uniform.default.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/global/plugins/jquery-tags-input/jquery.tagsinput.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/global/plugins/jquery-multi-select/css/multi-select.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/global/plugins/select2/select2.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/global/plugins/bootstrap-toastr/toastr.min.css')}}" rel="stylesheet" type="text/css"/>
+            <!-- END GLOBAL MANDATORY STYLES -->
+
+            <!-- BEGIN THEME STYLES -->
+            <link href="{{ asset('fgassets/assets/global/css/components.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/global/css/plugins.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/layouts/layout/css/layout.min.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/layouts/layout/css/themes/default.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/global/plugins/typeahead/typeahead.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/assets/global/plugins/bootstrap-select/css/bootstrap-select.min.css')}}" rel="stylesheet" type="text/css"/>
+
+            <link href="{{ asset('fgcustom/css/bootstrap-toggle-switch.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgcustom/tokenfield/css/bootstrap-tokenfield.css')}}" rel="stylesheet" type="text/css"/>
+            <link href="{{ asset('fgassets/global/css/animate.min.css') }}" type="text/css" rel="stylesheet"/>
+            <!-- END THEME STYLES -->
+
+{% endif %}

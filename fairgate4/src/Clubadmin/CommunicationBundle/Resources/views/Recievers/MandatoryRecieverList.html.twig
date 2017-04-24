@@ -1,0 +1,146 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' :'::clubadmin/layout.html.twig' %}
+{% set title='NON_MANDATORY_RECIEVER_TITLE'|trans({'%name%':listname}) %}
+    {% set pageTitle = title %}
+        {% block pagecontent %} 
+            <!-- BEGIN PAGE CONTENT-->
+
+            <!-- BEGIN CONTENT -->
+            <!-- BEGIN PAGE HEADER-->
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                    {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+                </div>
+            </div>
+                 <!-- START PAGE TITLE -->
+                 <div class="row">
+            {% set page_settings = { 'pagetitle':'true','searchbox':'true','columnsettings':'true'}  %}
+            {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': title, 'page_settings': page_settings, 'searchbox_id':'searchbox' } %}      
+                 </div>
+            <!-- END PAGE TITLE -->
+            <!-- END PAGE TITLE & BREADCRUMB-->
+            <div class="alert alert-danger display-hide">
+                <button class="close" data-close="alert"></button>
+                {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+            </div>
+            <div id="fg_dev_mandatoryMessage" class="alert alert-info alert-dismissable">
+                <button class="close" data-close="alert"></button>
+                <span><strong>{{'PLEASE_NOTE'|trans}}: </strong>{{'MANDATORY_MESSAGE'|trans}}.</span>
+            </div>
+            <div id="data-tabs-content">
+                <!-- END PAGE HEADER-->
+                <div id="sudscriber-tab" class="tab-pane">
+                    <div class="row">
+                        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                        <div class="portlet-body new-table-height" id="tableWrapper">
+                            <table data-ajax-path="{{ path('get_mandatory_reciever_list')  }}"
+                                   class="fg-dev-communication-dataTable table 
+                                   table-bordered
+                                   table-hover
+                                   table-condensed
+                                   dataTable-scroll-y
+                                   dataTable-ajax
+                                   dataTable-rows
+                                   dataTable-scroll-x
+                                   dataTables_scrollBody
+                                   lastcolumn_sort dataTable-initialSort data-count"   xWidth="100" yHeight="300" data-table-name="dataTables" data_row_change="fgrowchange"   dataTable-hover="true" data-sort="0#asc" data-storage="communication_receiverlist" data-columnstorage="communication_receiverlist_column" data-column-def="true" data_table_type="recipient">
+                                <thead>
+                                    <tr>
+                                        <th>{%trans%}RL_EMAIL_ADDRESS{%endtrans%}</th>
+                                        <th>{%trans%}RL_CONTACT_FIELD{%endtrans%}</th>
+                                        <th>{%trans%}CONTACT_NAME{%endtrans%}</th>
+                                        {% if( hasHierarchy == '1') %}
+                                            <th >{{ clubTitle }}</th>
+                                            <th >{{ subfederationTitle }}</th>
+                                        {% endif %}   
+                                        <th>{%trans%}SL_SALUTATION{%endtrans%}</th>
+                                        <th>{%trans%}RL_FIELD_CORRES_LANG{%endtrans%}</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <!-- END EXAMPLE TABLE PORTLET-->
+                    </div>
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+            <!-- END CONTENT -->
+        {% endblock %}
+        {% block javascripts %}
+            <script>
+                var hasSeperator = true;
+                function getMainClub(contactClub){
+                    var myarr = contactClub.split(",");
+                    for(var loc = 0; loc < myarr.length; loc++){
+                        var clubTitle = (myarr[loc] !== null && myarr[loc] !== "0") ? clubData[myarr[loc].replace('#mainclub#','')] : "-";
+                        if (myarr.length == 1) {
+                            myarr[loc] = clubTitle;
+                        } else {
+                            myarr[loc] = clubTitle + ((myarr[loc].indexOf('#mainclub#') !== -1) ? ' <i class="fa fa-star text-yellow"></i>' : '');
+                        }
+                    }
+                    return myarr.join('<br>');
+                }
+                function getClubTitles(clubIds) {
+                    var myClubs = clubIds.split(";");
+                    var myClubTitles = [];
+                    for (var i = 0; i < myClubs.length; i++){
+                        myClubTitles[i] = getMainClub(myClubs[i]);
+                    }
+                    return myClubTitles.join('<br>');
+                }
+                var filterId = '{{filterId}}'
+                var contactOverviewPath = '{{path('render_contact_overview', {'offset': 0, 'contact': 'CONTACT' })}}';
+                var clubData = {{ clubData|json_encode|raw }};
+                var columnDefs = [
+                    {"name": "Email", "targets": 0, data: function(row, type, val, meta) {
+                            return   (row['email'] == '' || row['email'] == null) ? '-' : row['email'];
+                        }},
+                    {"name": "emailFields", "targets": 1, bSortable: true, data: function(row, type, val, meta) {
+                            splitString = FgCommon.splitWithLineBreak(row['emailFields']);
+                            return  splitString == '' ? '-' : splitString;
+                        }},
+                    {"name": "recipients", "targets": 2, bSortable: true, data: function(row, type, val, meta) {
+                            {% if(hasContactModuleAccess == 1) %}
+                                splitString = FgCommon.getContactNameWithPath(row['recipients'], row['recipientsId'], contactOverviewPath);
+                                return  splitString == '' ? '-' : splitString;
+                            {% else %}
+                                splitString = FgCommon.splitContactname(row['recipients']);
+                                return  splitString == '' ? '-' : splitString;
+                            {% endif %}                             
+                        }},
+                    {% set i=2 %}
+                    {% if( hasHierarchy == '1') %}
+                        { "name": "FIclub", "targets": 3, data:function(row, type, val, meta){
+                            return  (row['FIclub'] !== '' && row['FIclub'] !== null) ? getClubTitles(row['FIclub']) : '-';
+                        }},
+                        { "name": "FIsub_federation", "targets": 4, data:function(row, type, val, meta){
+                            return  (row['FIsub_federation'] !== '' && row['FIsub_federation'] !== null) ? getClubTitles(row['FIsub_federation']) : '-';
+                        }},
+                        {% set i=4 %}
+                    {% endif %}                     
+                    {% set i= i+1 %}
+                    {"name": "salutation", "targets": {{ i }}, data: function(row, type, val, meta) {
+                            return  row['salutation'];
+                        }},
+                    {% set i= i+1 %}
+                    {"name": "515", "targets": {{ i }}, data: function(row, type, val, meta) {
+                            return  row['CL_lang'];
+                    }}
+                ]
+            </script>    
+            <script src="{{ asset('fgcustom/js/sidebar.js') }}" type="text/javascript"></script>    
+            <script src="{{ asset('fgcustom/js/page/fg_communication_dataTable.js')}}" type="text/javascript"></script> 
+            <script>
+                $(function() {
+                    FgCommunicationTable.init();
+                })
+/*-------------- Page title bar configuration --------*/ 
+                FgPageTitlebar.init({
+                    title: true,
+                    search: true
+                }); 
+            </script>
+        {% endblock %}

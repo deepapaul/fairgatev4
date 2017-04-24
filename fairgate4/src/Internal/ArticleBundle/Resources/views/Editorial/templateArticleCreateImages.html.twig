@@ -1,0 +1,142 @@
+<%  var articleMedias = (typeof data.article == 'undefined') ? {} : data.article.media;  %>
+<div class="form-body">
+    <!-- Multiple Radios (inline) -->
+    <div class="form-group  fg-clear">
+        <label class="col-md-2 control-label fg-pad-top-0 text-right" for="radios">{{ 'ARTICLE_POSITION'|trans}}</label> 
+        <div class="col-md-10 fg-pad-left-0"> 
+            <label class="radio-inline" for="radios-0">
+                <% checkType ='';
+                if( (typeof articleMedias.position != 'undefined') && articleMedias.position == 'left_column'  ) { checkType = 'checked' } %>
+                <input type="radio" name="radios" id="radios-0" value="left_column" <%-checkType%>  data-key="article.media.position">
+                {{ 'ARTICLE_POSITION1'|trans}}
+            </label> 
+            <label class="radio-inline" for="radios-1">
+                <% checkType ='';
+                if( (typeof articleMedias.position != 'undefined') && articleMedias.position == 'right_column'  ) { checkType = 'checked' } %>
+                <input type="radio" name="radios" id="radios-1" value="right_column" <%-checkType%> data-key="article.media.position">
+                {{ 'ARTICLE_POSITION2'|trans}}
+            </label> 
+            <label class="radio-inline" for="radios-2">
+                <% checkType ='';
+                if( (typeof articleMedias.position != 'undefined') && articleMedias.position == 'top_slider'  ) { checkType = 'checked' } %>
+                <input type="radio" name="radios" id="radios-2" value="top_slider" <%-checkType%> data-key="article.media.position">
+                {{ 'ARTICLE_POSITION3'|trans}}
+            </label> 
+            <label class="radio-inline" for="radios-3">
+                <% checkType ='';
+                if( (typeof articleMedias.position != 'undefined') && articleMedias.position == 'bottom_slider'  ) { checkType = 'checked' } %>
+                <input type="radio" name="radios" id="radios-3" value="bottom_slider" <%-checkType%> data-key="article.media.position">
+                {{ 'ARTICLE_POSITION4'|trans}} 
+            </label>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="clearfix"></div>
+
+    {#image section#}
+    <div class="form-group col-md-12 fg-clear " >
+        <label class="col-md-2 control-label text-right fg-pad-top-0" for="attachments">{{ 'ARTICLE_IMAGEVIDEO'|trans}}</label> 
+        <div class="col-md-10 col-lg-10 ">
+            <div  class="fg-brdr-dash fg-marg-btm-10">
+                <div class="fg-article-upload-wrapper">
+                    <div class="fg-files-upload-button-wrapper fg-pad-15">                                    
+                        <div class="drop ">                            
+                            <input type="file" id="image-uploader" name="image-uploader" style="height:0px;width:0px;visibility: hidden" multiple="multiple"/>
+                            <button type="button" class="btn default fg-media-img-uploader" >{% trans %}CREATE_EVENT_FILEUPLOAD{% endtrans %}</button>
+                            <div class="btn default fg-add-existing-image" data-toggle="modal" data-target="#myModal-article "> {% trans %}NL_IMAGE_ADD_EXISITNG{% endtrans %} </div>
+                             <div class="btn default fg-a-add-video" > {% trans %} ARTICLE_ADD_VIDEO{% endtrans %} </div>
+                        </div>
+                        <p class="fg-marg-top-5 fg-marg-btm-0">{{ 'ARTICLE_ALLOWED_FILES'|trans}}</p>
+                    </div>
+                    <div class="fg-pad-left-15 fg-pad-right-15" id="articleimg-upload-error-container"></div> 
+                    <ul class="fg-files-uploaded-lists-wrapper">
+                        <% var mediaImages =  _.sortBy(articleMedias, "sortOrder");                        
+                         _.each(mediaImages,function(media,key){ 
+                            if(media.mediaId && media.type == 'images') {        {#IMAGES#}
+                              %>
+                            <li class="fg-files-uploaded-list sortables" id="<%- media.mediaId %>">
+                                <div class="fg-col-first-icon fg-sort-drag" ><i class="fa fg-sort ui-draggable handle"></i>
+                                    <input type="text" data-key="article.media.images.media.<%- media.mediaId %>.sort_order" class="sort-val media-desc fg-dev-sortable hide media-desc" value="<%- media.sortOrder %>"> 
+                                </div>
+                                
+                                <div class="col-sm-2 fg-thumb-wrapper">
+                                    <img src="<%-media.imgsrc %>" class="fg-thumb" id="article-img-preview-<%- media.mediaId %>" >
+                                </div>
+                                <div class="col-sm-5">
+                                    <label class="control-label" for="teaser">{{ 'ARTICLE_DESC'|trans}}</label>  
+                                    <div class="">
+                                        <% if(_.size(clubLanguages) > 0) { %>
+                                            <% _.each(clubLanguages,function(val,key){ %>
+                                                <textarea class="form-control no-resize media-desc <% if(defaultClubLang!=val){ %> hide <% } %> " name="imageDesc-<%- media.mediaId %>-<%- val %>" id="imageDesc-<%- media.mediaId %>-<%- val %>" data-key="article.media.images.media.<%- media.mediaId %>.description.<%- val %>" 
+                                                          placeholder="<% if(typeof media.description[val] == 'undefined' && mode == 'edit' ) { %><%- (media.description['default']) %><% } %>" data-lang="<%- val %>" ><% if( typeof media.description[val] != 'undefined') { %><%- media.description[val] %><% } %></textarea>                                                            
+                                            <% }); %>
+                                        <% } %>   
+                                    </div>
+                                </div>
+                                <div class="col-sm-5 fg-file-size"><%- (FgFileUpload.formatFileSize(parseInt(media.size)))%></div>
+                                <div class="clearfix"></div>
+                                <div class="fg-last-icon">
+                                    <div class="closeico">
+                                        <input type="checkbox" class="make-switch fg-delicon delete-article-attachment" value="1" id="<%-media.mediaId %>_is_deleted" data-key="article.media.images.media.<%-media.mediaId %>.is_deleted" name="is_deleted" data-inactiveblock="changecolor" data-parentid="<%-media.mediaId %>">
+                                        <label for="<%-media.mediaId %>_is_deleted"></label>
+                                    </div>
+                                </div>
+                                <input class="hide fg-media-desc-hid" name="mediaId-<%- media.mediaId %>" type="text" value="<%- media.mediaId %>" data-key="article.media.images.media.<%- media.mediaId %>.mediaid">
+                                <input class="hide fg-media-desc-hid" name="ItemId-<%- media.mediaId %>" type="text" value="<%- media.itemId %>" data-key="article.media.images.media.<%- media.mediaId %>.itemid">  
+                                <input type="text" class="hide" value="" id="<%-media.mediaId %>_is_deleted-hid" data-key="article.media.images.media.<%-media.mediaId %>.mediaid" name="hid-is_deleted" >                   
+                            </li>             
+                        <% } else if(media.mediaId && media.type == 'videos') {  %>              {#VIDEOS#}
+                            <li class="fg-files-uploaded-list sortables" id="<%- media.mediaId %>">
+                                <div class="fg-col-first-icon fg-sort-drag" ><i class="fa fg-sort ui-draggable handle"></i>
+                                    <input type="text" data-key="article.media.videos.media.<%- media.mediaId %>.sort_order" class="sort-val media-desc fg-dev-sortable hide media-desc" value="<%- media.sortOrder %>"> 
+                                </div>
+                                <div class="col-sm-2 fg-thumb-wrapper">
+                                    <img src="<%-media.imgsrc %>" class="fg-thumb" id="article-img-preview-<%- media.mediaId %>" >
+                                </div>
+                                <div class="col-sm-5 form-group">
+                                    <label class="control-label" for="teaser">{{ 'ARTICLE_VIDEO_URL'|trans}}</label>  
+                                    <div class="">
+                                        <input type="text" name="videoThumb<%- media.mediaId %>" required=""  data-key="article.media.videos.media.<%- media.mediaId %>.videoThumb" class="form-control video-url media-desc" value="<%- media.videoThumbUrl %>"> 
+                                        <p>{{ 'ARTICLE_VIDEO_URL_DESC'|trans}}</p>
+                                        <input class="invalid-video-url-flag" id="invalid-video-url-flag-<%- media.mediaId %>"  type="hidden" value="">
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <label class="control-label" for="teaser">{{ 'ARTICLE_DESC'|trans}}</label>  
+                                    <div class="">
+                                        <% if(_.size(clubLanguages) > 0) { %>
+                                            <% _.each(clubLanguages,function(val,key){ %>
+                                                <textarea class="form-control no-resize media-desc <% if(defaultClubLang!=val){ %> hide <% } %> " name="imageDesc-<%- media.mediaId %>-<%- val %>" id="imageDesc-<%- media.mediaId %>-<%- val %>" data-key="article.media.videos.media.<%- media.mediaId %>.description.<%- val %>" 
+                                                          data-lang="<%- val %>" placeholder="<% if(typeof media.description[val] == 'undefined' && mode=='edit' ) { %><%- (media.description['default']) %><% } %>" ><% if( typeof media.description[val] != 'undefined') { %><%- media.description[val] %><% } %></textarea>                                                            
+                                            <% }); %>
+                                        <% } %>   
+                                    </div>
+                                </div>                                
+                                <div class="clearfix"></div>
+                                <div class="fg-last-icon">
+                                    <div class="closeico">
+                                        <input type="checkbox" class="make-switch fg-delicon delete-article-attachment" value="1" id="<%-media.mediaId %>_is_deleted" data-key="article.media.videos.media.<%-media.mediaId %>.is_deleted" name="is_deleted" data-inactiveblock="changecolor" data-parentid="<%-media.mediaId %>">
+                                        <label for="<%-media.mediaId %>_is_deleted"></label>
+                                    </div>
+                                </div>
+                                <input class="hide fg-media-desc-hid" name="mediaId-<%- media.mediaId %>" type="text" value="<%- media.mediaId %>" data-key="article.media.videos.media.<%- media.mediaId %>.mediaid">
+                                <input class="hide fg-media-desc-hid" name="ItemId-<%- media.mediaId %>" type="text" value="<%- media.itemId %>" data-key="article.media.videos.media.<%- media.mediaId %>.itemid">  
+                                <input type="text" class="hide" value="" id="<%-media.mediaId %>_is_deleted-hid" data-key="article.media.videos.media.<%-media.mediaId %>.mediaid" name="hid-is_deleted" >                   
+                                <input class="hide video-thumb" name="videoThumbImg"  type="text" value="" data-key="article.media.videos.media.<%-media.mediaId %>.videoThumbImg">
+                            </li> 
+                        <%  }
+                        }); %>  
+                    </ul>
+                    <div id="myModal-article" class="fg-gallery-browser modal fade fg-gal-browse-model" role="dialog"></div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="fg-file-upload-footer fg-v-middle">
+              </div>
+        </div>
+    </div>
+   {# image section end#}              
+ 
+
+</div>

@@ -1,0 +1,466 @@
+recipents_list:
+    path:  /communication/recipientslist
+    defaults: { _controller: ClubadminCommunicationBundle:Recipients:index , level1: newsletter, level2: recipient}       
+get_recipents:
+    path:  /communication/getrecipents
+    defaults: { _controller: ClubadminCommunicationBundle:Recipients:getRecipientsList }
+get_recipent_counts:
+    path:  /communication/getrecipentcounts
+    defaults: { _controller: ClubadminCommunicationBundle:Recipients:getRecipientCounts }
+update_recipientslist:
+    path:  /communication/updaterecipientslist
+    defaults: { _controller: ClubadminCommunicationBundle:Recipients:updateRecipientsList }
+update_recipient_contacts:
+    path:  /communication/updaterecipientcontacts/{recipientId}
+    defaults: { _controller: ClubadminCommunicationBundle:Recipients:updateRecipientContacts }
+subscriber_import_file:
+    path:  /communication/import
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriberimport:index , level1: newsletter, level2: subscribers}
+subscriber_import_update_file:
+    path:  /communication/import/{type}
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriberimport:index }
+   
+template_create:
+    path:  /communication/template/create
+    defaults: { _controller: ClubadminCommunicationBundle:Template:index , level1: newsletter, level2: design}
+    
+template_save:
+    path:  /communication/template/save
+    defaults: { _controller: ClubadminCommunicationBundle:Template:save }
+   
+subscriber_import_data_assignment:
+    path:  /communication/importdata
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriberimport:importFileSubmit }
+    
+subscriber_import_file_correction:
+    path:  /communication/importcorrection
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriberimport:importFileCorrection }
+    
+subscriber_import_duplcate:
+    path:  /communication/importduplicate
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriberimport:importDuplicate }
+
+    
+subscriber_import_submit:
+    path:  /communication/importSubmit
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriberimport:importSubmit }
+
+subscriber_list:
+    path:  /communication/subscribers
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriber:index, level1: newsletter, level2: subscribers}   
+    options:
+        subpage: subscribers
+get_subscribers:
+    path:  /communication/getsubscribers
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriber:getSubscribersList }
+    
+communication_log_listing:
+    path: /communication/log/{tab}/{offset}/{subscriber}
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriberlog:index,level1: newsletter, level2: subscribers }
+    
+get_own_subscribers:
+    path:  /communication/getownsubscribers
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriber:getOwnSubscribers }
+    
+newsletter_preview:
+    path:  /communication/newsletter/preview/{templateid}
+    defaults: { _controller: ClubadminCommunicationBundle:Preview:previewNewsletter}
+    
+template_preview:
+    path:  /communication/template/preview/{templateid}
+    defaults: { _controller: ClubadminCommunicationBundle:Preview:previewTemplate}
+    
+subscriber_contact_list:
+    path:  /communication/subscriber/{subscriber}
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriber:index, level1: newsletter, level2: subscribers}
+    
+template_edit:
+    path:  /communication/template/edit/{id}
+    defaults: { _controller: ClubadminCommunicationBundle:Template:index , level1: newsletter, level2: design}   
+
+subscriber_create:
+    path:  /communication/createsubscriber
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriber:create , level1: newsletter, level2: subscribers}
+
+subscriber_edit:
+    path:  /communication/editsubscriber/{offset}/{subscriberid}
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriber:editSubscriber , level1: newsletter, level2: subscribers}
+
+template_list:
+    path:  /communication/template/list
+    defaults: { _controller: ClubadminCommunicationBundle:Template:list , level1: newsletter, level2: design}
+    
+template_tablelistdetails:
+    path:  /communication/template/gettabledetails
+    defaults: { _controller: ClubadminCommunicationBundle:Template:getemplateList}   
+
+communication_log_own_contact_listing:
+    path: /communication/owncontactlog/{offset}/{contact}
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriberlog:owncontactlog, level1: newsletter, level2: subscribers }
+    
+reciever_list_simplemail:
+    path:  /communication/simplemail/recieverslist/{filterId}
+    defaults: { _controller: ClubadminCommunicationBundle:Recipients:recieverslist , level1: simplemail, level2: recipient}
+
+reciever_list_newsletter:
+    path:  /communication/newsletter/recieverslist/{filterId}
+    defaults: { _controller: ClubadminCommunicationBundle:Recipients:recieverslist , level1: newsletter, level2: recipient}
+    
+get_reciever_list:
+    path:  /communication/getrecieversList
+    defaults: { _controller: ClubadminCommunicationBundle:Recipients:getRecieverList}
+   
+template_duplicate:
+    path:  /communication/template/duplicate/{id}
+    defaults: { _controller: ClubadminCommunicationBundle:Template:duplicate }
+    
+template_duplicate_delete_newsletter:
+    path:  /communication/template/duplicate
+    defaults: { _controller: ClubadminCommunicationBundle:Template:duplicateteDeletemplate }
+    
+save_duplicate_delete_template:
+    path:  /communication/template/saveduplicate
+    defaults: { _controller: ClubadminCommunicationBundle:Template:saveDuplicateDeleteTemplate }
+nonmandatory_reciever_list:
+    path:  /communication/newsletter/nonmandatoryrecieverslist/{filterId}
+    defaults: { _controller: ClubadminCommunicationBundle:NonmandatoryRecipients:index, level1: newsletter, level2: recipient}
+    
+nonmandatory_simplemail_reciever_list:
+    path:  /communication/simplemail/nonmandatoryrecieverslist/{filterId}
+    defaults: { _controller: ClubadminCommunicationBundle:NonmandatoryRecipients:index, level1: simplemail, level2: recipient}
+    
+get_nonmandatory_reciever_list:
+    path:  /communication/getnonmandatoryrecieversList
+    defaults: { _controller: ClubadminCommunicationBundle:NonmandatoryRecipients:getNonmandatoryRecieverList} 
+    
+subscriber_delete:
+    path:  /communication/subscribers/delete
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriber:deleteSubsciberContacts, level1: newsletter, level2: subscribers  }
+    
+save_delete_subscribers:
+    path:  /communication/subscribers/savedelete
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriber:saveDeleteSubscriber }
+    
+subscriber_export:
+    path: /communication/subscribers/export
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriber:exportSubscribers}
+
+subscriber_own_contact_export:
+    path: /communication/subscribers/owncontactexport
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriber:exportOwnContactSubscribers}
+
+save_export_subscribers:
+    path: /communication/subscribers/saveexport
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriber:saveExportSubscribers}
+
+subscriber_own_export:
+    path: /communication/subscribers/ownexport
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriber:exportOwnSubscribers}
+get_exception_contact_names:
+    path: /communication/getexceptioncontactnames
+    defaults: { _controller: ClubadminCommunicationBundle:Recipients:getExceptionContactNames}
+    
+communication_mandatory_recepients:
+    path:  /communication/newsletter/recepients/mandatory/{filterId}
+    defaults: { _controller: ClubadminCommunicationBundle:MandatoryRecipients:index, level1: newsletter, level2: recipient}
+ 
+communication_simplemail_mandatory_recepients:
+    path:  /communication/simplemail/recepients/mandatory/{filterId}
+    defaults: { _controller: ClubadminCommunicationBundle:MandatoryRecipients:index, level1: simplemail, level2: recipient}
+    
+get_mandatory_reciever_list:
+    path:  /communication/newsletter/recepients/mandatorylist
+    defaults: { _controller: ClubadminCommunicationBundle:MandatoryRecipients:getMandatoryRecieverList} 
+
+create_newsletter:
+    path:  /communication/newsletter/create
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:index, level1: newsletter, level2: mailings}
+simplemail_recipents_list:
+    path:  /communication/simplemailrecipientslist
+    defaults: { _controller: ClubadminCommunicationBundle:Recipients:index , level1: simplemail, level2: recipient}  
+    
+newsletter_mailings:
+    path:  /communication/newsletter/mailings
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:mailing , level1: newsletter, level2: mailings}   
+    
+newsletter_mailings_types:
+    path:  /communication/mailingtypes/{mail}/{type}
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:getNewsletterTypes} 
+  
+nl_newsletter_recepients:
+    path:  /communication/newsletter/recipients/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletterwizardrecipients:index , level1: newsletter, level2: mailings}
+
+mailings_newsletter_preview:
+    path:  /communication/newsletter/newsletterpreview/{status}/{id}
+    defaults: { _controller: ClubadminCommunicationBundle:Mailings:preview, level1: newsletter, level2: mailings}
+    
+mailings_newsletter_recipients:
+    path:  /communication/newsletter/recipients/{status}/{id}
+    defaults: { _controller: ClubadminCommunicationBundle:Mailings:recipients, level1: newsletter, level2: mailings}
+
+newsletter_template_preview:
+    path:  /communication/newsletter/preview/{templateid}/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:Preview:previewNewsletter}
+    
+update_newsletter_publish_archive:
+    path:  /communication/updatenewsletterarchive
+    defaults: { _controller: ClubadminCommunicationBundle:Mailings:updateNlPublish} 
+
+newsletter_simplemailings:
+    path:  /communication/simplemail/mailings
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:simpleMailing , level1: simplemail, level2: mailings}
+
+delete_draft_newsletter:
+    path: /communication/newsletter/deletenewsletterdraft/{type}/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:deleteNewsletterDraft, level1: newsletter, level2: mailings}
+
+confirm_delete_draft_newsletter:
+    path:  /communication/newsletter/confirmdelete
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:confirmDeleteDraftNewsletter }
+
+move_draft_newsletter:
+    path: /communication/newsletter/movenewsletterdraft/{type}/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:moveScheduledNewsletterToDraft, level1: newsletter, level2: mailings}
+
+confirm_move_to_draft:
+    path:  /communication/newsletter/confirmmove
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:confirmMoveToDraft }
+    
+active_nonmandatory_nl_recipients_list:
+    path:  /communication/newsletter/nonmandatory/activerecipientlist
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletterwizardrecipients:getNonmandatoryPreviewList }
+
+active_nonmandatory_nl_recipients_tabs:
+    path:  /communication/newsletter/nonmandatory/tabs
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletterwizardrecipients:getNonmandatoryTabshow }
+
+duplicate_newsletter:
+    path: /communication/newsletter/duplicate/{type}/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:duplicateNewsletter }
+    
+nl_subscriber_preview_list:
+    path: /communication/newsletter/subscriberpreview
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletterwizardrecipients:getSubscriberPreviewList }
+    
+nl_nonmandatory_recipients_list:
+    path:  /communication/newsletter/nonmandatory/activerecipientlist
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletterwizardrecipients:getNonmandatoryPreviewList }
+nl_federation_list_tab:
+    path:  /communication/newsletter/nonmandatory/fedmembertab
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletterwizardrecipients:getFedmembersPreviewTab }
+nl_federation_list_preview:
+    path:  /communication/newsletter/nonmandatory/fedmemberpreview
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletterwizardrecipients:getFedmembersPreviewList }
+
+confirm_duplicate_newsletter:
+    path:  /communication/newsletter/confirmduplicate
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:confirmDuplicateNewsletter }
+
+simplemail_preview:
+    path:  /communication/simplemail/preview/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:Preview:previewSimpleMail}
+    
+inlineedit_recepients_bounced:
+    path:  /communication/recepients/editbounced/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:Mailings:editBouncedRecepients}
+    
+nl_collect_contactname:
+    path:  /communication/recepients/getcontactname
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletterwizardrecipients:getcontactNames}  
+    
+recepients_resend:
+    path:  /communication/recepients/resend
+    defaults: { _controller: ClubadminCommunicationBundle:Mailings:recepientsResend}
+    
+nl_deleted_nonmandatory_recipient_list:
+    path:  /communication/recepients/deletedlist   
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletterwizardrecipients:getDeletedContactList}
+    
+create_simplemail:
+    path:  /communication/simplemail/create
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:mailIndex, level1: simplemail, level2: mailings}   
+    
+nl_generalsave:
+    path:  /communication/generalsave
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:generalSave} 
+    
+send_newsletter:
+    path:  /communication/sendnewsletter/{id}
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:sendNewsletter}
+
+tmp_upload_file:
+    path:  /communication/uploadfile/{type}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardContent:uploadFile}
+    
+get_newsletter_content:
+    path:  /communication/newsletter/getcontent/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardContent:getNewsletterContent}
+    
+mailings_simplemail_preview:
+    path:  /communication/simplemail/simpleemailpreview/{status}/{id}
+    defaults: { _controller: ClubadminCommunicationBundle:Mailings:preview, level1: simplemail, level2: mailings}
+    
+mailings_simplemail_recipients:
+    path:  /communication/simplemail/recipients/{status}/{id}
+    defaults: { _controller: ClubadminCommunicationBundle:Mailings:recipients, level1: simplemail, level2: mailings}
+    
+newsletter_step_content:
+    path:  /communication/newsletter/content/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardContent:index, level1: newsletter, level2: mailings}
+
+simplemail_step_content:
+    path:  /communication/simplemail/content/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardContent:index, level1: simplemail, level2: mailings }
+
+recepients_bounce_message:
+    path:  /communication/recipients/{logId}
+    defaults: { _controller: ClubadminCommunicationBundle:Mailings:getRecepientsBounceMessage}
+    
+edit_newsletter:
+    path:  /communication/newsletter/edit/{id}
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:index, level1: newsletter, level2: mailings}
+    
+tracking_email:
+    path:  /public/communication/track.gif
+    defaults: { _controller: ClubadminCommunicationBundle:MailTracking:trackingEmail }    
+
+edit_simplemail:
+    path:  /communication/simplemail/edit/{id}
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:mailIndex, level1: simplemail, level2: mailings}
+    
+newsletter_save_content:
+    path:  /communication/newsletter/content/save/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardContent:saveContents, level1: newsletter, level2: content}
+simplemail_save_content:
+    path:  /communication/simplemail/content/save/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardContent:saveContents, level1: simplemail, level2: content}
+save_newsletter_step2:
+    path:  /communication/saveNewsletterStep2
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletterwizardrecipients:saveNewsletterStep2}
+active_mandatory_nl_recipients_tabs:
+    path:  /communication/newsletter/mandatory/tabs
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletterwizardrecipients:getMandatoryTabshow }   
+newsletter_editor_content:
+    path:  /communication/newsletter/editor/{type}/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardContent:getEditorContents, level1: newsletter, level2: content}
+simplemail_editor_content:
+    path:  /communication/simplemail/editor/{type}/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardContent:getEditorContents, level1: simplemail, level2: content}
+
+nl_simplemail_recepients:
+    path:  /communication/simplemail/recipients/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletterwizardrecipients:index , level1: simplemail, level2: mailings}
+
+nl_design:
+    path: /communication/newsletter/design/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:templateNlDesign, level1: newsletter, level2: mailings}
+sm_design:
+    path: /communication/simplemail/design/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:templateSmDesign, level1: simplemail, level2: mailings}
+nl_template_selection:
+    path: /communication/newsletter/templateselection/{newsletterId}/{pageType}
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:templateSelection}
+send_test_newsletter:
+    path: /communication/newsletter/testmail
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:testMail}
+nl_template_update:
+    path: /communication/newsletter/updatenewslettertemplate
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:updateTemplate}
+nl_sending:
+    path: /communication/newsletter/sending/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:sendingNewsletter, level1: newsletter, level2: mailings}
+sm_sending:
+    path: /communication/simplemail/sending/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:sendingSimpleMail,level1: simplemail, level2: mailings}
+nl_update_send:
+    path: /communication/newsletter/send
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:updateSendingNlSm}
+newsletter_save_editorcontent:
+    path:  /communication/newsletter/saveeditorcontent/{from}/{wordType}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardContent:saveEditorContent, level1: newsletter, level2: content}
+simpleemail_save_editorcontent:
+    path:  /communication/newsletter/saveeditorcontent/{from}/{wordType}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardContent:saveEditorContent, level1: simplemail, level2: content}
+newsletter_delete_editorcontent:
+    path:  /communication/newsletter/deleteeditorcontent/{type}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardContent:deleteEditorContent, level1: newsletter, level2: content}
+simpleemail_delete_editorcontent:
+    path:  /communication/newsletter/deleteeditorcontent/{type}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardContent:deleteEditorContent, level1: simplemail, level2: content}
+get_simpleemail_content:
+    path:  /communication/newsletter/getsimplecontent/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardContent:getNLsimpleContent}
+get_Nl_additional_subscribers:
+    path: /communication/getadditionalsubscribers/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletterwizardrecipients:getAdditionalSubscriber}    
+
+newsletter_statistics:
+    path:     /communication/newsletter/statistics
+    defaults: { _controller: ClubadminCommunicationBundle:Statistics:newsletter, level1: newsletter, level2: statistics }
+    
+newsletter_statistics_ajax:
+    path:     /communication/newsletter/statistics/ajax
+    defaults: { _controller: ClubadminCommunicationBundle:Statistics:newsletterAjax }  
+    requirements:
+        _method:  POST
+        
+simplemail_statistics:
+    path:     /communication/simplemail/statistics
+    defaults: { _controller: ClubadminCommunicationBundle:Statistics:simpleMail, level1: simplemail, level2: statistics }
+    
+simplemail_statistics_ajax:
+    path:     /communication/simplemail/statistics/ajax
+    defaults: { _controller: ClubadminCommunicationBundle:Statistics:simpleMailAjax }  
+    requirements:
+        _method:  POST 
+nl_step_sidebar:
+    path:     /communication/newsletter/sidebar/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardSidebar:index, level1: newsletter, level2: mailings}
+nl_step_save_sidebar:
+    path:     /communication/newsletter/savesidebar/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardSidebar:saveSidebar, level1: newsletter, level2: mailings}      
+
+inlineedit_subscriber:
+    path: /subscriber/inlinedit
+    defaults: { _controller: ClubadminCommunicationBundle:Subscriber:subscriberInlineEdit}
+nl_newsletter_unsubscription_page:
+    path:  /public/unsubscription/{encodings}
+    defaults: { _controller: ClubadminCommunicationBundle:MailTracking:unSubscription, level1: newsletter }  
+nl_newsletter_unsubscription_ajax:
+    path:  /public/unsubscription/ajax/{encodings}
+    defaults: { _controller: ClubadminCommunicationBundle:MailTracking:unsubscribeContact }   
+    
+get_newsletter_sidebar_content:
+    path:  /communication/newsletter/getsidebarcontent/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardSidebar:getSidebarContent}    
+    
+check_email_exists:
+    path:  /communication/recepients/checkemailexists
+    defaults: { _controller: ClubadminCommunicationBundle:Mailings:checkPrimaryEmailExists}
+    
+update_primaryemail:
+    path:  /communication/recepients/updateprimaryemail/{newsletterId}
+    defaults: { _controller: ClubadminCommunicationBundle:Mailings:updatePrimaryEmail}
+    
+get_template_sponsor_content:
+    path:  communication/template/sponsor/{templateId}
+    defaults: { _controller: ClubadminCommunicationBundle:Template:getSponsorContent}  
+    
+get_newsletter_template_details:   
+    path: /communication/newsletter/{templateId}/newsletterFirststepAjax
+    defaults: { _controller: ClubadminCommunicationBundle:Newsletter:newsletterFirststepAjax} 
+
+get_newsletter_receivers:   
+    path: /communication/newsletter/getReceivers
+    defaults: { _controller: ClubadminCommunicationBundle:Mailings:getNewsletterReceivers}
+    
+backend_nextprevious_save:
+    path:     nextprevious/save
+    defaults: { _controller: InternalGeneralBundle:Navigation:saveNextPreviousData}
+get_internal_article:
+    path:  /communication/newsletter/getarticle
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardContent:getInternalArticle}
+get_internal_article_details:
+    path:  /communication/newsletter/getarticledetails/{lang}/{articleId}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardContent:getInternalArticleDetails}

@@ -1,0 +1,51 @@
+<div class="modal-content">
+    <div class="modal-header fg-modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        {% if totalCount > 1 %}
+            <h4 class="modal-title">
+                <span class="fg-dev-event-names">
+                    <a href="#" class="fg-plus-icon"></a>
+                    <a href="#" class="fg-minus-icon"></a>
+                </span>
+                <div class="fg-popup-text" id="popup_head_text">{{title}}</div>
+                <div class="fg-arrow-sh">
+                    <ul>
+                        {% for key, value in pageArray %}
+                            <li>
+                                <a data-page-id="{{value.id}}" onClick = "FgCmsPageList.editPage({{value.id}});"  target="_blank" class="fg-event-detail-popup-link">{{value.title}}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </h4>
+        {% else %}
+            <h4 class="modal-title">{{title}}</h4>
+        {% endif %}
+    </div>
+    <div class="modal-body fg-cms-unassign-modal">
+        <div class="form-group fg-clear fg-cms-unassign-form">
+            <p>{{text}}</p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn default" data-dismiss="modal">{{ 'CANCEL'|trans }}</button>
+        {% if footer != 'okCancel' %}
+            <button type="button" class="btn green" id="unAssignDelete">{{ 'DELETE'|trans }}</button>
+        {% else %}
+            <button type="button" class="btn green" data-dismiss="modal">{{ 'OK'|trans }}</button>
+        {% endif %}
+    </div>
+</div>
+<script>
+    $(document).off('click', '.modal-title .fg-dev-event-names');
+    $(document).on('click', '.modal-title .fg-dev-event-names', function (e) {
+        $(this).parent().toggleClass('fg-arrowicon');
+    });
+    $(document).off('click', '#unAssignDelete');
+    $(document).on('click', '#unAssignDelete', function () {
+        FgModelbox.hidePopup();
+        FgXmlHttp.post(assignExistingPageSave, {'totCount': {{totalCount}}, 'navIds': {{pageAssigned|raw}}, 'pageFlag': 'unAssign'}, '', function (response) {
+            FgCmsPage.unassignPageCallback();
+        });
+    });
+</script>

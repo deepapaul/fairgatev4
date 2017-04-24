@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="{{clubDefaultLang}}" data-ng-app="fairgate">
+
+    <!-- BEGIN HEAD -->
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% set metaDetails = (metaDetails is defined) ? metaDetails : ''  %}
+       
+        {{ include('::website/meta.html.twig', {'metaData': metaDetails ,'pagecontentData':pagecontentData,'defaultlang':clubDefaultLang}) }}
+        <!-- BEGIN CSS -->
+        {% block stylesheets %}
+            <!-- BEGIN GLOBAL MANDATORY STYLES -->
+            {{ include('::website/corelevel-styles.html.twig') }}
+            <!-- END GLOBAL MANDATORY STYLES -->
+
+            <!-- BEGIN FAIRGATE STYLE -->
+            {{ include('::website/fairgate-styles.html.twig') }}
+            <!--  END FAIRGATE STYLE -->
+
+            <!-- INLCLUDE css and theme configuration styles -->
+            {% set publicConfig = fgclub.get('publicConfig') %}
+            <link href="{{ asset('/'~colorCssPath~'/'~publicConfig.theme~'/'~publicConfig.cssColorScheme) }}" type="text/css" rel="stylesheet" />
+            <link href="{{ asset('/'~cssPath~'/'~publicConfig.theme~'/'~publicConfig.cssFile) }}" type="text/css" rel="stylesheet" />
+            <!-- END css and theme configuration styles -->
+
+            <!-- BEGIN PAGE STYLES -->
+            {% block customstylesheets %}
+
+            {% endblock %}
+            <!-- END PAGE STYLES -->
+        {% endblock %}
+        <!-- BEGIN PAGE STYLES -->
+             <!-- END PAGE STYLES -->
+        {{ include('::global/google-analytic-web.html.twig') }}
+     
+        <!-- END CSS -->
+    </head>
+    <!-- END HEAD -->
+
+    <!-- BEGIN BODY -->
+    {% set isHeader = (isHeader is defined) ? isHeader : true  %}
+    {% set isNavigation = (isNavigation is defined) ? isNavigation : true  %}
+    {% set previewFlag = (previewFlag is defined) ? previewFlag : 'website'  %}
+    {% set isLoggedIn = (app.user and ('frontend1' in fgclub.get('bookedModulesDet')) and isNavigation == true ) ? true : false  %}
+    {% set themeId = fgclub.get('publicConfig').theme %}
+    {% set logoClass =  ( fgclub.get('publicConfig').header_options.header_label|length > 0 and themeId == 1) ? 'fg-haslogo' : '' %} 
+    <!---set fg-header-sticky/fg-header-scroll classes for theme01 and not for theme02--->
+    {% set headerClass =  (themeId == '1') ? 'fg-header-'~fgclub.get('publicConfig').header_options.type : '' %}  
+     
+    <body class="fg-web-theme-0{{ themeId }} {% if (isHeader == true) %} {{ headerClass }} {% endif %} {{(isLoggedIn)?' fg-has-admin-nav ':''}} {{ logoClass }} {% if (fgclub.get('publicConfig').header_options.type == 'sticky')%} no-scroll {% endif %} ">
+        
+         <!-- BEGIN ADMIN HEADER -->
+        <div class="container-fluid fg-webpage-admin-header" id="webpage-admin-header">
+            <!-- HEADER UNDERSCORE TEMPLATE included here -->
+        </div>
+        <!-- END ADMIN HEADER -->
+                 
+       {{ include(themeFiles['themeLayoutFiles']['theme'~themeId].headerFile) }}
+
+        <div class="clearfix"> </div>
+
+        <!-- BEGIN CONTAINER -->
+        <main class="container-fluid fg-visible-hidden {% if fgclub.get('publicConfig').bg_options.original_size is defined %} fg-web-bg-org-size {% endif %} fg-web-main-content {% if pagecontentData.sidebar is defined  %} {% if pagecontentData.sidebar|length >0 %}   {% if pagecontentData.page.sidebar.side == 'left' %} fg-cms-page-sidebar-left {% elseif pagecontentData.page.sidebar.side == 'right' %} fg-cms-page-sidebar-right {% endif %} {% endif %} {% endif %}" >
+            <div id="fg-dev-pagetitle-container" class="{%if(pagecontentData.hidePageTitle is defined)%}{% if (pagecontentData.hidePageTitle == '1') %}hide{% endif %}{% endif %}"></div>
+            <div class="container {%if(pagecontentData.hidePageTitle is defined)%}{% if (pagecontentData.hidePageTitle == '1') %}fg-marg-top-20{% endif %}{% endif %}">
+                <div class="fg-web-page-container row">
+                    {% block websiteContentArea %}      
+                    <!-- SideBar Wrapper -->
+                    {% if ( ( pagecontentData.sidebar is defined ) and (pagecontentData.sidebar|length >0) and  (pagecontentData.page.sidebar.side =="left")) %}
+
+                            {{ include(themeFiles['themeLayoutFiles']['theme'~themeId].sidebarFile) }}
+
+                    {% endif %}
+
+
+                        <!-- BEGIN CONTENT -->
+                        {{ include(themeFiles['themeLayoutFiles']['theme'~themeId].contentFile) }}
+                        <!-- END CONTENT -->
+
+
+                    {#sidebar DISPLAY AREA START RIGHT#}
+                    {% if (( pagecontentData.sidebar is defined ) and (pagecontentData.sidebar|length >0) and  (pagecontentData.page.sidebar.side =="right") ) %}
+
+                            {{ include(themeFiles['themeLayoutFiles']['theme'~themeId].sidebarFile) }}
+
+                    {% endif %}
+                    {#sidebar DISPLAY AREA RIGHT END#}
+
+                {% endblock  %}
+                {% block websiteCustomContentArea %}      
+
+                {% endblock  %}
+                </div>
+                <!-- END SideBar Wrapper -->
+            </div>
+        </main>
+        <!-- END CONTAINER -->
+
+        <!-- BEGIN FOOTER -->
+        {% if (( pagecontentData.footer is defined ) and (pagecontentData.footer|length >0)) %}
+            {{ include(themeFiles['themeLayoutFiles']['theme'~themeId].footerFile) }}
+        {% endif %}
+        <!-- END FOOTER -->
+
+        <div class="fg-web-bg-wrapper" id="fg-web-bg-wrapper-id">
+            <!-- BACKGROUND UNDERSCORE TEMPLATE included here -->
+        </div>
+
+        <div class="fg-web-promobox-wrapper">
+            
+        </div>
+
+        <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+        <!-- BEGIN PAGE LEVEL UNDERSCORE TEMPLATE -->
+        <div id="divTemplates">
+            {{ include(themeFiles['themeLayoutFiles']['theme'~themeId].pageTitleBarFile) }}
+            {{ include(themeFiles['themeLayoutFiles']['theme'~themeId].topnavFile) }}
+            {{ include(themeFiles['themeLayoutFiles']['theme'~themeId].headerLogosFile) }} 
+            {{ include(themeFiles['themeLayoutFiles']['theme'~themeId].headerNavMenuFile) }} 
+            {{ include(themeFiles['themeLayoutFiles']['theme'~themeId].backgroundFile) }}
+            {% block underscoretemplate %}
+
+            {% endblock %}
+        </div>
+        <!-- END PAGE LEVEL UNDERSCORE TEMPLATE -->
+
+
+        {% block scripts %}
+            <!-- BEGIN CORE JQUERY AND ANGULARJS PLUGINS -->
+            {{ include('::website/corelevel-scripts.html.twig') }}
+            <!-- END CORE JQUERY AND ANGULARJS PLUGINS -->
+
+            <!-- BEGIN FAIRGATE SCRIPTS -->
+            {{ include('::website/fairgate-scripts.html.twig') }}
+            {{ include(themeFiles['themeLayoutFiles']['theme'~themeId].themeScripts) }}
+            <!-- END FAIRGATE SCRIPTS -->
+
+        {% endblock %}
+          
+        <script type="text/javascript">
+                var ajaxCallStart = 0;
+                var ajaxCallComplete =0;
+                var refreshIntervalId;
+                var systemEnvironment = '{{ app.environment }}';
+                var systemClubUrlIdentifier = '{{ fgclub.clubUrlIdentifier }}';
+                 var iconSettingsType = "website";
+                {% set previewFlag = (previewFlag is defined) ? previewFlag : 'website' %}
+                {% set menu = (menu is defined) ? menu : '' %}
+                {% if currentNavigationId is defined %} 
+                    var currentNavigationId = '{{currentNavigationId}}';
+                {% endif %}
+                var clubId = '{{fgclub.get('id')}}';
+                var formDataArray = {};
+                var formMessages = {};
+                formMessages['fileType']="{{'FILEMANAGER_UPLOAD_FILETYPE_ERROR'|trans}}";
+                formMessages['virus']="{{'FILEMANAGER_UPLOAD_VIRUS_ERROR'|trans}}";
+                var previewFlag = '{{ previewFlag }}';
+                var menu = '{{ menu }}';
+                var additionalmenuPath = '{{path('website_additional_navigation_list',{'level1':menu })}}';
+                if (previewFlag == 'preview') {
+                    var headerNav = "{{ path('website_theme_preview_header_nav',{'level1':menu })}}";
+                    var noNavErrorPage = "{{path('website_theme_preview_page_menu',{'menu':'**dummy**'})}}";
+                } else {
+                    var headerNav = "{{ path('website_header_nav',{'level1':menu })}}";
+                    var noNavErrorPage = "{{path('website_public_page_menus',{'menu':'**dummy**'})}}";
+                } 
+                var headerPath = "{{backgroundPath}}";
+                var isHeader = "{{isHeader}}";
+                var isNavigation ="{{isNavigation}}";
+                var publicConfig = {{fgclub.get('publicConfig')|json_encode()|raw}};
+                fgwebsite = new FgWebsite();
+                //theme specific js
+                var FgWebsiteThemeObj = new FgWebsiteTheme();
+                fgwebsite.init();
+                if(isNavigation==true)
+                    fgwebsite.renderPromoBox("{{ path('website_promobox') }}", "{{ path('website_promobox_cookie') }}");
+                
+                var cmspage = new Fgwebsitepage();  
+                onLoadData = {{pageData | json_encode() | raw}};
+                 var jsonData = {{pagecontentData | json_encode() | raw}};
+                 jsonData['ajax'] = {};
+                {% if clubDefaultLang is defined %} 
+                    clubDefaultLang = '{{clubDefaultLang}}';
+                {% endif %}
+                  var cmsOptions = {
+                    data: jsonData.page,
+                    onLoadData:onLoadData,
+                    containerType: 'content',
+                    mainContainer: '#fg-website-content',
+                    sideContainer: '#fg-website-sidebar',
+                    footerContainer:'#fg-website-footer',
+                     pageInitCallback: function() {
+                        cmspage.pageCallBackFunction();
+                    },renderAllAreaContentCallback:function(){
+                         FgWebsiteThemeObj.makeFooterSticky();
+                        if(!($('body').hasClass('no-scroll')) ){                         
+                            $(".fg-web-page-footer").removeClass('fg-visible-hidden');
+                        }
+                       
+                    }
+                };
+                
+                $(document ).ready(function() { 
+                    var loginElems = _.filter(onLoadData, function(elem) { return elem.elementType == 'login';});
+                    if(loginElems){
+                        $( "body" ).on( "loaded.fg.element.login", function( event ) {
+                            _.each(loginElems, function(loginElem){
+                                cmspage.handleLoginButtonsClick('elementbox-' + loginElem.id,loginElem.htmlContent);
+                            });
+                            
+                        });
+                    }
+                    cmspage.pagedocInit();
+                });  
+
+        </script>
+       
+        <!-- BEGIN PAGE LEVEL SCRIPTS -->
+        {% block javascripts %}
+
+        {% endblock %}
+        <!-- END PAGE LEVEL SCRIPTS -->
+
+        {% if isLoggedIn %}
+            {{ include('::website/internal-topnavigation.html.twig') }}
+        {% endif %} 
+          <div class="custom-popup">
+                <div class="popover bottom">
+                    <div class="arrow"></div>
+                    <div class="popover-content"></div>
+                </div>
+            </div>
+    </body>
+       
+    <!-- END BODY -->
+</html>

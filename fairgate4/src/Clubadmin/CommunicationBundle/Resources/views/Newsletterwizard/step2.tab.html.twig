@@ -1,0 +1,93 @@
+<div class="row  fg-contact-data">
+    <div class="col-md-12">
+        <div class="portlet-body">
+            <div class="tabbable-custom ">
+                <ul  class="nav nav-tabs data-more-tab" id="data-tabs">
+
+                    <li id="data_li_recipient" class="active" data-target="1">
+                        <a data-toggle="tab" data-datatableId="recipient_table" href="#recipient_table" id="recipient_content" class="activerecipient_content">{% trans %} NL_STEP2_NON_MANDATORY_TAB1{% endtrans %} <span class="badge fg-nonmandatory-tab1-count"></span></a>
+                    </li> 
+                    {% if additionalsubscriberFlag =='1'%}
+                        <li id="data_li_additional_subscribers" data-target="2">
+                            <a data-toggle="tab" data-datatableId="additionalsubscriber_table" href="#additionalsubscriber_table"  class="additionalsubscriber_content">{% trans %} NL_STEP2_NON_MANDATORY_TAB2{% endtrans %} <span class="badge fg-nonmandatory-tab2-count">{{additionalSubscriberCount}}</span></a>
+                        </li> 
+                    {% endif %}
+                    {% if federationmemberFlag =='1'%}
+                        <li id="data_li_fed_member" data-target="3">
+                            <a data-toggle="tab" data-datatableId="fedmember_table" href="#fedmember_table" class="fedmember_content">{% trans %} NL_STEP2_NON_MANDATORY_TAB3{% endtrans %} <span class="badge fg-nonmandatory-tab3-count">{{fedCount}}</span></a>
+                        </li> 
+                    {% endif %}
+
+                    {#more tab#}
+{#                    <li class="hideshow" ><a href="#"  id="fg-contact-more-tab" class="dropdown-toggle" data-toggle="dropdown">{{ 'MORE'|trans }}</a>#}
+                        <li class="datahideshow dropdown" ><a href="#"  id="fg-contact-more-tab" class="dropdown-toggle" data-toggle="dropdown">{{ 'MORE'|trans }}<i class="fa fa-angle-down"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li id="data_li_recipient"  data-target="1">
+                                <a tabindex="-1" data-toggle="tab" data-datatableId="recipient_table" href="#recipient_table" class="activerecipient_content">{% trans %} NL_STEP2_NON_MANDATORY_TAB1{% endtrans %} <span class="badge fg-nonmandatory-tab1-count"></span></a>
+                            </li> 
+                            {% if additionalsubscriberFlag =='1'%}
+                                <li id="data_li_additional_subscribers" data-target="2">
+                                    <a tabindex="-1" data-toggle="tab" data-datatableId="additionalsubscriber_table" href="#additionalsubscriber_table" class="additionalsubscriber_content">{% trans %} NL_STEP2_NON_MANDATORY_TAB2{% endtrans %} <span class="badge fg-nonmandatory-tab2-count">{{additionalSubscriberCount}}</span></a>
+                                </li> 
+                            {% endif %}
+                            {% if federationmemberFlag =='1'%}
+                                <li id="data_li_fed_member" data-target="3">
+                                    <a tabindex="-1" data-toggle="tab" data-datatableId="fedmember_table" href="#fedmember_table" class="fedmember_content">{% trans %} NL_STEP2_NON_MANDATORY_TAB3{% endtrans %} <span class="badge fg-nonmandatory-tab3-count">{{fedCount}}</span></a>
+                                </li> 
+                            {% endif %}
+                        </ul>
+                    </li>
+                    {# more tab ends #}
+                </ul>
+                <div class="fg-log-filter"><button id="fgContactLog" data-toggle="dropdown" class="btn tableaction"></button></div>
+                <div class="fg-clear"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="data-tabs-content" class="tab-content">   
+
+    <div class="portlet-body tab-pane new-table-height logTabs active" id="recipient_table">
+        <div class="fg-clear"></div>
+        <div class="replaceDiv">
+     
+        </div>
+    </div>
+    {% if additionalsubscriberFlag =='1'%}
+        <div class="portlet-body tab-pane new-table-height logTabs" id="additionalsubscriber_table">
+            <div class="fg-clear"></div>
+            <div class="replaceDiv">
+
+                {#Second tab conten load here#}
+            </div>
+        </div>
+    {% endif %}            
+    {% if federationmemberFlag =='1'%}
+        <div class="portlet-body tab-pane new-table-height logTabs" id="fedmember_table">
+            <div class="fg-clear"></div>
+            <div class="replaceDiv">
+                {#Third tab content #}
+            </div>
+        </div>
+    {% endif %}
+</div>
+<script>
+   
+   $(function(){
+      FgMoreMenu.initClientSideWithNoError('data-tabs', 'data-tabs-content');
+      
+   })
+    $.ajax({url: "{{path('nl_nonmandatory_recipients_list')}}",
+        data: {'recipient': "{{recipientId}}", 'manualSelectedIds': "{{manualSelectedContact}}", 'newsletterId': "{{newsletterId}}"},
+        type: "post",
+        success: function(data) {
+            $('#recipient_table').find('.replaceDiv').html(data);
+
+        }
+    })
+
+
+</script>    
+   
+
+

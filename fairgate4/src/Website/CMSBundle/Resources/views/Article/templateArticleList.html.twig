@@ -1,0 +1,55 @@
+<script type="text/template" id="template-article-listing">
+    <div class="fg-article-content-block <%- (data.FIRST_IMAGE)?' fg-has-thumb ':''%> fg-dev-article-list" id="article-<%- data.articleId %>" data-url="<%- data.detailPath %>">
+        <h3 class="fg-title visible-xs"><%- data.title %></h3>
+
+        <% if(data.FIRST_IMAGE) { %>
+            <div class="col-sm-4 fg-thumb">
+                <figure><img alt="" src="/uploads/<%- data.club_id %>/gallery/width_300/<%- data.FIRST_IMAGE %>"></figure>
+            </div>
+        <% } %>
+
+
+        <section class="<%- (data.FIRST_IMAGE)?'col-sm-8':'col-sm-12'%>">
+            <h3 class="fg-title hidden-xs"><%- data.title %></h3>
+            <main class="fg-content">
+              <it><%- (data.teaser)?data.teaser:data.text%></it>
+              <a class="fg-read-more" href="<%- data.detailPath %>"><i class="fa fa-arrow-circle-right"></i>{{'READ_MORE'|trans}}</a>
+            </main>
+            <footer class="fg-footer">
+                <div class="pull-left fg-date"><%- FgLocaleSettings.formatDate(data.PUBLICATION_DATE, 'date', 'YYYY-MM-DD hh:mm:ss') %></div>
+                    <div class="pull-right fg-block fg-cat-tags">
+                        <% if(data.isAllArea == true || data.sharedClub == true || data.areaCount != 1) { %>
+                            <% if(data.areaTooltip != '') { %>
+                                <span class="fg-club-tag"><%- data.areaTooltip %></span>
+                            <% } %>
+                            
+                            <% if (data.isClub == 1 && data.isCurrentClub){ %> <span class="fg-club-tag">{{fgtwig.getTerminolgyName('Club',singular,'UCF')}}</span> <% } %>
+                            <% if(data.AREAS != '' && data.AREAS != null) { %>
+                                <% var areaArray = data.AREAS.split("*##*");  %>
+                                <% _.each(areaArray, function(area, index) { %>
+                                    <span class="fg-club-tag"><%- area %></span>
+                                <% }) %>
+                            <% } %>
+                        <% } %>
+                    
+                    
+                        <% if(data.isAllCategory == true || data.categoryCount != 1 || data.sharedClub == true) { %>
+                            <% if(data.catTooltip != '') { %>
+                                <span class="fg-cat-tag"><%- data.catTooltip %></span>
+                            <% } %>
+                            <% if(data.CATEGORIES != '' && data.CATEGORIES != null) { %>
+                                <% var categoryArray = data.CATEGORIES.split("*##*");  %>
+                                <% _.each(categoryArray, function(category, index) { %>
+                                    <span class="fg-cat-tag"><%- category %></span>
+                                <% }) %>
+                            <% } %>
+                        <% } %>
+                    </div>
+            
+                    <% if (data.COMMENTS > 0) { %>
+                        <div class="pull-right fg-block fg-comments-count"><%- data.COMMENTS %> {{'AR_COMMENTS'|trans}}</div>
+                    <% } %>
+            </footer>
+        </section>
+    </div>
+</script>

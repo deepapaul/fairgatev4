@@ -1,0 +1,242 @@
+{% if(fontsArray is defined) %}
+    {% for fonts in fontsArray %}
+        @import url(https://fonts.googleapis.com/css?family={{ fonts|raw }});
+    {% endfor %}
+{% endif %} 
+
+/*font-family: 'PT Sans', sans-serif;*/
+.fg-web-theme-0{{ themeId }} > header *, 
+.fg-web-theme-0{{ themeId }} > main  *, 
+.fg-web-theme-0{{ themeId }} > footer  *,
+.fg-body-ckeditor.fg-web-theme-0{{ themeId }} * {
+  /*----------------------------------------------------------------
+  Main text style related elements
+  -------------------------------------------------------------------*/
+{% if(font.TM_MAIN_TEXT.fontName is defined and font.TM_MAIN_TEXT.fontName is not empty) %}
+    font-family: {{ font.TM_MAIN_TEXT.fontName|raw }};
+{% endif %}
+{% if(font.TM_MAIN_TEXT.fontStrength is defined and font.TM_MAIN_TEXT.fontStrength is not empty) %}
+    font-weight: {{ font.TM_MAIN_TEXT.fontStrength == 'lighter' ? '300' : font.TM_MAIN_TEXT.fontStrength|raw }};
+{% endif %}
+{% if( font.TM_MAIN_TEXT.isItalic is defined and font.TM_MAIN_TEXT.isItalic == 1 ) %}
+    font-style: italic;
+{% else %}
+    font-style: normal;
+{% endif %} 
+{% if( font.TM_MAIN_TEXT.isUppercase is defined and font.TM_MAIN_TEXT.isUppercase == 1 ) %}
+    text-transform: uppercase;
+{% else %}
+    text-transform: none;
+{% endif %}
+  /* main text style override on  other elements */
+  /*----------------------------------------------------------------
+  header section 
+  -------------------------------------------------------------------*/
+  /* heading style override on  other elements */
+  /*----------------------------------------------------------------
+  nav sectionstyle related elements
+  -------------------------------------------------------------------*/
+  /*----------------------------------------------------------------
+  Main text style related elements
+  -------------------------------------------------------------------*/
+  /*other overide section */
+}
+
+.fg-web-theme-0{{ themeId }} em {
+  font-style: italic !important;
+}
+.fg-web-theme-0{{ themeId }} em * {
+  font-style: italic !important;
+}
+.fg-web-theme-0{{ themeId }} strong {
+  font-weight: bold !important;
+}
+.fg-web-theme-0{{ themeId }} strong * {
+  font-weight: bold !important;
+}
+.fg-web-theme-0{{ themeId }} .fg-calendar-event-widget .fg-event-block .fg-event-title {
+{% if(font.TM_MAIN_TEXT.fontName is defined and font.TM_MAIN_TEXT.fontName is not empty) %}
+    font-family: {{ font.TM_MAIN_TEXT.fontName|raw }};
+{% endif %}
+{% if(font.TM_MAIN_TEXT.fontStrength is defined and font.TM_MAIN_TEXT.fontStrength is not empty) %}
+    font-weight: {{ font.TM_MAIN_TEXT.fontStrength == 'lighter' ? '300' : font.TM_MAIN_TEXT.fontStrength|raw }};
+{% endif %}
+{% if( font.TM_MAIN_TEXT.isItalic is defined and font.TM_MAIN_TEXT.isItalic == 1 ) %}
+    font-style: italic;
+{% else %}
+    font-style: normal;    
+{% endif %} 
+{% if( font.TM_MAIN_TEXT.isUppercase is defined and font.TM_MAIN_TEXT.isUppercase == 1 ) %}
+    text-transform: uppercase;
+{% else %}
+    text-transform: none;    
+{% endif %}
+}
+.fg-web-theme-0{{ themeId }} .form-group *:not(.fa) {
+{% if(font.TM_MAIN_TEXT.fontName is defined and font.TM_MAIN_TEXT.fontName is not empty) %}
+    font-family: {{ font.TM_MAIN_TEXT.fontName|raw }};
+{% endif %}
+{% if(font.TM_MAIN_TEXT.fontStrength is defined and font.TM_MAIN_TEXT.fontStrength is not empty) %}
+    font-weight: {{ font.TM_MAIN_TEXT.fontStrength == 'lighter' ? '300' : font.TM_MAIN_TEXT.fontStrength|raw }};
+{% endif %}
+{% if( font.TM_MAIN_TEXT.isItalic is defined and font.TM_MAIN_TEXT.isItalic == 1 ) %}
+    font-style: italic;
+{% else %}
+    font-style: normal;    
+{% endif %} 
+    text-transform: none;   
+}
+.fg-web-theme-0{{ themeId }} .ug-gallery-wrapper .ug-textpanel-description {
+{% if(font.TM_MAIN_TEXT.fontName is defined and font.TM_MAIN_TEXT.fontName is not empty) %}
+    font-family: {{ font.TM_MAIN_TEXT.fontName|raw }};
+{% endif %}
+{% if(font.TM_MAIN_TEXT.fontStrength is defined and font.TM_MAIN_TEXT.fontStrength is not empty) %}
+    font-weight: {{ font.TM_MAIN_TEXT.fontStrength == 'lighter' ? '300' : font.TM_MAIN_TEXT.fontStrength|raw }};
+{% endif %}
+{% if( font.TM_MAIN_TEXT.isItalic is defined and font.TM_MAIN_TEXT.isItalic == 1 ) %}
+    font-style: italic;
+{% else %}
+    font-style: normal;    
+{% endif %} 
+{% if( font.TM_MAIN_TEXT.isUppercase is defined and font.TM_MAIN_TEXT.isUppercase == 1 ) %}
+    text-transform: uppercase;
+{% else %}
+    text-transform: none;    
+{% endif %}
+}
+
+.fg-web-theme-0{{ themeId }} .ug-gallery-wrapper {
+{% if(font.TM_MAIN_TEXT.fontName is defined and font.TM_MAIN_TEXT.fontName is not empty) %}
+    font-family: {{ font.TM_MAIN_TEXT.fontName|raw }};
+{% endif %}
+{% if(font.TM_MAIN_TEXT.fontStrength is defined and font.TM_MAIN_TEXT.fontStrength is not empty) %}
+    font-weight: {{ font.TM_MAIN_TEXT.fontStrength == 'lighter' ? '300' : font.TM_MAIN_TEXT.fontStrength|raw }};
+{% endif %}
+{% if( font.TM_MAIN_TEXT.isItalic is defined and font.TM_MAIN_TEXT.isItalic == 1 ) %}
+    font-style: italic;
+{% else %}
+    font-style: normal;    
+{% endif %} 
+{% if( font.TM_MAIN_TEXT.isUppercase is defined and font.TM_MAIN_TEXT.isUppercase == 1 ) %}
+    text-transform: uppercase;
+{% else %}
+    text-transform: none;    
+{% endif %}
+}
+.fg-web-theme-0{{ themeId }} header h1, .fg-web-theme-0{{ themeId }} header h2, .fg-web-theme-0{{ themeId }} header h3, .fg-web-theme-0{{ themeId }} header h4, .fg-web-theme-0{{ themeId }} header h5, .fg-web-theme-0{{ themeId }} header h6, .fg-web-theme-0{{ themeId }} main h1, .fg-web-theme-0{{ themeId }} main h2, .fg-web-theme-0{{ themeId }} main h3, .fg-web-theme-0{{ themeId }} main h4, .fg-web-theme-0{{ themeId }} main h5, .fg-web-theme-0{{ themeId }} main h6, .fg-web-theme-0{{ themeId }} footer h1, .fg-web-theme-0{{ themeId }} footer h2, .fg-web-theme-0{{ themeId }} footer h3, .fg-web-theme-0{{ themeId }} footer h4, .fg-web-theme-0{{ themeId }} footer h5, .fg-web-theme-0{{ themeId }} footer h6 {
+{% if(font.TM_HEADINGS.fontName is defined and font.TM_HEADINGS.fontName is not empty) %}
+    font-family: {{ font.TM_HEADINGS.fontName|raw }};
+{% endif %}
+{% if(font.TM_HEADINGS.fontStrength is defined and font.TM_HEADINGS.fontStrength is not empty) %}
+    font-weight: {{ font.TM_HEADINGS.fontStrength == 'lighter' ? '300' : font.TM_HEADINGS.fontStrength|raw }};
+{% endif %}
+{% if( font.TM_HEADINGS.isItalic is defined and font.TM_HEADINGS.isItalic == 1 ) %}
+    font-style: italic;
+{% else %}
+    font-style: normal;    
+{% endif %} 
+{% if( font.TM_HEADINGS.isUppercase is defined and font.TM_HEADINGS.isUppercase == 1 ) %}
+    text-transform: uppercase;
+{% else %}
+    text-transform: none;    
+{% endif %}
+    margin-top: 0;
+}
+.fg-web-theme-0{{ themeId }} .fg-login-widget .form-group .fg-submit {
+{% if(font.TM_HEADINGS.fontName is defined and font.TM_HEADINGS.fontName is not empty) %}
+    font-family: {{ font.TM_HEADINGS.fontName|raw }};
+{% endif %}
+{% if(font.TM_HEADINGS.fontStrength is defined and font.TM_HEADINGS.fontStrength is not empty) %}
+    font-weight: {{ font.TM_HEADINGS.fontStrength == 'lighter' ? '300' : font.TM_HEADINGS.fontStrength|raw }};
+{% endif %}
+{% if( font.TM_HEADINGS.isItalic is defined and font.TM_HEADINGS.isItalic == 1 ) %}
+    font-style: italic;
+{% else %}
+    font-style: normal;    
+{% endif %} 
+{% if( font.TM_HEADINGS.isUppercase is defined and font.TM_HEADINGS.isUppercase == 1 ) %}
+    text-transform: uppercase;
+{% else %}
+    text-transform: none;    
+{% endif %}
+}
+.fg-web-theme-0{{ themeId }} .fg-web-main-nav li a { 
+{% if(font.TM_NAVIGATION.fontName is defined and font.TM_NAVIGATION.fontName is not empty) %}
+    font-family: {{ font.TM_NAVIGATION.fontName|raw }};
+{% endif %}
+{% if(font.TM_NAVIGATION.fontStrength is defined and font.TM_NAVIGATION.fontStrength is not empty) %}
+    font-weight: {{ font.TM_NAVIGATION.fontStrength == 'lighter' ? '300' : font.TM_NAVIGATION.fontStrength|raw }};
+{% endif %}
+{% if( font.TM_NAVIGATION.isItalic is defined and font.TM_NAVIGATION.isItalic == 1 ) %}
+    font-style: italic;
+{% else %}
+    font-style: normal;    
+{% endif %} 
+{% if( font.TM_NAVIGATION.isUppercase is defined and font.TM_NAVIGATION.isUppercase == 1 ) %}
+    text-transform: uppercase;
+{% else %}
+    text-transform: none;    
+{% endif %}
+}
+.fg-web-theme-0{{ themeId }} .fg-article-widget .fg-article-wrapper .fg-content {
+  font-weight: normal;
+}
+/*original size background images*/
+
+.fg-web-bg-org-size {
+{% if(bgImage is defined) %}
+    background-image: {{bgImage.bgImage|raw}};
+    background-position: {{bgImage.bgPosition|raw}};
+    background-repeat: {{bgImage.bgRepeat|raw}};
+    background-attachment: {{bgImage.bgAttachment|raw}};
+{% endif %}
+}
+
+.fg-web-theme-0{{ themeId }} .fa {
+  font-family: FontAwesome !important;
+  font-style: normal;
+}
+.fg-web-theme-0{{ themeId }} .glyphicon:not(.fa) {
+  font-family: 'Glyphicons Halflings' !important;
+  font-style: normal;
+}
+
+.icon-magnifier {
+  font-family: 'simple-line-icons' !important;
+}
+
+.fg-web-theme-0{{ themeId }} .fg-title > .comments-count {
+  /* heading  txt */
+  {% if(font.TM_HEADINGS.fontName is defined and font.TM_HEADINGS.fontName is not empty) %}
+    font-family: {{ font.TM_HEADINGS.fontName|raw }};
+  {% endif %}
+  {% if(font.TM_HEADINGS.fontStrength is defined and font.TM_HEADINGS.fontStrength is not empty) %}
+    font-weight: {{ font.TM_HEADINGS.fontStrength == 'lighter' ? '300' : font.TM_HEADINGS.fontStrength|raw }};
+  {% endif %}
+  {% if( font.TM_HEADINGS.isItalic is defined and font.TM_HEADINGS.isItalic == 1 ) %}
+    font-style: italic;
+  {% else %}
+    font-style: normal;    
+  {% endif %} 
+   margin-top: 0;
+}
+
+.fg-web-theme-0{{ themeId }} .fg-web-top-nav-languages .fg-web-language-list * {
+  {% if(font.TM_NAVIGATION.fontName is defined and font.TM_NAVIGATION.fontName is not empty) %}
+    font-family: {{ font.TM_NAVIGATION.fontName|raw }};
+{% endif %}
+{% if(font.TM_NAVIGATION.fontStrength is defined and font.TM_NAVIGATION.fontStrength is not empty) %}
+    font-weight: {{ font.TM_NAVIGATION.fontStrength == 'lighter' ? '300' : font.TM_NAVIGATION.fontStrength|raw }};
+{% endif %}
+{% if( font.TM_NAVIGATION.isItalic is defined and font.TM_NAVIGATION.isItalic == 1 ) %}
+    font-style: italic;
+{% else %}
+    font-style: normal;    
+{% endif %} 
+{% if( font.TM_NAVIGATION.isUppercase is defined and font.TM_NAVIGATION.isUppercase == 1 ) %}
+    text-transform: uppercase;
+{% else %}
+    text-transform: none;    
+{% endif %}
+}
+

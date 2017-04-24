@@ -1,0 +1,121 @@
+external_application:
+    path:     /externalApplication
+    defaults: { _controller: CommonUtilityBundle:ExternalApplication:externalApplicationForm }   
+    
+external_contact_application:
+    path:     /register/{formId}/{type}
+    defaults: { _controller: CommonUtilityBundle:ContactApplication:contactApplication, type : ''}  
+external_application_save:
+    path:     /externalApplicationSave
+    defaults: { _controller: CommonUtilityBundle:ExternalApplication:externalApplicationSave }  
+
+website_cms:
+    resource: "@WebsiteCMSBundle/Resources/config/routing.yml"
+    prefix:   /website/
+
+internal_article:
+    resource: "@InternalArticleBundle/Resources/config/routing.yml"
+    prefix:   /internal/
+
+common_help:
+    resource: "@CommonHelpBundle/Resources/config/routing.yml"
+    prefix:   /help/
+    
+common_filemanager:
+    resource: "@CommonFilemanagerBundle/Resources/config/routing.yml"
+    prefix:   /files/
+
+internal_gallery:
+    resource: "@InternalGalleryBundle/Resources/config/routing.yml"
+    prefix:   /internal/
+    
+internal_calendar:
+    resource: "@InternalCalendarBundle/Resources/config/routing.yml"
+    prefix:   /internal/
+
+internal_message:
+    resource: "@InternalMessageBundle/Resources/config/routing.yml"
+    prefix:   /internal/
+
+internal_team:
+    resource: "@InternalTeamBundle/Resources/config/routing.yml"
+    prefix:   /internal/
+
+internal_general:
+    resource: "@InternalGeneralBundle/Resources/config/routing.yml"
+    prefix:   /internal/  
+    
+internal_user:
+    resource: "@InternalUserBundle/Resources/config/routing.yml"
+    prefix:   /internal/
+
+internal_profile:
+    resource: "@InternalProfileBundle/Resources/config/routing.yml"
+    prefix:   /internal/  
+
+internal_user:
+    resource: "@InternalUserBundle/Resources/config/routing.yml"
+    prefix:   /internal/  
+    
+clubadmin_general:
+    resource: "@ClubadminGeneralBundle/Resources/config/routing.yml"
+    prefix:   /backend/
+    
+clubadmin_documents:
+    resource: "@ClubadminDocumentsBundle/Resources/config/routing.yml"
+    prefix:   /backend/
+
+notes:
+    resource: "@NotesBundle/Resources/config/routing.yml"
+    prefix:   /backend/
+
+common_utility:
+    resource: "@CommonUtilityBundle/Resources/config/routing.yml"
+    prefix:   /backend/
+
+clubadmin_contact:
+    resource: "@ClubadminContactBundle/Resources/config/routing.yml"
+    prefix:   /backend/
+    
+terminology:
+    resource: "@TerminologyBundle/Resources/config/routing.yml"
+    prefix:   /backend/  
+    
+clubadmin_club:
+    resource: "@ClubadminClubBundle/Resources/config/routing.yml"
+    prefix:   /backend/
+    
+fos_user_group:
+    resource: "@FOSUserBundle/Resources/config/routing/group.xml"
+    prefix: /group
+
+unauthorized_user:
+    path:  /backend/unauthorized
+    defaults: { _controller: CommonUtilityBundle:Metronic:unauthorized }
+ 
+clubadmin_communication:
+    resource: "@ClubadminCommunicationBundle/Resources/config/routing.yml"
+    prefix:   /backend/
+    
+clubadmin_sponsor:
+    resource: "@ClubadminSponsorBundle/Resources/config/routing.yml"
+    prefix:   /backend/  
+    
+upload_url:
+    resource: "@ClubadminGeneralBundle/Resources/config/routing_upload.yml"
+    prefix:   /uploads/{clubId}/communication
+    
+upload_company_logo:
+    path:     /uploads/{clubId}/contact/companylogo/original/{filename}
+    defaults: { _controller: InternalGeneralBundle:Dashboard:handleCompanyLogoUrl }
+
+internal_variables:
+    path:     /public/fgInternalVariables.js
+    defaults: { _controller: InternalGeneralBundle:Navigation:internalVariables } 
+
+website_public:
+    resource: "@WebsiteCMSBundle/Resources/config/website.yml"
+    prefix:   /
+document_download:
+    path: /public/document/download/{docId}/{versionId}
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:downloadDocuments } 

@@ -1,0 +1,75 @@
+<div class="form-body">
+    {#attachment upload#}
+    <div class="form-group col-md-12 fg-clear" >
+        <label class="col-md-2 control-label text-right fg-pad-top-0" for="attachments">{% trans %}CREATE_EVENT_ATTACHMENTS{% endtrans %}</label>
+        <div class="col-md-10 col-lg-10 ">
+            <input type="file" id="file-uploader" name="file-uploader" style="height:0px;width:0px;visibility: hidden" multiple="multiple"/>
+            <div class="dropzone" name="attachments" id="drop-upload-area">
+                {#upload area#}
+                <div class="fg-pad-15">
+                    <div class="fg-clear fg-marg-btm-10">
+                        
+                        <button type="button" class="btn default fg-cal-file-upload">{% trans %}CREATE_EVENT_FILEUPLOAD{% endtrans %}</button>
+                        <button type="button" class="btn default fg-cal-browse-server">{% trans %}CREATE_EVENT_BROWSE_SERVER{% endtrans %}</button>
+                    </div>
+                    <div class="fg-upload-area fg-upload-area-div ">
+                        <div class="" id="articleattachments-upload-error-container"></div>
+                        <ul class="fg-article-upload-items">
+                        <%  var articleAttachments = (typeof data.article == 'undefined') ? {} : data.article.attachment;
+                        articleAttachments = _.sortBy(articleAttachments, function (i) { return i.attachmentName.toLowerCase(); });
+                          _.each(articleAttachments,function(val,key){
+                            var url = (typeof val.virtualFilename != 'undefined' && val.virtualFilename != '')?articleFilemanagerPath.replace(/__FILEID__/i, val.virtualFilename):'javascript:void(0)';
+                              %>
+                              {% if (editorialMode is defined and editorialMode == 'duplicate') %}
+                                  <li class="fg-article-upload-item fg-clear filecontent" id="<%-val.filemanagerId %>">
+                                      <div class="col-sm-12 fg-pad-top-5 fg-calendar-item-name">
+                                          <div class="row fg-uploadcalendar-name"> 
+                                              <div class="col-md-9">
+                                                    <label class="fg-marg-btm-0">
+                                                        <a target="_blank" href="<%-url%>"><%-val.attachmentName %></a>
+                                                    </label>
+                                              </div>
+                                              <div class="col-md-3">
+                                                <span class="fg-file-size"> <%- FgFileUpload.formatFileSize(parseInt(val.attachmentSize)) %> </span>
+                                              </div>
+                                            </div>
+                                      </div>
+                                      <input class="hide" name="file-'+serverFile.id+'" type="text" value="<%-val.filemanagerId %>" data-key="article.attachment.filemanager.<%-val.filemanagerId %>.fileid">
+                                      <a href="javascript:void(0)" class="fg-delete" onclick="AttachmentsUploader.deleteAttachmentonDuplicate(<%-val.filemanagerId %>);" parentid="<%-val.filemanagerId %>"><i class="fa fa-times-circle fa-2x"></i></a>
+                                  </li>
+                              {% else %}
+                                  <li class="fg-article-upload-item fg-clear filecontent " id="<%-val.attachmentId %>">
+                                        <div class="col-sm-12 fg-pad-top-5 fg-calendar-item-name">
+                                            <div class="row fg-uploadcalendar-name"> 
+                                                <div class="col-md-9">
+                                                    <label class="fg-marg-btm-0">
+                                                        <a target="_blank" href="<%-url%>"><%-val.attachmentName %></a>
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <span class="fg-file-size"> <%- FgFileUpload.formatFileSize(parseInt(val.attachmentSize)) %> </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                      <div class="fg-last-icon">
+                                          <div class="closeico">
+                                              <input type="checkbox" class="make-switch fg-delicon delete-article-attachment" value="1" id="<%-val.attachmentId %>_is_deleted" data-key="article.attachment.article.<%-val.attachmentId %>.is_deleted" name="is_deleted" data-inactiveblock="changecolor" data-parentid="<%-val.attachmentId %>">
+                                              <label for="<%-val.attachmentId %>_is_deleted"></label>
+                                          </div>
+                                      </div>
+                                  </li>
+                                  <input type="text" class="hide" value="" id="<%-val.attachmentId %>_is_deleted-hid" data-key="article.attachment.article.<%-val.attachmentId %>.attachmentid" name="hid-is_deleted" >
+                              {% endif %}
+
+                            <% }); %>
+                        </ul>
+                        <input type="hidden" name="fileCount" id="fileCount" value=""/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

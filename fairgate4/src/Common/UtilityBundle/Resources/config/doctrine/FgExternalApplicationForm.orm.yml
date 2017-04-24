@@ -1,0 +1,137 @@
+Common\UtilityBundle\Entity\FgExternalApplicationForm:
+    repositoryClass: Common\UtilityBundle\Repository\FgExternalApplicationFormRepository
+    type: entity
+    table: fg_external_application_form
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        firstName:
+            type: string
+            length: 160
+            fixed: false
+            nullable: false
+            column: first_name
+        lastName:
+            type: string
+            length: 160
+            fixed: false
+            nullable: false
+            column: last_name
+        gender:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        dob:
+            type: datetime
+            nullable: false
+        email:
+            type: string
+            length: 160
+            fixed: false
+            nullable: false
+        street:
+            type: text
+            nullable: true
+        zipcode:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+        location:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+        telM:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: tel_m
+        telG:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: tel_g
+        relatives:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+        employer:
+            type: string
+            length: 160
+            fixed: false
+            nullable: false
+        personalNumber:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: personal_number
+        comment:
+            type: text
+            nullable: true
+        clubSelected:
+            type: string
+            length: 160
+            fixed: false
+            nullable: false
+            column: club_selected
+        createdDate:
+            type: datetime
+            nullable: false
+            column: created_date
+        decisionDate:
+            type: datetime
+            nullable: true
+            column: decision_date
+        status:
+            type: string
+            length: null
+            fixed: false
+            nullable: false        
+    manyToOne:
+        fedMembership:
+            targetEntity: FgCmMembership
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                fed_membership:
+                    referencedColumnName: id
+            orphanRemoval: false
+        decidedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                decided_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        fedContact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                fed_contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

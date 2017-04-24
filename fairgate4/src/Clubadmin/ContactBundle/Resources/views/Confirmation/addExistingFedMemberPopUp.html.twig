@@ -1,0 +1,206 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">{{ 'ADD_EXISTING_FED_MEMBER_TITLE'|trans }}</h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">                      
+                <div class="form-body">
+                    <div class="form-group">                            
+                        <div class="col-lg-12 col-md-12 col-xs-12">
+                            <div class="fg-sponsor-add" id="sponsor-search-div"><i id="fg-sponsor-search" class="fa fa-search fg-autocomplete-search"></i> <input type="text" id="input_addsponsors" class="fg-sponsor-add-exist" /> </div>
+                            <div id="failcallback" class="alert alert-danger fg-pad-15 hide" >
+                                <span>{{'FED_MEMBERSHIP_EXIST_EMAIL'|trans}}</span>
+                            </div>
+                            <div id="failcallback1" class="alert alert-danger fg-pad-15 hide" >
+                                <span>{{'FED_MEMBERSHIP_PENDING'|trans}}</span>
+                            </div>
+                            <div id="failcallback2" class="alert alert-danger fg-pad-15 hide" >
+                                <span>{{'MEMBER_SHARED_WITH_CLUB'|trans}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-body fg-modal-text fg-details hide" >
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <div class="row form-group ">
+                    <div class="col-sm-6 text-right text-grey">{{'COMPANY'|trans}}</div>
+                    <div class="col-sm-6 fg-company"></div>
+                </div>   
+                <div class="row form-group ">
+                    <div class="col-sm-6 text-right text-grey">{{'FIRST_NAME'|trans}}</div>
+                    <div class="col-sm-6 fg-firstname"></div>
+                </div>
+                <div class="row form-group ">
+                    <div class="col-sm-6 text-right text-grey">{{'LAST_NAME'|trans}}</div>
+                    <div class="col-sm-6 fg-lastname"></div>
+                </div>
+                <div class="row form-group ">
+                    <div class="col-sm-6 text-right text-grey">{{'GENDER'|trans}}</div>
+                    <div class="col-sm-6 fg-gender"></div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-6 text-right text-grey">{{'BIRTH_DATE'|trans}}</div>
+                    <div class="col-sm-6 fg-dob"></div>
+                </div>
+                <div class="row form-group ">
+                    <div class="col-sm-6 text-right text-grey">{{'LOCATION'|trans}}</div>
+                    <div class="col-sm-6 fg-location"></div>
+                </div>
+                <div class="row form-group ">
+                    <div class="col-sm-6 text-right text-grey">{{'CLUBS'|trans}}</div>
+                    <div class="col-sm-6 fg-clubs"></div>
+                </div>
+                <div class="row form-group ">
+                    <div class="col-sm-6 text-right text-grey"><input type="hidden" class="fg-fedmem" >{{'FEDERATION_MEMBERSHIP'|trans}}</div>
+                    <div class="col-sm-6 fg-fedmembership"></div>
+                </div>
+            </div>
+        </div>
+    </div>   
+</div>           
+{% include 'clubadmin/savebuttonpopup.html.twig' with {'save_button_val': 'ADD'|trans } %}
+
+<script type="text/javascript">
+ var existingContactEmails = {{existingEmails|json_encode()|raw}};
+ existingContactEmails = _.without(existingContactEmails,"");
+ var applicationPending = {{applicationPending|json_encode|raw}};
+ var fedContacts = {{fedContacts|json_encode()|raw}};
+ var c4checknoapp = {{c4checknoapp}};
+    $('#save').one('click',function() {
+        if ($('.ids-fbautocomplete').val() !== "") {
+            savefedmemberPath = "{{ path('save_add_existing_fedmember') }}";
+            params = {"contactId": $('.ids-fbautocomplete').val(),'membership':$('.fg-fedmem').val()};
+            $.ajax({
+                type: 'POST',
+                url: savefedmemberPath,
+                data: params,
+                success: function(data) {
+                    $("#cancel").trigger("click");
+                    var updateArr= {};
+                    if(c4checknoapp){
+                        var updateArr = {"0":{'categoryId':'',"subCatId": data.membership ,'dataType':'fed_membership','sidebarCount': 1,"action":"add"},
+                        "1":{'categoryId':'',"subCatId": '' ,'dataType':'allActive','sidebarCount': 1,"action":"add"}};
+                        FgCountUpdate.update('addexisting','contact','active',updateArr, 1);
+                        oTable.api().draw();
+                    }
+                    FgUtility.showToastr(data.flash);
+                },
+                async: false
+            });
+        }
+    });
+    $('#save').attr('disabled',true);
+    autocompleteContactPath = "{{ path('contact_addexistfedmember_autocomplete') }}";
+    $('#input_addsponsors').fbautocomplete({
+        url: autocompleteContactPath, // which url will provide json!
+        maxItems: 1,
+        useCache: false,
+        formName: "contacts",
+        onItemSelected: function(obj, itemId, selected) {
+            $('#fg-sponsor-search').css({"display": "none"});
+            if(_.contains(existingContactEmails,selected[0].primaryEmail)){
+                $('#failcallback').removeClass('hide');
+            }else{
+                if(_.contains(applicationPending,selected[0].id)){
+                     $('#failcallback1').removeClass('hide');
+                }else{
+                     if(_.contains(fedContacts,selected[0].id)){
+                        $('#failcallback2').removeClass('hide');
+                    }else
+                        hideSearch(selected);
+                }
+            }
+        },
+        onItemRemoved: function(obj, itemId) {
+            $('#failcallback').addClass('hide');
+            $('#failcallback1').addClass('hide');
+             $('#failcallback2').addClass('hide');
+            hideSearch($(".ids-fbautocomplete"));
+        }
+    });
+    hideSearch = function(selectedContact) {
+        if (selectedContact.length > 0) {
+            $('#save').attr('disabled',false);
+            $('.fg-details').removeClass('hide');
+            $('#sponsor-search-div').removeClass("fg-sponsor-add");
+            if(selectedContact[0].company == 0 ||selectedContact[0].has_main_contact != 0 ){
+                $('.fg-firstname').parent().removeClass('hide');
+                $('.fg-lastname').parent().removeClass('hide');
+                $('.fg-gender').parent().removeClass('hide');
+                $('.fg-dob').parent().removeClass('hide');
+                if(typeof selectedContact[0].firstname != "undefined" && selectedContact[0].firstname != ""){
+                    $('.fg-firstname').text(selectedContact[0].firstname);
+                }else{
+                    $('.fg-firstname').text('-');
+                }
+                if(typeof selectedContact[0].lastname != "undefined" && selectedContact[0].lastname !=""){ 
+                    $('.fg-lastname').text(selectedContact[0].lastname); 
+                }else{
+                    $('.fg-lastname').text('-');
+                }
+                if(typeof selectedContact[0].gender != "undefined" && selectedContact[0].gender !=""){
+                    $('.fg-gender').text(selectedContact[0].gender);
+                }else{
+                     $('.fg-gender').text('-'); 
+                }
+                if(typeof selectedContact[0].birth != "undefined" && selectedContact[0].birth != null && selectedContact[0].birth !="" && selectedContact[0].birth1 != "0000-00-00"){
+                    $('.fg-dob').text(selectedContact[0].birth);
+                }else{
+                    $('.fg-dob').text('-');
+                }
+            }else{
+                $('.fg-firstname').parent().addClass('hide');
+                $('.fg-lastname').parent().addClass('hide');
+                $('.fg-gender').parent().addClass('hide');
+                $('.fg-dob').parent().addClass('hide');
+            }
+            if(typeof selectedContact[0].company != "undefined" && selectedContact[0].company != ""){
+                $('.fg-company').text(selectedContact[0].company);
+                $('.fg-company').parent().removeClass('hide');
+            }else{
+                 $('.fg-company').parent().addClass('hide');
+                 $('.fg-company').text('-');
+            }
+            
+            if(typeof selectedContact[0].location != "undefined" && selectedContact[0].location!= null && selectedContact[0].location != ""){
+                $('.fg-location').text(selectedContact[0].location);
+            }else{
+                $('.fg-location').text('-');
+            }
+            if(typeof selectedContact[0].clubs != "undefined" && selectedContact[0].clubs != ""){
+                var myarr = selectedContact[0].clubs.split(",");
+                for(var loc = 0; loc < myarr.length; loc++){
+                    if(myarr.length == 1){
+                        myarr[loc] = myarr[loc].replace('#mainclub#','');
+                    }else{
+                        myarr[loc] = myarr[loc].replace('#mainclub#',' <i class="fa  fa-star text-yellow"></i>');
+                    }
+                }
+                selectedContact[0].clubs = myarr.join();
+                $('.fg-clubs').html(selectedContact[0].clubs);
+            }else{
+                $('.fg-clubs').text('-');
+            }
+            if(typeof selectedContact[0].fedmembership != "undefined" && selectedContact[0].fedmembership !=""){ 
+                $('.fg-fedmembership').text(selectedContact[0].fedmembership);
+                $('.fg-fedmem').val(selectedContact[0].fedmemId);
+            }else{
+                $('.fg-fedmembership').text('-');
+            }
+        } else {
+            $('#save').attr('disabled',true);
+            $('#fg-sponsor-search').css({"display": ""});
+            $('.fg-details').addClass('hide');
+            $('#sponsor-search-div').addClass("fg-sponsor-add");
+        }
+    }
+</script>
+

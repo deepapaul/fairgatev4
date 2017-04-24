@@ -1,0 +1,121 @@
+{% extends 'InternalMessageBundle:MessageWizard:messagewizard.html.twig' %}
+ 
+{% block wizardstage %}
+<div id="tab1" class="tab-pane fg-tab-list active">    
+    <h3 class="block">{{'MESSAGEWIZARD_STAGE2_HEADER'|trans}}</h3>                   
+    <div class="form-body fg-ck-wrap">
+      <div class="form-group last fg-dev-subject">
+        <label class="control-label col-md-3 col-sm-3">{{'MESSAGEWIZARD_STAGE2_SUBJECT'|trans}} <span class="required" aria-required="true"> *</span></label>
+        <div dataerror-group class="col-lg-9 col-sm-9 col-xs-12">
+            <input type="text" class="form-control" name="subject" id="subject" value="{% if edit %}{{messageDetailArray.subject}}{% endif %}">
+        </div>
+      </div>
+      <div class="form-group last fg-dev-message">
+        <label class="control-label col-md-3 col-sm-3">{{'MESSAGEWIZARD_STAGE2_MESSAGE'|trans}} <span class="required" aria-required="true"> *</span></label>
+        <div dataerror-group class="col-lg-9 col-sm-9 col-xs-12">
+          <textarea rows="6" name="message" id="message" class="form-control" style="">{% if edit %}{{messageDetailArray.content}}{% endif %}</textarea>
+          <div class="fg-smaple-editor fg-editor-7053 fg-pad-top-10">
+            <a class="fg-advanced-editor" href="javascript:void(0)" style="display: block;">
+                <i class="fa fa-caret-square-o-down" style="font-size:130%;margin-right:5px"></i><span>{{'CKEDITOR_ADVANCED_EDITOR'|trans}}</span>
+            </a>
+            <a class="fg-simple-editor" href="javascript:void(0)" style="display: none;">
+                <i class="fa fa-caret-square-o-up" style="font-size:130%;margin-right:5px"></i><span>{{'CKEDITOR_SIMPLE_EDITOR'|trans}}</span>
+            </a>
+        </div>
+        </div>
+      </div>
+      <div class="form-group last">
+        <label class="control-label col-md-3 fg-msg-attachment">{{'MAILINGS_ATTACHMENTS'|trans}}</label>
+        <div class="col-lg-9">
+          <div class="fg-createmail-fileupload">
+              <div class="drop">
+                  {{'FILE_UPLOAD'|trans}}
+                  <input type="file" id="attachments" name="upl" multiple="multiple" 
+                      method="post" upload-url="{{path('internal_message_attachment_upload',{'type':'message'})}}"/>
+                  <input type="text" class="display-none" value="" id="attachment-updator" name="attachment-updator"/>
+              </div>
+              <ul id='file-uploaded-attachements'>
+                
+              </ul>              
+          </div>
+          </ul>
+        </div>
+      </div>
+    </div>
+</div> 
+{% endblock %}
+
+{% block wizardprogressstage %}
+<ul class="nav nav-pills nav-justified steps">
+    <li class="done"> <a class="step" href="{{path('internal_edit_message_step1', {'messageId':messageDetailArray.id})}}" aria-expanded="true"> <span class="number"> 1 </span> <span class="desc"> <i class="fa fa-check"></i>&nbsp;&nbsp;{{'MESSAGEWIZARD_GENERAL'|trans}}</span> </a> </li>
+    <li class="active"> <a class="step" href="javascript:void(0)"> <span class="number"> 2 </span> <span class="desc"> <i class="fa fa-check"></i>{{'MESSAGEWIZARD_MESSAGE'|trans}}</span> </a> </li>
+    <li> <a class="step active" href="javascript:void(0)"> <span class="number"> 3 </span> <span class="desc"> <i class="fa fa-check"></i>{{'MESSAGEWIZARD_NOTIFICATION'|trans}}</span> </a> </li>                                     
+</ul>
+<div role="progressbar" class="progress progress-striped" id="bar">
+    <div class="progress-bar progress-bar-warning" style="width: 66.6667%;"> </div>
+</div>
+{% endblock %}
+
+
+
+{% block wizardscript %}
+<script src="{{ asset('fgassets/assets/global/plugins/ckeditor/ckeditor.js')}}" type="text/javascript"></script>
+<script src="{{ asset('fgassets/global/js/ckEditor-config.js')}}" type="text/javascript"></script>
+<script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.ui.widget.js')}}" type="text/javascript"></script>
+<script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.iframe-transport.js')}}" type="text/javascript"></script>
+<script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.fileupload.js')}}" type="text/javascript"></script>
+<script src="{{ asset('fgassets/global/js/FgFileUpload.js')}}" type="text/javascript"></script>
+<script>
+jQuery(document).ready(function() {       
+    fgMessageWizardStep2.init();  
+    {% if messageAttachmentDetailArray|length > 0 %}
+    setAttachmentUI({{messageAttachmentDetailArray|json_encode|raw}});
+    {% endif %}
+});
+
+$(window).load(function() {
+    fgMessageWizardStep2.initFgDirtyFields(); 
+});
+
+var requiredValidationTransalator = '{{'VALIDATION_THIS_FIELD_REQUIRED'|trans}}';
+var usedOf = '{{'FILE_SIZE_USED_OF'|trans}}';
+var message_step2_save = '{{path('internal_message_step2_save', {'messageId':messageDetailArray.id})}}';
+var messageBackTo = '{{path('internal_edit_message_step1', {'messageId':messageDetailArray.id})}}';
+
+
+function setAttachmentUI(attachmentArray){
+    var htmlContent = '';
+    var htmlContentCompiled = _.template($('#imageUploadContent').html());
+    
+    for (i = 0; i < attachmentArray.length; i++) {
+        var detail = {};
+        uploadIdDetailArray = attachmentArray[i].file
+        detail.name = uploadIdDetailArray;
+        detail.id = uploadIdDetailArray;
+        detail.value = attachmentArray[i].file;
+        detail.size = fgMessageWizardStep2.formatFileSize(attachmentArray[i].size);
+        detail.size_raw = attachmentArray[i].size;
+        htmlContent+=htmlContentCompiled(detail);
+    }
+    $('#file-uploaded-attachements').html(htmlContent);
+    $('#attachment-updator').attr('value', $( "input[name='uploaded_attachments[]']" ).map(function() {return this.value;}).get().join());
+}
+
+</script>  
+ <script type="text/template" id="imageUploadContent">
+    <li class="fg-dev-attachmentcontent" id="<%- id %>">
+        <p ><%- name %><span class="fg-bytes fg-replacewith-errormsg "><%- size %></span></p>
+        <span class="removeUpload"><i class="fa fa-times-circle fa-2x" style="font-size: 130%;"></i></span>        
+        <input type="hidden" name='uploaded_attachments[]' value="<%- value %>"> {#temporary name#}
+        <input type="hidden" name='uploaded_attachment_names[]' value="<%- name %>"> {#original name#}        
+        <input type="hidden" name='uploaded_attachments_size[]' value="<%- size_raw %>">        
+    </li>
+</script>
+<script type="text/template" id="fileUploadError">
+    <span class="help-block">
+    <% if (error == 0) { %> {{'FILEMANAGER_UPLOAD_FILETYPE_ERROR'|trans}}
+    <% } else if (error == 1) { %> {{'FILEMANAGER_UPLOAD_VIRUS_ERROR'|trans}}
+    <% } else if (error == 2) { %> {{'VIRUS_FILE_CONTACT'|trans}}
+    <% } else { %> <%- error %> <% } %></span>
+</script>
+{% endblock %}   

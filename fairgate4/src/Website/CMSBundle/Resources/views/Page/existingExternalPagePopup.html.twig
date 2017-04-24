@@ -1,0 +1,89 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        {% if module == 'existing' %}
+            <h4 class="modal-title">{{'ASSIGN_EXISTING_PAGE_TITLE'|trans}}</h4>
+        {% elseif (module == 'duplicate' or module == 'calendar' or module == 'article' or module == 'gallery') %}
+            <h4 class="modal-title">{{'ASSIGN_EXISTING_PAGE_DUPLICATE_TITLE'|trans}}</h4>
+        {% elseif module == 'external' %}
+            <h4 class="modal-title">{{'ASSIGN_EXTERNAL_PAGE_TITLE'|trans}}</h4>
+        {% endif %}
+    </div>
+    <div class="modal-body fg-cms-external-existing-modal">
+        <div class="form-group fg-clear fg-cms-external-existing-form">
+            {% if module == 'existing' %}
+                <label class="control-label text-right fg-label-valign col-lg-3 col-md-3">{{'CMS_PAGE'|trans}}</label>
+                <div class="col-lg-9 col-md-8 fg-error-add-required">
+                    <select class="form-control selectpicker" required id='fg-cms-pages-list'>
+                        <option value="">{{'SELECT_DEFAULT'|trans}}</option>
+                        {% if pagesList is not empty %}
+                            {% for key, data in pagesList %}
+                                <option value="{{data['roleId']}}">{{data['rTitle']}}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+            {% elseif (module == 'duplicate' or module == 'calendar' or module == 'article' or module == 'gallery') %}
+                <p>{{'ASSIGN_EXISTING_PAGE_DUPLICATE_CONTENT'|trans}}</p>
+            {% elseif module == 'external' %}
+                <label class="control-label text-right fg-label-valign col-lg-3 col-md-3">{{'URL_NAME'|trans}}</label>
+                <div class="col-lg-9 col-md-8 fg-error-add-required">
+                    <input type="text" class="form-control input-md" name="externalUrl" id="externalUrl">
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn default" data-dismiss="modal">{{ 'CANCEL'|trans }}</button>
+        <button type="button" class="btn green" id="existingExternalPageBtn">{{ 'ASSIGN'|trans }}</button>
+    </div>
+</div>
+<script>
+    var module = '{{module}}';
+    $('#externalUrl').on('blur', function(){
+        FgCmsPage.appendHttp(this);
+    });
+    handleEnterKeyPress('externalUrl','existingExternalPageBtn');
+    $(document).off('click', '#existingExternalPageBtn');
+    $(document).on('click', '#existingExternalPageBtn', function () {
+        $('div.has-error').removeClass('has-error');
+        $('span.required').remove();
+        var pageVal = '';
+        if (module == 'existing') {
+            var pageVal = $('#fg-cms-pages-list').val();
+            if (pageVal === '') {
+                FgCmsPage.intiValidate();
+                return false;
+            }
+        } else if (module == 'external') {
+            var pageVal = $('#externalUrl').val();
+            if (pageVal === '') {
+                FgCmsPage.intiValidate();
+                return false;
+            } else {
+                if (!(/^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(pageVal))) {
+                    $('.fg-cms-external-existing-form').addClass('has-error');
+                    $('.fg-error-add-required').append('<span class=required>'+invalidUrl+'</span>');
+                    return false;
+                }
+            }
+        } else if (module == 'duplicate' || module == 'calendar' || module == 'article' || module == 'gallery') {
+            var pageVal = $('#fg-cms-existing-external-page-id').val();
+        }
+        var navId = {{navId}};
+        FgModelbox.hidePopup();
+        FgXmlHttp.post(assignExistingPageSave, {'module': module, 'navId': navId, 'pageId': pageVal, 'pageFlag': 'assign'}, '', function (response) {
+            FgCmsPage.assignPageAndExLinkSaveCallback(response);
+            $('#existingExternalPageBtn').attr('disabled', 'disabled');
+        });
+    });
+    function handleEnterKeyPress(fieldId,saveId){
+    $(document).on('keypress', '#'+fieldId, function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {// Enter key press
+                $('#'+saveId).trigger("click");
+            }
+        });
+    }
+</script>
+

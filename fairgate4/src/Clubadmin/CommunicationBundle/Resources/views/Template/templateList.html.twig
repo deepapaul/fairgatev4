@@ -1,0 +1,139 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' :'::clubadmin/layout.html.twig' %}
+{% set title='DESIGN_TEMPLATES'|trans %}       
+{% set pageTitle = title %}
+    {% block pagecontent %} 
+        <!-- BEGIN PAGE CONTENT-->
+
+        <!-- BEGIN CONTENT -->
+        <!-- BEGIN PAGE HEADER-->
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+            </div>
+        </div>
+        <div class="row margin-bottom-10">
+            <form method="POST" action= "" id="hiddenform">
+                <input type="hidden" name="selcontacthidden" value="" id="selcontacthidden" search-value="" />
+                <input type="hidden" name="searchhidden" value="" id="searchhidden" search-value="" />
+                <input type="hidden" name="counthidden" value="" id="counthidden" search-value="" />
+            </form>
+
+           {# <div class="col-md-7 col-sm-6" id="fg-dev-dynamic-menu">
+                {% include 'clubadmin/dynamicmenu.html.twig' with {'title':'DESIGN_TEMPLATES'|trans, 'filterslash' : 'false'} %}
+            </div>#}
+            <!-- PAGE TITLE BAR BEGIN-->
+              {% set page_settings = { 'pagetitle':'true','actionmenu':'true' }  %}
+              {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'page_settings': page_settings } %}
+              <!-- PAGE TITLE BAR END-->
+        </div>
+        <div class="alert alert-danger display-hide">
+            <button class="close" data-close="alert"></button>
+            {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+        </div>
+        <div id="data-tabs-content">
+        <!-- END PAGE HEADER-->
+        <div id="sudscriber-tab" class="tab-pane">
+            <div class="row">
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet-body new-table-height" id="tableWrapper">
+                    <table id="template-list"
+                           class="archive-border-remove
+                           table 
+                           dataTable-subscriber
+                           table-bordered
+                           table-hover
+                           table-condensed
+                           dataTable-scroll-y
+                           dataTable-ajax
+                           dataTable-rows
+                           dataTable-scroll-x
+                           dataTables_scrollBody
+                           lastcolumn_sort dataTable-initialSort data-count"  changeDefaultRow xWidth="100" yHeight="300" data-table-name="dataTables" data_row_change="fgrowchange" dataTable-popover="true" dataTable-hover="true" >
+                        <thead>
+                            <tr>
+                                <th ><input type="checkbox" class="dataTable_checkall fg-dev-avoidicon-behaviour" id="check_all" name="check_all"><i class="chk_cnt"></i></th>
+                                <th >{%trans%}TEMPLATE_TITLE{%endtrans%}</th>
+                                <th>{%trans%}TEMPLATE_CREATED_ON{%endtrans%}</th>
+                                <th>{%trans%}TEMPLATE_EDITED_ON{%endtrans%}</th>
+                                <th>{%trans%}TEMPLATE_EDITED_BY{%endtrans%}</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                            <div id="callPopupFunction"></div>
+        <!-- Connection Popup -->
+        <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+            <div class="modal-dialog modal-wide">
+                <div class="modal-content fg-popup-wrap" id="popup_contents">
+                </div>
+            </div>
+        </div>
+                <!-- END EXAMPLE TABLE PORTLET-->
+            </div>
+        </div>
+        </div>
+        <!-- END PAGE CONTENT-->
+
+
+        <!-- END CONTENT -->
+        <!-- END PAGE CONTENT-->
+    {% endblock %}
+    {% block javascripts %}
+    <script src="{{ asset('fgcustom/js/sidebar.js') }}" type="text/javascript"></script>    
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js')}}" type="text/javascript"></script>
+    <script>
+     FgMoreMenu.initServerSide('data-tabs');
+     var actionMenuNoneSelectedText = {
+        'createtemplate' : {'title' : "{{'CREATE_TEMPLATE'|trans}}", 'dataUrl' : '{{path('template_create')}}', 'hrefLink' : '{{ path('template_create') }}' , 'visibleAlways' : true},
+    };
+    var actionMenuSingleSelectedText = {                 
+        'edittemplate' : {'title' : "{{'EDIT_SELECTED_TEMPLATE'|trans}}",'dataUrl' : '{{path('template_edit',{'id':'dummy'})}}', 'appendSelectedId' : '1'},
+        'templateduplicate' : {'title' : "{{'DUPLICATE_SELECTED_TEMPLATE'|trans}}",'dataUrl' : '{{path('template_duplicate_delete_newsletter')}}'},
+        'templatedelete' : {'title' : "{{'DELETE_SELECTED_TEMPLATE_ONE'|trans}}",'dataUrl' : '{{path('template_duplicate_delete_newsletter')}}'},
+    };
+    var actionMenuMultipleSelectedText = {
+        'templatedelete' : {'title' : "{{'DELETE_SELECTED_TEMPLATE'|trans}}",'dataUrl' : '#'},
+    };
+    
+    var columnDefs=[{ type: "checkbox", orderable: false, "width":"1%",targets: 0, data:function(row, type, val, meta){
+                            return "<input type='checkbox' class='dataClass fg-dev-avoidicon-behaviour' id='"+row[0]+"' name='check'>";
+                        } },
+                        { "name": "title",  "width":"25%", "targets": 1 , data:function(row, type, val, meta){
+                            return  row[1]=='' || row[1] == null ? '-':"<a href='"+row[5]+"'>"+row[1]+"</a>"; 
+                        }},
+                        { "name": "created_on", "width":"25%", "targets": 2, data:function(row, type, val, meta){
+                            return  row[2]=='' || row[2] == null ? '-':row[2]; 
+                        } },
+                        { "name": "last_updated", "width":"25%","targets": 3, data:function(row, type, val, meta){
+                            return  row[3]=='' || row[3] == null ? '-':row[3]; 
+                        } },
+                        { "name": "edited_by", "width":"24%","targets": 4, data:function(row, type, val, meta){
+                            return  row[4]=='' || row[4] == null ? '-':row[4]; 
+                        } }
+                        
+                    ]
+                    var duplicateDeleteTemplatePath = '{{path('template_duplicate_delete_newsletter')}}';
+                    
+        {#$(document).ready(function() {
+            $('.table.dataTable-subscriber').dataTable({
+                "iDisplayLength": 50
+            });
+        } );#}
+            /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                     actionMenu: true,
+                     title: true,
+
+             });
+             var ajaxPath= "{{ path('template_tablelistdetails')}}" ;
+             
+             var datatableId = 'template-list';
+             var datatableServerSideprocess = true;
+             
+    </script>
+    <script src="{{ asset('fgcustom/js/FgBackendDatatable.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/subscriber-list.js')}}" type="text/javascript"></script> 
+    {% endblock %}

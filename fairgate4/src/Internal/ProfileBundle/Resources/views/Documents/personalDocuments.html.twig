@@ -1,0 +1,214 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout-sidebar.html.twig' %}
+{% set pageTitle = 'PERSONAL_DOCUMENTS'|trans %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTAINER -->
+    <!-- BEGIN BREADCRUMB-->
+    <div class="row">
+        <div class="col-lg-12">
+            {% include 'internal/breadcrumb.html.twig' %}
+        </div>
+    </div>
+    <!-- END BREADCRUMB-->
+    <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+    {% include 'global/page-title-bar.html.twig' with {'pageTitle': title } %}
+     <div class="fg-page-title-block-2 hide">      
+            <div class="fg-page-title-link fg-dis-none">
+                    <a href="#" class="link fg-dev-markall" data_url="{{urlArray.url}}"><i class="fa fa-check-circle"></i> {{urlArray.title}}</a>                            
+            </div>
+      </div> 
+    <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+    <!-- BEGIN CONTENT -->
+    <div class="row" id="fg-personal-datatable">
+        <div class="portlet-body new-table-height fg-datatable-wrapper" id="tableWrapper">
+            <table class="dataTable
+                   table
+                   table-bordered
+                   table-hover
+                   table-condensed"
+                   id="datatable-club-document" dataTable-popover="true" dataTable-hover="true">
+                <thead>
+                    <tr>
+                        <th> {{'DC_DOCUMENT_NAME'|trans}}  </th>
+                        <th> {{'SECTION'|trans}}  </th>                               
+                        <th> {{'LAST_CHANGED'|trans}} </th>
+                        <th> {{'DC_DOCUMENT_SIZE'|trans}} </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <!-- END CONTENT -->                
+    <!--  Custom pop over html -->
+    <div class="custom-popup">
+        <div class="popover bottom">
+            <div class="arrow"></div>
+            <div class="popover-content"></div>
+        </div>
+    </div>
+
+
+{% endblock %}
+{% block javascripts %}
+    <script src="/fgcustom/js/custom-fileupload.js" type="text/javascript"></script>
+    <script src="/fgassets/internal/js/page/fgDocumentCount.js" type="text/javascript"></script>
+    <script>
+        documentSidebarCountPath = '{{ path('document_update_sidebar_count') }}';
+        $(function () {
+            scope = angular.element($("#BaseController")).scope();
+        });
+        
+        var path = "{{path('document_download',{'docId':'|documentId|','versionId':'|versionId|'})}}";
+        var mark_all_read = "{{path('documents_read_all')}}";
+        var teamTerminology = '{{fgtwig.getTerminolgyName('Team',plural)}}';
+        
+        // Set datatable column definition      
+        var columnDefs = [
+            {"name": "docname", "targets": 0, data: function (row, type, val, meta) {
+                    row.sortData = row['documentName'];
+                  //  var docName = (row['isUnread'] === '1') ? '<strong>' + row['documentName'] + '</strong>' : row['documentName'];
+                    var classname = (row['isUnread'] === '1') ? 'fg-strong' : '';
+                    var url = path.replace("|documentId|", row['documentId']);
+                    url = url.replace("|versionId|", row['versionId']);   
+                    var fileIcon =(typeof row['fileName'] != 'undefined') ? fileUploader.getFileIcon(row['fileName']):'';                    
+                    row.displayData = '<span class="fg-table-reply" >' +  fileIcon + '<a href="'+ url +'" class="fg-dev-read '+ classname +'" data_url="'+ url +'" >' + row['documentName'] + '</a></span>';
+                    return row;
+                }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'sortData'}},
+            {"name": "section", "targets": 1, data: function (row, type, val, meta) {
+                    row.sortData = row['documentSection'];
+                    if(row['documentType']=='TEAM' || row['documentType']=='WORKGROUP'){
+                        var typ =(row['documentType']=='TEAM') ? teamTerminology : 'workgroups';
+                        row.displayData = row['documentSection']?FgInternal.createPopover(row['documentSection'],typ):'';
+                    }else{
+                        row.displayData = row['documentSection'];
+                    } 
+                    
+                    
+                    return row;
+                }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'sortData'}},
+            {"name": "last changed", "targets": 2, data: function (row, type, val, meta) {
+                    row.sortData = row['lastUpdatedOrg'];
+row.displayData = row['T_DO_LAST_UPDATED'] ? row['T_DO_LAST_UPDATED'].split(' ')[0] : '';
+                    return row;
+                }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}},
+            {"name": "file size", "targets": 3, width: '49.5%', data: function (row, type, val, meta) {
+                    row.sortData = row['T_FO_SIZE'];
+                    row.displayData = FgInternal.convertByteToMb(row['T_FO_SIZE'], '{{'DC_MB'|trans}}');
+                    return row;
+                }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}}
+        ];
+        FgPageTitlebar = $(".fg-action-menu-wrapper").FgPageTitlebar({
+            title: true,
+            search:true,
+            filter:false,
+            colSetting:false,
+            counter : true,
+            link : true,
+            row2: true
+        });
+
+        var jsonData = {};
+        $.getJSON("{{url('get_document_sidebar')}}", function (data) {
+            jsonData = data;
+            FgSidebar.jsonData = true;
+            FgSidebar.ActiveMenuDetVar = FgLocalStorageNames.personalDocuments.activeContactMenuDet;
+            FgSidebar.activeMenuVar = FgLocalStorageNames.personalDocuments.sidebarActiveMenu;
+            FgSidebar.activeSubMenuVar = FgLocalStorageNames.personalDocuments.sidebarActiveSubMenu;
+            FgSidebar.activeOptionsVar = FgLocalStorageNames.personalDocuments.sidebarActiveOptions;
+            FgSidebar.defaultMenu = 'MYDOCS_li';
+            FgSidebar.defaultSubMenu = 'MYDOCS_li_'+jsonData["MYDOCS"]['entry'][0]['id']; //If NEW exist, then 'NEW' else 'ALLDOCUMENTS'
+            FgSidebar.options = [];
+            FgSidebar.defaultTitle = jsonData["MYDOCS"]['entry'][0]['title'];
+            FgSidebar.showloading = true;
+            FgSidebar.module = 'personalDocuments';
+            FgSidebar.settings = {};
+           
+            $.each(jsonData, function(categoryName, categoryArray) {
+                var menuId = categoryArray['id']+ '_li';
+                if(categoryName == "MYDOCS") { 
+                    /* My DOcuments */                   
+                    var myDocMenu = {templateType: 'general', menuType: categoryArray['id'], 'parent': {id: menuId, class: 'tooltips bookmark-link', name: 'bookmark-link', 'data-placement': "right"}, title: categoryArray['title'], template: '#template_sidebar_menu', 'menu': {'items': categoryArray['entry']}};
+                    FgSidebar.settings[categoryArray['id']+ '_li'] = myDocMenu;
+                    FgSidebar.options.push({'id': menuId, 'title': categoryArray['title']});
+                } else {                    
+                    var contactMenu = {templateType: 'menu2level', menuType: categoryArray['id'], 'parent': {id: menuId, class: categoryArray['id']}, title: categoryArray['title'], template: '#template_sidebar_menu2level', 'logo': categoryArray['logo'], 'menu': {'items': categoryArray['entry']}};
+                    FgSidebar.settings[categoryArray['id']+ '_li'] = contactMenu;
+                    FgSidebar.options.push({'id': menuId, 'title': categoryArray['title']});
+                }
+            });
+            
+            FgSidebar.init();
+            datatableOptions = {
+                columnDefFlag: true,
+                ajaxPath: "{{ path('get_documents_list',{'type':'personal' }) }}",
+                ajaxparameterflag:true,
+                isCheckbox:false,
+                ajaxparameters:{
+                    menuType: FgSidebar.activeMenuData.menuType,  //'new' or 'all' or 'subcategory'
+                    categoryId: FgSidebar.activeMenuData.categoryId,
+                    subCategoryId: FgSidebar.activeMenuData.id
+                },
+                fixedcolumn:false,
+                columnDefValues: columnDefs,
+                popupFlag: true,
+                initialSortingFlag:true,
+                initialsortingColumn: 2,
+                initialSortingorder: 'desc',
+                displaylength: 10,
+                serverSideprocess:false,
+                countDisplayFlag:true
+            };
+            FgDatatable.listdataTableInit('datatable-club-document', datatableOptions);
+            FgDatatable.datatableSearch();
+            
+            FgPersonalDocs.setSidebarCount(jsonData);
+            FgPersonalDocs.showHideMarkAll();           
+        });
+        
+        var FgPersonalDocs = {
+            //for updateing sidebar count
+            setSidebarCount: function (params) {                    
+                $.post(documentSidebarCountPath, {"category" : params}, function(data) {
+                    FgCountUpdate.updateSidebar(data);
+                    //FgSidebar.show();
+               });
+            },   
+            showHideMarkAll: function () {
+               /* If there are no new documents mark all read link not needed */
+                var activeSubMenu = localStorage.getItem(FgSidebar.activeSubMenuVar);
+                if(( (activeSubMenu == null || activeSubMenu=='') && FgSidebar.defaultSubMenu == 'MYDOCS_li_NEW') || activeSubMenu == 'MYDOCS_li_NEW' ){                
+                    $('.fg-page-title-block-2').removeClass('fg-dis-none').addClass('fg-active-IB');
+                /* show mark all as seen link only for all document and new documents */    
+                }else{
+                    if(activeSubMenu!= 'MYDOCS_li_NEW'){
+                        $('.fg-page-title-block-2').removeClass('fg-active-IB').addClass('fg-dis-none');             
+                    }
+                }
+            }
+        };
+        //for document download.
+        $(document).on('click',".fg-dev-read",function(event){
+            event.preventDefault();
+            var data_url= $(this).attr('data_url');
+            if ($('.fg-dev-read').hasClass('fg-strong')) {
+                var activeSubMenu = localStorage.getItem(FgSidebar.activeSubMenuVar);
+                if (activeSubMenu == 'MYDOCS_li_NEW') {
+                    listTable.row($(this).parents('tr')).remove().draw(false);
+                }
+                FgDocumentCount.updatePersonalDocumentsCount('download');
+                $(this).removeClass('fg-strong');
+            }
+            window.open(data_url,'_blank'); 
+        });
+           //for mark all document as seen.
+         $(document).on('click',".fg-dev-markall",function(event){
+           event.preventDefault();
+           var data_url= $(this).attr('data_url');
+           localStorage.removeItem(FgSidebar.activeMenuVar);
+           localStorage.removeItem(FgSidebar.activeSubMenuVar);		   
+           FgXmlHttp.post(data_url);     
+         });
+ 
+    </script>
+
+{% endblock %}

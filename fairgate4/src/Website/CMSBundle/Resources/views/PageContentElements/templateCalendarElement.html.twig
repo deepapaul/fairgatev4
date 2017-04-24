@@ -1,0 +1,49 @@
+{% if calendarData is empty %}
+    <div class="fg-cms-empty-box-wrapper">
+        <p class="text-center">{{'NO_CALENDAR_EVENT_MESSAGE'|trans}}</p>
+    </div>           
+{% endif %}
+{% set i = 0 %}
+{% for key, data in calendarData %}
+    {% if( i < 7 ) %}
+            <div class="fg-event-block fg-dev-calendar-detail" data-href="{{ path('website_calendar_appointment_details', { 'navIdentifier': 'NAV_IDENTIFIER', 'eventId': data.eventDetailId, 'startTimeStamp': data.startDateTimestamp, 'endTimeStamp': data.endDateTimestamp }) }}" >
+                <h3 class="fg-event-title">{{data.title}}</h3>
+                <p class="fg-event-date">  
+                   {% if(data.dateDetails.startDate is defined) %} 
+                        {% set arrayStartDateArr = data.dateDetails.startDate|split(',') %}
+                        {% set arrayStartDate = arrayStartDateArr[0]|split(' ') %}
+                        <!-- in some language, shortname of weekday contains dot. For removing that replace '.' with ', '-->
+                        {% set weekNameStart = data.startDate|date('Y-m-d H:i:s')|localizeddate('none', 'none', clubLocale, null, clubDateFormat) %}
+                        {% set dateTimeStart = data.dateDetails.startDate %}
+                        <!--This if case for FAIRDEV-127 -->
+                        {% if(data.dateDetails.endDate is defined and data.isAllday != 1 ) %} 
+                            {% set dateTimeStart = fgtwig.formatDate(dateTimeStart) %}
+                        {% endif %}
+                        {% if clubDateFormat == 'EEEE' %}                           
+                            {{weekNameStart~", "~dateTimeStart}} 
+                        {% else %}                                                       
+                            {% set finalStart = weekNameStart~" "~dateTimeStart %} 
+                            {{finalStart}}                           
+                        {% endif %}
+                   {% endif %} 
+                   {% if(data.dateDetails.endDate is defined and data.isAllday != 1 ) %}
+                       {% set arrayEndDateArr = data.dateDetails.endDate|split(',') %} 
+                       {% set arrayEndDate = arrayEndDateArr[0]|split(' ') %}
+                       <!-- in some language, shortname of weekday contains dot. For removing that replace '.' with ', '-->
+                       {% set weekNameEnd = data.endDate|date('Y-m-d H:i:s')|localizeddate('none', 'none', clubLocale, null, clubDateFormat) %}                       
+                       - 
+                       {% set dateTimeEnd = data.dateDetails.endDate %}
+                       {% set dateTimeEnd = fgtwig.formatDate(dateTimeEnd) %}
+                       {% if clubDateFormat == 'EEEE' %}
+                           {{weekNameEnd~", "~dateTimeEnd}} 
+                       {% else %}
+                           {% set finalEnd = weekNameEnd~" "~dateTimeEnd %} 
+                           {{finalEnd}}
+                       {% endif %}
+                   {% endif %}
+               </p>
+            </div>
+    {% endif %}
+    {% set i = i + 1 %}
+{% endfor %} 
+

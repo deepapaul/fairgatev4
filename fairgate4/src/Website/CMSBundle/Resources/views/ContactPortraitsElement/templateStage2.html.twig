@@ -1,0 +1,119 @@
+<script type="text/template" id="contacts_portrait_stage2_template"> 
+    <form class="form-horizontal" id="contacts_portrait_element_stage2" name="contacts_portrait_element_stage2">
+    <div id="form-tab1" method="post" data-url="" class="form-horizontal">
+        <div class="fg-tab-list fg-nl-lang-drop">
+           <div class="fg-clear">
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-4 control-label">{{'PORTRAITS_PER_ROW'|trans|raw}}</label>
+                    <div class="col-sm-4 col-md-3 col-lg-2">
+                        <div class="fg-input-plus-minus">
+                                <button class="left minus form-control FL selectButton btn-number" data-field="portraitPerRow" data-type="minus" type="button">-</button>
+                                <input type="text" required="true" min="1" disabled="" oldCount="1" data-key="portraitPerRow" class="form-control FL number input-number" max="{{ colSize }}" name="portraitPerRow" value="<%- data.portraitPerRow %>" id="portraitPerRow" maxlength="1" >                                
+                                <button class="right plus form-control FL selectButton btn-number" data-field="portraitPerRow" data-type="plus" type="button">+</button>
+                        </div>
+                        <span class="help-block" id="portraitsPerRowMsg"></span>                         
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-4 control-label">{{'PORTRAITS_ROWS_PER_PAGE'|trans|raw}}</label>
+                    <div class="col-sm-4 col-md-3 col-lg-2">
+                        <div class="fg-input-plus-minus">
+                                <button class="left minus form-control FL selectButton btn-number" data-field="rowsPerPage" data-type="minus" type="button">-</button>
+                                <input type="text" required="true" min="1" oldCount="1" data-key="rowsPerPage" class="form-control FL number input-number" max="100" name="rowsPerPage" value="<%- data.rowPerpage %>" id="rowsPerPage" >                                
+                                <button class="right plus form-control FL selectButton btn-number" data-field="rowsPerPage" data-type="plus" type="button">+</button>
+                        </div>
+                        <span class="help-block">
+                            <span id="rowsPerPageCount"></span> {{'PORTRAITS_PER_PAGE'|trans}}
+                        </span>  
+                        <span class="help-block hide fg-dev-error-msg" >{{'VALIDATE_ROWS_PER_PAGE'|trans|raw}}</span> 
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-4 control-label fg-pad-top-0" >{{'PORTRAITS_SEARCH'|trans}}</label>
+                    <div class="col-sm-8">
+                        <label for="checkboxes-0" class="fg-checkbox">
+                            <input type="checkbox" name="tableSearch" id="tableSearch" value="1" <% if(data.tableSearch == '1') { %> checked <% } %> data-key="tableSearch" >
+                            {{'PORTRAITS_ACTIVATE'|trans}}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group required">
+                    <label class="col-md-3 col-sm-4 control-label  " >{{'PORTRAITS_SORTING'|trans}}</label> 
+                    <div class="col-sm-4 col-md-3 fg-dev-sort-type">                        
+                        <select name="contact-list-portrait-column-type" id="contact-list-portrait-column-type" data-key="sortingType" required="true" class="selectpicker form-control contact-list-portrait-column-type">
+                            <option value="">{{'CONTACT_LIST_COLUMN_TYPE_DP_DEFAULT_SELECT'|trans}}{{'CONTACT_LIST_COLUMN_TYPE_DP_DEFAULT'|trans}}</option>
+                            <% _.each(contactListColumnJson, function(columnType, columnKey) { 
+                                var selected = '';
+                                if(typeof data.initialSortingDetails == 'object' && data.initialSortingDetails != null ){ if(data.initialSortingDetails.type == columnKey) { 
+                                    selected = 'selected';
+                                } } 
+                                if(typeof columnType['fieldName'] == 'object') { %>
+                                    <option <%- selected %> value="<%- columnKey %>"><%- columnType['fieldName'][defaultLang] %></option>
+                                <% } else if(typeof columnType['fieldName'] == 'string') { %>
+                                    <option <%- selected %> value="<%- columnKey %>"><%- columnType['fieldName'] %></option>
+                                <% }
+                            }); %>
+                        </select> 
+                    </div>
+            
+                    
+                    
+                    <% if(typeof data.initialSortingDetails == 'object' && data.initialSortingDetails != null ){ if( typeof data.initialSortingDetails.name != 'undefined') { %>
+                        <div class="col-sm-4 col-md-3 fg-dev-contact-secondDp" data-name="fg-dev-contact-secondDp">
+                            <select name="fg-dev-contact-list-portrait-secondDp" id="fg-dev-contact-list-portrait-secondDp" data-key="sortingName"  class="selectpicker form-control fg-dev-contact-list-portrait-secondDp">
+                                <option value=""><%- contactListColumnJson[data.initialSortingDetails.type]['defaultOption'] %></option>
+                                <% _.each(contactListColumnJson[data.initialSortingDetails.type].fieldValue, function(detail) { %>
+                                    <% if(data.initialSortingDetails.type == 'CONTACT_FIELD') { %>
+                                        <optgroup value="<%- detail['catId'] %>" label="<%- detail['catName'] %>">
+                                            <% _.each(detail.attrDetails, function(attrData) { 
+                                                if(attrData['isSystemField'] == 1) { 
+                                                    if ((attrData['fieldNameLang'][clubLangDetails[defaultLang]['systemLang']] != '') && (attrData['fieldNameLang'][clubLangDetails[defaultLang]['systemLang']] != undefined )) { %>
+                                                        <option <% if(attrData['attrId'] == data.initialSortingDetails.name) { %> selected <% } %> value="<%- attrData['attrId'] %>" opt_type=""><%- attrData['fieldNameLang'][clubLangDetails[defaultLang]['systemLang']] %></option>
+                                                    <% } else { %>
+                                                        <option <% if(attrData['attrId'] == data.initialSortingDetails.name) { %> selected <% } %> value="<%- attrData['attrId'] %>" opt_type=""><%- attrData['fieldName'] %></option>
+                                                    <% }
+                                                } else {
+                                                    if ((attrData['fieldNameLang'][defaultLang] != '') && (attrData['fieldNameLang'][defaultLang] != undefined)) { %>
+                                                        <option <% if(attrData['attrId'] == data.initialSortingDetails.name) { %> selected <% } %> value="<%- attrData['attrId'] %>" opt_type=""><%- attrData['fieldNameLang'][defaultLang] %></option>
+                                                    <% } else { %>
+                                                        <option <% if(attrData['attrId'] == data.initialSortingDetails.name) { %> selected <% } %> value="<%- attrData['attrId'] %>" opt_type=""><%- attrData['fieldName'] %></option>
+                                                    <% } %>
+                                                <% } %>
+                                            <% }); %>
+                                        </optgroup>
+                                    <% } else {
+                                        if ((detail['attrNameLang'][defaultLang] != '') && (detail['attrNameLang'][defaultLang] != undefined)) { %>
+                                            <option <% if(detail['attrId'] == data.initialSortingDetails.name) { %> selected <% } %> value="<%- detail['attrId'] %>"><%- detail['attrNameLang'][defaultLang] %></option>
+                                        <% } else { %>
+                                            <option <% if(detail['attrId'] == data.initialSortingDetails.name) { %> selected <% } %> value="<%- detail['attrId'] %>"><%- detail['attrName'] %></option>
+                                        <% } %>
+                                    <% } %>
+                                <% }); %>
+                            </select>  
+                        </div>
+                    <% } } %>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 col-sm-4 control-label fg-pad-top-0" >{{'PORTRAITS_ORDER'|trans}}</label>
+                    <div class="col-sm-8">
+                        <div class="fg-dis-IB fg-marg-right-15">
+                            <label for="sortingOrder-0" class="fg-checkbox">
+                                <input type="radio" name="sortingOrder" id="sortingOrder-0" value="asc" <% if(data.initialSortOrder == 'asc') { %> checked <% } %> data-key="sortingOrder">
+                                {{'PORTRAITS_ASC'|trans}}
+                            </label>
+                        </div>
+                        <div class="fg-dis-IB">
+                            <label for="sortingOrder-1" class="fg-checkbox">
+                                <input type="radio" name="sortingOrder" id="sortingOrder-1" value="desc" <% if(data.initialSortOrder == 'desc') { %> checked <% } %> data-key="sortingOrder">
+                                {{'PORTRAITS_DESC'|trans}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    </form>
+</script>

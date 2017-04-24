@@ -1,0 +1,98 @@
+{% extends 'InternalMessageBundle:MessageWizard:messagewizard.html.twig' %}
+      
+{% block wizardstage %}
+<div id="tab1" class="tab-pane fg-tab-list active">
+<h3 class="block">{{'MESSAGEWIZARD_STAGE1_CHOOSE_RECIPIENT'|trans}}</h3>
+<dl>
+    
+   <div class='fg-dev-recipients fg-autocomplete-parent' >
+    <dt class="control-label">{{'MESSAGEWIZARD_STAGE1_RECIPIENT'|trans}} <span aria-required="true" class="required"> * </span></dt>
+    <dd>
+        <div>
+        <input type="text" class="form-control dFExclude" name="recipients" id="recipients"> 
+        <input type="text" style="display:none;" name="recipients-suggest-updator" id="recipients-suggest-updator" value=""> 
+        <input type="hidden" name="grouptype" value="{{recipienttype}}">
+        </div>
+           {% if recipienttype == "TEAM" or recipienttype == "WORKGROUP"  %}
+             <a class="add-all" href="javascript:void(0)" id='add-all-contact'>
+                 {{'MESSAGEWIZARD_STAGE1_ADDALL_RECIPIENT'|trans}}
+             </a>
+           {% endif %}       
+    </dd>
+   </div>
+   
+   <div class='fg-dev-conversation' >
+   <dt class="control-label fg-pad-top-0" style='padding-top: 0px'>{{'MESSAGEWIZARD_STAGE1_CONVERSATIONTYPE'|trans}}<span aria-required="true" class="required"> * </span></dt>
+   <dd>
+      <div class="radio-list">
+         <div class="fg-news-radio">
+            <span><input type="radio" {% if (edit and messageDetailArray.messageType == 'GROUP') or not(edit) %} {{'checked="checked"'}} {% endif %} value="GROUP" id="optionsRadios25" name="conversationtype"></span>
+            <label class="propertyClick" for="optionsRadios25">{{'MESSAGEWIZARD_STAGE1_GROUPCONVERSATION'|trans}}</label>
+         </div>
+         <div class="fg-news-radio">
+            <span><input type="radio" {% if edit and messageDetailArray.messageType == 'PERSONAL' %} {{'checked="checked"'}} {% endif %} value="PERSONAL" id="optionsRadios26" name="conversationtype"></span>
+            <label class="propertyClick" for="optionsRadios26">{{'MESSAGEWIZARD_STAGE1_PERSONALCONVERSATION'|trans}}</label>
+         </div>
+      </div>
+   </dd>
+   </div>
+    
+   <div class='fg-dev-emails' >
+   <dt class="control-label">{{'MESSAGEWIZARD_STAGE1_SENDEREMAIL'|trans}}</dt>
+   <dd>
+      <select class="form-control bs-select" name='senderemail' id='senderemail'>
+        {% for email in emailList %}
+            <option {% if edit and messageDetailArray.senderEmail == email %} {{'selected="selected"'}} {% endif %} value="{{email}}">{{email}}</option>
+        {% endfor %}
+      </select>
+   </dd>
+   </div>
+   
+</dl>
+</div>  
+{% endblock %}
+
+{% block wizardprogressstage %}
+<ul class="nav nav-pills nav-justified steps">
+    <li class="active"> <a class="step" href="javascript:void(0)" aria-expanded="true"> <span class="number"> 1 </span> <span class="desc"> <i class="fa fa-check"></i>{{'MESSAGEWIZARD_GENERAL'|trans}}</span> </a> </li>
+    <li> <a class="step" href="{% if edit %}{{path('internal_create_message_step2', {'messageId':messageDetailArray.id})}}{%else%}{{'javascript:void(0)'}}{% endif %}"> <span class="number"> 2 </span> <span class="desc"> <i class="fa fa-check"></i>{{'MESSAGEWIZARD_MESSAGE'|trans}}</span> </a> </li>
+    <li> <a class="step active" href="javascript:void(0)"> <span class="number"> 3 </span> <span class="desc"> <i class="fa fa-check"></i>{{'MESSAGEWIZARD_NOTIFICATION'|trans}}</span> </a> </li>                                     
+</ul>
+
+<div role="progressbar" class="progress progress-striped" id="bar">
+    <div class="progress-bar progress-bar-warning" style="width: 33.3333%;"> </div>
+</div>
+{% endblock %}
+
+{% block wizardscript %}
+    <script src="{{ asset('fgcustom/js/fbautocomplete/fbautocomplete.js')}}" type="text/javascript"></script>
+    <script type="text/javascript">
+        {% if recipienttype == "CONTACT"%}
+            var message_recipient_contact_url = "{{path('internal_create_message_step1_getrecipients_contacts')}}";  
+        {% endif %}
+        var messageStep1Saveurl = '{% if edit %} {{path('internal_edit_message_step1_save', {'messageId':messageDetailArray.id})}} {%else%} {{path('internal_create_message_step1_save')}} {% endif %}';
+        var message_recipient_type = '{{recipienttype}}';  
+        var removeButtonTransalator = '{{'NL_AUTOCOMPLETE_REMOVE'|trans}}';
+        var requiredValidationTransalator = '{{'VALIDATION_THIS_FIELD_REQUIRED'|trans}}';
+
+        $(document).ready(function () {
+            fgMessageWizardStep1.init();
+            fgMessageWizardStep1.initFgDirtyFields();
+            
+            //Hack to manipulate the FgDirty field
+            if('{{source}}' == 'overview'){
+                var recipientsSuggestUpdator = $('#recipients-suggest-updator');
+                recipientsSuggestUpdator.val(recipientsSuggestUpdator.val()+',').trigger('change');
+            }
+        });                                                                
+         
+         function getRecipients()
+         {
+             return {{recipients|json_encode|raw}};
+         }
+         function getSelectedRecipients()
+         {
+             return {{selectedRecipients|json_encode|raw}};
+         }
+    </script>    
+{% endblock %}   

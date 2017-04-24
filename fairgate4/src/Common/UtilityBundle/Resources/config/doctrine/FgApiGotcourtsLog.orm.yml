@@ -1,0 +1,61 @@
+Common\UtilityBundle\Entity\FgApiGotcourtsLog:
+    repositoryClass: Common\UtilityBundle\Repository\Api\FgApiGotcourtsLogRepository
+    type: entity
+    table: fg_api_gotcourts_log
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        date:
+            type: datetime
+            nullable: false
+        field:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        valueAfter:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: value_after
+        valueBefore:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: value_before
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        gotcourt:
+            targetEntity: FgApiGotcourts
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                gotcourt_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        changedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                changed_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

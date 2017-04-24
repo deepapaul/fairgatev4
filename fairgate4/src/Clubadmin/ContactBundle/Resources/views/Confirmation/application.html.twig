@@ -1,0 +1,330 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+
+{% block pagecontent %}
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BREADCRUMB STARTS -->
+            {% include 'clubadmin/breadcrumb.html.twig' %}
+            <!-- BREADCRUMB ENDS -->
+        </div>
+    </div>
+    <div class="row">
+      {% set page_settings = { 'pagetitle':'true','actionmenu':'true','tabs':'true' }  %}
+      {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': title|trans, 'page_settings': page_settings,'tabs':tabs ,'type':page,'hrefLink':'true','url':'#'} %}
+    </div>
+      <div id="data-tabs-content" class="tab-content">
+        {% for key,logTab in logTabs %}
+            {% set active = (key == activeTab) ? 'active': '' %}
+            <div class="tab-pane {{ active }}" id="confirmations-{{ logTab }}-table-div">
+                {% include 'ClubadminContactBundle:Confirmation:applicationList.html.twig' with { 'activeTab' : logTab, 'typeId' : key,'clubType': clubType } %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div id="callPopupFunction"></div>
+    <!-- Connection Popup -->
+    <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-content fg-popup-wrap" id="popup_contents">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/sidebar.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg-nullsort-handle-dataTable.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/fgConfirmApplications.js')}}" type="text/javascript"></script>
+    <script type="text/javascript">
+        var clubTitles = '{{ clubTitles|json_encode()|raw }}';
+        clubTitles1 = JSON.parse(clubTitles);
+        var clubType = '{{ clubType }}';
+        var page = '{{ page }}';
+        var actionMenuFlag = (clubType=='federation') ? true : false;
+        $(document).ready(function() {
+            FgPageTitlebar.init({
+                title       : true,
+                tab       : true,
+                search     :false,
+                actionMenu  : actionMenuFlag,
+                tabType  :'client'
+
+            });
+       });
+        FgConfirmations.activeTabName = '{{ (activeTab == '1') ? 'list' : 'log' }}';
+        var currentDateFormat = FgLocaleSettingsData.momentDateTimeFormat;
+
+        if (FgConfirmations.activeTabName == 'list') {
+            var confirmUrl = '{{ path('confirm_or_discard_application', {'action' : 'confirm'}) }}' + '?page=' + page;
+            var discardUrl = '{{ path('confirm_or_discard_application', {'action' : 'discard'}) }}' + '?page=' + page;            
+            var actionMenuNoneSelectedText = {
+                'confirmConfirmations'   : {'title' : "{{ 'CONFIRMATION_CONFIRM'|trans }}", 'dataUrl': confirmUrl, 'visibleAlways' : false},
+                'discardConfirmations'   : {'title' : "{{ 'CONFIRMATION_DISCARD'|trans }}", 'dataUrl': discardUrl, 'visibleAlways' : false}
+            };
+            var actionMenuSingleSelectedText = {
+                'confirmConfirmations'   : {'title' : "{{ 'CONFIRMATION_CONFIRM'|trans }}", 'dataUrl': confirmUrl, 'visibleAlways' : true},
+                'discardConfirmations'   : {'title' : "{{ 'CONFIRMATION_DISCARD'|trans }}", 'dataUrl': discardUrl, 'visibleAlways' : true}
+            };
+            var actionMenuMultipleSelectedText = {
+                'confirmConfirmations'   : {'title' : "{{ 'CONFIRMATION_CONFIRM'|trans }}", 'dataUrl': confirmUrl, 'visibleAlways' : true},
+                'discardConfirmations'   : {'title' : "{{ 'CONFIRMATION_DISCARD'|trans }}", 'dataUrl': discardUrl, 'visibleAlways' : true}
+            };
+        }
+        var contactUrl = '{{ path('render_contact_overview', {'offset' : 0, 'contact' : 'dummy'}) }}';
+        var contactDetailUrl = '{{ path('new_contact_detail', {'contact' : 'dummy'}) }}';
+
+        colCount = 0;
+        colCount2 = 0;
+        var columnDefs1 = [];
+        var columnDefs2 = [];
+        if (clubType=='federation') {
+            columnDefs1.push({ type: "checkbox", orderable: false, "width" : "5%", targets: colCount++, data:function(row, type, val, meta){
+                return "<input type='checkbox' class='dataClass fg-dev-avoidicon-behaviour' id='"+row['confirmId']+"' name='check'>";
+            }});
+        }
+        columnDefs1.push({ "name": "modified_date", "width" : "15%", "type": "null-last",  "targets": colCount++ , data:function(row, type, val, meta){
+                                var modifiedDate = ((row['modifiedDate'] === '') || (row['modifiedDate'] === null)) ? '': FgLocaleSettings.formatDate(row['modifiedDate'], 'datetime', 'YYYY-MM-DD hh:mm:ss');
+                                row.sortData = row['modifiedDate'];
+                                row.displayData = modifiedDate;
+                                return row;
+                            }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}
+                        },
+                        { "name": "contact", "width" : "20%",  "targets": colCount++, data:function(row, type, val, meta){
+                                var icon = getContactIcon(row['gender'], row['isCompany'], row['clubMembershipCat'], clubType);
+                                var overviewLink = icon+' <a class="fg-marg-left-5" href="'+contactUrl.replace('dummy', row['isActiveContact'])+'">'+row['contactName']+'</a>';
+                                var popupLink = icon+' <a class="fg-creations-new-contact fg-marg-left-5" href="#" data-url="'+contactDetailUrl.replace('dummy', row['contactId'])+'">'+row['contactName']+'</a>';
+                                return  ((row['contactName'] == '' || row['contactName'] == null) ? '-' : (clubType == 'sub_federation_club' || clubType == 'federation_club') ? ( overviewLink ) : (((row['valueBefore'] == '' || row['valueBefore'] == null) ? popupLink : (overviewLink)  )));
+                        }});
+
+        if (clubType=='federation') {
+            if (page == 'mergeapplication') {
+                columnDefs1.push({ "name": "club", "width" : "20%",  "targets": colCount++, data:function(row, type, val, meta){
+                      if (row['currentClub'] == '' || row['currentClub'] == null) { 
+                          return '-'; 
+                      } else {
+                          return row['currentClub'];
+                      }
+                }});
+            } else {
+                columnDefs1.push({ "name": "club", "width" : "20%",  "targets": colCount++, data:function(row, type, val, meta){
+                      if(row['existingClubs'] == '' || row['existingClubs'] == null) { 
+                          return '-'; 
+                      }else{
+                        var myarr = row['existingClubs'].split(", ");
+                        for(var loc = 0; loc < myarr.length; loc++){
+                            if(myarr.length != 1 && row['mainClub'] == myarr[loc]){
+                               var vclubid = parseInt(myarr[loc]);
+                                clubName = _.where(clubTitles1, {id: vclubid}); 
+                                if(typeof clubName[0] !== 'undefined' ){
+                                    titleLen = 0;
+                                   if(clubName[0]['titleLang'] != null)
+                                        titleLen = parseInt(clubName[0]['titleLang'].length);
+                                    if(titleLen!=0){
+                                      
+                                       myarr[loc] =  clubName[0]['titleLang'];  
+                                    }else if(clubName[0]['title']!== ''){
+                                        
+                                       myarr[loc] =  clubName[0]['title'];
+                                  } 
+                                }
+				 myarr[loc] = myarr[loc]+' <i class="fa  fa-star text-yellow"></i>';
+                            }else{
+                                var vclubid = parseInt(myarr[loc]);
+                               
+                                clubName = _.where(clubTitles1, {id: vclubid}); 
+                                if(typeof clubName[0] !== 'undefined' ){
+                                    titleLen = 0;
+                                   if(clubName[0]['titleLang'] != null)
+                                         titleLen = parseInt(clubName[0]['titleLang'].length);
+                                    if(titleLen!=0){
+                                        myarr[loc] =  clubName[0]['titleLang'];  
+                                        
+                                    }else if(clubName[0]['title']!== ''){
+
+                                       myarr[loc] =  clubName[0]['title'];
+                                    } 
+                                } 
+                            }
+                        }
+                        
+                       
+                        row['existingClubs'] = myarr.join(", ");
+                        
+                        return row['existingClubs'];
+                      }
+                }});
+            }
+        }
+        if (page == 'mergeapplication') {
+            columnDefs1.push({ "name": "existingContact", "width" : "20%",  "targets": colCount++, data:function(row, type, val, meta){
+                    var icon = getContactIcon(row['ECGender'], row['ECIsCompany'], row['ECClubMembership'], clubType);
+                    var overviewLink = icon + ((row['ECIsActive'] !== null) ? ' <a class="fg-marg-left-5" href="'+contactUrl.replace('dummy', row['ECContactId'])+'">'+row['ECContactName']+'</a>' : row['ECContactName']);
+                    return  (row['ECContactName'] == '' || row['ECContactName'] == null) ? '-' : overviewLink;
+            }});
+            columnDefs1.push({ "name": "newclubs", "width" : "20%",  "targets": colCount++, data:function(row, type, val, meta){
+                    if(row['ECExistingClubs'] == '' || row['ECExistingClubs'] == null) { 
+                        return '-'; 
+                    } else {
+                        var clubArr = row['ECExistingClubs'].split(", ");
+                        var clubTitleArr = _.map(clubArr, function(clubData){
+                            var clubTitle = clubData.split("#---#");
+                            return ((clubArr.length > 1 && row['ECMainClub'] === clubTitle[0]) ? (clubTitle[1]+' <i class="fa  fa-star text-yellow"></i>') : clubTitle[1]); 
+                        });
+                        row['existingClubs'] = clubTitleArr.join(", ");
+                        return row['existingClubs'];
+                    }
+            }});
+        } else {
+            columnDefs1.push({ "name": "value_before", "width" : "20%", "targets": colCount++, data:function(row, type, val, meta){
+                                return (row['valueBefore'] == '' || row['valueBefore'] == null) ? '-' : row['valueBefore'];
+
+                            }},
+                            { "name": "value_after", "width" : "20%", "targets": colCount++, data:function(row, type, val, meta){
+                                return (row['valueAfter'] == '' || row['valueAfter']) == null ? '-' : row['valueAfter'];
+                            }}
+            );
+        }
+        columnDefs1.push({ "name": "modified_by", "width" : "20%", "targets": colCount++, data:function(row, type, val, meta){
+                            var extra = (row['isActiveModifiedContact'] == null && row['modifiedById'] != 1) ?' ('+row['clubChangedBy']+')':"";    
+                            return  (row['modifiedBy'] == '' || row['modifiedBy'] == null) ? '-' : ( (row['modifiedById'] == 1 || row['isActiveModifiedContact'] == null ) ? row['modifiedBy']+extra : '<a href="'+contactUrl.replace('dummy', row['isActiveModifiedContact'])+'">'+row['modifiedBy']+'</a>'+extra);
+                        }}
+                    );
+        columnDefs2 = [{ "name": "decision", "width" : "10%",   "targets": colCount2++ , data:function(row, type, val, meta){
+                            return row['status'] == 'CONFIRMED' ? '<span class="label label-sm fg-color-added">'+'{{ 'APPLICATION_CONFIRMED'|trans }}'+'</span>' : row['status'] == 'PENDING' ? '<span class="label label-sm fg-color-removed">'+'{{ 'APPLICATION_PENDING'|trans }}'+'</span>' : '<span class="label label-sm fg-color-removed">'+'{{ 'APPLICATION_DECLINED'|trans }}'+'</span>';
+                      }},
+                      { "name": "decision_date", "width" : "10%",  "type": "null-last","targets": colCount2++, data:function(row, type, val, meta){
+                                var decisionDate = ((row['decidedDate'] === '') || (row['decidedDate'] === null)) ? '': FgLocaleSettings.formatDate(row['decidedDate'], 'datetime', 'YYYY-MM-DD hh:mm:ss');
+                                row.sortData = row['decidedDate'];
+                                row.displayData = decisionDate;
+                                return row;
+                            }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}
+                       },
+                       { "name": "decided_by", "width" : "10%", "targets": colCount2++, data:function(row, type, val, meta){
+                            var extra = (row['isActiveDecidedContact'] == null && row['decidedById'] != 1) ?' ('+row['clubDecidedBy']+')':"";   
+                            return  (row['decidedBy'] == '' || row['decidedBy'] == null) ? '-' : ((row['decidedById'] == 1 || row['isActiveDecidedContact']==null) ? row['decidedBy']+extra : '<a href="'+contactUrl.replace('dummy', row['decidedById'])+'">'+row['decidedBy']+'</a>'+extra);
+                       }},
+                       { "name": "modified_date", "width" : "10%", "type": "null-last",  "targets": colCount2++ , data:function(row, type, val, meta){
+                                var modifiedDate = ((row['modifiedDate'] === '') || (row['modifiedDate'] === null)) ? '': FgLocaleSettings.formatDate(row['modifiedDate'], 'datetime', 'YYYY-MM-DD hh:mm:ss');
+                                row.sortData = row['modifiedDate'];
+                                row.displayData = modifiedDate;
+                                return row;
+                            }, render: {"_": 'sortData', "display": 'displayData', 'filter': 'displayData'}
+                        }, 
+                        {"name": "contact", "width" : "20%", "targets": colCount2++, data:function(row, type, val, meta){
+                                var icon = getContactIcon(row['gender'], row['isCompany'], row['clubMembershipCat'], clubType);
+                                var overviewLink = icon + ' <a class="fg-marg-left-5" href="'+contactUrl.replace('dummy', row['isActiveContact'])+'">'+row['contactName']+'</a>';
+                                var popupLink = icon + ' <a class="fg-creations-new-contact fg-marg-left-5" href="#" data-url="'+contactDetailUrl.replace('dummy', row['contactId'])+'">'+row['contactName']+'</a>';
+
+                                return  (row['contactName'] == '' || row['contactName'] == null) ? '-' : ( (row['contactId'] == 1 || row['isActiveContact']==null) ? popupLink : ('{{ page }}' == 'creations') ? popupLink : overviewLink );
+                        }}
+                       ];
+                            
+        if (clubType == 'federation' || page == 'mergeapplication') {
+            columnDefs2.push({ "name": "clubs", "width" : "15%",  "targets": colCount2++, data:function(row, type, val, meta){
+                if (row['existingClubs'] == '' || row['existingClubs'] == null) { 
+                    return '-'; 
+                } else{
+                  var myarr = row['existingClubs'].split(", ");
+                  for(var loc = 0; loc < myarr.length; loc++){
+                      if(myarr.length != 1 && row['mainClub'] == myarr[loc]){
+                            var vclubid = parseInt(myarr[loc]);
+                             clubName = _.where(clubTitles1, {id: vclubid}); 
+                            if(typeof clubName[0] !== 'undefined' ){
+                                titleLen = 0;
+                                if(clubName[0]['titleLang'] != null)
+                                    titleLen = parseInt(clubName[0]['titleLang'].length);
+                                if(titleLen!=0){
+
+                                   myarr[loc] =  clubName[0]['titleLang'];  
+                                }else if(clubName[0]['title']!== ''){
+
+                                   myarr[loc] =  clubName[0]['title'];
+                                } 
+                            }
+                            myarr[loc] = myarr[loc]+' <i class="fa  fa-star text-yellow"></i>';
+                       }else{
+                                var vclubid = parseInt(myarr[loc]);
+                                clubName = _.where(clubTitles1, {id: vclubid}); 
+                                if(typeof clubName[0] !== 'undefined' ){
+                                    titleLen = 0;
+                                    if(clubName[0]['titleLang'] != null)
+                                        titleLen = parseInt(clubName[0]['titleLang'].length);
+                                    if(titleLen!=0){
+
+                                       myarr[loc] =  clubName[0]['titleLang'];  
+                                    }else if(clubName[0]['title']!== ''){
+
+                                       myarr[loc] =  clubName[0]['title'];
+                                    } 
+                                }   
+                            }
+                       
+                          
+                   }
+                  row['existingClubs'] = myarr.join(", ");
+                  return row['existingClubs'];
+                }
+            }});
+        }    
+        if (page == 'mergeapplication' && clubType == 'federation' ) { 
+            columnDefs2.push({ "name": "new_club", "width" : "15%",  "targets": colCount2++, data:function(row, type, val, meta){
+                return ((row['club'] == '' || row['club'] == null) ? '-' : row['club']);
+            }});
+        } 
+        if (page == 'fedapplication') {
+            columnDefs2.push({ "name": "value_before", "width" : "20%", "targets": colCount2++, data:function(row, type, val, meta){
+                  return (row['valueBefore'] == '' || row['valueBefore'] == null) ? '-' : row['valueBefore'];
+              }},
+              { "name": "value_after", "width" : "10%", "targets": colCount2++, data:function(row, type, val, meta){
+                  return (row['valueAfter'] == '' || row['valueAfter']) == null ? '-' : row['valueAfter'];
+              }}
+            );
+        }
+        columnDefs2.push({ "name": "modified_by", "width" : "10%", "targets": colCount2++, data:function(row, type, val, meta){
+              var extra = (row['isActiveModifiedContact'] == null && row['modifiedById'] != 1) ?' ('+row['clubChangedBy']+')':"";   
+              return  (row['modifiedBy'] == '' || row['modifiedBy'] == null) ? '-' : ( (row['modifiedById'] == 1 || row['isActiveModifiedContact'] == null) ? row['modifiedBy']+extra : '<a href="'+contactUrl.replace('dummy', row['isActiveModifiedContact'])+'">'+row['modifiedBy']+'</a>'+extra);
+        }});
+
+
+        // method to handle pop up click in contact overview page
+    var profilePreviewPopup = function(){
+        $("body").off('click', "a.fa-access-edit") ;
+        $("body").on('click', "a.fa-access-edit", function(event) {
+            event.preventDefault();
+            var contactId= $(this).attr("data-contact-id");
+            var path = $(this).attr("data-url");
+            var type = $(this).attr("data-type");
+            var module = $(this).attr("data-module");
+
+            showPopup(type,{'path': path,'type':type,'contactId':contactId});
+        });
+    }();
+
+    function getContactIcon(gender,isCompany, clubMembershipCat, clubType) 
+    {
+          var contactIcon='';
+          var iconClass = (clubType != 'federation') ? "fg-bg-light-green active" : '';
+          if (isCompany == 1) {
+              if (clubMembershipCat != null) {
+                 contactIcon = '<i class="fa fa-building-o fg-bg-light-green active"></i>';
+             } else {
+                 contactIcon = '<i class="fa fa-building-o inactive"></i>';
+             }
+          } else {
+             if (clubMembershipCat != null && gender == 'Male') {
+                 contactIcon = '<i class="fa fa-male fg-male '+ iconClass+'"></i>';
+             } else if(clubMembershipCat == null && gender == 'Male') {
+                 contactIcon = '<i class="fa fa-male fg-male inactive"></i>';
+             } else if(clubMembershipCat != null && gender == 'Female') {
+                 contactIcon = '<i class="fa fa-female fg-female '+ iconClass+'"></i>';
+             } else if(clubMembershipCat == null && gender == 'Female') {
+                 contactIcon = '<i class="fa fa-female fg-female inactive"></i>';
+             }
+          }
+           return contactIcon   ;
+    }
+    </script>
+
+{% endblock %}

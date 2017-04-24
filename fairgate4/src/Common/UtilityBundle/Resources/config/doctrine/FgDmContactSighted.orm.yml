@@ -1,0 +1,32 @@
+Common\UtilityBundle\Entity\FgDmContactSighted:
+    repositoryClass: Common\UtilityBundle\Repository\FgDmContactSightedRepository
+    type: entity
+    table: fg_dm_contact_sighted
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        document:
+            targetEntity: FgDmDocuments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                document_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

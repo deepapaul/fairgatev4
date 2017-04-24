@@ -1,0 +1,80 @@
+<script type='template' id='gallery-img-upload'>
+<li class="fg-gallery-upload-item row filecontent" id="<%- id %>">
+<div class= "fg-replacewith-errormsg">
+    <div class="col-sm-2 fg-preview-thumb">
+        <div class="fg-dev-scalable-img-wrapper">
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-5 col-lg-5 form-group">
+            <label class="fg-active-IB control-label fg-v-top" for="textarea">{{'GM_IMAGE_DESC'|trans}}</label>
+            <div class="fg-active-IB fg-gallery-decription fg-v-top">                     
+            {% for clubLanguage in clubLanguageArr %}
+                <textarea class="form-control fg-event-name {% if(defaultClubLang!=clubLanguage) %} hide {% endif %}" id="desc_{{clubLanguage}}" data-lang="{{clubLanguage}}" name="imgDesc[{{clubLanguage}}][]"></textarea>
+            {% endfor %}
+            </div>
+    </div>
+    <div class="col-sm-4 col-md-5 col-lg-5 form-group">
+        <div class="fg-gallery-scope-wrapper row"> 
+            <div class="col-md-3 text-right">    
+                    <span class="fg-text">{{'GM_IMAGE_SCOPE'|trans}}</span>
+            </div>
+            <div class="col-md-9">
+                <label class="fg-active-IB">
+                  <input type="radio" name="imgScope[<%- id %>]" value="PUBLIC">
+                    <span class="fg-text">{{'GM_IMAGE_PUBLIC'|trans}}</span>
+                </label> 
+                <label class="radio-inline">
+                  <input type="radio" name="imgScope[<%- id %>]" value="INTERNAL">
+                    <span class="fg-text">{{'GM_IMAGE_INTERNAL'|trans}}</span>
+                </label> 
+            </div>
+        </div>
+        <div class="fg-gallery-upload-details">
+            <div class="fg-file-details row">
+                <div class="col-md-3 text-right">{{'GM_IMAGE_FILE_SIZE'|trans}}</div>
+                <div class="fg-file-size col-md-9">
+                    <span><%- size %></span>
+                    <div class="fg-gallery-upload-progress">
+                        <div class="fg-upload-progress" style="display: block;">
+                            <div class="progress progress-striped active">
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                    <span class="sr-only"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name='uploadedImages[]' value="<%- value %>"/>
+            <input type="hidden" name='uploadedImageId[]' value="<%- id %>"/>
+            <input name="fileSize[]" type="hidden" value="<%- size_raw %>">
+            <input name="fileName[]" type="hidden" value="<%- name %>">
+        </div>
+    </div>
+</div>
+        <a href="javascript:void(0)" class="fg-delete"><i class="fa fa-times-circle fa-2x"></i></a>
+</li>
+</script>
+<script type="text/template" id="gallery-uploader-errorlist-template">   
+    <% if(errors.length > 0) { %>
+        <% _.each(errors, function(error) { %>
+            <% if (error == 0) { %>
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    {{'GALLERY_UPLOAD_FILETYPE_ERROR'|trans}}
+                </div>
+            <% } %>
+        <% }) %> 
+    <% } %>   
+</script>
+<script type="text/template" id="fileUploadError">
+   <div class="fg-clear">
+       <div class="col-sm-7"> <%- name %>  </div>
+       <div class="col-sm-5">
+           <p><span class="help-block">
+          <% if (error == 0) { %> {{'FILEMANAGER_UPLOAD_FILETYPE_ERROR'|trans}} 
+          <% } else if (error == 1) { %> {{'FILEMANAGER_UPLOAD_VIRUS_ERROR'|trans}} 
+          <% } else if (error == 2) { %> {{'VIRUS_FILE_CONTACT'|trans}} 
+          <% } else { %> <%- error %> <% } %></span></p>
+       </div>
+</script>

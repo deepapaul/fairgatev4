@@ -1,0 +1,236 @@
+/* ------------------------------------Pid = 7
+CMS Theme configuration related Styles
+01. theme configuation list styles
+02. theme Edit font styles
+03. theme set background page
+---------------------------------------------*/
+/* =============================================================================
+01. theme configuation list styles
+================================================================================ */
+.fg-theme-config-wrapper{
+	@extend %clearfix;
+	.fg-dropzone-center-text{
+		border:10px solid #f7f7f7;
+		position:relative;
+
+		.fg-messages{
+			@include position(absolute,0,0,0,0);
+			margin: auto;
+		    height: 45px;
+		}
+		h3{
+			font-size: 16px;
+			font-weight: bold;
+			margin-top: 0;
+		}
+	}
+}
+.fg-theme-list-wrapper{
+	.fg-config-name{
+		font-size: 14px;
+		.fg-preview{
+			opacity: 0;
+		}
+		&:hover{
+			.fg-preview{
+				opacity: 1;
+			}
+		}
+	}
+	.fg-theme-name{
+		text-align: right;
+		span{
+			background: #ffcc02;
+			font-size: 12px;
+			padding: 2px 5px;
+		}
+	}
+	.fg-activate-wrapper{
+		.fg-activated{
+			background: #35aa47;
+			color: #fff;
+			padding: 2px 5px;
+		}
+		.fg-deactivated{
+			font-size: 14px;
+			.fa{
+				position: relative;
+				top: 1px;
+			}
+		}
+	}
+	.fg-duplicate{
+		@include bpMin('768px'){
+			padding-right: 40px;
+		}
+		.fa{
+			display: inline-block;
+			vertical-align: bottom;
+			cursor: pointer;
+		}
+	}
+	.fg-color-schemes-wrapper{
+		padding-left: 0;
+		.fg-color-schemes{
+			list-style: none;
+			padding: 0;
+			margin-right: 20px;
+			display: inline-block;
+			vertical-align: middle;
+		    font-size: 0;
+			background: url('../../global/img/transparent.jpg') repeat;
+			background-size: contain;
+			li{
+				display: inline-block;
+				border:1px solid #ddd;
+				border-right:0px;
+				width:28px;
+				height: 29px;
+				&:last-child{
+					border-right:1px solid #ddd;
+				}
+				.fg-edit-scheme{
+					
+				}
+			}
+		}
+		.fg-edit-scheme{   
+			display: inline-block;
+			vertical-align: middle;
+			font-size: 14px;
+		}
+
+	}
+
+	&.fg-pad-5{
+		.fg-activate-wrapper{
+
+		}
+	}
+	@include bpMax('767px') {
+		div[class^="col-sm-"]{
+		    line-height: 25px;
+		}
+		.fg-theme-name{
+			text-align: left;
+		}
+		.fg-color-schemes-wrapper .fg-color-schemes{
+			margin: 0;
+		}
+		.fg-duplicate{
+			@include position(absolute,0,25px,auto,auto);
+		}
+	
+	}
+
+	@include bpMax('600px') {
+		.fg-config-name{
+			width:calc(100% - 40px);
+			margin-bottom: 5px;
+			clear: both;
+		}
+		.fg-theme-name,.fg-activate-wrapper{
+			width:50%;
+			padding-left: 0;
+		}
+
+		&.fg-color-scheme-list-wrapper{
+			.fg-color-schemes-wrapper{
+				width: calc(100% - 60px);
+				clear: both;
+			}
+			.fg-activate-wrapper{
+				float: right;
+			}
+		}
+	}
+	@include bpMax('360px') {
+
+		.fg-color-schemes-wrapper{
+			clear: both;
+			max-width: calc(100% - 70px);
+		}
+	}
+
+}
+
+/* =============================================================================
+02. theme Edit font styles
+================================================================================ */
+
+.form-control.fg-select-common{
+    -webkit-appearance: menulist;
+}
+
+.fg-theme-edit-fonts-wrapper{
+	.fg-font-family{
+		width:250px;
+		margin-right: 10px;
+
+	}
+	.fg-font-weight{
+		width:130px;
+
+	}
+	.fg-font-style{
+	
+	}
+	@include bpMax('767px'){
+		.fg-font-style{
+			display: block;
+			margin-top: 5px;
+		}
+	}
+}
+
+.fg-theme-config-create-wrapper{
+
+	.tab-content{
+		h3{
+			&.block{
+			    margin: 0 -19px 20px;
+			}
+		}
+	}
+	.fg-theme-layout-thumb-wrapper{
+		>li{
+			display: inline-block;
+			padding: 5px;
+			border: 1px solid #ddd;
+			margin-right: 10px;
+			margin-bottom: 10px;
+			cursor: pointer;
+			width:230px;
+			.fg-thumb{
+				width:100%;
+			}
+			&:hover,
+			&.selected{
+				outline: 2px solid $borderblue;
+			}
+		}
+	}
+	.fg-dropzone{
+
+	}
+}
+
+/* =============================================================================
+03. theme set background page
+================================================================================ */
+.fg-set-background-form-wrapper{
+	.fg-duration{
+		width:80px;
+		margin-left: 10px;
+	}
+	.fg-files-upload-wrapper{
+
+	}
+	@include bpMax('767px'){
+		.fg-files-upload-wrapper{
+			.fg-thumb-wrapper{
+				margin-bottom: 10px !important;
+			}
+		}
+	}
+}

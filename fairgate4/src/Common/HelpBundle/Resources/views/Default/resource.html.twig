@@ -1,0 +1,14 @@
+{% block customstylesheets %}
+    <link href="{{ asset('bundles/commonHelp/css/fg-help-styles.css') }}" type="text/css" rel="stylesheet"/>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('bundles/commonHelp/js/FgHelp.js') }}" type="text/javascript"></script>    
+    <script src="{{ asset('bundles/commonHelp/js/fg-helper-main.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>
+    <script type="text/javascript">
+        var pathCheckModal = '{{path('help_dontshow_checkbox')}}';
+        var pathHelpDetails = '{{path('help_content_details')}}';
+        var pathHelpWindow = '{{path('help_quickstart')}}';
+        var windowVisibility = '{{windowVisibility}}';
+    </script>
+{% endblock %} 

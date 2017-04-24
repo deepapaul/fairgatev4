@@ -1,0 +1,57 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = galleryTitle%}
+
+{% block pagecontent %}
+
+    <div class="row">
+        <div class="col-lg-12">
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+        </div>
+    </div>
+    
+    <!-- PAGE TITLE -->
+    {% include 'global/page-title-bar.html.twig' with {'pageTitle':  pageTitle, 'tabs': {},'clubLanguages':clubLanguages, 'clubDefaultLang':clubDefaultLang} %}
+    {% block customstylesheets %}
+        <link href="{{ asset('fgassets/assets/global/plugins/jquery-nestable/jquery.nestable.css') }}" rel="stylesheet" type="text/css"/>
+    {% endblock %}
+    <form id="album-settings"  class="form-horizontal" method="post" onsubmit="return false;" novalidate="novalidate">
+        <div class="alert alert-danger display-hide">
+            <button class="close" data-close="alert"></button>
+            {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+        </div>
+
+        <!-- Album settings are listed -->
+        <div class="excludejs fg-gallery-album-settings-wrapper">
+            <div class="dd fg-nestable fg-nestable-no-toggle">
+                <ol class="dd-list fg-bookmark-list-wrapper-draggable" id="gallery_album_settings">
+                </ol>
+            </div>
+        </div>
+        
+        <div class="btn-group  fg-common-add-item">
+            <a href="javascript:void(0)"  class="add-album" id="add-album"><i class="fa fa-plus-circle fa-2x"></i><span class="fg-left-move"> {{'ALBUM_SETTINGS_ADD_ALBUM_TEXT'|trans}}</span></a>
+        </div>
+        <div class="clearfix">  </div>
+        {% include 'internal/savebutton.html.twig' with {'backLink':breadCrumb.back} %}
+
+        <input type="text" style="visibility: hidden;height: 0px; width: 0px" id="albumSettingData" name="albumSettingData"/>
+    </form>
+{% endblock %}
+
+{% block underscoretemplate %}
+    {% include 'InternalGalleryBundle:AlbumSettings:addAlbumTemplate.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('fgassets/assets/global/plugins/jquery-nestable/jquery.nestable.js') }}" type="text/javascript"></script>
+    <script>
+        var clubLanguages = {{clubLanguages|json_encode|raw}};
+        var defaultLang = selectedLang = '{{clubDefaultLang}}';
+        var saveAlbumPath = "{{ path('gallery_album_settings_save',{'type':galleryType}) }}";
+        var resultData = {{resultData|json_encode|raw}};
+        var sideBarPath = '{{ path('internal_gallery_view') }}';  
+        var galleryType = '{{galleryType}}';
+        FgUtility.handleDelete();
+    </script>
+    <script src="{{ asset('fgassets/internal/js/page/fg-albumsettings.js') }}" type="text/javascript"></script>
+{% endblock %}

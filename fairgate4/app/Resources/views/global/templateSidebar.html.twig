@@ -1,0 +1,138 @@
+{#<script type="text/template" id="firstLevelTemplate">
+    <li id="<%=menuData.id%>_li" class="<%=menuData.id%>_li fg_gallery_sidebar_mainmenu" isclickable="true">
+        <a href="javascript:;"><span class=" arrow pull-left "></span><span class="title"><%= menuData.title %></span></a>
+        <% if(!_.isEmpty(firstLevelObject.content)) { %>
+            <ul class="page-sidebar-menu sub-menu  "> 
+                <%= firstLevelObject.content %>
+            </ul>
+        <% } %>
+        <div class="btn-group pull-left btngrpdiv">
+            <button data-toggle="dropdown" class="btn"> <i class="fa fa-bars"></i> </button>
+            <ul class="dropdown-menu dropdown-menu-align-left pull-right drpmenu-new">
+                <li class="create_new_element" role_type="CG" element_type="album" data-catid="" data-target="#CG_li" hierarchy="1" data-fntype="" data-fncount="" data-placeholder="Create Album" data-function-placeholder=""> <a href="javascript:void(0)">Create Album</a> </li>
+                <li> <a href="/club111/internal/gallery/albumsettings/club" url="#">Album settings…</a> </li>
+            </ul>
+        </div>
+    </li>
+</script>#}
+{#<script type="text/template" id="secondLevelTemplate">
+    <li id="<%=levelData.id%>_li_<%=secondLevelObject.id%>" class="fg-dev-draggable ">
+        <a href="javascript:;" class="fg-no-data-sidebar-sub  sidebabar-link" data-type="<%=levelData.id%>" data-id="<%=secondLevelObject.id%>"> <i data-id="<%=secondLevelObject.id%>" data-bookmark-id="<%=levelData.id%>_li_<%=secondLevelObject.id%>" id="bk_<%=levelData.id%>_li_<%=secondLevelObject.id%>" data_type="<%=levelData.id%>" class="fa fa-bookmark  bookmarkclick fa-bookmark"></i><span class=" fg-without-arrow "></span><span class="title"><%=secondLevelObject.title%></span></a>
+        <% if(!_.isEmpty(secondLevelObject.content)) { %>
+            <ul class="page-sidebar-menu sub-menu  "> 
+                <%= secondLevelObject.content %>
+            </ul>
+        <% } %>
+        <div class="btn-group pull-left btngrpdiv">
+            <button data-toggle="dropdown" class="btn"> <i class="fa fa-bars"></i> </button>
+            <ul class="dropdown-menu dropdown-menu-align-left pull-right drpmenu-new">
+                <li class="create_new_element" role_type="<%=levelData.id%>" element_type="<%=levelData.id%>" data-catid="<%=secondLevelObject.id%>" data-target="#<%=levelData.id%>_li_<%=secondLevelObject.id%>" hierarchy="2" data-fntype="" data-fncount="" data-placeholder="Create sub-album" data-function-placeholder=""> <a href="javascript:void(0)">Create sub-album</a> </li>
+            </ul>
+        </div>
+    </li>
+</script>#}
+{#<script type="text/template" id="thirdLevelTemplate">
+    <li id="<%=levelData.id%>_li_<%=secondLevelObject.id%>" class="fg-dev-draggable ">
+        <a href="javascript:;" class="fg-no-data-sidebar-sub  sidebabar-link" data-type="<%=levelData.id%>" data-id="<%=secondLevelObject.id%>"> <i data-id="<%=secondLevelObject.id%>" data-bookmark-id="<%=levelData.id%>_li_<%=secondLevelObject.id%>" id="bk_<%=levelData.id%>_li_<%=secondLevelObject.id%>" data_type="<%=levelData.id%>" class="fa fa-bookmark  bookmarkclick fa-bookmark"></i><span class=" fg-without-arrow "></span><span class="title"><%=secondLevelObject.title%></span></a>
+        <% if(!_.isEmpty(secondLevelObject.content)) { %>
+            <ul class="page-sidebar-menu sub-menu  "> 
+                <%= secondLevelObject.content %>
+            </ul>
+        <% } %>
+        <div class="btn-group pull-left btngrpdiv">
+            <button data-toggle="dropdown" class="btn"> <i class="fa fa-bars"></i> </button>
+            <ul class="dropdown-menu dropdown-menu-align-left pull-right drpmenu-new">
+                <li class="create_new_element" role_type="<%=levelData.id%>" element_type="<%=levelData.id%>" data-catid="<%=secondLevelObject.id%>" data-target="#<%=levelData.id%>_li_<%=secondLevelObject.id%>" hierarchy="2" data-fntype="" data-fncount="" data-placeholder="Create sub-album" data-function-placeholder=""> <a href="javascript:void(0)">Create sub-album</a> </li>
+            </ul>
+        </div>
+    </li>
+</script>#}
+<script type="text/template" id="firstLevelBookmarkTemplate">
+    <li id="bookmark_li" class="tooltips bookmark-link" name="bookmark-link" data-placement="right">
+        <a href="javascript:;"><span class=" arrow pull-left "></span><span class="title"><%= menuData.title %></span></a>
+        <ul class="sub-menu bookmarkdown sub-page-clickable">
+            <li id="ALL" name="allActive" class="subclass fg-without-arrow fg-dev-non-draggable">
+                <a href="javascript:void(0)" class="sidebabar-link" data-type="ALL" data-categoryid="" data-id="ALL"><i class="fa fg-empty"></i><span class="title">All images </span></a>
+            </li>
+            <li id="EXTERNAL" name="allActive" class="subclass fg-without-arrow fg-dev-non-draggable">
+                <a href="javascript:void(0)" class="sidebabar-link" data-type="EXTERNAL" data-categoryid="" data-id="EXTERNAL"><i class="fa fg-empty"></i><span class="title">External images </span></a>
+            </li>
+            <li id="ORPHAN" name="allActive" class="subclass fg-without-arrow fg-dev-non-draggable">
+                <a href="javascript:void(0)" class="sidebabar-link" data-type="ORPHAN" data-categoryid="" data-id="ORPHAN"><i class="fa fg-empty"></i><span class="title">Images without album </span></a>
+            </li>
+            <%= firstLevelObject.content %>
+        </ul>
+        <div class="btn-group pull-left btngrpdiv">
+            <button data-toggle="dropdown" class="btn"> <i class="fa fa-bars"></i> </button>
+            <ul class="dropdown-menu dropdown-menu-align-left pull-right drpmenu-new">
+                <li> <a href="/club111/internal/gallery/bookmark" url="#">Sorting…</a> </li>
+            </ul>
+        </div>
+    </li>
+</script>
+<script type="text/template" id="secondLevelBookmarkTemplate">
+    <li id="bookmark_li_<%=levelData.id%>_li_<%=secondLevelObject.id%>" class="subclass fg-dev-non-draggable">
+        <a href="#" class="pull-left side-right-zro"><i class="fa fa-bookmark  bookmarkclick bookmarked" data_type="<%=levelData.id%>" id="bk_bookmark_li_<%=levelData.id%>_li_<%=secondLevelObject.id%>" data-bookmark-id="bookmark_li_<%=levelData.id%>_li_<%=secondLevelObject.id%>" data-id="<%=secondLevelObject.id%>"></i></a>
+        <a href="javascript:void(0)" data-url="" data-type="<%=levelData.id%>" data-categoryid="0" data-id="<%=secondLevelObject.id%>" data-fntype="" class="sidebabar-link  "><span class="title"><%=secondLevelObject.title%></span></a>
+    </li>
+</script>
+
+<script type="text/template" id="secondLevelTemplate">
+    <% parentId = levelObject.ids.join('_'); %>
+    <li id="li_<%= parentId %>" class="nav-item">
+        <a href="javascript:void(0);" class="nav-link nav-toggle" data-type="<%= levelData.itemType %>" data-id="<%= levelData.id %>"> <span class="arrow"></span><span class="title"><%= levelData.title %></span></a>
+        <% if(!_.isEmpty(levelObject.content)) { %>
+            <ul class="sub-menu secondleval"> 
+                <%= levelObject.content %>
+            </ul>
+        <% } %>
+{#        <div class="btn-group pull-left btngrpdiv">
+            <button data-toggle="dropdown" class="btn"> <i class="fa fa-bars"></i> </button>
+            <ul class="dropdown-menu dropdown-menu-align-left pull-right drpmenu-new">
+                <li class="create_new_element" role_type="<%=levelData.id%>" element_type="<%=levelData.id%>" data-catid="<%=secondLevelObject.id%>" data-target="#<%=levelData.id%>_li_<%=secondLevelObject.id%>" hierarchy="2" data-fntype="" data-fncount="" data-placeholder="Create sub-album" data-function-placeholder=""> <a href="javascript:void(0)">Create sub-album</a> </li>
+            </ul>
+        </div>#}
+    </li>
+</script>
+
+<script type="text/template" id="firstLevelTemplate">
+    <li id="li_<%= levelObject.id %>" class="nav-item">
+        <a href="javascript:;" class="nav-link nav-toggle" data-type="<%= levelData.itemType %>" data-id="<%= levelData.id %>"><span class="arrow"></span><span class="title"><%= levelData.title %></span></a>
+        <% if(!_.isEmpty(levelObject.content)) {  %>
+            <ul class="sub-menu "> 
+                <%= levelObject.content %>
+            </ul>
+        <% } %>
+        {#<div class="btn-group pull-left btngrpdiv">
+            <button data-toggle="dropdown" class="btn"> <i class="fa fa-bars"></i> </button>
+            <ul class="dropdown-menu dropdown-menu-align-left pull-right drpmenu-new">
+                <li class="create_new_element" role_type="CG" element_type="album" data-catid="" data-target="#CG_li" hierarchy="1" data-fntype="" data-fncount="" data-placeholder="Create Album" data-function-placeholder=""> <a href="javascript:void(0)">Create Album</a> </li>
+                <li> <a href="/club111/internal/gallery/albumsettings/club" url="#">Album settings…</a> </li>
+            </ul>
+        </div>#}
+    </li>
+</script>
+
+<script type="text/template" id="thirdLevelTemplate">
+    <% parentId = levelObject.ids.join('_'); %>
+    <li id="li_<%= parentId %>" class="nav-item ">
+        <a href="javascript:void(0);" class="nav-link nav-toggle" data-type="<%= levelData.itemType %>" data-id="<%= levelData.id %>"> <span class="arrow "></span><span class="title"><%= levelData.title %></span></a>
+        <% if(!_.isEmpty(levelObject.content)) { %>
+            <ul class="sub-menu thirdleval "> 
+                <%= levelObject.content %>
+            </ul>
+        <% } %>
+    </li>
+</script>
+
+<script type="text/template" id="fourthLevelTemplate">
+    <% parentId = levelObject.ids.join('_'); %>
+    <li id="li_<%= parentId %>" class="nav-item ">
+        <a href="javascript:void(0);" class="nav-link nav-toggle" data-type="<%= levelData.itemType %>" data-id="<%= levelData.id %>"> <span class="arrow "></span><span class="title"><%= levelData.title %></span></a>
+        <% if(!_.isEmpty(levelObject.content)) { %>
+            <ul class="sub-menu fourthleval "> 
+                <%= levelObject.content %>
+            </ul>
+        <% } %>
+    </li>
+</script>

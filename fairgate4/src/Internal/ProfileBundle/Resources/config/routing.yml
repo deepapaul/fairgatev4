@@ -1,0 +1,95 @@
+internal_dashboard:
+    path:     /dashboard
+    defaults: { _controller: InternalProfileBundle:Overview:index, module: profile, level1: overview }
+    
+internal_privacy_settings: 
+    path: /privacysettings
+    defaults: { _controller: InternalProfileBundle:Privacy:privacySettings, module: profile, level1: privacysettings } 
+    
+save_internal_privacy_settings: 
+    path: /saveprivacysettings
+    defaults: { _controller: InternalProfileBundle:Privacy:savePrivacySettings, module: profile } 
+    
+internal_community_profile:
+    path: /community/profile/{contactId}
+    defaults: { _controller: InternalProfileBundle:Privacy:communityProfile, module: search }
+
+internal_mydata:
+    path: /mydata
+    defaults: { _controller: InternalProfileBundle:Mydata:index, module: profile, level1: mydata } 
+
+save_userdata:
+    path: /saveuserdata
+    defaults: { _controller: InternalProfileBundle:Mydata:saveUserData } 
+    
+get_my_connections:
+    path: /myconnections
+    defaults: { _controller: InternalProfileBundle:Overview:getConnections }
+    
+next_birthdays_overview:
+    path: /nextbirthdays
+    defaults: { _controller: InternalProfileBundle:Overview:getNextBirthdayOverview }
+    
+messsges_overview:
+    path: /messagesoverview
+    defaults: { _controller: InternalProfileBundle:Overview:getMessagesOverview } 
+    
+frontend_search_contactname:
+    path: /contact/search
+    defaults: { _controller: InternalProfileBundle:Mydata:search }
+    
+document_listing__overview:
+    path: /documentslisting
+    defaults: { _controller: InternalProfileBundle:Overview:documentslistingOverview } 
+    
+role_overview_documents:
+    path: /roledocumentslisting
+    defaults: { _controller: InternalProfileBundle:Overview:roleOverviewDocuments } 
+
+    
+documents_personal_list:
+    path: /personal/documents
+    defaults: { _controller: InternalProfileBundle:Documents:personalDocuments , module: profile, level1: documents } 
+    
+get_documents_list:
+    path: /documents/getDocumentsList/{type}
+    defaults: { _controller: InternalProfileBundle:Documents:getDocumentsList } 
+    
+documents_all_list:
+    path: /documents/all
+    defaults: { _controller: InternalProfileBundle:Documents:allDocuments }
+    
+
+    
+documents_read_all:
+    path: /documents/markallasread
+    defaults: { _controller: InternalProfileBundle:Documents:markAllRead } 
+    
+forum_listing_overview:   
+    path: /forumlisting
+    defaults: { _controller: InternalProfileBundle:Overview:forumlistingOverview } 
+    
+forum_listing_teamoverview:   
+    path: /forumlisting
+    defaults: { _controller: InternalProfileBundle:Overview:forumlistingOverview, role: team }
+    
+forum_listing_workgroupoverview:   
+    path: /forumlisting
+    defaults: { _controller: InternalProfileBundle:Overview:forumlistingOverview, role: workgroup }  
+    
+role_overview_calendar:
+    path: /rolecalendarlisting
+    defaults: { _controller: InternalProfileBundle:Overview:roleOverviewCalendar }  
+    
+article_listing_overview:
+    path: /articlelisting
+    defaults: { _controller: InternalProfileBundle:Overview:articleListingOverview }      
+
+article_listing_teamoverview:   
+    path: /articlelisting
+    defaults: { _controller: InternalProfileBundle:Overview:articleListingOverview, role: team }    
+ 
+article_listing_workgroupoverview:   
+    path: /articlelisting
+    defaults: { _controller: InternalProfileBundle:Overview:articleListingOverview, role: workgroup }    
+

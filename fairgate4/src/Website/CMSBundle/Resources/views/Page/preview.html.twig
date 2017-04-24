@@ -1,0 +1,73 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = 'Page Preview' %}
+{# empty Twig template #}
+{% block pagecontent %}
+     <div class="clearfix"> </div>
+
+
+    <!-- BEGIN BREADCRUMB-->
+    <div class="row">
+        <div class="col-lg-12">
+           {% include 'internal/breadcrumb.html.twig' with {'breadCrumb':{'back':referer}} %}  
+             
+        </div>
+    </div>
+    <!-- END BREADCRUMB-->
+    <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+ {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'contactId': '', 'tabs': tabs,'url':'','type':'', 'clubDefaultLang': clubDefaultLang,'hrefLink':true} %}
+
+
+    <!-- BEGIN CONTAINER -->
+
+    <div class="row fg-cms-page-canvas-wrapper ">
+        <div class='fg-cms-page-iframe-wrapper col-md-12'>
+          
+       <iframe  class="lockframe" id="pagePreview" src="{{ path('website_page_preview', {'pageId': pageId}) }}" width='100%' allowTransparency="true" ></iframe>
+        </div>
+            </div>
+            
+    
+    
+
+ {% endblock %}
+  {% block customstylesheets %}
+        <link href="{{ asset('fgassets/website/css/style-cms.css')}}" type="text/css" rel="stylesheet" />
+        
+
+    {% endblock %}
+ {% block javascripts %}
+
+     <script>
+     
+         var pageId = {{pageId}};
+        FgPageTitlebar = $(".fg-action-menu-wrapper").FgPageTitlebar({
+                title: true,
+                tab: true,
+                languageSwitch: true,
+                tabType: 'server',
+                editTitle: false,
+            });
+            setTimeout(function () {
+                FgPageTitlebar.setMoreTab();
+            }, 2000);
+            FgInternal.breadcrumb(FgInternal.extraBreadcrumbTitle);
+         $('.lockframe').contents().find("body").css('overflow','hidden');
+         $('.lockframe').load(function() {
+              
+         $('.lockframe').contents().find("body").css({
+             'pointer-events':'none',
+             
+         })
+         $('.lockframe').contents().find("body *").css({
+             'pointer-events':'none',
+             
+         })
+             
+         
+          });
+      
+     </script>
+            
+
+ 
+{% endblock %}

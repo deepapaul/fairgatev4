@@ -1,0 +1,214 @@
+<script type="text/template" id="fg-dev-internal-team-userrights"> 
+<%
+    if(type=='T'){
+        roletype="teamAdminInt";
+        roletype1="teamSection";
+    }else{
+        roletype="wgAdminInt";
+        roletype1="wgSection";
+    }
+    groupAdminTemp = groupAdmin;
+    grpAdmin = _(groupAdminTemp).filter(function (list) { return ((list['module_type']== 'all')&&(list['type']=='role')&& (list['roleType']==type));});
+    grpAdmin = FgInternal.groupByMulti(grpAdmin, ['contact_id','team']); 
+    otherSectionAdmin = _(groupAdminTemp).filter(function (list) { return ((list['module_type']!= 'all')&& (list['roleType']== type)&&(list['type']=='role'));});
+    otherSectionAdmin = FgInternal.groupByMulti(otherSectionAdmin, ['contact_id','team']);
+    
+    %>
+    
+<div class="row">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12 fg-common-top">
+                <div class="panel-heading fg-theme-head">
+                    <h3 class="fg-panel-title">
+                        <% if(type=='T'){ %>
+                            {{'USER_RIGHTS_TEAM_ADMINISTRATOR'|trans ({'%Team%' : fgtwig.getTerminolgyName('Team',singular,'UCF')})}}
+                        <% } else{ %>   
+                            {{'USER_RIGHTS_WORKGROUP_ADMINISTRATORS'|trans }}
+                        <% } %>
+                    </h3>
+                </div> 
+            </div>
+            <div class="col-md-12 fg-user-div fg-common-top fg-dev-user-rights-elements">
+                <% if(grpAdmin.length!=0) { %>  
+                    
+                    <% 
+                    var teamsAdmin = [];        
+                    _.each(grpAdmin,function(contentVal1,contentKey1){ 
+                         teamsAdmin.push(contentKey1);        
+                %>
+                         <% var contactName = '';var createdAt = '';var stealth=0; var isMember = contentVal1['isTeamMember']; %>
+                        <% _.each(contentVal1,function(val,key){ %>
+                            <% contactName = val[0]['contactname'] ;
+                            stealth = val[0]['is_stealth_mode']; %>
+                             <% createdAt = val[0]['createdAt']; %>
+                        <% }); %>
+                         <div class="row fg-border-line sortables" id="fg-clrChangeBlk_<%- contentKey1 %>" >
+                            <div class="col-md-5 col-sm-5 col-xs-8">
+                                 <% if(stealth == 0) { 
+                                     var communityLink = communityPath.replace("dummyContactId", contentKey1); %>
+                                    <a target="_blank" href="<%- communityLink %>"> 
+                                 <% }%>
+                                    <%- contactName %> 
+                                <% if(stealth == 0) { %>
+                                    </a> 
+                                    <% }%>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                            <i>{{'SINCE'|trans}} <%- createdAt %></i>
+                            </div>
+                            <div class="fg-last-icon">
+                               <% if(_.size(isClubOrSuperAdminOrFedAdmin) > 0){
+                            
+                                    if(contentKey1 != loggedContactId) { %>
+                                        <div class="closeico">
+                                            <input type="checkbox" class="make-switch" id="contact_<%- contentKey1 %>_is_deleted" data-key="teams.<%- roletype %>.delete.<%- contentKey1 %>.team.<%- roleId %>"  name="contact_<%- contentKey1 %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- contentKey1 %>">
+                                            <label for="contact_<%- contentKey1 %>_is_deleted"></label>
+                                        </div>
+                                    <% } else { %>
+                                        <i class="fa fa-lock fa-2x ash"></i>
+                                    <% } %>
+                                <% } else if((_.size(isClubOrSuperAdminOrFedAdmin) == 0) && (_.size(isTeamMember)> 0)){ %>
+                                
+                                        <% if((contentKey1 == loggedContactId) || (_.contains(clubAdmins,contentKey1)) || (_.contains(fedAdmins,contentKey1))|| (!isMember)) { %>
+                                            <i class="fa fa-lock fa-2x ash"></i>
+                                        <% } else { %>
+                                        <div class="closeico">
+                                            <input type="checkbox" class="make-switch" id="contact_<%- contentKey1 %>_is_deleted" data-key="teams.<%- roletype %>.delete.<%- contentKey1 %>.team.<%- roleId %>"  name="contact_<%- contentKey1 %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- contentKey1 %>">
+                                            <label for="contact_<%- contentKey1 %>_is_deleted"></label>
+                                        </div>
+                                        <% } %>
+                                    
+                                <% }else { %>
+                                        <% if((contentKey1 == loggedContactId) || (_.contains(clubAdmins,contentKey1)) || (_.contains(fedAdmins,contentKey1))) { %>
+                                            <i class="fa fa-lock fa-2x ash"></i>
+                                        <% } else { %>
+                                        <div class="closeico">
+                                            <input type="checkbox" class="make-switch" id="contact_<%- contentKey1 %>_is_deleted" data-key="teams.<%- roletype %>.delete.<%- contentKey1 %>.team.<%- roleId %>"  name="contact_<%- contentKey1 %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- contentKey1 %>">
+                                            <label for="contact_<%- contentKey1 %>_is_deleted"></label>
+                                        </div>
+                                        <% } %>
+                                <% } %>
+                            </div>
+                            <div class="random" data-id="{{random()}}"></div>
+                        </div>
+                <% }); }%>
+            </div>
+            <div class="fg-clear"></div>
+      
+            <div class="col-lg-12 fg-common-add-item"><a class="fg-dev-add-grp-admin-internal" data-toggle="modal" href="#basic" id="pencil"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text"><% if(type == 'T') { %>{{'USER_RIGHTS_TEAM_ADD_LINK'|trans ({'%Team%' : fgtwig.getTerminolgyName('Team',singular,'UCF')})}} <% } else { %> {{'USER_RIGHTS_WORKGROUP_ADD_LINK'|trans}} <% } %></span></a></div> 
+       
+        </div>    
+        
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12 fg-user-div fg-common-top">
+                <div class="panel-heading fg-theme-head">
+                    <h3 class="fg-panel-title">
+                            {{'USER_RIGHTS_ADMINISTRATION_SECTION'|trans}}
+                        </h3>
+                </div>
+            </div>
+              <div class="col-md-12 fg-user-div fg-common-top fg-dev-user-rights-elements-section">
+                <% if(otherSectionAdmin.length!=0) { %>
+                     <% _.each(otherSectionAdmin,function(contentVal1,contentKey1){ %>
+                        <% var contactName = '';%>
+                        <% _.each(contentVal1,function(val,key){ %>
+                            <% contactName = val[0]['contactname'] ;
+                             stealth = val[0]['is_stealth_mode']; %>
+                        <% }); %>
+                    <% rand = {{random()}} %>
+                <div class="row fg-border-line sortables" id = "fg-clrChangeBlk_<%- roletype1 %>_<%- contentKey1 %>_<%-roleId%>">
+                    <div class="random" data-id="<%-rand%>"></div>
+                    <div class="col-md-5 col-sm-6 col-xs-12">
+                     <%  if(stealth == 0) { 
+                            var communityLink = communityPath.replace("dummyContactId", contentKey1); %>
+                        <a target="_blank" href="<%- communityLink %>">
+                     <% } %>
+                        <%- contactName %>
+                     <%  if(stealth == 0) { %>
+                         </a>
+                     <% } %>
+                    </div>
+                    <input id="include-wg-admin-section-<%-rand%>" type="hidden"  value="<%- contentKey1 %>" class="form-control input-sm" data-key="teams.new.module.<%-rand%>.contact." />
+                     <%  _.each(contentVal1,function(contentVal,contentKey){ %>
+                         <%  _.each(contentVal,function(contentVal1,contentKey1){
+                             var isMember =  contentVal1['isTeamMember'];
+                         }); 
+                           var isDisabled = '';
+                        if(_.size(isClubOrSuperAdminOrFedAdmin) > 0){ 
+                            if(contentKey1 == loggedContactId) 
+                                { var isDisabled="disabled"; }
+                        } else if((_.size(isClubOrSuperAdminOrFedAdmin) == 0) && (_.size(isTeamMember)> 0)){
+                            if((contentKey1 == loggedContactId) || (_.contains(clubAdmins,contentKey1)) ||  (_.contains(teamsAdmin,contentKey1) && !isMember)){ 
+                                var isDisabled="disabled";
+                            }
+                        }else {
+                            if((contentKey1 == loggedContactId) || (_.contains(clubAdmins,contentKey1)))  
+                                {  var isDisabled="disabled";} 
+                        } %>
+                                        
+                            <div class="col-md-6"> 
+                                <% if(contentKey1 != loggedContactId) { %>
+                                    <select name="section_grp" <%- isDisabled %> data-key="teams.<%- roletype1 %>.existing.<%- contentKey1 %>.<%-roleId %>.modules" multiple title="{{'SELECT_DEFAULT'|trans}}" class="selectpicker form-control show-tick">
+                                <% } else { %>
+                                    <select name="section_grp" disabled data-key="teams.<%- roletype1 %>.existing.<%- contentKey1 %>.<%-roleId %>.modules" multiple title="{{'SELECT_DEFAULT'|trans}}" class="selectpicker form-control show-tick">
+                                <% } %>
+                                    <% _.each(admins,function(admin){ %> 
+                                        <% var select= "multiple" ; %>
+                                        <%  _.each(contentVal,function(contentVal1,contentKey1){ 
+                                           var isMember =  contentVal1['isTeamMember'];
+                                           if(admin.id == contentVal1['group_id']){ select +=" selected" ;} %>
+                                       <%});%>
+                                        <option value="<%- admin.id %>" class=<%- select %>  ><%- admin.transName %></option>
+                                    <% }); %>  
+                                    </select>   
+                            </div> 
+                            <div class="col-md-1">
+                                 <% if(_.size(isClubOrSuperAdminOrFedAdmin) > 0){
+                            
+                                    if(contentKey1 != loggedContactId) { %>
+                                        <div class="closeico">
+                                            <input type="checkbox" class="make-switch" id="teams_<%- roletype1 %>_existing_<%- contentKey1 %>_is_deleted" data-key="teams.<%- roletype1 %>.existing.<%- contentKey1 %>.<%- roleId %>"  name="teams_<%- roletype %>_existing_<%- contentKey1 %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- roletype1 %>_<%- contentKey1 %>_<%- roleId%>">
+                                        <label for="teams_<%- roletype1 %>_existing_<%- contentKey1 %>_is_deleted"></label>
+                                        </div>
+                                    <% } else { %>
+                                        <i class="fa fa-lock fa-2x ash"></i>
+                                    <% } %>
+                                <% } else if((_.size(isClubOrSuperAdminOrFedAdmin) == 0) && (_.size(isTeamMember)> 0)){ %>
+                                
+                                        <% if((contentKey1 == loggedContactId) || (_.contains(clubAdmins,contentKey1)) ||  (_.contains(teamsAdmin,contentKey1) && !isMember))  { %>
+                                            <i class="fa fa-lock fa-2x ash"></i>
+                                        <% } else { %>
+                                        <div class="closeico">
+                                            <input type="checkbox" class="make-switch" id="teams_<%- roletype1 %>_existing_<%- contentKey1 %>_is_deleted" data-key="teams.<%- roletype1 %>.existing.<%- contentKey1 %>.<%- roleId %>"  name="teams_<%- roletype %>_existing_<%- contentKey1 %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- roletype1 %>_<%- contentKey1 %>_<%- roleId%>">
+                                        <label for="teams_<%- roletype1 %>_existing_<%- contentKey1 %>_is_deleted"></label>
+                                         
+                                        </div>
+                                        <% } %>
+                                    
+                                <% }else { %>
+                                        <% if((contentKey1 == loggedContactId) || (_.contains(clubAdmins,contentKey1))) { %>
+                                            <i class="fa fa-lock fa-2x ash"></i>
+                                        <% } else { %>
+                                        <div class="closeico">
+                                         <input type="checkbox" class="make-switch" id="teams_<%- roletype1 %>_existing_<%- contentKey1 %>_is_deleted" data-key="teams.<%- roletype1 %>.existing.<%- contentKey1 %>.<%- roleId %>"  name="teams_<%- roletype %>_existing_<%- contentKey1 %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- roletype1 %>_<%- contentKey1 %>_<%- roleId%>">
+                                        <label for="teams_<%- roletype1 %>_existing_<%- contentKey1 %>_is_deleted"></label>
+                                            
+                                        </div>
+                                        <% } %>
+                                <% } %>
+                            </div>
+                </div> 
+                <% });%>
+            <% });%> 
+                <%   } %>
+              </div> 
+          <div class="col-lg-12 fg-common-add-item"><a class="fg-dev-add-grp-section-internal" data-toggle="modal" href="#basic" id="pencil"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i>
+                <span class="fg-add-text">
+                          {{'USER_RIGHTS_ADD_ADMINISTRATOR'|trans}}</span></a></div> 
+        </div>   
+     </div>
+</div>
+</script>

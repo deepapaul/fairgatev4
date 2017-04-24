@@ -1,0 +1,46 @@
+Common\UtilityBundle\Entity\FgCmsPageContentElementFormFieldsI18n:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPageContentElementFormFieldsI18nRepository
+    type: entity
+    table: fg_cms_page_content_element_form_fields_i18n
+    fields:
+        lang:
+            id: true
+            type: string
+            length: 2
+            fixed: true
+            nullable: false
+        fieldnameLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: fieldname_lang
+        predefinedValueLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: predefined_value_lang
+        placeholderValueLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: placeholder_value_lang
+        tooltipValueLang:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: tooltip_value_lang
+    oneToOne:
+        id:
+            targetEntity: FgCmsPageContentElementFormFields
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

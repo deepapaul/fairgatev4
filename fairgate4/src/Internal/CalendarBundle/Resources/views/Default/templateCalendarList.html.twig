@@ -1,0 +1,106 @@
+<script type="text/template" id="calendarListTemplate">
+    <% if(dataCount == 0){ %>
+    <div class="row fg-calendar-view-content">
+                <div class="col-lg-12">
+                    <div class="portlet box fg-portlet-ash">
+                        <div class="portlet-title ">
+                            <div class="caption"></div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="row fg-border-line fg-calendar-list-item">
+                                <div class="col-md-12 text-center">
+                                {{'NO_EVENTS_AVAILABLE'|trans}}
+                                </div>   
+                            </div>
+                    </div>
+            </div>
+    </div>
+    </div>
+    <% } else { %>
+    <div class="row fg-calendar-view-content calendarList calendarList-<%- i %>">
+                        <div class="col-lg-12">
+                            <div class="portlet box fg-portlet-ash">
+                                <div class="portlet-title ">
+                                    <div class="caption"><%- moment(i, "YYYYMM").format('MMMM') %></div>
+                                </div>
+                                <div class="portlet-body">
+                                <% d= _.sortBy(d, 'evTimestamp'); %>
+                                <% _.each(d, function(event) {  %>
+                                    <div class="row fg-border-line fg-calendar-list-item">
+                                    <input class="fg-export-input" type="hidden" name="hid-calendar" value="<%- event.rowId %>" data-isRepeat="<%- event.isMasterRepeat %>" data-sdate="<%- event.evStartDate.format('YYYY-MM-DD') %>" data-edate="<%- event.evEndDate.format('YYYY-MM-DD') %>" data-sTime="<%- event.evStartDate.format('H:mm:ss') %>" data-eTime="<%- event.evEndDate.format('H:mm:ss') %>" data-eventDetId="<%- event.evDetId %>">
+                                    <% if(event.hasEditRights==1){ %>
+                                        <div class="fg-first-col"> <input class="dataClass" type="checkbox" name="cb-calendar" value="<%- event.rowId %>" data-isRepeat="<%- event.isMasterRepeat %>" data-sdate="<%- event.evStartDate.format('YYYY-MM-DD') %>" data-edate="<%- event.evEndDate.format('YYYY-MM-DD') %>" data-sTime="<%- event.evStartDate.format('H:mm:ss') %>" data-eTime="<%- event.evEndDate.format('H:mm:ss') %>" data-eventDetId="<%- event.evDetId %>"> </div>
+                                    <% } %>    
+                                        <div class="col-md-12 <% if(isAdmin){ %> fg-col-hack <% }else{ %> row <% } %>">
+                                            <div class="col-sm-3 fg-event-time">
+                                        <label>
+                                        <%- moment(event.evDate).format('ddd') %>
+                                        <%- moment(event.evDate).format(FgLocaleSettingsData.momentDateFormat) %><% 
+                                        if(event.isAllDay==1){ %>, {{'All_DAY'|trans}}<% }else{ %>,
+                                             <% if(event.evStartDate.format('YYYYMMDD')==event.evEndDate.format('YYYYMMDD')){ %>
+                                                 <%- event.evStartDate.format(FgLocaleSettingsData.momentTimeFormat) %> -
+                                                 <%- event.evEndDate.format(FgLocaleSettingsData.momentTimeFormat) %>
+                                             <% }else if(event.evStartDate.format('YYYYMMDD')==moment(event.evDate).format('YYYYMMDD')){ %>
+                                             <%- event.evStartDate.format(FgLocaleSettingsData.momentTimeFormat) %> <i class="fa fa-angle-double-right"></i>
+                                             <% }else if(event.evEndDate.format('YYYYMMDD')==moment(event.evDate).format('YYYYMMDD')){ %>
+                                             <i class="fa fa-angle-double-right"></i> <%- event.evEndDate.format(FgLocaleSettingsData.momentTimeFormat) %>
+                                             <% }else{ %><%- '{{'All_DAY'|trans}}' %><% } %>
+                                     
+                                           <% } %>   
+                                        </label>
+                                        
+                                            </div>
+                                            <div class="col-sm-3 fg-event-name">{#calendar_appointment_details#}
+                                            <%
+                                                var evUrl ="{{ path('calendar_appointment_details', {'eventId': "****",'startTimeStamp':'**startTime**','endTimeStamp':'**endTime**' }) }}";
+                                                evUrl =evUrl.replace('****',event.evDetId);
+                                                evUrl =evUrl.replace('**startTime**',event.evStartTimestamp);
+                                                evUrl =evUrl.replace('**endTime**',event.evEndTimestamp);                                      
+                                            %>                                    
+                                                <a href="#" data-index="<%- event.rowId %>" data-href="<%- evUrl %>"  class="fg-choose-ind-color list-cal-events event-details"><%- event.evTitle %></a>  
+                                                    <% if(event.evScope=="GROUP" && event.hasEditRights==1){ %><i class="fa fa-users"></i><% } %>
+                                                    <% if(event.evScope=="INTERNAL" && event.hasEditRights==1){ %><i class="fa fa-key"></i><% }%>
+                                                    
+                                            </div>
+                                            <div class="col-sm-3 fg-event-teams">
+                                            <% if(event.isClubAreaSelected==1){ %>
+                                                <span class="fg-team" style="background: <%- event.clubColorCode %>;color: #fff;">
+                                                <%- event.evClubs.title.title %>
+                                                <% if(event.evClubs.title.clubType=='federation'|| event.evClubs.title.clubType=='sub_federation'){ %> <img src="<%- event.evClubs.logo %>"/> <% } %> 
+                                                </span>
+                                             <% } %>
+                                         
+                                           <% if(event.evRole !=null){ _.each(event.evRole.split('|&&&|'), function(role) {  
+                                                var rol =role.split('|@@@|');
+                                                if( clubId == event.evClubId && rol !=''){
+                                            %>
+                                            <span class="fg-team" style="background: <%- rol[2] %>;color: #fff;"><%- rol[1] %></span>
+                                            
+                                            <% }  }); } %>
+                                    
+                                            </div>
+                                            <div class="col-sm-3 fg-event-category">
+                                                <% if(event.evCategory !=null){ 
+                                                    var shownCategories = new Array();
+                                                    _.each(event.evCategory.split('|&&&|'), function(cat) {
+                                                    var evcat =cat.split('|@@@|'); 
+                                                    if(shownCategories.indexOf(evcat[1]) < 0) {
+                                                        %>
+                                                        <span class="fg-category"><%- evcat[1] %></span>
+                                                        <%
+                                                    }                                               
+                                                    shownCategories.push(evcat[1]);
+                                                }); } %> 
+                                            </div>
+
+                                        </div>   
+                                    </div> 
+                                <% }); %> 
+                                       
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+    <% } %>
+</script>    

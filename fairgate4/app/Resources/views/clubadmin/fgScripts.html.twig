@@ -1,0 +1,92 @@
+{% if (include == 'jqueryAndUi') %}
+
+    <!-- BEGIN JQUERY & UI JS -->
+    {% if (asseticEnv != 'dev') %}
+        {% javascripts '@jqueryAndUi' package="assetic" output='js/jqueryAndUi.js' %}
+            <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% else %}
+        <script src="{{ asset('fgassets/assets/global/plugins/jquery-1.11.0.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/jquery-migrate-1.2.1.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/jquery-ui/jquery-ui.min.js') }}" type="text/javascript"></script>
+        {#<script src="{{ asset('fgassets/assets/global/plugins/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>#}
+        <script src="{{ asset('assets/global/plugins/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/jquery.blockui.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/jquery.cokie.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/uniform/jquery.uniform.min.js') }}" type="text/javascript"></script>
+    {% endif %}
+    <!-- END JQUERY & UI JS -->
+
+{% elseif (include == 'metronicAndLayout') %}
+
+    <!-- BEGIN THEME JS -->
+    {% if (asseticEnv != 'dev') %}
+        {% javascripts '@metronicAndLayout' package="assetic" output='js/metronicAndLayout.js' %}
+            <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% else %}
+        <script src="{{ asset('fgassets/assets/global/scripts/metronic.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/admin/layout/scripts/layout.js') }}" type="text/javascript"></script>
+    {% endif %}
+    <!-- END THEME JS -->
+
+{% elseif (include == 'jqueryElements1') %}
+
+    <!-- BEGIN JQUERY ELEMENT SPECIFIC JS -->
+    {% if (asseticEnv != 'dev') %}
+        {% javascripts '@jqueryElements1' package="assetic" output='js/jqueryElements1.js' %}
+            <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% else %}
+        <script src="{{ asset('fgassets/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/jquery-validation/js/jquery.validate.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/jquery-validation/js/additional-methods.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.de.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.de.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/typeahead/handlebars.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/typeahead/typeahead.bundle.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/jquery-tags-input/jquery.tagsinput.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('assets/global/plugins/data-tables/jquery.dataTables_10.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('assets/global/plugins/data-tables/dataTables.fixedColumns.min_3.0.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('assets/global/plugins/data-tables/DT_bootstrap.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-select/bootstrap-select.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/select2/select2.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/global/js/bootstrap-dropdown-on-hover.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/global/js/datetime-moment.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/global/js/accounting.js') }}" type="text/javascript"></script>
+    {% endif %}
+    <!-- END JQUERY ELEMENT SPECIFIC JS -->
+
+{% elseif (include == 'jqueryElements2') %}
+
+    <!-- BEGIN JQUERY ELEMENT SPECIFIC JS -->
+    {% if (asseticEnv != 'dev') %}
+        {% javascripts '@jqueryElements2' package="assetic" output='js/jqueryElements2.js' %}
+            <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% else %}
+        <script src="{{ asset('fgassets/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.de.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/jquery-tags-input/jquery.tagsinput.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('assets/global/plugins/data-tables/jquery.dataTables_10.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('assets/global/plugins/data-tables/dataTables.fixedColumns.min_3.0.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('assets/global/plugins/data-tables/DT_bootstrap.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-select/bootstrap-select.min.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/select2/select2.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/global/js/bootstrap-dropdown-on-hover.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/global/js/datetime-moment.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/global/js/accounting.js') }}" type="text/javascript"></script>
+    {% endif %}
+    <!-- END JQUERY ELEMENT SPECIFIC JS -->
+
+{% endif %}
+        

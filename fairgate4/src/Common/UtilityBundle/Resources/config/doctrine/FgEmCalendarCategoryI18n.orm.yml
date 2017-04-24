@@ -1,0 +1,28 @@
+Common\UtilityBundle\Entity\FgEmCalendarCategoryI18n:
+    repositoryClass: Common\UtilityBundle\Repository\Calendar\FgEmCalendarCategoryI18nRepository
+    type: entity
+    table: fg_em_calendar_category_i18n
+    fields:
+        lang:
+            id: true
+            type: string
+            length: 45
+            fixed: false
+            nullable: false
+        titleLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: title_lang
+    oneToOne:
+        id:
+            targetEntity: FgEmCalendarCategory
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

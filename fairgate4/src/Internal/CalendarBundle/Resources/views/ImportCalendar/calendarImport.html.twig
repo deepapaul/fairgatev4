@@ -1,0 +1,189 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = 'IMPORT_APPOINTMENTS_PAGE_TITLE'|trans %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+            <!-- BEGIN BREADCRUMB-->
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <!-- END BREADCRUMB-->
+
+            <!-- PAGE TITLE -->
+            {% include 'global/page-title-bar.html.twig' with {'pageTitle': 'IMPORT_APPOINTMENTS_TITLE'|trans, 'tabs':false} %}
+
+            <div class="clearfix"></div>
+            <div class="row">
+                <div class="form-body fg-create-calendar-appointment">
+                    <form id="fg-calendar-import-events" name="fg-calendar-import-events" onsubmit="return false;" class="form-horizontal">              
+                        <div class="col-md-12">
+                            <div class="alert alert-danger fg-marg-top-0 hide">
+                                <button class="close" data-close="alert"></button>
+                                <span>{{ 'FORM_ERROR_DISPLAY'|trans }}</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12 fg-clear" >
+                            <label class="col-md-2 control-label text-right" for="textinput">{{ 'CREATE_EVENT_SCOPE'|trans }}</label>  
+                            <div class="col-md-8 col-lg-5 ">
+                                <div class="switch-toggle switch-3 switch-fg">
+                                    <input id="fg-dev-scope-public" name="fg-event-scope" type="radio" checked class="make-switch" value="PUBLIC">
+                                    <label for="fg-dev-scope-public">{{ 'SCOPE_PUBLIC'|trans }}</label>
+                                    <input id="fg-dev-scope-internal" name="fg-event-scope" type="radio" class="make-switch" value="INTERNAL">
+                                    <label for="fg-dev-scope-internal">{{ 'SCOPE_INTERNAL'|trans }}</label>
+                                    <input id="fg-dev-scope-group" name="fg-event-scope" type="radio" class="make-switch" value="GROUP">
+                                    <label for="fg-dev-scope-group">{{ 'SCOPE_GROUP'|trans }}</label>
+                                    <a class="btn btn-primary"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12 required fg-clear" >
+                            <label class="col-md-2 control-label text-right" for="textinput">{{ 'CREATE_EVENT_AREAS'|trans }}</label>  
+                            <div class="col-md-8 col-lg-5 ">
+                                <div id="fg-dev-areas-others-div">
+                                    <select name="fg-event-areas-others[]" class="form-control selectpicker" multiple required="true">
+                                        {% if (myAreas.club is defined) %}
+                                            <option value="0">{{ myAreas.club }}</option>
+                                        {% endif %}
+                                        {% if (myAreas.teams|length > 0) %}
+                                            <optgroup label="{{ fgtwig.getTerminolgyName('Team', plural) }}">
+                                                {% for id,title in myAreas.teams %}
+                                                    <option value="{{ id }}">{{ title }}</option>
+                                                {% endfor %}     
+                                            </optgroup>
+                                        {% endif %}
+                                        {% if (myAreas.workgroups|length > 0) %}
+                                            <optgroup label="{{ 'AREA_WORKGROUPS'|trans }}">
+                                                {% for id,title in myAreas.workgroups %}
+                                                    <option value="{{ id }}" >{{ title }}</option>
+                                                {% endfor %}
+                                            </optgroup>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                <div id ="fg-dev-areas-groups-div">
+                                    <select name="fg-event-areas-groups[]" class="form-control selectpicker">
+                                        <option value="">{{ "SELECT_DROPDOWN_VALUE"|trans }}</option>
+                                        {% if (myAreas.teams|length > 0) %}
+                                            <optgroup label="{{ fgtwig.getTerminolgyName('Team', plural) }}">
+                                                {% for id,title in myAreas.teams %}
+                                                    <option value="{{ id }}">{{ title }}</option>
+                                                {% endfor %}     
+                                            </optgroup>
+                                        {% endif %}
+                                        {% if (myAreas.workgroups|length > 0) %}
+                                            <optgroup label="{{ 'AREA_WORKGROUPS'|trans }}">
+                                                {% for id,title in myAreas.workgroups %}
+                                                    <option value="{{ id }}" >{{ title }}</option>
+                                                {% endfor %}
+                                            </optgroup>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12 required fg-clear" >
+                                <label class="col-md-2 control-label text-right" for="textinput">{{ 'CREATE_EVENT_CATEGORIES'|trans }}</label>
+                            <div class="col-md-8 col-lg-5 ">
+                                <select  name="fg-event-categories[]" id= "ajaxLoadSelectpicker" class=" fg-event-categories form-control selectpicker" multiple required="true"> 
+                                </select>
+                            </div>
+                            {% if (myAreas.club is defined) %}
+                                <div class="fg-extra-col fg-active-IB">
+                                    <a href="javascript:void(0)" class="fg-choose-ind-color fg-dev-cat">{{ 'CREATE_NEW_CATEGORY'|trans }}</a>   
+                                </div>
+                            {% endif %}  
+                        </div>
+                        <div class="form-group col-md-12 required fg-clear" >
+                            <label class="col-md-2 control-label text-right" for="textinput">{{ 'IMPORT_ICS_FILE'|trans }}</label>  
+                            <div class="col-md-10 col-lg-10 ">
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <span class="btn default btn-file">
+                                        <span class="fileinput-new">{{ 'IMPORT_FILE_UPLOAD'|trans }}</span>
+                                        <span class="fileinput-exists">{{ 'IMPORT_FILE_CHANGE'|trans }}</span>
+                                        <input type="file" title="" name="importFile" id="importFile" required="true">
+                                    </span>
+                                    <span class="fileinput-filename"></span>
+                                    &nbsp; <a href="#" class="close fileinput-exists" data-dismiss="fileinput" data-fileid=""></a>
+                                </div> 
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            {% include 'internal/savebutton.html.twig' with {'backLink':breadCrumb.back, 'save_button_val':'SAVE'|trans, 'discard_button_val':'CANCEL_BUTTON'|trans} %}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        jQuery(document).ready(function () {
+            $(".fg-action-menu-wrapper").FgPageTitlebar({
+                title: true,
+                tab: false
+            });
+            $('#fg-dev-areas-groups-div').hide();
+            
+            FgFormTools.selectpickerViaAjax("{{ path('calendar_categories') }}", 0);
+            $('select.selectpicker').selectpicker({
+                noneSelectedText: '{{ "SELECT_DROPDOWN_VALUE"|trans }}'
+            });
+            FormValidation.init('fg-calendar-import-events', '');
+
+            $('body').on('click', '#save_changes', function () {
+                if ($('#fg-calendar-import-events').valid()) {
+                    var paramObj = {};
+                    paramObj.form = $('#fg-calendar-import-events');
+                    paramObj.url = '{{ path('calendar_import_validate') }}';
+                    paramObj.successCallback = function () {
+
+                    };
+                    paramObj.failCallback = function (responseText) {
+                        if (responseText.status !== 'SUCCESS') {
+                            $('div.alert-danger').removeClass('hide');
+                            $('<span class="help-block required">'+responseText.message+'</span>').insertAfter($("div.fileinput"));  
+                        }
+                    };
+                    FgXmlHttp.formPost(paramObj);                   
+                } else {
+                    $('div.alert-danger').removeClass('hide'); 
+                    if ($('#importFile').val() == '') {
+                       $('<span class="help-block required">'+ '{{ 'VALIDATION_THIS_FIELD_REQUIRED'|trans }}' +'</span>').insertAfter($("div.fileinput"));   
+                    }
+                }
+                return false;
+            });
+            
+            $('body').on('click', '#reset_changes', function () {
+                document.location = '{{ breadCrumb.back }}';
+            });
+            
+            $('body').on('click', '.make-switch[name="fg-event-scope"]', function () {
+                var scope = $(this).val();
+                if (scope == 'GROUP') {
+                    $('#fg-dev-areas-groups-div').find('.selectpicker').attr("required", true);
+                    $('#fg-dev-areas-others-div').find('.selectpicker').removeAttr("required");
+                    $('#fg-dev-areas-others-div').find('.selectpicker').selectpicker('refresh');
+                    $('#fg-dev-areas-groups-div').find('.selectpicker').selectpicker('refresh');
+                    $('#fg-dev-areas-groups-div').show();
+                    $('#fg-dev-areas-others-div').hide();
+                } else {
+                    $('#fg-dev-areas-others-div').find('.selectpicker').attr("required", true);
+                    $('#fg-dev-areas-groups-div').find('.selectpicker').removeAttr("required");
+                    $('#fg-dev-areas-groups-div').find('.selectpicker').selectpicker('refresh');
+                    $('#fg-dev-areas-others-div').find('.selectpicker').selectpicker('refresh');
+                    $('#fg-dev-areas-others-div').show();
+                    $('#fg-dev-areas-groups-div').hide();
+                }
+            });
+            
+            $('body').on('click', '.fg-dev-cat', function () {
+                var rand = $.now();
+                $.post('{{ path('calendar_category_save') }}', {'catId':rand, 'defaultLang': '{{ clubDefaultLanguage }}', 'noParentLoad' : true }, function(data) {             
+                    FgModelbox.showPopup(data);         
+                });      
+            });
+        });
+    </script>
+{% endblock %}

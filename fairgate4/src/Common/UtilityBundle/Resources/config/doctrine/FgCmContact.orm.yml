@@ -1,0 +1,276 @@
+Common\UtilityBundle\Entity\FgCmContact:
+    repositoryClass: Common\UtilityBundle\Repository\FgCmContactRepository
+    type: entity
+    table: fg_cm_contact
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        memberId:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: member_id
+        isCompany:
+            type: boolean
+            nullable: true
+            column: is_company
+        isSponsor:
+            type: boolean
+            nullable: false
+            column: is_sponsor
+        isStealthMode:
+            type: boolean
+            nullable: false
+            column: is_stealth_mode
+        intranetAccess:
+            type: boolean
+            nullable: false
+            column: intranet_access
+        isSubscriber:
+            type: boolean
+            nullable: false
+            column: is_subscriber
+        isDeleted:
+            type: boolean
+            nullable: true
+            column: is_deleted
+        systemLanguage:
+            type: string
+            length: 8
+            fixed: false
+            nullable: true
+            column: system_language
+        isPermanentDelete:
+            type: boolean
+            nullable: false
+            column: is_permanent_delete
+        isDraft:
+            type: boolean
+            nullable: true
+            column: is_draft
+        isPostalAddress:
+            type: boolean
+            nullable: false
+            column: is_postal_address
+        isNew:
+            type: boolean
+            nullable: true
+            column: is_new
+        isFairgate:
+            type: boolean
+            nullable: true
+            column: is_fairgate
+        isFormerFedMember:
+            type: boolean
+            nullable: false
+            column: is_former_fed_member
+        isFedMembershipConfirmed:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: is_fed_membership_confirmed
+        isClubAssignmentConfirmed:
+            type: boolean
+            nullable: false
+            column: is_club_assignment_confirmed
+        compDefContact:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: comp_def_contact
+        compDefContactFun:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: comp_def_contact_fun
+        lastUpdated:
+            type: datetime
+            nullable: false
+            column: last_updated
+        dispatchTypeInvoice:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: dispatch_type_invoice
+        dispatchTypeDun:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: dispatch_type_dun
+        hasMainContact:
+            type: boolean
+            nullable: false
+            column: has_main_contact
+        hasMainContactAddress:
+            type: boolean
+            nullable: false
+            column: has_main_contact_address
+        isHouseholdHead:
+            type: boolean
+            nullable: false
+            column: is_household_head
+        createdAt:
+            type: datetime
+            nullable: false
+            column: created_at
+        joiningDate:
+            type: datetime
+            nullable: false
+            column: joining_date
+        leavingDate:
+            type: datetime
+            nullable: false
+            column: leaving_date
+        firstJoiningDate:
+            type: datetime
+            nullable: false
+            column: first_joining_date
+        archivedOn:
+            type: datetime
+            nullable: false
+            column: archived_on
+        isSeperateInvoice:
+            type: boolean
+            nullable: false
+            column: is_seperate_invoice
+        sameInvoiceAddress:
+            type: boolean
+            nullable: false
+            column: same_invoice_address
+        loginCount:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: login_count
+        lastLogin:
+            type: datetime
+            nullable: true
+            column: last_login
+        importTable:
+            type: string
+            length: 50
+            fixed: false
+            nullable: true
+            column: import_table
+        importId:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: import_id
+        allowMerging:
+            type: boolean
+            nullable: false
+            column: allow_merging
+        resignedOn:
+            type: datetime
+            nullable: true
+            column: resigned_on
+        quickwindowVisibilty:
+            type: boolean
+            nullable: false
+            column: quickwindow_visibilty
+        isFedAdmin:
+            type: boolean
+            nullable: false
+            column: is_fed_admin
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        mainClub:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                main_club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        mergeToContact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                merge_to_contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        clubMembershipCat:
+            targetEntity: FgCmMembership
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_membership_cat_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        fedMembershipCat:
+            targetEntity: FgCmMembership
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                fed_membership_cat_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        oldFedMembership:
+            targetEntity: FgCmMembership
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                old_fed_membership_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        fedMembershipAssignedClub:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                fed_membership_assigned_club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdClub:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        fedContact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                fed_contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        subfedContact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                subfed_contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

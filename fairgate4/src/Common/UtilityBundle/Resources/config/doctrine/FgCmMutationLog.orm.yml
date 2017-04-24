@@ -1,0 +1,44 @@
+Common\UtilityBundle\Entity\FgCmMutationLog:
+    type: entity
+    table: fg_cm_mutation_log
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        confirmedDate:
+            type: datetime
+            nullable: true
+            column: confirmed_date
+    manyToOne:
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        confirmedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                confirmed_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        toconfirm:
+            targetEntity: FgCmChangeToconfirm
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                toconfirm_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

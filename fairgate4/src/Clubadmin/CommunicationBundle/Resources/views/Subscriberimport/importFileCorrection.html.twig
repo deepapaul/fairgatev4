@@ -1,0 +1,56 @@
+<form id="form-tab3" method="post" data-url="{{ actionPath }}" data-corrected="{{ isCorrectFile ? '1' : '0' }}" onsubmit="return false;" autocomplete="off" novalidate="novalidate" class="form-horizontal" enctype="multipart/form-data">
+    <h3 class="block">{{ isCorrectFile ? 'IMPORT_FILE_IS_CORRECT'|trans : 'IMPORT_CORRECT_YOUR_FILE'|trans  }}</h3>
+    <div class="form-body">
+        {% if(isCorrectFile == false) %}
+            <div class="form-group">
+                <p>{{'IMPORT_ERROR_DESCRIPTION'|trans}}</p>
+                {% if errorRows|length > 0 %}
+                    <!-- Table -->
+                <div class="fg-table-wrap">
+                    <table class="table fg-import-table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>{%trans%}IMPORT_ERROR{%endtrans%}</th>
+                                <th>{%trans%}IMPORT_ON_FIELD{%endtrans%}</th>
+                                <th>{%trans%}IMPORT_IN_COLUMN{%endtrans%}</th>  
+                                <th>{%trans%}IMPORT_IN_ROW{%endtrans%}</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rowError in errorRows %}
+                                <tr>
+                                    <td>{{rowError.errorMessage}}</td>                    
+                                    <td>{{rowError.fieldname}}</td>
+                                    <td>{{rowError.headerColumn}}</td>        
+                                    <td>{{rowError.rows}}</td>  
+                                </tr>                                
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- End Table -->
+                {% endif %}
+            </div>               
+            <div class="form-group form-group-last">
+                <div class="col-md-9">
+                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                        <span class="btn default btn-file">
+                            <span class="fileinput-new">{{'FILE_UPLOAD'|trans}}</span>
+                            <span class="fileinput-exists">{{'FILE_CHANGE'|trans}} </span>
+                            <input type="file" title="" name="importFile" id="importFile">
+                        </span>
+                        <span class="fileinput-filename"></span>
+                        &nbsp; <a href="#" class="close fileinput-exists" data-dismiss="fileinput" data-fileId=""></a>
+                    </div>
+                    {% if fileError is defined %}    
+                        <p class="help-block" data-required>{{ fileError }}</p>
+                    {% endif %}
+                    <p class="help-block">{%trans%}ALLOWED_FILE_CSV{%endtrans%}</p>
+                </div>
+            </div> 
+        {% endif %} 
+
+    </div>  
+    <input type="hidden" id="step" name="step" value="file_correction" />
+    <input type="hidden" id="not_import_first_row" name="not_import_first_row" value="{{ notImportFirstRow }}" />
+</form>

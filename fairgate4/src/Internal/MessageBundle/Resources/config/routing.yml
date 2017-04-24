@@ -1,0 +1,84 @@
+internal_message_homepage:
+    path:     /message
+    defaults: { _controller: InternalMessageBundle:Default:index }
+internal_create_message_step1_contact:
+    path:  /message/create/contact
+    defaults: { _controller: InternalMessageBundle:MessageWizard:wizardGeneral, module: profile, level1: messages, level2: conversation, recipienttype:"CONTACT" }
+internal_create_message_step1_team:
+    path:  /message/create/team
+    defaults: { _controller: InternalMessageBundle:MessageWizard:wizardGeneral, module: profile, level1: messages, level2: conversation, recipienttype:"TEAM" }
+internal_create_message_step1_workgroup:
+    path:  /message/create/workgroup
+    defaults: { _controller: InternalMessageBundle:MessageWizard:wizardGeneral, module: profile, level1: messages, level2: conversation, recipienttype:"WORKGROUP" }   
+internal_edit_message_step1:
+    path:  /message/edit/{messageId}
+    defaults: { _controller: InternalMessageBundle:MessageWizard:wizardGeneral, module: profile, level1: messages, level2: conversation}
+internal_create_message_step1_getrecipients_contacts:
+    path:  /message/getrecipients/contact
+    defaults: { _controller: InternalMessageBundle:MessageWizard:getRecipients}
+internal_message_inbox:
+    path:     /message/inbox
+    defaults: { _controller: InternalMessageBundle:Inbox:inbox, module: profile, level1: messages }    
+internal_create_message_step1_save:
+    path:  /message/create/save
+    defaults: { _controller: InternalMessageBundle:MessageWizard:wizardGeneralSave }
+internal_edit_message_step1_save:
+    path:  /message/edit/save/{messageId}
+    defaults: { _controller: InternalMessageBundle:MessageWizard:wizardGeneralSave }
+internal_create_message_step2:
+    path:  /message/create/step2/{messageId}
+    defaults: { _controller: InternalMessageBundle:MessageWizard:wizardMessage, module: profile, level1: messages, level2: conversation }   
+internal_message_inbox_listing:
+    path:     /message/inbox/listing
+    defaults: { _controller: InternalMessageBundle:Inbox:inboxMessages }   
+internal_create_message_step3:
+    path:  /message/create/sending/{messageId}
+    defaults: { _controller: InternalMessageBundle:MessageWizard:wizardSending, module: profile, level1: messages, level2: conversation } 
+internal_get_contacts_for_notif:
+    path:  /message/getmessgaecontacts/{messageId}
+    defaults: { _controller: InternalMessageBundle:MessageWizard:getContactAndEmailsForNotific } 
+internal_message_step2_save:
+    path:  /message/save/step2/{messageId}
+    defaults: { _controller: InternalMessageBundle:MessageWizard:wizardMessageSave }   
+internal_message_attachment_upload:
+    path:     /message/attachment/upload
+    defaults: { _controller: ClubadminDocumentsBundle:Default:uploadFile,type: "message" }
+internal_message_conversation:
+    path:     /message/conversation/{messageId}
+    defaults: { _controller: InternalMessageBundle:Conversation:conversation, module: profile, level1: messages, level2: conversation  } 
+internal_message_conversation_listing:
+    path:     /message/conversation/list/{messageId}/{page}/{limit}
+    defaults: { _controller: InternalMessageBundle:Conversation:getConversation }   
+internal_message_addreply:  
+    path:     /message/addreply
+    defaults: { _controller: InternalMessageBundle:Conversation:addReply }
+internal_edit_message_step2:
+    path:  /message/edit/step2/{messageId}
+    defaults: { _controller: InternalMessageBundle:MessageWizard:wizardMessage, module: profile, level1: messages, level2: conversation }  
+internal_message_set_read:    
+    path:     /message/setread
+    defaults: { _controller: InternalMessageBundle:Conversation:setRead }
+internal_message_download_attachment:    
+    path:     /message/download/{attachmentName}
+    defaults: { _controller: InternalMessageBundle:Conversation:downloadAttachments }    
+internal_message_confirmation_popup:    
+    path:     /message/confirmationpopup
+    defaults: { _controller: InternalMessageBundle:Inbox:confirmationPopup } 
+internal_message_delete:
+    path:     /message/delete
+    defaults: { _controller: InternalMessageBundle:Inbox:deleteMessage } 
+internal_message_unread:   
+    path:     /message/unread
+    defaults: { _controller: InternalMessageBundle:Inbox:unreadMessage }
+internal_message_read:
+    path:     /message/read
+    defaults: { _controller: InternalMessageBundle:Inbox:readMessage }
+internal_message_draft:   
+    path:     /message/drafts
+    defaults: { _controller: InternalMessageBundle:Inbox:draftMessages }
+internal_message_setnotification:   
+    path:     /message/setnotification
+    defaults: { _controller: InternalMessageBundle:Inbox:setNotification }    
+internal_message_send:   
+    path:     /message/sending/submit/{messageId}
+    defaults: { _controller: InternalMessageBundle:MessageWizard:wizardSendingSubmit}    

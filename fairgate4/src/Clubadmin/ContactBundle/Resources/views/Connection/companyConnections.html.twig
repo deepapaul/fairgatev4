@@ -1,0 +1,90 @@
+<!-- START COMPANY-->
+{% set companyIds = [] %}
+<div class="row">
+    <div class="col-md-12 fg-common-top"><span class="fg-sub-caption">{{contactdetails.is_company ? 'MAIN_CONTACT'|trans:'COMPANIES_IS_MAIN_CONTACT_OF'|trans}}</span></div>
+</div>
+<div class="row fg-common-top">
+    {% if(contactdetails.is_company ) %}
+        {% if(contactdetails.has_main_contact==1 and  (contactdetails.comp_def_contact and (companyContacts is defined))) %}
+            {% set mainContRelation = 'mcRel'~contactdetails.id %}
+        <div class="col-md-3 col-sm-6" data-cloumn>
+            <div class="portlet box fg-red-border">
+                <div class="portlet-title fg-theme-head">
+                    <div class="caption">{{contactdetails.comp_def_contact_fun}}</div>
+                    {% if(not readOnly) %}
+                        <div class="closeico">
+                            {% if(companyContacts.mainContactClub) %}
+                            <input type="checkbox" data-inactiveblock="changecolor" data-parentid="fg-content-minarea" class="make-switch" data-key="company.{{companyContacts.id}}.{{mainContRelation}}.is_deleted" name="company_{{companyContacts.id}}_{{mainContRelation}}_is_deleted" id="company_{{companyContacts.id}}_{{mainContRelation}}_is_deleted"  />
+                            <label for="company_{{companyContacts.id}}_{{mainContRelation}}_is_deleted" class="fa fa-times-circle fa-2x fg-close-btn" ></label>
+                            {% endif %}
+                            <i class="fa fg-lock fa-2x fg-close-btn" {% if(companyContacts.mainContactClub) %}style="display:none;"{% endif %}></i>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="portlet-body fg-content-minarea"> <div class="fg-connection-img">{% include 'clubadmin/profile-image.html.twig' with {'clubId':companyContacts.clubId,'contactType':0,'filename':companyContacts.profilbild,'type':'other'} %}</div>
+                    <div class="fg-contact-info"> <span class="fg-contact-name">
+                            {% if (clubType == 'federation') %}
+                                {% set contactId = companyContacts.fed_contact_id %}
+                            {% elseif (clubType == 'sub_federation') %}
+                                {% set contactId = companyContacts.subfed_contact_id %}
+                            {% else %}
+                                {% set contactId = companyContacts.id %}
+                            {% endif %}
+                            {% if (companyContacts.mainContactClub) %}<a  href="{{path('contact_connection',{'contact': companyContacts.mainContactClub,'offset':0})}}" >{{companyContacts.contactname}}</a>
+                            {% else %}<span class="fg-blue-title">{{companyContacts.contactname}}</span>
+                            {% endif %}
+                        </span> </div>
+                </div>
+            </div>
+        </div>
+        {% elseif(not readOnly) %}
+            <div class="col-md-3 col-sm-6" data-overwrite="1">
+                <div class="portlet box fg-red-border fg-disable-block">
+                    <div class="fg-disable-link"> <a data-toggle="connection" data-type="company" data-exclude="" data-overwrite="1" data-isCompany="0" href="#basic" onclick="return false"  id="pencil"><i class="fa fa-plus-circle fa-2x col-blue"></i><span class="fg-left-move">{%trans%}ADD_CONNECTION{%endtrans%}</span></a> </div>
+                </div>
+            </div>
+        {% endif %}
+    {% else %}
+        {% for companyConnection in companyContacts %}
+        {% set companyIds = companyIds|merge([companyConnection.id]) %}
+        {% set mainContRelation = 'mcRel'~companyConnection.id %}
+        <div class="col-md-3 col-sm-6" data-cloumn>
+            <div class="portlet box fg-red-border">
+                <div class="portlet-title fg-theme-head">
+                    <div class="caption">{{companyConnection.comp_def_contact_fun}}</div>
+                    {% if(not readOnly) %}
+                    <div class="closeico">
+                        {% if(companyConnection.mainContactClub) %}
+                        <input type="checkbox" data-inactiveblock="changecolor" data-parentid="fg-content-minarea" class="make-switch" data-key="company.{{companyConnection.id}}.{{mainContRelation}}.is_deleted" name="company_{{companyConnection.id}}_{{mainContRelation}}_is_deleted" id="company_{{companyConnection.id}}_{{mainContRelation}}_is_deleted"  />
+                        <label for="company_{{companyConnection.id}}_{{mainContRelation}}_is_deleted" class="fa fa-times-circle fa-2x fg-close-btn" ></label>
+                        {% endif %}
+                        <i class="fa fg-lock fa-2x fg-close-btn" {% if(contactdetails.mainClubId) %}style="display:none;"{% endif %}></i>
+                    </div>
+                    {% endif %}</div>
+                <div class="portlet-body fg-content-minarea"> <div class="fg-connection-img">{% include 'clubadmin/profile-image.html.twig' with {'clubId':companyConnection.clubId,'filename':companyConnection.profilbild,'contactType': companyConnection.is_company,'type':'other'} %}</div>
+                    <div class="fg-contact-info"> <span class="fg-contact-name">
+                            {% if (clubType == 'federation') %}
+                                {% set contactId = companyConnection.fed_contact_id %}
+                            {% elseif (clubType == 'sub_federation') %}
+                                {% set contactId = companyConnection.subfed_contact_id %}
+                            {% else %}
+                                {% set contactId = companyConnection.id %}
+                            {% endif %}
+                            {% if (companyConnection.mainContactClub) %}<a  href="{{path('contact_connection',{'contact': companyConnection.mainContactClub,'offset':0})}}" >{{companyConnection.companyName}}</a>
+                            {% else %}<span class="fg-blue-title">{{companyConnection.companyName}}</span>
+                            {% endif %}
+                        </span> </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% if(not readOnly) %}
+        <div class="col-md-3 col-sm-6">
+            <div class="portlet box fg-red-border fg-disable-block">
+                <div class="fg-disable-link"> <a data-toggle="connection" data-exclude="{{companyIds|join(',')}}" data-type="company" data-isCompany="1" href="#basic" onclick="return false"  id="pencil"><i class="fa fa-plus-circle fa-2x col-blue"></i><span class="fg-left-move">{%trans%}ADD_CONNECTION{%endtrans%}</span></a> </div>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
+</div>
+<!-- END COMPANY-->

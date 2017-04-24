@@ -1,0 +1,151 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'USER_RIGHTS_PAGE_TITLE'|trans %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BREADCRUMB STARTS -->
+            {% include 'clubadmin/breadcrumb.html.twig' %}
+            <!-- BREADCRUMB ENDS -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="portlet-body fg-theme-blue">
+                                <div class="fg-left-zero">
+                                    <div class="row">
+                                      {% set page_settings = { 'pagetitle':'true','tabs':'true' }  %}
+                                      {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle':  'USER_RIGHTS_PAGE_TITLE'|trans, 'page_settings': page_settings,'tabs':tabs ,'type':'userrights','hrefLink':'true','url':'#','aId':'true'} %}
+                                    </div>
+                                </div>
+                                         
+                                <div class="fg-clear"></div>
+                                <form id="userRightsForm" onsubmit="return false;" class="form-horizontal fg-internalUserrights"> 
+                                    <div id="failcallbackServerSide" class="alert alert-danger" style="display:none;">
+                                        <button class="close" data-close="alert"></button>
+                                        <span>{{'FORM_ERROR_DISPLAY'|trans}}</span>
+                                    </div>
+                                    <div id="fg-dev-user-rights-div" style="display:none;" class="fg-userrights-wrapper "></div> 
+                                    {% include 'clubadmin/savebutton.html.twig' with {'settings':true} %}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id ="divTemplates">  
+        {% include 'ClubadminContactBundle:Userrights:userrightsInternalUnderscore.html.twig' %}
+        {% include 'ClubadminContactBundle:Userrights:new-contact-team-user-right.html.twig' %}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/page/fg_userrights.js') }}" type="text/javascript"></script>  
+     <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>
+    <script>
+             /*-------------- Page title bar configuration --------*/ 
+        $(document).ready(function() {
+            FgPageTitlebar.init({
+                title       : true,
+                tab       : true, 
+                tabType  :'server'
+               
+            }); 
+       });
+       var exclude=JSON.stringify({{exclude|raw}});
+        exclude = JSON.parse(exclude);
+        var newExcludeTeamAdmins = new Array();
+        var newExcludeTeamSectionAdmins = new Array();
+        var newExcludeWGAdmins = new Array();
+        var newExcludeWGSectionAdmins = new Array();
+        if(exclude.existingUserDetails != null && exclude.existingUserDetails.length != 0) {
+            newExcludeTeamAdmins = exclude.existingUserDetails; // Assigning current details to auto complete array to exclude the same contacts from auto complete
+        }
+        if(exclude.existingSectionUser != null && exclude.existingSectionUser.length != 0) {
+            newExcludeTeamSectionAdmins = exclude.existingSectionUser; // Assigning current details to auto complete array to exclude the same contacts from auto complete
+        } 
+        if(exclude.existingWGUserDetails != null && exclude.existingWGUserDetails.length != 0) {
+            newExcludeWGAdmins = exclude.existingWGUserDetails; // Assigning current details to auto complete array to exclude the same contacts from auto complete
+        }
+        if(exclude.existingWGSectionUser != null && exclude.existingWGSectionUser.length != 0) {
+            newExcludeWGSectionAdmins = exclude.existingWGSectionUser; // Assigning current details to auto complete array to exclude the same contacts from auto complete
+        } 
+        var loggedContactId={{loggedContactId}};
+        var urlPath = "{{path('user_rights_page')}}";
+        var urlPath1 = "{{path('group_userrights_team')}}";
+        var groupAdmin = JSON.stringify({{groupAdmin|raw}});
+        var dropDownList = JSON.stringify({{dropdown|raw}});
+        var admins = JSON.stringify({{admins|raw}});
+        admins = JSON.parse(admins);
+        groupAdmin = JSON.parse(groupAdmin);
+        dropDownList = JSON.parse(dropDownList);
+        var overviewPathIntUserrights = '{{path('render_contact_overview',{'offset':0,'contact': 'dummyContactId'})}}'; // Overview link
+    
+    
+        $(document).ready(function() {
+            var teamList = _(dropDownList).filter(function(list){ return (list['type']=='T');});
+            var workgroupList = _(dropDownList).filter(function(list){ return (list['type']=='W');});
+            initPageFunctions('save');
+            FgUtility.changeColorOnDelete();
+
+            // Global variable for user rights which need to be passed to js
+            var options = {
+                newExclude                  : newExcludeTeamAdmins,
+                newExcludeTeamSectionAdmins : newExcludeTeamSectionAdmins,
+                newWGExclude                : newExcludeWGAdmins,
+                newExcludeWGSectionAdmins   : newExcludeWGSectionAdmins,
+                contactNameUrl              : '{{contactNameUrl}}',
+                saveUrl                     : "{{path('save_group_user_rights')}}",
+                saveFlag                    : 0,
+                teamList                    : teamList,
+                workgroupList               : workgroupList,
+                admins                      : admins
+            };
+            FgUserRights.initFrontend(options); // Initing all the underlying functionalities of user rights including create and delete
+            
+        });
+        
+    function initPageFunctions(from ){
+       if(from == 'discard'){
+            exclude=JSON.stringify({{exclude|raw}});
+            exclude = JSON.parse(exclude);
+            typeHeadTeamAdminOptions.newExcludeAdmins = exclude.existingUserDetails; 
+            typeHeadWGAdminOptions.newExcludeAdmins =  exclude.existingSectionUser; 
+            typeHeadTeamSectionAdminOptions.newExcludeAdmins =  exclude.existingWGUserDetails; 
+            typeHeadWGSectionAdminOptions.newExcludeAdmins = exclude.existingWGSectionUser; 
+        }
+       FgPageTitlebar.setMoreTab();
+       var result_data = FGTemplate.bind('fg-dev-userrights-internal-team-list', {groupAdmin:groupAdmin,overviewPath:overviewPathIntUserrights,loggedContactId: loggedContactId,dropDownList:dropDownList,admins:admins});
+        $('#fg-dev-user-rights-div').html(result_data); // Displaying user rights from underscore
+        $('select.selectpicker').selectpicker('render');
+        $('#fg-dev-user-rights-div').show();
+        
+        FgApp.init();
+        FgFormTools.handleUniform();
+        ComponentsDropdowns.init();
+        pageInit(); 
+    }    
+      // Page init
+    function pageInit() {
+        FgDirtyFields.init('userRightsForm', {
+                dirtyFieldSettings :{
+                    {#dirtyFormClass : "isDirty"#}
+                }, 
+                    enableDragDrop : false, 
+                    enableUpdateSortOrder : false, 
+                    enableDiscardChanges : false
+               
+            });
+    }
+ 
+     
+ 
+   
+</script>
+<script src="{{ asset('fgcustom/js/dirtyfields/jquery.dirtyFields.js') }}" type="text/javascript"></script>
+<script src="{{ asset('fgcustom/js/fg_dirtyfields.js') }}" type="text/javascript"></script>
+<script src="{{ asset('fgcustom/tokenfield/js/bootstrap-tokenfield.js') }}" type="text/javascript"></script>
+{% endblock %} 

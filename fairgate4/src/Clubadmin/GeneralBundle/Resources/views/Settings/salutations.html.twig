@@ -1,0 +1,235 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = "GENERAL_SETTINGS"|trans %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body fg-theme-green">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                {% include 'clubadmin/breadcrumb.html.twig' with {'breadCrumb':{}} %}
+
+                <!-- END PAGE TITLE & BREADCRUMB-->
+
+                {#{% include 'clubadmin/settings-tab.html.twig' with {'tabs':tabs,'active':'salutations','clubLanguages': clubLanguages,'clubDefaultLang':clubDefaultLang,langSwitch:1} %}
+                #}
+                <div class="row">
+                    {% set page_settings = { 'pagetitle':'true','tabs':'true','lang_switch_left':'true'}  %}
+                    {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle':pageTitle ,'page_settings': page_settings,'tabs': tabs,'hrefLink' : true, 'url':"#",'type':'salutations','clubLanguages': clubLanguages,'clubDefaultLang':clubDefaultLang,'langSwitch':1 } %}
+                </div>
+                <div class="clearfix"></div>
+                <div class="alert alert-info fg-marg-btm-0">
+                    <strong>{{ 'SALUTATION_GLOBAL_SETTINGS'|trans }}: </strong>{{ 'SALUTATION_GLOBAL_SETTINGS_TEXT'|trans }}            
+                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
+                </div> 
+
+                <div class="row">
+                    <div class="col-md-12 fg-common-top">
+                        <div class="panel panel-primary panel-bg">
+                            <div class="panel-heading fg-theme-head paneldisplay fg-clear">
+                                <h3 class="panel-title pull-left">{{ 'SALUTATION_FEMALE_CONTACT'|trans }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="form1" action="#" class="form-horizontal form-bordered fg-form-unborder">                  
+                    <div class="row">
+                        <div class="col-md-12">      
+                            <div class="portlet-body form">
+                                <!-- BEGIN FORM-->
+                                <div class="form-body">
+                                    <div class="form-group fg-subscibers-list fg-salutation-clear">
+                                        <dl>
+                                            <dt>{{ 'SALUTATION_FORMAL'|trans }}</dt>
+                                            <dd>                                        
+                                                {% for lang, value in rowSalutation.female.formal %}
+                                                    {% set systemLang = clublanguageDetails[lang]['systemLang'] %}
+                                                    <input id="female_formal_{{ lang }}_{{ lang }}" name="salutation[{{ lang }}][femaleFormal]" data-lang="{{ lang }}" type="text" class="form-control" value="{{ value }}" placeholder="{{default['femaleFormal'][systemLang]}}"/>
+                                                {% endfor %}
+                                            </dd>
+                                            <dt>{{ 'SALUTATION_INFORMAL'|trans }}</dt>
+                                            <dd>
+                                                {% for lang, value in rowSalutation.female.informal %}
+                                                    {% set systemLang = clublanguageDetails[lang]['systemLang'] %}
+                                                    <input id="female_informal_{{ lang }}_{{ lang }}" name="salutation[{{ lang }}][femaleInformal]" data-lang="{{ lang }}" type="text" class="form-control" value="{{ value }}" placeholder="{{default['femaleInformal'][systemLang]}}"/>
+                                                {% endfor %}
+                                            </dd>                    
+                                        </dl>
+                                    </div>                  
+                                </div>                
+                                <!-- END FORM-->
+                            </div>         
+                        </div>       
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel panel-primary panel-bg">
+                                <div class="panel-heading fg-theme-head paneldisplay fg-clear">
+                                    <h3 class="panel-title pull-left">{{ 'SALUTATION_MALE_CONTACT'|trans}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">      
+                            <div class="portlet-body form">
+                                <!-- BEGIN FORM-->
+                                <div class="form-body">
+                                    <div class="form-group fg-subscibers-list fg-salutation-clear">
+                                        <dl>
+                                            <dt>{{ 'SALUTATION_FORMAL'|trans }}</dt>
+                                            <dd>
+                                                {% for lang, value in rowSalutation.male.formal %}
+                                                    {% set systemLang = clublanguageDetails[lang]['systemLang'] %}
+                                                    <input id="male_formal_{{ lang }}_{{ lang }}" name="salutation[{{ lang }}][maleFormal]" data-lang="{{ lang }}" type="text" class="form-control" value="{{ value }}" placeholder="{{default['maleFormal'][systemLang]}}"/>
+                                                {% endfor %}
+                                            </dd>
+                                            <dt>{{ 'SALUTATION_INFORMAL'|trans }}</dt>
+                                            <dd>
+                                                {% for lang, value in rowSalutation.male.informal %}
+                                                    {% set systemLang = clublanguageDetails[lang]['systemLang'] %}
+                                                    <input id="male_informal_{{ lang }}_{{ lang }}" name="salutation[{{ lang }}][maleInformal]" data-lang="{{ lang }}" type="text" class="form-control" value="{{ value }}" placeholder="{{default['maleInformal'][systemLang]}}"/>
+                                                {% endfor %}
+                                            </dd>                    
+                                        </dl>
+                                    </div>                  
+                                </div>                
+                                <!-- END FORM-->
+                            </div>         
+                        </div>       
+                    </div>
+                    {% if(fgtwig.inArray('invoice', bookedModule)) %}  
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-primary panel-bg">
+                                    <div class="panel-heading fg-theme-head paneldisplay fg-clear">
+                                        <h3 class="panel-title pull-left">{{ 'SALUTATION_FAMILY'|trans}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">      
+                                <div class="portlet-body form">
+                                    <!-- BEGIN FORM-->
+                                    <div class="form-body">
+                                        <div class="form-group fg-subscibers-list fg-salutation-clear">
+                                            <dl>
+                                                <dt>{{ 'SALUTATION_FORMAL'|trans }}</dt>
+                                                <dd>
+                                                    {% for lang, value in rowSalutation.family.formal %}
+                                                        {% set systemLang = clublanguageDetails[lang]['systemLang'] %}
+                                                        <input id="family_formal_{{ lang }}_{{ lang }}" name="salutation[{{ lang }}][familyFormal]" data-lang="{{ lang }}" type="text" class="form-control" value="{{ value }}" placeholder="{{default['familyFormal'][systemLang]}}"/>
+                                                    {% endfor %}
+                                                </dd>
+                                                <dt>{{ 'SALUTATION_INFORMAL'|trans }}</dt>
+                                                <dd>
+                                                    {% for lang, value in rowSalutation.family.informal %}
+                                                        {% set systemLang = clublanguageDetails[lang]['systemLang'] %}
+                                                        <input id="family_formal_{{ lang }}_{{ lang }}" name="salutation[{{ lang }}][familyInformal]" data-lang="{{ lang }}" type="text" class="form-control" value="{{ value }}" placeholder="{{default['familyInformal'][systemLang]}}"/>
+                                                    {% endfor %}
+                                                </dd>                    
+                                            </dl>
+                                        </div>                  
+                                    </div>                
+                                    <!-- END FORM-->
+                                </div>         
+                            </div>       
+                        </div>
+                    {% endif %}   
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel panel-primary panel-bg">
+                                <div class="panel-heading fg-theme-head paneldisplay fg-clear">
+                                    <h3 class="panel-title pull-left">{{ 'SALUTATION_COMPANY_NO_MAIN_CONTACT'|trans}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">      
+                            <div class="portlet-body form">
+                                <!-- BEGIN FORM-->
+                                <div class="form-body">
+                                    <div class="form-group fg-subscibers-list fg-salutation-clear">
+                                        <dl>
+                                            <dt>{{ 'SALUTATION'|trans }}</dt>
+                                            <dd>
+                                                {% for lang, value in rowSalutation.company_nomain_contact %}
+                                                    {% set systemLang = clublanguageDetails[lang]['systemLang'] %}
+                                                    <input id="company_nomain_contact_{{ lang }}_{{ lang }}" name="salutation[{{ lang }}][company_nomain_contact]" data-lang="{{ lang }}" type="text" class="form-control" value="{{ value }}" placeholder="{{default['companyNoMain'][systemLang]}}"/>
+                                                {% endfor %}
+                                            </dd>                                      
+                                        </dl>
+                                    </div>                  
+                                </div>                
+                                <!-- END FORM-->
+                            </div>         
+                        </div>       
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel panel-primary panel-bg">
+                                <div class="panel-heading fg-theme-head paneldisplay fg-clear">
+                                    <h3 class="panel-title pull-left">{{ 'SALUTATION_SUBSCRIBER'|trans}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">      
+                            <div class="portlet-body form">
+                                <!-- BEGIN FORM-->
+                                <div class="form-body">
+                                    <div class="form-group fg-subscibers-list fg-salutation-clear">
+                                        <dl>
+                                            <dt>{{ 'SALUTATION'|trans }}</dt>
+                                            <dd>
+                                                {% for lang, value in rowSalutation.subscriber %}
+                                                    {% set systemLang = clublanguageDetails[lang]['systemLang'] %}
+                                                    <input id="subscriber_{{ lang }}_{{ lang }}" name="salutation[{{ lang }}][subscriber]" data-lang="{{ lang }}" type="text" class="form-control" value="{{ value }}" placeholder="{{default['subscriber'][systemLang]}}"/>
+                                                {% endfor %}
+                                            </dd>                                      
+                                        </dl>
+                                    </div>                  
+                                </div>                
+                                <!-- END FORM-->
+                            </div>         
+                        </div>       
+                    </div>
+                    <!-- END PAGE CONTENT-->
+                    {% include 'clubadmin/savebutton.html.twig' with {'settings':'settings'} %}
+                    <input id="id" name="id"  value="{{ id }}" type="hidden" />
+                </form>                             
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>  
+    <script src="{{ asset('fgassets/backend/js/page/settings.js') }}" type="text/javascript"></script>  
+    <script src="{{ asset('fgcustom/js/common.js')}}"></script>
+    <script type="text/javascript">
+        var salutationSaveUrl = "{{ path('settings_salutations_save')}}";
+        $(document).ready(function () {
+            FgApp.init();
+            FgUtility.showTranslation('{{clubDefaultLang}}');
+            // FgSettings.initPage();
+            FgSalutationSettings.initSalutationSettings();
+            FgPageTitlebar.init({
+                title: true,
+                tab: true,
+                search: false,
+                actionMenu: false,
+                tabType: 'server',
+                languageSwitch: true
+
+            });
+        });
+
+    </script>
+{% endblock %}

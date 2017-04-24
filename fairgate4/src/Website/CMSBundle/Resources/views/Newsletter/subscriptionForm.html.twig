@@ -1,0 +1,75 @@
+<form class="form-horizontal" id="subscription-form-elementbox-{{elementId}}" action="{{path(saveSubscriptionLinkRoute)}}">
+    <div class="alert alert-info hide"></div>
+    <div class="alert alert-danger hide"></div>
+    <fieldset class="fg-noseprator">
+        <div class="form-group required">
+            <label for="textinput" class="col-sm-4 control-label"><span class="fg-marg-right-5">{{'CMS_NEWSLETTER_EMAIL_LABEL'|trans}}</span></label>
+            <div class="col-sm-8">
+                <input id="email-{{elementId}}" name="Email" class="form-control input-md" type="email">
+                <span id="email-{{elementId}}-required-error" class="help-block hide">{{'VALIDATION_THIS_FIELD_REQUIRED'|trans}}</span>
+                <span id="email-{{elementId}}-email-error" class="help-block hide">{{'FG_INVALID_FORMAT'|trans}}</span>
+            </div>
+        </div>
+
+        {% if (clubLanguages|length > 2) %}   
+            <div class="form-group required">
+                <label for="selectbasic" class="col-sm-4 control-label"><span class="fg-marg-right-5">{{'CMS_NEWSLETTER_LANGUAGE_LABEL'|trans}}</span></label>
+                <div class="col-sm-8">
+                    <select id="language-{{elementId}}" name="Language" class="form-control bs-select">
+                        {% for language in clubLanguages %}
+                            <option value="{{language.id}}">{{language.title}}</option>
+                        {% endfor %}
+                    </select>
+                    <span id="language-{{elementId}}-required-error" class="help-block hide">{{'VALIDATION_THIS_FIELD_REQUIRED'|trans}}</span>
+                </div>
+            </div>
+        {% endif %} 
+    </fieldset>
+        
+    <fieldset>
+        <legend>{{'CMS_NEWSLETTER_FIELDSET_LEGEND'|trans}}</legend>
+        <span class="fg-hidden-span"></span>
+        <div class="form-group">
+            <label for="firstname-{{elementId}}" class="col-sm-4 control-label">{{'CMS_NEWSLETTER_FIRSTNAME_LABEL'|trans}}</label>
+            <div class="col-sm-8"><input id="firstname-{{elementId}}" name="FirstName" placeholder="" required="" class="form-control input-md" type="text"></div>
+        </div>
+        <div class="form-group">
+            <label for="lastname-{{elementId}}" class="col-sm-4 control-label">{{'CMS_NEWSLETTER_LASTNAME_LABEL'|trans}}</label>
+            <div class="col-sm-8"><input id="lastname-{{elementId}}" name="LastName" placeholder="" class="form-control input-md" type="text"></div>
+        </div>
+        <div class="form-group">
+            <label for="company-{{elementId}}" class="col-sm-4 control-label">{{'CMS_NEWSLETTER_COMPANY_LABEL'|trans}}</label>
+            <div class="col-sm-8"><input id="company-{{elementId}}" name="Company" placeholder="" class="form-control input-md" type="text"></div>
+        </div>
+        <div class="form-group">
+            <label for="salutation-{{elementId}}" class="col-sm-4 control-label">{{'CMS_NEWSLETTER_SALUTATION_LABEL'|trans}}</label>
+            <div class="col-sm-8">
+                <select id="salutation-{{elementId}}" name="Salutation" class="form-control bs-select">
+                    {% for salutation in salutationArr %}
+                        <option value="{{salutation.id}}">{{salutation.title}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="gender-{{elementId}}" class="col-sm-4 control-label">{{'CMS_NEWSLETTER_GENDER_LABEL'|trans}}</label>
+            <div class="col-sm-8">
+                <select id="gender-{{elementId}}" name="Gender" class="form-control bs-select" data-key="{{elementId}}.gender">
+                    {% for gender in genderArr %}
+                        <option value="{{gender.id}}">{{gender.title}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>          
+    </fieldset>
+    <fieldset class="fg-noseprator">
+        <div class="form-group">
+            <div class="col-sm-8 col-sm-offset-4"><div class="g-recaptcha" id='fg-captchaelementbox-{{elementId}}'></div></div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-8 col-sm-offset-4">
+                <input class="btn btn-default subscribeFormSubmit" type="button" value="{{'CMS_NEWSLETTER_SUBMIT_LABEL'|trans}}" disabled>
+            </div>
+        </div>
+    </fieldset>
+</form>

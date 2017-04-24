@@ -1,0 +1,233 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::global/layout-sidebar.html.twig' %}
+{% set pageTitle = 'ARTICLE_LIST_TITLE'|trans %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTAINER -->
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN BREADCRUMB-->
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <!-- END BREADCRUMB-->
+            <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+            {% include 'global/page-title-bar.html.twig' with {'pageTitle': '', 'contactId': '', 'tabs': '', 'roleCount' : '' , 'type':'', 'url' : '','columnsUrl':path("internal_article_column_settings", {"moduleName": "editorial"}) } %}
+            <!-- END PAGE TITLE AND PANEL TABS -->
+            <div class="fg-news-editorial-editable-list-wrapper ">
+                <div class="custom-alerts alert fg-news-editorial-editable-list-filter fg-alert-block hide">
+                    <button type="button" class="close fg_filter_hide"></button>
+                    <div id="articleFilterWrap">
+                        <div class="row">
+                            <div class="col-lg-6 fg-date-bw">
+                                <label class="first-label fg-active-IB" for="START_DATE">{{'ARTICLE_DATE_BETWEEN'|trans}}</label>  
+                                <div class="input-group datepicker date fg-date fg-active-IB">
+                                    <input name="START_DATE" id="START-DATE" type="text" data-key="filter.START_DATE" class="form-control FILTER-DATE fg-dev-newfield">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                </div>
+                                <label class=" fg-active-IB" for="END_DATE">{{'AND'|trans}}</label>  
+                                <div  class="input-group datepicker date fg-date fg-active-IB">
+                                    <input name="END_DATE" id="END-DATE" type="text" data-key="filter.END_DATE" class="form-control FILTER-DATE fg-dev-newfield">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div data-filter-select="AREAS" class="col-lg-3 col-sm-6">       
+                                <select name="AREAS" id="FILTER_AREAS" multiple data-key="filter.AREAS" class="form-control bs-select selectpicker fg-dev-newfield fg-all-areas">
+                                    <option class="single" value="ALL">{{'ALL'|trans}} {{'AR_AREAS'|trans|lower}}</option>
+                                    {% for key,areas in sidebarData.AREAS.entry|default({}) %}
+                                        {% if areas.id=='TEAM' or areas.id=='WG' %}
+                                            <optgroup label="{{areas.title}}">
+                                                {% for key,input in areas.input|default({}) %}
+                                                <option class="multiple" value="{{input.id}}">{{input.title}}</option>
+                                            {% endfor %}
+                                            </optgroup>
+                                        {% else %}    
+                                            {% if areas.id != 'WA' %}
+                                                <option class="multiple" value="{{areas.id}}">{{areas.title}}</option>
+                                            {% endif %}
+                                        {% endif %}
+                                        {% endfor %}
+                                </select>       
+                            </div>
+                            <div data-filter-select="CAT" class="col-lg-3 col-sm-6">      
+                                <select name="CATEGORIES" id="FILTER_CAT" multiple data-key="filter.CATEGORIES" class="form-control selectpicker fg-dev-newfield bs-select">
+                                    <option class="single" value="ALL">{{'ALL'|trans}} {{'AR_CATEGORIES'|trans|lower}}</option>
+                                    {% for key,category in sidebarData.CAT.entry|default({}) %}
+                                        {% if not loop.last %}
+                                            <option class="multiple" value="{{category.categoryId}}">{{category.title}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>       
+                            </div>
+                        </div>
+                        <div class="row fg-marg-top-5">
+                            <div class="col-lg-6 col-sm-6 ">
+                                <div class="fg-created-by input-icon ">
+                                    <i class="fa fa-search"></i>
+                                    <input type="text" id="publishedBy" placeholder="{{'AR_CREATED_BY'|trans}}" data-contactlist name="publishedBy" value="" class="form-control" />
+                                </div>
+                                <input type="text" class="hide fg-dev-newfield" id="publishedBySelection" data-club="contact" name="publishedBySelection" value="" data-key="filter.publishedBy" />
+                                <input type="text" class="hide fg-dev-newfield" id="publishedByTitle" data-club="contact" name="publishedByTitle" value="" data-key="filter.publishedByTitle" />
+                            </div>
+                            <div data-filter-select="status" class="col-lg-3 col-sm-6">
+                                <select name="STATUS" id="FILTER_STATUS" multiple data-key="filter.STATUS" class="form-control selectpicker fg-dev-newfield bs-select">
+                                    <option class="single" value="ALL">{{'ALL'|trans}} {{'AR_STATUS'|trans|lower}}</option>
+                                    <option class="multiple" value="planned">{{'PLANNED'|trans}}</option>
+                                    <option class="multiple" value="published">{{'PUBLISHED'|trans}}</option>
+                                    <option class="multiple" value="draft">{{'DRAFT'|trans}}</option>
+                                </select>
+                            </div> 
+                        </div>        
+                        <div class="portlet-body form fg-alertbox-btn-wrapper">
+                            <div class="form-actions fluid">
+                                <div class="col-md-offset-0 col-md-10">
+                                    <button class="btn blue" id="search-filter-article" type="submit">{{'DATA_SEARCH'|trans}}</button>
+                                    <button class="btn default remove-filter" type="button">{{'CONTACT_FILTER_CLEAR'|trans}}</button>
+                                </div>
+                            </div>
+                        </div>        
+                    </div>
+                </div>    
+            <!-- BEGIN CONTENT -->
+            <div class="fg-news-editorial-editable-lists">
+                <div class="portlet-body new-table-height fg-datatable-wrapper row" id="tableWrapper">
+                    <table class="dataTable
+                           table
+                           table-bordered
+                           table-hover
+                           table-condensed
+                           dataTable-dragable"
+                           id="datatable-internal-article" dataTable-popover="true" dataTable-hover="true">
+                        
+                    </table>
+                </div>
+            </div>
+            <!-- END CONTENT -->
+            <div id="dummyPopupcontent">
+                <div class='fg-dev-singleSelectionText fg-modal-header-div hide' ></div>   
+                <div class='fg-dev-multipleSelectionText fg-modal-header-div hide' ></div>
+            </div>
+        </div>
+    </div>
+<div id="selectedIds"></div>
+    <!-- END CONTENT -->
+{% endblock %}
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/global/css/fbautocomplete.css')}}" type="text/css" rel="stylesheet" />
+{% endblock %}
+{% block javascripts %}
+  
+    <script src="{{ asset('fgassets/internal/js/page/fg-editorial-list.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/internal/js/page/fg-article-filter.js')}}" type="text/javascript"></script>
+     <script src="{{ asset('fgassets/internal/js/page/fg-article-sidebar.js')}}" type="text/javascript"></script>
+   
+    <script>
+        $('body').addClass('fg-news-editable-page');
+        // column settings
+        var columnSettings = {
+            titleTranslate: function (title) {
+                switch(title){
+                    case 'ARCHIVED_AT':return '{{'AR_ARCHIVED_AT'|trans}}';break;
+                    case 'ARCHIVED_BY':return '{{'AR_ARCHIVED_BY'|trans}}';break;
+                    case 'TITLE':return '{{'AR_TITLE'|trans}}';break;
+                    case 'STATUS':return '{{'AR_STATUS'|trans}}';break;
+                    case 'PUBLICATION_DATE':return '{{'AR_PUBLICATION_DATE'|trans}}';break;
+                    case 'ARCHIVING_DATE':return '{{'AR_ARCHIVING_DATE'|trans}}';break ;
+                    case 'AREAS':return '{{'AR_AREAS'|trans}}';break;
+                    case 'CATEGORIES':return '{{'AR_CATEGORIES'|trans}}';break;
+                    case 'AUTHOR':return '{{'AR_AUTHOR'|trans}}';break;
+                    case 'SCOPE':return '{{'AR_SCOPE'|trans}}';break;
+                    case 'CREATED_AT':return '{{'AR_CREATED_AT'|trans}}';break;
+                    case 'CREATED_BY':return '{{'AR_CREATED_BY'|trans}}';break;
+                    case 'EDITED_AT':return '{{'AR_EDITED_AT'|trans}}';break;
+                    case 'EDITED_BY':return '{{'AR_EDITED_BY'|trans}}';break;
+                    case 'IMAGE_VIDEOS':return '{{'AR_IMAGE_VIDEOS'|trans}}';break;
+                    case 'COMMENTS':return '{{'AR_COMMENTS'|trans}}';break;
+                    case 'LANGUAGES':return '{{'AR_LANGUAGES'|trans}}';break;
+                }
+            }
+        };
+        var newElementData ={newType:'CAT',newTitle:'{{'ARTICLE_CREATE_NEW_CATEGORIES'|trans}}'};
+        // column values trans
+        var colValTrans = {
+            valTrans: function (value) {
+                switch(value){
+                    case 'PUBLIC':return '{{'PUBLIC'|trans}}';break;
+                    case 'INTERNAL':return '{{'INTERNAL'|trans}}';break;
+                    case 'archived':return '{{'ARCHIVED'|trans}}';break;
+                    case 'draft':return '{{'DRAFT'|trans}}';break;
+                    case 'published':return '{{'PUBLISHED'|trans}}';break;
+                    case 'planned':return '{{'PLANNED'|trans}}';break ;
+                }
+            }
+        };
+        var preActive = '';
+        var listingTable = 'listarticle';
+        var commentSettings = {{commentSettings}};
+        var archivedOpt ='<option value="archived">{{'ARCHIVED'|trans}}</option>';
+        var communityProfilePath = '{{path("internal_community_profile", {"contactId": "contactIdReplace"})}}';
+        var removestring = "{{ 'NL_AUTOCOMPLETE_REMOVE'|trans }}";
+        var contactUrl= "{{ path('internal_article_editorial_createdby_list') }}";
+        var articleDetailsPath = '{{path('internal_article_editorial_details', {"articleId": "articleIdToReplace"})}}';
+        var articleEditPath = '{{path('internal_article_editorial_edit', {"articleId": "articleIdReplace"})}}';
+        var selectedCon = [{"id":"{{contactId}}","title":"{{contactName}}"}];
+        var clubId = {{clubId}};
+        var contactId = {{contactId}};
+        var memberType = 'editorial';
+        var ajaxUrlEditorialListing = '{{path("internal_article_editorial_get_listing")}}';
+        tableSettingValue = '{{defaultColumnSetting|json_encode()|raw}}';
+        var archiveArticlePopup ='{{path("internal_article_editorial_archive_popup")}}';
+        var archiveArticle ='{{path("internal_article_editorial_archive")}}';
+        var deleteArticlePopup = '{{path("internal_article_editorial_delete_popup")}}';
+        var reactivateArticlePopup = '{{path("internal_article_editorial_reactivate_popup")}}';
+        var deleteArticle = '{{path("internal_article_editorial_delete")}}';
+        var reactivateArticle = '{{path("internal_article_editorial_reactivate")}}';
+        var saveNextPreviousArticlePath = '{{path("internal_article_editorial_nextprevious_save")}}';
+        var saveNextPreviousArticleKey = clubId+'_ARTICLE';
+        var articleSidebarCountPath = '{{ path('internal_article_sidebar_count') }}';
+        var articleDuplicatePath = "{{path('internal_article_editorial_duplicate',{'articleId':'dummyId'})}}";
+        
+        var ArticleTrans = {
+            CREATE_TIMEPERIOD : '{{'ARTICLE_TIME_PERIOD_MANAGE_TEXT'|trans}}',
+            CREATE_CATEGORY : '{{'ARTICLE_CATEGORIES_CREATE'|trans}}',
+            CATEGORY_SETTINGS : '{{'MANAGE_ARTICLE_CATEGORIES'|trans}}'
+        };
+        var ArticleParams = {
+            activeMenuVar : 'activeArticleMenu-{{clubId}}-{{contactId}}',
+            activeSubMenuVar : "activeSubMenuVar-{{clubId}}-{{contactId}}",
+            activeOptionsVar : "activeArticleOptions{{clubId}}-{{contactId}}",
+            catSettingPath : '{{path("internal_article_editorial_category")}}'
+        };
+
+        var newElementLevel1 = '{{ include('::clubadmin/new-element-sidebar_level1.html.twig')}}';
+        var newElementLevel2 = '{{ include('::clubadmin/new-element-sidebar_level2.html.twig')}}';
+        var newElementLevel2Sub = '{{ include('::clubadmin/new-element-sidebar_level2_withfunction.html.twig')}}';
+        var defaultTitle = '{{'ALL_GALLERY'|trans}}';
+        var newElementUrl = '{{path("internal_article_category_save_from_sidebar")}}';
+        var bookmarkUpdateUrl = "{{path('gallery_bookmark_sidebar_update')}}";
+        var pathSidebardata = "{{path('internal_article_editorial_update_sidebar')}}";
+        var jsonData = {{sidebarData|json_encode()|raw}};
+        var hasRights = '{{hasRights}}';
+        //callSidebar();
+        var timeperiodPopupPath= '{{path('internal_article_editorial_timeperiod_popup')}}';
+        articleAssignPath = '{{path('internal_article_editorial_assign_popup')}}';
+        var clubTerminology=  '{{fgclub.get('title')|capitalize}}';
+        var  tableFilterStorageName = 'ARTICLE_INTERNAL_FILTER_' + memberType + clubId + '-' + contactId;
+        var tableFilterVisible = 'ARTICLE_INTERNAL_FILTER_VISIBLE' + memberType + clubId + '-' + contactId;
+        FgArticleSidebar.initSidebar();
+        var filterVar  = sessionStorage.getItem(tableFilterStorageName);
+        if(filterVar){
+             var li =  sessionStorage.getItem('activeSubMenuVar-' + clubId + '-' + contactId);
+            FgSidebar.handleSidebarClick(li); 
+            sessionStorage.removeItem(tableFilterStorageName);
+            sessionStorage.removeItem('activeSubMenuVar-' + clubId + '-' + contactId);
+            sessionStorage.removeItem('activeArticleMenu-' + clubId + '-' + contactId);
+        }
+         
+         
+    </script>
+
+{% endblock %}

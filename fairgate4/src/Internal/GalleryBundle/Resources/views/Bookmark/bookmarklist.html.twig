@@ -1,0 +1,175 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = 'GALLERY_BOOKMARK'|trans %}
+{% block pagecontent %}
+    <!-- BEGIN BREADCRUMB CONTENT-->
+    <div class="row">
+        <div class="col-lg-12">
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+        </div>
+    </div>
+    <!-- END BREADCRUMB CONTENT-->
+    <!-- PAGE TITLE START-->
+    {% include 'global/page-title-bar.html.twig' with {'pageTitle':  'GALLERY_BOOKMARK'|trans, 'tabs': {}} %}  
+    <!-- PAGE TITLE END-->
+    <!-- BEGIN CONTENT -->
+    <div class="fg-bookmarks-sorting-wrapper">
+        <form id="bookmarksort" class="form-horizontal"  novalidate="novalidate" onSubmit="return false;" autocomplete="off">
+
+            <ul class="fg-bookmark-list-wrapper-no-drag">
+                <li class="row fg-border-line fg-sort-drag-hover">
+                    <div class="fg-col-first-icon fg-sort-drag">
+                        <i class="fa fg-sort  ui-draggable inactive"></i>
+                    </div>
+                    <!-- LISTING FOR ACTIVE CONTACT STARTS-->
+                    <div class="col-md-12 fg-col-hack">
+                        <div class="row">
+                            <div class="col-sm-6  col-xs-12  fg-bookmark-active-contact">
+                                <label class="input-sm fg-album-name">{%trans%}ALL_IMAGE_TEXT{%endtrans%}</label>
+                            </div>
+                            <div class="col-sm-2 text-right">
+                                <a href="javascript:void(0)" class="fg-bookmarkCount-click" bookmark_id='ALL' data-type="" data-parent-id="" data-role-id="">{{allimageCount[0]['allimage']}} {{'BOOKMARK_IMAGES_COUNT_TEXT'|trans}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+            <ul class="fg-bookmark-list-wrapper-no-drag">
+                <li class="row fg-border-line fg-sort-drag-hover">
+                    <div class="fg-col-first-icon fg-sort-drag">
+                        <i class="fa fg-sort  ui-draggable inactive"></i>
+                    </div>
+                    <!-- LISTING FOR ACTIVE CONTACT STARTS-->
+                    <div class="col-md-12 fg-col-hack">
+                        <div class="row">
+                            <div class="col-sm-6  col-xs-12  fg-bookmark-active-contact">
+                                <label class="input-sm fg-album-name">{%trans%}ORPHANED_IMAGES_TEXT{%endtrans%}</label>
+                            </div>
+                            <div class="col-sm-2 text-right">
+                                <a href="javascript:void(0)" class="fg-bookmarkCount-click" bookmark_id="ORPHAN" data-type="" data-parent-id="" data-role-id="">{{allimageCount['0']['orphanCount']}} {{'BOOKMARK_IMAGES_COUNT_TEXT'|trans}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+
+            <ul id="bookmarklist_sort" class="fg-bookmark-list-wrapper-draggable" >
+                {% set i=1 %}
+                {% set bookmark_details_length = bookmark_details|length %}
+                {% for key,attributes in bookmark_details %}
+                    {% set bookmark_title = (attributes.title) ? attributes.title : attributes.albumname %}
+                    <li class="row fg-border-line fg-sort-drag-hover sortables" id="{{attributes.id}}">
+                        <div class="fg-col-first-icon fg-sort-drag">
+                            <i class="fa ui-draggable handle fg-sort"></i>
+                        </div>
+                        <div class="col-md-12 fg-col-hack">
+                            <div class="row" id="{{attributes.id}}" >
+                                <div class="col-sm-6 col-xs-12 fg-clear-left">
+                                    <div class="bookmark fg-bkmrk-left">
+                                        <input id="box{{i}}" type="checkbox" checked class="make-switch" data-key="{{attributes.id}}.is_deleted" name="{{attributes.id}}_is_deleted" id="{{attributes.id}}_is_deleted">
+                                        <label for="box{{i}}">
+                                            <i class="fa fa-bookmark"></i>
+                                        </label>
+                                    </div>
+                                    <label class="input-sm fg-album-name">{{bookmark_title}}</label>
+                                </div>
+                                <div class="col-sm-2 text-right fg-padding-tp-three">
+                                    <a href="javascript:void(0)" class="fg-bookmarkCount-click" bookmark_id="{{attributes.albumid}}" data-type="{{attributes.type}}" data-parent-id="{{attributes.parentId}}" data-role-id="{{attributes.roleId}}">{{attributes.imagecount}} {% if((attributes.imagecount)== 1) %} {{'BOOKMARK_IMAGES_COUNT_LOWER'|trans}} {% else %} {{'BOOKMARK_IMAGES_COUNT_TEXT'|trans}} {% endif%}</a>
+                                </div>
+                                <input type="text" class="hide" data-key="{{attributes.id}}.sort_order" name="{{attributes.id}}_sort_order" id="{{attributes.id}}_sort_order" value="{{i}}" data-sort-parent="bookmarklist_sort" />
+                            </div>
+                        </div>
+                    </li>
+
+                    {% set i=i+1 %}
+                {% endfor %}
+            </ul>
+
+            <div class="clearfix">  </div>
+            {% include 'internal/savebutton.html.twig' with {'backLink':backLink} %}
+        </form>
+    </div>
+    <!-- BEGIN CONTENT -->
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        var contactid = '{{contactId}}';
+        var clubid = '{{clubId}}';
+
+        $(document).ready(function () {
+            FgInternalDragAndDrop.sortWithOrderUpdation('#bookmarklist_sort', false);
+            var initialOrderArray = FgUtility.getOrderOfChildElements('#bookmarklist_sort');
+            var resetSections = {
+                '0': {
+                    'parentElement': '#bookmarklist_sort',
+                    'initialOrder': initialOrderArray,
+                    'addClass': false,
+                    'className': 'blkareadiv'
+                }
+            };
+
+            FgInternalDragAndDrop.resetChanges(resetSections);
+            initDirtyField();
+
+            /*-------------- Page title bar configuration --------*/
+            $(".fg-action-menu-wrapper").FgPageTitlebar({
+                title: true,
+                row2: true,
+            });
+        });
+        function initDirtyField() {
+            FgDirtyFields.init('bookmarksort', {
+                discardChangesCallback: function () {
+        {# initDirtyField();#}
+                        FgInternalDragAndDrop.sortWithOrderUpdation('#bookmarklist_sort', false);
+                    }
+                });
+            }
+            $('form').on('click', '#save_changes', function () {
+                var objectGraph = {};
+        {#objectGraph = FgInternalParseFormField.fieldParse();#}
+                $("form :input").each(function () {
+                    if ($(this).hasClass("fairgatedirty")) {
+                        var inputVal = ''
+                        if ($(this).attr('type') == 'checkbox') {
+                            inputVal = $(this).attr('checked') ? 0 : 1;
+                        } else {
+                            inputVal = $(this).val();
+                        }
+
+                        if (inputVal !== '') {
+                            FgInternal.converttojson(objectGraph, $(this).attr('data-key').split('.'), inputVal);
+                        }
+                    }
+                });
+                var bookmarkArr = JSON.stringify(objectGraph);
+                FgXmlHttp.post("{{ path('gallery_bookmark_update')}}", {'bookmarkArr': bookmarkArr}, false, callback);
+
+            });
+            $('body').on('click', '.fg-bookmarkCount-click', function () {
+                var url = '{{ path('internal_gallery_view') }}';
+                var albumId = $(this).attr('bookmark_id');
+                var galleryType = $(this).attr('data-type');
+                var parentId = $(this).attr('data-parent-id');
+                var roleId = $(this).attr('data-role-id');
+                localStorage.setItem(FgLocalStorageNames.gallery.activeMenuVar, 'bookmark_li');
+                if (galleryType != '') {
+                    if (parentId > 0) {
+                        (galleryType == 'CLUB') ? localStorage.setItem(FgLocalStorageNames.gallery.activeSubMenuVar, 'bookmark_li_CG_li_' + parentId + '_' + albumId) : localStorage.setItem(FgLocalStorageNames.gallery.activeSubMenuVar, 'bookmark_li_RG_li_' + parentId + '_' + albumId);
+                    }
+                    else {
+                        (galleryType == 'CLUB') ? localStorage.setItem(FgLocalStorageNames.gallery.activeSubMenuVar, 'bookmark_li_CG_li_' + albumId) : localStorage.setItem(FgLocalStorageNames.gallery.activeSubMenuVar, 'bookmark_li_RG_li_' + albumId);
+                    }
+                } else {
+                    localStorage.setItem(FgLocalStorageNames.gallery.activeSubMenuVar,albumId);
+                }
+                 localStorage.setItem(FgLocalStorageNames.gallery.selectedAlbum,albumId);
+                window.location = url;
+
+            });
+            function callback() {
+                FgInternal.breadcrumb(FgInternal.extraBreadcrumbTitle);
+            }
+    </script>
+{% endblock %}

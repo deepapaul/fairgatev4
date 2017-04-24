@@ -1,0 +1,595 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% if(module == 'sponsor')  %}
+    {% set pageTitle = 'IMPORT_TO_SPONSORS'|trans %}
+    {% set backPath = path('clubadmin_sponsor_homepage') %}
+{%  else  %}
+    {% set pageTitle = 'IMPORT_TO_ACTIVE_CONTACTS'|trans %}
+    {% set backPath = path('contact_index') %}
+{% endif %}
+{% block pagecontent %}
+<!-- BEGIN PAGE HEADER-->
+<div class="row">
+    <div class="col-md-12">
+          <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+            {% include 'clubadmin/breadcrumb.html.twig' with {'breadCrumb':{'back': backPath }} %}
+          <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- BEGIN PAGE CONTENT-->
+
+        <div class="row" data-body style="display:none">
+            <div class="col-md-12">
+                <div class="portlet-body fg-theme-green fg-theme-panel">
+                   {# <div class="col-md-3 col-sm-7 propertiblk fg-page-title-nav">                
+                        <h3 class="page-title fg-page-title fg-left-zero">
+                        {% if(module == 'sponsor')  %}
+                            {{'IMPORT_TO_SPONSORS'|trans}}
+                        {%  else  %}
+                            {{'IMPORT_TO_ACTIVE_CONTACTS'|trans}}
+                        {% endif %}</h3>                
+                    </div> #}
+                 {% if(module == 'sponsor')  %}
+                       {% set page_Title = 'IMPORT_TO_SPONSORS'|trans%}
+                 {%  else  %}
+                        {% set page_Title = 'IMPORT_TO_ACTIVE_CONTACTS'|trans %}
+                 {% endif %}
+                 <div class="row">
+                   {% set page_settings = { 'pagetitle':'true','tabs':'true'}  %}
+                   {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': page_Title , 'page_settings': page_settings,'tabs':tabs,'url':"#",'type':'import','hrefLink':true} %}    
+                    </div>
+                   {#<div class="fg-tab-line">
+                        <ul class="nav nav-tabs fg-full-width">
+                            <li class="{{update=='1' ? '':'active'}}"> <a href="#tab_1_1" data-url="{{path('import_file')}}" data-toggle="tab">                                    
+                                    {% if(module == 'sponsor')  %}
+                                        {{'IMPORT_NEW_SPONSOR'|trans}}
+                                    {%  else  %}
+                                        {{ 'IMPORT_NEW_CONTACT'|trans }}
+                                    {% endif %}
+                                </a> </li>
+                            {% if(module == 'contact')  %}
+                            <li class="{{update=='1' ? 'active':''}}"> <a href="#tab_1_2" data-url="{{path('import_update_file',{'type':'update'})}}" data-toggle="tab">{{'UPDATE_EXISTING_CONTACT'|trans}}</a> </li>                         
+                            {% endif %}
+                        </ul> 
+                    </div>      #}  
+                    <div class="fg-clear"></div>             
+                    {% include 'ClubadminContactBundle:Import:importSample.html.twig' with { 'clubLanguages' : clubLanguages, 'update':update, 'module':module,'fedMembershipMandatory':fedMembershipMandatory } %}
+                    <!-- BEGIN PAGE CONTENT-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="portlet box fg-theme-head" id="form_wizard_1">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        <span class="step-title">
+                                            {{'IMPORT_STEP'|trans}} 1 {{'IMPORT_STEP_OF'|trans}} {{ module == 'contact' ? (update=='1' ? '4':'5') : '4' }} </span>
+                                    </div>      
+                                </div>
+                                <div class="portlet-body form fg-import-block">
+                                       <div class="form-wizard">
+                                            <div class="form-body">
+                                                <ul class="nav nav-pills nav-justified steps">
+                                                    <li>
+                                                        <a href="#tab1" data-toggle="tab" class="step">
+                                                            <span class="number">
+                                                                1 </span>
+                                                            <span class="desc">
+                                                                <i class="fa fa-check"></i>{%trans%}IMPORT_FILE{%endtrans%}</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#tab2" data-toggle="tab" class="step">
+                                                            <span class="number">
+                                                                2 </span>
+                                                            <span class="desc">
+                                                                <i class="fa fa-check"></i>{%trans%}IMPORT_DATA_ASSIGNMENT{%endtrans%}</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#tab3" data-toggle="tab" class="step active">
+                                                            <span class="number">
+                                                                3 </span>
+                                                            <span class="desc">
+                                                                <i class="fa fa-check"></i>{%trans%}IMPORT_FILE_CORRECTION{%endtrans%}</span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#tab4" data-toggle="tab" class="step">
+                                                            <span class="number">
+                                                                4 </span>
+                                                            <span class="desc">
+                                                                <i class="fa fa-check"></i>{%trans%}IMPORT_DUPLICATE{%endtrans%}</span>
+                                                        </a>
+                                                    </li>
+                                                    {% if(update=='0' and module == 'contact') %}
+                                                    <li>
+                                                        <a href="#tab5" data-toggle="tab" class="step">
+                                                            <span class="number">
+                                                                5 </span>
+                                                            <span class="desc">
+                                                                <i class="fa fa-check"></i>{%trans%}IMPORT_ASSIGNMENTS{%endtrans%}</span>
+                                                        </a>
+                                                    </li>
+                                                    {% endif %}
+                                                </ul>
+                                                <div id="bar" class="progress progress-striped" role="progressbar">
+                                                    <div class="progress-bar progress-bar-warning">
+                                                    </div>
+                                                </div>
+                                                <div class="tab-content">
+                                                    <div class="alert alert-danger display-none">
+                                                        <button class="close" data-dismiss="alert"></button>
+                                                        <span data-error>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+                                                    </div>
+                                                    <div class="alert alert-success display-none">
+                                                        <button class="close" data-dismiss="alert"></button>
+                                                        Your form validation is successful!
+                                                    </div>
+                                                    <div class="tab-pane active" id="tab1">
+                                                        <div class="alert alert-danger display-none">
+                                                            <button class="close" data-dismiss="alert"></button>
+                                                            <span data-error>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+                                                        </div>
+                                                        <form id="form-tab1" method="post" 
+                                                              {% if(module == 'sponsor')  %}
+                                                                    data-url="{{ path('import_sponsor_data_assignment') }}"
+                                                                {%  else  %}
+                                                                    data-url="{{ path('import_data_assignment') }}"
+                                                                {% endif %}
+                                                              skipDirtyCheck onsubmit="return false;" autocomplete="off" novalidate="novalidate" class="form-horizontal">
+                                                        <h3 class="block">{%trans%}CHOOSE_DETAILS{%endtrans%}&hellip;</h3>
+                                                        <div class="form-group">
+                                                            <label class="col-md-3 control-label">{%trans%}FILE_CONTAINS{%endtrans%}</label>
+                                                            <div class="col-md-9">
+                                                                <div class="radio-list">
+                                                                    <label class="radio-inline">
+                                                                        <input type="radio" name="contactType" id="optionsRadios25" value="single" checked> {%trans%}SINGLE_PERSONE{%endtrans%}</label>
+                                                                    <label class="radio-inline">
+                                                                        <input type="radio" name="contactType" id="optionsRadios26" value="companyWithMain" > {%trans%}COMPANY_WITH_MAIN{%endtrans%}</label>
+                                                                    <label class="radio-inline">
+                                                                        <input type="radio" name="contactType" id="optionsRadios27" value="companyNoMain" > {%trans%}COMPANY_WITHOUT_MAINCONTACT{%endtrans%}</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-3 control-label">{%trans%}CSV_TYPE{%endtrans%}</label>
+                                                            <div class="col-md-9">
+                                                                <div class="radio-list">
+                                                                    <label class="radio-inline">
+                                                                        <input type="radio" name="csvType" id="optionsRadios25" value="semicolon" checked> {%trans%}SEMICOLON_SEPARATED{%endtrans%}</label>
+                                                                    <label class="radio-inline">
+                                                                        <input type="radio" name="csvType" id="optionsRadios26" value="comma" > {%trans%}COMMA_SEPARATED{%endtrans%}</label>
+                                                                </div>
+                                                            </div>                    
+                                                        </div>
+                                                        <h3 class="block">&hellip;{%trans%}AND_UPLOAD_CSV{%endtrans%}</h3>
+                                                        <div class="alert alert-info alert-br">
+                                                            <p>{%trans%}IMPORT_SPREADSHEET{%endtrans%}</p>
+                                                        </div>
+                                                        <div class="form-group form-group-last">
+                                                            <div class="col-md-9">
+                                                                <div class="fileinput fileinput-{{ (dataValue is defined) ? 'exists' :'new'}}" data-provides="fileinput">
+                                                                    <span class="btn default btn-file">
+                                                                        <span class="fileinput-new">{{'FILE_UPLOAD'|trans}}</span>
+                                                                        <span class="fileinput-exists">{{'FILE_CHANGE'|trans}} </span>
+                                                                        <input type="file" title="" name="importFile" id="importFile">
+                                                                    </span>
+                                                                    <span class="fileinput-filename">{{ (dataValue is defined) ? dataValue :''}}</span>
+                                                                    &nbsp; <a href="#" class="close fileinput-exists" data-dismiss="fileinput" data-fileId=""></a>
+                                                                </div>
+                                                                <p class="help-block display-none" data-required>{%trans%}VALIDATION_THIS_FIELD_REQUIRED{%endtrans%}</p>  
+                                                                <p class="help-block">{%trans%}ALLOWED_FILE_CSV{%endtrans%}</p>
+                                                            </div>
+                                                        </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="tab-pane" id="tab2"></div>
+                                                    <div class="tab-pane" id="tab3"></div>
+                                                    <div class="tab-pane" id="tab4"></div>
+                                                    {% if update=='0' %}<div class="tab-pane" id="tab5"></div>{% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="form-actions right">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="col-md-offset-9">
+                                                            <a href="javascript:;" class="btn default button-previous">
+                                                                {%trans%}BACK{%endtrans%} </a>
+                                                            <a href="javascript:;" class="btn green button-next pull-right">
+                                                                {%trans%}CONTINUE_BTN{%endtrans%}
+                                                            </a>
+                                                            <a href="javascript:;" class="btn green button-submit">
+                                                                {%trans%}IMPORT_BTN{%endtrans%} 
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END PAGE CONTENT-->
+        <!-- BEGIN Assignment dropdown templates-->
+            {% include 'ClubadminContactBundle:Import:import-assignment-select-type.html.twig' %}
+            {% include 'ClubadminContactBundle:Import:import-assignment-contact.html.twig' %}
+            {% include 'ClubadminContactBundle:Import:import-assignment-contact-roles.html.twig' %}
+            {% include 'ClubadminContactBundle:Import:import-assignment-contact-function.html.twig' %}
+      <!-- BEGIN Assignment dropdown templates-->
+{% endblock %}
+{% block javascripts %}
+      <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js')}}" type="text/javascript"></script>
+      <script src="{{ asset('fgcustom/js/custom-form-wizard.js')}}" type="text/javascript"></script>
+      <script src="{{ asset('fgcustom/js/assignment.js')}}" type="text/javascript"></script>
+      <script src="{{ asset('fgcustom/js/fg_more_menu.js')}}" type="text/javascript"></script>
+<script type="text/javascript">
+  var offset; var limit;
+  var update={{update=='0' ? '0':'1'}};
+  var mappingError= " {%trans%}IMPORT_DUPLICATE_ASSIGNMENTS{%endtrans%}";
+  var mandatoryError= " {%trans%}IMPORT_MANDATORY_ERROR{%endtrans%}";
+  var columnSkippError= " {%trans%}IMPORT_NOT_SKIPPED_ERROR{%endtrans%}";
+  var importStep= "{%trans%}IMPORT_STEP{%endtrans%} ";
+  var importOf= " {%trans%}IMPORT_STEP_OF{%endtrans%} ";
+  var manFiledError={};
+  var assignmentDpDn='{{path("get_all_assignment_dropdown")}}';
+  FgAssignment.init(assignmentDpDn);
+  $(window).resize(function(){
+      dataAssignments.checkScreenSize();
+  });
+  jQuery(document).ready(function() { 
+     $('div[data-body]').show();
+     dataAssignments.checkScreenSize();
+     FormWizard.init();
+     dataAssignments.init();
+  });
+  $(document).on('click','.nav-tabs a[data-url]',function(){
+      document.location = $(this).attr('data-url');
+  });
+  $(document).on('change','#form-tab1 input[name=contactType]',function(){
+      var contactType=$(this).val();
+      $('table[data-sample-type]').hide();
+      $('table[data-sample-type='+contactType+']').show();
+  });
+  function assignmentSuccess(){}
+  
+    $(document).off('click','.create_new_assignment');
+    $(document).on('click', '.create_new_assignment',function(event){ 
+        ImportAssignment.assignmentTypeDisplay($(this));
+    });
+    $('body').on('change', '.fg-dev-roleType', function() {
+        ImportAssignment.assignmentTypeSelection($(this));
+    });
+    $('body').on('change', '.fg-dev-catDropDown', function() {
+        var selectedCatId=$(this).val();
+        ImportAssignment.assignmentCatSelection($(this));
+    });
+    $(document).on('change', '.fg-dev-roleDropDown', function() {
+        ImportAssignment.assignmentRoleSelection($(this));
+    });  
+    $(document).on('change', '.fg-dev-functionDropDown', function() {
+        ImportAssignment.assignmentFunctionSelection($(this));
+    });
+        
+  var ImportAssignment={
+        assignmentTypeDisplay: function(thisVar){
+
+            var new_assignment_initial_template=$('#fg-dev-import-assign-type').html();
+            var initial_template = _.template(new_assignment_initial_template,{clubType: '{{clubType}}',federation:arrayFederation,subfederation:arraySubfederation,normalRoles:arrayNormalRoles,team:arrayTeam,workgroup:arrayWorkgroup});
+            $('#fg-dev-import-assignment-section').children('.new-import-assignment-panel').append(initial_template); 
+            FgFormTools.handleBootstrapSelect();
+            //initAreyouSure();
+            thisVar.hide();
+        },
+        assignmentTypeSelection: function(thisVar){
+            var elementType = $('option:selected', thisVar).attr('element-type');
+            var insertFlag = thisVar.attr('insert-flag');
+            var optionTextCat = $('option:selected', thisVar).attr('option-text-category');
+            thisVar.find('option').removeAttr('selected');
+            //$(this).val(elementType);
+            thisVar.find('option[value='+elementType+']').attr('selected',true);
+            ImportAssignment.initialDropdown(thisVar,elementType,insertFlag,optionTextCat);
+        },
+        initialDropdown: function(thisVar,elementType,insertFlag,optionTextCat){
+            var dynamicFinalArrayName='final'+elementType;
+            var dynamicArrayName='array'+elementType;
+            var filteredElementArray=window[dynamicFinalArrayName];
+            var elementArray=window[dynamicArrayName];
+            if(optionTextCat!=1) {
+                if(elementType=='Workgroup') {
+                    var new_assignment_roles_template=$('#fg-dev-import-assign-RolesContact').html();
+                    var result_template = _.template(new_assignment_roles_template, {filterArray: filteredElementArray,element:elementType,normalArray:elementArray,loggedClubId:clubId});
+                } else {
+                    var new_assignment_template=$('#fg-dev-import-assign-category').html();
+                    var result_template = _.template(new_assignment_template, {filterArray: filteredElementArray,normalArray:elementArray,elementtype: elementType});
+                } 
+                if(insertFlag == 0) {
+                    thisVar.parent().parent().append(result_template);
+                    thisVar.attr("insert-flag","1");
+                } else {
+                    thisVar.parent().siblings('.fg-dev-categoryDp-blk').remove();
+                    thisVar.parent().siblings('.fg-dev-roleDp-blk').remove();
+                    thisVar.parent().siblings('.fg-dev-functionDp-blk').remove();
+                    thisVar.parent().parent().append(result_template);
+                    thisVar.attr("insert-flag","1");
+                }
+                $('.create_new_assignment').hide();
+            } else {
+                thisVar.parent().siblings('.fg-dev-categoryDp-blk').remove();
+                thisVar.parent().siblings('.fg-dev-roleDp-blk').remove();
+                thisVar.parent().siblings('.fg-dev-functionDp-blk').remove();
+                thisVar.attr("insert-flag","0");
+                $('.create_new_assignment').hide();
+            }
+            //initAreyouSure();
+            ComponentsDropdowns.init();
+        },
+        assignmentCatSelection: function(thisVar){
+            var selectedCatId=thisVar.val();
+            var elementType = $('option:selected', thisVar).attr('element-type');
+            var insertFlag = thisVar.attr('insert-flag');
+            var optionTextCat = $('option:selected', thisVar).attr('option-text-category');
+            thisVar.find('option').removeAttr('selected');
+            thisVar.find('option[value='+selectedCatId+']').attr('selected',true);
+            if(optionTextCat!=1) {
+                var dynamicFinalArrayName='final'+elementType;
+                var dynamicArrayName='array'+elementType;
+                var filteredElementArray=window[dynamicFinalArrayName];
+                var elementArray=window[dynamicArrayName];
+                var rolesArray=filteredElementArray[selectedCatId];
+                var new_assignment_roles_template=$('#fg-dev-import-assign-RolesContact').html();
+                var result_roles_template = _.template(new_assignment_roles_template, {filterArray: rolesArray,element:elementType,category:selectedCatId,normalArray:elementArray});
+
+                if(insertFlag == 0) {
+                    thisVar.parent().parent().append(result_roles_template);
+                    thisVar.attr("insert-flag","1");
+                } else {
+                    thisVar.parent().siblings('.fg-dev-roleDp-blk').remove();
+                    thisVar.parent().siblings('.fg-dev-functionDp-blk').remove();
+                    thisVar.parent().parent().append(result_roles_template);
+                    thisVar.attr("insert-flag","1");
+                }
+            } else {
+                thisVar.parent().siblings('.fg-dev-roleDp-blk').remove();
+                thisVar.parent().siblings('.fg-dev-functionDp-blk').remove();
+                thisVar.attr("insert-flag","0");
+                $('.create_new_assignment').hide();
+            }
+            //initAreyouSure();
+            ComponentsDropdowns.init();
+        },
+        assignmentRoleSelection: function(thisVar){
+            var selectedRoleId=thisVar.val();
+            var elementType = $('option:selected', thisVar).attr('element-type');
+            var selectedCatId = $('option:selected', thisVar).attr('category');
+            var insertFlag = thisVar.attr('insert-flag');
+            var optionTextRole = $('option:selected', thisVar).attr('option-text-role');
+            thisVar.find('option').removeAttr('selected');
+            thisVar.find('option[value='+selectedRoleId+']').attr('selected',true);
+            
+            if(optionTextRole!=1) {
+                var dynamicFinalArrayName='final'+elementType;
+                var dynamicArrayName='array'+elementType;
+                var filteredElementArray=window[dynamicFinalArrayName];
+                var elementArray=window[dynamicArrayName];
+
+                if(elementType=='Workgroup') {
+                    var executiveBoardValue = $('option:selected', thisVar).attr('executive-board');
+                    if(executiveBoardValue==1) {
+                        var dummyWorkgroupFunctionArray = _(elementArray).filter(function (x) { return x['is_executive_board']==executiveBoardValue;});                        
+                        functionArray=FgUtility.groupByMulti(dummyWorkgroupFunctionArray, ['functionId']);                        
+                    } else {
+                        var functionArray=filteredElementArray[selectedRoleId];
+                    }
+                } else {
+                    var functionArray=filteredElementArray[selectedCatId][selectedRoleId];
+                }
+
+                if(functionArray['null']== undefined) {
+
+                    var new_assignment_function_template=$('#fg-dev-import-assign-function').html();
+                    var result_function_template = _.template(new_assignment_function_template, {filterArray: functionArray,element:elementType,category:selectedCatId,role:selectedRoleId,normalArray:elementArray,clubType:clubType});
+                    if(insertFlag ==0) {
+                        thisVar.parent().parent().append(result_function_template);
+                        thisVar.attr("insert-flag","1");
+                    } else {
+                        thisVar.parent().siblings('.fg-dev-functionDp-blk').remove();
+                        thisVar.parent().parent().append(result_function_template);
+                        thisVar.attr("insert-flag","1");
+                    }
+                } else {
+                    $('.create_new_assignment').show();
+                    thisVar.parent().siblings('.fg-dev-functionDp-blk').remove();
+                }
+            } else {
+                thisVar.parent().siblings('.fg-dev-functionDp-blk').remove();
+                $('.create_new_assignment').hide();
+            }
+            //initAreyouSure();
+            ComponentsDropdowns.init();
+        },
+        assignmentFunctionSelection: function(thisVar){
+            var selectedFunctionId=thisVar.val();
+            thisVar.find('option').removeAttr('selected');
+            thisVar.find('option[value='+selectedFunctionId+']').attr('selected',true);
+            var optionTextRole = $('option:selected', thisVar).attr('option-text-role');
+            if(optionTextRole!=1) {
+                $('.create_new_assignment').show();
+            } else {
+                $('.create_new_assignment').hide();
+            }
+            ComponentsDropdowns.init();
+        },
+        validateAssignments:function(paramobj){
+            $('#fg-dev-failcallback-import').hide();
+            var importAssignmentErrorFlag=0;
+            $('.new-import-assignment-panel select').each(function(){
+                var _this= $(this);
+                _this.parent().removeClass("has-error");
+                var selectedVal=_this.val();
+                if(selectedVal==='' || selectedVal===' ') {
+                    importAssignmentErrorFlag=1;
+                    _this.parent().addClass("has-error");
+                    $('#fg-dev-failcallback-import').show();
+                }
+            });
+            if(importAssignmentErrorFlag !=1){
+                $('.fg-dev-roleTypeDpdn-blk').each(function() {
+                    ImportAssignment.generateDataKeyElement($(this));
+                });
+                var objectImportAssignment = {};
+                objectImportAssignment=ImportAssignment.customImportFieldParse();
+                var catRoleFunctionArray = JSON.stringify(objectImportAssignment);
+                {#console.log(catRoleFunctionArray);
+                alert(catRoleFunctionArray.length);#}
+                if(catRoleFunctionArray.length > 2) {
+                    $.getJSON('{{path("importAssignmentValidation")}}',{ 'assignedArr': catRoleFunctionArray}, function(multiAssignErrorArr) {
+                        if(multiAssignErrorArr.errorFlag==1) {
+                            _.each(multiAssignErrorArr.errorArray, function(value,key) {
+                                $('.new-import-assignment-panel select').each(function(){
+                                    var _this= $(this);
+                                    var selectedVal=_this.val();
+                                    if(selectedVal==key) {
+                                        $(this).parent().parent().parent().addClass("has-error");
+                                    }
+                                });
+                            });
+                            $('#fg-dev-failcallback-import span').text(multiAssignErrorArr.errorType);
+                            $('#fg-dev-failcallback-import').show();
+
+                        } else {
+                            $('#fg-dev-failcallback-import').hide();
+                            paramobj['extradata']['asgmntDataArray'] = catRoleFunctionArray;
+                            FgXmlHttp.formPost(paramobj);
+                        }
+                    });
+                } else {
+                    FgXmlHttp.formPost(paramobj);
+                }
+            }
+        },
+        customImportFieldParse:function() {
+
+            var objectArray = {};
+            $(".new-import-assignment-panel :input").each(function() {
+                if ($(this).hasClass("fg-dev-finalKeyVal-import")) {
+                    var inputVal = ''
+                    inputVal = $(this).val();
+                    if (inputVal != "" && inputVal != '' && inputVal != "on" && inputVal!= "NormalRoles" && inputVal!= "Federation" && inputVal!= "Subfederation" && inputVal!= "Team" && inputVal!= "Workgroup") {
+                        converttojson(objectArray, $(this).attr('data-key').split('.'), inputVal);
+                    }
+                }
+            });
+            return objectArray;
+        },
+        generateDataKeyElement:function(thisVal){
+            var selectedOption = thisVal.find('select:last option:selected');
+            var dataKey = selectedOption.attr('data-key');
+            var dataName = selectedOption.attr('name');
+            var dataValue = selectedOption.val();
+            var appendVal = (selectedOption.attr('element-type') == 'Team') ? 'team' : '';
+            var keyElement = thisVal.find('input[type=hidden][data-type=key_element-import]');
+            $(keyElement).attr({'name': appendVal + dataName + '_is_new', 'data-key': appendVal + dataKey , 'value': dataValue, 'class': 'fg-dev-finalKeyVal-import'});
+        }
+    }
+    $(document).on('click', '.fg_dev_remove_assignment',function(event){
+        $(this).parent().parents('.fg-dev-roleTypeDpdn-blk').remove();
+        $('.create_new_assignment').show();
+        initAreyouSure();
+        return false;
+    });
+  
+  var dataAssignments={
+      handleDelete: function(){
+          $('#tab2').on('click', 'input[data-inactiveblock=changecolor]', function() {
+            $(this).closest('tr').toggleClass('danger');
+            $(this).closest('tr').find('span[data-field]').toggleClass('display-none');
+        });
+      },
+      handleAddColumn: function(){          
+          $('#tab2').on('click','div[data-addMore] a',function(){              
+            var csvRows=$('#tab2').find('#assign-data-fields-selection').attr('data-rows');   
+            csvData= JSON.parse(csvRows);
+            offset=(limit)? limit : 50;
+            limit=(( offset + 10) > csvData[0].length) ? csvData[0].length : offset+10;
+            if(csvData[0].length <= ( offset + 10)){
+                $(this).hide();
+            }
+            else if(csvData[0].length < (limit+10)){
+              $(this).find('span.fg-add-text .fg-more-count').html((csvData[0].length-limit));  
+            }
+            var template = $('#assign-data-fields-selection').html();
+            var result_data = _.template(template, {data: {'csvData': csvData, 'offset': offset, 'limit': limit}});
+            $('#tab2 table tbody').append(result_data);
+            $('#tab2 table tbody tr').slice(offset).find('.bs-select').selectpicker();            
+          })  
+      },
+      /*handle icons of invoice and correspondense in select field*/      
+      handleIconsInSelect:function() {                  
+        $(document).on('click',".opt", function() {
+            $(this).parents('.bootstrap-select').find('button.dropdown-toggle').removeClass('fg-btn-money').removeClass('fg-btn-home');
+            if($(this).hasClass("fg-option-money")) {
+                $(this).parents('.bootstrap-select').find('button.dropdown-toggle').addClass('fg-btn-money');
+            }
+            if($(this).hasClass("fg-option-home")) {
+                $(this).parents('.bootstrap-select').find('button.dropdown-toggle').addClass('fg-btn-home');
+            }
+        });
+        
+        $('.bs-select').each(function(){            
+            if($(this).find(":selected").hasClass( "fg-option-home" )) {                  
+                $(this).parent().find('.bootstrap-select').find('button.dropdown-toggle').addClass('fg-btn-home');
+            } 
+            if($(this).find(":selected").hasClass( "fg-option-money" )) {                
+                $(this).parent().find('.bootstrap-select').find('button.dropdown-toggle').addClass('fg-btn-money');
+            }
+        });    
+      },
+      handleImportFirstRow: function(){
+            $('#tab2').on('change','input#not_import_first_row',function(){
+                var columnClount=$('span[data-colCount]').html();
+                var newCount= ($(this).is(':checked')) ? parseInt(columnClount)-1 :parseInt(columnClount)+1;
+                $('span[data-colCount]').html(newCount);
+                $('span[data-firstRow]').toggleClass('display-none');
+            });
+      },
+      handleMandetory:function(){
+        var manFileds={};
+           $('table tr select:first option[data-req]').each(function(){
+                var fieldReq=$(this).val();
+                var manFiled=$(this).text();
+                manFileds[fieldReq] = manFiled.replace('*', '');
+           });
+           return manFileds;
+      },
+      checkScreenSize:function(){
+        if(window.screen.width < 768) {
+            $('div.portlet-body').children('ul').hide();
+            $('div.portlet-body').children('.row:last').hide();
+            $('div.portlet-body div[data-sample]').children('.alert-info').hide();
+            $('div.portlet-body div[data-sample]').children('.alert-danger').show();
+       } else {
+            $('div.portlet-body').children('ul').show();
+            $('div.portlet-body').children('.row:last').show();
+            $('div.portlet-body div[data-sample]').children('.alert-info').show();
+            $('div.portlet-body div[data-sample]').children('.alert-danger').hide();
+       }
+       $('div[data-body]').show();
+      },
+      init:function(){
+            this.handleDelete();
+            this.handleAddColumn();            
+            this.handleImportFirstRow();
+      }        
+  }
+  /*-------------- Page title bar configuration --------*/ 
+  var tabCondition = {{ (tabs|length > 1) ? 'true' : 'false' }};
+            FgPageTitlebar.init({
+                     title: true,
+                     tab: tabCondition,
+                     tabType  :'server'
+                     
+                 }); 
+</script>
+{% endblock %}

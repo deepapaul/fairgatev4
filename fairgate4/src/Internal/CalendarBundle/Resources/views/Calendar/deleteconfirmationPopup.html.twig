@@ -1,0 +1,75 @@
+    <div class="modal-header fg-modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title"></h4>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">                    
+                    <div class="form-group">
+                        <label class="col-lg-12 col-md-12 col-xs-12 pop-uptext">
+                        </label>
+                    </div>
+                    <div id="fg-repeat" class="hide fg-calendar-popup"> 
+                        <div class="radio-list">
+                            <div class="fg-news-radio">
+                                     <label class="radio-inline">
+                                <input type="radio" name="publishType" id="mode" value="instance"  checked>
+                                {{'ONLY_INSTANCE'|trans}}</label>
+                            </div>
+                            <div class="fg-news-radio">
+                                  <label class="radio-inline">
+                                <input type="radio" name="publishType" id="mode" value="all_following" >
+                                {{'ALL_FOLLOWING'|trans}}</label>
+                            </div> 
+                            <div class="fg-news-radio">
+                                  <label class="radio-inline">
+                                <input type="radio" name="publishType" id="mode" value="all_series" >
+                                {{'ALL_APP_SERIES'|trans}}</label>
+                            </div> 
+                        </div>
+                    </div>  
+                </div>                                             
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+    {% include 'internal/savebuttonPopup.html.twig' with {'button_val' : button_val}  %}
+<script type="text/javascript"> 
+    FgInternal.togglePopUpNames();
+    var translation = {{translation|json_encode()|raw}};
+    var jsonRowIds = {{jsonRowId|raw}};
+    var deleteSavePath = "{{path('save_calendar_delete')}}";
+    var type = 0;
+    var detailPath = "{{path('calendar_appointment_details',{'eventId':'dummyId','startTimeStamp':'startTime', 'endTimeStamp':'endTime'})}}";
+    var from = "{{from}}";
+    
+    if(from == 'detailpage'){
+        //jsonRowIds = count = 1
+        finalArray = {{finalArray|raw}};
+        type = finalArray[0]['isMasterRepeat'];
+    }else{
+       
+        finalArray = {};
+        for(var count = 0; count < _.size(jsonRowIds); count++){
+            //jsonRowIds = index of global array -
+           var  data = calandarData[jsonRowIds[count]['index']];
+           finalArray[count] = data;
+            if(finalArray[count]['isMasterRepeat'] == 1){
+               type= 1;
+           }
+        }
+    }
+    if(type == 1){
+        $('#fg-repeat').removeClass('hide');
+    }
+    FgCalendarDelete.displayPopupHeading();   
+    $('.radio-inline #mode').uniform();
+    $(document).off('click', '#savePopup');
+    $(document).on('click', '#savePopup', function() {
+       var choice = $('#mode:checked').val(); 
+       FgCalendarDelete.deleteSave(finalArray,choice,from);
+    });
+  
+</script>    

@@ -1,0 +1,54 @@
+{% if clubId is defined %}
+    {% set logTypeId = clubId %} 
+{% endif %}
+<table class= "dataTable
+                table
+                table-bordered
+                table-hover
+                table-condensed
+                dataTable-rows
+                logDataTableClass
+                dataTable-scroll-x
+                dataTable-initialSort" xWidth="100" data-table-name="dataTables" id="log_display_{{logTypeId}}_{{typeId}}" data-sort="0#desc">
+    <thead>
+        <tr>
+            <th>{%trans%}LOG_DATE{%endtrans%}</th>
+            <th>{%trans%}LOG_ACTION{%endtrans%}</th>
+            <th>{%trans%}LOG_BEFORE{%endtrans%}</th>
+            <th>{%trans%}LOG_AFTER{%endtrans%}</th>
+            <th>{%trans%}LOG_EDITED_BY{%endtrans%}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for logEntry in logEntries %}
+            <tr>
+                <td data-sort="{{ logEntry.dateOriginal }}">{{ logEntry.date }}</td>
+                {% set colorFlag = (logEntry.status != "none") ? logEntry.status : '' %}
+                {% set colorLabel = (colorFlag != '') ? transKindFields[colorFlag]|trans : '' %}    
+                <td><span class="label label-sm fg-color-{{colorFlag}}">{{ colorLabel }}</span></td>
+                {% if logEntry.valueBefore != '' %}
+                    {% if logEntry.valueBefore|length > 400 %}
+                    {% set valueBefore = logEntry.value_before %}
+                        <td><a href="#" class="popovers" content ="{{valueBefore}}" onclick='javascript:popUpNotes(this,&quot;{{logEntry.date}}&quot;)' data-container="body" data-trigger="hover" data-placement="auto" data-content="{{logEntry.valueBefore[:400]~'...'}}" data-original-title=""><i class="fa fa-file-text-o fa-2x"></i></a></td>
+                    {% else %}
+                        <td><a href="#" class="popovers" data-container="body" data-trigger="hover" data-placement="auto" data-content="{{logEntry.valueBefore}}" data-original-title=""><i class="fa fa-file-text-o fa-2x"></i></a></td>
+                    {% endif %}
+                {% else %}
+                    <td>-</td>
+                {% endif %}
+                {% if logEntry.valueAfter != '' %}
+                    {% if logEntry.valueAfter|length > 400 %}
+                        {% set valueAfter = logEntry.value_after %}
+                        <td><a href="#" class="popovers" content ="{{valueAfter}}" onclick='javascript:popUpNotes(this,&quot;{{logEntry.date}}&quot;)' data-container="body" data-trigger="hover" data-placement="auto" data-content="{{logEntry.valueAfter[:400]~'...'}}" data-original-title=""><i class="fa fa-file-text-o fa-2x"></i></a></td>
+                    {% else %}
+                        <td><a href="#" class="popovers" data-container="body" data-trigger="hover" data-placement="auto" data-content="{{logEntry.valueAfter}}" data-original-title=""><i class="fa fa-file-text-o fa-2x"></i></a></td>
+                    {% endif %}
+                {% else %}
+                    <td>-</td>
+                {% endif %}
+                <td>{%if (logEntry.activeContact != null)%}<a href="{{ path('render_contact_overview', {'offset' : 0, 'contact' : logEntry.activeContact  }) }}" target="_blank" data-cont-id="{{ logEntry.activeContact }}">{{ logEntry.editedBy }}</a> {% else %}{{ logEntry.editedBy }} {% endif %}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+ 

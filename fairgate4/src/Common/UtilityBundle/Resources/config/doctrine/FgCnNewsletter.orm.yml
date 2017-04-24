@@ -1,0 +1,201 @@
+Common\UtilityBundle\Entity\FgCnNewsletter:
+    repositoryClass: Common\UtilityBundle\Repository\FgCnNewsletterRepository
+    type: entity
+    table: fg_cn_newsletter
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        subject:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        senderName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: sender_name
+        senderEmail:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: sender_email
+        salutationType:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: salutation_type
+        salutation:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        isHideTableContents:
+            type: boolean
+            nullable: true
+            column: is_hide_table_contents
+        newsletterType:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: newsletter_type
+        emailContent:
+            type: text
+            nullable: true
+            column: email_content
+        sendMode:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: send_mode
+        sendDate:
+            type: datetime
+            nullable: false
+            column: send_date
+        isDisplayInArchive:
+            type: boolean
+            nullable: false
+            column: is_display_in_archive
+        publishType:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: publish_type
+        lastUpdated:
+            type: datetime
+            nullable: true
+            column: last_updated
+        step:
+            type: integer
+            unsigned: false
+            nullable: false
+        status:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        languageSelection:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: language_selection
+        lastSpoolContactId:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: last_spool_contact_id
+        lastContactId:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: last_contact_id
+        lastSpoolAdminReceiverId:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: last_spool_admin_receiver_id
+        recepientCount:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: recepient_count
+        isCron:
+            type: boolean
+            nullable: false
+            column: is_cron
+        isSubscriberSelection:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: is_subscriber_selection
+        receiverType:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: receiver_type
+        newsletterContent:
+            type: text
+            nullable: true
+            column: newsletter_content
+        createdAt:
+            type: datetime
+            nullable: false
+            column: created_at
+        includeFormerMembers:
+            type: boolean
+            nullable: false
+            column: include_former_members
+        isRecepientUpdated:
+            type: boolean
+            nullable: false
+            column: is_recepient_updated
+        resentStatus:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: resent_status
+        templateUpdated:
+            type: datetime
+            nullable: false
+            column: template_updated
+    manyToOne:
+        updatedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                updated_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        template:
+            targetEntity: FgCnNewsletterTemplate
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                template_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        recepientList:
+            targetEntity: FgCnRecepients
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                recepient_list:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

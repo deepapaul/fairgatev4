@@ -1,0 +1,207 @@
+internal_article_editorial_create:
+    path:     article/editorial/create
+    defaults: { _controller: InternalArticleBundle:Editorial:index, module: article, level1: editorial  }
+
+internal_article_editorial_save:
+    path:     article/editorial/save
+    defaults: { _controller: InternalArticleBundle:Editorial:save, fromPage: create }
+
+internal_article_editorial_list:
+    path:     article/editorial
+    defaults: { _controller: InternalArticleBundle:Editorial:articleList, module: article, level1: editorial  }
+
+internal_article_editorial_category:
+    path:     article/editorial/editcategory
+    defaults: { _controller: InternalArticleBundle:Category:index, module: article, level1: editorial }
+
+internal_article_editorial_create_json:
+    path:     article/editorial/getData/{pagetype}
+    defaults: { _controller: InternalArticleBundle:Editorial:getData }
+
+internal_article_editorial_edit:
+    path:     article/editorial/edit/{articleId}
+    defaults: { _controller: InternalArticleBundle:Editorial:index, module: article, level1: editorial }
+
+internal_article_editorial_save_edit:
+    path:     article/editorial/save/{articleId}
+    defaults: { _controller: InternalArticleBundle:Editorial:save, fromPage: edit }
+
+internal_article_category_save_popup:
+    path:     article/editorial/categoryCreatePopup
+    defaults: { _controller: InternalArticleBundle:Editorial:categoryCreatePopup }
+
+internal_article_list_categories:
+    path:     article/editorial/listarticlecategories
+    defaults: { _controller: InternalArticleBundle:Editorial:getArticleCategories }
+
+internal_article_editorial_timeperiod_popup:
+    path:     article/editorial/timeperiod/popup
+    defaults: { _controller: InternalArticleBundle:TimePeriod:timePeriodPopup }
+
+internal_article_editorial_timeperiod_save:
+    path:     article/editorial/timeperiod/save
+    defaults: { _controller: InternalArticleBundle:TimePeriod:timePeriodSave }
+
+internal_article_category_save:
+    path:     article/category/save
+    defaults: { _controller: InternalArticleBundle:Category:savecategory }
+
+internal_article_category_save_from_sidebar:
+    path:     article/category/savefromsidebar
+    defaults: { _controller: InternalArticleBundle:Category:savecategoryFromSidebar }
+
+internal_article_column_settings:
+    path:     article/columnsettings/{moduleName}
+    defaults: { _controller: InternalArticleBundle:ColumnSettings:index, module: article, level1: editorial }
+
+internal_article_settings_comments_page:
+    path:     article/settings/comments
+    defaults: { _controller: InternalArticleBundle:Settings:settings, module: article, level1: articlesettings, level2: articlecomments}
+
+internal_article_settings_multilanguage_page:
+    path:     article/settings/multilanguage
+    defaults: { _controller: InternalArticleBundle:Settings:settings, module: article, level1: articlesettings, level2: articlemultilang}
+
+internal_article_settings_save:
+    path:     article/settings/save/settingsData
+    defaults: { _controller: InternalArticleBundle:Settings:settingsSave }
+
+internal_article_settings_userrights:
+    path:     article/settings/userrights
+    defaults: { _controller: InternalArticleBundle:Settings:articleUserRights, module: article, level1: articlesettings, level2: articleuserrights }
+
+internal_article_editorial_details:
+    path:     article/editorial/details/{articleId}
+    defaults: { _controller: InternalArticleBundle:Editorial:details, module: article, level1: editorial }
+
+internal_article_editorial_details_comments_data:
+    path:     article/editorial/details/commentsData/{articleId}
+    defaults: { _controller: InternalArticleBundle:EditorialDetails:getCommentsData, module: article, level1: editorial }
+
+internal_article_editorial_get_listing:
+    path:     article/getArticleList
+    defaults: { _controller: InternalArticleBundle:Editorial:getArticleList }
+
+internal_article_save_userrights:
+    path : article/userrights/save
+    defaults: { _controller: InternalArticleBundle:Settings:saveRoleUserRights}
+
+article_details_download_attachments:
+    path: /article/details/downloadFile
+    defaults: { _controller: InternalArticleBundle:Editorial:downloadArticleAttachment }
+
+internal_article_editorial_archive_popup:
+    path:     article/editorial/archivePopup
+    defaults: { _controller: InternalArticleBundle:Editorial:archiveArticlePopup }
+
+internal_article_editorial_archive:
+    path:     article/editorial/archive
+    defaults: { _controller: InternalArticleBundle:Editorial:archive }
+
+internal_article_editorial_details_comments_save:
+    path:     article/editorial/details/comments/save
+    defaults: { _controller: InternalArticleBundle:EditorialDetails:saveComments, module: article, level1: editorial }
+
+internal_article_editorial_details_comments_delete_popup:
+    path:     article/editorial/details/comments/deletePopup
+    defaults: { _controller: InternalArticleBundle:EditorialDetails:commentsDeleteConfirmationPopup }
+
+internal_article_editorial_details_comments_delete:
+    path:     article/editorial/details/comments/delete
+    defaults: { _controller: InternalArticleBundle:EditorialDetails:commentsDelete }
+
+internal_article_editorial_delete_popup:
+    path:     article/editorial/deletePopup
+    defaults: { _controller: InternalArticleBundle:Editorial:deleteArticlePopup }
+
+internal_article_editorial_delete:
+    path:     article/editorial/deleteArticle
+    defaults: { _controller: InternalArticleBundle:Editorial:delete }
+
+internal_article_editorial_reactivate_popup:
+    path:     article/editorial/reactivatePopup
+    defaults: { _controller: InternalArticleBundle:Editorial:reactivateArticlePopup }
+
+internal_article_editorial_reactivate:
+    path:     article/editorial/reactivateArticle
+    defaults: { _controller: InternalArticleBundle:Editorial:reactivate }
+
+internal_article_editorial_createdby_list:
+    path:     article/editorial/contacts
+    defaults: { _controller: InternalArticleBundle:Editorial:getCreatedByContacts }
+
+internal_article_editorial_assign_popup:
+    path:     article/editorial/assignPopup
+    defaults: { _controller: InternalArticleBundle:Editorial:assignArticlePopup }
+
+internal_article_editorial_assign_area_category:
+    path:     article/editorial/assignAreaAndCaregoty
+    defaults: { _controller: InternalArticleBundle:Editorial:assignAreaAndCategory }
+
+internal_article_details_view:
+    path:     article/details/{articleId}
+    defaults: { _controller: InternalArticleBundle:Article:index,  module: article, level1: article}
+
+internal_article_list:
+    path:     article/list
+    defaults: { _controller: InternalArticleBundle:Article:articleList, module: article, level1: article}
+
+internal_article_editorial_nextprevious_save:
+    path:     nextprevious/save
+    defaults: { _controller: InternalGeneralBundle:Navigation:saveNextPreviousData}
+
+internal_article_sidebar_count:
+    path:     article/editorial/getsidebarcount
+    defaults: { _controller: InternalArticleBundle:Editorial:getSidebarCount, module: article}
+
+internal_article_detail_text:
+    path:     article/editorial/details/text/{articleId}
+    defaults: { _controller: InternalArticleBundle:EditorialDetails:getText }
+
+internal_article_detail_media:
+    path:     article/editorial/details/media/{articleId}
+    defaults: { _controller: InternalArticleBundle:EditorialDetails:getMedia }
+
+internal_article_detail_attachments:
+    path:     article/editorial/details/attachments/{articleId}
+    defaults: { _controller: InternalArticleBundle:EditorialDetails:getAttachments }
+
+internal_article_detail_settings:
+    path:     article/editorial/details/settings/{articleId}
+    defaults: { _controller: InternalArticleBundle:EditorialDetails:getSettings }
+
+internal_article_editorial_details_log_data:
+    path:     article/editorial/details/logData/{articleId}
+    defaults: { _controller: InternalArticleBundle:EditorialDetails:getEditorialLogEntries, module: article}
+
+internal_article_editorial_duplicate:
+    path:     article/editorial/duplicate/{articleId}
+    defaults: { _controller: InternalArticleBundle:Editorial:index, module: article, level1: editorial, editorialMode: duplicate }
+
+internal_article_get_listdata:
+    path:     article/getListData
+    defaults: { _controller: InternalArticleBundle:Article:getListData }
+
+internal_article_editorial_save_detail:
+    path:     article/editorial/detailsave/{articleId}
+    defaults: { _controller: InternalArticleBundle:Editorial:save, fromPage: detail }
+
+internal_article_detail_revision_update:
+    path:     article/editorial/details/updateRevision/{articleId}/{historyId}
+    defaults: { _controller: InternalArticleBundle:EditorialDetails:setCurrentRevision }
+
+internal_article_detail_revision:
+    path:     article/editorial/details/revision/{articleId}
+    defaults: { _controller: InternalArticleBundle:EditorialDetails:getRevision }
+
+internal_article_tmp_upload_file:
+    path:  article/editorial/uploadfile/{type}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardContent:uploadFile}    
+
+internal_article_editorial_status_update:
+    path:     article/statusupdate
+    defaults: { _controller: InternalArticleBundle:Editorial:updateStatus }
+internal_article_editorial_update_sidebar:
+    path:     article/editorial/updatesidebar
+    defaults: { _controller: InternalArticleBundle:Editorial:updateSidebar }
+

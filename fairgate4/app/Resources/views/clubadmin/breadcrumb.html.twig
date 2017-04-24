@@ -1,0 +1,82 @@
+<ul class="page-breadcrumb breadcrumb">
+    <!-- PREV/NEXT ARROWS STARTS -->
+    {% if nextPreviousResultset is defined %}
+        <li class="btn-arrownew fg-swipe-next-right">
+            {% if ((nextPreviousResultset.previous is defined) and (nextPreviousResultset.previous != '')) %}
+                {% set offsetVal= offset-1 %}
+                {% if offsetVal < 0 %} 
+                    <a href="#"><i class="fa fg-chevron-up fadearrow"></i></a>
+                {% else %}  
+                    <a class="fg-prev" href="{{path(nextPreviousResultset.url,{(nextPreviousResultset.param1): offsetVal, (nextPreviousResultset.param2): nextPreviousResultset.previous})}}"><i class="fa fg-chevron-up"></i></a>
+                {% endif %}                   
+            {% else %}
+                <a href="#"><i class="fa fg-chevron-up fadearrow"></i></a>
+            {% endif %}
+            {% if ((nextPreviousResultset.next is defined) and (nextPreviousResultset.next != '')) %}
+                {% set offsetVal= offset+1 %}
+                <a class="fg-next" href="{{path(nextPreviousResultset.url,{(nextPreviousResultset.param1): offsetVal,(nextPreviousResultset.param2): nextPreviousResultset.next})}}"><i class="fa fg-chevron-down"></i></a>
+            {% else %}
+                <a href="#"><i class="fa fg-chevron-down fadearrow"></i></a>
+            {% endif %}
+        </li>
+    {% endif %}
+    <!-- PREV/NEXT ARROWS ENDS -->
+    
+    <!-- PREV/NEXT ARROWS FOR DOCUMENT MODULE STARTS -->
+    {% if docNextPrevious is defined %}
+        <li class="btn-arrownew">
+            {% if ((docNextPrevious.previous is defined) and (docNextPrevious.previous != '')) %}
+                {% set offsetVal= offset-1 %}
+                <a href="{{path(docNextPrevious.url,{(docNextPrevious.param1): docNextPrevious.previous, (docNextPrevious.param2): offsetVal })}}"><i class="fa fg-chevron-up"></i></a>
+            {% else %}
+                <a href="#"><i class="fa fg-chevron-up fadearrow"></i></a>
+            {% endif %}
+            {% if ((docNextPrevious.next is defined) and (docNextPrevious.next != '')) %}
+                {% set offsetVal= offset+1 %}
+                <a href="{{path(docNextPrevious.url,{(docNextPrevious.param1): docNextPrevious.next, (docNextPrevious.param2): offsetVal})}}"><i class="fa fg-chevron-down"></i></a>
+            {% else %}
+                <a href="#"><i class="fa fg-chevron-down fadearrow"></i></a>
+            {% endif %}
+        </li>
+    {% endif %}
+    <!-- PREV/NEXT ARROWS ENDS -->
+    
+    
+    
+    <!-- PREV/NEXT ARROWS STARTS -->
+    {% if breadCrumb is defined %}
+        <li class="btn-arrownew">
+            {% if (breadCrumb.prev is defined) %}
+                <a href="{{breadCrumb.prev|default('#')}}"><i class="fa fg-chevron-up {% if ((breadCrumb.prev == '#') or (breadCrumb.prev == '')) %} fadearrow {% endif %}"></i></a>
+            {% endif %}
+            {% if (breadCrumb.next is defined) %}
+                <a href="{{breadCrumb.next|default('#')}}"><i class="fa fg-chevron-down {% if ((breadCrumb.next == '#') or (breadCrumb.next == '')) %} fadearrow {% endif %}"></i></a>
+            {% endif %}
+        </li>
+    {% endif %}
+    <!-- PREV/NEXT ARROWS ENDS -->
+    
+    <!-- PREV/NEXT ARROWS FOR TEMPLATE STARTS -->
+    {% if templateBreadCrumb is defined %}
+        <li class="btn-arrownew">
+            {% if ((templateBreadCrumb.previous is defined) and (templateBreadCrumb.previous != '')) %}
+                <a href="{{ path('template_edit',{'id':templateBreadCrumb.previous})}}"><i class="fa fg-chevron-up {% if ((templateBreadCrumb.previous == '#') or (templateBreadCrumb.previous == '')) %} fadearrow {% endif %}"></i></a>
+             {% else %}
+                <a href="#"><i class="fa fg-chevron-up fadearrow"></i></a>
+             {% endif %}
+            {% if ((templateBreadCrumb.next is defined) and (templateBreadCrumb.next != '')) %}
+                <a href="{{ path('template_edit',{'id':templateBreadCrumb.next})}}"><i class="fa fg-chevron-down {% if ((templateBreadCrumb.next == '#') or (templateBreadCrumb.next == '')) %} fadearrow {% endif %}"></i></a>
+             {% else %}
+                <a href="#"><i class="fa fg-chevron-down fadearrow"></i></a>
+            {% endif %}
+        </li>
+    {% endif %}
+    <!-- PREV/NEXT ARROWS ENDS -->
+
+    {% if (breadCrumb.back is defined) %}
+        <li class="btn-group backtop">
+            <button type="button" class="btn default btnpadnew bckid" data-hover="dropdown" data-auto="back_button_top" data-url="{{breadCrumb.back}}"><i class="fa fg-chevron-left"></i> <span class="fg-backbtn-device">{%trans%}BACK{%endtrans%} </span></button>
+        </li>
+    {% endif %}
+    
+</ul>

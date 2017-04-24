@@ -1,0 +1,38 @@
+Common\UtilityBundle\Entity\FgCmsArticleTextI18n:
+    repositoryClass: Common\UtilityBundle\Repository\Article\FgCmsArticleTextI18nRepository
+    type: entity
+    table: fg_cms_article_text_i18n
+    fields:
+        lang:
+            id: true
+            type: string
+            length: 2
+            fixed: true
+            nullable: false
+        titleLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: title_lang
+        teaserLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: teaser_lang
+        textLang:
+            type: text
+            nullable: true
+            column: text_lang
+    oneToOne:
+        id:
+            targetEntity: FgCmsArticleText
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

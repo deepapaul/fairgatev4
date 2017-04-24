@@ -1,0 +1,95 @@
+<script type="text/template" id="form_field_templates_select">   
+    
+    <div class="fg-collapsed-content-wrapper">
+
+        <div class="form-group">
+            <label class="col-md-3 col-sm-4 control-label" for="<%- data.formId %>.<%- data.formFieldId %>_isRequired">{{'CMS_FORM_REQUIRED'|trans}}</label>
+            <div class="col-sm-4">
+                <label for="<%- data.formId %>.<%- data.formFieldId %>_isRequired" class="fg-checkbox">
+                    <input type="checkbox" class="fg-dev-newfield" id="<%- data.formFieldId %>_isRequired" data-key="<%- data.formId %>.<%- data.formFieldId %>.isRequired" name="<%- data.formFieldId %>_isRequired" <%= (($.trim(data.isRequired) == '1' || data.isRequired === true) ? 'checked' :'') %>/>
+                </label>
+            </div>
+        </div>
+        
+        <div class="form-group fg-dev-form-group">
+            <label class="col-md-3 col-sm-4 control-label" for="checkboxes">{{'CMS_FORM_FIELD_VALUES'|trans}}</label>
+            <div class="col-sm-8 col-md-9">
+                <ul class="list-group fg-sortable-list fg-option-value-list" id="formElement_value_<%= data.formFieldId %>">
+                    <% if(_.isUndefined(data.options)) { %>
+                        <%= FgContactFormFieldsObj.setElementInitialOptionValue(data) %>
+                    <% } else { %>    
+                    <% _.each(data.options, function(valueArray,key) { %>
+                         <%= FgContactFormFieldsObj.getOptionValuesHtml(data,key)%>
+                    <% }); %>
+                    <% } %>
+                </ul>
+                <a class="fg-add-text add_field_option_value" data-field="<%- data.formFieldId %>" href="javascript:void(0)">
+                    <i class="fa fa-2x fa-plus-circle "></i><span>{{'CMS_FORM_FIELD_ADD_VALUE'|trans}}</span>
+                </a>
+            </div>
+        </div>
+    
+        <div class="form-group">
+            <label class="col-md-3 col-sm-4 control-label" for="<%- data.formId %>.<%- data.formFieldId %>_dropdown">{{'CMS_FORM_FIELD_DROPDOWN'|trans}}</label>
+            <div class="col-sm-4">
+                <label for="<%- data.formId %>.<%- data.formFieldId %>_isMultiSelectable" class="fg-checkbox">
+                    <input type="checkbox" class="fg-dev-newfield" id="<%- data.formFieldId %>_isMultiSelectable" data-key="<%- data.formId %>.<%- data.formFieldId %>.isMultiSelectable" name="<%- data.formFieldId %>_isMultiSelectable" <%= (($.trim(data.isMultiSelectable) == '1' || data.isMultiSelectable === true) ? 'checked' :'') %>/>
+                {{'CMS_FORM_FIELD_DROPDOWN_MULTI_SELECTABLE'|trans}}
+            </label>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-md-3 col-sm-4 control-label" for="textarea">{{'CMS_FORM_FIELD_TOOLTIP'|trans}}</label>
+            <div class="col-sm-4"> 
+            <% _.each(data.clubLanguages, function(clubLang) { %>
+                <textarea maxlength="160" class="form-control fg-textarea fg-dev-newfield <%- clubLang != data.clubDefaultLanguage ? 'hide':''  %>" data-key="<%- data.formId %>.<%- data.formFieldId %>.tooltip.<%- clubLang %>" 
+                        <% var placeholderDefaultValue = (_.contains(_.keys(data.tooltip),data.clubDefaultLanguage)) ? data.tooltip[data.clubDefaultLanguage]:'' %>
+                        placeholder="<%- (clubLang != data.clubDefaultLanguage)?placeholderDefaultValue:'' %>"
+                        data-lang="<%- clubLang %>" name="<%- data.formFieldId %>_tooltip_<%- clubLang %>"  id="<%- data.formFieldId %>_tooltip_<%- clubLang %>"><%= (_.contains(_.keys(data.tooltip),clubLang)) ? $.trim(data.tooltip[clubLang]):'' %></textarea>
+            <% }); %>
+            </div>
+        </div>
+
+    </div>
+    
+</script>
+<script type="text/template" id="form_field_templates_add_value">   
+    <li data-source="<%- FgContactFormFieldsObj.isUndefined(data,["options",key,"value"]) ? 'new':'' %>" class="list-group-item <%- (data.options[key]['isDeleted'] == 0) ? '':'inactiveblock' %>">
+        <i class="fa fa-2x fa-ellipsis-v fg-sort-row fg-dev-optionvalue-sort-handle"></i> 
+        <input type="hidden" class="fg-dev-newfield fg-dev-sortOrder optionSort" data-key="<%- data.formId %>.<%- data.formFieldId %>.options.<%- key %>.sortOrder" 
+                id="formElementOptionSortOrder_<%- key %>_<%- data.formFieldId %>" value="<%- FgContactFormFieldsObj.isUndefined(data,["options",key,"sortOrder"]) ? '':data['options'][key]['sortOrder']%>">
+        <div class="fg-delete-row">
+            <input type="checkbox" class="fg-dev-newfield make-switch optionDelete" data-key="<%- data.formId %>.<%- data.formFieldId %>.options.<%- key %>.isDeleted" id="<%- data.formFieldId %>_<%- key %>_isDeleted" name="<%- data.formFieldId %>_<%- key %>_isDeleted" <%- (data.options[key]['isDeleted'] == 0) ? '':'checked' %>>
+            <label for="<%- data.formFieldId %>_<%- key %>_isDeleted"></label>
+        </div>
+        <div class="fg-sortable-list-item-wrapper">
+            <div class="col-sm-5">
+            <% var placeholderDefaultValue = FgContactFormFieldsObj.isUndefined(data,["options",key,"value",data.clubDefaultLanguage]) ? '':data['options'][key]['value'][data.clubDefaultLanguage] %>
+            <% _.each(data.clubLanguages, function(clubLang) { %>
+                <div dataerror-group="" data-lang="<%- clubLang %>" >
+                    <input type="text" class="fg-dev-newfield form-control <%- clubLang != data.clubDefaultLanguage ? 'hide':''  %>" data-lang="<%- clubLang %>"
+                            value="<%- FgContactFormFieldsObj.isUndefined(data,["options",key,"value",clubLang]) ? '':data['options'][key]['value'][clubLang] %>" 
+                            id="<%- data.formFieldId %>_<%- key %>_value_<%- clubLang %>" 
+                            data-key="<%- data.formId %>.<%- data.formFieldId %>.options.<%- key %>.value.<%- clubLang %>" 
+                            name="<%- data.formFieldId %>_<%- key %>_value_<%- clubLang %>"
+                            placeholder="<%- (clubLang != data.clubDefaultLanguage)?placeholderDefaultValue:(data['options'][key]['default_value'] != '' && typeof data['options'][key]['default_value'] != 'undefined'?data['options'][key]['default_value']:'') %>"
+                            <%=(clubLang == data.clubDefaultLanguage) ? ' data-required="true"':'' %> 
+                            <%=(clubLang == data.clubDefaultLanguage && data.options[key]['isDeleted'] != 1) ? ' required="required"':'' %> 
+                        >
+                </div>    
+            <% }); %>
+            </div>
+            <div class="col-sm-3 col-sm-offset-4 text-right">
+                <label class="switch-light switch-light-sm fg-onoff-switch" onClick="">
+                    <input type="checkbox" class="make-switch fg-dev-newfield" <%- FgContactFormFieldsObj.isUndefined(data,["options",key,"isActive"]) ? '':data['options'][key]['isActive']==1 ? 'checked':'' %> data-key="<%- data.formId %>.<%- data.formFieldId %>.options.<%- key %>.isActive" id="<%- data.formFieldId %>_<%- key %>_isActive" name="<%- data.formFieldId %>_<%- key %>_isActive">
+                    <span> 
+                        <span>{{'ON'|trans}}</span>
+                        <span>{{'OFF'|trans}}</span>                                                                    
+                    </span>
+                    <a class="btn btn-primary"></a>
+                </label>
+            </div>
+        </div>
+    </li>
+</script>  

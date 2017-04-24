@@ -1,0 +1,80 @@
+<script type="text/template" id="gallaryNonAdminTemplate">
+    <div class="fg-gallery-wrapper fg-clear">
+        <%
+            var galImgs = data.data;
+            var galLen = galImgs.length;
+            var imgPath = data.imgPath;
+        %>
+        <div id="gallery-<%-randId%>" style="display:none;" class="<%- (galLen <= 4) ? 'item-'+galLen :'' %> fg-marg-top-3">
+         <% 
+        
+         if(galImgs.length == 0){ %>
+         <% }else{ %>
+            <% _.each(galImgs, function(d,i,c) {  %>
+                <% if(d.itemType == 'IMAGE'){ %> 
+                    <a href="#">
+                        <img alt="<%- d.itemDescription %>"
+                             src="<%- imgPath %>width_300/<%- d.filepath %>"
+                             data-image="<%- imgPath %>width_1920/<%- d.filepath %>"
+                             data-description="<%- d.itemDescription %>"
+                             style="display:none">
+                    </a>
+                <% }else if(d.itemType == 'VIDEO'){
+                  var vDet= FgVideoThumbnail.getVideoId(d.filepath);
+                  var vType = (vDet.type=='y')?'youtube':((vDet.type=='v')?'vimeo':'');
+                %>
+                        <img alt="<%- d.itemDescription %>" 
+                            data-type="<%- vType %>"  src="<%- imgPath %>width_300/<%- d.videoThumbUrl %>"
+                            data-image="<%- imgPath %>width_1920/<%- d.videoThumbUrl %>"
+                            data-description="<%- d.itemDescription %>"
+                            data-videoid="<%- vDet.id %>" style="display:none">
+                <% } %>
+            <% }); %>
+         <% } %>
+        </div>
+    </div>                 
+               
+</script>
+<script type="text/template" id="gallaryAdminTemplate">
+   <div class="fg-gallery-admin-wrapper">
+        <% 
+        var galImgs = data.data;
+        var imgPath = data.imgPath;
+        if(galImgs.length == 0){ %>
+        <% }else{ %>
+            <div class="fg-gallery-items fg-clear">
+                <% _.each(galImgs, function(d,i,c) {
+                    var thumbUrl = (d.itemType=='IMAGE') ? imgPath +'width_300/'+ d.filepath : imgPath +'width_300/'+ d.videoThumbUrl;
+                %>
+                    <div class="fg-gallery-img-wrapper sortables ui-draggable <% if(d.scope == 'INTERNAL'){ %>fg-gallery-scope-lock <% } %>" style="background-image:url('<%- thumbUrl %>')" data-itemid="<%- d.itemId %>" data-scope="<%- d.scope %>" data-albumItemId="<%- d.albumItemId %>" data-id="<%- i %>">
+                        <% if(d.albumItemIsCoverImage=='1'){ %><i class="fa fa-asterisk fg-album-cover-icon"></i><% } %>
+                        <img alt="<%- d.albumName %>" class="fg-img"  src="<%- thumbUrl %>">
+                    </div>
+                <% }); %>    
+            </div> 
+        <% } %>
+    </div>     
+</script>
+<script type="text/template" id="gallaryAdminLoadmoreTemplate">
+         <% 
+        var galImgs = data.data;
+        var imgPath = data.imgPath;
+        if(galImgs.length == 0){ %>
+        <% }else{ %>
+         
+                <% _.each(galImgs, function(d,i,c) {
+                    var thumbUrl = (d.itemType=='IMAGE') ? imgPath +'width_300/'+ d.filepath : imgPath +'width_300/'+ d.videoThumbUrl;
+                %>
+                    <div class="fg-gallery-img-wrapper sortables ui-draggable<% if(d.scope == 'INTERNAL'){ %>fg-gallery-scope-lock <% } %>" style="background-image:url('<%- thumbUrl %>')" data-itemid="<%- d.itemId %>" data-scope="<%- d.scope %>" data-albumItemId="<%- d.albumItemId %>" data-id="<%- i %>">
+                        <% if(d.albumItemIsCoverImage=='1'){ %><i class="fa fa-asterisk fg-album-cover-icon"></i><% } %>
+                        <img alt="<%- d.albumName %>" class="fg-img"  src="<%- thumbUrl %>">
+                    </div>
+                <% }); %>    
+ 
+        <% } %>
+</script>        
+<script type="text/template" id="gallaryLoadmoreTemplate">
+<div id="gallery-loader" class="fg-gallery-page-loading" onclick="FgGalleryView.gallerySuccessCallback()">
+   <span>{{'GALLERY_LOAD_MORE_IMAGE_BUTTON_TEXT'|trans}}</span>
+</div>
+</script>

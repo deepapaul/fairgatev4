@@ -1,0 +1,7 @@
+#!/bin/bash
+#CRON JOBS RUNNING EVERY 5 MINUTES 
+
+#EVERY 5 MINUTES CRON
+cd /var/www/html/fairgate_fedv2_hotfix/fairgate4
+php bin/console newsletter:insert_to_spool --time-limit=280 >> /var/www/html/fairgate_fedv2_hotfix/cronjob.log
+date >> /var/www/html/fairgate_fedv2_hotfix/cronjob.log

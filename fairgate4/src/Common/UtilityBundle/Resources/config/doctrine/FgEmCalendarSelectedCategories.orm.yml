@@ -1,0 +1,31 @@
+Common\UtilityBundle\Entity\FgEmCalendarSelectedCategories:
+    type: entity
+    table: fg_em_calendar_selected_categories
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        calendarDetails:
+            targetEntity: FgEmCalendarDetails
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                calendar_details_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        category:
+            targetEntity: FgEmCalendarCategory
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                category_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

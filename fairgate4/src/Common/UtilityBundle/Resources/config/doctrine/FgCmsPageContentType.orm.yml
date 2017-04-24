@@ -1,0 +1,40 @@
+Common\UtilityBundle\Entity\FgCmsPageContentType:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPageContentTypeRepository
+    type: entity
+    table: fg_cms_page_content_type
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        type:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        logoName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: logo_name
+        label:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        tableName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: table_name
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sort_order
+    lifecycleCallbacks: {  }

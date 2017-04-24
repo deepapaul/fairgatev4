@@ -1,0 +1,85 @@
+fos_user_security_login:
+    path:  /signin
+    defaults: { _controller: CommonUtilityBundle:Security:login }
+    
+fairgate_user_security_check:
+    path:  /login_check
+    defaults: { _controller: CommonUtilityBundle:Security:check }
+
+fairgate_user_security_logout:
+    path:  /signout
+    defaults: { _controller: CommonUtilityBundle:Security:logout }
+    
+fos_user_resetting:
+    path:  /request
+    defaults: { _controller: CommonUtilityBundle:Resetting:request }
+    
+fos_user_resetting_send_email:
+    path:  /send-email
+    defaults: { _controller: CommonUtilityBundle:Resetting:sendEmail }
+    
+fos_user_resetting_check_email:
+    path:  /check-email
+    defaults: { _controller: CommonUtilityBundle:Resetting:checkEmail }
+
+fos_user_resetting_reset:
+    path:  /reset/{token}
+    defaults: { _controller: CommonUtilityBundle:Resetting:reset }
+         
+user_rights_page:
+    path: /settings/userrights
+    defaults: { _controller: ClubadminContactBundle:Userrights:index , level1: userrightsettings}
+ 
+edit_executive_board_members:
+    path: /settings/editexecutiveboardmembers
+    defaults: { _controller: ClubadminContactBundle:Assignment:editExecutiveBoardMembers, level1: editexecutiveboardmembers}
+    
+update_executive_board_members:
+    path: /settings/updateexecutiveboardmembers
+    defaults: { _controller: ClubadminContactBundle:Assignment:updateExecutiveBoardMembers }
+    
+contact_settins_name_search:
+    path: /settings/contactnames/{term}
+    defaults: { _controller: ClubadminContactBundle:Connection:contactNames }  
+    
+test_bounce_mail:
+    path: /testbouncemail
+    defaults: { _controller: CommonUtilityBundle:Fg:testBounceMail }
+    
+jquery_file_upload:
+    path: /uploadfile
+    defaults: { _controller: CommonUtilityBundle:Fileupload:index }  
+    
+jquery_file_upload_delete:
+    path: /deletetempfile
+    defaults: { _controller: CommonUtilityBundle:Fileupload:deleteTempFile }   
+
+javascript_variables_handler:
+    path: /public/getdynamicjsdata.js
+    defaults: { _controller: CommonUtilityBundle:Default:getDynamicJSData}
+
+menu_autocomplete_clubs:
+    path: /club/autocomplete/menu
+    defaults: { _controller: CommonUtilityBundle:TopNavigation:getClubsForSearch}
+    
+menu_autocomplete_documents: 
+    path: /document/autocomplete/menu
+    defaults: { _controller: CommonUtilityBundle:TopNavigation:getDocumentsForSearch}   
+    
+menu_autocomplete_contacts: 
+    path: /contact/autocomplete/menu
+    defaults: { _controller: CommonUtilityBundle:TopNavigation:getContactsForSearch, module: contact }   
+    
+menu_autocomplete_sponsors: 
+    path: /sponsor/autocomplete/menu
+    defaults: { _controller: CommonUtilityBundle:TopNavigation:getContactsForSearch, module: sponsor }  
+
+user_activate_account:
+    path:  /activateaccount
+    defaults: { _controller: CommonUtilityBundle:Resetting:activateacct } 
+    
+clubAssignment:
+    path:     /getAssignments
+    defaults: { _controller: CommonUtilityBundle:Fg:getAssignments }  
+ 
+    

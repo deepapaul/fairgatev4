@@ -1,0 +1,30 @@
+Common\UtilityBundle\Entity\FgCnSmsJobLog:
+    type: entity
+    table: fg_cn_sms_job_log
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        jobId:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: job_id
+        smsId:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sms_id
+        statusMessage:
+            type: text
+            nullable: false
+            column: status_message
+        date:
+            type: datetime
+            nullable: false
+    lifecycleCallbacks: {  }

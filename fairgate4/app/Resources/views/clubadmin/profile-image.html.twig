@@ -1,0 +1,23 @@
+{% if(contactType is defined and contactType == 0) %}
+    {% set isCompanyContact = 0 %}
+    {% set folderPath = fgavatar.getUploadFilePath('profilepic','width_150') %}
+{% else %}
+    {% set isCompanyContact = 1 %}
+    {% set folderPath = fgavatar.getUploadFilePath('companylogo','width_150') %}
+{% endif %}
+
+{% if(type=='tabimage') %}
+    {% if(filename != '' ) %}
+        <img width="21" height="21" src="{{'/'~folderPath~'/'~filename}}" alt="">
+    {% endif %} 
+{% else %}
+    {% if(filename != '' ) %}
+        
+        {% if (isCompanyContact == 0) %}
+            <div class="fg-profile-img-blk130 fg-round-img" style="background-image:url('{{'/'~folderPath~'/'~filename}}')"></div>
+        {% else %}
+            <div class="fg-profile-img-blk-C130 " ><img src="{{'/'~folderPath~'/'~filename}}" alt=""></div>
+        {% endif %}
+     {% else %}        
+    {% endif %} 
+{% endif %}

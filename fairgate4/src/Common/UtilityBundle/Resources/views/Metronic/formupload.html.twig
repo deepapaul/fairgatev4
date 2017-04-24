@@ -1,0 +1,21 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% form_theme form  'CommonUtilityBundle:Form:contact.html.twig' %}
+
+{% block pagecontent %}
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="form-horizontal">
+    	{{ form_start(form, { 'attr': {'id': 'form1' ,'class': 'form-horizontal','action':'metronic_form_submit','novalidate':'novalidate', 'onSubmit': 'return false;'} }) }}
+        {{ form_rest(form) }}
+        {{ form(form) }}
+    </div>
+    {% block javascripts %}
+        <script type="text/javascript">   
+            function SaveData(){
+                FgXmlHttp.post("", $('#form1').serialize());
+                return false;
+            }
+        </script>
+    {% endblock %}
+    <!-- END PAGE CONTENT-->
+{% endblock %}

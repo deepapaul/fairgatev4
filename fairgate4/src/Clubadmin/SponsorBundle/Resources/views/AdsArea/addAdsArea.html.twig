@@ -1,0 +1,25 @@
+
+<script type="text/template" id="ads-category-add">
+    <% dataKey = isNew ? catId : catId %>
+    <% dataName = isNew ? 'new_' + catId : catId %>
+    <% catType = '' %>
+    <div <% if (isNew) { %>style="display:none;"  <% } %> class="row fg-border-line  <% if (isNew) { %> addednew <% } %>" id="<%- dataName %>">
+      
+        <div class="col-md-12 fg-col-hack"> {#colordarkash#}
+            <div class="row">
+                <div class="col-sm-5 col-lg-8 col-xs-12 fg-clear-left">
+                    <div class="bookmark fg-form-group">
+                          <% catTitleLang = attributes['title']; %>
+                            <input type="text" class="form-control input-sm fg-input-area show" data-key="<%- dataKey %>.title" id="<%- dataName %>_title" name="<%- dataName %>_title" data-lang="" value="<%- catTitleLang %>"  required="true"/>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+        {#<!-- For render the delete button -->#}
+                {% include 'clubadmin/common.html.twig' with {'type': 'underscorejs_delete'} %}
+  
+       
+    </div>
+</script>
+

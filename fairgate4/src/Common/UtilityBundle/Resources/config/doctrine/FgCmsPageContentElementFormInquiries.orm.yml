@@ -1,0 +1,40 @@
+Common\UtilityBundle\Entity\FgCmsPageContentElementFormInquiries:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPageContentElementFormInquiriesRepository    
+    type: entity
+    table: fg_cms_page_content_element_form_inquiries
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        createdAt:
+            type: datetime
+            nullable: true
+            column: created_at
+        formData:
+            type: text
+            nullable: true
+            column: form_data
+    manyToOne:
+        element:
+            targetEntity: FgCmsPageContentElement
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                element_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

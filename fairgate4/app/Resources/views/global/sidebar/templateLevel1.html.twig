@@ -1,0 +1,28 @@
+<script type="text/template" id="sidebarLevel1Template">
+    <% 
+        var noHover = (levelObject.hoverable) ? '' : 'no-hover';
+        var nonDroppable = (levelObject.droppable) ? '' : 'non-dropable';
+        var nonClickable = (levelObject.clickable) ? '' : 'non-clickable';
+        var menuId = 'li_'+ levelData.id;
+        var active = (levelObject.active) ? 'active' : (levelObject.activeMenu == menuId) ? 'active' : '';
+        var open = (levelObject.open) ? 'open' : ((_.contains(levelObject.openedSidebarMenus, menuId) || (active == 'active' && !_.isEmpty(levelObject.content))) ? 'open' : '');
+        var dropDown = _.isEmpty(levelObject.content) ? 'empty' : 'arrow';
+        var toggle = _.isEmpty(levelObject.content) ? '' : 'nav-toggle';
+        var dropDownOpen = (dropDown == 'arrow') ? open : '';
+    %>
+
+    <li id="<%= menuId %>" class="nav-item <%- noHover %> <%- active %> <%- open %>">
+        <a href="javascript:;" class="nav-link <%- toggle %> <%- nonDroppable %> <%- nonClickable %>" data-type="<%= levelData.itemType %>" data-id="<%= levelData.id %>">
+            <span class="<%- dropDown %> <%- dropDownOpen %>"></span><span class="title"><%- levelData.title %></span>
+        </a>
+        <% if(!_.isEmpty(levelObject.content)) {  %>
+            <ul class="sub-menu sidebar-level2"> 
+                <%= levelObject.content %>
+            </ul>
+        <% } %>
+{#        settings menu #}
+        <% if(!_.isEmpty(levelObject.settings)) {  %>
+            <%= levelObject.settings %>
+        <% } %>
+    </li>
+</script>

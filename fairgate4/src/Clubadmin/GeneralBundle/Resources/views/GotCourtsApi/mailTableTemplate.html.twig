@@ -1,0 +1,99 @@
+{% set tdStyle = 'padding:10px 20px; font-family: Calibri,Arial,sans-serif;' %}
+{% set tdAddressStyle = 'padding:0px 20px 10px 20px; font-family: Calibri,Arial,sans-serif;' %}
+{% set clubCurrency = 'CHF' %}
+<table style="background-color:#fff; width: 100%;" cellpadding="0" cellspacing="0">
+{% if (mailType == 'booking_confirm' or mailType == 'booking_notification') %}
+    <tr>
+        <td style="{{tdStyle}}">{{'GCAPI_MAIL_DATETIME'|trans([], 'messages', correslang)}}:</td>
+        <td style="{{tdStyle}}">{{apiDetails['bookedOn']|default('')}}</td>
+    </tr>
+    <tr>
+        <td style="{{tdStyle}} vertical-align: top;">{{'GCAPI_MAIL_CLUB_ADDRESS'|trans([], 'messages', correslang)}}:</td>
+        <td style="{{tdAddressStyle}}">
+              <p>{{ clubTitle}}</p>
+              <p>{{ street}}</p>
+              <p>{{ zipcode}} {{ location}}</p>
+              <p>{{ country}}</p>
+        </td>
+    </tr>
+    <tr>
+        <td style="{{tdStyle}}">{{'GCAPI_MAIL_SERVICE'|trans([], 'messages', correslang)}}:</td>
+        <td style="{{tdStyle}}">{{'GCAPI_GC_API_CONNECTION'|trans([], 'messages', correslang)}}</td>
+    </tr>
+    <tr>
+        <td style="{{tdStyle}}">{{'GCAPI_MAIL_ON_OFF_CHARGES'|trans([], 'messages', correslang)}}:</td>
+        <td style="{{tdStyle}}">{{ clubCurrency}} 50</td>
+    </tr>
+    <tr>
+        <td style="{{tdStyle}}">{{'GCAPI_MAIL_LICENCE_FEE'|trans([], 'messages', correslang)}}:</td>
+        <td style="{{tdStyle}}">{{ clubCurrency}} 50</td>
+    </tr>
+    <tr>
+        <td style="{{tdStyle}}">{{'GCAPI_MAIL_CONTACT'|trans([], 'messages', correslang)}}:</td>
+        <td style="{{tdStyle}}">{{contactName}}</td>
+    </tr>
+    {% endif%}
+    
+{% if (mailType == 'cancel_confirm') %}
+     <tr>
+        <td style="{{tdStyle}}">{{'GCAPI_MAIL_SERVICE_START'|trans([], 'messages', correslang)}}:</td>
+        <td style="{{tdStyle}}">{{apiDetails['bookedOn']|default('')}}</td>
+    </tr>
+     <tr>
+        <td style="{{tdStyle}}">{{'GCAPI_MAIL_SERVICE_END'|trans([], 'messages', correslang)}}:</td>
+        <td style="{{tdStyle}}">{{apiDetails['cancelledOn']|default('')}}</td>
+    </tr>
+    <tr>
+        <td style="{{tdStyle}} vertical-align: top;">{{'GCAPI_MAIL_CLUB_ADDRESS'|trans([], 'messages', correslang)}}:</td>
+        <td style="{{tdAddressStyle}}">
+              <p>{{ clubTitle}}</p>
+              <p>{{ street}}</p>
+              <p>{{ zipcode}} {{ location}}</p>
+              <p>{{ country}}</p>
+        </td>
+    </tr>
+    <tr>
+        <td style="{{tdStyle}}">{{'GCAPI_MAIL_SERVICE'|trans([], 'messages', correslang)}}:</td>
+        <td style="{{tdStyle}}">{{'GCAPI_GC_API_CONNECTION'|trans([], 'messages', correslang)}}</td>
+    </tr>
+    <tr>
+        <td style="{{tdStyle}}">{{'GCAPI_MAIL_CONTACT'|trans([], 'messages', correslang)}}:</td>
+        <td style="{{tdStyle}}">{{contactName}}</td>
+    </tr>
+    {% endif%}
+    
+{% if (mailType == 'cancel_notification') %}
+    <tr>
+        <td style="{{tdStyle}}">{{'GCAPI_MAIL_DATETIME'|trans([], 'messages', correslang)}}:</td>
+        <td style="{{tdStyle}}">{{apiDetails['bookedOn']|default('')}}</td>
+    </tr>
+    <tr>
+        <td style="{{tdStyle}} vertical-align: top;">{{'GCAPI_MAIL_CLUB_ADDRESS'|trans([], 'messages', correslang)}}:</td>
+        <td style="{{tdStyle}}">
+              <p>{{ clubTitle}}</p>
+              <p>{{ street}}</p>
+              <p>{{ zipcode}} {{ location}}</p>
+              <p>{{ country}}</p>
+        </td>
+    </tr>
+    <tr>
+        <td style="{{tdStyle}}">{{'GCAPI_MAIL_MODULE'|trans([], 'messages', correslang)}}:</td>
+        <td style="{{tdStyle}}">{{'GCAPI_FRONTEND1'|trans([], 'messages', correslang)}}</td>
+    </tr>
+    <tr>
+        <td style="{{tdStyle}}">{{'GCAPI_MAIL_ON_OFF_CHARGES'|trans([], 'messages', correslang)}}:</td>
+        <td style="{{tdStyle}}">{{ clubCurrency}} 50</td>
+    </tr>
+    <tr>
+        <td style="{{tdStyle}}">{{'GCAPI_MAIL_LICENCE_FEE'|trans([], 'messages', correslang)}}:</td>
+        <td style="{{tdStyle}}">{{ clubCurrency}} 50</td>
+    </tr>
+    <tr>
+        <td style="{{tdStyle}}">{{'GCAPI_MAIL_CONTACT'|trans([], 'messages', correslang)}}:</td>
+        <td style="{{tdStyle}}">{{contactName}}</td>
+    </tr>
+    
+    
+    {% endif%}
+    
+</table>

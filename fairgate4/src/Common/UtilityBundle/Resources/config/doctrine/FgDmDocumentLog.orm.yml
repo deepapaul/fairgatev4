@@ -1,0 +1,76 @@
+Common\UtilityBundle\Entity\FgDmDocumentLog:
+    repositoryClass: Common\UtilityBundle\Repository\FgDmDocumentLogRepository
+    type: entity
+    table: fg_dm_document_log
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        documentType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: document_type
+        date:
+            type: datetime
+            nullable: true
+        kind:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+        field:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        valueAfter:
+            type: text
+            nullable: true
+            column: value_after
+        valueBefore:
+            type: text
+            nullable: true
+            column: value_before
+        valueBeforeId:
+            type: text
+            nullable: true
+            column: value_before_id
+        valueAfterId:
+            type: text
+            nullable: true
+            column: value_after_id
+    manyToOne:
+        documents:
+            targetEntity: FgDmDocuments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                documents_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        changedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                changed_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

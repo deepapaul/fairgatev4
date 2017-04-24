@@ -1,0 +1,90 @@
+<script type="text/template" id="formElementStage2">
+    <% var defaultEmailId = 'noreply@fairgate.ch' %>
+    <form class="form-horizontal fg-marg-top-20" id="form-field-elements-form-stage2">
+        <div id="form-tab2" method="post" data-url="" class="form-horizontal">
+            <div class="fg-tab-list fg-nl-lang-drop">
+                <h3 class="block">{{'CMS_FORM_CONFIRMATION_MAIL'|trans}}</h3>
+                <div class="fg-clear">
+                    <div class="alert alert-info">{{'CMS_FORM_CONFIRMATION_MAIL_MESSAGE'|trans}}</div>
+
+                    <div class="form-group required">
+                        <label class="col-md-3 col-sm-4 control-label">{{'CMS_FORM_SENDER_EMAIL'|trans}}</label>
+                        <div class="col-sm-4">
+                            <input type="email" class="form-control fg-dev-newfield " <%- (form.senderemail == defaultEmailId) ? 'disabled':''  %> value="<%- form.senderemail %>" id="formelement_stage2_senderemail" data-key="<%- formId %>.senderemail" required="required">
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="formelement_stage2_reply" class="fg-pad-top-7">
+                                <input type="checkbox" name="checkboxes" id="formelement_stage2_reply" <%- (form.senderemail == defaultEmailId) ? 'checked="checked"':''  %> value="1" data-key="<%- formId %>.reply" class="fg-dev-newfield">
+                                {{'CMS_FORM_USE_EMAIL'|trans}} <span id="formelement_stage2_senderemail_default"><%- defaultEmailId %></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <% _.each(clubLanguages, function(clubLang) { %>
+                    <div class="form-group <%- clubLang != clubDefaultLang ? 'hide':'required'  %>" data-lang="<%- clubLang %>">
+                        <label class="col-md-3 col-sm-4 control-label " >{{'CMS_FORM_SUBJECT'|trans}}</label>
+                        <div class="col-sm-4">
+                            <div dataerror-group="">
+                                <% var defaultSubject = defaultTranslations[clubLang]['subject'] %>
+                                <input type="text" class="form-control fg-dev-newfield <%- clubLang != clubDefaultLang ? 'hide':''  %>" id="<%- formId %>_subject_<%- clubLang %>" 
+                                        data-lang="<%- clubLang %>" data-key="<%- formId %>.subject.<%- clubLang %>" name="subject_<%- clubLang %>"
+                                        <%=(clubLang == clubDefaultLang) ? 'required="required" data-required="true"':'' %>
+                                        placeholder="<%- (_.contains(_.keys(form.subject),clubDefaultLang) && clubLang != clubDefaultLang) ? form.subject[clubDefaultLang]:'' %>" 
+                                        value="<%- (_.contains(_.keys(form.subject),clubLang)) ? form.subject[clubLang]: defaultSubject %>"
+                                        />
+                            </div>
+                        </div>
+                    </div>
+                     <% }); %>
+                 
+                    <% _.each(clubLanguages, function(clubLang) { %>
+                        <div class="form-group <%- clubLang != clubDefaultLang ? 'hide':'required'  %>" data-lang="<%- clubLang %>">
+                            <label class="col-md-3 col-sm-4 control-label " >{{'CMS_FORM_CONTENT'|trans}}</label>
+                            <div class="col-sm-8">
+                                <div dataerror-group="">
+                                    <% var defaultContent = defaultTranslations[clubLang]['content'] %>
+                                    <textarea class="form-control fg-dev-newfield <%- clubLang != clubDefaultLang ? 'hide':''  %>" id="<%- formId %>_content_<%- clubLang %>" 
+                                                data-lang="<%- clubLang %>" data-key="<%- formId %>.content.<%- clubLang %>" name="content_<%- clubLang %>" 
+                                                placeholder="<%- (_.contains(_.keys(form.content),clubDefaultLang) && clubLang != clubDefaultLang) ? form.content[clubDefaultLang]:'' %>"
+                                                <%=(clubLang == clubDefaultLang) ? 'required="required" data-required="true"':'' %>><%- (_.contains(_.keys(form.content),clubLang)) ? form.content[clubLang]:defaultContent %></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-4 control-label">{{'CMS_APPLICATION_DETAILS'|trans}}</label>
+                        <div class="col-sm-8 fg-pad-top-7">
+                            {{'CMS_APPLICATION_DETAILS_TEXT'|trans}}
+                        </div>                        
+                    </div>
+            
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-4 control-label">{{'CMS_SIGNATURE'|trans}}</label>
+                        <div class="col-sm-8 fg-pad-top-7">
+                        {{fgclub.get('signature')|nl2br}}
+                            <% if( hasAdminRights == 1) { %>
+                            <p class="fg-marg-top-15"><a href="<%-editSignaturePath%>" target="_blank">{{'CMS_EDIT_SIGNATURE'|trans}}</a></p>
+                            <% } %>
+                        </div>                        
+                    </div>
+
+                    <h3 class="block">{{'CMS_FORM_STEP_NOTIFICATION_MAIL'|trans}}</h3>
+
+                    <div class="alert alert-info">{{'CMS_FORM_STEP_NOTIFICATION_MAIL_MESSAGE'|trans}}</div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-sm-4 control-label " >{{'CMS_FORM_RECIPIENTS'|trans}}</label>
+                        <div class="col-sm-6 fg-autocomplete-parent">
+                            <div>
+                                <input type="text" placeholder="{{'CMS_NOTIFICATION_PLACEHOLDER'|trans}}" class="form-control" id="<%- formId %>_recipients"></input>
+                                <input type="text" class="form-control hide fg-dev-newfield" id="<%- formId %>_recipients_data" id="<%- formId %>_recipients_data" value="<%- form.recipients %>"  data-key="<%- formId %>.recipients"></input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </form>
+</script>

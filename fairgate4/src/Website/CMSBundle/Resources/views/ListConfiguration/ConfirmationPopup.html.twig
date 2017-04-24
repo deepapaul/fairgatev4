@@ -1,0 +1,43 @@
+<div class="modal-content" id="popup_contents">
+    <div class="modal-header fg-modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        {% if pageCount > 1 %}
+            <h4 class="modal-title">
+                <span class="fg-dev-event-names">
+                    <a href="#" class="fg-plus-icon"></a>
+                    <a href="#" class="fg-minus-icon"></a>
+                </span>
+                <div class="fg-popup-text" id="popup_head_text">{{title}}</div>
+                <div class="fg-arrow-sh">
+                    <ul>
+                        {% for key, value in pageArray %}
+                            <li>
+                                <a data-page-id="{{value.id}}" href="{{ path('website_cms_editpage_preview', {'pageId': value.id }) }}" target="_blank" class="fg-event-detail-popup-link">{{value.title}}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </h4>
+        {% else %}
+            <h4 class="modal-title">{{title}}</h4>
+        {% endif %}
+
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="form-group">
+                        <label class="col-lg-12 col-md-12 col-xs-12 fg-marg-btm-20"> 
+                            {{text}}
+                        </label>
+                    </div>
+                </div>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="theme_config_id_hidden" id="theme_config_id_hidden" value="{{data.configId}}">                    
+    {% include 'internal/savebuttonPopup.html.twig' with {'button_val':buttonText} %}
+</div>

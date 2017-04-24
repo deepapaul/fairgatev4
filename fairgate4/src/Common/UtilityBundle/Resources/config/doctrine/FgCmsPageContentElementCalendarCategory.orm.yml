@@ -1,0 +1,32 @@
+Common\UtilityBundle\Entity\FgCmsPageContentElementCalendarCategory:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPageContentElementCalendarCategoryRepository
+    type: entity
+    table: fg_cms_page_content_element_calendar_category
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        element:
+            targetEntity: FgCmsPageContentElement
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                element_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        category:
+            targetEntity: FgEmCalendarCategory
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                category_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

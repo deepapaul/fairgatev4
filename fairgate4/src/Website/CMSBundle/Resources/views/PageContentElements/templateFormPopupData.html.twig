@@ -1,0 +1,26 @@
+<script type='template' id='form-element-popup-data'>
+     <div class="form-group">   
+        <label class="col-sm-8 fg-clear-marg" for="newForm">
+            <input type="radio" name="selectForm" id="newForm" class="uniform" checked value="newForm">
+             <span>{{ 'USE_NEW_FORM'|trans }}</span>
+        </label>
+    </div>
+
+    <div class="form-group fg-clear fgFormTemplateError">
+        <div class="col-sm-6 col-md-5" id="fg-existing-form">
+            <label class="fg-marg-top-5" for="existingForm">
+                <input type="radio" name="selectForm" id="existingForm" class="uniform" value="existingForm">
+                 <span>{{'USE_EXISTING_FORM_TEMPLATE'|trans}}</span>
+            </label>
+        </div>
+        <div class="col-sm-6 fg-form-element-data">
+            <select name="repeat-type"  class="form-control selectpicker formTemplateSelect" disabled="disabled">
+                <option value="">{{'SELECT_DEFAULT'|trans}}</option>
+                <% _.each(data, function(val) { %>
+                        <option value="<%-val.formId%>"><%-val.title%></option>
+                <% }) %>
+            </select>
+        </div>
+    </div>
+    
+</script>

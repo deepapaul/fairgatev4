@@ -1,0 +1,55 @@
+<div class="fg-dev-dataTable-hide-wrapper" data-table-type="past" id="fg_dev_past">
+    <div class="row">
+        <div class="col-md-12 fg-common-top-btm">
+            <div class="panel-primary panel-bg"> 
+                    <div class="panel-heading fg-theme-head paneldisplay">
+                        <button class="btn tableaction fg-file-doc-button fgContactdrop" data-toggle="dropdown" data-type="past" data-menu-type="multiple"><i class="fa fa-bars fa-2x"></i></button>
+                        <ul class="dropdown-menu pull-left fg-doc-dropdown" id="fgdropmenu"></ul> 
+                        <h3 class="panel-title pull-left fg-doc-pannel-text">{{ 'SPONSOR_PAST'|trans }}</h3>
+        </div>
+    </div>
+        </div>
+    </div>   
+    <div class="row">
+        <div class="col-md-12 fg-common-btm">
+            <div style="display:none" class="fg-stat-and col-md-12" data-empty="past">{%trans%}NO_DATA_AVAILABLE{%endtrans%}</div>
+            <div class="portlet-body new-table-height" data-type="past" style="display:none" id="tableWrapper-future">
+                <div class="row fg-past-table-wrapper" data-service-list="past">
+                    <table data-contact-service="past"
+                           class="fg-dev-sponsor-overview-dataTable table   fg-icons-change
+                           table-bordered
+                           table-hover
+                           table-condensed
+
+                           dataTable-ajax
+                           dataTable-rows
+                           dataTable-scroll-x
+                           dataTables_scrollBody
+                           lastcolumn_sort dataTable-initialSort data-count fg-dev-no-paging fg-dev-colums-sending"  id="fg-dev-dataTable-future" xWidth="100" yHeight="300" data-table-name="dataTables" data_row_change="fgrowchange"   dataTable-hover="true" data-sort="0#desc" data-storage="communication_receiverlist" data-columnstorage="communication_receiverlist_column" data-column-def="true" data_table_type="recipient" data-update-flag="true">
+                        <thead>
+                            <tr>
+                                <th><div class='fg-th-wrap'><i class='chk_cnt' ></i>&nbsp;<input type='checkbox' data-type= "past" name='check_all_past' id='check_all_future' class='dataTable_checkall fg-dev-avoidicon-behaviour'></div>&nbsp;</th>
+                                <th >{%trans%}SM_START_DATE{%endtrans%}</th>
+                                <th>{%trans%}SM_END_DATE{%endtrans%}</th>
+                                <th>{%trans%}SPONSOR_SERVICE{%endtrans%}</th>
+                                <th>{%trans%}SM_PAYMENT_PLAN{%endtrans%}</th>
+                                <th>{% trans %}SM_TOTAL_PAYMENT{%endtrans%}</th>
+                            </tr>
+                        </thead>
+                        <tfoot data-footer="past">
+                        <tr class="fg-datatable-footer-grey">
+                            <th></th><th>{% trans %}SM_TOTAL{% endtrans %}</th><th></th><th></th><th></th><th data-total="past">-</th>
+                        </tr>
+                       </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-content fg-popup-wrap" id="popup_contents" >
+            </div>
+        </div>
+</div>

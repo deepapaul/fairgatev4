@@ -1,0 +1,22 @@
+{% extends '::internal/layout_login.html.twig' %}
+{% set pageTitle = pageTitle %}
+{% block logincontent %}
+    <div class="content">
+        <!-- BEGIN LOGIN FORM -->
+        <form action=""  method="post" class="login-form" novalidate="">
+            <input type="hidden" name="_csrf_token" value="" />
+            <h3 class="form-title">{{ pageFormTitle }}</h3>
+            <p>{{ pageFormMsg }}</p>           
+            <div class="form-actions fg-login-btn-space">
+                <button type="button" onclick="window.location.href = '{{ path('internal_user_login') }}'" id="back-btn" class="btn">
+                    {% trans %}LOGIN_BACK_LINK{% endtrans %}</button>                
+            </div>
+
+        </form>
+        <!-- END LOGIN FORM -->
+        <!-- BEGIN FORGOT PASSWORD FORM -->
+        <!-- END FORGOT PASSWORD FORM -->
+        <!-- BEGIN REGISTRATION FORM -->
+        <!-- END REGISTRATION FORM -->
+    </div>
+{% endblock %}

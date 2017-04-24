@@ -1,0 +1,75 @@
+<script type="text/template" id="templateArticleComments">
+ <% if (commentDetails.isCommentAllow !== 0) { %>
+  <% var commentAllowFlag = (isGuestContact) ? ((commentDetails.isCommentAllow == 2) ? 1 : 0) : ((commentDetails.isCommentAllow == 1 || commentDetails.isCommentAllow == 2) ? 1 : 0); %>
+  <div class="fg-web-article-comments-wrapper">
+      <%if (commentDetails.data.length > 0 || commentAllowFlag == 1) { %>  <h2 class="fg-title text-center">{{'WEBSITE_ARTICLE_COMMENTS_TEXT'|trans}} (<span id="comments-count" class ="comments-count"><%- commentDetails.data.length %></span>)</h2> <% } %>
+        <ul class="fg-web-article-comments-list">
+         <%if (commentDetails.data.length > 0) { %>
+            <% _.each(commentDetails.data, function(commentData) { %>
+                <li class="fg-web-article-comment-block" id="comments-li-data_<%- commentData.id %>">
+               <div class="fg-avatar">
+                <% if (commentData.guestUserName != '') { %>
+                 <i class="fa fa-user-circle fg-avatar-placeholder"></i>
+                <% } else if (commentData.contactImage) { %>
+                
+                           <div class="fg-profile-img-blk45 fg-round-img" style="background-image:url('<%- commentData.contactImage %>')"></div>
+                <% } else { %>
+                        <i class="fa fa-user-circle fg-avatar-placeholder"></i>
+                <% } %>
+                 </div>
+                    <div class="fg-content-wrapper">
+                      <div class="fg-comment-details">
+                        <p><strong class="fg-author"><%- (commentData.guestUserName) ? commentData.guestUserName : commentData.createdBy %> </strong>{{'WEBSITE_ARTICLE_ON_TEXT'|trans}} <%- commentData.createdDate %></p>
+                      </div>
+                      <div class="fg-comment" id="comment-text-content_<%- commentData.id %>" >
+                        <%=  commentData.comment.replace(/\r\n|\r|\n/g,"<br />") %>
+                      </div>
+                    </div>
+                </li>
+              <% }); %>
+        <% } %>
+       
+       <% if (commentAllowFlag == 1) { %>
+            <li class="fg-web-article-comment-block">
+            {# form #}
+             <div class="fg-avatar"> 
+             
+        <% if (isGuestContact) { %>
+            <i class="fa fa-user-circle fg-avatar-placeholder"></i>
+        <% } else if (commentDetails.contactImage) { %>
+                  {#<img src="<%- commentDetails.contactImage %>"> #}
+                   <div class="fg-profile-img-blk45 fg-round-img" style="background-image:url('<%- commentDetails.contactImage %>')"></div>
+              <% } else { %>
+                        <i class="fa fa-user-circle fg-avatar-placeholder"></i>
+             <% } %>
+         </div>
+            <div class="fg-content-wrapper">
+                <div class="fg-comment-details">
+                    <p><strong class="fg-author"><%- commentDetails.contactName %> </strong></p>
+                </div>
+               <% if (isGuestContact) { %>
+                <div class="form-group" id="fg-dev-guestuser-block">
+                 <input type="text" class="form-control" id="guest-user" name="guest-user" placeholder="{{'WEBSITE_ARTICLE_GUESTNAME_TEXT'|trans}}">
+                 </div>
+                <div class ="text-red fg-marg-top-5 hide" id="guestuser-error-block">{{'EDITORIAL_COMMENT_REQUIRED_MESSAGE'|trans}}</div>
+                <% } %>
+                <div class="fg-comment">
+                 <form class="fg-post-new-comment" method="post" data-validation="true" onsubmit="return false;" novalidate="novalidate">
+                        <textarea rows="8" class="fg-width-P" id="comment-text-area_new" name="comment-text-area_new %>"></textarea>
+                        <% if (isGuestContact) { %>   
+                           <div class="g-recaptcha" id="fg-captcha"></div>
+                        <% } %>
+                         <div class="fg-button">
+                            <button data-id="new" data-articleId= "<%- commentDetails.articleId %>" id="save_changes" name="singlebutton" class="btn btn-primary fg-submit comment_save" disabled="disabled">{{'WEBSITE_ARTICLE_SUBMIT_TEXT'|trans}}</button>
+                        </div>
+
+                </div>
+            </div>
+             </form>
+            </li>
+       <% } %>
+
+       </ul>
+    </div>
+ <% } %>
+</script>

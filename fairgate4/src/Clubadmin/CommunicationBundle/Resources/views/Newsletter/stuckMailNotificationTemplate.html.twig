@@ -1,0 +1,53 @@
+<html lang="en" class="no-js"><!--<![endif]--><!-- BEGIN HEAD -->
+    <head>
+        <meta charset="utf-8"/>
+        <title>{{'NOTIFICATION_VIRUSLOG_MAIL_TITLE'|trans}}</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+        <meta content="" name="description"/>
+        <meta content="" name="author"/>
+
+        <link rel="shortcut icon" href="img/favicon.ico" />
+    </head>
+    <!-- BEGIN BODY -->
+    <body style="">
+        <table  style="background-color: #eee;font-family: Calibri,Arial,sans-serif;padding: 20px;width: 100%;">
+            <tr>
+                <td>
+                    <table cellpadding="0" cellspacing="0" border="0" >
+                        <tr>
+                            {% if(logoURL is defined and logoURL is not empty) %}
+                                <td style="padding-bottom:12px;padding-left: 1px; vertical-align: middle; width: 1%;">
+                                 <img style="max-width: 100px;" src="{{ logoURL }}"  />
+                                </td>
+                                <td style="font-family: Calibri,Arial,sans-serif;"><h1 style="margin: 0; padding-left: 28px; font-size: 30px; font-weight: 500; margin-top: -4px;">Fairgate AG</h1></td>
+                            {% endif %}
+                        </tr>
+                    </table>
+                    <table style="background-color:#fff; border:1px solid #e1e1e1; width:560px;" cellpadding="0" cellspacing="0">
+
+                        {% for details in stuckMailDetails %}
+                            <tr>
+                                <td style="padding:7px;font-family: Calibri,Arial,sans-serif;">
+                                    <span><b>Club:</b> {{details.clubTitle}} </span><br/>
+                                    <span> <i>{{details.clubTitle}}</i>  has had {{details.stuckcount}} unsent newsletters/simple mails in the last 12 hours. Of those {{details.recepientCount}}  recepient eMails could not be sent.</span><br/>
+                                </td>
+                            </tr>
+                            <tr>  <td style="padding:7px;font-family: Calibri,Arial,sans-serif;">
+                                    <span>Clubs Url: <a href="{{baseUrl}}/{{details.clubUrl}}/backend/communication/newsletter/mailings">{{baseUrl}}/{{details.clubUrl}}/backend/communication/newsletter/mailings</a></span><br/><br/>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+
+            </tr>
+
+
+
+
+        </table>
+    </td>
+</tr>
+</body>
+<!-- END BODY -->
+</html>

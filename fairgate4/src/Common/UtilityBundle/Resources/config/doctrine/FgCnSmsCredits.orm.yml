@@ -1,0 +1,60 @@
+Common\UtilityBundle\Entity\FgCnSmsCredits:
+    type: entity
+    table: fg_cn_sms_credits
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        date:
+            type: datetime
+            nullable: true
+        credits:
+            type: integer
+            unsigned: false
+            nullable: true
+        status:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        isTest:
+            type: boolean
+            nullable: false
+            column: is_test
+        recredits:
+            type: integer
+            unsigned: false
+            nullable: false
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        clubPackages:
+            targetEntity: FgCnSmsClubPackages
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_packages_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        sms:
+            targetEntity: FgCnSms
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                sms_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

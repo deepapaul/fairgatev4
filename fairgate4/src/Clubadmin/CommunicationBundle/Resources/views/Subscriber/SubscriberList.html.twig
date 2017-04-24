@@ -1,0 +1,226 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' :'::clubadmin/layout.html.twig' %}
+{% set title='SUBSCRIBERS_TITLE'|trans %}       
+{% set pageTitle = title %}
+    {% block pagecontent %} 
+        <!-- BEGIN PAGE CONTENT-->
+
+        <!-- BEGIN CONTENT -->
+        <!-- BEGIN PAGE HEADER-->
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+            </div>
+        </div>
+        <div class="row">
+            <form method="POST" action= "" id="hiddenform">
+                <input type="hidden" name="selcontacthidden" value="" id="selcontacthidden" search-value="" />
+                <input type="hidden" name="searchhidden" value="" id="searchhidden" search-value="" />
+                <input type="hidden" name="counthidden" value="" id="counthidden" search-value="" />
+            </form>
+
+  
+            {% set page_settings = { 'pagetitle':'true','actionmenu':'true','tabs':'true','searchbox':'true','columnsettings':'true' }  %}
+            {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': title|trans, 'page_settings': page_settings,'tabs':tabs ,'type':subscrbertype,'searchbox_id':'searchbox','hrefLink':'true','url':'#','subscriberedit_path': path('inlineedit_subscriber')} %}
+             
+          
+            <!-- END PAGE TITLE & BREADCRUMB-->
+        </div>
+        <div class="alert alert-danger display-hide">
+            <button class="close" data-close="alert"></button>
+            {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+        </div>
+        <div id="data-tabs-content">
+        <!-- END PAGE HEADER-->
+        <div id="sudscriber-tab" class="tab-pane">
+            <div class="row">
+                 <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet-body new-table-height" id="tableWrapper">
+                <table  accesskey="" class="table {{ subscrbertype=='subscriber' ? 'hover-edit' : '' }} dataTable-subscriber                            
+                           table-bordered
+                           table-hover
+                           table-condensed
+                           dataTable-scroll-y
+                           dataTable-ajax
+                           dataTable-rows
+                           dataTable-scroll-x
+                           dataTables_scrollBody
+                           lastcolumn_sort dataTable-initialSort data-count"  id="subscriber-list" xWidth="100" yHeight="300" data-table-name="dataTables"  data_row_change="fgrowchange"  dataTable-hover="true" >
+                    <thead>
+                        <tr>
+                            <th ><input type="checkbox" class="dataTable_checkall" id="check_all" name="check_all"><i class="chk_cnt"></i></th>
+                            <th >{%trans%}SL_EMAIL{%endtrans%}</th>
+                            <th>{%trans%}SL_LAST_NAME{%endtrans%}</th>
+                            <th>{%trans%}SL_FIRST_NAME{%endtrans%}</th>
+                            <th>{%trans%}SL_COMPANY{%endtrans%}</th>
+                            <th>{%trans%}SL_GENDER{%endtrans%}</th>
+                            <th>{%trans%}SL_SALUTATION{%endtrans%}</th>
+                            {% if (subscrbertype=='subscriber') %}
+                            <th>{%trans%}CL_CORRESPOND_LANG{%endtrans%}</th>
+                            <th>{%trans%}SL_CREATED_AT{%endtrans%}</th>
+                            <th>{%trans%}SL_EDITED_AT{%endtrans%}</th>
+                            <th>{%trans%}SL_EDITED_BY{%endtrans%}</th>
+                            {% endif %}
+                            <th>{%trans%}SL_RECEIVED{%endtrans%}</th>                               
+                        </tr>
+                    </thead>
+                </table>
+                </div>
+                <div id="callPopupFunction"></div>
+                <!-- Connection Popup -->
+                <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+                    <div class="modal-dialog modal-wide">
+                        <div class="modal-content fg-popup-wrap" id="popup_contents">
+                        </div>
+                    </div>
+                </div>
+                <!-- END EXAMPLE TABLE PORTLET-->
+            </div>                
+        </div>
+        </div>
+        <!-- END PAGE CONTENT-->
+        <!-- END CONTENT -->
+        <!-- END PAGE CONTENT-->
+    {% endblock %}
+    {% block javascripts %}
+    <script src="{{ asset('fgcustom/js/sidebar.js') }}" type="text/javascript"></script>    
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/FgBackendDatatable.js') }}" type="text/javascript"></script>
+    <script>
+        $(document).ready(function() {
+        
+            FgPageTitlebar.init({
+                title       : true,
+                tab       : true,
+                search     :true,
+                actionMenu  : true,
+                tabType  :'server'
+               
+            }); 
+       });
+     FgMoreMenu.initServerSide('data-tabs');
+     var actionMenuNoneSelectedText = {
+
+        {% if (subscrbertype=='subscriber') %} 
+        'createsubscriber' : {'title' : "{{'CREATE_SUBSCRIBER'|trans}}", 'dataUrl' : '{{ path('subscriber_create') }}', 'hrefLink' : '{{ path('subscriber_create') }}' , 'visibleAlways' : true},
+        'importsubscriber'   : {'title' : "{{'IMPORT_ALL'|trans}}", 'dataUrl' : '{{ path('subscriber_import_file') }}', 'hrefLink' : '{{ path('subscriber_import_file') }}' , 'visibleAlways' : true},
+        {% endif %}
+        'subscriberexport'   : {'title' : "{{'EXPORT_ALL'|trans}}", 'dataUrl' : '{{ subscrbertype=='subscriber' ? path('subscriber_export') : path('subscriber_own_contact_export') }}'},
+    };
+    var actionMenuSingleSelectedText = {     
+        {% if (subscrbertype=='subscriber') %} 
+        'editsubscriber' : {'title' : "{{'EDIT_SELECTED'|trans}}",'dataUrl' : '{{editUrl}}' , 'appendSelectedId' : '1'},
+        {% endif %}   
+        'subscriberexport'   : {'title' : "{{'EXPORT_ONE'|trans}}", 'dataUrl' : '{{ subscrbertype=='subscriber' ? path('subscriber_export') : path('subscriber_own_contact_export') }}'},
+        {% if (subscrbertype=='subscriber') %}
+        'subscriberlog' : {'title' : "{{'LOG'|trans}}",'dataUrl' : '{{logUrl}}' , 'appendSelectedId' : '1'},
+        'subscriberdelete' : {'title' : "{{'DELETE_SUBSCRIBER'|trans}}",'dataUrl' : '{{path('subscriber_delete')}}'},
+        {% endif %}        
+    };
+    var actionMenuMultipleSelectedText = {
+        'subscriberexport' : {'title' : "{{'EXPORT_SELECTED'|trans}}",'dataUrl' : '{{ subscrbertype=='subscriber' ? path('subscriber_export') : path('subscriber_own_contact_export') }}'},
+        {% if (subscrbertype=='subscriber') %} 
+        'subscriberdelete' : {'title' : "{{'DELETE_SUBSCRIBER'|trans}}", 'dataUrl' : '{{path('subscriber_delete')}}'},
+        {% endif %}          
+    };
+    var inlineEditFlag = 0;
+    if ($("#inlineEditSubscriber").length > 0 && $('#inlineEditSubscriber').is(':checked')) {
+         inlineEditFlag = 1;
+    }
+    var tabIndex=0;
+    var columnDefs=[{ type: "checkbox", orderable: false, "width" : "1%", targets: 0, data:function(row, type, val, meta){
+                            return "<input type='checkbox' class='dataClass' id='"+row[0]+"' name='check'>";
+                        } },
+                        { "name": "email", "width" : "10%",   "targets": 1 , data:function(row, type, val, meta){
+                            if(!inlineEditFlag){
+                                var editPath = "{{ path('subscriber_edit', {'offset': 0,'subscriberid': "subscriberid" }) }}";                                
+                                editPath = editPath.replace("subscriberid", row[0]);
+                                return  row[1]=='' || row[1] == null ? '-':'<a href="mailto:'+row[1]+'">'+row[1]+'</a><a href="'+editPath+'" class="fg-tableimg-hide"><i class="fa fa-pencil-square-o fg-pencil-square-o"></i></a>'; 
+                             }else {
+                                return '<span class="inline-editable editable-click" data-edit-row="' + row[0] + '" data-edit-col="Email" data-edit-val="' + row[1] + '" data-tabindex=' + tabIndex++ + ' tabindex=' + tabIndex +'>' + (row[1]=="" || row[1] == null ? "-":row[1]) + '</span>' 
+                             }
+                        }},
+                        { "name": "last_name", "width" : "10%",  "targets": 2, data:function(row, type, val, meta){
+                            if(!inlineEditFlag){
+                                return  row[2]=='' || row[2] == null ? '-':row[2]; 
+                            } else {
+                                return '<span class="inline-editable editable-click" data-edit-row="' + row[0] + '" data-edit-col="LastName" data-edit-val="' + row[2] + '" data-tabindex=' + tabIndex++ + ' tabindex=' +tabIndex +'>' + (row[2]=="" || row[2] == null ? "-":row[2]) + '</span>' 
+                             }
+                        } },
+                        { "name": "first_name", "width" : "10%", "targets": 3, data:function(row, type, val, meta){
+                            if(!inlineEditFlag){
+                                 return  row[3]=='' || row[3] == null ? '-':row[3]; 
+                             }else{
+                                return '<span class="inline-editable editable-click" data-edit-row="' + row[0] + '" data-edit-col="FirstName" data-edit-val="' + row[3] + '" data-tabindex=' + tabIndex++ + ' tabindex=' +tabIndex +'>' + (row[3]=="" || row[3] == null ? "-":row[3]) + '</span>'  
+                             }
+                        } },
+                        { "name": "company", "width" : "10%",    "targets": 4 , data:function(row, type, val, meta){
+                                if(!inlineEditFlag){
+                            return  row[6]=='' || row[6] == null ? '-':row[6]; 
+                             }else{
+                            return '<span class="inline-editable editable-click" data-edit-row="' + row[0] + '" data-edit-col="Company" data-edit-val="' + row[6] + '" data-tabindex=' + tabIndex++ + ' tabindex=' +tabIndex+'>' + (row[6]=="" || row[6] == null ? "-":row[6]) + '</span>'  
+                             }
+                        }},
+                        { "name": "gender", "width" : "10%",  "targets": 5, data:function(row, type, val, meta){
+                            if(!inlineEditFlag){
+                                return  row[4]=='' || row[4] == null ? '-':row[4]; 
+                            }else{
+                                return '<span class="inline-editable editable-click" data-edit-row="' + row[0] + '" data-edit-col="Gender" data-edit-val="' + row[12] + '" data-tabindex=' + tabIndex++ + ' tabindex=' +tabIndex +'>' + (row[4]=="" || row[4] == null ? "-":row[4]) + '</span>'  
+                            }
+                        } },
+                        { "name": "salutation", "width" : "10%",    "targets": 6,data:function(row, type, val, meta){
+                                if(!inlineEditFlag){
+                            return  row[5]=='' || row[5] == null ? '-':row[5]; 
+                        }else{
+                            return '<span class="inline-editable editable-click" data-edit-row="' + row[0] + '" data-edit-col="Salutation" data-edit-val="' + row[13] + '" data-tabindex=' + tabIndex++ + ' tabindex=' +tabIndex +'>' + (row[5]=="" || row[5] == null ? "-":row[5]) + '</span>'  
+                        }
+                        } },
+                        {% if (subscrbertype=='subscriber') %}
+                            { "name": "correspondance_lang", "width" : "10%",    "targets": 7 , data:function(row, type, val, meta){
+{#                                return  row[15]=='' || row[15] == null ? '-':row[15]; #}
+                                
+                                if(!inlineEditFlag){
+                                    return  row[15]=='' || row[15] == null ? '-':row[15];  
+                                }else{
+                                    return '<span class="inline-editable editable-click" data-edit-row="' + row[0] + '" data-edit-col="CorresLang" data-edit-val="' + row[16] + '" data-tabindex=' + tabIndex++ + ' tabindex=' +tabIndex +'>' + (row[15]=="" || row[15] == null ? "-":row[15]) + '</span>'  
+                                }
+                             }
+                            },
+                            
+                            { "name": "created_at",    "targets": 8 , data:function(row, type, val, meta){
+                            return  row[7]=='' || row[7] == null ? '-':row[7]; 
+                            }},
+                                { "name": "edited_at",    "targets": 9 , data:function(row, type, val, meta){
+                                return  row[8] =='' || row[8] == null ? '-':row[8]; 
+                            }},
+                                { "name": "edited_by",    "targets": 10 ,data:function(row, type, val, meta){
+                                if(row['14']!= null){
+                                    overViewPath = '{{path('render_contact_overview', {'offset': '0', 'contact': '**dummy**'})}}';
+                                    var oPath = overViewPath.replace('**dummy**', row['14']);
+                                    row['9'] ='<a href="'+oPath+'" target="_blank" data-cont-id="'+ row['14']+'">'+row['9']+'</a>';
+                                 }
+                                return  row[9]=='' || row[9] == null ? '-':row[9]; 
+                            }},
+                                { "name": "newsletterCount",    "targets": 11, "defaultContent": "-",data:function(row, type, val, meta){
+                                return "<a href='"+row[11]+"'>"+row[10]+"</a>";
+                                } }
+                        {% else %}
+                            { "name": "newsletterCount",    "targets": 7 , "defaultContent": "-", data:function(row, type, val, meta){
+                            return "<a href='"+row[8]+"'>"+row[7]+"</a>";
+                            } }
+                        {% endif %}
+                    ];  
+                    var deleteSubscriberPath = '{{path('subscriber_delete')}}';
+                    var exportSubscribers = '{{ subscrbertype=='subscriber' ? path('subscriber_export') : path('subscriber_own_contact_export') }}';
+                    var dataInlineEdit = '{{ data|json_encode()| raw }}';
+                    
+                    var ajaxPath= "{{ subscrbertype=='subscriber' ? path('get_subscribers') : path('get_own_subscribers') }}" ;                    
+                    var datatableId = 'subscriber-list';
+                    var datatableServerSideprocess = true;
+             
+    </script>
+     <script src="{{ asset('fgcustom/js/inline-edit.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/subscriber-list.js')}}" type="text/javascript"></script> 
+    {% endblock %}

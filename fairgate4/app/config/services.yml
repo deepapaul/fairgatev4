@@ -1,0 +1,56 @@
+services:
+    club:
+        class: "%Club.service.class%"
+        arguments: ['@service_container', "@security.access_map"]
+        tags:
+            -  { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:500 }
+    fairgate_terminology_service:
+        class:     "%Clubadmin.controller.service.class%"
+        arguments: ['@service_container']
+        tags:
+            -  { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:499 }
+    fg.twig.extension:
+        class: "%Clubadmin.twig.service.class%"
+        arguments: ['@fairgate_terminology_service']
+        tags:
+            -  { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+    fg.logout_success_handler:
+        class:  %fg.logout_success_handler.class%
+        arguments: ['@service_container']
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }
+    fg.login_success_handler:
+        class:  %fg.login_success_handler.class%
+        arguments: ["@service_container","@security.http_utils", "@security.access_map", {}]
+        tags:
+            - { name: 'kernel.event_listener', event: 'security.interactive_login', priority:300 }
+            
+#   contact listener should be called after the security firewall(priority = 8)   
+    contact:
+        class: "%Contact.service.class%"
+        arguments: ['@service_container','@router']
+        tags:
+            -  { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:7 } 
+
+    fg.exception:
+        class:  Common\UtilityBundle\Listener\ExceptionListener
+        arguments: ['@templating','@service_container']
+        tags:
+            - { name: 'kernel.event_listener', event: kernel.exception, method: onKernelException } 
+    fg.cache:
+       class: Common\UtilityBundle\Cache\FgApcuCache
+
+    fg.fos_user.mailer:
+          class: "%security.mailer.class%"
+          arguments: ['@mailer','@router','@templating']
+          
+    fg.security.authentication.userprovider:
+        class:  "%security.userprovider.class%"
+        arguments: ['@fos_user.user_manager'] 
+    fg.avatar :
+        class: "%fg.avatar.class%"
+        arguments: ['@service_container','@club']
+    twig.extension.intl:
+       class: Twig_Extensions_Extension_Intl
+       tags:
+           - { name: twig.extension }    

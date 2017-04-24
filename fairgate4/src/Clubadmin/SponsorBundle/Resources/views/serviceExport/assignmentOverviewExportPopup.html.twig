@@ -1,0 +1,99 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">{{titleText}}</h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form method= "post" action="{{path('sponsor_assignment_overview_export')}}" class="form-horizontal form-row-sepe" id="serviceexportform">
+                    <div class="form-body fg-csv-expt fg-exprt">
+                        
+            <div class="form-group ">
+                  <label class="control-label col-md-3">{%trans%}CSV TYPE{%endtrans%}</label>
+                  <div class="col-lg-4 col-md-4 col-sm-12  col-xs-12">
+                    <label class="fg-cursor fg-radio-export">
+                    <input type="radio" name="CSVtype" id="CSVtype_colonSep " value="colonSep" checked>
+                    <span class="fg-radio-export-txt">
+                          {%trans%}SEMICOLON SEPERATED{%endtrans%}
+                    </span>
+                    </label>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-12  col-xs-12">
+                    <label class="fg-cursor fg-radio-export">   
+                     <input type="radio" name="CSVtype" id="CSVtype_commaSep" value="commaSep" >     
+                     <span class="fg-radio-export-txt">
+                         {%trans%}COMMA SEPERATED{%endtrans%}
+                     </span>
+                    </label>
+                  </div>
+            </div>
+                <input type="hidden" name="selectedId" id="selectedId" value="" />
+                <input type="hidden" name="actionType" id="actionType" value="{{actionType}}" />   
+                <input type="hidden" name="csvType" id="csvType" value="" /> 
+                <input type="hidden" name="tabType" id="tabType" value="" /> 
+                <input type="hidden" name="exportData" id="exportData" value="" /> 
+
+
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+                {% include 'clubadmin/savebuttonpopup.html.twig'  %}
+ 
+
+
+<script type="text/javascript">
+   
+    var actionType = '{{actionType}}';
+    var selActionType = '{{selActionType}}';
+    var tabType = '{{tabType}}';
+    var contactId = '{{contactId}}';
+    var clubId = '{{clubId}}';
+    var bookedIds = '{{bookedIds}}';
+    var exportData;
+   
+    if (tabType == "futureassignments" || tabType == "activeassignments" || tabType == "recentlydelete" || tabType == "formerassignments" ) {
+           exportData=overviewTable.rows({order:  'applied', search: 'applied', page:   'all'}).data();
+           exportData.context = '';
+           exportData.length='';
+           exportData.selector='';
+           exportData.ajax='';
+       } 
+    if(bookedIds !='') {
+           var selectedIds=bookedIds.split(',')  ;
+           exportData = _(exportData).filter(function (x) { return _.contains(selectedIds,x['SA_bookingId'])});
+    }
+         
+    $(document).off('click', 'button[data-function=save], button[data-function=cancel]');
+    $(document).on('click', 'button[data-function=save], button[data-function=cancel]', function() {
+        var buttonId = this.id;
+        if (buttonId == 'save') {
+            var csvType= $('input[name=CSVtype]:checked').val();
+            exportServiceFun(csvType);
+        }
+    });
+    
+    function exportServiceFun(csvType) {
+        var order = '';
+        var selectedId = ''; 
+          
+        selectedId =  JSON.stringify(bookedIds);
+        exportData =  JSON.stringify(exportData);
+  
+        $('#selectedId').val(selectedId);
+        $('#actionType').val(actionType);
+        $('#csvType').val(csvType);
+        $('#tabType').val(tabType);     
+        $('#exportData').val(exportData);
+        $('#popup').modal('hide');
+        $("#serviceexportform").submit();   
+       
+        }
+    
+</script>
+

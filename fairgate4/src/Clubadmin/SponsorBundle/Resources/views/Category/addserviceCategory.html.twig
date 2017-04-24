@@ -1,0 +1,43 @@
+<script type="text/template" id="template-category-add">
+    <% dataKey = isNew ? catId : catId %>
+    <% dataName = isNew ? 'new_' + catId : catId %>
+    <% catType = '' %>
+    <div <% if (isNew) { %>style="display:none;"  <% } %> class="row fg-border-line sortables fg-sort-drag-hover <% if (isNew) { %> addednew <% } %>" id="<%- dataName %>">
+        <div class="fg-col-first-icon fg-sort-drag" name="fg-dev-sorting"><i class="fa fg-sort ui-draggable handle"></i></div>
+        <div class="col-md-12 fg-col-hack"> {#colordarkash#}
+            <div class="row">
+                <div class="col-sm-5 col-lg-8 col-xs-12 fg-clear-left">
+                    <div class="bookmark fg-form-group">
+                          <% catTitleLang = attributes['title']; %>
+                            <input type="text" class="form-control input-sm fg-input-area show" data-key="<%- dataKey %>.title" id="<%- dataName %>_title" name="<%- dataName %>_title" data-lang="" value="<%- catTitleLang %>"  required="true"/>
+                       
+                    </div>
+                </div>
+             
+               <div class="col-sm-2 col-lg-2 fg-padding-tp-three">
+                        <% if (attributes['serviceCount'] == 1) { %>
+                            <%- attributes['serviceCount'] %> {%trans%}SM_SERVICE{%endtrans%}
+                        <% } else if (attributes['serviceCount'] > 0) { %>
+                            <%- attributes['serviceCount'] %> {%trans%}SM_SERVICES{%endtrans%}
+                        <% } else { %>
+                            0 {%trans%}SM_SERVICES{%endtrans%}
+                        <% } %>
+                </div>
+                    
+                <div class="col-lg-2 col-sm-5" name="fg-dev-manage">
+                    <% if (!isNew) { %>
+                            <% catSettingsPath = categorySettingsPath.replace('catId', catId); %>
+                            <a href="<%- catSettingsPath %>" data-type="redirect" data-catType="<%- catType %>" data-catid="<%- catId %>">{%trans%}SM_MANAGE_SERVICES{%endtrans%}&hellip;</a>                      
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        {#<!-- For render the delete button -->#}
+            <% if (attributes['assignmentCount'] > 0) { %>
+                <div class="fg-col-last-icon" name="fg-dev-close-icon"><div class="pull-right deletediv"><i class="fa fa-lock fa-2x ash"></i></div></div>
+            <% } else { %>
+                {% include 'clubadmin/common.html.twig' with {'type': 'underscorejs_delete'} %}
+            <% } %>
+        <input type="hidden" class="sorthidden" data-key="<%- dataKey %>.sortOrder" name="<%- dataName %>_sortOrder" id="<%- dataName %>_sortOrder" value="" data-element="sortorder" data-sort-parent="role_category_sort" />
+    </div>
+</script>

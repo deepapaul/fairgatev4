@@ -1,0 +1,964 @@
+extends _helpers/layout.jade
+
+block vars
+  - var bodyClass = 'fg-web-theme-01 ';
+block title
+    title Article Title
+
+block page-level-header
+      link(href='theme-based-styles/theme-01-color-schemes.css', rel='stylesheet', media='screen')
+      link(href='theme-based-styles/theme-01-color-schemes.css', rel='stylesheet', media='screen')
+      link(href='../../global/js/flaviusmatis-simplePagination/simplePagination.css', rel='stylesheet', media='screen')
+      style(type='text/css').
+        .fg-contents .col-sm-12 figure{
+          background:#e6e6e6; 
+        }
+        .fg-placeholder{
+            margin:auto;
+        }
+block header
+    .row.fg-web-top-nav-wrapper
+        .container
+            .FR
+                ul.fg-web-top-nav-links.list-inline
+                    li
+                        a(href='#') FAQ
+                    li
+                        a(href='#') Contact
+                    li
+                        a(href='#') Map
+                ul.fg-web-top-nav-languages.list-inline
+                    li
+                        a(href='#') EN
+    .row.fg-web-main-nav-bar
+        .container
+            .fg-logo-wrapper
+                a(href='#').fg-logo
+                  img(src="http://www.fauchard.org/system/ckeditor_assets/pictures/101/content_pfa_portrait_logo-300print.jpg")
+            .fg-web-nav-icon.visible-xs
+                i.fa.fa-bars.fa-3x
+            nav.navbar.navbar-default.fg-web-main-nav
+                ul.nav.navbar-nav
+                    li.active                                    
+                        a(href='#') Home     
+                    li
+                        a(href='#') Club
+                    li
+                        a(href='#') Teams
+                    li
+                        a(href='#') News
+                    li.dropdown
+                        a(href='#')
+                            | Photos 
+                        span.caret.dropdown-toggle(href='#', data-toggle='dropdown', role='navigation', aria-haspopup='true', aria-expanded='true')
+                        ul.dropdown-menu
+                            li
+                                a(href='#') Second level menu
+                            li
+                                a(href='#') Second level menu
+                            li.dropdown-submenu
+                                a(href='#')
+                                    | Second level Dropdown Second level Dropdown 
+                                span.fg-dropdown-toggle
+                                ul.dropdown-menu.fg-web-open-right
+                                    li
+                                        a(href='#') Third level menu
+                                    li
+                                        a(href='#') Third level menu
+
+                                    li.dropdown-submenu
+                                        a(href='#')
+                                            | Third level Dropdown 
+                                        span.fg-dropdown-toggle
+                                        ul.dropdown-menu.fg-web-open-left
+                                            li
+                                                a(href='#') Fourth level menu
+                                            li
+                                                a(href='#') Fourth level menu
+                                            li
+                                                a(href='#') Fourth level menu
+                                            li
+                                                a(href='#') Fourth level menu
+                                    li
+                                        a(href='#') Third level menu
+                            li
+                                a(href='#') Second level menu
+                            li
+                                a(href='#') Second level menu
+              
+                    li
+                        a(href='#') Contact
+block content
+        .row.fg-web-page-title-bar
+            .container
+                .fg-web-titlebar-left-col.has-breadcrumb.pull-left
+
+                      .fg-web-page-title-block.fg-breadcrumb-block
+                          ul.fg-breadcrumbs
+                            li
+                              a(href='http://192.168.0.39:12004/auto/home') Title bar improvements
+                            li
+                              a(href='javascript:void(0);') CLUB
+
+                      .fg-titlebar-block.fg-web-page-title-block
+                          h1.fg-web-page-title
+                            | How to contact us
+
+                .fg-web-titlebar-right-col.pull-right
+
+                      .fg-titlebar-block.fg-icon-bg
+                            i.fg-icon.fg-page-prev
+
+                      .fg-titlebar-block.fg-icon-bg
+                            i.fg-icon.fg-page-close
+
+                      .fg-titlebar-block.fg-icon-bg
+                            i.fg-icon.fg-page-next
+                .clearfix
+
+        .container
+            .row.fg-web-page-container
+              .col-sm-12.fg-web-page-content-wrapper
+                  .row
+                      .col-sm-12.fg-grid-col-6(style='background:#fff; border:1px solid red;', id="elem001")
+                          .fg-header-widget.fg-widget-block
+                              h2 Column 6
+                          .fg-portrait-widget.fg-widget-block
+                              .fg-portrait-header
+                                  .FL
+                                      .fg-dis-IB
+                                          select.selectpicker
+                                              option Option A
+                                              option Option B
+                                      .fg-dis-IB
+                                          select.selectpicker
+                                              option Option A
+                                              option Option B
+                                      .fg-dis-IB
+                                          select.selectpicker
+                                              option Option A
+                                              option Option B
+                                  .FR
+                                      .fg-dis-IB
+                                          input(type="text").form-control
+                                  .clearfix
+                              .fg-portrait-body
+                                  .fg-portrait-row.row
+                                    .fg-portrait.fg-col-2
+
+                                        .fg-portrait-col.fg-col-2
+                                          .fg-contents.row
+                                              .fg-placeholder.fg-widget-placeholder-animate
+                                                    .fg-animated-background
+                                                        .fg-background-masker.border-v-1
+                                                        .fg-background-masker.border-h-1
+                                                        .fg-background-masker.border-h-2
+                                                        .fg-background-masker.border-h-3
+                                                        .fg-background-masker.border-h-4
+                                                        .fg-background-masker.border-h-5
+                                                        .fg-background-masker.border-h-6
+                                                        .fg-background-masker.border-h-7
+                                        
+                                    .fg-portrait.fg-col-2
+                                        .fg-portrait-col.fg-col-2.col-sm-6
+                                          .fg-contents.row
+                                              .col-sm-4
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                                  p 
+                                                    | Team A, Team B
+                                                    br
+                                                    | Squad number: 12
+                                                    br
+                                                    a(href="#")
+                                                      i.fa.fa-image
+
+                    
+                                              .col-sm-8
+                                                p
+                                                    a(href="#").fg-contact-name   Daniel Schweri
+                                                    br
+                                                    | c/o FairgateAG
+                                                    br
+                                                    | Burgheingham
+                                                    br
+                                                    | 8400 India
+                                                p
+                                                  
+                                                  a(href="#") 
+                                                    i.fa.fa-envelope &nbsp; 
+                                                    | daniel.schewri@gmail.com
+                                                  br
+                                                  | Phone M: +91 953548712 - G: 0484 27512654
+                                                  br
+                                                  a(href="#") Facebook
+                                                  br
+                                                  | Linkedin :-
+                                                  br
+                                                  | Web: 
+                                                  a(href="#") www.abcd.com
+                                        
+                                    .fg-portrait.fg-col-2
+                                        .fg-portrait-col.fg-col-2.col-sm-6
+                                          .fg-contents.row
+                                              .col-sm-4
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                                  p 
+                                                    | Team A, Team B
+                                                    br
+                                                    | Squad number: 12
+                                                    br
+                                                    a(href="#")
+                                                      i.fa.fa-image
+
+                    
+                                              .col-sm-8
+                                                p
+                                                    a(href="#").fg-contact-name   Daniel Schweri
+                                                    br
+                                                    | c/o FairgateAG
+                                                    br
+                                                    | Burgheingham
+                                                    br
+                                                    | 8400 India
+                                                p
+                                                  
+                                                  a(href="#") 
+                                                    i.fa.fa-envelope &nbsp; 
+                                                    | daniel.schewri@gmail.com
+                                                  br
+                                                  | Phone M: +91 953548712 - G: 0484 27512654
+                                                  br
+                                                  a(href="#") Facebook
+                                                  br
+                                                  | Linkedin :-
+                                                  br
+                                                  | Web: 
+                                                  a(href="#") www.abcd.com
+                                        
+                                    .fg-portrait.fg-col-2
+                                        .fg-portrait-col.fg-col-2.col-sm-6
+                                          .fg-contents.row
+                                              .col-sm-4
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                                  p 
+                                                    | Team A, Team B
+                                                    br
+                                                    | Squad number: 12
+                                                    br
+                                                    a(href="#")
+                                                      i.fa.fa-image
+
+                    
+                                              .col-sm-8
+                                                p
+                                                    a(href="#").fg-contact-name   Daniel Schweri
+                                                    br
+                                                    | c/o FairgateAG
+                                                    br
+                                                    | Burgheingham
+                                                    br
+                                                    | 8400 India
+                                                p
+                                                  
+                                                  a(href="#") 
+                                                    i.fa.fa-envelope &nbsp; 
+                                                    | daniel.schewri@gmail.com
+                                                  br
+                                                  | Phone M: +91 953548712 - G: 0484 27512654
+                                                  br
+                                                  a(href="#") Facebook
+                                                  br
+                                                  | Linkedin :-
+                                                  br
+                                                  | Web: 
+                                                  a(href="#") www.abcd.com
+                              .fg-portrait-footer                        
+                                  .pagination.fg-pagination.has-pagination
+                                      .pagination.fg-pagination.simple-pagination(id='', class='.fg-pagination')
+                                        ul.pagination
+                                          li
+                                            a.page-link.prev(href='#2')
+                                              i.fa.fa-angle-left
+                                          li
+                                            a.page-link(href='#1') 1
+                                          li
+                                            a.page-link(href='#2') 2
+                                          li.active
+                                            span.current 3
+                                          li
+                                            a.page-link(href='#4') 4
+                                          li
+                                            a.page-link.next(href='#4')
+                                              i.fa.fa-angle-right
+
+
+                          .fg-portrait-widget.fg-widget-block.hide
+                              .fg-portrait-header 
+                                  .clearfix
+                              .fg-portrait-body
+                                  .fg-portrait-row.row
+                                    h5.fg-clear  Col Design One item per row (6)
+                                    .fg-portrait-col.col-md-12.fg-col-6
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                  .fg-portrait-row.row
+                                    h5.fg-clear  Col Design Two items per row (3 + 3)
+                                    .fg-portrait-col.col-md-6.fg-col-3
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-6.fg-col-3
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                  .fg-portrait-row.row
+                                    h5.fg-clear  Col Design Three items per row (2 + 2 + 2)
+                                    .fg-portrait-col.col-md-4.fg-col-2
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-4.fg-col-2
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-4.fg-col-2
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                  .fg-portrait-row.row
+                                    h5.fg-clear  Col Design Four items per row (1 + 1 + 1 + 1 + Empty space+2) Small screen Two items per row
+                                    .fg-portrait-col.col-md-2.col-sm-6.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-2.col-sm-6.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-2.col-sm-6.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-2.col-sm-6.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-empty-col.visible-md.visible-lg.col-md-4      
+                                        p &nbsp;  
+                                  .fg-portrait-row.row
+                                    h5.fg-clear  Col Design Five items per row (1 + 1 + 1 + 1 + 1 + Empty space)  Small screen Two items per row
+                                    .fg-portrait-col.col-md-2.col-sm-6.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-2.col-sm-6.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-2.col-sm-6.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-2.col-sm-6.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-2.col-sm-6.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-empty-col.visible-md.visible-lg.col-md-2      
+                                        p &nbsp;  
+                                  .fg-portrait-row.row
+                                    h5.fg-clear  Col Design Six items per row (1 + 1 + 1 + 1 + 1 + 1)  Small screen Three items per row
+                                    .fg-portrait-col.col-md-2.col-sm-4.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-2.col-sm-4.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-2.col-sm-4.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-2.col-sm-4.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-2.col-sm-4.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-2.col-sm-4.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-2.col-sm-4.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-2.col-sm-4.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                    
+                              .fg-portrait-footer          
+
+                          #fgElem3453
+
+                      .col-sm-10.fg-grid-col-5(style='background:#fff; border:1px solid green;', id="elem002")
+                          .fg-header-widget.fg-widget-block
+                              h2 Column 5      
+
+                          .fg-portrait-widget.fg-widget-block
+                              .fg-portrait-header
+                                  .clearfix
+                              .fg-portrait-body
+
+                                  .fg-portrait-row.row 
+                                    h5.fg-clear  Col Design One item per row (5)
+                                    .fg-portrait-col.col-md-2.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                  .fg-portrait-row.row 
+                                    h5.fg-clear  Col Design Two item per row (5)
+                                    .fg-portrait-col.col-md-4.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-4.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                  .fg-portrait-row.row 
+                                    h5.fg-clear  Col Design Five items per row (5)
+                                    .fg-portrait-col.col-md-4.fg-col-2
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                    
+                    
+                              .fg-portrait-footer  
+                      .col-sm-8.fg-grid-col-4(style='background:#fff; border:1px solid blue;', id="elem003")
+                          .fg-header-widget.fg-widget-block
+                              h2 Column 4
+                          .fg-portrait-widget.fg-widget-block
+                              .fg-portrait-header
+                                  .clearfix
+                              .fg-portrait-body
+                                  .fg-portrait-row.row 
+                                    h5.fg-clear  Col Design Two item per row (5)
+                                    .fg-portrait-col.col-md-4.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-4.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                      .col-sm-6.fg-grid-col-3(style='background:#fff; border:1px solid yellow;', id="elem004")
+                          .fg-header-widget.fg-widget-block
+                              h2 Column 3
+                          .fg-portrait-widget.fg-widget-block
+                              .fg-portrait-header
+                                  .clearfix
+                              .fg-portrait-body
+                                  .fg-portrait-row.row 
+                                    h5.fg-clear  Col Design Two item per row (5)
+                                    .fg-portrait-col.col-md-4.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-4.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-4.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                      .col-sm-4.fg-grid-col-2(style='background:#fff; border:1px solid red;', id="elem005")
+                          .fg-header-widget.fg-widget-block
+                              h2 Column 2
+                          .fg-portrait-widget.fg-widget-block
+                              .fg-portrait-header
+                                  .clearfix
+                              .fg-portrait-body
+                                  .fg-portrait-row.row 
+                                    h5.fg-clear  Col Design Two item per row (5)
+                                    .fg-portrait-col.col-md-4.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                                    .fg-portrait-col.col-md-4.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                      .col-sm-2.fg-grid-col-1(style='background:#fff; border:1px solid SlateBlue;', id="elem006")
+                          .fg-header-widget.fg-widget-block
+                              h2 Column 1
+                          .fg-portrait-widget.fg-widget-block
+                              .fg-portrait-header
+                                  .clearfix
+                              .fg-portrait-body
+                                  .fg-portrait-row.row 
+                                    h5.fg-clear  Col Design Two item per row (5)
+                                    .fg-portrait-col.col-md-4.fg-col-1
+                                          .fg-contents.row
+                                              .col-sm-12
+                                                  figure
+                                                    .fg-placeholder
+                                                        i.fa.fa-user-o.fa-4x
+                        
+block footer
+    .container
+        .row
+            .col-sm-4.fg-grid-col-2
+                .fg-header-widget.fg-widget-block
+                    h3 VISUAL AND PRACMATIC
+
+            .col-sm-4.fg-grid-col-2
+                .fg-header-widget.fg-widget-block
+                    h3 VISUAL AND PRACMATIC
+
+            .col-sm-4.fg-grid-col-2
+                .fg-header-widget.fg-widget-block
+                    h3 VISUAL AND PRACMATIC
+
+
+block after-footer
+    a(href='#').fg-web-go-top
+        i.fa.fa-arrow-circle-up
+    .fg-web-bg-wrapper
+        //-.fg-web-bg(style="background-image:url('http://www.sambeauvois.be/blog/wp-content/uploads/2010/06/bg.gif');z-index:1;")
+        //- .fg-web-bg.fg-web-bg-no-repeat.fg-web-pos-left(style="background-image:url('http://www.sambeauvois.be/blog/wp-content/uploads/2010/06/bg.gif');z-index:2;")
+        //- .fg-web-bg.fg-web-bg-no-repeat.fg-web-pos-right(style="background-image:url('http://school.esanpt1.go.th/wwk/VDO/images/BG-Top.gif');z-index:3;")
+        //-  .fg-web-bg.fg-web-bg-no-repeat.fg-web-pos-center.fg-web-pos-middle(style="background-image:url('http://media.treehugger.com/assets/images/2016/04/tracy-johnson-hummingbirds-1.jpg.662x0_q70_crop-scale.jpg');z-index:4;")
+        //-   .fg-web-bg.fg-web-bg-no-repeat.fg-web-pos-left.fg-web-pos-bottom(style="background-image:url('http://www.tipsquirrel.com/wp-content/uploads/2011/06/Background-small.jpg');z-index:5;") 
+        .fg-web-bg(style="background-image:url('http://www.sambeauvois.be/blog/wp-content/uploads/2010/06/bg.gif');z-index:6;")
+
+
+
+
+
+block page-level-footer
+    script(src='../../global/js/unitegallery-master/package/unitegallery/themes/slider/ug-theme-slider.js')
+    script(src='../../global/js/underscore-min.js')
+    script(src='../../global/js/fgtemplate.js')
+    script(src='../../global/js/flaviusmatis-simplePagination/jquery.simplePagination.js')
+    script(src='../js/fg-cms-frontend-portrait.js')
+    #divTemplates
+        script(id='templateContactPortraitElementFrontendContainer',type='text/template').
+            <div class="fg-portrait-widget fg-widget-block" id="<%= portraitId %>">
+              <div class="fg-portrait-header">
+                  <div class="FL fg-filter-wrapper"></div>
+                  <div class="FR fg-search-wrapper"></div>
+
+                  <div class="clear"></div>
+              </div>
+              <div class="clear"></div>
+              <div class="fg-portrait-body">
+              </div>
+              <div class="clear"></div>
+              <div class="fg-portrait-footer">
+                  <div class="pagination fg-pagination"></div>
+              </div>
+            </div>
+        script(id='templateContactPortraitElementFilter',type='text/template').
+            
+            <%  _.each(filterData, function(data,key) { %>
+                    <div class="fg-dis-IB">
+                      <select class="selectpicker" id="<%= data.id %>" title="<%= data.title %>" placeholder="<%= data.title %>" name="">
+                          <%  _.each(data.input, function(option,key) { %>
+                                <option id="<%= option.id %>"><%= option.title %></option>
+                          <% }); %>   
+                          
+                      </select>
+                    </div>
+             <% }); %>    
+        script(id='templateContactPortraitElementSearch',type='text/template').
+
+            <div class="fg-dis-IB">
+                <input type="text" class="form-control">
+            </div>
+        script(id='templateContactPortraitElement-75669',type='text/template').
+          adasdas
+            <%  _.each(contactsData, function(data,key) { %>
+                  <div class="fg-portrait-row row">
+                      <div class="fg-portrait-col col-sm-6">
+                          <div class="fg-contents row">
+                              <div class="col-sm-4">
+                              asdasdasdada
+                              </div>
+                              <div class="col-sm-8">   
+                              asdsadsadsd          
+                              </div>
+                          </div>
+                      </div>    
+                  </div>
+            <% }); %>    
+        script(id='templateContactPortraitElementPagination',type='text/template').
+
+          <div id="" class="pagination <%= paginationData.selector %> fg-pagination"></div>
+
+    script.
+      jQuery(document).ready(function () {
+      });
+
+      $(window).load(function(){
+        var src = '../../global/js/fgtemplate.js'; 
+        var newScript = document.createElement("script");
+        newScript.type = "text/javascript";
+        newScript.setAttribute("src", src);
+        $("body").append(newScript);
+          var options = {
+              boxId : 'elem001',
+              options:{
+                  items:100,
+              },
+              clubDetails:{
+                  clubId :123123,
+              },
+              elemId:'fgElem3453', //Dynamic element id 
+              initCompletedCallback: function ($object){
+              },
+              filter:true,
+              filterData: [
+                  {
+                    "id": "1",
+                    "title": "Select Anredeart",
+                    "shortName": "Anredeart",
+                    "type": "CF",
+                    "selectgroup": "Personal",
+                    "input": [
+                      {
+                        "id": "Informal",
+                        "title": "Informal"
+                      },
+                      {
+                        "id": "Formal",
+                        "title": "Formal"
+                      }
+                    ],
+                    "data-edit-type": "select2",
+                    "catId": "1"
+                  }
+                ],
+              searchBox: true,
+              portraitWrapperData : {"data":{"portraitElement":{"id":"1212","title":"test","portraitPerRow":1,"container":{"279":{"containerId":279,"sortOrder":1,"actionType":"edit","columnSize":4,"columns":{"439":{"columnId":439,"columnSize":8,"gridSize":"4","container":279,"sortOrder":"1","data":{"1952":{"type":"edit","containerId":279,"columnId":439,"dataId":1952,"selectedField":null,"selectedFieldType":"PROFILE_PIC","fieldType":"","roleId":null,"roleCategoryId":null,"columnSubType":null,"sortOrder":0,"fieldDisplayType":null,"lineBreakBefore":"","emptyValueDisplay":null,"separateListing":null,"placeholderImage":"annie.jpg","profileImage":"annie.jpg","catId":null,"label":{"":null}}}},"440":{"columnId":440,"columnSize":8,"gridSize":"4","container":279,"sortOrder":"2","data":{"1952":{"type":"edit","containerId":279,"columnId":439,"dataId":1952,"selectedField":null,"selectedFieldType":"PROFILE_PIC","fieldType":"","roleId":null,"roleCategoryId":null,"columnSubType":null,"sortOrder":0,"fieldDisplayType":null,"lineBreakBefore":"","emptyValueDisplay":null,"separateListing":null,"placeholderImage":"annie.jpg","profileImage":"annie.jpg","catId":null,"label":{"":null}}}},"441":{"columnId":441,"columnSize":8,"gridSize":"4","container":279,"sortOrder":"3","data":{"1952":{"type":"edit","containerId":279,"columnId":439,"dataId":1952,"selectedField":null,"selectedFieldType":"PROFILE_PIC","fieldType":"","roleId":null,"roleCategoryId":null,"columnSubType":null,"sortOrder":0,"fieldDisplayType":null,"lineBreakBefore":"","emptyValueDisplay":null,"separateListing":null,"placeholderImage":"annie.jpg","profileImage":"annie.jpg","catId":null,"label":{"":null}}}},"442":{"columnId":442,"columnSize":8,"gridSize":"4","container":279,"sortOrder":"4","data":{"1952":{"type":"edit","containerId":279,"columnId":439,"dataId":1952,"selectedField":null,"selectedFieldType":"PROFILE_PIC","fieldType":"","roleId":null,"roleCategoryId":null,"columnSubType":null,"sortOrder":0,"fieldDisplayType":null,"lineBreakBefore":"","emptyValueDisplay":null,"separateListing":null,"placeholderImage":"annie.jpg","profileImage":"annie.jpg","catId":null,"label":{"":null}}}}}}}}},"stage":3,"error":null},
+              portraitContactsData:{"iTotalRecords":"15","iTotalDisplayRecords":"15","aaData":[{"2211":"switch (schwimmer, david)","2212":"david","2218":"","2219":"","2220":"","2221":"1.4","2222":"","2223":"u","2224":"test rrrsl, fgggfgbdkj, dfds3","2225":"dfd","2226":"EEE, AAA, CCC, FFF","2227":"sss","2228":"filter role2, filter role3","2229":"","id":"507735","fed_contact_id":"582980","subfed_contact_id":"582981","fedicon":"","2211_showProfilePicture":"0","Gprofile_company_pic":"","2211_linkUrl":"","2212_visibility":"community","2218_visibility":"community","2219_visibility":"community","2220_visibility":"private","2222_flag":"","2222_visibility":"","contactname":"switch (schwimmer, david)","Ismember":"ismember","Gender":"Male","Iscompany":"1","contactclubid":"651","fedmembershipType":"0","createdclubid":"651","clubmembershipType":"737","compDefContact":"607393","hasMainContact":"1","sameInvoiceAddress":"1","fedMembershipId":"","clubMembershipId":"737","fedmembershipApprove":"0","sponsorFlag":"0","Gprofile_company_picExists":false,"edit_url":"/club111/backend/contact/editcontact/507735","SponsorIcon":false,"Function":null,"click_url":"/club111/backend/contact/data/0/507735","edit":"0"},{"2211":" ","2212":"","2218":"test@fairgate.ch","2219":"","2220":"","2221":"0.7","2222":"","2223":"","2224":"","2225":"","2226":"","2227":"","2228":"","2229":"","id":"617356","fed_contact_id":"617357","subfed_contact_id":"617358","fedicon":"","2211_showProfilePicture":"0","Gprofile_company_pic":"","2211_linkUrl":"","2212_visibility":"community","2218_visibility":"community","2219_visibility":"community","2220_visibility":"private","2222_flag":"","2222_visibility":"","contactname":", ","Ismember":"ismember","Gender":"","Iscompany":"0","contactclubid":"651","fedmembershipType":"89","createdclubid":"651","clubmembershipType":"737","compDefContact":"","hasMainContact":"0","sameInvoiceAddress":"1","fedMembershipId":"89","clubMembershipId":"737","fedmembershipApprove":"0","sponsorFlag":"0","Gprofile_company_picExists":false,"edit_url":"/club111/backend/contact/editcontact/617356","SponsorIcon":false,"Function":null,"click_url":"/club111/backend/contact/data/1/617356","edit":"0"},{"2211":"test, test","2212":"test","2218":"","2219":"","2220":"","2221":"","2222":"","2223":"u","2224":"","2225":"dfd","2226":"","2227":"sss","2228":"","2229":"","id":"619560","fed_contact_id":"619558","subfed_contact_id":"619559","fedicon":"","2211_showProfilePicture":"0","Gprofile_company_pic":"","2211_linkUrl":"","2212_visibility":"community","2218_visibility":"community","2219_visibility":"community","2220_visibility":"private","2222_flag":"","2222_visibility":"","contactname":"test, test","Ismember":"ismember","Gender":"Male","Iscompany":"0","contactclubid":"651","fedmembershipType":"832","createdclubid":"651","clubmembershipType":"737","compDefContact":"","hasMainContact":"0","sameInvoiceAddress":"1","fedMembershipId":"832","clubMembershipId":"737","fedmembershipApprove":"0","sponsorFlag":"0","Gprofile_company_picExists":false,"edit_url":"/club111/backend/contact/editcontact/619560","SponsorIcon":false,"Function":null,"click_url":"/club111/backend/contact/data/2/619560","edit":"0"},{"2211":"cont1, new","2212":"new","2218":"","2219":"","2220":"","2221":"","2222":"","2223":"aaa","2224":"","2225":"dfd, test","2226":"","2227":"sss","2228":"","2229":"","id":"620009","fed_contact_id":"620007","subfed_contact_id":"620008","fedicon":"","2211_showProfilePicture":"0","Gprofile_company_pic":"","2211_linkUrl":"","2212_visibility":"community","2218_visibility":"community","2219_visibility":"community","2220_visibility":"private","2222_flag":"","2222_visibility":"","contactname":"cont1, new","Ismember":"ismember","Gender":"Male","Iscompany":"0","contactclubid":"651","fedmembershipType":"89","createdclubid":"651","clubmembershipType":"800","compDefContact":"","hasMainContact":"0","sameInvoiceAddress":"1","fedMembershipId":"89","clubMembershipId":"800","fedmembershipApprove":"0","sponsorFlag":"0","Gprofile_company_picExists":false,"edit_url":"/club111/backend/contact/editcontact/620009","SponsorIcon":false,"Function":null,"click_url":"/club111/backend/contact/data/3/620009","edit":"0"},{"2211":"qwe, qwe","2212":"qwe","2218":"qwe@qwe.com","2219":"","2220":"","2221":"0.7","2222":"","2223":"","2224":"","2225":"","2226":"","2227":"sss","2228":"","2229":"sasdsadsad","id":"620432","fed_contact_id":"620430","subfed_contact_id":"620431","fedicon":"","2211_showProfilePicture":"0","Gprofile_company_pic":"","2211_linkUrl":"","2212_visibility":"community","2218_visibility":"community","2219_visibility":"community","2220_visibility":"private","2222_flag":"","2222_visibility":"","contactname":"qwe, qwe","Ismember":"ismember","Gender":"Male","Iscompany":"0","contactclubid":"651","fedmembershipType":"116","createdclubid":"651","clubmembershipType":"1171","compDefContact":"","hasMainContact":"0","sameInvoiceAddress":"1","fedMembershipId":"116","clubMembershipId":"1171","fedmembershipApprove":"0","sponsorFlag":"0","Gprofile_company_picExists":false,"edit_url":"/club111/backend/contact/editcontact/620432","SponsorIcon":false,"Function":null,"click_url":"/club111/backend/contact/data/4/620432","edit":"0"},{"2211":"abhi, abhi","2212":"abhi","2218":"poi@yopmail.com","2219":"","2220":"","2221":"0.6","2222":"","2223":"","2224":"","2225":"","2226":"","2227":"sss","2228":"","2229":"","id":"620441","fed_contact_id":"620439","subfed_contact_id":"620440","fedicon":"","2211_showProfilePicture":"0","Gprofile_company_pic":"http://192.168.0.143:8080/uploads/608/contact/profilepic/width_150/9(1).gif","2211_linkUrl":"","2212_visibility":"community","2218_visibility":"community","2219_visibility":"community","2220_visibility":"private","2222_flag":"","2222_visibility":"","contactname":"abhi, abhi","Ismember":"ismember","Gender":"Male","Iscompany":"0","contactclubid":"651","fedmembershipType":"117","createdclubid":"651","clubmembershipType":"737","compDefContact":"","hasMainContact":"0","sameInvoiceAddress":"1","fedMembershipId":"117","clubMembershipId":"737","fedmembershipApprove":"0","sponsorFlag":"0","Gprofile_company_picExists":false,"edit_url":"/club111/backend/contact/editcontact/620441","SponsorIcon":false,"Function":null,"click_url":"/club111/backend/contact/data/5/620441","edit":"0"},{"2211":"aaa, zzzzpp","2212":"zzzzpp","2218":"priyeshp11@yahoo.in","2219":"","2220":"","2221":"0.7","2222":"","2223":"","2224":"","2225":"","2226":"","2227":"","2228":"","2229":"","id":"620704","fed_contact_id":"620702","subfed_contact_id":"620703","fedicon":"","2211_showProfilePicture":"0","Gprofile_company_pic":"http://192.168.0.143:8080/uploads/608/contact/profilepic/width_150/file1-ä.jpg","2211_linkUrl":"","2212_visibility":"community","2218_visibility":"community","2219_visibility":"community","2220_visibility":"private","2222_flag":"","2222_visibility":"","contactname":"aaa, zzzzpp","Ismember":"ismember","Gender":"Male","Iscompany":"0","contactclubid":"651","fedmembershipType":"0","createdclubid":"651","clubmembershipType":"1287","compDefContact":"","hasMainContact":"0","sameInvoiceAddress":"0","fedMembershipId":"","clubMembershipId":"1287","fedmembershipApprove":"0","sponsorFlag":"1","Gprofile_company_picExists":true,"edit_url":"/club111/backend/contact/editcontact/620704","SponsorIcon":false,"Function":null,"click_url":"/club111/backend/contact/data/6/620704","edit":"0"},{"2211":"ab, blog","2212":"blog","2218":"blogpost@yopmail.com","2219":"","2220":"","2221":"0.7","2222":"","2223":"","2224":"","2225":"","2226":"","2227":"sss","2228":"","2229":"","id":"620775","fed_contact_id":"620773","subfed_contact_id":"620774","fedicon":"","2211_showProfilePicture":"0","Gprofile_company_pic":"","2211_linkUrl":"","2212_visibility":"community","2218_visibility":"community","2219_visibility":"community","2220_visibility":"private","2222_flag":"","2222_visibility":"","contactname":"ab, blog","Ismember":"ismember","Gender":"Male","Iscompany":"0","contactclubid":"651","fedmembershipType":"83","createdclubid":"651","clubmembershipType":"1172","compDefContact":"","hasMainContact":"0","sameInvoiceAddress":"0","fedMembershipId":"83","clubMembershipId":"1172","fedmembershipApprove":"0","sponsorFlag":"0","Gprofile_company_picExists":false,"edit_url":"/club111/backend/contact/editcontact/620775","SponsorIcon":false,"Function":null,"click_url":"/club111/backend/contact/data/7/620775","edit":"0"},{"2211":"club, rinu","2212":"rinu","2218":"rinuclub@yopmail.com","2219":"","2220":"","2221":"0.7","2222":"2015","2223":"","2224":"","2225":"","2226":"","2227":"sss","2228":"","2229":"","id":"620944","fed_contact_id":"620942","subfed_contact_id":"620943","fedicon":"","2211_showProfilePicture":"0","Gprofile_company_pic":"http://192.168.0.143:8080/uploads/608/contact/profilepic/width_150/tupu.jpg","2211_linkUrl":"","2212_visibility":"community","2218_visibility":"community","2219_visibility":"community","2220_visibility":"private","2222_flag":"","2222_visibility":"","contactname":"club, rinu","Ismember":"ismember","Gender":"Male","Iscompany":"0","contactclubid":"651","fedmembershipType":"116","createdclubid":"651","clubmembershipType":"800","compDefContact":"","hasMainContact":"0","sameInvoiceAddress":"1","fedMembershipId":"116","clubMembershipId":"800","fedmembershipApprove":"0","sponsorFlag":"0","Gprofile_company_picExists":false,"edit_url":"/club111/backend/contact/editcontact/620944","SponsorIcon":false,"Function":null,"click_url":"/club111/backend/contact/data/8/620944","edit":"0"},{"2211":"white, white","2212":"white","2218":"white@yopmail.com","2219":"","2220":"","2221":"0.6","2222":"","2223":"","2224":"","2225":"","2226":"","2227":"","2228":"","2229":"","id":"628086","fed_contact_id":"628084","subfed_contact_id":"628085","fedicon":"","2211_showProfilePicture":"0","Gprofile_company_pic":"","2211_linkUrl":"","2212_visibility":"community","2218_visibility":"community","2219_visibility":"community","2220_visibility":"private","2222_flag":"","2222_visibility":"","contactname":"white, white","Ismember":"ismember","Gender":"Male","Iscompany":"0","contactclubid":"651","fedmembershipType":"117","createdclubid":"651","clubmembershipType":"800","compDefContact":"","hasMainContact":"0","sameInvoiceAddress":"1","fedMembershipId":"117","clubMembershipId":"800","fedmembershipApprove":"0","sponsorFlag":"0","Gprofile_company_picExists":false,"edit_url":"/club111/backend/contact/editcontact/628086","SponsorIcon":false,"Function":null,"click_url":"/club111/backend/contact/data/9/628086","edit":"0"},{"2211":"uiop, qwerty","2212":"qwerty","2218":"","2219":"","2220":"","2221":"","2222":"","2223":"","2224":"","2225":"testdff","2226":"","2227":"","2228":"","2229":"","id":"648877","fed_contact_id":"648875","subfed_contact_id":"648876","fedicon":"","2211_showProfilePicture":"0","Gprofile_company_pic":"","2211_linkUrl":"","2212_visibility":"community","2218_visibility":"community","2219_visibility":"community","2220_visibility":"private","2222_flag":"","2222_visibility":"","contactname":"uiop, qwerty","Ismember":"ismember","Gender":"Male","Iscompany":"0","contactclubid":"651","fedmembershipType":"83","createdclubid":"651","clubmembershipType":"1195","compDefContact":"","hasMainContact":"0","sameInvoiceAddress":"1","fedMembershipId":"83","clubMembershipId":"1195","fedmembershipApprove":"0","sponsorFlag":"0","Gprofile_company_picExists":false,"edit_url":"/club111/backend/contact/editcontact/648877","SponsorIcon":false,"Function":null,"click_url":"/club111/backend/contact/data/10/648877","edit":"0"},{"2211":"uiop, qwerty","2212":"qwerty","2218":"","2219":"","2220":"","2221":"","2222":"","2223":"","2224":"","2225":"","2226":"","2227":"","2228":"","2229":"","id":"648962","fed_contact_id":"648960","subfed_contact_id":"648961","fedicon":"","2211_showProfilePicture":"0","Gprofile_company_pic":"","2211_linkUrl":"","2212_visibility":"community","2218_visibility":"community","2219_visibility":"community","2220_visibility":"private","2222_flag":"","2222_visibility":"","contactname":"uiop, qwerty","Ismember":"ismember","Gender":"Male","Iscompany":"0","contactclubid":"651","fedmembershipType":"89","createdclubid":"651","clubmembershipType":"1195","compDefContact":"","hasMainContact":"0","sameInvoiceAddress":"1","fedMembershipId":"89","clubMembershipId":"1195","fedmembershipApprove":"0","sponsorFlag":"0","Gprofile_company_picExists":false,"edit_url":"/club111/backend/contact/editcontact/648962","SponsorIcon":false,"Function":null,"click_url":"/club111/backend/contact/data/11/648962","edit":"0"},{"2211":"test1, test1","2212":"test1","2218":"testing@yopmail.com","2219":"","2220":"","2221":"","2222":"","2223":"","2224":"","2225":"","2226":"","2227":"","2228":"","2229":"","id":"780050","fed_contact_id":"780048","subfed_contact_id":"780049","fedicon":"","2211_showProfilePicture":"0","Gprofile_company_pic":"","2211_linkUrl":"","2212_visibility":"community","2218_visibility":"community","2219_visibility":"community","2220_visibility":"private","2222_flag":"","2222_visibility":"","contactname":"test1, test1","Ismember":"ismember","Gender":"Male","Iscompany":"0","contactclubid":"651","fedmembershipType":"90","createdclubid":"651","clubmembershipType":"1195","compDefContact":"","hasMainContact":"0","sameInvoiceAddress":"1","fedMembershipId":"90","clubMembershipId":"1195","fedmembershipApprove":"0","sponsorFlag":"0","Gprofile_company_picExists":false,"edit_url":"/club111/backend/contact/editcontact/780050","SponsorIcon":false,"Function":null,"click_url":"/club111/backend/contact/data/12/780050","edit":"0"},{"2211":"xplay, xplay","2212":"xplay","2218":"moto@yopmail.com","2219":"","2220":"","2221":"0.3","2222":"","2223":"","2224":"","2225":"","2226":"","2227":"","2228":"","2229":"","id":"952105","fed_contact_id":"952103","subfed_contact_id":"952104","fedicon":"","2211_showProfilePicture":"0","Gprofile_company_pic":"","2211_linkUrl":"","2212_visibility":"community","2218_visibility":"community","2219_visibility":"community","2220_visibility":"private","2222_flag":"","2222_visibility":"","contactname":"xplay, xplay","Ismember":"ismember","Gender":"Male","Iscompany":"0","contactclubid":"651","fedmembershipType":"90","createdclubid":"651","clubmembershipType":"1195","compDefContact":"","hasMainContact":"0","sameInvoiceAddress":"1","fedMembershipId":"90","clubMembershipId":"1195","fedmembershipApprove":"0","sponsorFlag":"0","Gprofile_company_picExists":false,"edit_url":"/club111/backend/contact/editcontact/952105","SponsorIcon":false,"Function":null,"click_url":"/club111/backend/contact/data/13/952105","edit":"0"},{"2211":"FAIR-2729, FAIR-2729","2212":"FAIR-2729","2218":"FAIR-2729@yopmail.com","2219":"","2220":"","2221":"0.1","2222":"","2223":"","2224":"","2225":"","2226":"","2227":"","2228":"","2229":"","id":"1098630","fed_contact_id":"1098628","subfed_contact_id":"1098629","fedicon":"","2211_showProfilePicture":"0","Gprofile_company_pic":"","2211_linkUrl":"","2212_visibility":"community","2218_visibility":"community","2219_visibility":"community","2220_visibility":"private","2222_flag":"","2222_visibility":"","contactname":"FAIR-2729, FAIR-2729","Ismember":"ismember","Gender":"Male","Iscompany":"0","contactclubid":"651","fedmembershipType":"0","createdclubid":"651","clubmembershipType":"1195","compDefContact":"","hasMainContact":"0","sameInvoiceAddress":"1","fedMembershipId":"","clubMembershipId":"1195","fedmembershipApprove":"0","sponsorFlag":"0","Gprofile_company_picExists":false,"edit_url":"/club111/backend/contact/editcontact/1098630","SponsorIcon":false,"Function":null,"click_url":"/club111/backend/contact/data/14/1098630","edit":"0"}],"elementId":75669,"elementType":"contacts-table"},
+              pagination:true,
+
+              
+          };
+          var options2 = {
+              boxId : 'elem001',
+              options:{
+                  items:100,
+              },
+              elemId:'fgElem31453', //Dynamic element id 
+              initCompletedCallback: function ($object){
+              },
+              filter:true,
+              filterData: [
+                  {
+                    "id": "aaaa",
+                    "title": "Select AAAAAAAAAA",
+                    "shortName": "sadadasdasdad",
+                    "type": "CF",
+                    "selectgroup": "Personal",
+                    "input": [
+                      {
+                        "id": "Informal",
+                        "title": "Informal"
+                      },
+                      {
+                        "id": "Formal",
+                        "title": "Formal"
+                      }
+                    ],
+                    "data-edit-type": "select2",
+                    "catId": "1"
+                  },
+                  {
+                    "id": "1",
+                    "title": "Select Anredeart",
+                    "shortName": "Anredeart",
+                    "type": "CF",
+                    "selectgroup": "Personal",
+                    "input": [
+                      {
+                        "id": "Informal",
+                        "title": "Informal"
+                      },
+                      {
+                        "id": "Formal",
+                        "title": "Formal"
+                      }
+                    ],
+                    "data-edit-type": "select2",
+                    "catId": "1"
+                  },
+                  {
+                    "id": "fed_membership",
+                    "name": "FMfed_membership",
+                    "title": "Select Fed memberships",
+                    "type": "FM",
+                    "input": [
+                      {
+                        "id": "",
+                        "title": "- Select fed membership -"
+                      },
+                      {
+                        "id": "any",
+                        "title": "Any fed membership"
+                      },
+                      {
+                        "id": 1405,
+                        "title": "Aktivmitglied",
+                        "itemType": "fed_membership",
+                        "bookMarkId": null,
+                        "draggable": 1
+                      }
+                    ],
+                    "shortTitle": "Fed membership"
+                  },
+                  {
+                    "id": "3502",
+                    "type": "WORKGROUP",
+                    "title": "Select workgroup:en",
+                    "functionAssign": "individual",
+                    "input": [
+                      {
+                        "id": "7412",
+                        "type": "select",
+                        "title": "Executive Board",
+                        "isRoleActive": "1",
+                        "bookMarkId": null,
+                        "categoryId": "3502",
+                        "itemType": "WORKGROUP",
+                        "draggable": "1",
+                        "functionAssign": "individual",
+                        "input": [
+                          {
+                            "id": "8284",
+                            "title": "Präsident"
+                          },
+                          {
+                            "id": null,
+                            "title": null
+                          }
+                        ]
+                      }
+                    ],
+                    "show_filter": 1
+                  }
+                ],
+              searchBox: true,
+              pagination:true,
+              paginationOptions:{
+                  options:{
+                      items:200,
+                      itemsOnPage:10, 
+                  }
+              }
+              
+          };
+
+          var options3 = {
+              boxId : 'elem002',
+              options:{
+                  items:100,
+              },
+              elemId:'fgElem319953', //Dynamic element id 
+              initCompletedCallback: function ($object){
+              },
+              filter:true,
+              filterData: [
+                  {
+                    "id": "aaaa",
+                    "title": "Select AAAAAAAAAA",
+                    "shortName": "sadadasdasdad",
+                    "type": "CF",
+                    "selectgroup": "Personal",
+                    "input": [
+                      {
+                        "id": "Informal",
+                        "title": "Informal"
+                      },
+                      {
+                        "id": "Formal",
+                        "title": "Formal"
+                      }
+                    ],
+                    "data-edit-type": "select2",
+                    "catId": "1"
+                  },
+                  {
+                    "id": "1",
+                    "title": "Select Anredeart",
+                    "shortName": "Anredeart",
+                    "type": "CF",
+                    "selectgroup": "Personal",
+                    "input": [
+                      {
+                        "id": "Informal",
+                        "title": "Informal"
+                      },
+                      {
+                        "id": "Formal",
+                        "title": "Formal"
+                      }
+                    ],
+                    "data-edit-type": "select2",
+                    "catId": "1"
+                  },
+                  {
+                    "id": "fed_membership",
+                    "name": "FMfed_membership",
+                    "title": "Select Fed memberships",
+                    "type": "FM",
+                    "input": [
+                      {
+                        "id": "",
+                        "title": "- Select fed membership -"
+                      },
+                      {
+                        "id": "any",
+                        "title": "Any fed membership"
+                      },
+                      {
+                        "id": 1405,
+                        "title": "Aktivmitglied",
+                        "itemType": "fed_membership",
+                        "bookMarkId": null,
+                        "draggable": 1
+                      }
+                    ],
+                    "shortTitle": "Fed membership"
+                  },
+                  {
+                    "id": "3502",
+                    "type": "WORKGROUP",
+                    "title": "Select workgroup:en",
+                    "functionAssign": "individual",
+                    "input": [
+                      {
+                        "id": "7412",
+                        "type": "select",
+                        "title": "Executive Board",
+                        "isRoleActive": "1",
+                        "bookMarkId": null,
+                        "categoryId": "3502",
+                        "itemType": "WORKGROUP",
+                        "draggable": "1",
+                        "functionAssign": "individual",
+                        "input": [
+                          {
+                            "id": "8284",
+                            "title": "Präsident"
+                          },
+                          {
+                            "id": null,
+                            "title": null
+                          }
+                        ]
+                      }
+                    ],
+                    "show_filter": 1
+                  }
+                ],
+              searchBox: true,
+              pagination:true,
+              paginationOptions:{
+                  options:{
+                      items:2000,
+                      itemsOnPage:10, 
+                  }
+              }
+              
+          };
+
+          FgPortraitElement.initSettings(options);
+          FgPortraitElement.renderPagination({},'fgElem3453')
+         // FgPortraitElement.initSettings(options2);
+         // FgPortraitElement.initSettings(options3);
+      });

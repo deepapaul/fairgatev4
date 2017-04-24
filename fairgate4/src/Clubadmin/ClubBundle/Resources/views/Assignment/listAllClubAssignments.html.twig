@@ -1,0 +1,71 @@
+<script type="text/template" id="listAllClubAssigments" >
+<div class='row'>
+<% if(arrayClassification.length==0) { %>
+                <div class="col-md-12 fg-common-top">
+                    <div class="alert alert-info">
+                        <button class="close" data-close="alert"></button>
+                        <span>{{'CLUB_ASSIGNMENT_NO_ENTRY'|trans}}</span>
+                    </div> 
+                </div>
+            <% } else { %>
+    <div class="col-md-6 fg-common-top"> 
+     <% if(arrayClassification.length!=0) {  %>
+        <div class="portlet box fg-contact-width" id="fg-dev-classification">
+            <div class="panel">
+                <div class="panel-heading fg-theme-head fg-common-btm">
+                    <h3 class="fg-panel-title">{{'CL_CLASSIFICATION'|trans}}</h3>
+                </div>
+                <% if(content.hasOwnProperty('Classification')) { 
+                        var InheritAssignmentArray=content.Classification;
+                %>
+        
+                <div class="insert_new_assignment_panel">
+                    <% _.each(InheritAssignmentArray,function(InheritVal,InheritKey){ %>
+                        <div class="row fg-border-line" id="fg-clrChangeBlk_<%- InheritVal.classificationId %>_<%- InheritVal.classId %>">
+                            <div class="col-lg-5 col-sm-5 fg-panel-move fg-font-frt" data-name="fg-dev-class-title"><%- InheritVal.classTitle %>
+                            </div>
+                            <div class="col-lg-4 col-sm-4 fg-panel-move" data-name="fg-dev-classification-title">
+                                <span class="fg-category fg-blue-box"><%- InheritVal.classificationTitle %></span>
+                            </div>
+                            <div class="col-lg-3 col-sm-3 fg-panel-move" data-name="fg-dev-club-cnt">
+                               <a class="fg-link-font-siz" href="javascript:handleCountOrSidebarClick.updateFilter('class', 'clubfilterdisplayflag_<%- content.loggedclubId%>-<%- content.contactId%>', '', '<%- content.loggedclubId%>', '<%- content.contactId%>', '', '', '<%- content.clubUrlIdentifier %>', 'count', '', '', '', '', 'club', '', '<%- InheritVal.classificationId %>', '<%- InheritVal.classId %>', '')">
+                               <% if( InheritVal.clubCount > 0) { %>
+                                   <%- InheritVal.clubCount %>
+                                   <% if( InheritVal.clubCount ==1) {
+                                       %> <%-content.club %> <% }
+                                      else { %> <%-content.clubs %> <% } } %>
+                                </a>
+                            </div>
+                            <div class="fg-last-icon" data-name="fg-dev-lasticon">
+                                 <div class="closeico">
+                                    <% if(content.clubType=='sub_federation' && InheritVal.subLevel == 'assign')  { %>
+                                    <input type="checkbox" class="make-switch" id="<%- overviewClubId %>_<%- InheritVal.classificationId %>_class_<%- InheritVal.classId %>_is_deleted" data-key="<%- overviewClubId %>.<%- InheritVal.classificationId%>.class.<%- InheritVal.classId %>.is_deleted" name="<%- overviewClubId %>_<%- InheritVal.classificationId%>.class.<%- InheritVal.classId %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- InheritVal.classificationId%>_<%- InheritVal.classId %>">
+                                    <label for="<%- overviewClubId %>_<%- InheritVal.classificationId%>_class_<%- InheritVal.classId %>_is_deleted"></label>
+                                    <% } else if(content.clubType=='federation') { %>
+                                    <input type="checkbox" class="make-switch" id="<%- overviewClubId %>_<%- InheritVal.classificationId %>_class_<%- InheritVal.classId %>_is_deleted" data-key="<%- overviewClubId %>.<%- InheritVal.classificationId%>.class.<%- InheritVal.classId %>.is_deleted" name="<%- overviewClubId %>_<%- InheritVal.classificationId%>.class.<%- InheritVal.classId %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- InheritVal.classificationId%>_<%- InheritVal.classId %>">
+                                    <label for="<%- overviewClubId %>_<%- InheritVal.classificationId%>_class_<%- InheritVal.classId %>_is_deleted"></label>
+                                    <% } else { %>
+                                    <i class="fa fa-lock fa-2x ash"></i>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                      <% }); %>
+                </div>
+                <% } %>
+            </div>
+          <% } %>  
+        <% if(arrayClassification.length!=0) {  %>
+        <div class="col-lg-12 fg-common-btm-seven fg-clear-left">
+            <a element-title="Classification" element-type="Classification" class="create_new_assignment" data-toggle="modal" href="#basic" id="pencil">
+                <i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i>
+                <span class="fg-add-text">{%trans%}ADD_CLASS{%endtrans%}</span>
+            </a>
+        </div>
+        <% } %>
+        </div>
+  
+    </div>
+    <% } %>
+</div>
+</script>

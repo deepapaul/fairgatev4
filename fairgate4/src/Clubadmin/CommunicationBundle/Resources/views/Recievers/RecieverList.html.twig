@@ -1,0 +1,166 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' :'::clubadmin/layout.html.twig' %}
+{% set title='RECIEVER_TITLE'|trans({'%name%':listname}) %}
+{% set pageTitle = title %}
+{% block pagecontent %} 
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+            {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+        </div>
+    </div>
+    <div class="row margin-bottom-10">
+        {% set page_settings = { 'pagetitle':'true','searchbox':'true','columnsettings':'true','langcount':true }  %}
+            {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': title, 'page_settings': page_settings,'searchbox_id':'searchbox' } %}
+            <div class="fg-clear"></div>
+    </div>
+    <div class="alert alert-danger display-hide">
+        <button class="close" data-close="alert"></button>
+        {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+    </div>
+    <div id="data-tabs-content">
+        <!-- END PAGE HEADER-->
+        <div id="sudscriber-tab" class="tab-pane">
+            <div class="row">
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet-body new-table-height" id="tableWrapper">
+                    <table data-ajax-path="{{ path('get_reciever_list')  }}"
+                           class="fg-dev-communication-dataTable table 
+                   table-bordered
+                   table-hover
+                   table-condensed
+                   dataTable-scroll-y
+                   dataTable-ajax
+                   dataTable-rows
+                   dataTable-scroll-x
+                   dataTables_scrollBody
+                   lastcolumn_sort dataTable-initialSort data-count"   xWidth="100" yHeight="300" data-table-name="dataTables" data_row_change="fgrowchange"   dataTable-hover="true" data-sort="0#asc" data-storage="communication_receiverlist" data-columnstorage="communication_receiverlist_column" data-column-def="true" data_table_type="recipient" data-update-flag="true">
+                        <thead>
+                            <tr>
+                                <th >{%trans%}CONTACT_NAME{%endtrans%}</th>
+                                    {% if( hasHierarchy == '1') %}
+                                    <th >{{ clubTitle }}</th>
+                                    <th >{{ subfederationTitle }}</th>
+                                    {% endif %}                                        
+                                <th>{%trans%}SL_GENDER{%endtrans%}</th>
+                                <th>{%trans%}SL_SALUTATION{%endtrans%}</th>
+                                <th>{%trans%}PRIMARY_EMAIL{%endtrans%}</th>
+                                    {% for column in tableColumns %}
+
+                                    <th>{{column.shortname}}</th>
+                                    {% endfor %}
+                                <th>{%trans%}NL_SUBSCRIBER{%endtrans%}</th>
+                                <th>{%trans%}RL_FIELD_CORRES_LANG{%endtrans%}</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!-- END EXAMPLE TABLE PORTLET-->
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+<script>
+        function getMainClub(contactClub){
+            var myarr = contactClub.split(",");
+            for(var loc = 0; loc < myarr.length; loc++){
+                var clubTitle = (myarr[loc] !== null && myarr[loc] !== "0") ? clubData[myarr[loc].replace('#mainclub#','')] : "-";
+                if (myarr.length == 1) {
+                    myarr[loc] = clubTitle;
+                } else {
+                    myarr[loc] = clubTitle + ((myarr[loc].indexOf('#mainclub#') !== -1) ? ' <i class="fa fa-star text-yellow"></i>' : '');
+                }
+            }
+            return myarr.join('<br>');
+        }
+        var contactOverviewPath = '{{path('render_contact_overview', {'offset': 0, 'contact': 'CONTACT' })}}';
+        var filterId = '{{filterId}}';
+        var clubData = {{ clubData|json_encode|raw }};
+        var columnDefs = [
+                { "name": "contactname", "targets": 0, data:function(row, type, val, meta){
+                    {% if(hasContactModuleAccess == 1) %}
+                        return  '<a href="' + contactOverviewPath.replace('CONTACT', row['id']) + '" target="_blank">' + row['contactname'] + '</a>';  
+                    {% else %}
+                        return  row['contactname'];
+                    {% endif %}                        
+                }},                       
+                {% set i=0 %}
+                {% if( hasHierarchy == '1') %}
+                    { "name": "FIclub", "targets": 1, data:function(row, type, val, meta){
+                        return (row['FIclub'] !== "" && row['FIclub'] !== null) ? getMainClub(row['FIclub']) : '-';
+                    }},
+                    { "name": "FIsub_federation", "targets": 2, data:function(row, type, val, meta){
+                        return  (row['FIsub_federation'] !== "" && row['FIsub_federation'] !== null) ? getMainClub(row['FIsub_federation']) : '-';
+                    }},                            
+                    {% set i=2 %}
+                {% endif %}   
+                {% set i=i+1 %}  
+                    { "name": "Gender", "targets":{{ i }}, data:function(row, type, val, meta){
+                        if (row['Gender'] !== '' && row['Gender'] !== null) {    
+                            if ((row['Gender'].toLowerCase()) == 'male') {
+                                row['Gender'] = '{{'CM_MALE'|trans }}';
+                            } else if ((row['Gender'].toLowerCase()) == 'female') {
+                                row['Gender'] = '{{'CM_FEMALE'|trans }}';
+                            }
+                        } else {
+                            row['Gender'] = '-';
+                        }
+                        return  row['Gender'];
+                    }},
+                {% set i=i+1 %}  
+                    { "name": "salutation", "targets":{{  i }}, data:function(row, type, val, meta){
+                        if (row['salutation'] !== '' && row['salutation'] !== null) {      
+                            if ((row['salutation'].toLowerCase()) == 'formal') {
+                                row['salutation'] = '{{'CM_FORMAL'|trans }}';
+                            } else if ((row['salutation'].toLowerCase()) == 'informal') {
+                                row['salutation'] = '{{'CM_INFORMAL'|trans }}';
+                            }
+                        } else {
+                            row['salutation'] = '-';
+                        }
+                        return  row['salutation'];
+                    } },
+                {% set i=i+1 %}  
+                    { "name": "Email", "targets":{{ i }}, data:function(row, type, val, meta){
+                        return (row['Email'] !== '' && row['Email'] !== null) ? row['Email'].trim() : '-';
+                    }}
+                    ]
+                {% set i= i+1 %}
+                {% for emailcolumn in columns %}
+                    {% if emailcolumn=='C_Parent' %}
+                        columnDefs.push({ "name": '{{emailcolumn}}', "targets": {{i}} , data:function(row, type, val, meta){
+                            if (row['{{emailcolumn}}']) {
+                                row['{{emailcolumn}}'] = row['{{emailcolumn}}'].replace(';', '<br />').trim();
+                            }
+                            return  row['{{emailcolumn}}'] == '' ? '-':row['{{emailcolumn}}'];
+                        }})
+                    {%else%}    
+                        columnDefs.push({ "name": '{{emailcolumn}}', "targets": {{i}} , data:function(row, type, val, meta){
+                        return  (row['{{emailcolumn}}'] ? (row['{{emailcolumn}}'].trim() == '' ? '-':row['{{emailcolumn}}']) : '-');
+                        }})
+                    {% endif %}
+                    {% set i=i+1 %}       
+                {% endfor %}
+                columnDefs.push({ "name": "Subscriber", "targets": {{i}} , data:function(row, type, val, meta){
+                    if (row['Subscriber'] == 1) {
+                        row['Subscriber'] = '{{'RL_YES'|trans }}';
+                    } else {
+                        row['Subscriber'] = '{{'RL_NO'|trans }}';
+                    }
+                    return row['Subscriber'];
+                }})
+                {% set i=i+1 %}
+                columnDefs.push({ "name": "515", "targets": {{i}} , data:function(row, type, val, meta){
+                    return  row['CL_lang'];
+                }})
+</script>    
+<script src="{{ asset('fgcustom/js/sidebar.js') }}" type="text/javascript"></script>    
+<script src="{{ asset('fgcustom/js/page/fg_communication_dataTable.js')}}" type="text/javascript"></script> 
+<script>
+    $(function(){
+        FgCommunicationTable.init();
+    });
+</script>
+{% endblock %}

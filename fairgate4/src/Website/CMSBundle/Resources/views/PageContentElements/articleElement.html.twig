@@ -1,0 +1,207 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = (elementId == 'new') ? 'ARTICLE_ELEMENT_ADD_PAGE_TITLE'|trans : 'ARTICLE_ELEMENT_EDIT_PAGE_TITLE'|trans %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTAINER -->
+        <div class="col-md-12">
+            <!-- BEGIN BREADCRUMB-->
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <!-- END BREADCRUMB-->
+            <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+            {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'contactId': '', 'tabs': tabs, 'roleCount' : '' , 'type':'', 'url' : ''} %}
+            <!-- END PAGE TITLE AND PANEL TABS -->
+            <div id="failcallbackClientSide" class="alert alert-danger" style="display:none;">
+                <button class="close" data-close="alert"></button>
+                <span>{{'CMS_ELEMENT_FORM_ERROR'|trans}}</span>
+            </div>
+            
+            <div class="row fg-cms-elements-head-edit-wrapper" id="elementArticleWrapper">
+                <div class="col-md-12">
+                    <div class="form-body">
+                        <form id="addArticleElement" class="" method="post" data-validation="true" onsubmit="return false;" novalidate="novalidate">
+                            <div class="form-group fg-clear fg-cms-article-areas">
+                                <label class="col-md-2 control-label fg-marg-top-5 text-right" for="articleTitle">{{'ARTICLE_AREAS'|trans}}</label>
+                                <div class="col-md-6  col-lg-5 ">
+                                    <select class="form-control selectpicker"  multiple="multiple" name='articleAreas' id='articleAreas'>
+                                        <optgroup label="">
+                                             {% if selectedAreasandCategories is not empty %}
+                                                    {% set selected = (fgtwig.inArray("ALL_AREAS", selectedAreasandCategories.areaIds)) ? 'selected' : ''  %}
+                                             {% endif %}
+                                            <option value="ALL_AREAS" {{selected|default('')}} class="single fg-arrow-all" >{{'CMS_ALL_AREAS'|trans }}</option>
+                                        </optgroup>
+                                        <optgroup label="">
+                                                 {% if selectedAreasandCategories is not empty %}
+                                                       {% set selected = (selectedAreasandCategories.areaClub) ? 'selected' : ''  %}
+                                                 {% endif %}
+                                                 <option class="multiple" {{selected|default('')}} value="{{fgclub.get('id')}}">{{fgtwig.getTerminolgyName('Club',singular)}}</option>
+                                           
+                                        </optgroup>
+                                        {% if areas.teams is not empty %}
+                                            <optgroup label="{{fgtwig.getTerminolgyName('Team',plural)}}">
+                                                {% for key, data in areas.teams %}
+                                                    {% if selectedAreasandCategories is not empty %}
+                                                        {% set selected = (fgtwig.inArray(key, selectedAreasandCategories.areaIds)) ? 'selected' : ''  %}
+                                                    {% endif %}
+                                                    <option class="multiple" {{selected|default('')}} value="{{ key }}"  >{{ data }}</option>
+                                                {% endfor %}
+                                            </optgroup>
+                                        {% endif %}
+                                        {% if areas.workgroups is not empty %}
+                                            <optgroup label="{{'CMS_WORKGROUP'|trans}}">
+                                                {% for key, data in areas.workgroups %}
+                                                    {% if selectedAreasandCategories is not empty %}
+                                                        {% set selected = (fgtwig.inArray(key, selectedAreasandCategories.areaIds)) ? 'selected' : ''  %}
+                                                    {% endif %}
+                                                    <option class="multiple" {{selected|default('')}} value="{{ key }}" > {% if (data=='Executive Board') %} {{fgtwig.getTerminolgyName('Executive Board',singular)}} {% else %} {{ data }} {% endif %}</option>
+                                                {% endfor %}
+                                            </optgroup>
+                                        {% endif %}
+
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="form-group fg-clear fg-cms-article-categories">
+                                <label class="col-md-2 control-label fg-marg-top-5  text-right" for="from-date">{{'ARTICLE_CATEGORIES'|trans}}</label>
+                                <div class="col-md-6  col-lg-5 ">
+                                    <select name="articleCategories" id="articleCategories" class="form-control selectpicker" multiple="multiple" >
+                                        <optgroup label="">
+                                             {% if selectedAreasandCategories is not empty %}
+                                                    {% set selected = (fgtwig.inArray("ALL_CATS", selectedAreasandCategories.catIds)) ? 'selected' : ''  %}
+                                             {% endif %}
+                                            <option value="ALL_CATS" {{selected|default('')}} class="single fg-arrow-all" >{{'CMS_ALL_CATEGORIES'|trans }}</option>
+                                        </optgroup>
+                                        
+                                            {% for data in categories %}
+                                                {% if selectedAreasandCategories is not empty %}
+                                                    {% set selected = (fgtwig.inArray(data.id, selectedAreasandCategories.catIds)) ? 'selected' : ''  %}
+                                                {% endif %}
+                                                <option class="multiple" {{selected|default('')}} value="{{ data.id }}"  >{{ data.title }}</option>
+                                            {% endfor %}
+                                       
+                                    </select>
+                                </div>
+                            </div>
+                             
+                           {% if (clubType != 'federation' and clubType != 'standard_club') %}            
+                            <div class="form-group fg-clear">
+                                <div class="col-md-6 col-sm-8 col-lg-5 col-md-offset-2">
+                                    <label class="checkbox-inline fg-pad-left-0 " for="fedShared">
+                                        <input data-id="" {%if fedLowerLevelArticleCount == 0 %} disabled {% endif %} type="checkbox" name="fedShared" id="fedShared" {%if selectedAreasandCategories.sharedClub is defined and selectedAreasandCategories.sharedClub is not empty and (fgtwig.inArray(fedId, selectedAreasandCategories.sharedClub)) %} {%if fedLowerLevelArticleCount > 0 %} checked {% endif %} {% endif %} class="uniform">
+                                        {{'CMS_FEDERATION_SHARED_ARTICLES'|trans}}
+                                    </label>
+                                </div>
+                            </div>
+                           {% endif %}  
+                           {% if (clubType == 'sub_federation_club') %}        
+                            <div class="form-group fg-clear">
+                                <div class="col-md-6 col-sm-8 col-lg-5 col-md-offset-2">
+                                    <label class="checkbox-inline fg-pad-left-0 " for="subFedShared">
+                                        <input data-id="" {%if subFedLowerLevelArticleCount == 0 %} disabled {% endif %} type="checkbox" name="subFedShared" id="subFedShared" {%if selectedAreasandCategories.sharedClub is defined and selectedAreasandCategories.sharedClub is not empty and (fgtwig.inArray(subFedId, selectedAreasandCategories.sharedClub))  %} {%if subFedLowerLevelArticleCount > 0 %} checked {% endif %} {% endif %} class="uniform">
+                                        {{'CMS_SUB_FEDERATION_SHARED_ARTICLES'|trans}}
+                                    </label>
+                                </div>
+                            </div>
+                            {% endif %}        
+
+                            {%if (elementId > 0)%}
+                                {% include 'internal/savebutton.html.twig' with {'save_button_val':'CMS_ELEMENT_SAVE_BUTTON'|trans,'second_btn_val':'CMS_ELEMENT_SAVE_AND_BACK_BUTTON'|trans, 'second_button_id':'save_bac', 'discard_button_val':'CMS_ELEMENT_DISCARD_BUTTON'|trans, 'backLink': path('website_cms_page_edit',{'pageId': pageId}) } %}
+                            {%else%}
+                                {% include 'internal/savebutton.html.twig' with { 'save_button_id':'save_bac', 'save_button_val':'CMS_ELEMENT_ADD_BUTTON'|trans, 'second_btn_val':'CMS_ELEMENT_CANCEL_BUTTON'|trans, noDiscardChange:'1', 'backLink': path('website_cms_page_edit',{'pageId': pageId})} %}
+                            {%endif%}
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% include 'WebsiteCMSBundle:PageContentElements:cmsElementLogHeaderTemplate.html.twig' %}
+        </div>
+    {% endblock %}
+    {% block javascripts %}
+        <script src="{{ asset('fgassets/internal/js/fg_tab_selection_process.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/website/js/Fg_cms_article_element.js') }}" type="text/javascript"></script>
+        <script>
+            var FgPageTitlebar;
+            var tabheadingArray = {{ tabs|json_encode()|raw }};
+            var elementLogDetailsPath = "{{path('website_cms_element_log_data')}}";
+            var saveArticleElement = "{{path('website_cms_save_article_element')}}";
+            var profilePath = "{{ path('internal_community_profile', {'contactId': "dummy" }) }}";
+            var contentEditPagePath = '{{path('website_cms_page_edit',{'pageId': pageId})}}';
+            var type = 'articleElement';
+            var clubId = '{{fgclub.get('id')}}';
+            var contactId = '{{contactId}}';
+            var boxId = '{{boxId}}';
+            var elementId = '{{elementId}}';
+            var sortOrder = '{{sortOrder}}';
+            var pageId = '{{pageId}}';
+            statusTranslations = {
+                'added': "{{ 'LOG_FLAG_ADDED'|trans }}",
+                'changed': "{{ 'LOG_FLAG_CHANGED'|trans }}",
+                'deleted': "{{ 'LOG_FLAG_REMOVED'|trans }}",
+                'select': "{{ 'DROPDOWN_SELECT_OPTION'|trans }}",
+                'element' : "{{ 'CMS_ELEMENT'|trans }}",
+                'page_assignment' :"{{ 'CMS_PAGE_ASSIGNMENT'|trans }}"
+            };
+
+            var CmsArticleElement = new FgCmsArticleElement();
+            $(document).ready(function () {
+                    scope = angular.element($("#BaseController")).scope();
+                    FgPageTitlebar = $(".fg-action-menu-wrapper").FgPageTitlebar({
+                        title: true,
+                        tab: true,
+                        tabType: 'client'
+                    });
+
+                    var option = {
+                        pageType: 'cmsAddElement',
+                        contactId: contactId,
+                        currentClubId: clubId,
+                        localStorageName: type + '_' + clubId + '_' + contactId,
+                        tabheadingArray: tabheadingArray
+                    };
+
+
+                    Fgtabselectionprocess.initialize(option);
+                    FgDirtyFields.init('addArticleElement', {saveChangeSelector: "#save_changes, #save_bac", discardChangesCallback:CmsArticleElement.discardChangesCallback});
+                    var ArticleElementLog = new FgCmsArticleElementLog();
+                    ArticleElementLog.init();
+                    CmsArticleElement.renderContent();
+                    $('.selectpicker').selectpicker();
+                    $('select.selectpicker').selectpicker({noneSelectedText: statusTranslations['select']});
+                    $('select.selectpicker').selectpicker('render');
+                    FgUtility.handleSelectPicker();
+                    FgFormTools.handleUniform();
+            });
+
+            $('body').off('click', '#save_changes');
+            $('body').on('click', '#save_changes, #save_bac', function (e) {
+                var currentSelectedButton = $(this).attr('id');
+                var articleAreas = $('[name=articleAreas]').val();
+                var articleCategories = $('[name=articleCategories]').val();
+                var fedId = '{{fedId}}';
+                var subFedId = '{{subFedId}}';
+                var fedIdVal = ($("#fedShared").is(':checked')) ? fedId : '';
+                var subFedIdVal = ($("#subFedShared").is(':checked')) ? subFedId  : '';
+                var isValid =  CmsArticleElement.isValidForm(articleAreas, articleCategories, fedIdVal, subFedIdVal);
+                if(isValid){
+                  $("#fedShared").attr('data-id', fedIdVal); 
+                  $("#subFedShared").attr('data-id', subFedIdVal);
+                  var isAllArea = (articleAreas == 'ALL_AREAS') ?  1 : '';
+                  var isAllCat = (articleCategories == 'ALL_CATS') ? 1 : '';
+                
+                  var saveType = (currentSelectedButton == 'save_changes') ? 'save' : 'saveBack';
+                  var data = {'areas': articleAreas, 'categories': articleCategories, 'boxId':boxId, 'elementId':elementId, 'sortOrder':sortOrder, 'pageId':pageId, 'isAllArea':isAllArea, 'isAllCat':isAllCat, 'saveType':saveType, 'fedSharedVal':fedIdVal, 'subFedSharedVal':subFedIdVal };
+                  FgDirtyFields.removeAllDirtyInstances();
+                  //return false;
+                  FgXmlHttp.post(saveArticleElement, data, false, CmsArticleElement.saveElementCallback);
+                  $('#save_changes,#save_bac').attr('disabled','disabled');
+                }
+
+            });
+
+           $('body').on('click', '#preview', function (e) {
+                  window.location.href = contentEditPagePath;
+           });
+
+
+        </script>
+    {% endblock %}

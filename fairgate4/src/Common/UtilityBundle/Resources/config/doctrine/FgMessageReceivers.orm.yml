@@ -1,0 +1,49 @@
+Common\UtilityBundle\Entity\FgMessageReceivers:
+    repositoryClass: Common\UtilityBundle\Repository\Message\FgMessageReceiversRepository
+    type: entity
+    table: fg_message_receivers
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        unreadCount:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: unread_count
+        readAt:
+            type: datetime
+            nullable: true
+            column: read_at
+        isDeleted:
+            type: boolean
+            nullable: true
+            column: is_deleted
+        isNotificationEnabled:
+            type: boolean
+            nullable: true
+            column: is_notification_enabled
+    manyToOne:
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        message:
+            targetEntity: FgMessage
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                message_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

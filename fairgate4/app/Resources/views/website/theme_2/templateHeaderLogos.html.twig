@@ -1,0 +1,146 @@
+<script type="text/template" id="template_header_navigation"> 
+    
+<% var headerPosition = config.header_options.headerPosition; %>
+<%  if(headerPosition == 'banner_left_aligned') { 
+        headerPositionClass = 'fg-header-bg-left col-xs-6'; 
+    } else if(headerPosition == 'banner_right_aligned') { 
+        headerPositionClass = 'fg-header-bg-right col-xs-6'; 
+    } else { 
+        headerPositionClass = '';
+    }
+    if(config.header_options.header_label == null) {
+        config.header_options.header_label = [];
+    }
+    var logoPosition = ''; //flag
+%>    
+    <div class="row fg-web-header-content">        
+        <% if(typeof config.header_options.header_label.TM_HEADER_LOGO != 'undefined' && (config.header_options.headerPosition == 'full_width') ) { %>
+            <% logoPosition = 'fullWidth'; %>
+            <figure class="fg-header-bg"><img src="<%- headerPath.resize1920 %>/<%- config.header_options.header_label.TM_HEADER_LOGO.file_name %>"></figure> 
+            <div class="clearfix"></div>
+            <% if((typeof config.header_options.header_label.TM_DEFAULT_LOGO != 'undefined' || typeof config.header_options.header_label.TM_MOBILE_SCREEN_LOGO != 'undefined') && (config.header_options.headerPosition == 'full_width')) { %>                
+                <div class="container fg-logo-container">
+                    <div class="fg-logo-wrapper col-sm-4 col-xs-6 fg-logo-<%- config.header_options.headerLogoPosition %> <%- classL %>">
+                        <a href="<%- logoPath %>" class="fg-logo">
+                            <% if(typeof config.header_options.header_label.TM_DEFAULT_LOGO != 'undefined') {  %>
+                                <img class="<%-classD %>" src="<%- headerPath.original %>/<%- config.header_options.header_label.TM_DEFAULT_LOGO.file_name %>">
+                            <% } %>
+                            <% if(typeof config.header_options.header_label.TM_MOBILE_SCREEN_LOGO != 'undefined') {  %>
+                                <img class="<%-classM %>" src="<%- headerPath.original %>/<%- config.header_options.header_label.TM_MOBILE_SCREEN_LOGO.file_name %>">
+                            <% } %>
+                        </a>
+                    </div> 
+                </div>
+            <% } %>
+        <% } %>
+        <div class="container">
+            <% if(typeof config.header_options.header_label.TM_HEADER_LOGO != 'undefined' && (config.header_options.headerPosition != 'full_width') ) { %>
+                <figure class="fg-header-bg <%-headerPositionClass%>"><img src="<%- headerPath.resize1170 %>/<%- config.header_options.header_label.TM_HEADER_LOGO.file_name %>"></figure>        
+            <% } %>
+            <% if((typeof config.header_options.header_label.TM_DEFAULT_LOGO != 'undefined' || typeof config.header_options.header_label.TM_MOBILE_SCREEN_LOGO != 'undefined') && (logoPosition != 'fullWidth')) { %>                
+                <div class="fg-logo-wrapper col-sm-4 col-xs-6 fg-logo-<%- config.header_options.headerLogoPosition %> <%- classL %>">
+                    <a href="<%- logoPath %>" class="fg-logo">
+                        <% if(typeof config.header_options.header_label.TM_DEFAULT_LOGO != 'undefined') {  %>
+                            <img class="<%-classD %>" src="<%- headerPath.original %>/<%- config.header_options.header_label.TM_DEFAULT_LOGO.file_name %>">
+                        <% } %>
+                        <% if(typeof config.header_options.header_label.TM_MOBILE_SCREEN_LOGO != 'undefined') {  %>
+                            <img class="<%-classM %>" src="<%- headerPath.original %>/<%- config.header_options.header_label.TM_MOBILE_SCREEN_LOGO.file_name %>">
+                        <% } %>
+                    </a>
+                </div>                
+            <% } %>
+            
+            <div class="fg-navbar-container fg-clear"> 
+                <div class="fg-web-nav-icon"><span></span></div>
+                <nav class="navbar navbar-default fg-web-main-nav">                
+                    <ul class="nav navbar-nav" id="fg-web-header-menus">
+                    </ul>
+                </nav>
+        
+                <div class="fg-additional-nav fg-dev-div-additional">
+                    <div class="fg-web-top-nav-languages">                      
+                    </div>
+                </div>
+        
+            </div>   
+        </div>
+    </div>
+</script>
+<script type="text/template" id="template_header_navigation_level1">
+    <% if (!_.isEmpty(levelObject.content.trim()) || item.page_id !== null || item.external_link !== null) { %>
+        <% var subNav = (item.page_id !== null || item.external_link !== null) ? false : true; %>
+        <% var navigationUrl = (subNav) ? levelObject.subNavigationData[item.id].navigation_url : item.navigation_url; %>
+        <% var navExternalLink = (subNav) ? levelObject.subNavigationData[item.id].external_link : item.external_link; %> 
+
+        <li class="hide <% if (navigationUrl == levelObject.activeHeaderMenu) { %>active <% } %><% if (!_.isEmpty(levelObject.content)) { %>dropdown<% } %>">
+            <% if (navExternalLink !== null) { %>
+                <a data-id="<%- item.id %>" href = "<%- navExternalLink %>" target="_blank">
+            <% } else { %>
+                <a data-id="<%- item.id %>" href = "<%- levelObject.navPath.replace('**dummy**', navigationUrl) %>">
+            <% } %>
+            <% var defaultTitle = (_.has(item.langTitle, levelObject.clubLang)) ? (!_.isEmpty(item.langTitle[levelObject.clubLang].title_lang) ? item.langTitle[levelObject.clubLang].title_lang : item.title) : item.title;  %>
+            <%- (_.has(item.langTitle, levelObject.lang)) ? (!_.isEmpty(item.langTitle[levelObject.lang].title_lang) ? item.langTitle[levelObject.lang].title_lang : defaultTitle) : defaultTitle %></a>
+            <% if (!_.isEmpty(levelObject.content.trim())) { %>
+                <span href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="fg-icon-right-angle-right fg-dropdown-toggle"></span>
+                <ul class="dropdown-menu">
+                    <%= levelObject.content %>
+                </ul>
+            <% } %>
+        </li>
+    <% } %>
+</script>
+<script type="text/template" id="template_header_navigation_level2">
+    <% if (!_.isEmpty(levelObject.content.trim()) || item.page_id !== null || item.external_link !== null) { %>
+        <% var subNav = (item.page_id !== null || item.external_link !== null) ? false : true; %>
+        <% var navigationUrl = (subNav) ? levelObject.subNavigationData[item.id].navigation_url : item.navigation_url; %>
+        <% var navExternalLink = (subNav) ? levelObject.subNavigationData[item.id].external_link : item.external_link; %> 
+        
+        <li class="hide <% if (navigationUrl == levelObject.activeHeaderMenu) { %>active fg-dev-nav-active <% } %><% if (!_.isEmpty(levelObject.content)) { %>dropdown-submenu <% } %>">
+            <% if (navExternalLink !== null) { %>
+                <a data-id="<%- item.id %>" href = "<%- navExternalLink %>" target="_blank">
+            <% } else { %>
+                <a data-id="<%- item.id %>" href = "<%- levelObject.navPath.replace('**dummy**', navigationUrl) %>">
+            <% } %>
+            <% var defaultTitle = (_.has(item.langTitle, levelObject.clubLang)) ? (!_.isEmpty(item.langTitle[levelObject.clubLang].title_lang) ? item.langTitle[levelObject.clubLang].title_lang : item.title) : item.title;  %>
+            <%- (_.contains(item.langTitle, levelObject.lang)) ? (!_.isEmpty(item.langTitle[levelObject.lang].title_lang) ? item.langTitle[levelObject.lang].title_lang : defaultTitle) : defaultTitle %></a>
+            <% if (!_.isEmpty(levelObject.content.trim())) { %>
+                    <span class="fg-icon-right-angle-right fg-dropdown-toggle"></span>
+                    <ul class="dropdown-menu fg-web-open-right">
+                        <%= levelObject.content %>
+                    </ul>
+            <% } %>
+        </li>
+    <% } %>
+</script>
+
+<script type="text/template" id="template_lang_navigation"> 
+ <div class="fg-current-language"><a href="javascript:void(0);"><%- deflang.toUpperCase() %></a>
+ <ul id="fg-website-lang-ul" class="dropdown-menu pull-right fg-web-language-list">
+          <% _.each(langNav,function(itemI,keyI){ %>
+           <li  class="<% if (keyI == deflang) { %> active  <% } %>"><a data-id="<%- keyI  %>" href="javascript:void(0);"><%-  itemI.toUpperCase() %> </a></li>
+               <% }); %>
+            </ul>
+</script>
+
+<script type="text/template" id="template_addition_navigation_mobile">    
+    <div class="fg-web-top-nav-links active"><a href="javascript:void(0)" data-toggle="dropdown" role="navigation" aria-expanded="false"><i class="fg-icon-additional-nav"></i></a>
+        <ul class="dropdown-menu">
+          <% _.each(additionalNav,function(itemI,keyI){ %>
+                <% if(itemI.externalLink !== null) { %>
+                      <li class="<% if (itemI.navigationUrl == activeMenu) { %>active <% } %> " ><a data-id="<%- itemI.id %>" href = "<%- itemI.externalLink %>" target="_blank"><%- itemI.title %> </a></li>
+                <% } else { %>
+                <li class="<% if (itemI.navigationUrl == activeMenu) { %>active <% } %> " ><a href="<%- (systemEnvironment=='domain') ? '/'+itemI.navigationUrl:'/'+systemClubUrlIdentifier+'/'+itemI.navigationUrl %>"><%- itemI.title %> </a></li>
+            <% } }); %>
+        </ul>
+    </div>
+</script>
+<script type="text/template" id="template_header_navigation_moremenu">    
+    <li name="fg-dev-more-tab" class="datahideshow dropdown hide">
+        <a href="#" class="dropdown-toggle"  data-toggle="dropdown">{{ 'MORE'|trans }} 
+            <i class="fa fa-angle-down"></i>
+        </a>
+        <ul class="dropdown-menu fg-dropdown-more pull-right fg-dev-more-menu ">
+            
+        </ul>
+    </li>
+</script>                

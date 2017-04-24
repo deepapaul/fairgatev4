@@ -1,0 +1,17 @@
+<div id="data-list-wrap-design" class="portlet-body fg-dashboard-wrap"></div>
+<script type="text/template" id="rssFeeds">
+    <ul>
+      <% if (!_.isEmpty(data)) { %>
+        <% _.each(data,function(entry,key){  %><li>
+            <a href="<%- entry.guid %>" target="_blank">
+              
+              <%= _.unescape(entry.title) %></a><span class="fg-news-date pull-right"><%- entry.date %></span></li>
+         <% }); %>
+     <% } else { %>
+            <li><span class="fg-news">{{'DASHBOARD_NEWS'|trans}}</span></li>
+       <% } %>
+    </ul>
+    <div class="fg-graph-bottom-link">
+    <a href="<%- data[0].blog_url %>" target="_blank"><i class="fa fa-arrow-circle-right"></i> {{'MORE'|trans}}...</a>
+    </div>
+</script>

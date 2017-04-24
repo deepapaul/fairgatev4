@@ -1,0 +1,896 @@
+doctype html
+//
+//if IE 8
+//if IE 9
+// [if !IE] <!
+// <![endif]
+// BEGIN HEAD
+head
+  meta(charset='utf-8')
+  title Metronic | Search Box On Header 1
+  meta(http-equiv='X-UA-Compatible', content='IE=edge')
+  meta(content='width=device-width, initial-scale=1', name='viewport')
+  meta(content='', name='description')
+  meta(content='', name='author')
+  // BEGIN GLOBAL MANDATORY STYLES
+
+  include ../../global/partials/_metronic-mandatory-styles
+  include ../../internal/partials/_internal-styles
+  include ../partials/_website-styles
+
+  
+  // END THEME LAYOUT STYLES
+  link(rel='shortcut icon', href='favicon.ico')
+// END HEAD
+// BEGIN HEADER
+body.page-header.navbar.navbar-fixed-top.page-sidebar-fixed.page-footer-fixed.page-header-fixed(id="BaseController" data-ng-controller="BaseController")
+  // BEGIN HEADER INNER
+  .page-header-inner
+    // BEGIN LOGO
+    .page-logo
+      a(href='index.html')
+        img.logo-default(src='../../fgassets/global/img/fairgate-small-logo.jpg', alt='logo')
+      .menu-toggler.sidebar-toggler  
+    // END LOGO
+    // BEGIN HEADER SEARCH BOX
+    form.search-form(action='page_general_search_2.html', method='GET')
+      .input-group
+        input.form-control(type='text', placeholder='Search...', name='query')
+        span.input-group-btn
+          a.btn.submit(href='javascript:;')
+            i.icon-magnifier
+    // END HEADER SEARCH BOX
+    // BEGIN RESPONSIVE MENU TOGGLER
+    a.menu-toggler.responsive-toggler(href='javascript:;', data-toggle='collapse', data-target='.navbar-collapse')  
+    // END RESPONSIVE MENU TOGGLER
+    // BEGIN TOP NAVIGATION MENU
+    .top-menu
+      ul.nav.navbar-nav.pull-right
+        // BEGIN NOTIFICATION DROPDOWN
+        // DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte
+        li#header_notification_bar.dropdown.dropdown-extended.dropdown-notification
+          a.dropdown-toggle(href='javascript:;', data-toggle='dropdown', data-hover='dropdown', data-close-others='true')
+            i.icon-bell
+            span.badge.badge-default  7 
+          ul.dropdown-menu
+            li.external
+              h3
+                span.bold 12 pending
+                |  notifications
+              a(href='page_user_profile_1.html') view all
+            li
+              ul.dropdown-menu-list.scroller(style='height: 250px;', data-handle-color='#637283')
+                li
+                  a(href='javascript:;')
+                    span.time just now
+                    span.details
+                      span.label.label-sm.label-icon.label-success
+                        i.fa.fa-plus
+                      |  New user registered.
+                li
+                  a(href='javascript:;')
+                    span.time 3 mins
+                    span.details
+                      span.label.label-sm.label-icon.label-danger
+                        i.fa.fa-bolt
+                      |  Server #12 overloaded.
+                li
+                  a(href='javascript:;')
+                    span.time 10 mins
+                    span.details
+                      span.label.label-sm.label-icon.label-warning
+                        i.fa.fa-bell-o
+                      |  Server #2 not responding.
+                li
+                  a(href='javascript:;')
+                    span.time 14 hrs
+                    span.details
+                      span.label.label-sm.label-icon.label-info
+                        i.fa.fa-bullhorn
+                      |  Application error.
+                li
+                  a(href='javascript:;')
+                    span.time 2 days
+                    span.details
+                      span.label.label-sm.label-icon.label-danger
+                        i.fa.fa-bolt
+                      |  Database overloaded 68%.
+                li
+                  a(href='javascript:;')
+                    span.time 3 days
+                    span.details
+                      span.label.label-sm.label-icon.label-danger
+                        i.fa.fa-bolt
+                      |  A user IP blocked.
+                li
+                  a(href='javascript:;')
+                    span.time 4 days
+                    span.details
+                      span.label.label-sm.label-icon.label-warning
+                        i.fa.fa-bell-o
+                      |  Storage Server #4 not responding dfdfdfd.
+                li
+                  a(href='javascript:;')
+                    span.time 5 days
+                    span.details
+                      span.label.label-sm.label-icon.label-info
+                        i.fa.fa-bullhorn
+                      |  System Error.
+                li
+                  a(href='javascript:;')
+                    span.time 9 days
+                    span.details
+                      span.label.label-sm.label-icon.label-danger
+                        i.fa.fa-bolt
+                      |  Storage server failed.
+        // END NOTIFICATION DROPDOWN
+        // BEGIN INBOX DROPDOWN
+        // DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte
+        li#header_inbox_bar.dropdown.dropdown-extended.dropdown-inbox
+          a.dropdown-toggle(href='javascript:;', data-toggle='dropdown', data-hover='dropdown', data-close-others='true')
+            i.icon-envelope-open
+            span.badge.badge-default  4 
+          ul.dropdown-menu
+            li.external
+              h3
+                | You have
+                span.bold 7 New
+                |  Messages
+              a(href='app_inbox.html') view all
+            li
+              ul.dropdown-menu-list.scroller(style='height: 275px;', data-handle-color='#637283')
+                li
+                  a(href='#')
+                    span.photo
+                      img.img-circle(src='../assets/layouts/layout3/img/avatar2.jpg', alt='')
+                    span.subject
+                      span.from  Lisa Wong 
+                      span.time Just Now 
+                    span.message  Vivamus sed auctor nibh congue nibh. auctor nibh auctor nibh... 
+                li
+                  a(href='#')
+                    span.photo
+                      img.img-circle(src='../assets/layouts/layout3/img/avatar3.jpg', alt='')
+                    span.subject
+                      span.from  Richard Doe 
+                      span.time 16 mins 
+                    span.message  Vivamus sed congue nibh auctor nibh congue nibh. auctor nibh auctor nibh... 
+                li
+                  a(href='#')
+                    span.photo
+                      img.img-circle(src='../assets/layouts/layout3/img/avatar1.jpg', alt='')
+                    span.subject
+                      span.from  Bob Nilson 
+                      span.time 2 hrs 
+                    span.message  Vivamus sed nibh auctor nibh congue nibh. auctor nibh auctor nibh... 
+                li
+                  a(href='#')
+                    span.photo
+                      img.img-circle(src='../assets/layouts/layout3/img/avatar2.jpg', alt='')
+                    span.subject
+                      span.from  Lisa Wong 
+                      span.time 40 mins 
+                    span.message  Vivamus sed auctor 40% nibh congue nibh... 
+                li
+                  a(href='#')
+                    span.photo
+                      img.img-circle(src='../assets/layouts/layout3/img/avatar3.jpg', alt='')
+                    span.subject
+                      span.from  Richard Doe 
+                      span.time 46 mins 
+                    span.message  Vivamus sed congue nibh auctor nibh congue nibh. auctor nibh auctor nibh... 
+        // END INBOX DROPDOWN
+        // BEGIN TODO DROPDOWN
+        // DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte
+        li#header_task_bar.dropdown.dropdown-extended.dropdown-tasks
+          a.dropdown-toggle(href='javascript:;', data-toggle='dropdown', data-hover='dropdown', data-close-others='true')
+            i.icon-calendar
+            span.badge.badge-default  3 
+          ul.dropdown-menu.extended.tasks
+            li.external
+              h3
+                | You have
+                span.bold 12 pending
+                |  tasks
+              a(href='app_todo.html') view all
+            li
+              ul.dropdown-menu-list.scroller(style='height: 275px;', data-handle-color='#637283')
+                li
+                  a(href='javascript:;')
+                    span.task
+                      span.desc New release v1.2 
+                      span.percent 30%
+                    span.progress
+                      span.progress-bar.progress-bar-success(style='width: 40%;', aria-valuenow='40', aria-valuemin='0', aria-valuemax='100')
+                        span.sr-only 40% Complete
+                li
+                  a(href='javascript:;')
+                    span.task
+                      span.desc Application deployment
+                      span.percent 65%
+                    span.progress
+                      span.progress-bar.progress-bar-danger(style='width: 65%;', aria-valuenow='65', aria-valuemin='0', aria-valuemax='100')
+                        span.sr-only 65% Complete
+                li
+                  a(href='javascript:;')
+                    span.task
+                      span.desc Mobile app release
+                      span.percent 98%
+                    span.progress
+                      span.progress-bar.progress-bar-success(style='width: 98%;', aria-valuenow='98', aria-valuemin='0', aria-valuemax='100')
+                        span.sr-only 98% Complete
+                li
+                  a(href='javascript:;')
+                    span.task
+                      span.desc Database migration
+                      span.percent 10%
+                    span.progress
+                      span.progress-bar.progress-bar-warning(style='width: 10%;', aria-valuenow='10', aria-valuemin='0', aria-valuemax='100')
+                        span.sr-only 10% Complete
+                li
+                  a(href='javascript:;')
+                    span.task
+                      span.desc Web server upgrade
+                      span.percent 58%
+                    span.progress
+                      span.progress-bar.progress-bar-info(style='width: 58%;', aria-valuenow='58', aria-valuemin='0', aria-valuemax='100')
+                        span.sr-only 58% Complete
+                li
+                  a(href='javascript:;')
+                    span.task
+                      span.desc Mobile development
+                      span.percent 85%
+                    span.progress
+                      span.progress-bar.progress-bar-success(style='width: 85%;', aria-valuenow='85', aria-valuemin='0', aria-valuemax='100')
+                        span.sr-only 85% Complete
+                li
+                  a(href='javascript:;')
+                    span.task
+                      span.desc New UI release
+                      span.percent 38%
+                    span.progress.progress-striped
+                      span.progress-bar.progress-bar-important(style='width: 38%;', aria-valuenow='18', aria-valuemin='0', aria-valuemax='100')
+                        span.sr-only 38% Complete
+        // END TODO DROPDOWN
+        // BEGIN USER LOGIN DROPDOWN
+        // DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte
+        li.dropdown.dropdown-user
+          a.dropdown-toggle(href='javascript:;', data-toggle='dropdown', data-hover='dropdown', data-close-others='true')
+            img.img-circle(alt='', src='../assets/layouts/layout/img/avatar3_small.jpg')
+            span.username.username-hide-on-mobile  Nick 
+            i.fa.fa-angle-down
+          ul.dropdown-menu.dropdown-menu-default
+            li
+              a(href='page_user_profile_1.html')
+                i.icon-user
+                |  My Profile
+            li
+              a(href='app_calendar.html')
+                i.icon-calendar
+                |  My Calendar
+            li
+              a(href='app_inbox.html')
+                i.icon-envelope-open
+                |  My Inbox
+                span.badge.badge-danger  3 
+            li
+              a(href='app_todo.html')
+                i.icon-rocket
+                |  My Tasks
+                span.badge.badge-success  7 
+            li.divider  
+            li
+              a(href='page_user_lock_1.html')
+                i.icon-lock
+                |  Lock Screen
+            li
+              a(href='page_user_login_1.html')
+                i.icon-key
+                |  Log Out
+        // END USER LOGIN DROPDOWN
+        // BEGIN QUICK SIDEBAR TOGGLER
+        // DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte
+        li.dropdown.dropdown-quick-sidebar-toggler
+          a.dropdown-toggle(href='javascript:;')
+            i.icon-logout
+        // END QUICK SIDEBAR TOGGLER
+    // END TOP NAVIGATION MENU
+  // END HEADER INNER
+// END HEADER
+// BEGIN HEADER & CONTENT DIVIDER
+.clearfix  
+// END HEADER & CONTENT DIVIDER
+// BEGIN CONTAINER
+.page-container
+  // BEGIN SIDEBAR
+  include ../partials/_page-sidebar
+  // END SIDEBAR
+  // BEGIN CONTENT
+  .page-content-wrapper
+    // BEGIN CONTENT BODY
+    .page-content
+      // BEGIN PAGE HEADER
+      // BEGIN THEME PANEL
+      .theme-panel.hidden-xs.hidden-sm
+        .toggler  
+        .toggler-close  
+        .theme-options
+          .theme-option.theme-colors.clearfix
+            span  THEME COLOR 
+            ul
+              li.color-default.current.tooltips(data-style='default', data-container='body', data-original-title='Default')  
+              li.color-darkblue.tooltips(data-style='darkblue', data-container='body', data-original-title='Dark Blue')  
+              li.color-blue.tooltips(data-style='blue', data-container='body', data-original-title='Blue')  
+              li.color-grey.tooltips(data-style='grey', data-container='body', data-original-title='Grey')  
+              li.color-light.tooltips(data-style='light', data-container='body', data-original-title='Light')  
+              li.color-light2.tooltips(data-style='light2', data-container='body', data-html='true', data-original-title='Light 2')  
+          .theme-option
+            span  Theme Style 
+            select.layout-style-option.form-control.input-sm
+              option(value='square', selected='selected') Square corners
+              option(value='rounded') Rounded corners
+          .theme-option
+            span  Layout 
+            select.layout-option.form-control.input-sm
+              option(value='fluid', selected='selected') Fluid
+              option(value='boxed') Boxed
+          .theme-option
+            span  Header 
+            select.page-header-option.form-control.input-sm
+              option(value='fixed', selected='selected') Fixed
+              option(value='default') Default
+          .theme-option
+            span  Top Menu Dropdown
+            select.page-header-top-dropdown-style-option.form-control.input-sm
+              option(value='light', selected='selected') Light
+              option(value='dark') Dark
+          .theme-option
+            span  Sidebar Mode
+            select.sidebar-option.form-control.input-sm
+              option(value='fixed') Fixed
+              option(value='default', selected='selected') Default
+          .theme-option
+            span  Sidebar Menu 
+            select.sidebar-menu-option.form-control.input-sm
+              option(value='accordion', selected='selected') Accordion
+              option(value='hover') Hover
+          .theme-option
+            span  Sidebar Style 
+            select.sidebar-style-option.form-control.input-sm
+              option(value='default', selected='selected') Default
+              option(value='light') Light
+          .theme-option
+            span  Sidebar Position 
+            select.sidebar-pos-option.form-control.input-sm
+              option(value='left', selected='selected') Left
+              option(value='right') Right
+          .theme-option
+            span  Footer 
+            select.page-footer-option.form-control.input-sm
+              option(value='fixed') Fixed
+              option(value='default', selected='selected') Default
+      // END THEME PANEL
+      // BEGIN PAGE BAR
+      .page-bar
+        ul.page-breadcrumb
+          li
+            a(href='index.html') Home
+            i.fa.fa-circle
+          li
+            span Page Layouts
+        .page-toolbar
+          .btn-group.pull-right
+            button.btn.green.btn-sm.btn-outline.dropdown-toggle(type='button', data-toggle='dropdown')
+              | Actions
+              i.fa.fa-angle-down
+            ul.dropdown-menu.pull-right(role='menu')
+              li
+                a(href='#')
+                  i.icon-bell
+                  |  Action
+              li
+                a(href='#')
+                  i.icon-shield
+                  |  Another action
+              li
+                a(href='#')
+                  i.icon-user
+                  |  Something else here
+              li.divider  
+              li
+                a(href='#')
+                  i.icon-bag
+                  |  Separated link
+      // END PAGE BAR
+      // BEGIN PAGE TITLE
+      h3.page-title
+        | Search Box On Header 1
+        small search box on header
+      // END PAGE TITLE
+      // END PAGE HEADER
+      .note.note-info
+        p  Collapsed quick search bar in the header. 
+    // END CONTENT BODY
+  // END CONTENT
+  // BEGIN QUICK SIDEBAR
+  a.page-quick-sidebar-toggler(href='javascript:;')
+    i.icon-login
+  .page-quick-sidebar-wrapper(data-close-on-body-click='false')
+    .page-quick-sidebar
+      ul.nav.nav-tabs
+        li.active
+          a(href='javascript:;', data-target='#quick_sidebar_tab_1', data-toggle='tab')
+            | Users
+            span.badge.badge-danger 2
+        li
+          a(href='javascript:;', data-target='#quick_sidebar_tab_2', data-toggle='tab')
+            | Alerts
+            span.badge.badge-success 7
+        li.dropdown
+          a.dropdown-toggle(href='javascript:;', data-toggle='dropdown')
+            | More
+            i.fa.fa-angle-down
+          ul.dropdown-menu.pull-right
+            li
+              a(href='javascript:;', data-target='#quick_sidebar_tab_3', data-toggle='tab')
+                i.icon-bell
+                |  Alerts
+            li
+              a(href='javascript:;', data-target='#quick_sidebar_tab_3', data-toggle='tab')
+                i.icon-info
+                |  Notifications
+            li
+              a(href='javascript:;', data-target='#quick_sidebar_tab_3', data-toggle='tab')
+                i.icon-speech
+                |  Activities
+            li.divider
+            li
+              a(href='javascript:;', data-target='#quick_sidebar_tab_3', data-toggle='tab')
+                i.icon-settings
+                |  Settings
+      .tab-content
+        #quick_sidebar_tab_1.tab-pane.active.page-quick-sidebar-chat
+          .page-quick-sidebar-chat-users(data-rail-color='#ddd', data-wrapper-class='page-quick-sidebar-list')
+            h3.list-heading Staff
+            ul.media-list.list-items
+              li.media
+                .media-status
+                  span.badge.badge-success 8
+                img.media-object(src='../assets/layouts/layout/img/avatar3.jpg', alt='...')
+                .media-body
+                  h4.media-heading Bob Nilson
+                  .media-heading-sub  Project Manager 
+              li.media
+                img.media-object(src='../assets/layouts/layout/img/avatar1.jpg', alt='...')
+                .media-body
+                  h4.media-heading Nick Larson
+                  .media-heading-sub  Art Director 
+              li.media
+                .media-status
+                  span.badge.badge-danger 3
+                img.media-object(src='../assets/layouts/layout/img/avatar4.jpg', alt='...')
+                .media-body
+                  h4.media-heading Deon Hubert
+                  .media-heading-sub  CTO 
+              li.media
+                img.media-object(src='../assets/layouts/layout/img/avatar2.jpg', alt='...')
+                .media-body
+                  h4.media-heading Ella Wong
+                  .media-heading-sub  CEO 
+            h3.list-heading Customers
+            ul.media-list.list-items
+              li.media
+                .media-status
+                  span.badge.badge-warning 2
+                img.media-object(src='../assets/layouts/layout/img/avatar6.jpg', alt='...')
+                .media-body
+                  h4.media-heading Lara Kunis
+                  .media-heading-sub  CEO, Loop Inc 
+                  .media-heading-small  Last seen 03:10 AM 
+              li.media
+                .media-status
+                  span.label.label-sm.label-success new
+                img.media-object(src='../assets/layouts/layout/img/avatar7.jpg', alt='...')
+                .media-body
+                  h4.media-heading Ernie Kyllonen
+                  .media-heading-sub
+                    | Project Manager,
+                    br
+                    |  SmartBizz PTL
+              li.media
+                img.media-object(src='../assets/layouts/layout/img/avatar8.jpg', alt='...')
+                .media-body
+                  h4.media-heading Lisa Stone
+                  .media-heading-sub  CTO, Keort Inc 
+                  .media-heading-small  Last seen 13:10 PM 
+              li.media
+                .media-status
+                  span.badge.badge-success 7
+                img.media-object(src='../assets/layouts/layout/img/avatar9.jpg', alt='...')
+                .media-body
+                  h4.media-heading Deon Portalatin
+                  .media-heading-sub  CFO, H&D LTD 
+              li.media
+                img.media-object(src='../assets/layouts/layout/img/avatar10.jpg', alt='...')
+                .media-body
+                  h4.media-heading Irina Savikova
+                  .media-heading-sub  CEO, Tizda Motors Inc 
+              li.media
+                .media-status
+                  span.badge.badge-danger 4
+                img.media-object(src='../assets/layouts/layout/img/avatar11.jpg', alt='...')
+                .media-body
+                  h4.media-heading Maria Gomez
+                  .media-heading-sub  Manager, Infomatic Inc 
+                  .media-heading-small  Last seen 03:10 AM 
+          .page-quick-sidebar-item
+            .page-quick-sidebar-chat-user
+              .page-quick-sidebar-nav
+                a.page-quick-sidebar-back-to-list(href='javascript:;')
+                  i.icon-arrow-left
+                  | Back
+              .page-quick-sidebar-chat-user-messages
+                .post.out
+                  img.avatar(alt='', src='../assets/layouts/layout/img/avatar3.jpg')
+                  .message
+                    span.arrow
+                    a.name(href='javascript:;') Bob Nilson
+                    span.datetime 20:15
+                    span.body  When could you send me the report ? 
+                .post.in
+                  img.avatar(alt='', src='../assets/layouts/layout/img/avatar2.jpg')
+                  .message
+                    span.arrow
+                    a.name(href='javascript:;') Ella Wong
+                    span.datetime 20:15
+                    span.body  Its almost done. I will be sending it shortly 
+                .post.out
+                  img.avatar(alt='', src='../assets/layouts/layout/img/avatar3.jpg')
+                  .message
+                    span.arrow
+                    a.name(href='javascript:;') Bob Nilson
+                    span.datetime 20:15
+                    span.body  Alright. Thanks! :) 
+                .post.in
+                  img.avatar(alt='', src='../assets/layouts/layout/img/avatar2.jpg')
+                  .message
+                    span.arrow
+                    a.name(href='javascript:;') Ella Wong
+                    span.datetime 20:16
+                    span.body  You are most welcome. Sorry for the delay. 
+                .post.out
+                  img.avatar(alt='', src='../assets/layouts/layout/img/avatar3.jpg')
+                  .message
+                    span.arrow
+                    a.name(href='javascript:;') Bob Nilson
+                    span.datetime 20:17
+                    span.body  No probs. Just take your time :) 
+                .post.in
+                  img.avatar(alt='', src='../assets/layouts/layout/img/avatar2.jpg')
+                  .message
+                    span.arrow
+                    a.name(href='javascript:;') Ella Wong
+                    span.datetime 20:40
+                    span.body  Alright. I just emailed it to you. 
+                .post.out
+                  img.avatar(alt='', src='../assets/layouts/layout/img/avatar3.jpg')
+                  .message
+                    span.arrow
+                    a.name(href='javascript:;') Bob Nilson
+                    span.datetime 20:17
+                    span.body  Great! Thanks. Will check it right away. 
+                .post.in
+                  img.avatar(alt='', src='../assets/layouts/layout/img/avatar2.jpg')
+                  .message
+                    span.arrow
+                    a.name(href='javascript:;') Ella Wong
+                    span.datetime 20:40
+                    span.body  Please let me know if you have any comment. 
+                .post.out
+                  img.avatar(alt='', src='../assets/layouts/layout/img/avatar3.jpg')
+                  .message
+                    span.arrow
+                    a.name(href='javascript:;') Bob Nilson
+                    span.datetime 20:17
+                    span.body  Sure. I will check and buzz you if anything needs to be corrected. 
+              .page-quick-sidebar-chat-user-form
+                .input-group
+                  input.form-control(type='text', placeholder='Type a message here...')
+                  .input-group-btn
+                    button.btn.green(type='button')
+                      i.icon-paper-clip
+        #quick_sidebar_tab_2.tab-pane.page-quick-sidebar-alerts
+          .page-quick-sidebar-alerts-list
+            h3.list-heading General
+            ul.feeds.list-items
+              li
+                .col1
+                  .cont
+                    .cont-col1
+                      .label.label-sm.label-info
+                        i.fa.fa-check
+                    .cont-col2
+                      .desc
+                        | You have 4 pending tasks.
+                        span.label.label-sm.label-warning
+                          | Take action
+                          i.fa.fa-share
+                .col2
+                  .date  Just now 
+              li
+                a(href='javascript:;')
+                  .col1
+                    .cont
+                      .cont-col1
+                        .label.label-sm.label-success
+                          i.fa.fa-bar-chart-o
+                      .cont-col2
+                        .desc  Finance Report for year 2013 has been released. 
+                  .col2
+                    .date  20 mins 
+              li
+                .col1
+                  .cont
+                    .cont-col1
+                      .label.label-sm.label-danger
+                        i.fa.fa-user
+                    .cont-col2
+                      .desc  You have 5 pending membership that requires a quick review. 
+                .col2
+                  .date  24 mins 
+              li
+                .col1
+                  .cont
+                    .cont-col1
+                      .label.label-sm.label-info
+                        i.fa.fa-shopping-cart
+                    .cont-col2
+                      .desc
+                        | New order received with
+                        span.label.label-sm.label-success  Reference Number: DR23923 
+                .col2
+                  .date  30 mins 
+              li
+                .col1
+                  .cont
+                    .cont-col1
+                      .label.label-sm.label-success
+                        i.fa.fa-user
+                    .cont-col2
+                      .desc  You have 5 pending membership that requires a quick review. 
+                .col2
+                  .date  24 mins 
+              li
+                .col1
+                  .cont
+                    .cont-col1
+                      .label.label-sm.label-info
+                        i.fa.fa-bell-o
+                    .cont-col2
+                      .desc
+                        | Web server hardware needs to be upgraded.
+                        span.label.label-sm.label-warning  Overdue 
+                .col2
+                  .date  2 hours 
+              li
+                a(href='javascript:;')
+                  .col1
+                    .cont
+                      .cont-col1
+                        .label.label-sm.label-default
+                          i.fa.fa-briefcase
+                      .cont-col2
+                        .desc  IPO Report for year 2013 has been released. 
+                  .col2
+                    .date  20 mins 
+            h3.list-heading System
+            ul.feeds.list-items
+              li
+                .col1
+                  .cont
+                    .cont-col1
+                      .label.label-sm.label-info
+                        i.fa.fa-check
+                    .cont-col2
+                      .desc
+                        | You have 4 pending tasks.
+                        span.label.label-sm.label-warning
+                          | Take action
+                          i.fa.fa-share
+                .col2
+                  .date  Just now 
+              li
+                a(href='javascript:;')
+                  .col1
+                    .cont
+                      .cont-col1
+                        .label.label-sm.label-danger
+                          i.fa.fa-bar-chart-o
+                      .cont-col2
+                        .desc  Finance Report for year 2013 has been released. 
+                  .col2
+                    .date  20 mins 
+              li
+                .col1
+                  .cont
+                    .cont-col1
+                      .label.label-sm.label-default
+                        i.fa.fa-user
+                    .cont-col2
+                      .desc  You have 5 pending membership that requires a quick review. 
+                .col2
+                  .date  24 mins 
+              li
+                .col1
+                  .cont
+                    .cont-col1
+                      .label.label-sm.label-info
+                        i.fa.fa-shopping-cart
+                    .cont-col2
+                      .desc
+                        | New order received with
+                        span.label.label-sm.label-success  Reference Number: DR23923 
+                .col2
+                  .date  30 mins 
+              li
+                .col1
+                  .cont
+                    .cont-col1
+                      .label.label-sm.label-success
+                        i.fa.fa-user
+                    .cont-col2
+                      .desc  You have 5 pending membership that requires a quick review. 
+                .col2
+                  .date  24 mins 
+              li
+                .col1
+                  .cont
+                    .cont-col1
+                      .label.label-sm.label-warning
+                        i.fa.fa-bell-o
+                    .cont-col2
+                      .desc
+                        | Web server hardware needs to be upgraded.
+                        span.label.label-sm.label-default  Overdue 
+                .col2
+                  .date  2 hours 
+              li
+                a(href='javascript:;')
+                  .col1
+                    .cont
+                      .cont-col1
+                        .label.label-sm.label-info
+                          i.fa.fa-briefcase
+                      .cont-col2
+                        .desc  IPO Report for year 2013 has been released. 
+                  .col2
+                    .date  20 mins 
+        #quick_sidebar_tab_3.tab-pane.page-quick-sidebar-settings
+          .page-quick-sidebar-settings-list
+            h3.list-heading General Settings
+            ul.list-items.borderless
+              li
+                | Enable Notifications
+                input.make-switch(type='checkbox', checked='', data-size='small', data-on-color='success', data-on-text='ON', data-off-color='default', data-off-text='OFF')
+              li
+                | Allow Tracking
+                input.make-switch(type='checkbox', data-size='small', data-on-color='info', data-on-text='ON', data-off-color='default', data-off-text='OFF')
+              li
+                | Log Errors
+                input.make-switch(type='checkbox', checked='', data-size='small', data-on-color='danger', data-on-text='ON', data-off-color='default', data-off-text='OFF')
+              li
+                | Auto Sumbit Issues
+                input.make-switch(type='checkbox', data-size='small', data-on-color='warning', data-on-text='ON', data-off-color='default', data-off-text='OFF')
+              li
+                | Enable SMS Alerts
+                input.make-switch(type='checkbox', checked='', data-size='small', data-on-color='success', data-on-text='ON', data-off-color='default', data-off-text='OFF')
+            h3.list-heading System Settings
+            ul.list-items.borderless
+              li
+                | Security Level
+                select.form-control.input-inline.input-sm.input-small
+                  option(value='1') Normal
+                  option(value='2', selected='') Medium
+                  option(value='e') High
+              li
+                | Failed Email Attempts
+                input.form-control.input-inline.input-sm.input-small(value='5')
+              li
+                | Secondary SMTP Port
+                input.form-control.input-inline.input-sm.input-small(value='3560')
+              li
+                | Notify On System Error
+                input.make-switch(type='checkbox', checked='', data-size='small', data-on-color='danger', data-on-text='ON', data-off-color='default', data-off-text='OFF')
+              li
+                | Notify On SMTP Error
+                input.make-switch(type='checkbox', checked='', data-size='small', data-on-color='warning', data-on-text='ON', data-off-color='default', data-off-text='OFF')
+            .inner-content
+              button.btn.btn-success
+                i.icon-settings
+                |  Save Changes
+  // END QUICK SIDEBAR
+// END CONTAINER
+// BEGIN FOOTER
+.page-footer
+  .page-footer-inner
+    | 2014 © Metronic by keenthemes.
+    a(href='http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes', title='Purchase Metronic just for 27$ and get lifetime updates for free', target='_blank') Purchase Metronic!
+  .scroll-to-top
+    i.icon-arrow-up
+// END FOOTER
+//if lt IE 9
+  script(src='../../../assets/global/plugins/respond.min.js')
+  script(src='../../../assets/global/plugins/excanvas.min.js')
+// BEGIN CORE PLUGINS
+script(src='../../assets/global/plugins/jquery.min.js', type='text/javascript')
+script(src='../../assets/global/plugins/bootstrap/js/bootstrap.min.js', type='text/javascript')
+script(src='../../assets/global/plugins/js.cookie.min.js', type='text/javascript')
+script(src='../../assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js', type='text/javascript')
+script(src='../../assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js', type='text/javascript')
+script(src='../../assets/global/plugins/jquery.blockui.min.js', type='text/javascript')
+script(src='../../assets/global/plugins/uniform/jquery.uniform.min.js', type='text/javascript')
+script(src='../../assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js', type='text/javascript')
+// END CORE PLUGINS
+// BEGIN THEME GLOBAL SCRIPTS
+script(src='../../assets/global/scripts/app.js', type='text/javascript')
+// END THEME GLOBAL SCRIPTS
+// BEGIN THEME LAYOUT SCRIPTS
+script(src='../../assets/layouts/layout/scripts/layout.js', type='text/javascript')
+script(src='../../assets/layouts/layout/scripts/demo.min.js', type='text/javascript')
+script(src='../../assets/layouts/global/scripts/quick-sidebar.min.js', type='text/javascript')
+
+script(type='text/javascript').
+    jstranslations = {
+      "VALIDATION_THIS_FIELD_REQUIRED": "This field is required",
+      "dirtyformAlert": "Did you forget to save first form?",
+      "validateMinLength": "Please enter at least {0} characters.",
+      "localeName": "en",
+      "EMAIL_VALIDATION": "Please enter a valid email address.",
+      "invalidurl": "Invalid URL",
+      "validateMax": "Please enter a value less than or equal to {0}.",
+      "validateMin": "Please enter a value greater than or equal to {0}.",
+      "noneSelectedText": "none",
+      "countSelectedText": "{0} of {1} selected",
+      "loadingVar": "Loading",
+      "data_Search": "Search",
+      "data_showing": "Showing",
+      "data_to": "to",
+      "data_of": "of",
+      "data_entries": "entries",
+      "no_matching_records": "LOADING",
+      "no_record": "No data available in table:en",
+      "filtered_from": "filtered from",
+      "total_entries": "total entries",
+      "row": "rows",
+      "Reg": "inv.",
+      "Korr": "corr.",
+      "contact_name": "Contact",
+      "Function": "Functions",
+      "waitingForConfirmation": "Waiting for confirmation.",
+      "currentActiveValue": "Current active value: %a%",
+      "More": "More",
+      "PrivateText": "You are not allowed to see the value",
+      "fedmemConfirmTootipMsg": " Application for Fed membership is waiting for confirmation",
+      "allSelected": "All",
+      "chars": "chars",
+      "cmsNavMenuDeleteTooltip": "This menu item has sub-items. Please delete them first."
+    };
+    FgLocaleSettingsData ={
+        "jqueryDateFormat": "dd-mm-yyyy",
+        "jqueryDateTimeFormat": "dd-mm-yyyy hh:ii",
+        "jqueryDtimeFormat": "hh:ii",
+        "momentDateFormat": "DD-MM-YYYY",
+        "momentDateTimeFormat": "DD-MM-YYYY HH:mm",
+        "momentTimeFormat": "HH:mm",
+        "currency": "EUR",
+        "currencyPosition": "left",
+        "decimalMark": ".",
+        "thousendSeperator": "&#8239;"
+      }
+
+//- script(src='../../internal/js/fgmetronic.js', type='text/javascript')
+//- script(src='../../global/js/fgtemplate.js', type='text/javascript')
+//- script(src='../../internal/js/internal.js', type='text/javascript')
+//- script(src='../../internal/js/frondendDatatable.js', type='text/javascript')
+//-script(src='../../global/js/fg_sidebar.js', type='text/javascript')
+// END THEME LAYOUT SCRIPTS

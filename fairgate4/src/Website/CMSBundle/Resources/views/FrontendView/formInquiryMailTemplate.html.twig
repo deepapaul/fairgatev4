@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+    <head>
+        <meta charset="utf-8"/>
+        <title> </title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+        <meta content="" name="description"/>
+        <meta content="" name="author"/>
+
+        <link rel="shortcut icon" href="img/favicon.ico" />
+    </head>
+    <!-- BEGIN BODY -->
+    <body style="">
+        <table  style="background-color: #eee;font-family: Calibri,Arial,sans-serif;padding: 20px;width: 100%;">
+            <tr>
+                <td>
+                    <center style="width: 100%; margin: auto; max-width: 560px;">
+                    <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+                        <tr>
+                            <td style="font-family: Calibri,Arial,sans-serif;">
+                                {% if(logoURL is not empty) %}                                    
+                                    <table class="row" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+                                        <tr>
+                                            <td style="padding-bottom:12px; vertical-align: middle; width: 1%;">
+                                                <img style="max-width: 100px; padding-left: 1px;" src="{{ logoURL }}" />
+                                            </td>
+                                            <td style="width: 28px; ">
+                                            </td>
+                                            <td style="font-family: 'Helvetica', 'Arial', sans-serif; vertical-align: middle;">
+                                                <h1 style="margin: 0; font-size: 30px; font-weight: 500; margin-top: -4px;">{{ clubTitle }}</h1>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                {% else %} 
+                                    <table class="row" cellpadding="0" cellspacing="0" border="0" style="width:100%; table-layout: fixed;">
+                                        <tr>
+                                            <td style="font-family: 'Helvetica', 'Arial', sans-serif; vertical-align: middle;">
+                                                <h1 style="margin: 0; font-size: 30px; font-weight: 500; margin-top: -4px;">{{ clubTitle }}</h1>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="background-color:#fff; border:1px solid #e1e1e1; width: 100%; border-bottom: 0;padding-bottom:10px;" cellpadding="0" cellspacing="0">
+                        
+                        <tr>
+                            <td style="padding:10px 20px; font-family: Calibri,Arial,sans-serif;">
+                                <p style="margin:0">{{ mailContent|raw }} </p>
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="background-color:#fff; border:1px solid #e1e1e1; width: 100%;" cellpadding="0" cellspacing="0">
+
+                        <tr><td colspan="2" style="padding:10px; font-family: Calibri,Arial,sans-serif;"></td></tr>
+                        {% for formValue in formValues %}
+                            <tr>
+                                <td style="padding-bottom: 20px;  padding-left: 20px; padding-right: 20px; vertical-align:top; font-family: Calibri,Arial,sans-serif;">
+                                    {% set fieldTitle = ( (formValue.fieldName[contactLang] is defined) and (formValue.fieldName[contactLang] != '') ) ? formValue.fieldName[contactLang] : formValue.fieldName['default'] %}
+                                    {{ fieldTitle }}
+                                </td>
+                                <td style="padding-bottom: 20px;  padding-left: 20px; padding-right: 20px; font-family: Calibri,Arial,sans-serif;">
+                                    {% if(formValue.fieldValue == '')  %}
+                                        -
+                                    {% elseif(formValue.fieldType == 'fileupload')  %}
+                                        
+                                        <a href="{{ attachmentPath|raw|replace({ '**FILENAME**': formValue.fieldValue }) }}" target="_blank">{{ formValue.fieldValue }}</a>
+                                    {% elseif ((formValue.fieldType == 'select') or (formValue.fieldType == 'radio') or (formValue.fieldType == 'checkbox'))  %}
+                                        {% set fieldValue = [] %}
+                                        {% for fieldVal in formValue.fieldValue %}
+                                            {% set fieldValue = fieldValue|merge([( (fieldVal[contactLang] is defined) and (fieldVal[contactLang] != '') ) ? fieldVal[contactLang] : fieldVal['default'] ]) %}
+                                        {% endfor %}
+                                        {{ fieldValue|join(', ') }}
+                                    {% elseif(formValue.fieldType == 'url')  %}
+                                        <a href="{{ formValue.fieldValue }}" target="_blank" >{{ formValue.fieldValue }}</a>
+                                    {% elseif(formValue.fieldType == 'date')  %}    
+                                        {{ fgclub.formatDate(formValue.fieldValue,'date', 'Y-m-d') }}
+                                    {% elseif(formValue.fieldType == 'time')  %}    
+                                        {{ fgclub.formatDate(formValue.fieldValue,'time', 'H:i') }}
+                                    {% elseif(formValue.fieldType == 'number')  %}    
+                                        {% set val = formValue.fieldValue|replace({',':'.'}) %}    
+                                        {{ fgclub.formatNumber(val)|raw }}
+                                    {% else %}
+                                        {{ formValue.fieldValue|nl2br }}
+                                    {% endif %}
+                                    
+                                </td>                                
+                            </tr>
+                        {% endfor %}
+                        <tr >
+                            <td style="padding:10px 20px; border-bottom: 1px solid #ddd; font-family: Calibri,Arial,sans-serif;" colspan="2">
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:20px; font-family: Calibri,Arial,sans-serif;">
+                                {{signature|nl2br}}
+                            </td>
+                        </tr>
+
+                    </table>
+                    <table cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
+                        <tr>
+                            <td style="text-align: right; float:right;padding-top:10px; font-size:12px; display:inline-block; padding-left: 1px; font-family: Calibri,Arial,sans-serif;"> <span>{{ 'MESSAGE_SYS_POWERED_BY'|trans }} <a href="http://www.fairgate.ch/" style="text-decoration: none;">Fairgate</a></span></td>
+                        </tr>
+                    </table>
+                    </center>
+                </td>
+            </tr>
+        </table>
+    </body>
+    <!-- END BODY -->
+</html>

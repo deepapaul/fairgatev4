@@ -1,0 +1,363 @@
+{# src/Clubadmin/DocumentsBundle/Resources/views/Documents/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout-sidebar.html.twig' %}
+{% set clubTerminolgy = fgtwig.getTerminolgyName('Club',singular)%}
+    {% set subFederationTerminology = fgtwig.getTerminolgyName('Sub-federation',singular)%}
+        {% set executiveboardTerminology = fgtwig.getTerminolgyName('Executive Board',singular)%}
+            {% set federationmemberTerminology = fgtwig.getTerminolgyName('Federation member',singular)%}
+
+                {% if type =='CLUB' %}
+                    {% set pageTitle = 'TOPNAV_CLUB_DOCS'|trans({'%club%':fgtwig.getTerminolgyName('Club',singular,'UCF')}) %}
+                        {% elseif type =='TEAM' %}
+                            {% set pageTitle = 'TOPNAV_TEAM_DOCS'|trans ({'%Team%':fgtwig.getTerminolgyName('Team',singular,'UCF')})%}
+                                {% elseif type =='CONTACT' %}
+                                    {% set pageTitle = 'TOPNAV_CONTACT_DOCS'|trans %}
+                                        {% else %}
+                                            {% set pageTitle = 'TOPNAV_WORKGROUP_DOCS'|trans %}
+                                                {% endif %}
+
+
+                                                    {% set title = 'DOCUMENTS_LISTING'|trans %}
+                                                        {% block customstylesheets %}
+                                                            <link href="{{ asset('fgcustom/css/jquery-ui.min.css')}}" rel="stylesheet" type="text/css"/>
+                                                            <link href="{{ asset('fgcustom/css/fbautocomplete.css')}}" rel="stylesheet" type="text/css"/>
+                                                        {% endblock %}
+                                                        {% if (fgtwig.inArray('contact',fgclub.get('allowedRights'))) %}
+                                                            {% set accessFlag = 1 %} 
+                                                                {% else%}
+                                                                    {% set accessFlag = 0 %}        
+                                                                        {% endif %}
+
+
+                                                                            {% block pagecontent %}
+                                                                                <!-- BEGIN PAGE HEADER-->
+                                                                                <div class="row">
+                                                                                    <div class="col-md-12">
+                                                                                        <!-- BREADCRUMB STARTS -->
+                                                                                        {% include 'clubadmin/breadcrumb.html.twig' %}
+                                                                                        <!-- BREADCRUMB ENDS -->
+                                                                                    </div>
+                                                                                </div>
+                                                                                        <div class="row">
+                                                                                {% set columnsUrl = columnSettings %}
+                                                                                {% set page_settings = { 'columnsettings':'true','pagetitle':'true','counter':'true','searchbox':'true','filter':'true','actionmenu':'true' }  %}
+                                                                                {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': 'DOCUMENTS_LISTING'|trans, 'page_settings': page_settings,'columnsUrl': columnsUrl,'counter':1,'searchbox_id':'searchbox'} %}
+                                                                                <input type="hidden" name="selcontacthidden" id="selcontacthidden" value='' />
+                                                                                {#<div class="row margin-bottom-10">
+
+
+                                                                                    <div class="col-md-7 col-sm-6" id="fg-dev-dynamic-menu">
+
+                                                                                        {% include 'clubadmin/dynamicmenu.html.twig' with {'title':title} %}
+                                                                                    </div>
+                                                                                    <input type="hidden" name="selcontacthidden" id="selcontacthidden" value=''>
+                                                                                    <div class="col-xs-12 col-md-5 col-sm-6 fg-contact-searchbox fg-has-filter">
+                                                                                        <div class="input-icon fg-search-div"> <i class="fa fa-search"></i>
+                                                                                            <input type="text" placeholder="{{'SEARCH_TABLE'|trans}}" class="form-control control2" id="searchbox">
+                                                                                            
+                                                                                        </div>
+                                                                                            <div class="fg-filter-check-icon"><input type="checkbox" id="filterFlag" name="fg_filter"></div>
+                                                                                        <div class="btn-group pull-right">
+                                                                                            <button class="btn tableactionright" data-toggle="dropdown"> <i class="fa fa-table fa-2x"></i> </button>
+                                                                                            <ul class="dropdown-menu pull-right fg-drpmenu-new dropdown-menu-form padinten hold-on-click">
+                                                                                                <li> <a href="{{columnSettings}}">{% trans%} COLUMN {% endtrans%}&hellip;</a></li>
+                                                                                                <li><div id="fgrowchange" ></div></li>                                                                                                
+                                                                                            </ul>
+                                                                                        </div>
+                                                                                    </div>#}
+                                                                                    <!-- END PAGE TITLE & BREADCRUMB-->
+                                                                                </div>
+                                                                                  
+                                                                                <!-- START UPLOAD SECTION-->
+                                                                                <div class="fg-common-btm hide" data-upload-doc-area="{{type|default('CLUB')}}" style="display:none">
+                                                                                    <form id="upload-form" skipDirtyCheck onSubmit="return false;" autocomplete="off" novalidate="novalidate" data-url="{{path('document_save', {'documentType':type|default('club')})}}" name="upload-form" method="post">
+                                                                                        {% include 'ClubadminDocumentsBundle:Documents:documentUpload.html.twig' %}
+                                                                                        {% if(type|default('CLUB')=='CLUB') %}
+                                                                                            {% include 'ClubadminDocumentsBundle:Documents:uploadTemplateClub.html.twig' with {'clubType':clubType,'contactName':contactName}%}
+                                                                                        {% elseif(type|default('CLUB')=='TEAM') %}
+                                                                                            {% include 'ClubadminDocumentsBundle:Documents:uploadTemplateTeam.html.twig' with {'teams':teams,'contactName':contactName} %}
+                                                                                        {% elseif(type|default('CLUB')=='WORKGROUP') %}
+                                                                                            {% include 'ClubadminDocumentsBundle:Documents:uploadTemplateWorkgroup.html.twig' with {'workgroups':workgroups,'contactName':contactName} %}
+                                                                                        {% elseif(type|default('CLUB')=='CONTACT') %}
+                                                                                            {% include 'ClubadminDocumentsBundle:Documents:uploadTemplateContact.html.twig' with {'contactName':contactName} %}
+                                                                                        {% endif %}
+                                                                                    </form>
+                                                                                </div>
+                                                                                <!-- END UPLOAD SECTION-->  
+                                                                                <!-- BEGIN FILTER AREA -->
+                                                                                <div class="alert alert-danger display-hide">
+                                                                                    <button class="close" data-close="alert"></button>
+                                                                                    {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+                                                                                </div>
+                                                                                <div class="alert-block fade in space filter-alert fg-marg-top-0">
+                                                                                    <button  class="close fg_filter_hide" type="button" ></button>
+                                                                                    <div class="row filter-pad">
+                                                                                        <div id="target"></div>
+                                                                                    </div>
+                                                                                    <div class="clearfix filter-pad addandsave fg-common-top-btm">
+                                                                                        <a data-toggle="modal" href="#basic" id="addCriteria"><i class="fa fa-plus-circle fa-2x"></i><span class="fg-left-move"> {%trans%}SAVED_FILTER_ADD_CRITERION{%endtrans%}</span> </a>
+
+                                                                                        <div id="filternameText" class="editable editable-click fg-filter-name btn-group"> </div>
+                                                                                    </div>
+                                                                                    <div class="portlet-body form">
+                                                                                        <div class="form-actions fluid">
+                                                                                            <div class="col-md-offset-0 col-md-10">
+                                                                                                <button type="submit" id="search" class="btn blue">{%trans%}CONTACT_FILTER_SEARCH{%endtrans%}</button>
+                                                                                                <button type="button" class="btn default remove-filter">{%trans%}CONTACT_FILTER_CLEAR{%endtrans%}</button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <!-- END FILTER AREA -->
+                                                                                <div class="row">
+                                                                                    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+
+                                                                                    <div class="portlet-body new-table-height fg-document-table-wrapper" id="tableWrapper">
+                                                                                        <table data-ajax-path="{{ path('document_club_table_list',{'doctype': type|default('club')|upper })  }}"
+                                                                                               class="documentdataTable
+                                                                                               table
+                                                                                               table-bordered
+                                                                                               table-hover
+                                                                                               table-condensed
+                                                                                               dataTable-scroll-y
+                                                                                               dataTable-ajax
+                                                                                               dataTable-ajaxHeader
+                                                                                               dataTable-fixed
+                                                                                               dataTable-rows
+                                                                                               dataTable-scroll-x
+                                                                                               dataTables_scrollBody
+                                                                                               dataTable-dragable 
+                                                                                               lastcolumn_sort dataTable-initialSort data-filter-count dataTable-widthResize" xWidth="100" yHeight="300" data-table-name="documentdataTable" data_row_change="fgrowchange" data-sort="1#asc" dataTable-popover="true" dataTable-hover="true" id="documentdataTable" document-parameter="true" data_serversideProcess="true">
+                                                                                        </table>
+                                                                                    </div>
+                                                                                    <div id="callPopupFunction"></div>
+                                                                                    <!-- END EXAMPLE TABLE PORTLET-->
+                                                                                </div>
+                                                                                <!-- Connection Popup -->
+                                                                                <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+                                                                                    <div class="modal-dialog modal-wide">
+                                                                                        <div class="modal-content fg-popup-wrap" id="popup_contents" >
+                                                                                        </div>
+                                                                                        
+                                                                                    </div>
+                                                                                </div>
+                                                                                <!-- END Connection pop up  area -->
+                                                                                <!-- dummy content of pop up -->
+                                                                                <div id="dummyPopupcontent" class="hidden">
+                                                                                    <div class="modal-header fg-modal-header">
+                                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                                                        <div class="fg-popup-text" id="header_text">
+                                                                                            <div class='fg-dev-singleSelectionText fg-modal-header-div hide' > {{'MOVE_SINGLE_DOC'|trans}}</div>   
+                                                                                            <div class='fg-dev-multipleSelectionText fg-modal-header-div hide' > {{'MOVE_MULTIPLE_DOC'|trans}}</div>
+                                                                                        </div>
+                                                                                        <h4 class="modal-title"></h4>
+                                                                                    </div>
+                                                                                    <div class="modal-body fg-modal-text">
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-12">
+                                                                                                <div class="portlet-body form">
+                                                                                                    <!-- BEGIN FORM-->
+                                                                                                    <form action="#" class="form-horizontal form-row-sepe" id="movedocs">
+                                                                                                        <div class="form-body">
+                                                                                                            <div id="block_0">
+                                                                                                                <!-- CATEGORY SECTION STARTS -->
+                                                                                                                <div class="form-group">
+                                                                                                                    <label class="control-label col-lg-3 col-md-3">{{'DM_CATEGORY'|trans}}</label>
+                                                                                                                    <div class="col-lg-9 col-md-8">
+                                                                                                                        <select class="form-control " data-placeholder="Club fields" id="category_dropdown">
+                                                                                                                        </select>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <!-- CATEGORY SECTION ENDS -->
+
+                                                                                                                <!-- SUBCATEGORY SECTION STARTS -->
+                                                                                                                <div class="form-group hide" data-id="show_class_section">
+                                                                                                                    <label id="fg-dev-class-label" class="control-label col-lg-3 col-md-3">{{'DM_SUBCATEGORY'|trans}}</label>
+                                                                                                                    <div class="col-lg-9 col-md-8">
+                                                                                                                        <select class="form-control" data-placeholder="Club fields" id="subcategory_dropdown">
+                                                                                                                        </select>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </form>
+                                                                                                    <!-- END FORM-->
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="modal-footer form-actions fg-modal-footer">
+                                                                                        <button type="button" class="btn default" id="cancel" data-dismiss="modal" data-function="cancel">{{'CANCEL'|trans}}</button>
+                                                                                        <button type="button" class="btn green fg-dev-move" id="save" data-function="save">{{'DM_MOVE'|trans}}</button>
+                                                                                    </div>
+                                                                                </div>
+                                                                                  
+                                                                                    <div id="divTemplates">
+                                                                                        <script type="text/template" id="display_dropdown">
+                                                                                            <% if (Object.keys(options).length > 0) { %>
+                                                                                                <option value="">{{'SELECT_DROPDOWN'|trans}}</option>
+                                                                                                <% _.each(options, function(option) { %>
+                                                                                                    <option value="<%- option['id'] %>" <% if (option['id'] == selectedId) { %> selected <% } %>><%- option['title'] %></option>
+                                                                                                <% }); %>
+                                                                                            <% } %>
+                                                                                        </script>
+
+                                                                                    </div>  
+                                                                            {% endblock %}
+
+                                                                            {% block javascripts %}
+                                                                                <script type="text/javascript">
+                                                                                    {% if(type=='CLUB') %}
+                                                                                        var clubs ={{subclubs|json_encode()|raw }} ;{% endif %}
+                                                                                                var contactUrl = "{{path('document_collect_contactname')}}";
+                                                                                        var type = '{{type|default('CLUB')}}';
+                                                                                        var removestring = "{{'NL_AUTOCOMPLETE_REMOVE'|trans}} %s";
+                                                                                        var tableColumnTitleStorage = 'clubtableColumnTitle_{{clubId}}-{{contactId}}';
+                                                                                        var docType = '{{type|default('club')|upper}}';
+                                                                                        var clubId = '{{clubId}}';
+                                                                                        var contactId = '{{contactId}}';
+                                                                                        var clubType = '{{fgclub.get('type')}}';
+                                                                                        var all = '{{'ALL'|trans}}';
+                                                                                        var none = '{{'NONE'|trans}}';
+                                                                                        var teamTerminology = '{{fgtwig.getTerminolgyName('Team',plural)}}';
+                                                                                        var executiveBoardTerminology = '{{executiveboardTerminology}}';
+                                                                                        var wholeTeam = "{{'DM_LIST_WHOLE_TEAMS'|trans({'%team%':fgtwig.getTerminolgyName('Team',singular,'UCF')}) }}";
+                                                                                        var teamAdmins = "{{'DM_LIST_TEAM_ADMINS'|trans({'%team%':fgtwig.getTerminolgyName('Team',singular,'UCF')}) }}";
+                                                                                        var clubDocumentAdmin = "{{'DM_LIST_CLUB_ADMINS_DOC_ADMIN'|trans({'%Club%':fgtwig.getTerminolgyName('Club',singular,'UCF')}) }}";
+                                                                                        var teamFunction = "{{'DM_LIST_TEAM_AND_FUNCTIONS'|trans({'%team%':fgtwig.getTerminolgyName('Team',singular,'UCF')}) }}";
+                                                                                        var workgroups = "{{'DM_WORKGROUP_CONTACTS_AND_ADMIN'|trans }}";
+                                                                                        var workgroupAdmin = "{{'DM_WORKGROUP_ADMIN'|trans }}";
+                                                                                        var documenAdmin = "{{'DM_WORKGROUP_MAIN_AND_DOC_ADMIN'|trans }}";
+                                                                                        var movePath="{{path('document_move_data')}}";
+                                                                                        var clubTerminology = '{{clubTerminolgy}}';
+                                                                                        var accessFlag = {{accessFlag}};
+                                                                                        var editDocumentPath = '';
+                                                                                        var documentLogPath = '';
+                                                                                        if (docType == 'CLUB') {
+                                                                                            editDocumentPath = '{{path('document_settings_club', {"documentId":"Id","offset":"index"}) }}';
+                                                                                            documentLogPath = '{{path('document_log_club', {"documentId":"Id"}) }}';
+                                                                                        } else if (docType == 'TEAM') {
+                                                                                            editDocumentPath = '{{path('document_settings_team', {"documentId":"Id","offset":"index"}) }}';
+                                                                                            documentLogPath = '{{path('document_log_team', {"documentId":"Id"}) }}';
+                                                                                        } else if (docType == 'WORKGROUP') {
+                                                                                            editDocumentPath = '{{path('document_settings_workgroup', {"documentId":"Id","offset":"index"}) }}';
+                                                                                            documentLogPath = '{{path('document_log_workgroup', {"documentId":"Id"}) }}';
+                                                                                        } else if (docType == 'CONTACT') {
+                                                                                            editDocumentPath = '{{path('document_settings_contact', {"documentId":"Id","offset":"index"}) }}';
+                                                                                            documentLogPath = '{{path('document_log_contact', {"documentId":"Id"}) }}';
+                                                                                        }
+                                                                                    </script>
+                                                                                    <script src="{{asset('fgassets/assets/global/plugins/jquery-validation/js/jquery.validate.min.js')}}" type="text/javascript" ></script>
+                                                                                    <script src="{{asset('fgassets/assets/global/plugins/jquery-validation/js/additional-methods.min.js')}}" type="text/javascript" ></script>
+                                                                                    <script src="{{ asset('fgcustom/js/jquery-fileupload/jquery.ui.widget.js')}}" type="text/javascript"></script>
+                                                                                    <script src="{{ asset('fgcustom/js/jquery-fileupload/jquery.iframe-transport.js')}}" type="text/javascript"></script>
+                                                                                    <script src="{{ asset('fgcustom/js/jquery-fileupload/jquery.fileupload.js')}}" type="text/javascript"></script>
+                                                                                    <script src="{{ asset('fgcustom/js/custom-form-validation.js')}}" type="text/javascript"></script>
+                                                                                    <script src="{{ asset('fgcustom/js/fbautocomplete/fbautocomplete.js')}}" type="text/javascript"></script>
+                                                                                    <script src="{{ asset('fgcustom/js/dirtyfields/jquery.dirtyFields.js') }}" type="text/javascript"></script>
+                                                                                    <script src="{{ asset('fgcustom/js/fg_dirtyfields.js') }}" type="text/javascript"></script>
+                                                                                    <script src="{{ asset('fgcustom/js/custom-fileupload.js')}}" type="text/javascript"></script>
+                                                                                    <script src="{{ asset('fgcustom/js/page/documentUploadList.js')}}" type="text/javascript"></script>
+                                                                                    <script src="{{ asset('fgcustom/js/page/documentUpload.js')}}" type="text/javascript"></script>
+                                                                                    <script src="{{ asset('fgcustom/js/fg_document_list.js')}}" type="text/javascript"></script>
+                                                                                    <script src="{{ asset('fgcustom/js/fg_document_datatable.js')}}" type="text/javascript"></script>
+
+                                                                                    <script type="text/javascript">
+                                                                                        {# DEFINE DYNAMIC MENU TEXT HERE#}
+                                                                                            var actionMenuNoneSelectedText = {
+                                                                                                'upload': {'title': "{{'DM_UPLOAD'|trans }}", 'visibleAlways': false, 'isActive':true,  'dataUrl': '', 'divider':'1'},
+                                                                                                'editdocument': {'title': "{{'EDIT_SELECTED'|trans}}", 'dataUrl': '', 'visibleAlways': false},
+                                                                                                'movedocument': {'title': "{{'DOCUMENT_MOVE_TO'|trans}}", 'dataUrl': "", 'visibleAlways': false, 'divider':'1'},
+                                                                                                'documentlog': {'title': "{{ 'LOG'|trans }}", 'dataUrl': '', 'divider':'1'},
+                                                                                                'delete': {'title': "{{'DELETE_SELECTED'|trans }}", 'dataUrl': ''},
+                                                                                            };
+                                                                                            var actionMenuSingleSelectedText = {
+                                                                                                'docupload': {'title': "{{'DM_UPLOAD'|trans }}", 'visibleAlways': false, 'isActive': false, 'dataUrl': '', 'divider':'1'},
+                                                                                                'editdocument': {'title': "{{'EDIT_SELECTED'|trans}}", 'dataUrl': editDocumentPath},
+                                                                                                'movedocument': {'title': "{{'DOCUMENT_MOVE_TO'|trans}}", 'dataUrl': "", 'visibleAlways': true, 'divider':'1'},
+                                                                                                'documentlog': {'title': "{{ 'LOG'|trans }}", 'dataUrl': documentLogPath, 'divider':'1'},
+                                                                                                'documentdelete': {'title': "{{'DELETE_SELECTED'|trans }}", 'dataUrl': '{{path('document_settings_delete_popup')}}'},
+                                                                                            };
+                                                                                            var actionMenuMultipleSelectedText = {
+                                                                                                'docupload': {'title': "{{ 'DM_UPLOAD'|trans }}", 'dataUrl': '', 'divider':'1', 'visibleAlways': false, 'isActive': false},
+                                                                                                'editdocument': {'title': "{{'EDIT_SELECTED'|trans}}", 'dataUrl': '', 'visibleAlways': false, 'isActive': false},
+                                                                                                'movedocument': {'title': "{{'DOCUMENT_MOVE_TO'|trans}}", 'dataUrl': "", 'visibleAlways': true, 'divider':'1'},
+                                                                                                'documentlog': {'title': "{{ 'LOG'|trans }}", 'dataUrl': '', 'divider':'1', 'visibleAlways': false, 'isActive': false},
+                                                                                                'documentdelete': {'title': "{{'DELETE_SELECTED'|trans }}", 'dataUrl': '{{path('document_settings_delete_popup')}}'},
+                                                                                            };
+                                                                                            var actionMenuText = {'active' : {'none': actionMenuNoneSelectedText, 'single': actionMenuSingleSelectedText, 'multiple': actionMenuMultipleSelectedText}};
+                                                                                            FgSidebar.dynamicMenus.push({actionmenu: actionMenuText});                                                                                            
+                                                                                            FgDirtyFields.init('upload-form', {dirtyFieldSettings :{dirtyFormClass : "isDirty"}, enableDragDrop : false, enableUpdateSortOrder : false});
+                                                                                            
+                                                                                            var deletedocumentPath = '{{path('document_settings_delete_popup')}}';
+                                                                                            var catArray = {};
+                                                                                            var subcatArray = {};
+                                                                                            var selectedCat;
+                                                                                            var selectedSubcat;
+                                                                                    </script>
+
+                                                                                    <!-- SIDEBAR & FILTER -->
+                                                                                    <script src="{{ asset('fgcustom/js/search-filter.js')}}" type="text/javascript"></script>
+                                                                                    <script src="{{ asset('fgcustom/js/page/filter-settings.js')}}" type="text/javascript"></script>
+                                                                                    <script type="text/javascript">
+                                                                                        var dropdownPath = '{{path('category_doc_dropdown', {'typeval': type})}}';  
+                                                                                            var defaultColumnSetting ={{defaultColumnSetting|json_encode()|raw}} ;
+                                                                                                    var filterDisplayFlagStorage = 'documentfilterdisplayflag_{{type}}-{{clubId}}-{{contactId}}';
+                                                                                            var filterName = 'document_filter';
+                                                                                            var filterdata = '';
+                                                                                            var tableSettingValueStorage = 'documenttableSettingValue_{{type|lower }}{{clubId}}-{{contactId}}';
+                                                                                            var tableColumnTitleStorage = 'documenttableColumnTitle_{{type}}{{clubId}}-{{contactId}}';
+
+                                                                                            var filterStorage = 'documentfilter_{{type}}-{{clubId}}-{{contactId}}';
+                                                                                            var ActiveMenuDetVar = 'document_active_menu_det_' + type + '-' + clubId + '-' + contactId;
+                                                                                            var filterCondition = FgFilter.getCondition('{{'CM_AND'|trans}}', '{{'CM_OR'|trans}}', '{{'CM_IS'|trans}}', '{{'CM_ISNOT'|trans}}', '{{'CM_IS_BETWEEN'|trans}}', '{{'CM_IS_NOTBETWEEN'|trans}}', '{{'CM_CONTAINS'|trans}}', '{{'CM_NOTCONTAINS'|trans}}', '{{'CM_BEGINSWITH'|trans}}', '{{'CM_NOTBEGINSWITH'|trans}}', '{{'CM_ENDWITH'|trans}}', '{{'CM_NOTENDWITH'|trans}}');
+                                                                                            var jsonDataPath = '{{path('get_documents_data', {'type': type})}}';
+                                                                                            var selectText = '{{'CM_SELECT_TYPE'|trans}}',
+                                                                                                    selectCriteria = '{{'CM_CRITERIA'|trans}}';
+
+                                                                                            var bookmarkUpdateUrl = '{{url('document_bookmark_createdelete')}}',
+                                                                                                    filterCountUrl = '{{path('club_filter_count', {'id': '|id|'})}}',
+                                                                                                    filterDataUrl = '{{path('club_filter_data', {'id': '|id|'})}}',
+                                                                                                    newElementLevel1 = '{{ include('::clubadmin/new-element-sidebar_level1.html.twig') }}',
+                                                                                                    newElementLevel2 = '{{ include('::clubadmin/new-element-sidebar_level2.html.twig') }}',
+                                                                                                    newElementLevel2Sub = '{{ include('::clubadmin/new-element-sidebar_level2_withfunction.html.twig') }}',
+                                                                                                    newElementUrl = '{{path("document_create_category")}}',
+                                                                                                    module = '{{fgclub.get('module')}}',
+                                                                                                    allDocsCount = '{{fgclub.get(type|lower~'DocCount')}}',
+                                                                                                    defaultTitle = '{{'ALL_DOCUMENTS'|trans}}',
+                                                                                                    bookmarkTitle = '{{'SIDEBAR_BOOKMARKS'|trans}}',
+                                                                                                    sortingTitle = '{{'SIDEBAR_SORTING'|trans}}';
+
+                                                                                            var createCatTitle = '{{'DOCUMENT_CREATE_CATEGORY'|trans}}',
+                                                                                                    createSubcatTitle = '{{'DOCUMENT_CREATE_SUBCATEGORY'|trans}}',
+                                                                                                    addCatTitle = '{{'DOCUMENT_ADD_CATEGORY'|trans}}',
+                                                                                                    addSubcatTitle = '{{'DOCUMENT_ADD_SUBCATEGORY'|trans}}',
+                                                                                                    manageCatTitle = '{{'DOCUMENT_MANAGE_CATEGORY'|trans}}',
+                                                                                                    manageSubcatTitle = '{{'DOCUMENT_MANAGE_SUBCATEGORIES'|trans}}';
+
+                                                                                            var manageCategoryPath = '{{ url('category_edit_' ~ type|default('club')|lower) }}',
+                                                                                                    manageSubcategoryPath = '{{ url('sub_category_edit_' ~ type|default('club')|lower, {'catId': '|id|'}) }}',
+                                                                                                    bookMarkSortingPath = '{{ url('document_bookmark_list_' ~ type|default('club')|lower) }}';
+                                                                                    
+                                                                                    </script>
+                                                                                    <script src="{{ asset('fgcustom/js/documentlist.js')}}" type="text/javascript"></script>
+                                                                                    <script src="{{ asset('fgcustom/js/sidebarfilter.js')}}" type="text/javascript"></script>                                        
+                                                                                    <!-- SIDEBAR & FILTER -->                                                                                    
+                                                                                    <script>
+                                                                                    //for calling popup if no category exists
+                                                                                    requestPath = '{{path('document_category_add_page')}}';
+                                                                                    type = '{{ type }}';
+                                                                                    callCreateCategoryPopup(requestPath, type);
+                                                                                    
+                                                                                /*-------------- Page title bar configuration --------*/ 
+                                                                                            FgPageTitlebar.init({
+                                                                                                     actionMenu: true,
+                                                                                                     title: true,
+                                                                                                     counter: true,
+                                                                                                     filter: true,
+                                                                                                     search: true,
+                                                                                                     colSetting: true,
+                                                                                                     searchFilter: true,
+
+                                                                                             });
+                                                                                    </script>
+                                                                                    {% endblock %}

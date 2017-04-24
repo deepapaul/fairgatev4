@@ -1,0 +1,78 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">{{titleText}}</h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="#" class="form-horizontal form-row-sepe" id="archivecontacts">
+                    <div class="form-body">
+                        
+                        <div id="block_0" class="fg-dev-archive-content">
+                            <p class="fg-dev-archive-status-txt">{{deleteDesc}}</p>
+                        </div>
+
+                    </div>
+                    
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer form-actions fg-modal-footer">
+    <button type="button" class="btn default" id="cancel" data-dismiss="modal" data-function="cancel">{{'CANCEL'|trans}}</button> 
+    <button type="button" class="btn green" id="save" data-function="save">{{'DC_DELETE_BUTTON'|trans}}</button>        
+</div> 
+
+<script type="text/javascript">
+    
+    var assignmentId = '{{assignmentId}}';
+    {% if removeclub is defined %}
+        var removeclub = '{{removeclub}}';
+    {% endif %}
+    {% if clubId is defined %}
+        var clubId = '{{clubId}}';
+        var url = '{{path('club_documents_remove', {'offset': 0, 'clubId':clubId})}}';   
+    {% endif %}   
+    {% if removecontact is defined %}
+        var removecontact = '{{removecontact}}';
+    {% endif %}
+    {% if contactId is defined %}
+        var contactId = '{{contactId}}';
+        var url = '{{(module == 'sponsor') ? path('sponsor_documents_remove', {'offset': 0, 'contact':contactId}) : path('contact_documents_remove', {'offset': 0, 'contact':contactId}) }}';   
+    {% endif %}   
+             
+    
+    $(document).off('click', 'button[data-function=save], button[data-function=cancel]');
+    $(document).on('click', 'button[data-function=save], button[data-function=cancel]', function() {
+        var buttonId = this.id;
+        if (buttonId == 'save') {
+            deleteDocumentAssignment();
+        }
+    });
+    function deleteDocumentAssignment() {  
+        var params;
+        if (typeof removeclub != 'undefined') {
+            if(removeclub == "all") {               
+               params = {"removeclub": "all"};
+            } else {
+               params = {"assignmentId": assignmentId};                      
+            }
+        } else if (typeof removecontact != 'undefined') {
+            if(removecontact == "all") {
+                params = {"removecontact": "all"};                 
+           } else {
+              params = {"assignmentId": assignmentId};  
+            }
+        } 
+        $.post( url, params)
+            .done(function( data ) {   
+                redrawdataTableFromServer();
+            }); 
+        $( "#cancel" ).trigger( "click" );       
+    }   
+    
+</script>

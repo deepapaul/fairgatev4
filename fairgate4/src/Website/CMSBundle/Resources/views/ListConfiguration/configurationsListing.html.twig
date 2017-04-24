@@ -1,0 +1,95 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = 'CMS_THEME_CONFIGURATIONS'|trans %}
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/website/css/style-cms.css') }}" type="text/css" rel="stylesheet" />
+{% endblock %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTAINER -->
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN BREADCRUMB-->
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <!-- END BREADCRUMB-->
+            <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+            {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'contactId': '', 'tabs': '', 'roleCount' : '' , 'type':'', 'url' : '', 'clubLanguages':'', 'clubDefaultLang':''} %}
+            <!-- END PAGE TITLE AND PANEL TABS -->
+            <!-- BEGIN CONTENT -->
+            <div class="fg-theme-config-wrapper">
+                <ul class="fg-list-row-wrapper fg-theme-list-wrapper no-sorting">
+                    {% if themeConfigs is defined %}
+                        {% for config in themeConfigs%}
+                            <li class="row fg-border-line fg_theme_list_li" id="Fg_theme_config_li_{{config.id}}" data-configid="{{config.id}}">
+                                <div class="col-md-4 col-sm-5 col-xs-6 fg-config-name fg-pad-left-0">
+                                    {% if config.isDefault == '1' %}
+                                        {{config.title}}
+                                    {%else%}    
+                                        <a href="{{path('website_theme_color_update', {'configId':config.id})}}">{{config.title}}</a> 
+                                    {% endif%}
+                                    <a target="_blank" href="{{path('website_theme_preview_page', {'configId':config.id})}}"><i class="fa fa-2x fa-search fg-preview fg-theme-config-preview"></i></a>
+                                </div>
+                                <div class="col-sm-2 col-md-offset-3 col-sm-offset-2  col-xs-6 text-right fg-theme-name">
+                                    <span class="">{{config.themeTitle}}</span>
+                                </div>
+                                <div class="col-sm-2 col-xs-12 fg-activate-wrapper">
+                                    {% if config.isActive == '1' %}
+                                        <span class="fg-activated">{{'CONFIG_ON'|trans}}</span>
+                                    {%else%}
+                                        <a  href="javascript:void(0)" class="fg-deactivated fg_theme_config_activate" data-configid="{{config.id}}"><i class="fa fa-2x fa-check-square-o"></i>{{'Activate'|trans}}</a>
+                                    {% endif%}
+                                </div>
+                                <div class="col-sm-1 fg-duplicate text-right fg-pad-right-15">
+                                    <i class="fa fa-2x fa-files-o fg_theme_copy_config fg-cursr-pointer" data-configid="{{config.id}}" title='{{'CONFIG_DUPLICATE'|trans}}'></i>
+                                </div>
+                                <div class="fg-col-last-icon fg_config_last_icon">
+                                    {% if config.isActive == '1' %}
+                                        <div class="lockdiv">
+                                            <i class="fa fa-lock fa-2x" data-toggle="tooltip" title=""></i>
+                                        </div>
+                                    {%else%}
+                                        <div class="deletediv">
+                                            <div class="closeico fg_theme_config_delete_wrapper" title='{{'CONFIG_DELETE'|trans}}'>
+                                                <input type="checkbox" name="theme_config_delete_{{config.id}}" id="theme_config_delete_{{config.id}}" value="{{config.id}}" class="make-switch fg_theme_config_delete">
+                                                <label for=""></label></div>
+                                        </div>
+                                    {% endif%}
+                                </div>
+                            </li>
+                        {% endfor%}
+                    {% endif%}
+
+                </ul>
+                <a  href="{{path('website_theme_configuration_create')}}" class="fg-add-item"> <i style="margin-right:8px;" class="fa-plus-circle fa fa-2x"></i>{{'CMS_NEW_CONFIGURATION'|trans}} </a>   
+            </div>
+            <!-- END CONTENT -->
+            {% block underscoretemplate %}
+                {% include 'WebsiteCMSBundle:ListConfiguration:templateConfigurationList.html.twig' %}
+            {% endblock %}
+
+        </div> 
+    {% endblock %}
+    {% block javascripts %}
+        <script src="{{ asset('fgassets/website/js/Fg_cms_theme_config.js')}}" type="text/javascript"></script>
+        <script>
+            var pagePreviewUrl = '{{path('website_theme_preview_page', {'configId':'CONFIGREPLACE'})}}';
+            $(document).ready(function () {
+                scope = angular.element($("#BaseController")).scope();
+                
+                FgPageTitlebar = $(".fg-action-menu-wrapper").FgPageTitlebar({
+                    title: true,
+                    tabType: 'client'
+                });
+                var themeConfig = new FgCmsThemeConfig();
+                themeConfig.themeConfigDuplicatePath = '{{path('website_theme_configuration_duplicate')}}';
+                themeConfig.themeConfigDeletePath = '{{path('website_theme_configuration_delete')}}';
+                themeConfig.themeConfigDeletePopupPath = '{{path('website_theme_configuration_delete_popup')}}';
+                themeConfig.themeConfigActivatePath = '{{path('website_theme_configuration_activate')}}';
+                themeConfig.themeConfigEditPath = '{{path('website_theme_color_update', {'configId':'**placeholder**'})}}';
+                themeConfig.duplicateTemplate = 'templateThemeConfigDuplicate';
+                themeConfig.StatusElementTemplate = 'templateThemeConfigStatusElement';
+                themeConfig.deleteElementTemplate = 'templateThemeConfigDeleteElement';
+
+            });
+        </script>
+    {% endblock %}    

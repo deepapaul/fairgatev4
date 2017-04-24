@@ -1,0 +1,158 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% form_theme form 'CommonUtilityBundle:Form:two_column.html.twig' %}
+{% block pagecontent %}
+
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row">
+        <div class="col-md-12">	
+            <div class="tabbable tabbable-custom boxless tabbable-reversed">	
+                <div class="portlet box green">
+                        <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="fa fa-reorder"></i>FormSample
+                                </div>                                
+                        </div>
+                        <div class="portlet-body form">
+                                <!-- BEGIN FORM-->
+                                {{ form_start(form, { 'attr': {'id': 'form1' ,'class': 'form-horizontal','action':'metronic_form_submit','novalidate':'novalidate', 'onSubmit': 'return false;'} }) }}
+                                <div class="form-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ form_row(form.name) }}       
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_row(form.email) }}
+                                        </div>  
+                                        <div class="col-md-6">
+                                            {{ form_row(form.language) }}
+                                        </div>  
+                                        <div class="col-md-6">
+                                            {{ form_row(form.nationality) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_row(form.url) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ form_row(form.gender) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_row(form.address) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_row(form.news) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_row(form.pincode) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form_row(form.contact) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-actions fluid">
+                                        <div class="row">
+                                                <div class="col-md-6">
+                                                        <div class="col-md-offset-3 col-md-9">
+                                                                <!--<button type="submit" onclick="SaveData();" class="btn green">Submit</button>-->
+                                                                <input type="submit" class="btn green" value="submit">
+                                                                <!--<button type="cancel" class="btn default">Cancel</button>-->
+                                                                 <input type="submit" class="btn default" value="Reset">
+                                                        </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                </div>
+                                        </div>
+                                </div>
+                                
+                                <!-- Model box area -->
+      <div class="modal fade" id="basic" tabindex="-1" role="basic" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+											<h4 class="modal-title">Modal Title</h4>
+										</div>
+										<div class="modal-body">
+											 Modal body goes here
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn default" data-dismiss="modal">Close</button>
+											<button type="button" class="btn blue">Save changes</button>
+										</div>
+									</div>
+									<!-- /.modal-content -->
+								</div>
+								<!-- /.modal-dialog -->
+							</div>
+                 <a class="btn default" data-toggle="modal" href="#basic">View Demo</a>               
+     <!-- Model box end area -->
+     <!-- Add More -->
+   <div id="default_template" >
+    <p>
+     Name <input type="text" name="phone_number" id="text"> <br>
+     Email: <input type="text" name="phone_numbery" id="texty"> <br>
+    
+        <input type="button" id="removediv" value="Remove">
+
+    </p>
+   </div>  
+     <input type="button" value="ADD NEW" id="add_phone_number"> 
+     <!-- End Add More -->
+     
+                                
+                             <input type="hidden" name="drag1" value="0,1" id="drag1">   
+                                <div class="fairdragg">
+                        <div  class="ui-state-default" style="color:red" id="0">check1</div>
+                        <div class="ui-state-default"  style="color:blue" id="1">check2</div>
+                        </div>
+                                {{ form_rest(form) }}
+                                {{ form_end(form) }}
+                        </div>
+                        
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+        <script type="text/javascript"> 
+      $(document).ready(function() {      
+        var contacts = new Bloodhound({
+          datumTokenizer: function(d) { return d.tokens; },
+          queryTokenizer: Bloodhound.tokenizers.whitespace,
+          remote: '/twilight/backend/contact/search/%QUERY'
+        });
+         
+        contacts.initialize();
+        $('.typeahead').typeahead(null, {
+          displayKey: 'name',
+          highlight: true,
+          hint:  true,
+          source: contacts.ttAdapter()
+      });
+      });
+            
+            function SaveData(){
+                
+                var values = {};
+                                $("form :input").each(function(){
+								if($(this).hasClass( "fairgatedirty" )) {
+								values[this.name] = $(this).val(); 
+								}
+								
+								 
+			});
+                                
+			console.log(values);	
+                
+               // FgXmlHttp.post("{{ path('metronic_form',{'club_id':'rahul'})}}", $('#form1').serialize());
+                return false;
+            }
+            
+             
+            
+        </script>
+    {% endblock %}

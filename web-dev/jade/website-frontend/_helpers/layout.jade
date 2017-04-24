@@ -1,0 +1,32 @@
+doctype html
+html
+	head
+		block title
+			title Bootstrap 101 Template
+		meta(name='viewport', content='width=device-width, initial-scale=1.0')
+		// Bootstrap
+		block page-level-library-css
+		include fg-web-style
+		block page-level-header
+	- var bodyClass = '';
+	- var bodyStyles = '';
+	- var headerClass = '';
+	block vars
+	body(class='#{bodyClass} #{bodyStyles}' style="")
+		block before-header
+		header(class='#{headerClass} container-fluid fg-web-page-header')
+			block header
+
+		main.container-fluid.fg-web-main-content
+			block content
+
+		footer.container-fluid.fg-web-page-footer
+			block footer
+		
+		block after-footer
+
+		block page-level-library-js
+
+		include fg-web-script
+
+		block page-level-footer

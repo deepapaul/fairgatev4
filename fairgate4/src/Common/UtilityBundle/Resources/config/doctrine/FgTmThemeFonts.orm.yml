@@ -1,0 +1,49 @@
+Common\UtilityBundle\Entity\FgTmThemeFonts:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgTmThemeFontsRepository
+    type: entity
+    table: fg_tm_theme_fonts
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        fontLabel:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: font_label
+        fontName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: font_name
+        fontStrength:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: font_strength
+        isItalic:
+            type: boolean
+            nullable: true
+            column: is_italic
+        isUppercase:
+            type: boolean
+            nullable: true
+            column: is_uppercase
+    manyToOne:
+        configuration:
+            targetEntity: FgTmThemeConfiguration
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                configuration_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

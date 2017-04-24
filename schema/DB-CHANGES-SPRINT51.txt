@@ -1,0 +1,25 @@
+ALTER TABLE `fg_dn_club_domains` ADD `is_secure` TINYINT(1) NOT NULL DEFAULT '0' AFTER `mail_request_status`;
+
+ALTER TABLE `fg_cms_navigation` ADD `is_additional` TINYINT(1) NOT NULL DEFAULT '0' AFTER `navigation_url`;
+
+Update in resize_gallery_server.sh
+
+PROCEDURE `deleteDuplicateSubscribers` changed for the Task 36279
+
+===============================================================================================
+FAIR - 1996
+Script needs to be run after a stable release of sprint 52 to LIVE. May be after 1-2 months
+Routing for calling script -
+
+Migration of contact profile pictures to folder 'width_65'
+/backend/contact/migration
+
+Mysql function update - Rajasree
+sublevelNavs
+===============================================================================================
+Script for updating the page-content element JSON
+ /changeJsonpath/1 - Sneha
+===============================================================================================
+
+DB change regarding FAIR-2457 (Aneesh)
+UPDATE `fg_tm_theme` SET `theme_options` = '{"themePreviewImage":"theme1.jpg","noOfColorsPerScheme":5,"noOfPresetSchemes":4,"colorLabels":["TM_BACKGROUND_COLOR","TM_INVERSE_COLOR","TM_ACCENT_COLOR","TM_LINKSBUTTONS_COLOR","TM_HIGHLIGHTING_COLOR"],"noOfHeaderImages":3,"headerImageLabels":["TM_DEFAULT_LOGO","TM_SHRINKED_LOGO","TM_MOBILE_SCREEN_LOGO"],"noOfFonts":3,"font_label":{"TM_MAIN_TEXT":{"font_name":"Roboto Condensed","font_strength":"light","is_italic":0,"is_uppercase":0},"TM_HEADINGS":{"font_name":"Roboto Condensed","font_strength":"bold","is_italic":0,"is_uppercase":1},"TM_NAVIGATION":{"font_name":"Roboto Condensed","font_strength":"regular","is_italic":0,"is_uppercase":1}}}' WHERE `fg_tm_theme`.`id` = 1;

@@ -1,0 +1,30 @@
+<script type='template' id='calendar-img-upload'>
+<li class="fg-calendar-upload-item fg-clear filecontent" id="<%- id %>">
+    <div class="col-sm-12 fg-calendar-item-name">
+            <div id="fg-uploadcalendar-name" class="row fg-uploadcalendar-name"> 
+                <div class="col-md-9"><%- name %>
+                    <div class="col-sm-5 fg-upload-progress pull-right">
+                        <div class="progress ">
+                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 fg-replacewith-errormsg"> <span class="fg-file-size"> <%- size %> </span></div>
+            </div>
+    </div>
+    
+    <input id="fg-uploadcalendar-name" name="fileName" type="hidden" placeholder="" value="<%- name %>" class="form-control fg-uploadcalendar-name" data-key="fileupload.name.<%- id %>">
+    <input class="fg-uploadcalendar-randName" name="randFileName" type="hidden" value="<%- value %>" data-key="fileupload.randName.<%- id %>">
+    <input class="fg-uploadcalendar-size" name="fileSize" type="hidden" value="<%- size_raw %>" data-key="fileupload.size.<%- id %>">
+    <input class="fg-uploadcalendar-newold" name="newold" type="hidden" value="new" data-key="fileupload.newold.<%- id %>">
+    <a href="javascript:void(0)" class="fg-delete"><i class="fa fa-times-circle fa-2x"></i></a>
+</li>
+</script>
+<script type="text/template" id="fileUploadError">
+    <p><span class="help-block">
+        <% if (error == 0) { %> {{'FILEMANAGER_UPLOAD_FILETYPE_ERROR'|trans}} 
+        <% } else if (error == 1) { %> {{'FILEMANAGER_UPLOAD_VIRUS_ERROR'|trans}} 
+        <% } else if (error == 2) { %> {{'VIRUS_FILE_CONTACT'|trans}} 
+        <% } else { %> <%- error %> <% } %></span></p>
+</script>

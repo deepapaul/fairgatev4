@@ -1,0 +1,607 @@
+<script type="text/template" id="overviewBox">
+	<div class="panel panel-primary" >
+		<div class="panel-heading">
+			<h3 class="panel-title fg-panel-title-head"><%- title %></h3>
+			<%= titleRight %>
+		</div>
+		<div class="row fg-common-top">
+			<div class="col-md-12">
+				<form class="form-horizontal" role="form">
+					<div class="form-body">
+						<%= content %>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</script>
+<script type="text/template" id="overviewProfile">
+    <div class="fg-profile-blk">
+    <div class="portlet box sortable">
+
+        <div class="panel panel-primary  fg-box-style-02">
+            <% if(settings.hasImage == 1) {  %> 
+                <% if(  settings.Iscompany != 1) { %>
+                    <div class="fg-profile-img-blk150 fg-round-img" style="background-image:url('<%- settings.contactImage %>')">
+                    </div>
+                <% } else { %>
+                    <div class="fg-profile-img-blk-C150 " >
+                        <img src="<%- settings.contactImage %>" alt="">
+                    </div>
+                <% } %>            
+            <% } %>
+            <div class="clearfix"></div>
+            <ul class="fg-access-module-list">
+                <% if((!((clubType == 'federation' || clubType == 'sub_federation') && createdClubId == contactClubId)) && (settings.fedMembershipId != null)) { 
+                    if(!_.isEmpty(clubAssignments)) { %>
+                        <li>
+                            <i class="fa fa-sitemap"></i>
+                                <% clubAssignmentLength = clubAssignments.length; 
+                                   clubAssignCount = 0; %>
+                                <% _.each(clubAssignments, function(caValue,caKey){ 
+                                    clubAssignCount = clubAssignCount+1; %>
+                                    <div class="fg-clubAssignments">
+                                        <%- caValue.title %>
+                                        <% if(caValue.toDate == '' || caValue.toDate == null) { %> 
+
+                                            ({{'CONTACT_OVERVIEW_SETTINGS_MEMBERSHIP_SINCE'|trans}} <%- caValue.fromDate %>) 
+                                            <% if((caValue.clubId==caValue.mainClubId) && (clubAssignments.length > 1)  && (activeClubAssignmentCount > 1)) { %>
+                                                <i class="fa  fa-star text-yellow"></i>
+                                            <% } 
+                                        } else { %> 
+
+                                            (<%- caValue.fromDate %> - <%- caValue.toDate %>) 
+
+                                        <% } 
+                                        if(clubAssignCount == clubAssignmentLength) { 
+                                            if(clubType =='federation') { %>
+                                                <a href="#" data-url = "{{path('contact_profile_settings_popup')}}" data-type= "clubAssignments" class="fa-access-edit"> <i class="fa fa-pencil-square-o"></i> </a>
+                                            <% } %>
+                                        <% } %>
+                                    </div>
+                                <% }) %>
+                        </li>
+                    <% } %>
+                <% } %>
+                
+                <% if(clubType != 'federation' && clubType != 'sub_federation' && clubMembershipAvailable != 0) { %>
+                    <li> 
+                     
+                        <% if(settings.Iscompany == 1) {  %>
+                        <% if(settings.clubMembershipId != null) {  %>  
+                        <i class="fa fa-building-o fg-bg-light-green active"></i>
+                        <% } else { %> 
+                        <i class="fa fa-building-o inactive"></i> 
+                        <% } %>
+                        <% if(settings.clubMembershipId != null) {  %> 
+                        <%- settings.clubMembershipTitle %>  
+                        <% } else { %> {{'NO_MEMBERSHIP'|trans}} <% } %>
+                        <% if(settings.contactclubid == settings.currentClub && settings.readOnlyUser == 0) {  %><a href="#" data-url = "{{path('contact_profile_settings_popup')}}" data-type= "clubmembership" class="fa-access-edit"> <i class="fa fa-pencil-square-o"></i> </a><% } %>
+                        <% } else { 
+                         var Gender = (settings.Gender).charAt(0).toUpperCase() + (settings.Gender).slice(1); 
+                        settings.Gender = Gender;
+                         %>
+                        <% if(settings.clubMembershipId != null && settings.Gender == 'Male') {  %>
+                        <i class="fa  fa-male fg-bg-light-green active"></i>
+                        <%- settings.clubMembershipTitle %>
+                        <% if(settings.contactclubid == settings.currentClub && settings.readOnlyUser == 0) {  %><a href="#" data-url = "{{path('contact_profile_settings_popup')}}" data-type= "clubmembership" class="fa-access-edit"><i class="fa fa-pencil-square-o"></i> </a><% } %>
+                        <% } else if(settings.clubMembershipId == null && settings.Gender == 'Male') { %>
+                        <i class="fa  fa-male "></i>
+                        {{'NO_MEMBERSHIP'|trans}}
+                        <% if(settings.contactclubid == settings.currentClub) {  %><a href="#" data-url = "{{path('contact_profile_settings_popup')}}" data-type= "clubmembership" class="fa-access-edit"><i class="fa fa-pencil-square-o"></i> </a><% } %>
+                        <% } else if(settings.clubMembershipId != null && settings.Gender == 'Female') { %>
+                        <i class="fa  fa-female fg-bg-light-green active"></i>
+                        <%- settings.clubMembershipTitle %>
+                        <% if(settings.contactclubid == settings.currentClub  && settings.readOnlyUser == 0) {  %><a href="#" data-url = "{{path('contact_profile_settings_popup')}}" data-type= "clubmembership" class="fa-access-edit"><i class="fa fa-pencil-square-o"></i> </a><% } %>
+                        <% } else if(settings.clubMembershipId == null && settings.Gender == 'Female') { %>
+                        <i class="fa  fa-female"></i> {{'NO_MEMBERSHIP'|trans}}
+                        <% if(settings.contactclubid == settings.currentClub  && settings.readOnlyUser == 0) {  %><a href="#" data-url = "{{path('contact_profile_settings_popup')}}" data-type= "clubmembership" class="fa-access-edit"><i class="fa fa-pencil-square-o"></i></a> <% } %>
+                        <% } %>
+                        <% } %>
+                    </li>
+                <% } %>
+                <% if(clubType != 'standard_club') { %>
+                    <li> 
+                        <% if(settings.Iscompany == 1) {  %>
+                            <% if(settings.fedMembershipId != null) {  %>  
+                            <i class="fa fa-building-o fg-bg-light-green fed-member"></i>
+                            <% } else { %> 
+                            <i class="fa fa-building-o inactive"></i> 
+                            <% } %>
+                            <% if(settings.fedMembershipId != null) {  %> 
+                            <%- settings.membershipTitle %> <img src="<%- settings.fedLogoPath %>" /> 
+                            <% } else { %> {{'NO_FED_MEMBERSHIP'|trans}} <% } %>
+                            <% if((((clubType == 'federation' || clubType == 'sub_federation') && createdClubId == contactClubId) || (clubType == 'sub_federation_club' || clubType == 'federation_club')) && isFedMemberConfirmed == 0) { %>
+                                <% if(settings.contactclubid == settings.currentClub && settings.readOnlyUser == 0) {  %><a href="#" data-url = "{{path('contact_profile_settings_popup')}}" data-type= "fedmembership" class="fa-access-edit"> <i class="fa fa-pencil-square-o"></i> </a><% } %>
+                            <% } %>
+                            <% if(isFedMemberConfirmed == 1) { %>
+                                <i class='fg-dev-Popovers fa fa-clock-o fg-PR' data-trigger='hover' data-placement='bottom' data-content="<%- fedmemConfirmTootipMsg %>" > </i>
+                            <% } %>
+                        <% } else { %>
+                            <% if(settings.fedMembershipId != null && settings.Gender == 'Male') {  %>
+                            <i class="fa  fa-male fg-bg-light-green fed-member"></i>
+                            <%- settings.membershipTitle %>
+                            <img src="<%- settings.fedLogoPath %>" />
+                            <% if((((clubType == 'federation' || clubType == 'sub_federation') && createdClubId == contactClubId) || (clubType == 'sub_federation_club' || clubType == 'federation_club')) && isFedMemberConfirmed == 0) { %>
+                                <% if(settings.contactclubid == settings.currentClub && settings.readOnlyUser == 0) {  %><a href="#" data-url = "{{path('contact_profile_settings_popup')}}" data-type= "fedmembership" class="fa-access-edit"><i class="fa fa-pencil-square-o"></i> </a><% } %>
+                            <% } %>
+                            <% if(isFedMemberConfirmed == 1) { %>
+                                <i class='fg-dev-Popovers fa fa-clock-o fg-PR' data-trigger='hover' data-placement='bottom' data-content="<%- fedmemConfirmTootipMsg %>" > </i>
+                            <% } %>
+                        <% } else if(settings.fedMembershipId == null && settings.Gender == 'Male') { %>
+                            <i class="fa  fa-male "></i>
+                            {{'NO_FED_MEMBERSHIP'|trans}}
+                            <% if((((clubType == 'federation' || clubType == 'sub_federation') && createdClubId == contactClubId) || (clubType == 'sub_federation_club' || clubType == 'federation_club')) && isFedMemberConfirmed == 0) { %>
+                                <% if(settings.contactclubid == settings.currentClub) {  %><a href="#" data-url = "{{path('contact_profile_settings_popup')}}" data-type= "fedmembership" class="fa-access-edit"><i class="fa fa-pencil-square-o"></i> </a><% } %>
+                            <% } %>
+                        <% } else if(settings.fedMembershipId != null && settings.Gender == 'Female') { %>
+                            <i class="fa  fa-female fg-bg-light-green fed-member"></i>
+                            <%- settings.membershipTitle %>
+                            <img src="<%- settings.fedLogoPath %>" />
+                            <% if((((clubType == 'federation' || clubType == 'sub_federation') && createdClubId == contactClubId) || (clubType == 'sub_federation_club' || clubType == 'federation_club')) && isFedMemberConfirmed == 0) { %>
+                                <% if(settings.contactclubid == settings.currentClub  && settings.readOnlyUser == 0) {  %><a href="#" data-url = "{{path('contact_profile_settings_popup')}}" data-type= "fedmembership" class="fa-access-edit"><i class="fa fa-pencil-square-o"></i> </a><% } %>
+                            <% } %>
+                            <% if(isFedMemberConfirmed == 1) { %>
+                                <i class='fg-dev-Popovers fa fa-clock-o fg-PR' data-trigger='hover' data-placement='bottom' data-content="<%- fedmemConfirmTootipMsg %>" > </i>
+                            <% } %>
+                        <% } else if(settings.fedMembershipId == null && settings.Gender == 'Female') { %>
+                            <i class="fa  fa-female"></i> {{'NO_FED_MEMBERSHIP'|trans}}
+                            <% if((((clubType == 'federation' || clubType == 'sub_federation') && createdClubId == contactClubId) || (clubType == 'sub_federation_club' || clubType == 'federation_club')) && isFedMemberConfirmed == 0) { %>
+                                <% if(settings.contactclubid == settings.currentClub  && settings.readOnlyUser == 0) {  %><a href="#" data-url = "{{path('contact_profile_settings_popup')}}" data-type= "fedmembership" class="fa-access-edit"><i class="fa fa-pencil-square-o"></i> </a><% } %>
+                            <% } %>
+                            <% } %>
+                        <% } %>
+                    </li>
+                <% } %>
+                <% if(settings.bookedModules.indexOf("sponsor") != -1) { %>
+                <li><i class="fa fa-money <% if(settings.is_sponsor != 0) {  %> fg-bg-light-green <% }%> "></i> <%- settings.sponsorText %><a href="#" class="fa-access-edit"></a></li>  
+                <% } %>
+                <li><i class="fa fa-envelope <% if(settings.is_subscriber != 0) {  %> fg-bg-light-green  <% }%> "></i> <%- settings.newsletterText %><a href="#" data-url = "{{path('contact_profile_settings_popup')}}" data-type= "subscription" class="fa-access-edit" data-active = "<%- settings.is_subscriber %>" ><% if(settings.readOnlyUser == 0) {  %><i class="fa fa-pencil-square-o"></i><% } %> </a> </li>
+                <% if(settings.bookedModules.indexOf("frontend1") != -1) { %>
+                <li><i class="fa  <% if(settings.stealthFlag  != 1) {  %> fa-eye fg-bg-light-green <% } else { %> fa-eye-slash <% } %> "></i> <%- settings.stealthModeText %><a href="#" class="fa-access-edit" data-type= "internal_visible" data-active = <%- settings.stealthFlag %> data-url = "{{path('contact_profile_settings_popup')}}"><% if(settings.readOnlyUser == 0) {  %><i class="fa fa-pencil-square-o"></i><% } %></a></li>
+                <li><i class="fa  fa-sign-in <% if(settings.intranet_access != 0) {  %> fg-bg-light-green  <% }%>"></i><%- settings.intranetAccessText %><a href="#" class="fa-access-edit" data-type= "internal_access"  data-active = <%- settings.intranet_access %> data-url = "{{path('contact_profile_settings_popup')}}"><% if(settings.readOnlyUser == 0) {  %><i class="fa fa-pencil-square-o"></i><% } %></a></li>
+                <% } %>    
+            </ul>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+</div>
+</script>
+<script type="text/template" id="overviewNotes">
+	<%
+		var noteCount=0;
+		var data = settings.notes.data;
+		var path = settings.notes.path;
+		_.each(data,function(value,key){
+			if(noteCount < 3) { %>
+
+					<div class="col-md-12">
+						<div class="fg-note-wrapper">
+							<span class="fg-note-note-date"><label><a href="<%- path %>#<%- value.id %>"><%- value.date %></a> {%trans%}CONTACT_OVERVIEW_NOTES_BY{%endtrans%} <%- value.createdBy %></label></span>
+							<span class="fg-note-note-text"><label class="control-label fg-overview"><span><%- value.note %></span><i></i><a href="<%- path %>#<%- value.id %>"></a></label></span>
+						</div>
+					</div>
+
+			<% }
+			noteCount=noteCount+1;
+	}); %>
+</script>
+<script type="text/template" id="overviewFedMembership">
+	<%
+		var data = settings.fedmembership.data;
+		_.each(data,function(value,key){ %>
+			<div class="form-group fg-overview-list">
+				<dl>
+					<% if(!_.isEmpty(value.leavingDate)) { %>
+                                            <dt><%- value.joiningDate %> - <%- value.leavingDate %></dt>
+					<% } else { %>
+                                            <dt>{%trans%}CONTACT_OVERVIEW_SETTINGS_MEMBERSHIP_SINCE{%endtrans%} <%- value.joiningDate %></dt>
+					<% } %>
+					<dd>
+                                            <%- value.title %>
+                                             <%  var fedIcon = {{fgclub.get('federation_icon')|json_encode()|raw}};  %>   
+                                            <% if(value.isFedCategory == 1) { %>
+                                                <img src="<%- fedIcon[value.clubId] %>" />
+                                            <% } %>
+					</dd>
+				</dl>
+			</div>
+	<% 	}); %>
+</script>
+<script type="text/template" id="overviewClubMembership"> 
+		<% var data = settings.clubmembership.data;
+		_.each(data,function(value,key){ %>
+                    <div class="form-group fg-overview-list">
+                        <dl>
+                            <% if(!_.isEmpty(value.leavingDate)) { %>
+                                <dt><%- value.joiningDate %> - <%- value.leavingDate %></dt>
+                            <% } else { %>
+                                <dt>{%trans%}CONTACT_OVERVIEW_SETTINGS_MEMBERSHIP_SINCE{%endtrans%} <%- value.joiningDate %></dt>
+                            <% } %>
+                            <dd>
+                                <%- value.title %>
+                                <% if(value.isFedCategory == 1) { %>
+                                    <%  var fedIcon = {{fgclub.get('federation_icon')|json_encode()|raw}};  %> 
+                                    <img src="<%- fedIcon[value.clubId] %>" />
+                                    
+                                <% } %>
+                            </dd>
+                        </dl>
+                    </div>
+                <% }); %>
+</script>
+<script type="text/template" id="overviewFedMembershipEditLink">
+	<% var logListingPath = settings.fedmembership.logListingPath; %>
+	<div class="fg-dev-overview-edit-mship">
+       <%  if(clubType == 'federation') {  %>
+        <span>{%trans%}CONTACT_OVERVIEW_SETTINGS_MEMBERSHIPS_EDIT_LINK{%endtrans%}</span>
+        <a href="<%- logListingPath %>?activeTab=fed_membership"><i class="fa fa-pencil-square-o "></i></a>
+         <%  } else {   %>
+           <span>{%trans%}LOG{%endtrans%}</span>
+         <span > <a href="<%- logListingPath %>?activeTab=fed_membership"><i class="fa fa-history"></i></a></span> &nbsp;&nbsp;
+        <% } %>
+    </div>
+</script>
+<script type="text/template" id="overviewClubMembershipEditLink">
+	<% var logListingPath = settings.clubmembership.logListingPath; %>
+	<div class="fg-dev-overview-edit-mship">
+        <span>{%trans%}CONTACT_OVERVIEW_SETTINGS_MEMBERSHIPS_EDIT_LINK{%endtrans%}</span>
+        <a href="<%- logListingPath %>?activeTab=membership"><i class="fa fa-pencil-square-o fg-pencil-square-o"></i></a>
+    </div>
+</script>
+<script type="text/template" id="overviewAddressBlock">
+	<% var addressBlock = settings.addressBlock; %>
+	<div class="row">
+		<div class="col-md-12">
+			<% _.each(overviewSettings.fields,function(fieldValue,fieldKey){
+				if(fieldKey=="correspondenceAddress") { %>
+					<div class="col-md-6 fg-other-conn fg-dev-overview-pre"><span class="fg-contact-txt-head"><%- fieldValue.fieldName %></span>
+						<% _.each(addressBlock.dataCorrespondence,function(correspondenceValue,correspondenceKey){ %>
+							<% if(correspondenceValue !="" && correspondenceValue!= null) { %>
+								<pre><%- correspondenceValue %></pre>
+							<% } %>
+						<% }); %>
+					</div>
+				<% }
+			}); %>
+		</div>
+	</div>
+</script>
+<script type="text/template" id="overviewRoleCategory">
+	<%
+		var roleCategory = settings.roleCategory;
+		var resultField = settings.contactOverviewData[roleCategoryIndex];
+		var federationCategoryDetails = _.where(roleCategory.categoryData, {rmCatId: roleCategorySettings.fieldId , is_fed_category : "1"});
+		var isFederationCategory = federationCategoryDetails.length;
+	%>
+	<dt>
+		<%- roleCategorySettings.fieldName %>
+                 <%  var fedIcon = {{fgclub.get('federation_icon')|json_encode()|raw}};  %>  
+		<% 	if(isFederationCategory) { %>
+			<img src="<%- fedIcon[federationCategoryDetails[0]["clubId"]] %>" />
+		<% } %>
+	</dt>
+	<dd>
+		<%
+			if(resultField) {
+				var resultFieldArray = resultField.split("),");
+				_.each(resultFieldArray,function(resultFieldValue,resultFieldKey){
+					var relationship = resultFieldValue.split("(");
+					if(relationship[1] != null) {
+						var disValue=relationship[1].replace(")", "");
+						var disValue = disValue.replace(",",";");
+					}
+					relationshipName=$.trim(relationship[0]); %>
+				<%- relationshipName %><% if(disValue != null){ %>: <%- disValue %><% } %>
+
+			<% });
+			} else { %> - <% } %>
+	</dd>
+</script>
+<script type="text/template" id="overviewRoleCategoryWrap">
+	<div class="form-group fg-overview-list">
+		<dl>
+		<%= content %>
+		</dl>
+	</div>
+</script>
+<script type="text/template" id="overviewFederationInfo">
+    <%
+        var contactClubId = settings.contactClubId;
+        var mainClubId = settings.mainClubId;
+        if((clubType == 'federation' || clubType == 'sub_federation') && createdClubId == contactClubId) { %>
+            <span class="fg-pading-page-btm">{{ 'CONTACT_OVERVIEW_TITLE_FED_OWNED_CONTACT'|trans ({'%federation%': fgtwig.getTerminolgyName('Federation', singular)}) }}</span>
+	<% } 
+	_.each(overviewSettings.fields,function(fieldValue,fieldKey){
+            var federationInfo = settings.federationInfo;
+            if(fieldValue.fieldId=="fedmembership" && federationInfo.data.fedMembershipId) {
+                if(fieldValue.emptyFlag == 0 || (fieldValue.emptyFlag == 1 && federationInfo.data.joiningDate)) { %>
+                    <div class="form-group fg-overview-list">
+                        <dl>
+                            <dt><%- federationInfo.data.fedmembershipTitle %></dt>
+                            <dd>
+                                <% if(federationInfo.data.joiningDate) { %> {%trans%}CONTACT_OVERVIEW_TITLE_FED_SINCE{%endtrans%} <%- federationInfo.data.joiningDate %> <% } else { %> - <% } %>
+                                <% if(isFedMemberConfirmed == 1) { %>
+                                    <i class='fg-dev-Popovers fa fa-clock-o fg-PR' data-trigger='hover' data-placement='bottom' data-content="<%- fedmemConfirmTootipMsg %>" > </i>
+                                <% } %>
+                            </dd>
+                        </dl>
+                    </div>
+            <% 	}
+            } else if(fieldValue.fieldId=="club") { 
+                if(!((clubType == 'federation' || clubType == 'sub_federation') && createdClubId == contactClubId) && ( (_.size(settings.fedmembership.data)>0 )|| isFedMemberConfirmed==1 ) && (createdClubType!='sub_federation')) { 
+                    if(fieldValue.emptyFlag == 0 || (fieldValue.emptyFlag == 1 && federationInfo.clubAssignments)) {  %>
+                      <% if(!_.isEmpty(federationInfo.clubAssignments)) { %>
+                                <div class="form-group fg-overview-list">
+                                            <dl>
+                                                <dt><%- fieldValue.fieldName %></dt>
+                                                <dd>
+                                                    <%  
+                                                        clubAssignmentLength = federationInfo.clubAssignments.length; 
+                                                        clubAssignCount = 0;
+                                                        _.each(federationInfo.clubAssignments, function(caValue,caKey){
+                                                            clubAssignCount = clubAssignCount+1; console.log(clubAssignCount);console.log(clubAssignmentLength);%>
+                                                            <div>
+                                                                {% if (fgtwig.inArray('clubAdmin',fgclub.get('allowedRights'))) or (fgtwig.inArray('superAdmin',fgclub.get('allowedRights'))) %}
+                                                                    <% if((clubType == 'federation') || (clubType=='sub_federation' && caValue.parentClubId==contactClubId)) { %>
+                                                                        <a href="<%- federationInfo.path.replace('dummyClubId', caValue.clubId) %>" target="_blank" ><%- caValue.title %></a>
+                                                                    <% } else { %>
+                                                                        <%- caValue.title %>
+                                                                    <% } %>
+                                                                {% else %}
+                                                                    <%- caValue.title %>
+                                                                {% endif %}
+                                                                <% if(caValue.toDate == '' || caValue.toDate == null) { %> 
+                                                                    ({{ 'CONTACT_OVERVIEW_SETTINGS_SPONSORED_SINCE'|trans }} <%- caValue.fromDate %>) 
+                                                                    <% if((caValue.clubId==caValue.mainClubId) && (federationInfo.clubAssignments.length > 1) && (activeClubAssignmentCount > 1)) { %> 
+                                                                        <i class="fa  fa-star text-yellow"></i>
+                                                                    <% } 
+                                                                } else { %> 
+                                                                    (<%- caValue.fromDate %> - <%- caValue.toDate %>) 
+                                                                <% }
+                                                                if(clubAssignCount == clubAssignmentLength) { 
+                                                                    if(clubType =='federation') { %>
+                                                                        <a href="#" data-url = "{{path('contact_profile_settings_popup')}}" data-type= "clubAssignments" class="fa-access-edit"> <i class="fa fa-pencil-square-o"></i> </a>
+                                                                    <% }
+                                                                } %>
+                                                            </div>
+                                                        <% }) %>
+
+                                                </dd>
+                                            </dl>
+                                        </div>
+                      <%             }
+                          }
+                }                          
+            } else if(fieldValue.fieldId=="sub_federation") {
+                if(!((clubType == 'federation' || clubType == 'sub_federation') && createdClubId == contactClubId)) {
+                    if(fieldValue.emptyFlag == 0 || (fieldValue.emptyFlag == 1 && federationInfo.subfederations)) { %>
+                        <div class="form-group fg-overview-list">
+                            <dl>
+                                <dt><%- fieldValue.fieldName %></dt>
+                                <dd>
+                                    <% var subfederationStr = '';
+                                    _.each(federationInfo.subfederations, function(caValue,caKey){
+                                        subfederationStr = caValue.title+', '+subfederationStr;
+                                    });
+                                    if (_.size(federationInfo.subfederations) > 0) {
+                                        subfederationStr = subfederationStr.slice(0,-2); %> 
+                                        <%- subfederationStr %>
+                                    <% } else { %>
+                                        -
+                                    <% } %>
+                                </dd>
+                            </dl>
+                        </div>
+                    <% }
+                }
+            } else {
+                if((fieldValue.fieldId=="club_executive_board_function") && !((clubType == 'federation' || clubType == 'sub_federation') && createdClubId == contactClubId)) {
+                    var roleData = settings.contactOverviewData;
+                    var roleCategoryIndex = overviewSettings.settingsType+"_"+fieldValue.fieldType+"_"+fieldValue.fieldId;
+                    var isRoleCategoryData = _.isString(roleData[roleCategoryIndex]);
+                    if(fieldValue.emptyFlag == 0 || (fieldValue.emptyFlag == 1 && isRoleCategoryData )) { %>
+                        <div class="form-group fg-overview-list">
+                            <dl>
+                                <dt><%- fieldValue.fieldName %></dt>
+                                <dd>
+                                        <% if(isRoleCategoryData) { %> <%- roleData[roleCategoryIndex] %> <% } else { %> - <% } %>
+                                </dd>
+                            </dl>
+                        </div>
+                    <% }
+                }
+            }
+        }); %>
+</script>
+<script type="text/template" id="overviewContactCategoryWrap">
+	<div class="form-group fg-overview-list">
+		<dl>
+		<%= content %>
+		</dl>
+	</div>
+</script>
+<script type="text/template" id="overviewContactCategory">
+    <%
+
+    var resultField = settings.contactOverviewData[contactCategoryIndex];
+    var countryList = settings.countryList;
+    var languages = settings.languages;
+    var resultFieldOutput = "-";
+    if((contactCategorySettings.emptyFlag==1 && isContactCategoryData) || (contactCategorySettings.emptyFlag == 0) ) { %>
+        <dt><%- contactCategorySettings.fieldName %></dt>
+        <% resultField= (!isContactCategoryData)?'-':resultField; %>
+        <dd>
+            <% switch(contactCategorySettings.inputType) {
+
+                    case 'login email':
+                    case 'email':
+                            resultFieldOutput = '<a href="mailto:'+resultField+'" target="_blank">'+resultField+'</a>';
+                            break;
+                    case 'url':
+                            resultFieldOutput = '<a href="'+resultField+'" target="_blank">'+resultField+'</a>';
+                            break;
+                    case 'checkbox':
+                            resultFieldOutput = resultField.replace(/;/g, "; ");
+                            break;
+                    case 'multiline':
+                            resultFieldOutput = resultField.replace(new RegExp('\r?\n', 'g'), '<br />');
+                            break;
+                    case 'date':
+                        if (resultField != "0000-00-00"){
+                            var reggie = /(\d{2}).(\d{2}).(\d{4})/;
+                            var reggie1 = /(\d{4})-(\d{2})-(\d{2})/;
+                            var dateArray = reggie.exec(resultField);
+                            var dateArray1 = reggie1.exec(resultField);
+                            if (_.size(dateArray) > 0) {
+                                resultFieldOutput =  FgLocaleSettings.formatDate(resultField, 'date' , 'DD.MM.YYYY');
+                            } else if (_.size(dateArray1) > 0) {
+                                resultFieldOutput = FgLocaleSettings.formatDate(resultField, 'date' , 'YYYY-MM-DD');
+                            }
+                        }
+                        break;
+                    case "number":
+                           resultFieldOutput = FgClubSettings.formatNumber(resultField,false);
+                           break;
+                    default:
+
+                        switch(contactCategorySettings.fieldId) {
+
+                            case '76':
+                            case '107':
+                            case '106':
+                            case '71877':
+                                    resultFieldOutput = countryList[resultField];
+                                    resultFieldOutput = (_.isEmpty(resultFieldOutput) || _.isUndefined(resultFieldOutput))?'-':resultFieldOutput;
+                                    break;
+                            case '515':
+                                    resultFieldOutput = languages[resultField];
+                                    break;
+                            case '72':
+                                    if(resultField == "Male"){
+                                            resultFieldOutput = '{%trans%}CM_MALE{%endtrans%}';
+                                    }else if(resultField == "Female"){
+                                            resultFieldOutput = '{%trans%}CM_FEMALE{%endtrans%}';
+                                    }
+                                    break;
+                            case '1':
+                                    if(resultField == "Formal"){
+                                            resultFieldOutput = '{%trans%}CM_FORMAL{%endtrans%}';
+                                    }else if(resultField == "Informal"){
+                                            resultFieldOutput = '{%trans%}CM_INFORMAL{%endtrans%}';
+                                    }
+                                    break;
+                            case 'created_at':
+                            case 'last_updated':
+                            case 'last_login':
+                            case 'last_invoice_sending':
+                                    var reggie = /(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/;
+                                    var dateArray = reggie.exec(resultField);
+                                    if(dateArray != null) {
+                                        resultFieldOutput =  FgLocaleSettings.formatDate(resultField, 'datetime' , 'YYYY.MM.DD HH:mm');
+                                    }
+                                    break;
+                            default:
+                                    if(contactCategorySettings.inputType == "date") {
+                                          if (resultField != "0000-00-00"){
+                                            var reggie = /(\d{2}).(\d{2}).(\d{4})/;
+                                            var reggie1 = /(\d{4})-(\d{2})-(\d{2})/;
+                                            var dateArray = reggie.exec(resultField);
+                                            var dateArray1 = reggie1.exec(resultField);
+                                            if (_.size(dateArray) > 0) {
+                                                resultFieldOutput =  FgLocaleSettings.formatDate(resultField, 'date' , 'DD.MM.YYYY');
+                                            } else if (_.size(dateArray1) > 0) {
+                                                resultFieldOutput = FgLocaleSettings.formatDate(resultField, 'date' , 'YYYY-MM-DD');
+                                            }
+                                        }
+                                    }else if(contactCategorySettings.inputType == "fileupload" || contactCategorySettings.inputType == "imageupload"){
+                                        var filePath = contactCategorySettings.imagePath+'/'+resultField;
+                                        resultFieldOutput = '<a href="'+filePath+'" target="_blank">'+resultField+'</a>';
+                                    }else{
+                                       resultFieldOutput = resultField;
+                                    }
+
+                                    break;
+                        }
+                        break;
+            } %>
+            <%= resultFieldOutput %>
+        </dd>
+    <% } %>
+</script>
+<script type="text/template" id="overviewConnections">
+	<div class="row">
+		<div class="col-md-12">
+			<%
+				var connections = settings.connections;
+				var contactData = settings.contactOverviewData;
+				var contactType = settings.contactType;
+				_.each(overviewSettings.fields,function(fieldValue,fieldKey){
+					if(fieldKey=="household_contact_withoutlink") {
+                        var contactConnectionsIndex = overviewSettings.settingsType+"_"+fieldValue.fieldType+"_"+fieldValue.fieldId;
+						var isContactConnectionsData = (_.isEmpty(contactData[contactConnectionsIndex]) || _.isUndefined(contactData[contactConnectionsIndex]) )?false:true;
+						if(isContactConnectionsData){
+							var resultFieldArray = contactData[contactConnectionsIndex].split(";");
+						%>
+								<div class="col-md-6 fg-other-conn"><span class="fg-contact-txt-head">{%trans%}CONTACT_OVERVIEW_TITLE_CONNECTIONS_HOUSEHOLD{%endtrans%}</span>
+									<%
+										_.each(resultFieldArray,function(resultFieldValue,resultFieldKey){
+											var regExp = /\(([^)]+)\)/;
+											var contactName = regExp.exec(resultFieldValue);
+											var relationship = resultFieldValue.split("(");
+											var contactId = relationship[1].split("|");
+											var overviewLink = connections.contactPath.replace("dummyContactId", contactId[1]);
+									%>
+										<p><%- contactName[1] %>: <a href="<%- overviewLink %>" target="_blank" ><%- relationship[0] %></a></p>
+									<% }); %>
+								</div>
+						<%
+							}
+						}else if(fieldKey=="mainContact") {
+							if(connections.mainContact!= null && connections.mainContact.length != 0) { %>
+								<div class="col-md-6 fg-other-conn">
+									<span class="fg-contact-txt-head">
+										<% if(contactType==1) { %>
+											{%trans%}CONTACT_OVERVIEW_TITLE_CONNECTIONS_COMPANY_MAIN{%endtrans%}
+										<% } else { %>
+											{%trans%}CONTACT_OVERVIEW_TITLE_CONNECTIONS_MAIN{%endtrans%}
+										<% } %>
+									</span>
+									<%_.each(connections.mainContact,function(mainContactVal,mainContactKey){ %>
+										<p><%- mainContactVal.functionName %>: <% if (mainContactVal.overviewLink) { %><a href="<%- mainContactVal.overviewLink %>" target="_blank" ><%- mainContactVal.contactName %></a><% } else { %><%- mainContactVal.contactName %><% } %></p>
+									<% }); %>
+								</div>
+							<% }
+						} else if(fieldKey=="otherConnections") {
+							if(connections.otherConnections!= null && connections.otherConnections.length != 0) { %>
+								<div class="col-md-6 fg-other-conn"><span class="fg-contact-txt-head">{%trans%}CONTACT_OVERVIEW_TITLE_CONNECTIONS_OTHER{%endtrans%}</span>
+									<% _.each(connections.otherConnections,function(otherConnectionsVal,otherConnectionsKey){ %>
+										<p><%- otherConnectionsVal.connectionName %>: <a href="<%- otherConnectionsVal.overviewLink %>" target="_blank" ><%- otherConnectionsVal.contactName %></a></p>
+									<% }); %>
+								</div>
+							<% }
+						}
+				});
+			%>
+		</div>
+	</div>
+</script>
+<script type="text/template" id="overviewSponsoredBy">
+    <%  var data = settings.sponsored.data;
+        _.each(data,function(value,key){ %>
+                <div class="form-group fg-overview-list">
+                        <dl>
+                                <% if(!_.isEmpty(value.endDate)) {  %>
+                                        <dt><%- value.startDate %> - <%- value.endDate %></dt>
+                                <% } else { %>
+                                        <dt>{{ 'CONTACT_OVERVIEW_SETTINGS_SPONSORED_SINCE'|trans }} <%- value.startDate %></dt>
+                                <% } %>
+                                <dd>
+                                    <a href="<%- settings.sponsored.path.replace('dummyContactId', value.sponsorId) %>" target="_blank" ><%- value.sponsorName %></a>
+                                    <span class="fg-ovr-service-name"><%- value.serviceName %></span>
+                                </dd>
+                        </dl>
+                </div>
+    <% 	}); %>
+</script>

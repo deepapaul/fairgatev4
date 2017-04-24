@@ -1,0 +1,223 @@
+When merging this Import Performance Improvement task we have to do the following
+
+1. Execute following script to delete trigger
+     drop trigger if exists assignMemberId;
+
+ 2. Add new procedure to update memberid
+    Procedure_updateMemberId.sql
+
+3. Execute the following script to index import column
+
+    ALTER TABLE `fg_cm_contact` ADD INDEX(`import_id`);
+    ALTER TABLE `fg_cm_contact` ADD INDEX(`import_table`);
+
+************************************************  FAIR-2471  ***********CHECK THE ID"S IN DB. IT will be different **********************************
+	UPDATE `fg_club_terminology_i18n` SET `plural_lang` = 'Team-Mitglieder' WHERE `fg_club_terminology_i18n`.`id` = 4 AND `fg_club_terminology_i18n`.`lang` = 'de';
+	DELETE FROM `fg_club_terminology` WHERE `fg_club_terminology`.`id` = 7;
+	UPDATE `fg_club_terminology_i18n` SET `plural_lang` = 'Galerien' WHERE `fg_club_terminology_i18n`.`id` = 163 AND `fg_club_terminology_i18n`.`lang` = 'de';
+	UPDATE `fg_club_terminology_i18n` SET `singular_lang` = 'Webseite' WHERE `fg_club_terminology_i18n`.`id` = 166 AND `fg_club_terminology_i18n`.`lang` = 'de';
+	UPDATE `fg_club_terminology_i18n` SET `singular_lang` = 'Unterverband' WHERE `fg_club_terminology_i18n`.`id` = 117 AND `fg_club_terminology_i18n`.`lang` = 'de';
+	UPDATE `fg_club_terminology_i18n` SET `plural_lang` = 'Unterverbände' WHERE `fg_club_terminology_i18n`.`id` = 117 AND `fg_club_terminology_i18n`.`lang` = 'de';
+	UPDATE `fg_club_terminology_i18n` SET `singular_lang` = 'Verbandsmitgliedschaft' WHERE `fg_club_terminology_i18n`.`id` = 4391 AND `fg_club_terminology_i18n`.`lang` = 'de';
+	UPDATE `fg_club_terminology_i18n` SET `plural_lang` = 'Verbandsmitgliedschaften' WHERE `fg_club_terminology_i18n`.`id` = 4391 AND `fg_club_terminology_i18n`.`lang` = 'de';
+****************************************************************************************************************************************
+DB CHANGES SPRINT 52 - Contact application form and sponsor ads element
+****************************************************************************************************************************************
+
+//clear all existing form element data
+--TO DO--
+DELETE FROM `fg_cms_page_content_element` WHERE `page_content_type_id` = 10
+****************************************************************************************************************************************
+
+//add new fg_cms_forms table
+
+CREATE TABLE `fg_cms_forms` (
+  `id` int(11) NOT NULL,
+  `club_id` int(11) NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `form_type` enum('contact_field','form_field') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'form_field',
+  `form_stage` enum('stage0','stage1','stage2','stage3') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'stage0',
+  `contact_form_type` enum('single_person','company_with_main_contact','company_without_main_contact') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `confirmation_email_sender` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `confirmation_email_subject` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `confirmation_email_content` text COLLATE utf8mb4_unicode_ci,
+  `notification_email_recipients` text COLLATE utf8mb4_unicode_ci,
+  `acceptance_email_sender` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `acceptance_email_subject` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `acceptance_email_content` text COLLATE utf8mb4_unicode_ci,
+  `is_acceptance_email_active` tinyint(1) NOT NULL DEFAULT '1',
+  `dismissal_email_sender` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `dismissal_email_subject` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `dismissal_email_content` text COLLATE utf8mb4_unicode_ci,
+  `is_dismissal_email_active` tinyint(1) NOT NULL DEFAULT '1',
+  `completion_prompt_success_message` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` datetime DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE `fg_cms_forms`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `club_id` (`club_id`),
+  ADD KEY `created_by` (`created_by`),
+  ADD KEY `updated_by` (`updated_by`);
+
+ALTER TABLE `fg_cms_forms`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+
+ALTER TABLE `fg_cms_forms`
+  ADD CONSTRAINT `fg_cms_forms_ibfk_1` FOREIGN KEY (`club_id`) REFERENCES `fg_club` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fg_cms_forms_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `fg_cm_contact` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fg_cms_forms_ibfk_3` FOREIGN KEY (`updated_by`) REFERENCES `fg_cm_contact` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
+
+****************************************************************************************************************************************
+
+//add new fg_cms_forms_i18n table
+
+CREATE TABLE `fg_cms_forms_i18n` (
+  `id` int(11) NOT NULL,
+  `lang` char(2) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `confirmation_email_subject_lang` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `confirmation_email_content_lang` text COLLATE utf8mb4_unicode_ci,
+  `acceptance_email_subject_lang` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `acceptance_email_content_lang` text COLLATE utf8mb4_unicode_ci,
+  `dismissal_email_subject_lang` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `dismissal_email_content_lang` text COLLATE utf8mb4_unicode_ci,
+  `success_message_lang` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE `fg_cms_forms_i18n`
+  ADD PRIMARY KEY (`id`,`lang`),
+  ADD KEY `id` (`id`);
+
+ALTER TABLE `fg_cms_forms_i18n`
+  ADD CONSTRAINT `fg_cms_forms_i18n_ibfk_1` FOREIGN KEY (`id`) REFERENCES `fg_cms_forms` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+****************************************************************************************************************************************
+
+//add new fg_cms_contact_application_forms table
+
+CREATE TABLE `fg_cms_contact_form_applications` (
+  `id` int(11) NOT NULL,
+  `form_id` int(11) NOT NULL,
+  `contact_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `form_data` text COLLATE utf8mb4_unicode_ci,
+  `status` enum('PENDING','CONFIRMED','DISMISSED') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'PENDING',
+  `created_at` datetime DEFAULT NULL,
+  `decision_date` datetime DEFAULT NULL,
+  `decided_by` int(11) DEFAULT NULL,
+  `club_contact_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE `fg_cms_contact_form_applications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `form_id` (`form_id`),
+  ADD KEY `contact_id` (`club_contact_id`),
+  ADD KEY `decided_by` (`decided_by`);
+
+ALTER TABLE `fg_cms_contact_form_applications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+ALTER TABLE `fg_cms_contact_form_applications`
+  ADD CONSTRAINT `fg_cms_contact_form_applications_ibfk_3` FOREIGN KEY (`club_contact_id`) REFERENCES `fg_cm_contact` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fg_cms_contact_form_applications_ibfk_4` FOREIGN KEY (`form_id`) REFERENCES `fg_cms_forms` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fg_cms_contact_form_applications_ibfk_5` FOREIGN KEY (`decided_by`) REFERENCES `fg_cm_contact` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
+
+****************************************************************************************************************************************
+
+//add new fg_cms_page_content_element_membership_selections
+
+CREATE TABLE `fg_cms_page_content_element_membership_selections` (
+  `id` int(11) NOT NULL,
+  `field_id` int(11) NOT NULL,
+  `membership_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE `fg_cms_page_content_element_membership_selections`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `field_id` (`field_id`),
+  ADD KEY `membership_id` (`membership_id`);
+
+ALTER TABLE `fg_cms_page_content_element_membership_selections`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+ALTER TABLE `fg_cms_page_content_element_membership_selections`
+  ADD CONSTRAINT `fg_cms_page_content_element_membership_selections_ibfk_1` FOREIGN KEY (`field_id`) REFERENCES `fg_cms_page_content_element_form_fields` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fg_cms_page_content_element_membership_selections_ibfk_2` FOREIGN KEY (`membership_id`) REFERENCES `fg_cm_membership` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+****************************************************************************************************************************************
+
+ALTER TABLE `fg_cms_page_content_element` DROP `form_stage`;
+
+ALTER TABLE `fg_cms_page_content_element` ADD `form_id` INT(11) NULL DEFAULT NULL AFTER `club_id`;
+ALTER TABLE `fg_cms_page_content_element` ADD INDEX(`form_id`);
+ALTER TABLE `fg_cms_page_content_element` ADD CONSTRAINT `fg_cms_page_content_element_ibfk_5` FOREIGN KEY (`form_id`) REFERENCES `fg_cms_forms`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+ALTER TABLE `fg_cms_page_content_element_form_fields` DROP FOREIGN KEY fk_fg_cms_page_content_element_form_fields_fg_cms_page_conten1;
+ALTER TABLE `fg_cms_page_content_element_form_fields` DROP `element_id`;
+ALTER TABLE `fg_cms_page_content_element_form_fields` ADD `form_id` INT(11) NOT NULL AFTER `id`;
+ALTER TABLE `fg_cms_page_content_element_form_fields` ADD INDEX(`form_id`);
+ALTER TABLE `fg_cms_page_content_element_form_fields` ADD CONSTRAINT `fk_fg_cms_page_content_element_form_fields_fg_cms_forms1` FOREIGN KEY (`form_id`) REFERENCES `fg_cms_forms`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+INSERT INTO `fg_cms_page_content_type` (`id`, `type`, `logo_name`, `label`, `table_name`, `sort_order`) VALUES (NULL, 'contact-application-form', 'fa-user-plus', 'CMS_CONTACT_APPLICATION_FORM', NULL, '11'), (NULL, 'sponsor-ads', 'fa-diamond', 'CMS_SPONSOR_ADS', NULL, '12');
+
+ALTER TABLE `fg_cms_page_content_element_form_fields` ADD `form_field_type` ENUM('contact','form','club-membership') NOT NULL DEFAULT 'form' AFTER `form_id`;
+ALTER TABLE `fg_cms_page_content_element_form_fields` ADD `attribute_id` INT(11) NULL DEFAULT NULL AFTER `form_field_type`, ADD `is_field_hidden_with_default_value` TINYINT(1) NOT NULL DEFAULT '0' AFTER `attribute_id`;
+ALTER TABLE `fg_cms_page_content_element_form_fields` ADD INDEX(`attribute_id`);
+ALTER TABLE `fg_cms_page_content_element_form_fields` ADD CONSTRAINT `fk_fg_cms_page_content_element_form_fields_fg_cm_attribute1` FOREIGN KEY (`attribute_id`) REFERENCES `fg_cm_attribute`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+ALTER TABLE `fg_cms_page_content_element_form_fields` ADD `club_membership_selection` ENUM('ALL','SELECTED') NOT NULL DEFAULT 'ALL' AFTER `deleted_at`;
+ALTER TABLE `fg_cms_page_content_element_form_fields` ADD `default_club_membership` INT(11) NULL DEFAULT NULL AFTER `club_membership_selection`, ADD INDEX (`default_club_membership`);
+ALTER TABLE `fg_cms_page_content_element_form_fields` ADD FOREIGN KEY (`default_club_membership`) REFERENCES `fg_cm_membership`(`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
+
+****************************************************************************************************************************************
+
+//add new fg_cms_page_content_element_sponsor_services table
+
+CREATE TABLE `fg_cms_page_content_element_sponsor_services` (
+  `id` int(11) NOT NULL,
+  `element_id` int(11) NOT NULL,
+  `service_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE `fg_cms_page_content_element_sponsor_services`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `element_id` (`element_id`),
+  ADD KEY `service_id` (`service_id`);
+
+ALTER TABLE `fg_cms_page_content_element_sponsor_services`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+ALTER TABLE `fg_cms_page_content_element_sponsor_services`
+  ADD CONSTRAINT `fg_cms_page_content_element_sponsor_services_ibfk_1` FOREIGN KEY (`element_id`) REFERENCES `fg_cms_page_content_element` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fg_cms_page_content_element_sponsor_services_ibfk_2` FOREIGN KEY (`service_id`) REFERENCES `fg_sm_services` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+****************************************************************************************************************************************
+
+ALTER TABLE `fg_cms_page_content_element` ADD `sponsor_ad_area_id` INT(11) NULL DEFAULT NULL AFTER `shared_club`, ADD INDEX (`sponsor_ad_area_id`);
+ALTER TABLE `fg_cms_page_content_element` ADD FOREIGN KEY (`sponsor_ad_area_id`) REFERENCES `fg_sm_ad_area`(`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
+ALTER TABLE `fg_cms_page_content_element` ADD `sponsor_ad_display_type` ENUM('fader','vertical','horizontal') NOT NULL DEFAULT 'vertical' AFTER `shared_club`;
+ALTER TABLE `fg_cms_page_content_element` ADD `sponsor_ad_display_time` INT(3) NULL DEFAULT NULL AFTER `sponsor_ad_display_type`;
+ALTER TABLE `fg_cms_page_content_element` ADD `sponsor_ad_max_width` ENUM('small','medium','large') NULL DEFAULT NULL AFTER `sponsor_ad_display_time`;
+ALTER TABLE `fg_cms_page_content_element` CHANGE `sponsor_ad_display_type` `sponsor_ad_display_type` ENUM('fader','vertical','horizontal') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+
+****************************************************************************************************************************************
+
+ALTER TABLE `fg_cms_page_content_element_form_fields_i18n` DROP FOREIGN KEY `fk_fg_cms_page_content_element_form_fields_i18n_fg_cms_page_c1`; 
+ALTER TABLE `fg_cms_page_content_element_form_fields_i18n` ADD FOREIGN KEY (`id`) REFERENCES `fg_cms_page_content_element_form_fields`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+ALTER TABLE fg_cms_page_content_element_form_fields_i18n DROP INDEX fk_fg_cms_page_content_element_form_fields_i18n_fg_cms_page_idx;
+ALTER TABLE `fg_cms_page_content_element_form_fields_i18n` ADD INDEX(`id`);
+
+****************************************************************************************************************************************
+
+DROP TABLE fg_cms_form_element_options_i18n;
+DROP TABLE `fg_cms_form_element_options`;
+
+
+****************************************************************************************************************************************
+ALTER TABLE  `fg_cms_page_content_element_form_fields` CHANGE  `club_membership_selection`  `club_membership_selection` ENUM(  'ALL',  'SELECTED' ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT  'ALL';
+ALTER TABLE `fg_cms_page_content_element_form_fields` CHANGE `is_field_hidden_with_default_value` `is_field_hidden_with_default_value` TINYINT(1) NULL DEFAULT '0';
+*******************************************************************************************************************************

@@ -1,0 +1,42 @@
+Common\UtilityBundle\Entity\FgCnSmsSpool:
+    type: entity
+    table: fg_cn_sms_spool
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        createdAt:
+            type: datetime
+            nullable: false
+            column: created_at
+        actualSmsContent:
+            type: text
+            nullable: true
+            column: actual_sms_content
+        smsId:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sms_id
+        jobId:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: job_id
+        phoneNumber:
+            type: string
+            length: 45
+            fixed: false
+            nullable: true
+            column: phone_number
+        sender:
+            type: string
+            length: 45
+            fixed: false
+            nullable: true
+    lifecycleCallbacks: {  }

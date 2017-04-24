@@ -1,0 +1,266 @@
+{% extends (hasSidebar ? '::global/layout-sidebar.html.twig' : '::internal/layout.html.twig') %}
+{% set pageTitle = hasSidebar ? 'CMS_MANAGE_MENU_BROWSER_PAGE_TITLE'|trans : 'CMS_TITLE'|trans %}
+
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTAINER -->
+    
+    <div class="row">
+        <form id="specialPageForm" class="" method="post" data-validation="true" onsubmit="return false;" novalidate="novalidate">
+        <div class="col-md-12">
+            <!-- BEGIN BREADCRUMB-->
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <!-- END BREADCRUMB-->
+            <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+            {% include 'global/page-title-bar.html.twig' with {'pageTitle': 'CMS_MY_PAGES'|trans, 'contactId': '', 'tabs': tabs, 'roleCount' : '' , 'type':'', 'url' : ''} %}
+            <!-- END PAGE TITLE AND PANEL TABS -->
+           <div class="fg-cms-create-page-wrapper hide">
+               <div class="tiles fg-cms-special-page-tiles">
+                   <div class="tile double bg-green-jungle" id="fg-cms-create-link">
+                       <div class="tile-body">
+                           <i class="fa fa-plus-circle"></i>
+                       </div>
+                       <div class="tile-object">
+                           <div class="name">
+                               {{ 'CMS_CREATE_NEW_PAGE'|trans }}
+                           </div>
+                       </div>
+                   </div>
+
+                   <div class="tile double bg-blue" id="fg-cms-assign-existing-link">
+                       <div class="tile-body">
+                           <i class="fa fa-arrow-circle-o-right"></i>
+                       </div>
+                       <div class="tile-object">
+                           <div class="name">
+                              {{ 'CMS_ASSIGN_EXISTING_PAGE'|trans }}
+                           </div>
+                       </div>
+                   </div>
+                   <div class="tile bg-grey-gallery" id="fg-cms-assign-external-link">
+                       <div class="tile-body">
+                           <i class="fa fa-globe"></i>
+                       </div>
+                       <div class="tile-object">
+                           <div class="name">
+                              {{ 'CMS_SET_EXTERNAL_LINK'|trans }}
+                           </div>
+                       </div>
+                   </div>
+                   <div class="tile bg-purple-soft fg-dev-special-page-create fg-dev-special-page-create" id="fg-cms-show-galleries-link" data-val="gallery">
+                       <div class="tile-body">
+                           <i class="fa fa-picture-o"></i>
+                       </div>
+                       <div class="tile-object">
+                           <div class="name">
+                               {{ 'CMS_SHOW_GALLERIES'|trans }}
+                           </div>
+                       </div>
+                   </div>
+                   <div class="tile bg-yellow-soft fg-dev-special-page-create {% if(calendarCount == 0)%} fg-tile-disabled {% endif %}" {% if(calendarCount == 0)%} data-toggle="tooltip" data-original-title="{{'CMS_CALENDAR_TOOLTIP' |trans}}" {% endif %} id="fg-cms-show-calendars-link" data-val="calendar">
+                       <div class="tile-body">
+                           <i class="fa fa-calendar"></i>
+                       </div>
+                       <div class="tile-object">
+                           <div class="name">
+                              {{ 'CMS_SHOW_CALENDARS'|trans }}
+                           </div>
+                       </div>
+                   </div>
+                   <div class="tile bg-red-sunglo fg-dev-special-page-create {% if(articleCount == 0)%}  fg-tile-disabled {% endif %}" {% if(articleCount == 0)%} data-toggle="tooltip" data-original-title="{{'CMS_ARTICLE_TOOLTIP' |trans}}" {% endif %} id="fg-cms-show-articles-link" data-val="article">
+                       <div class="tile-body">
+                           <i class="fa fa-newspaper-o"></i>
+                       </div>
+                       <div class="tile-object">
+                           <div class="name">
+                               {{ 'CMS_SHOW_ARTICLES'|trans }}
+                           </div>
+                       </div>
+                   </div>
+               </div>
+               <input type="hidden" id="fg-cms-existing-external-nav-id" ><input type="hidden" id="fg-cms-existing-external-page-id" >
+           </div>
+           <div class="fg-cms-create-page-preview-wrapper hide">
+                <h3>Page preview coming soon..    </h3>
+               
+            </div>
+            <!-- Begin Special page wrapper -->        
+            <div class="fg-cms-special-page-wrapper">
+            </div>
+            <input type="hidden" name="hidPageId" id="hidPageId" value=""/> 
+            <input type="hidden" name="hidPageType" id="hidPageType" value=""/> 
+            <input type="hidden" name="hidNavId" id="hidNavId" value=""/> 
+            <!-- End Special page wrapper --> 
+            <!-- BEGIN CONTENT -->
+            <div class="fg-cms-page-list hide">
+                <div class="portlet-body new-table-height fg-datatable-wrapper row" id="tableWrapper">
+                    <table class="dataTable
+                           table
+                           table-bordered
+                           table-hover
+                           table-condensed
+                           dataTable-dragable
+                           fg-brdr-btm"
+                           id="datatable-cms-page-list" dataTable-popover="true" dataTable-hover="true">
+                        <thead>
+                            <tr>
+                            {% if(hasSidebar)%}
+                                <th><div class="fg-th-wrap"><i class='chk_cnt' ></i>&nbsp;<input type="checkbox" name="check_all" id="check_all" class="dataTable_checkall fg-dev-avoidicon-behaviour"></div></th>
+                            {% endif %}
+                            <th> {{'CMS_PAGE'|trans}} </th>
+                        <th> {{'CMS_NAVIGATION'|trans}} </th>
+                        <th> {{'CMS_ELEMENTS'|trans}} </th>
+                        <th> {{'CMS_SIDE_COLUMN'|trans}} </th>
+                        {% if(hasSidebar)%}
+                        <th> {{'CMS_PAGE_ADMINS'|trans}} </th>
+                        {% endif %}
+                        <th> {{'CMS_LAST_EDITED'|trans}} </th>
+                        <th> {{'CMS_EDITED_BY'|trans}} </th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <!-- END CONTENT -->
+        </div>
+        </form>
+    </div>
+        <!-- END CONTENT -->
+        <!-- BEGIN POPUP CONTENT -->
+        {% include 'WebsiteCMSBundle:Page:createPagePopup.html.twig' %}
+        <!-- END POPUP CONTENT -->
+
+{% endblock %}
+{% block underscoretemplate %}
+        {% include 'WebsiteCMSBundle:SpecialPages:templateGalleryPageUpdate.html.twig' %}
+        {% include 'WebsiteCMSBundle:SpecialPages:templateArticleAndCalendarPage.html.twig' %}
+{% endblock %}
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/website/css/style-cms.css')}}" type="text/css" rel="stylesheet" />
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgassets/website/js/fg-cms-special-page.js')}}" type="text/javascript"></script>
+    <script>
+         CmsSpecialPage = new FgCmsSpecialPage();
+    </script>
+    <script src="{{ asset('fgassets/internal/js/fg_tab_selection_process.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/website/js/fg-cms-page-list.js')}}" type="text/javascript"></script>   
+    <script>
+        {% set header = [] %}
+        {% for headerDetail in headerDetails %}
+            {% set header = header|merge([{'id':headerDetail.id,'type':headerDetail.type, 'logo':'<i class="fa '~headerDetail.logo~' fg-marg-right-5 fg-cursr-default" data-toggle="tooltip" data-original-title="'~headerDetail.label|trans~'" ></i>', 'label':headerDetail.label|trans}]) %}
+        {% endfor %}
+        var headerDetails = {{header|json_encode()|raw}};
+        var pageListDatatableObj = {};
+        var pagePreviewpath = '{{ path('website_page_preview', {'pageId': "|IFRPAGEID|" }) }}';
+        var createPagePath = '{{ path('website_cms_create_page')}}';
+        var actionMenu = {{actionMenu|json_encode()|raw}};
+        var adminFlag = actionMenu.adminFlag;
+        var assignExistingPage = '{{ path('website_cms_assign_existing')}}';
+        var assignExistingPageSave = '{{ path('website_cms_assign_existing_save')}}';
+        var required = '{{'REQUIRED'|trans}}';
+        var invalidUrl = '{{'INVALID_URL'|trans}}';
+        var defaultLang = '{{clubDefaultLang}}';
+        var pageListPath = '{{path('website_cms_page_list')}}';
+        var profilePath = "{{ path('internal_community_profile', {'contactId': "***dummy***" }) }}";
+        var pageAdminTrans = "{{'CMS_PAGE_ADMIN'|trans}}";
+        var jsonData = {{ sidebarData|json_encode()|raw }};
+        var clubId  = {{ clubId }};
+        var editLink = '{{path('website_cms_content_sidebar_edit',{'pageId':"***dummy***",'fromList':true })}}';
+        var cmsSidebarParams = {
+            activeMenuVar : 'activeCmsMenu-{{clubId}}-{{contactId}}',
+            activeSubMenuVar : 'activeCmsSubMenu-{{clubId}}-{{contactId}}',
+            updateSidebarPath : '{{ path('website_cms_update_sidebar_data') }}'
+        };
+        
+        var pageAdmins = {{pageAdmins|raw}};
+        var pageDeletePopupPath = "{{ path('website_cms_page_delete_popup') }}";
+        var pageDeletePath = "{{ path('website_cms_page_delete') }}";
+        var fieldRequiredMessage = "{{ 'FIELD_REQUIRED_MESSAGE'|trans }}";
+        var CmsTrans = {
+            menuSettings : '{{ 'CMS_NAVIGATION_SIDEBAR_MANAGE_MENU'|trans }}',
+            menuSettingsPath : '{{ path("website_cms_listnavigations") }}',
+            addmenuSettings : '{{ 'CMS_ADDITIONAL_NAVIGATION_SIDEBAR_MANAGE_MENU'|trans }}',
+            addmenusettingPath:'{{ path("website_cms_listadditionalnavigations") }}',
+            pagePreviewPath : '{{ path("website_cms_editpage_preview", {'pageId': "**dummyId**" }) }}',
+            setDefault :'{{'SELECT_DEFAULT'|trans}}',
+            galleries :"{{'CMS_GALLERIES'|trans|raw}}",
+            formError:'{{'CMS_SPECIAL_PAGE_ERROR_MESSAGE'|trans}}',
+            calendar :'{{'CMS_CALENDAR_TAB_TEXT'|trans}}',
+            article :'{{'CMS_ARTICLE_TAB_TEXT'|trans}}',
+            content :'{{'CMS_CONTENT'|trans}}',
+            small :'{{'CMS_PAGE_SMALL'|trans}}',
+            wide :'{{'CMS_PAGE_WIDE'|trans}}',
+        };
+        var pageEditPath = "{{ path('website_cms_page_edit', {'pageId': "***dummy***" }) }}";
+        var pathEditPreview = "{{ path('website_cms_editpage_preview', {'pageId': "***dummy***" }) }}";
+         var hasSidebar = {{hasSidebar}};
+        var galleryPageDetails = '{{path('website_cms_gallery_page_details')}}';
+        var saveGalleryPageEdit = '{{path('website_cms_edit_gallery_save')}}';
+        var saveArticleAndGalleryPageEditSavePath = '{{path('website_cms_article_and_calendar_special_page_edit_save')}}';
+        var articleAndCalendarDetails = '{{url('website_cms_article_and_calendar_special_page_edit')}}';
+        {% if(hasSidebar)%}
+            FgCmsPageList.initSidebar();
+        {% else%}
+             FgPageTitlebar = $(".fg-action-menu-wrapper").FgPageTitlebar({title:true, search:true});
+             FgCmsPageList.init();
+        {% endif%}
+            
+         var fedId = '{{fedId}}';
+         var subFedId = '{{subFedId}}';         
+         var renderPageType='';
+         var pageID = 0;
+         var currPageType = '';
+         var specialPageCreatePopUpLink = '{{ path("website_special_page_create_popup") }}';
+         var clubLanguages = {{clubLanguages|json_encode()|raw}};
+         var specialPageFormSelector = 'specialPageForm';
+          var tabheadingArray = {{ tabs|json_encode()|raw }};
+            var option = {
+                pageType: 'cmsAddElement',
+                contactId: '{{contactId}}',
+                currentClubId: '{{clubId}}',
+                localStorageName: 'specialPage_{{clubId}}_{{contactId}}',
+                tabheadingArray: tabheadingArray
+            };
+            Fgtabselectionprocess.initialize(option);
+            FgTooltip.init();
+            var pageTypeTrans = {
+                'gallery' : '{{'CMS_GALLERY_SPECIAL_PAGE'|trans}}',
+                'calendar' : '{{'CMS_CALENDAR_SPECIAL_PAGE'|trans}}',
+                'article' : '{{'CMS_ARTICLE_SPECIAL_PAGE'|trans}}'
+            };
+            $(window).load(function() {
+              if($('#paneltab').length > 0){
+                $('#paneltab li').removeClass('active');
+                $('#fg_tab_cmsTabPreview').addClass('active'); 
+              }
+            
+              var lastEditedPage = sessionStorage.getItem("pageId");
+              var lastEditedNav =  sessionStorage.getItem("navId");
+              if(lastEditedPage>0){
+                 
+                var li = $('a.nav-link[data-pageid="'+ lastEditedPage +'"]').parent('li').attr('id');
+                FgSidebar.handleSidebarClick(li); 
+                 sessionStorage.removeItem("pageId");
+              }
+              if(lastEditedNav>0){
+                 
+                 var li = $('a.nav-link[data-id="'+ lastEditedNav +'"]').parent('li').attr('id');
+                 FgSidebar.handleSidebarClick(li); 
+                 sessionStorage.removeItem("navId");
+              }
+            });
+            //Sidebar Changes Topnavigation Click
+             $('body').on('click', '.fg-dev-header-menu-with-sidebar', function(e) {
+                var sidebarType = $(this).find('> a').attr('data-sidebartype');
+                if (localStorage.getItem("ClubGlobalConfig_" + clubId) !== null) {
+                    var sidebarData = {};
+                    var localStorageData = JSON.parse(localStorage.getItem("ClubGlobalConfig_" + clubId));  
+                    sidebarData[sidebarType] = {"Active": "", "Opened": localStorageData['sidebar'][sidebarType]['Opened']};
+                    var updatedData = $.extend(true, localStorageData['sidebar'], sidebarData);
+                    localStorage.setItem("ClubGlobalConfig_" + clubId, JSON.stringify({'sidebar': updatedData}));
+                }
+        });
+    </script>
+
+{% endblock %}

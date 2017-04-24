@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+	
+		<title>Date Picker</title>
+	
+		<link rel="stylesheet" type="text/css" href="../src/DateTimePicker.css" />
+	
+		<script type="text/javascript" src="jquery-1.11.0.min.js"></script>
+		<script type="text/javascript" src="../src/DateTimePicker.js"></script>
+		
+		<!--[if lt IE 9]>
+			<link rel="stylesheet" type="text/css" href="../src/DateTimePicker-ltie9.css" />
+			<script type="text/javascript" src="../src/DateTimePicker-ltie9.js"></script>
+		<![endif]-->
+		
+<style type="text/css">
+
+        p
+        {
+                margin-left: 20px;
+        }
+
+        input
+        {
+                width: 100px;
+                padding: 10px;
+                margin-left: 20px;
+                margin-bottom: 20px;
+        }
+        .dtpicker-header,
+        .dtpicker-buttonCont.dtpicker-singleButton{
+            display: none;
+        }
+        .dtpicker-components {
+            font-size: 14px;
+        }
+        .dtpicker-components .dtpicker-compButton{
+            font-size: 18px;
+        }
+        .dtpicker-overlay{
+            
+            min-width: 150px;
+        }
+        .dtpicker-content {
+            padding: 0;
+            max-width: 175px;
+        }
+        .dtpicker-components{
+            margin: 0;
+        }
+        .dtpicker-components .dtpicker-comp > *{
+            
+            height: 20px;
+            line-height: 25px;
+        }
+        
+</style>
+		
+	</head>
+	
+	<body>
+            <div >
+                    <p>Date : </p>
+                    <input type="text" data-field="time" readonly class="fg-custom-timepicker">
+
+                    <div id="dtBox1"></div>
+                
+            </div>
+            <div >
+                    <p>Date : </p>
+                    <input type="text" data-field="time" readonly class="fg-custom-timepicker">
+
+                    <div id="dtBox2"></div>
+                
+            </div>
+	
+		<script type="text/javascript">
+		
+			$(document).ready(function()
+			{
+				$("#dtBox2").DateTimePicker({
+                                    isPopup : false,
+                                    timeFormat : "hh|mm",
+                                    setValueInTextboxOnEveryClick : true,
+                                    buttonsToDisplay : [],                                    
+                                    timeSeparator: "|",
+                                    incrementButtonContent : '<i class="fa fa-angle-up fa-2x"></i>',
+                                    decrementButtonContent : '<i class="fa fa-angle-down fa-2x"></i>'
+                                });
+			});
+		
+		</script>
+	
+	</body>
+
+</html>

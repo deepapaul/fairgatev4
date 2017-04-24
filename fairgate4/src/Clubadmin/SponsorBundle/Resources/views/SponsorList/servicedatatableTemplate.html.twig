@@ -1,0 +1,88 @@
+<table data-ajax-path="{{ path('sponsor_service_details')}}" class= "table 
+       table-bordered 
+       table-hover
+       table-condensed
+       dataTable-scroll-y
+       dataTable-rows
+       dataTable-scroll-x
+       dataTables_scrollBody
+       lastcolumn_sort dataTable-initialSort serviceTable" xWidth="100" yWidth="300"  data-tab="{{activeTab}}" data-table-name="dataTables"  data-sort="0#desc" id="{{tablename}}">
+    <thead>
+        {% if (activeTab=='active')%}
+            <tr>
+                <th></th>
+                <th>{{'SM_START'|trans}}</th>
+                <th>{{'SM_END'|trans}}</th>
+                <th>{{'SM_CONTACT'|trans}}</th>
+                <th>{{'SM_DEPOSITED_WITH'|trans}}</th>
+                <th>{{'SM_PAYMENT_PLAN'|trans}}</th>
+                <th>{{'SM_NEXTPAYMENT_DATE'|trans}}</th>
+                <th>{{'SM_PAYMENTS_CURR'|trans({'%yr%': fiscalYear['current']['label']})}}</th>
+                <th>{{'SM_PAYMENTS_NEX'|trans({'%yr%': fiscalYear['next']['label']})}}</th>
+                <th>{{'SM_TOTAL_PAYMENT'|trans}}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr class='fg-datatable-footer-grey'>
+                <th></th>
+                <th>{{'SM_TOTAL'|trans}}</th>
+                <th colspan="6" style="text-align:right"></th>
+                <th style="text-align:right"></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </tfoot>
+    {% elseif(activeTab == 'future')%}
+        <tr>
+            <th></th>
+            <th>{{'SM_START'|trans}}</th>
+            <th>{{'SM_END'|trans}}</th>
+            <th>{{'SM_CONTACT'|trans}}</th>
+            <th>{{'SM_PAYMENT_PLAN'|trans}}</th>
+            <th>{{'SM_NEXTPAYMENT_DATE'|trans}}</th>
+            <th>{{'SM_PAYMENTS_CURR'|trans({'%yr%': fiscalYear['current']['label']})}}</th>
+            <th>{{'SM_PAYMENTS_NEX'|trans({'%yr%': fiscalYear['next']['label']})}}</th>
+            <th>{{'SM_TOTAL_PAYMENT'|trans}}</th>
+            <th></th>
+
+        </tr>
+    </thead>
+    <tfoot>
+        <tr class='fg-datatable-footer-grey'>
+            <th></th>
+            <th>{{'SM_TOTAL'|trans}}</th>
+            <th colspan="5" style="text-align:right"></th>
+            <th style="text-align:right"></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </tfoot>
+{% elseif(activeTab == 'former')%}
+    <tr>
+        <th></th>
+        <th>{{'SM_START'|trans}}</th>
+        <th>{{'SM_END'|trans}}</th>
+        <th>{{'SM_CONTACT'|trans}}</th>
+        <th>{{'SM_PAYMENT_PLAN'|trans}}</th>
+        <th>{{'SM_PAYMENTS_CURR'|trans({'%yr%': fiscalYear['current']['label']})}}</th>
+        <th>{{'SM_TOTAL_PAYMENT'|trans}}</th>
+        <th></th>
+    </tr>
+</thead>
+<tfoot>
+    <tr class='fg-datatable-footer-grey'>
+        <th></th>
+        <th>{{'SM_TOTAL'|trans}}</th>
+        <th colspan="4" style="text-align:right"></th>
+        <th></th>
+        <th></th>
+    </tr>
+</tfoot>
+{% endif %}
+
+
+
+</table>
+
+

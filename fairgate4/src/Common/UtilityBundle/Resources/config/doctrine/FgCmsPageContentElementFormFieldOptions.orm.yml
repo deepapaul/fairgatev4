@@ -1,0 +1,42 @@
+Common\UtilityBundle\Entity\FgCmsPageContentElementFormFieldOptions:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPageContentElementFormFieldOptionsRepository
+    type: entity
+    table: fg_cms_page_content_element_form_field_options
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        isActive:
+            type: boolean
+            nullable: true
+            column: is_active
+        selectionValueName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: selection_value_name
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: sort_order
+        isDeleted:
+            type: boolean
+            nullable: false
+            column: is_deleted
+    manyToOne:
+        field:
+            targetEntity: FgCmsPageContentElementFormFields
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                field_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,63 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = contactDetails.contactName %}
+{% block pagecontent %}
+<!-- BEGIN PAGE HEADER-->
+        {% set subFederationTerminology = fgtwig.getTerminolgyName('Sub-federation',plural)%}
+        {% set federationTerminology = fgtwig.getTerminolgyName('Federation',singular)%}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet-body fg-theme-red fg-connection-btn">
+                    <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                    {% include 'clubadmin/breadcrumb.html.twig' with {'breadCrumb':{'back': breadCrumb.back }} %}
+                    {% if missingReqAssgment is defined %}
+                        {% if missingReqAssgment > 0 and isReadOnlyContact == 0 %}
+                            <div id="MissingReqAssgmtError" class="alert alert-warning alert-dismissable ">
+                                <button class="close" data-close="alert"></button>
+                                <strong>{{'ATTENTION'|trans}}! </strong><span>{% trans with {'%fedmember%':  federationTerminology,'%a%':"<a href='"~path('contact_assignments',{'offset':offset,'contact':contactDetails.id})~"'>",'%b%':"</a>"} %}REQ_FED_SUBFED_ROLE_MISSING_ASSIGNMT_CONTACT{% endtrans %} </span>
+                            </div>
+                        {% endif %}  
+                    {% endif %} 
+                  {#  {% if(module == 'sponsor') %}
+                        {% include 'clubadmin/sponsor-panel-tabs.html.twig' with {'contactName':contactDetails.contactname,'contactId':contactDetails.id,'active':'connection','tabs':tabs, 'documentsCount': documentsCount} %}
+                    {% else %}#}
+                       {# {% include 'clubadmin/panel-tabs.html.twig' with {'contactName':contactDetails.contactname,'contactId':contactDetails.id,'active':'connection', 'documentsCount':documentsCount} %}
+                   #}
+                    <div class="row">
+                   {% set page_settings = { 'pagetitle':'true','tabs':'true'}  %}  
+                   {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': contactDetails.contactname ,'page_settings': page_settings, 'contactId': contactDetails.id, 'tabs': tabs, 'type':'overview', 'hrefLink' : true, 'url':"#"} %} 
+                    </div>
+                   {# {% endif %}  #}                  
+
+                    <!-- END PAGE TITLE & BREADCRUMB-->
+                    <form id="contact_connections" method="post" onsubmit="return false;" autocomplete="off" novalidate="novalidate">
+                        <!-- ERROR MESSAGE-->
+                        <div class="alert alert-danger display-hide fg-clear"> {{'FORM_ERROR_DISPLAY'|trans}}
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                        </div>
+                        <!-- END ERROR MESSAGE-->
+                    {% if(contactDetails.is_company==0) %}
+                        {% include 'ClubadminContactBundle:Connection:householdConnections.html.twig' with {'contactdetails':contactDetails,'householdContacts':householdContacts,'readOnly':readOnly,'clubId':clubId, 'bookedModule': bookedModuleDetails} %}
+                    {% endif %}
+                    {% include 'ClubadminContactBundle:Connection:companyConnections.html.twig' with {'contactdetails':contactDetails,'companyContacts':companyContacts,'readOnly':readOnly,'clubId':clubId} %}
+                    {% include 'ClubadminContactBundle:Connection:otherConnections.html.twig' with {'otherContacts':otherContacts,'contactdetails':contactDetails,'readOnly':readOnly,'clubId':clubId} %}
+                    {% if(not readOnly) %}
+                        {% include 'ClubadminContactBundle:Connection:addConnection.html.twig' with {'relation':relation,'contactdetails':contactDetails} %}
+                    {% endif %}
+                    {% include 'clubadmin/savebutton.html.twig' with {'backLink': breadCrumb.back} %}    
+                    </form> 
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+{% block javascripts %}
+<script src="{{ asset('fgcustom/js/fg_more_menu.js')}}" type="text/javascript"></script>
+<script type="text/javascript">
+    var isCompany={{contactDetails.is_company}},
+    implicationPath = "{{path('connection_implication',{'contact': contactDetails.id})}}",
+    contactId = '{{contactDetails.id}}',
+    updateConnection = '{{path("update_contact_connections")}}';
+    var contactSearchUrl = ("{{ module }}" == 'sponsor') ? '{{path("sponsor_name_search", {'term' : 'QUERY'})}}' : '{{path("contact_name_search", {'term' : 'QUERY'})}}';
+</script>
+<script src="{{ asset('fgassets/backend/js/page/contactconnection.js')}}" type="text/javascript"></script>
+{% endblock %}

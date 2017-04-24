@@ -1,0 +1,81 @@
+<form id="form-tab4" method="post" data-url="{{ actionPath }}" onsubmit="return false;" autocomplete="off" novalidate="novalidate" class="form-horizontal fg-form4-submit">
+    {% if duplicates|length > 0 %}
+        <h3 class="block">{{'IMPORT_HOW_TO_HANDLE_DUPLICATE'|trans}}</h3>                       
+        <div class="form-body">
+            <div class="form-group">
+                <p>{{'IMPORT_DUPLICATES_TEXT'|trans}}</p>                                 
+                <!-- Table -->
+                <div class="fg-table-wrap">
+                    <table class="table fg-import-table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    {{ 'IMPORT_IMPORTING'|trans }}
+                                </th>
+                                <th>
+                                    {{ 'IMPORT_EXISTING'|trans ({'%club%': fgtwig.getTerminolgyName('Club', singular), '%federation%': fgtwig.getTerminolgyName('Federation', singular)}) }}
+                                </th>
+                                <th>  
+                                <div class="checkbox-list">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" class="check-all" value="option1">{{'IMPORT_ANYWAY'|trans}}
+                                    </label>
+                                </div>                    
+                                </th>                    
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rowDup in duplicates %}
+                                <tr>
+                                    <td>
+                                        {% if(rowDup.tmpType=='3') %}{{ rowDup.tmpFirma}}{% else %}{{ rowDup.tmpType=='2' ?  rowDup.tmpFirma~' ('~rowDup.tmpLname~' '~rowDup.tmpFname~')':rowDup.tmpLname~' '~rowDup.tmpFname}}{% endif %}{% if rowDup.tmpEmail !='' %}{{ (rowDup.tmpEmail|default('') !='' and rowDup.tmpLname !='' and rowDup.tmpFname !='') ? ';':'' }} {{rowDup.tmpEmail}}{% endif %}{% if rowDup.tmpDob !='' %}; {{rowDup.tmpDob}}{% endif %}
+                                    </td>                    
+                                    <td>
+                                        {% if rowDup.clubId ==clubId %}
+                                        <a href="{{ path('render_contact_overview', {'offset': '0', 'contact': rowDup.contactId}) }}">
+                                        {% endif %}
+                                        {% if(rowDup.isCompany != 1) %}{{rowDup.lname~' '~rowDup.fname}}{% else %}
+                                        {{ rowDup.hasMC==1 ? rowDup.company~' ('~rowDup.lname~' '~rowDup.fname~')':rowDup.company }}{% endif %}{% if rowDup.email !='' %}; {{rowDup.email}}{% endif %}{% if rowDup.dob !='' %}; {{rowDup.dob}}{% endif %}
+                                        {% if rowDup.clubId ==clubId %}
+                                        </a>    
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="checkbox-list">
+                                            <label class="checkbox-inline">
+                                                <input class="check" type="checkbox" name="toimport[]" value="{{rowDup.tmpId}}" >{% if ((rowDup.tmpEmail!='') and (rowDup.tmpEmail|lower ==rowDup.email|lower)) %}({{'IMPORT_WITHOUT_EMAIL'|trans}}){% endif %}
+                                            </label>
+                                                {% if rowDup.tmpEmail|lower ==rowDup.email|lower %}
+                                                <input type="hidden" name="email_dup[]" value="{{rowDup.tmpId}}" />
+                                            {% endif %}
+                                            <input type="hidden" name="duplcates[]" value="{{rowDup.tmpId}}" />
+                                        </div>
+                                    </td>                                   
+                                </tr>                                
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- End Table -->
+            </div>
+        </div>
+    {% else %}                                
+        <h3 class="block">{{'IMPORT_NO_DUPLICATES'|trans}}</h3>
+    {% endif %}                             
+    <input type="hidden" id="step" name="step" value="duplicate" />
+</form>
+<script type="text/javascript">
+//select and deselect
+ $(".check-all").click(function () {
+        $('.check').prop('checked', this.checked);
+        jQuery.uniform.update('#form-tab4 :checkbox');
+    });
+
+//If one item deselect then button CheckAll is UnCheck
+    $(".check").click(function () {
+        if (!$(this).is(':checked')){
+            $(".check-all").prop('checked', false);
+        }
+        jQuery.uniform.update('#form-tab4 :checkbox');
+    });    
+</script>    

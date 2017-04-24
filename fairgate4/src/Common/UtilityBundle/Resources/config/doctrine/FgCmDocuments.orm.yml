@@ -1,0 +1,48 @@
+Common\UtilityBundle\Entity\FgCmDocuments:
+    type: entity
+    table: fg_cm_documents
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        date:
+            type: datetime
+            nullable: true
+        file:
+            type: text
+            nullable: true
+        fileSize:
+            type: string
+            length: 45
+            fixed: false
+            nullable: true
+            column: file_size
+    manyToOne:
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

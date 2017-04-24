@@ -1,0 +1,91 @@
+<script type="text/template" id="fg-dev-user-rights-us-list">
+ <%
+    cmsAdmin = _(content).filter(function (x) { return (x['type']=='club' && x['module_type']=='cms');});
+    allUserGroups=FgUtility.groupByMulti(allUserGroups, ['contact_id']);
+    %>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12 fg-common-top"><div class="panel-heading fg-theme-head"><h3 class="fg-panel-title">{{'USER_RIGHTS_CMS_ADMINISTRATORS'|trans }}</h3></div> </div>
+                <div class="col-md-12 fg-user-div fg-common-top fg-dev-user-rights-elements">
+                    <% if(cmsAdmin.length!=0) { %>          
+                        <% _.each(cmsAdmin,function(contentVal,contentKey){ %>
+                            <div class="row fg-border-line sortables" id="fg-clrChangeBlk_<%- contentVal.group_id %>_<%- contentVal.user_id %>" >
+                                <div class="col-md-9 col-sm-9 col-xs-8">
+                                    <% var overviewLink = overviewPath.replace("dummyContactId", contentVal.contact_id); %>
+                                    <a target="_blank" href="<%- overviewLink %>"><%- contentVal.contactname %></a>
+                                </div>
+                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                    <span class="fg-date-text">{{'USER_RIGHTS_PAGE_SINCE_DATE'|trans }} <%- contentVal.createdAt %></span>
+                                </div>
+                                <div class="fg-last-icon">
+                                <% if(contentVal.contact_id != loggedContactId) { %>
+                                    <div class="closeico">
+                                        <input type="checkbox" class="make-switch" id="group_<%- contentVal.group_id %>_<%- contentVal.user_id %>_is_deleted" data-key="delete.cmsAdmin.user.<%- contentVal.user_id %>" name="group_<%- contentVal.group_id %>_user_<%- contentVal.user_id %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- contentVal.group_id %>_<%- contentVal.user_id %>">
+                                        <label for="group_<%- contentVal.group_id %>_<%- contentVal.user_id %>_is_deleted"></label>
+                                    </div>
+                                <% } else { %>
+                                    <i class="fa fa-lock fa-2x ash"></i>
+                                <% } %>
+                                </div>
+                            </div>
+                        <% }); %>
+                    <% } %>
+                </div>
+                <div class="fg-clear"></div>
+                <div class="col-lg-12 fg-common-top"><a class="fg-dev-add-cms-admin" data-toggle="modal" href="#basic" id="pencil"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text">{{'USER_RIGHTS_ADD_CMS_ADMINISTRATOR'|trans }} </span></a></div> 
+            </div>    
+        </div>
+    <%    
+    WgAdmin =  _(pageContent).filter(function (x) { return (x['type']=='page' && x['module_type']=='cms');});
+    WgAdmin = FgUtility.groupByMulti(WgAdmin, ['contactId','pageId']);  %>
+        <div class="col-md-6">
+                <div class="col-md-12 fg-common-top"><div class="panel-heading fg-theme-head"><h3 class="fg-panel-title">{{'USER_RIGHTS_PAGE_ADMINISTRATORS'|trans }}</h3></div> </div>
+                <div class="col-md-12 fg-user-div fg-common-top fg-dev-user-rights-elements-team">
+                    <% if(WgAdmin.length!=0) { %>          
+                    <% _.each(WgAdmin,function(contentVal1,contentKey1){  %>
+                        <% contentKey1 = contentKey1.replace('c_',''); var contactName = '';%>
+                                <% _.each(contentVal1,function(val,key){ %>
+                                    <% contactName = val[0]['contactname'] ;%>
+                                <% }); %>
+                        <div class="row fg-border-line sortables" id="fg-clrChangeBlkW_<%- contentKey1 %>" >
+                            <div class="col-md-5 col-sm-5 col-xs-8">
+                                <% var overviewLink = overviewPath.replace("dummyContactId", contentKey1); %>
+                                <a target="_blank" href="<%- overviewLink %>"><%- contactName %></a>
+                            </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <% if(contentKey1 != loggedContactId) { %>
+                                     <select name="pages_admin" data-key="cms.pgAdmin.existing.<%- contentKey1 %>.pages" multiple title="{{'SELECT_DEFAULT'|trans}}" class="selectpicker form-control show-tick">
+                                <% } else { %>
+                                     <select name="pages_admin" disabled data-key="cms.pgAdmin.existing.<%- contentKey1 %>.pages" multiple title="{{'SELECT_DEFAULT'|trans}}" class="selectpicker form-control show-tick">
+                                <% } %>
+                                <% _.each(pageList,function(team){ %> 
+                                        <% var select= "multiple" ; %>
+                                        <%  _.each(contentVal1,function(contentVal0,contentKey0){ %>
+                                            <% if(team.roleId == contentKey0){ select +=" selected" ;} %>
+                                        <%});%>
+                                        <option value="<%- team.roleId %>" class=<%- select%> ><%- team.rTitle %></option>
+                                        <% pageId = team.pageId %>
+                                    <% }); %>
+                                </select>   
+                        </div>
+                        <div class="fg-last-icon">
+                            <% if(contentKey1 != loggedContactId) { %>
+                                <div class="closeico">
+                                    <input type="checkbox" class="make-switch" id="contactW_<%- contentKey1 %>_is_deleted" data-key="cms.pgAdmin.delete.<%- contentKey1 %>" name="contactW_<%- contentKey1 %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlkW_<%- contentKey1 %>">
+                                    <label for="contactW_<%- contentKey1 %>_is_deleted"></label>
+                                </div>
+                            <% } else { %>
+                                <i class="fa fa-lock fa-2x ash"></i>
+                            <% } %>
+                        </div>
+                        <div class="random" data-id="{{random()}}"></div>
+                    </div>
+                    <% }); }%>
+                </div>
+                <div class="fg-clear"></div>
+                <div class="col-lg-12 fg-common-top"><a class="fg-dev-add-wg-admin" data-toggle="modal" href="#basic" id="pencil"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text">{{'USER_RIGHTS_ADD_PAGE_ADMINISTRATOR'|trans}}</span></a></div> 
+            </div>  
+        </div>
+ </div>
+</script>

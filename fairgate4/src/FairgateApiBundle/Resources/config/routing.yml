@@ -1,0 +1,35 @@
+get_fed_contact:
+    path:  /fed/{fid}/members.{_format}
+    defaults: { _controller: FairgateApiBundle:FedContacts:getFedContacts, _format: json }
+    requirements:
+        _method: GET
+        
+get_fed_contact_single:
+    path:  /fed/{fid}/members/{contactId}.{_format}
+    defaults: { _controller: FairgateApiBundle:FedContacts:getSingleFederationContact, _format: json }
+    requirements:
+        _method: GET
+        
+get_fed_club_contact:
+    path:  /fed/{fid}/club/{cid}/members.{_format}
+    defaults: { _controller: FairgateApiBundle:FedContacts:getFedClubContacts, _format: json }
+    requirements:
+        _method: GET
+        
+get_fed_club_contact_single:
+    path:  /fed/{fid}/club/{cid}/members/{contactId}.{_format}
+    defaults: { _controller: FairgateApiBundle:FedContacts:getSingleFedClubContact, _format: json }
+    requirements:
+        _method: GET
+        
+get_all_fed_contact:
+    path:  /fed/{fid}/allmembers.{_format}
+    defaults: { _controller: FairgateApiBundle:FedContacts:getAllFedContacts, _format: json }
+    requirements:
+        _method: GET
+        
+get_all_fed_clubs:
+    path:  /fed/{fid}/clubs.{_format}
+    defaults: { _controller: FairgateApiBundle:FedContacts:getAllFedClubs, _format: json }
+    requirements:
+        _method: GET

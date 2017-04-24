@@ -1,0 +1,26 @@
+{% block pagecontent %}
+<form id='gallery_uploader_form' action="">
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12 fg-upload-area fg-upload-area-div">
+        <input type="file" id="file-uploader" name="file-uploader" style="height:0px;width:0px;visibility: hidden" multiple="multiple"/>
+        <div id='gallery_uploader_form-content'>
+        <input type="hidden" name="imgCount" id="imgCount" value=""/>
+        <input type="hidden" name="type" id="imgCount" value="IMAGE"/>
+        <input type="hidden" name="albumId" id="albumId" value=""/>
+        </div>
+    </div>
+</div> 
+<div class="portlet-body form hide" id='action-button-container'>
+    <div class="form-actions fg-upload-save fluid">
+        <div class="col-md-offset-0  col-md-12 col-sm-12 col-xs-12">
+            <a class="btn green" id="gallery_upload_save" href="#">  {{'SAVE_IMAGES'|trans}} </a>
+            <a class="btn default" id="gallery_upload_discard" href="javascript:void(0)"> {{'DISCARD_UPLOAD'|trans}} </a>
+        </div>  
+    </div>
+</div>
+</form>
+{% endblock %} 
+                    
+{% block underscoretemplate %}    
+    {% include 'InternalGalleryBundle:Gallery:templateImageUpload.html.twig' %}
+{% endblock %}

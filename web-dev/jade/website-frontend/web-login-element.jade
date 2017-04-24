@@ -1,0 +1,277 @@
+extends _helpers/layout.jade
+
+block vars
+  - var bodyClass = 'fg-web-theme-01 fg-header-sticky';
+block title
+    title Article Title
+
+block page-level-header
+      link(href='theme-based-styles/theme-01-color-schemes.css', rel='stylesheet', media='screen')
+      link(href='theme-based-styles/theme-01-config.css', rel='stylesheet', media='screen')
+block header
+    .row.fg-web-top-nav-wrapper
+        .container
+            .FR
+                ul.fg-web-top-nav-links.list-inline
+                    li
+                        a(href='#') FAQ
+                    li
+                        a(href='#') Contact
+                    li
+                        a(href='#') Map
+                ul.fg-web-top-nav-languages.list-inline
+                    li
+                        a(href='#') EN
+    .row.fg-web-main-nav-bar
+        .container
+            .fg-logo-wrapper
+                a(href='#').fg-logo
+                  //img(src="http://www.fauchard.org/system/ckeditor_assets/pictures/101/content_pfa_portrait_logo-300print.jpg")
+            .fg-web-nav-icon.visible-xs
+                i.fa.fa-bars.fa-3x
+            nav.navbar.navbar-default.fg-web-main-nav
+                ul.nav.navbar-nav
+                    li.active                                    
+                        a(href='#') Home     
+                    li
+                        a(href='#') Club
+                    li
+                        a(href='#') Teams
+                    li
+                        a(href='#') News
+                    li.dropdown
+                        a(href='#')
+                            | Photos 
+                        span.caret.dropdown-toggle(href='#', data-toggle='dropdown', role='navigation', aria-haspopup='true', aria-expanded='true')
+                        ul.dropdown-menu
+                            li
+                                a(href='#') Second level menu
+                            li
+                                a(href='#') Second level menu
+                            li.dropdown-submenu
+                                a(href='#')
+                                    | Second level Dropdown Second level Dropdown 
+                                span.fg-dropdown-toggle
+                                ul.dropdown-menu.fg-web-open-right
+                                    li
+                                        a(href='#') Third level menu
+                                    li
+                                        a(href='#') Third level menu
+
+                                    li.dropdown-submenu
+                                        a(href='#')
+                                            | Third level Dropdown 
+                                        span.fg-dropdown-toggle
+                                        ul.dropdown-menu.fg-web-open-left
+                                            li
+                                                a(href='#') Fourth level menu
+                                            li
+                                                a(href='#') Fourth level menu
+                                            li
+                                                a(href='#') Fourth level menu
+                                            li
+                                                a(href='#') Fourth level menu
+                                    li
+                                        a(href='#') Third level menu
+                            li
+                                a(href='#') Second level menu
+                            li
+                                a(href='#') Second level menu
+              
+                    li
+                        a(href='#') Contact
+block content
+        .row.fg-web-page-title-bar
+            .container
+                h1.fg-web-page-title
+                  | Set password
+        .container
+            .row.fg-web-page-container
+              .col-sm-12.fg-web-page-content-wrapper
+                  .row
+                    .col-sm-8
+                        form.fg-web-set-password-wrapper(role="form")
+                          .form-group
+                            label.control-label New password
+                            input.form-control.input-md(name='dummyText', type='password')
+                          .form-group
+                            label.control-label Repeat New password
+                            input.form-control.input-md(name='dummyText', type='password')
+                          .form-group.fg-button-block
+                            .fg-button
+                              button#singlebutton.btn.btn-primary.fg-submit(name='singlebutton') Send
+                            .clearfix
+
+block footer
+    .container
+        .row
+            .col-sm-4.fg-grid-col-2
+                .fg-header-widget.fg-widget-block
+                    h3 VISUAL AND PRACMATIC
+                
+                .fg-login-widget.fg-widget-block.fg-dev-element-box.elementBox
+                   
+                  p
+                    strong ACTIVATE YOUR ACCOUNT: 
+                    | Enter the email which is stored on your account to get linked to a page where you can set up your password. If you don't know which email is stored on your account, ask the responsibles of your organanisation FC Musterheim.
+                  form.form-horizontal
+                    .form-group.fg-input-box-left
+                      input.form-control.input-md(name='dummyText', type='text', placeholder='E-mail address')
+                    .form-group.fg-google-captcha
+                        img(src='https://www.google.com/recaptcha/intro/images/hero-recaptcha-demo.gif')
+                    .form-group.fg-button-block
+                      .fg-button
+                        button#singlebutton.btn.btn-primary.fg-submit(name='singlebutton') Send
+                        a(href='javascript:void(0)').fg-back-button
+                            i.fa.fa-arrow-circle-left.fa-2x
+                            | Back
+                      .clearfix
+                .fg-login-widget.fg-widget-block.fg-dev-element-box.elementBox
+                  .alert.alert-danger
+                      strong Danger!
+                          |  Indicates a dangerous or potentially negative action.
+
+                  p
+                    strong ACTIVATE YOUR ACCOUNT: 
+                    | Enter the email which is stored on your account to get linked to a page where you can set up your password. If you don't know which email is stored on your account, ask the responsibles of your organanisation FC Musterheim.
+                  form.form-horizontal
+                    .form-group.fg-input-box-left
+                      input.form-control.input-md(name='dummyText', type='text', placeholder='E-mail address')
+                    .form-group.fg-google-captcha
+                        img(src='https://www.google.com/recaptcha/intro/images/hero-recaptcha-demo.gif')
+                    .form-group.fg-button-block
+                      .fg-button
+                        button#singlebutton.btn.btn-primary.fg-submit(name='singlebutton') Send
+                        a(href='javascript:void(0)').fg-back-button
+                            i.fa.fa-arrow-circle-left.fa-2x
+                            | Back
+                      .clearfix
+
+            .col-sm-4.fg-grid-col-2
+                .fg-header-widget.fg-widget-block
+                    h3 VISUAL AND PRACMATIC
+               
+                .fg-login-widget.fg-widget-block.fg-dev-element-box.elementBox
+                    .fg-footer-block
+                      p
+                        strong SET PASSWORD: 
+                        | Please check your inbox. A mail was sent to you with instructions to activate your account.
+
+            .col-sm-4.fg-grid-col-2
+                .fg-header-widget.fg-widget-block
+                    h3 VISUAL AND PRACMATIC
+
+                .fg-login-widget.fg-widget-block.fg-dev-element-box.elementBox
+                  form.form-horizontal
+                    .form-group.fg-input-box-left
+                      input.form-control.input-md(name='dummyText', type='text', placeholder='E-mail address')
+                    .form-group.fg-input-box-right
+                      input.form-control.input-md(name='dummyPwd', placeholder='Password')
+                    .form-group.fg-button-block
+                      .fg-checkbox
+                        label.radio-inline(for='loggedIn')
+                          input#loggedIn(type='checkbox', name='loggedIn', value='1').uniform
+                          | Keep me logged in.
+                      .fg-button
+                        button#singlebutton.btn.btn-primary.fg-submit(name='singlebutton') Login
+                      .clearfix
+                    .fg-footer-block
+                      .fg-first
+                        h4 First time login?
+                        p
+                          a#forget-password(href='#') Click here
+                          |                     and active your account
+                      .fg-last
+                        h4 Lost password?
+                        p
+                          a#forget-password(href='#') Click here
+                          |                      to reset
+
+
+block after-footer
+    a(href='#').fg-web-go-top
+        i.fa.fa-arrow-circle-up
+    span.helper asd
+    .fg-web-bg-wrapper
+        //-.fg-web-bg(style="background-image:url('http://www.sambeauvois.be/blog/wp-content/uploads/2010/06/bg.gif');z-index:1;")
+        //- .fg-web-bg.fg-web-bg-no-repeat.fg-web-pos-left(style="background-image:url('http://www.sambeauvois.be/blog/wp-content/uploads/2010/06/bg.gif');z-index:2;")
+        //- .fg-web-bg.fg-web-bg-no-repeat.fg-web-pos-right(style="background-image:url('http://school.esanpt1.go.th/wwk/VDO/images/BG-Top.gif');z-index:3;")
+        //-  .fg-web-bg.fg-web-bg-no-repeat.fg-web-pos-center.fg-web-pos-middle(style="background-image:url('http://media.treehugger.com/assets/images/2016/04/tracy-johnson-hummingbirds-1.jpg.662x0_q70_crop-scale.jpg');z-index:4;")
+        //-   .fg-web-bg.fg-web-bg-no-repeat.fg-web-pos-left.fg-web-pos-bottom(style="background-image:url('http://www.tipsquirrel.com/wp-content/uploads/2011/06/Background-small.jpg');z-index:5;") 
+       //- .fg-web-bg(style="background-image:url('http://www.sambeauvois.be/blog/wp-content/uploads/2010/06/bg.gif');z-index:6;")
+
+
+
+block page-level-footer
+    script(src='../../global/js/unitegallery-master/package/unitegallery/themes/slider/ug-theme-slider.js')
+    script.
+      jQuery(document).ready(function () {
+         $("#dummy-gallery2").unitegallery({
+              gallery_theme: "slider",
+              tile_enable_action : false,
+              tile_enable_overlay : false,
+              slider_enable_text_panel:true,
+              slider_textpanel_enable_title:false,
+              slider_enable_play_button:false,
+              slider_enable_bullets:false,
+              slider_enable_progress_indicator:false
+        });
+      });
+
+      $(window).load(function(){
+          //function for responsive nav open
+          $('.fg-web-nav-icon').click(function(){
+              if($('body').hasClass('fg-navbar-open')){
+                    $('body').removeClass('fg-navbar-open');
+                    $('.fg-web-main-nav').animate({
+                          'min-height':0
+                    },350);
+
+              }else{
+                  var ulHeight = $('.fg-web-main-nav > .navbar-nav').outerHeight();
+                  $('.fg-web-main-nav').animate({
+                        'min-height':ulHeight
+                  },350,function(){
+                        $('body').addClass('fg-navbar-open');
+                  });
+              }
+                
+          });
+           //function for responsive nav submenu open
+          $('.dropdown-submenu .fg-dropdown-toggle').on("click", function(e){
+            if($(window).width()<768){
+                $(this).parent('li').toggleClass('open'); 
+                $(this).toggleClass('open');  
+                e.stopPropagation();
+                e.preventDefault();
+            }
+          });
+
+
+          //function for fixing menubar overflow to viewport
+              $(".fg-web-main-nav .dropdown,.fg-web-main-nav .dropdown-submenu").on('mouseenter mouseleave tap', function (e) {
+                  
+                  if ($(this).children('ul').length) {
+                        var elm = $(this).children('ul');
+                        var off = elm.offset();
+                        var l = off.left;
+                        var w = elm.width();
+                        var docH = $(window).height();
+                        var docW = $(window).width();
+                        var isEntirelyVisible = (l + w <= docW);
+                        console.log(elm)
+                        if (!isEntirelyVisible) {
+                            
+                            elm.removeClass('fg-web-open-right').addClass('fg-web-open-left');
+
+                        } else {
+
+                           // $(this).removeClass('edge');
+                        }
+                  }
+              });
+
+        $('.fg-widget-block').load(function(){
+            console.log($(this));
+        })
+      });

@@ -1,0 +1,155 @@
+<div class="row">
+    <div class="col-md-12 "> 
+        <div class="portlet-body" data-sample> 
+            <div class="alert alert-info alert-br">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                {% if update=='1' %} 
+                <strong>{%trans%}UPDATE_EXISTING_CONTACTS{%endtrans%}</strong>{%trans%}IMPORT_UPDATE_BOX_TEXT{%endtrans%}
+                {% else %}                    
+                    {% if (module =='sponsor') %} 
+                        <strong>{%trans%}IMPORT_NEW_SPONSORS{%endtrans%}</strong>{%trans%}SPONSOR_IMPORT_NEW_BOX_TEXT{%endtrans%}
+                    {% else %}
+                        <strong>{%trans%}IMPORT_NEW_CONTACTS{%endtrans%}</strong>{%trans%}IMPORT_NEW_BOX_TEXT{%endtrans%}
+                    {% endif %}                                    
+                <!-- Table -->
+                <div class="fg-table-wrap">
+                    <table data-sample-type="single" class="table fg-import-table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    {%trans%}CONTACT_FIELD_LAST_NAME{%endtrans%}
+                                </th>
+                                <th>
+                                    {%trans%}CONTACT_FIELD_FIRST_NAME{%endtrans%}
+                                </th>
+                                <th>
+                                    {%trans%}CONTACT_FIELD_SALUTATION{%endtrans%}
+                                </th>
+                                <th>
+                                    {%trans%}CONTACT_FIELD_GENDER{%endtrans%}
+                                </th>
+                                {% if (clubLanguages|length>1) %}
+                                    <th>{%trans%}CONTACT_FIELD_CORRES_LANG{%endtrans%}</th>
+                                {% endif %}
+                                <th>
+                                    {% if (fedMembershipMandatory==1) %}
+                                        {%trans%}CONTACT_FEDERATION_CLUB_REQUIRED{%endtrans%}
+                                    {% endif %}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    {%trans%}IMPORT_VALUES_NO_LIMIT{%endtrans%}
+                                </td>                    
+                                <td>
+                                    {%trans%}IMPORT_VALUES_NO_LIMIT{%endtrans%}
+                                </td>
+                                <td>
+                                    {%trans%}IMPORT_VALUES_SALUTATION{%endtrans%}
+                                </td>
+                                <td>
+                                    {%trans%}IMPORT_VALUES_GENDER{%endtrans%}
+                                </td>
+                                {% if (clubLanguages|length>1) %}
+                                <td>{%trans%}IMPORT_VALUES{%endtrans%}{% for lang in clubLanguages %}{{ (loop.index==loop.last) ? lang: lang~';' }} {% endfor %}{%trans%}IMPORT_VALUES_ETC{%endtrans%} </td>
+                                {% endif %}
+                                <td>
+                                     {% if (fedMembershipMandatory==1) %}
+                                        {%trans%}IMPORT_VALUES_FEDERATION_CLUB_REQUIRED{%endtrans%}
+                                    {% endif %}
+                                </td>
+                            </tr> 
+                        </tbody>
+                    </table>
+                    
+                    <table data-sample-type="companyWithMain" style="display:none" class="table fg-import-table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    {%trans%}CONTACT_FIELD_COMPANY{%endtrans%}
+                                </th>
+                                <th>
+                                    {%trans%}CONTACT_FIELD_LAST_NAME{%endtrans%}
+                                </th>
+                                <th>
+                                    {%trans%}CONTACT_FIELD_FIRST_NAME{%endtrans%}
+                                </th>
+                                <th>
+                                    {%trans%}CONTACT_FIELD_SALUTATION{%endtrans%}
+                                </th>
+                                <th>
+                                    {%trans%}CONTACT_FIELD_GENDER{%endtrans%}
+                                </th>
+                                {% if (clubLanguages|length>1) %}
+                                    <th>{%trans%}CONTACT_FIELD_CORRES_LANG{%endtrans%}</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    {%trans%}IMPORT_VALUES_NO_LIMIT{%endtrans%}
+                                </td>                    
+                                <td>
+                                    {%trans%}IMPORT_VALUES_NO_LIMIT{%endtrans%}
+                                </td>
+                                <td>
+                                    {%trans%}IMPORT_VALUES_NO_LIMIT{%endtrans%}
+                                </td>
+                                <td>
+                                    {%trans%}IMPORT_VALUES_SALUTATION{%endtrans%}
+                                </td>
+                                <td>
+                                    {%trans%}IMPORT_VALUES_GENDER{%endtrans%}
+                                </td>
+                                {% if (clubLanguages|length>1) %}
+                                <td>{%trans%}IMPORT_VALUES{%endtrans%}{% for lang in clubLanguages %}{{ (loop.index==loop.last) ? lang: lang~';' }} {% endfor %}{%trans%}IMPORT_VALUES_ETC{%endtrans%} </td>
+                                {% endif %}
+                            </tr> 
+                        </tbody>
+                    </table>
+                        
+                    <table data-sample-type="companyNoMain" style="display:none" class="table fg-import-table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    {%trans%}CONTACT_FIELD_COMPANY{%endtrans%}
+                                </th>
+                                {% if (clubLanguages|length>1) %}
+                                    <th>{%trans%}CONTACT_FIELD_CORRES_LANG{%endtrans%}</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    {%trans%}IMPORT_VALUES_NO_LIMIT{%endtrans%}
+                                </td>                    
+                                {% if (clubLanguages|length>1) %}
+                                <td>{%trans%}IMPORT_VALUES{%endtrans%}{% for lang in clubLanguages %}{{ (loop.index==loop.last) ? lang: lang~';' }} {% endfor %}{%trans%}IMPORT_VALUES_ETC{%endtrans%} </td>
+                                {% endif %}
+                            </tr> 
+                        </tbody>
+                    </table>
+                </div>
+                <!-- End Table -->
+                {% endif %}
+                <p>{%trans%}CHECK_USER_GUIDE_FOR_REQUIREMENTS{%endtrans%}</p>
+                <p>{%trans%}CHECK_USER_GUIDE_FOR_IMPORT{%endtrans%}<strong><a target="_blank" href="https://docs.google.com/spreadsheets/d/1AgFSYb036au79u9xZiQvSYVS-hIbQuJepWd6slb58sE/edit?pref=2&pli=1#gid=1860556361">{%trans%}GUIDE_FOR_IMPORT_TABLE{%endtrans%}</a></strong></p>
+                
+            </div>
+            <div class="alert alert-danger alert-br" style="display:none">
+                <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
+                <strong>{%trans%}NOT_FOR_MOBILE{%endtrans%}</strong>{%trans%}NOT_MOBILE_USE_DESKTOP{%endtrans%}
+            </div>   
+        </div>
+        <div class="portlet-body" data-sample-assignment style="display:none;"> 
+            <div class="alert alert-info alert-br" id="fg-dev-import-assign-fed-note">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                <strong>{{ 'IMPORT_ASSIGNMENT_INFO_NOTE'|trans }}</strong> {{ 'IMPORT_ASSIGNMENT_INFO_DESC'|trans }}
+            </div>
+        </div>
+    </div>
+</div>

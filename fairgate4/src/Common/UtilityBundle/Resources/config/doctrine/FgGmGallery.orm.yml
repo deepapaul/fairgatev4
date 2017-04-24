@@ -1,0 +1,56 @@
+Common\UtilityBundle\Entity\FgGmGallery:
+    repositoryClass: Common\UtilityBundle\Repository\Gallery\FgGmGalleryRepository
+    type: entity
+    table: fg_gm_gallery
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        type:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+        parentId:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: parent_id
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sort_order
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        role:
+            targetEntity: FgRmRole
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                role_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        album:
+            targetEntity: FgGmAlbum
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                album_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

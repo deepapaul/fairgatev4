@@ -1,0 +1,44 @@
+Common\UtilityBundle\Entity\FgForumContactDetails:
+    repositoryClass: Common\UtilityBundle\Repository\Forum\FgForumContactDetailsRepository
+    type: entity
+    table: fg_forum_contact_details
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        readAt:
+            type: datetime
+            nullable: true
+            column: read_at
+        isNotificationEnabled:
+            type: boolean
+            nullable: true
+            column: is_notification_enabled
+        lastNotificationSend:
+            type: datetime
+            nullable: true
+            column: last_notification_send
+    manyToOne:
+        forumTopic:
+            targetEntity: FgForumTopic
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                forum_topic_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

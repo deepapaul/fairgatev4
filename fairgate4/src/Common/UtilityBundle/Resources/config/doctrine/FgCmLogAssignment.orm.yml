@@ -1,0 +1,99 @@
+Common\UtilityBundle\Entity\FgCmLogAssignment:
+    type: entity
+    table: fg_cm_log_assignment
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        roleType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: role_type
+        date:
+            type: datetime
+            nullable: true
+        categoryTitle:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: category_title
+        valueBefore:
+            type: text
+            nullable: true
+            column: value_before
+        valueAfter:
+            type: text
+            nullable: true
+            column: value_after
+        historicalId:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: historical_id
+        isHistorical:
+            type: boolean
+            nullable: false
+            column: is_historical
+    manyToOne:
+        function:
+            targetEntity: FgRmFunction
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                function_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        categoryClub:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                category_club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        category:
+            targetEntity: FgRmCategory
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                category_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        role:
+            targetEntity: FgRmRole
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                role_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        changedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                changed_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

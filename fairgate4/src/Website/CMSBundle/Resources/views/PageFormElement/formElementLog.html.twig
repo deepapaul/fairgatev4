@@ -1,0 +1,49 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/website/css/style-cms.css') }}" type="text/css" rel="stylesheet" />
+{% endblock %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTAINER -->
+    <div class="row fg-theme-green">
+        <div class="col-md-12">
+            <!-- BEGIN BREADCRUMB-->
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <!-- END BREADCRUMB-->
+            <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+            {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'contactId': '', 'tabs': tabs, 'activeTab': 3, 'hrefLink':'1', 'roleCount' : '' , 'type':'', 'url' : ''} %}
+            <!-- END PAGE TITLE AND PANEL TABS -->
+            <!-- BEGIN CONTENT -->
+            <div class="clearfix"></div>
+            {% include 'WebsiteCMSBundle:PageContentElements:cmsElementLogHeaderTemplate.html.twig' %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/fgassets/website/js/Fg_cms_inquiry_list.js" type="text/javascript"></script>
+    <script>
+        var formElementLogPath = "{{path('website_cms_form_element_log_list', {'formId' : elementId} )}}";
+        var profilePath = "{{ path('internal_community_profile', {'contactId': "dummy" }) }}";
+        var statusTranslations = {
+                'added': "{{ 'LOG_FLAG_ADDED'|trans }}",
+                'changed': "{{ 'LOG_FLAG_CHANGED'|trans }}",
+                'removed': "{{ 'LOG_FLAG_REMOVED'|trans }}",
+                'select': "{{ 'DROPDOWN_SELECT_OPTION'|trans }}",
+                'element' : "{{ 'CMS_ELEMENT'|trans }}",
+                'page_assignment' :"{{ 'CMS_PAGE_ASSIGNMENT'|trans }}"
+            };
+
+        $(function () {
+            $(".fg-action-menu-wrapper").FgPageTitlebar({
+                title: true,
+                tab: true,
+                tabType: 'server',
+                row2: true,
+                languageSwitch: false
+            });
+            
+            new FgCmsCalendarElementLog();
+        });
+    </script>
+{% endblock %}

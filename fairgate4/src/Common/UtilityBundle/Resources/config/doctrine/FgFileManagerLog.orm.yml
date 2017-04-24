@@ -1,0 +1,53 @@
+Common\UtilityBundle\Entity\FgFileManagerLog:
+    repositoryClass: Common\UtilityBundle\Repository\FgFileManagerLogRepository
+    type: entity
+    table: fg_file_manager_log
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        kind:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        field:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        valueAfter:
+            type: text
+            nullable: true
+            column: value_after
+        valueBefore:
+            type: text
+            nullable: true
+            column: value_before
+        date:
+            type: datetime
+            nullable: true
+    manyToOne:
+        changedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                changed_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        fileManager:
+            targetEntity: FgFileManager
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                file_manager_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

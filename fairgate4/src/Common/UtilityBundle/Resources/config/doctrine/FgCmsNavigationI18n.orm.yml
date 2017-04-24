@@ -1,0 +1,28 @@
+Common\UtilityBundle\Entity\FgCmsNavigationI18n:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsNavigationI18nRepository
+    type: entity
+    table: fg_cms_navigation_i18n
+    fields:
+        lang:
+            id: true
+            type: string
+            length: 2
+            fixed: true
+            nullable: false
+        titleLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: title_lang
+    oneToOne:
+        id:
+            targetEntity: FgCmsNavigation
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

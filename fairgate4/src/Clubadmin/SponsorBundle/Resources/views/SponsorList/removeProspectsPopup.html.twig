@@ -1,0 +1,111 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title ">
+        {% if sponsors|length > 1 %}  
+            {#more than one prospect to delete#}
+            <span class="fg-dev-contact-names">
+                <a href="#" class="fg-plus-icon"></a><a href="#" class="fg-minus-icon"></a>
+            </span>
+            <div class="fg-popup-text" id="popup_head_text">
+            {% trans with {'%count%': count} %} SPONSOR_REMOVE_TITLE {% endtrans %}
+            </div>
+            <div class="fg-arrow-sh">
+                <ul>                              
+                    {% for contactid,contactname in sponsors %}
+                        <li><a href="{{path('render_sponsor_overview', { 'offset' : 0, 'sponsor' : contactid } ) }}" target="_blank" data-cont-id="{{ contactid }}">{{ contactname }}</a></li> 
+                    {% endfor %}                              
+                </ul>
+            </div>
+        {% else %} 
+            {#only one prospect to delete#}
+            {% for contactid,contactname in sponsors %}
+                <div class="fg-popup-text" id="popup_head_text">
+                {% trans with {'%contactname%': contactname} %} SPONSOR_REMOVE_TITLE_SINGLE {% endtrans %}
+                </div>
+            {% endfor %}
+        {% endif %}          
+   </h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="#" class="form-horizontal form-row-sepe" id="assigncontacts">
+                    <div class="form-body">
+
+                        <div id="block_0">
+                            <!-- CATEGORY SECTION STARTS -->
+                            <div class="form-group">
+                                <label class="col-lg-12 col-md-12 col-xs-12">
+                                    {% if sponsors|length > 1 %} 
+                                        {{'SPONSOR_REMOVE_CONFIRM_MSG'|trans}}
+                                    {% else %} 
+                                        {{'SPONSOR_REMOVE_CONFIRM_MSG_SINGLE'|trans}}
+                                    {% endif %} 
+                                    </label>                                
+                            </div>
+                            <!-- CATEGORY SECTION ENDS -->                             
+                            {% if notProspects|length > 0 %}                            
+                            <div class="alert  alert-danger fg-poup-alert" id="nonfedmember_error">
+                                <p><strong>{{'ERROR'|trans}}: </strong> {{'SPONSOR_CANNOT_REMOVE_MSG'|trans}}</p>
+                                <div class="fg-popup-link">
+                                    {% for contactid,contactname in notProspects %}                 
+                                        <a href="{{path('render_contact_overview', { 'offset' : 0, 'contact' : contactid } ) }}" target="_blank" data-cont-id="{{ contactid }}">{{ contactname }}</a>
+                                    {% endfor %}  
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                       
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer form-actions fg-modal-footer">
+    <button type="button" class="btn default" id="cancel" data-dismiss="modal" data-function="cancel">{{'CANCEL'|trans}}</button> 
+    <button type="button" class="btn green" id="save" 
+     {% if prospects is empty %}
+         disabled="disabled" 
+     {% endif %}  data-function="save">{{'BTN_REMOVE'|trans}}</button>        
+</div> 
+<script>    
+    $(function() {
+        $('.fg-plus-icon').click( function() {
+            $(this).parent().parent().addClass("fg-arrowicon");
+        });
+        $('.fg-minus-icon').click( function() {
+            $(this).parent().parent().removeClass("fg-arrowicon");
+        });
+        
+        $('#save').click( function() {
+            var prospects = '{{ prospects }}';
+            var totalcount = '{{ count }}';
+            if(prospects) {
+                removeProspects(prospects, totalcount);
+            }
+        }); 
+        var removeProspects = function(prospects, totalcount) {
+            params = { "contactids" : prospects, 'totalcount': totalcount };              
+            var pathremoveprospect = '{{path('sponsor_remove_prospect')}}';           
+            $.ajax({
+                type: 'POST',
+                url: pathremoveprospect,
+                data: params,
+                success: function( data ) {  
+                    $( "#cancel" ).trigger( "click" ); 
+                    FgUtility.showToastr(data.flash); 
+                    sponsorTable.api().draw();
+                    FgCountUpdate.updateTopNav("remove", "sponsor", "active", {{prospectsCount}} );
+                    FgCountUpdate.updateSidebarAllactive("remove", {{prospectsCount}});
+                    var updateArr = {"0":{'categoryId':'',"subCatId":"prospect",'dataType':"prospect",'sidebarCount':'{{prospectsCount}}',"action":"remove"}};
+                    FgCountUpdate.updateSidebar(updateArr);
+                },
+                async:false
+              });
+        }
+    });
+</script>    

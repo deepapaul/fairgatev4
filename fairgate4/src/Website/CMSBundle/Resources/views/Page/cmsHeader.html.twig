@@ -1,0 +1,46 @@
+
+<header class="col-md-12 fg-cms-page-widget-nav">
+    <ul class="fg-widget-list text-center fg-clear fg-dev-element-header">      
+        {%  for headerDetail in headerDetails %}
+            {% set hasDragClass = 1 %}
+            {% if (headerDetail.type == 'articles') %}
+                {% if articleCount == 0 %}
+                    {% set hasDragClass = 0 %}
+                    {% set tooltipText = 'CMS_ARTICLE_TOOLTIP'|trans %}
+                {% endif %}
+            {% elseif (headerDetail.type == 'calendar') %}
+                {% if calendarCount == 0 %}
+                    {% set hasDragClass = 0 %}
+                    {% set tooltipText = 'CMS_CALENDAR_TOOLTIP'|trans %}
+                {% endif %}
+            {% elseif (headerDetail.type == 'contact-application-form') %}
+                {% if contactAppCount == 0 %}
+                    {% set hasDragClass = 0 %}
+                    {% set tooltipText = 'CMS_CONTACTAPP_TOOLTIP'|trans %}
+                {% endif %}
+            {% elseif (headerDetail.type == 'sponsor-ads') %}
+                {% if sponsorActive == 0 %}
+                    {% set hasDragClass = 0 %}
+                    {% set tooltipText = toolTipMessage %}
+                {% endif %}
+            {% elseif (headerDetail.type == 'newsletter-subscription' or headerDetail.type == 'newsletter-archive') %}
+                {% if commModuleAvailable == 0 %}
+                    {% set hasDragClass = 0 %}
+                    {% set tooltipText = 'CMS_HEADER_NEWSLETTER_ELEMENT_NOACCESS_TOOLTIP'|trans %}
+            {% endif %}
+            {% elseif (headerDetail.type == 'contacts-table' or  headerDetail.type == 'portrait-element') %}
+                {% if hasContactRights == 0 or hasAdminRights == 0 %}
+                    {% set hasDragClass = 0 %}
+                    {% set tooltipText = 'CMS_HEADER_CONTACTTABLE_NOACCESS_TOOLTIP'|trans %}
+                {% endif %}
+            {% endif %}   
+            <li class="fg-widget {% if (hasDragClass == 0) %} fg-non-draggable {% endif %}" {% if (hasDragClass == 0) %} data-toggle="tooltip" data-original-title="{{ tooltipText }}" {% endif %} >
+                <div class="fg-widget-icon {% if (hasDragClass == 1) %} fg-dev-draggable-element {% endif %}" element-type="{{headerDetail.type }}">
+                    <i class="fa {{headerDetail.logo}}" ></i>                        
+                    <div class="fg-widget-title" >{{headerDetail.label|trans}}</div>
+                </div>
+            </li>
+        {% endfor %}
+
+    </ul>
+</header>

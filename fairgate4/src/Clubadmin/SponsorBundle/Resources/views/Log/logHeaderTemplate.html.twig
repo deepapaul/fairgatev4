@@ -1,0 +1,34 @@
+<table data-ajax-path="{{path('sponsor_log_datas',{'contact':contactData['id'],'fed_contact_id':contactData['fed_contact_id'],'subfed_contact_id':contactData['subfed_contact_id']})}}" class= "table 
+              table-bordered 
+               table-hover
+               table-condensed
+               dataTable-scroll-y
+               dataTable-rows
+               dataTable-scroll-x
+               dataTables_scrollBody
+               lastcolumn_sort dataTable-initialSort dataTable-log" xWidth="100" yWidth="300" data-id={{typeId}} data-tab={{activeTab}} data-table-name="dataTables" id="log_display_{{contactData['id']}}_{{typeId}}" data-sort="0#desc">
+    <thead>
+        {% if (activeTab=='data')%}
+        <tr>
+            <th>{%trans%}LOG_DATE{%endtrans%}</th>
+            <th>{%trans%}LOG_CONTACT_FIELDS{%endtrans%}</th>
+            <th>{%trans%}LOG_BEFORE{%endtrans%}</th>
+            <th>{%trans%}LOG_AFTER{%endtrans%}</th>
+            <th>{%trans%}LOG_EDITED_BY{%endtrans%}</th>
+        </tr>
+         {% elseif(activeTab == 'services')%}
+         <tr>
+            <th>{%trans%}LOG_DATE{%endtrans%}</th>
+            <th>{%trans%}LOG_ACTION{%endtrans%}</th>
+            <th>{%trans%}SM_LOG_CATEGORY{%endtrans%}</th>
+            <th>{%trans%}SM_LOG_SERVICE{%endtrans%}</th>
+            <th>{%trans%}LOG_EDITED_BY{%endtrans%}</th>
+         </tr>
+        {% endif %}
+        
+    </thead>
+    
+</table>
+           
+    
+

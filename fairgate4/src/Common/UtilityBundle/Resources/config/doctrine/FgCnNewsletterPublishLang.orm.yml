@@ -1,0 +1,29 @@
+Common\UtilityBundle\Entity\FgCnNewsletterPublishLang:
+    repositoryClass: Common\UtilityBundle\Repository\FgCnNewsletterPublishLangRepository
+    type: entity
+    table: fg_cn_newsletter_publish_lang
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        languageCode:
+            type: string
+            length: 2
+            fixed: false
+            nullable: true
+            column: language_code
+    manyToOne:
+        newsletter:
+            targetEntity: FgCnNewsletter
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                newsletter_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

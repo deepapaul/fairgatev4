@@ -1,0 +1,37 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::website/layout.html.twig' %}
+
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    {% block websiteContentArea %} {% endblock %}
+    {% block websiteCustomContentArea %}
+        <article class="fg-article-detail-wrapper fg-layout3">
+            <div id="article-content"></div>
+            
+            <div class="clearfix"></div>
+            
+            <div id="nextprev-fg-dev-pagetitle-container"></div>
+            
+            <div class="col-md-12" id="article-comment"></div>
+            
+        </article>
+    {% endblock  %}
+{% endblock %}
+
+
+{% block underscoretemplate %}
+    {% include 'WebsiteCMSBundle:Article:Theme2/templateArticleDetails.html.twig' %}
+    {% include 'WebsiteCMSBundle:Article:templateArticleMedia.html.twig' %}
+    {% include 'WebsiteCMSBundle:Article:templateArticleText.html.twig' %}
+    {% include 'WebsiteCMSBundle:Article:Theme2/templateArticleLinkAndAttachments.html.twig' %}
+    {% include 'WebsiteCMSBundle:Article:templateArticleSlider.html.twig' %}
+    {% include 'WebsiteCMSBundle:Article:Theme2/templateArticleComments.html.twig' %}
+    {% include 'WebsiteCMSBundle:Website:displayContentUnderscore.html.twig' %}
+{% endblock %}
+
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/internal/css/timeline.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block javascripts %}
+    {% include 'WebsiteCMSBundle:Article:articleDetailsJS.html.twig' %}
+{% endblock %}

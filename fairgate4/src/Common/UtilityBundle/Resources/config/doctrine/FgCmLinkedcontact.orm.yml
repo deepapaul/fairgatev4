@@ -1,0 +1,52 @@
+Common\UtilityBundle\Entity\FgCmLinkedcontact:
+    repositoryClass: Common\UtilityBundle\Repository\FgCmLinkedcontactRepository
+    type: entity
+    table: fg_cm_linkedcontact
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        linkedContactId:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: linked_contact_id
+        relation:
+            type: string
+            length: 40
+            fixed: false
+            nullable: true
+        type:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        clubId:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: club_id
+    manyToOne:
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        relation2:
+            targetEntity: FgCmRelation
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                relation_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,176 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+ {% if (catType == 'team') %}
+    {% set pageTitle = 'TEAM_CATEGORIES_TEAM'|trans({'%team%': fgtwig.getTerminolgyName('Team', singular,'UCF')})  %}
+ {% elseif (catType == 'filter_role') %}   
+        {% set pageTitle = 'FILTER_ROLE_CATEGORIES'|trans  %}
+ {% else %}
+           {% if ((catType == 'fed_cat') and ((clubType == 'federation') or (clubType == 'sub_federation'))) %}
+           {% set fedTerminology = (clubType == 'federation') ? fgtwig.getTerminolgyName('Federation', singular,'UCF') : fgtwig.getTerminolgyName('Sub-federation', singular, 'UCF') %}
+            {% set pageTitle = fedTerminology~' '~('ROLE_CATEGORIES'|trans)  %}
+            {% else %}
+{% set pageTitle = 'ROLE_CATEGORIES'|trans  %}
+
+            {% endif %}
+{% endif %}
+{% block pagecontent %}
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BREADCRUMB STARTS -->
+            {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+            <!-- BREADCRUMB ENDS -->
+            <!-- Starts title And Language area -->
+            {#{% include 'clubadmin/language_swtich.html.twig' with {'clubLanguages': clubLanguages, 'title': pageTitle} %}#}
+         <div class="row">
+        {% set page_settings = { 'pagetitle':'true','languageswitch':'true' }  %}
+        {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'page_settings': page_settings,'clubLanguages': clubLanguages  } %}
+         </div>
+           <!-- Ends title And Language area -->
+            <div class="fg-theme-green fg-theme-panel">
+
+                <!-- BEGIN FORM-->
+                <form id="editcategory" class="form-horizontal" method="post" onsubmit="return false;" novalidate="novalidate">
+                    <div class="alert alert-danger display-hide">
+                        <button class="close" data-close="alert"></button>
+                        {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+                    </div>
+                    <div class="excludejs" id="role_category_sort">
+                        <!-- Category listing here -->
+                    </div>
+                    <div class="btn-group  fg-common-top-btm">
+                        <a href="#basic" data-toggle="modal" class="add-membership" id="addcategory"><i class="fa fa-plus-circle fa-2x"></i><span class="fg-left-move"> {%trans%}ADD_CATEGORY{%endtrans%}</span></a>
+                    </div>
+                    <div class="clearfix">  </div>
+                    {% include 'clubadmin/savebutton.html.twig' %}
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+    <!-- ADD ROW TEMPLATES STARTS -->
+    <div id="divTemplates">
+        {# template for adding new category #}
+        {% include 'ClubadminContactBundle:Role:addcategory.html.twig' %}
+    </div>
+    <!-- ADD ROW TEMPLATES ENDS -->
+    <!-- END PAGE CONTENT-->
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    var defaultLang = selectedLang = '{{clubDefaultLang}}';
+    var clubLanguages = {{clubLanguages|json_encode|raw}};
+    var catType = "{{catType}}";
+    FgUtility.changeColorOnDelete();
+
+    $(document).ready(function(){
+        var result_data = {{result_data|json_encode|raw}};
+        var catCount = Object.keys(result_data).length;
+        if (catCount > 0) {
+            var resultData = FgUtility.groupByMulti(result_data, ['sortOrder']);
+            _.each(resultData, function(cat_data, catSortOrder) {
+                _.each(cat_data, function(catData, catVal) {
+                    var jsonData = {catId: catData.id, clubLanguages: clubLanguages, isNew: false, catType: catType, attributes: catData};
+                    renderNewRow('template-category-add', 'role_category_sort', jsonData);
+                });
+            });
+            setRedirectUrl();
+        }
+        initPageFunctions();
+    });
+
+    $(document).off('click', 'button[data-elem-function=switch_lang]');
+    /* function to show data in different languages on switching language */
+    $(document).on('click', 'button[data-elem-function=switch_lang]', function() {
+        selectedLang = $(this).attr('data-selected-lang');
+        FgUtility.showTranslation(selectedLang);
+    });
+
+    /* function to remove newly added row on clicking delete button */
+    $('form').on('click', 'div.addednew input[data-inactiveblock=changecolor]', function() {
+        $('#' + $(this).attr('data-parentid')).remove();
+        FgUtility.resetSortOrder($('#role_category_sort'));
+    });
+
+    function initPageFunctions() {
+        FgUtility.showTranslation(selectedLang);
+        FgApp.init();
+        FgDragAndDrop.sortWithOrderUpdation('#role_category_sort', false);
+
+        // For resetting the sorting changes done in the page on 'discard_changes'
+        var initialOrderArray = FgUtility.getOrderOfChildElements('#role_category_sort');
+        var resetSections = {
+            '0': {
+                'parentElement': '#role_category_sort',
+                'initialOrder': initialOrderArray,
+                'addClass': true,
+                'className': 'blkareadiv'
+            }
+        };
+        FgResetChanges.init(resetSections);
+        FormValidation.init('editcategory', 'saveChanges', 'errorHandler');
+        FgInputTextValidation.init();
+        FgPageTitlebar.checkMissingTranslation('{{clubDefaultLang}}');
+    }
+    /* save function */
+    function saveChanges() {
+        $('div.addednew input[data-key]').addClass('fairgatedirty');
+        var objectGraph = {};
+        //parse the all form field value as json array and assign that value to the array
+        objectGraph = FgParseFormField.fieldParse();
+        var catArr = JSON.stringify(objectGraph);
+        FgXmlHttp.post("{{path('update_role_category')}}", { 'catArr': catArr, 'catType': catType} , false, saveChangesCallback);
+    }
+    
+    function saveChangesCallback(response){
+        FgClearInvalidLocalStorageDataOnDelete.clear(response);
+        initPageFunctions();
+    }
+    
+    /* error handler function */
+    function errorHandler() {
+        FgUtility.showTranslation(defaultLang);
+    }
+    /* to set redirect url to settings page */
+    function setRedirectUrl() {
+        $('a[data-type=redirect]').each(function(){
+            var catType = $(this).attr('data-catType');
+            var catid = $(this).attr('data-catid');
+            if (catType == 'team') {
+                var url = "{{ path('team_category_settings', {'cat_id': 'catId'}) }}";
+            } else if(catType == 'filter_role') {
+                var url = "{{ path('filter_role_settings', {'cat_id': 'catId'}) }}";
+            } else {
+                var url = "{{ path('role_category_settings', {'cat_id': 'catId'}) }}";
+            }
+            url = url.replace("catId", catid);
+            $(this).attr('href', url);
+        });
+    }
+    /* add new category */
+    $('form').on('click', '#addcategory', function() {
+        var rand = $.now();
+        var attributes = {title: '', team_count: 0, role_count: 0, cat_count: 0, isActive: 1};
+        var jsonData = {catId: rand, clubLanguages: clubLanguages, isNew: true, catType: catType, attributes: attributes};
+        renderNewRow('template-category-add', 'role_category_sort', jsonData);
+    });
+    /* function to display new row */
+    function renderNewRow(templateScriptId, parentDivId, jsonData) {
+        var htmlFinal = FGTemplate.bind(templateScriptId, jsonData);
+        $('#' + parentDivId).append(htmlFinal);
+        $('#' + parentDivId).find('.addednew').slideDown('250','easeInQuart');
+        FgDragAndDrop.sortWithOrderUpdation('#role_category_sort', false);
+        FgUtility.resetSortOrder($('#role_category_sort'));
+        FgUtility.showTranslation(selectedLang);
+        FgTooltip.init();
+    }
+    /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                    
+                     title: true,
+                     languageSettings: true
+                    
+
+             });
+</script>
+{% endblock %}

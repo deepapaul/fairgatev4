@@ -1,0 +1,234 @@
+/* --------------------------------------------------------------------
+* Page titlebar related styles
+* 01 - Pagetitlebar common styles
+* 02 - Page title block
+* 03 - button/icon styles
+* 04 - breadcrumbs styles
+* 05 - 
+* 06 - 
+-----------------------------------------------------------------------*/
+
+
+/* -------------------------------------------------------------------------
+* 01 - Pagetitlebar common styles
+-----------------------------------------------------------------------------*/
+.fg-web-page-title-bar{
+	position: relative;
+	.container{
+		@include bpMax('991px') {		
+				
+			width: auto;
+		}
+
+	}
+	.fg-web-titlebar-left-col{
+		outline: none;
+		position: relative;
+	}
+	.fg-web-titlebar-right-col{
+
+	}
+	.fg-titlebar-block{
+		display: inline-block;
+		vertical-align: middle;
+		margin-right: 10px;
+
+	}
+
+	&.has-close-btn{
+
+		.fg-web-titlebar-left-col{
+			width: calc(100% - 185px);	
+		    display: inline-block;
+		    float: none !important;
+    		vertical-align: middle;
+			&.close-btn-only{
+				width: calc(100% - 50px);	
+				+.fg-web-titlebar-right-col{
+					.fg-page-close{
+						margin:0;				
+					}
+					+.fg-web-title-filter-wrapper{
+						display: none;
+					}
+					
+				}
+			}
+			@include bpMax('767px') {
+				width: calc(100% - 60px);	
+			}
+
+			
+		}
+		.fg-web-titlebar-right-col{
+		    display: inline-block;
+		    float: none !important;
+    		vertical-align: middle;
+		}
+	}
+	input[type="text"]{		
+		padding: 6px 10px;
+	}
+	input[type="text"],.bootstrap-select{
+		height:34px;
+		background: #fff;
+		color: #333;
+		outline: none;
+		border:1px solid;
+		width:100% !important;
+	}
+	.fg-page-search{
+		margin-right:0;
+		width:160px;
+	}
+	.fg-page-timeperiod{
+		width:160px;
+	}
+	.fg-page-timeperiod-input{
+
+	}
+	.bootstrap-select .selectpicker{
+		height:34px;
+		border:0;
+		font-size: 15px;
+		@include box-shadow(none);
+	}
+	.bootstrap-select .dropdown-menu li a{
+		outline: none;
+	}
+	.bootstrap-select .dropdown-menu li a span.text{
+		margin-right: 5px;
+	}
+	.fg-web-title-filter-wrapper{
+
+		>.fg-titlebar-block{
+			width:170px;
+		}
+		@include bpMax('767px'){
+
+			float: none !important;
+			width: 100%;
+			clear: both;
+			>.fg-titlebar-block{
+				width: 49%;
+				margin: 0;
+				&.fg-page-search{
+					width: 100%;
+				}
+			}
+		}
+		.bootstrap-select{
+			 .dropdown-menu{
+			 	padding: 0;
+			 	margin: 0;
+			 }
+			.selectpicker{
+
+				height: 100%;
+				max-height: 250px !important;
+			}
+		} 
+	}
+}
+/* -------------------------------------------------------------------------
+* 02 - Page title block
+-----------------------------------------------------------------------------*/
+.fg-web-page-title-bar{
+	.fg-web-page-title-block{
+
+	}
+}
+/* -------------------------------------------------------------------------
+* 03 - button/icon styles
+-----------------------------------------------------------------------------*/
+.fg-web-page-title-bar{
+
+	[class^='fg-icon'], div[class*=' fg-icon'] {
+		cursor: pointer;
+	}
+	.fg-icon-bg{
+		.fg-icon{			
+			width: 44px;
+			height: 44px;
+			background-image:url('../img/close-next-prev-sprite.png');
+			display: block;
+
+		}
+		&.fg-page-prev{
+
+			.fg-icon{	
+				background-position:  0 0 ;
+				&:hover{
+					background-position:  0 -46px;
+				}
+			}
+		}
+		&.fg-page-next{
+
+			.fg-icon{	
+				background-position: -46px 0px;
+				&:hover{
+					background-position: -46px -46px;
+				}
+			}
+		}
+		&.fg-page-close{
+
+			.fg-icon{	
+				background-position: -98px 0px;
+				background-size: 350%;
+				&:hover{
+					background-position: -98px -50px;
+				}
+			}
+		}
+
+	}
+}
+
+/* -------------------------------------------------------------------------
+* 04 - breadcrumbs styles
+-----------------------------------------------------------------------------*/
+.fg-web-page-title-bar.has-breadcrumbs{
+	.fg-web-titlebar-left-col.has-breadcrumb{
+		@include bpMin('768px') {
+			max-width: calc(100% - 180px);
+		}
+		@include bpMax('767px') {
+			max-width: calc(100% - 60px);
+		}
+		.fg-breadcrumb-block{
+			  @include bpMax('767px') {
+					position: static;
+			  }
+			.fg-breadcrumbs{
+				list-style-type: none;
+				padding: 0;
+				margin: 0;
+				font-size: 15px;
+				li{
+					display: inline-block;
+					a{
+						text-decoration: none;
+					}
+					&:after{
+						content:"\f105";
+						font-family:  FontAwesome !important;
+						margin: 0 3px 0 8px;
+						display: inline-block;
+					}
+					&:last-child{
+
+						&:after{
+							display: none;
+						}
+					}
+				}
+			}
+		}
+		   
+	}
+	.fg-web-titlebar-right-col{
+		 line-height: 55px;
+	}
+}

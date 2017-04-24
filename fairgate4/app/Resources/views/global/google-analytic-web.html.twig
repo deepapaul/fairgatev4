@@ -1,0 +1,17 @@
+{% set siteDomain = (fgclub.get('clubDomainFlag'))? fgclub.get('currentDomainName'):fgclub.get('clubUrlIdentifier') %}
+{% set siteUrlIdentifier = siteDomain|replace({'-':'_'})|replace({'.':'_'})%}
+<!-- Google Analytics -->
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};
+ga.l=+new Date;
+ga('create', '{{fgclub.get('fairgateAnalyticKey')}}', 'auto','fairgate');
+ga('set', 'appName', 'webcms-fairgate');
+ga('set', 'screenName', '{{siteDomain}}-fairgate');
+ga('fairgate.send', 'pageview');
+{% if fgclub.get('clubAnalyticKey') is defined and fgclub.get('clubAnalyticKey') != '' %}
+ga('create', '{{fgclub.get('clubAnalyticKey')}}', 'auto', '{{ siteUrlIdentifier }}_fairgate');
+ga('{{ siteUrlIdentifier }}_fairgate.send', 'pageview');
+{% endif %}       
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->

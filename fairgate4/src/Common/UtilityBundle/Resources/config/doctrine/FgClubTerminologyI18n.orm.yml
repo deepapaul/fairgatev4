@@ -1,0 +1,38 @@
+Common\UtilityBundle\Entity\FgClubTerminologyI18n:
+    repositoryClass: Common\UtilityBundle\Repository\FgClubTerminologyI18nRepository
+    type: entity
+    table: fg_club_terminology_i18n
+    fields:
+        lang:
+            id: true
+            type: string
+            length: 2
+            fixed: true
+            nullable: false
+        singularLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: singular_lang
+        pluralLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: plural_lang
+        isActive:
+            type: boolean
+            nullable: false
+            column: is_active
+    oneToOne:
+        id:
+            targetEntity: FgClubTerminology
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

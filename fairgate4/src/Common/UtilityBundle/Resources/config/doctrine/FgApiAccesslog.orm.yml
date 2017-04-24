@@ -1,0 +1,59 @@
+Common\UtilityBundle\Entity\FgApiAccesslog:
+    repositoryClass: Common\UtilityBundle\Repository\Api\FgApiAccesslogRepository
+    type: entity
+    table: fg_api_accesslog
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        apiUrl:
+            type: text
+            nullable: false
+            column: api_url
+        date:
+            type: datetime
+            nullable: false
+        requestDetail:
+            type: text
+            nullable: false
+            column: request_detail
+        requestClientip:
+            type: string
+            length: 160
+            fixed: false
+            nullable: false
+            column: request_clientip
+        responseDetail:
+            type: text
+            nullable: false
+            column: response_detail
+        responseCode:
+            type: string
+            length: 20
+            fixed: false
+            nullable: false
+            column: response_code
+    manyToOne:
+        api:
+            targetEntity: FgApis
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                api_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

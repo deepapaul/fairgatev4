@@ -1,0 +1,98 @@
+Common\UtilityBundle\Entity\FgCnSubscriber:
+    repositoryClass: Common\UtilityBundle\Repository\FgCnSubscriberRepository
+    type: entity
+    table: fg_cn_subscriber
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        email:
+            type: string
+            length: 160
+            fixed: false
+            nullable: false
+        firstName:
+            type: string
+            length: 160
+            fixed: false
+            nullable: false
+            column: first_name
+        lastName:
+            type: string
+            length: 160
+            fixed: false
+            nullable: false
+            column: last_name
+        company:
+            type: string
+            length: 160
+            fixed: false
+            nullable: false
+        gender:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        salutation:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        correspondanceLang:
+            type: string
+            length: 2
+            fixed: true
+            nullable: false
+            column: correspondance_lang
+        createdAt:
+            type: datetime
+            nullable: false
+            column: created_at
+        editedAt:
+            type: datetime
+            nullable: true
+            column: edited_at
+        importTable:
+            type: string
+            length: 50
+            fixed: false
+            nullable: false
+            column: import_table
+        importId:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: import_id
+    manyToOne:
+        editedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                edited_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

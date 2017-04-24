@@ -1,0 +1,46 @@
+<script type="text/template" id="template_background">
+    <% // background image  full screen handled here | original size handled in css theme file 
+    %>
+    <% var config = {{fgclub.get('publicConfig')|json_encode()|raw}};
+        var bgConfig = config.bg_options;
+        var firstKey = 0;
+    _.each(bgConfig,function(itemI,keyI){ %>
+        <%
+            if(keyI == 'full_screen'){
+                var sliderClass = '';
+                var zIndex = '888';
+                var sizeClass = 'fg-web-size-cover';
+            
+            _.each(itemI, function(item,key){
+                if(firstKey == 0){
+                    firstKey++;
+                    if(itemI[key].bg_image_selection == 'random_start_image' || itemI[key].bg_image_selection == 'default_start_image'){
+                        sliderClass = "fg-dev-slider";
+            %>
+                <div id="bg-slider-<%- zIndex%>" data-random-id="<%- zIndex%>" data-slidertime="<%- itemI[key].bg_slider_time %>"
+                    style="z-index:<%- zIndex %>;')" class=" fg-web-bg <%- sizeClass %> <%- sliderClass %> ">
+            <%
+                    }
+                }
+
+            if(item.bg_image_selection == 'random_start_image' || item.bg_image_selection == 'default_start_image'){ %>
+                   <a> <img id="bg-slider-<%- zIndex%>" data-random-id="<%- zIndex%>" data-slidertime="<%- item.bg_slider_time %>"
+                    style="z-index:<%- zIndex %>;" data-image="/<%- headerPath %>/<%- item.filepath %>" src="/<%- headerPath %>/<%- item.filepath %>"
+                    ></a>
+            <% }else{ %>
+                    <div id="bg-slider-<%- zIndex%>" data-random-id="<%- zIndex%>" data-slidertime="<%- item.bg_slider_time %>"
+                    style="background-image:url('/<%- headerPath %>/<%- item.filepath %>');z-index:<%- zIndex %>;')"
+                    class=" fg-web-bg  <%- sizeClass %>">
+                    </div>
+             <% }
+                zIndex--;
+                keyL = key;
+            });
+            if(itemI[keyL].bg_image_selection == 'random_start_image' || itemI[keyL].bg_image_selection == 'default_start_image'){ %>
+                </div>
+            <% }
+        }
+    }); %>
+
+
+</script>

@@ -1,0 +1,306 @@
+{#   Conteainer template area #}      
+<script type="text/template" id="templateContactApplicationFormField">
+<% var dynamicFormId = $.now(); %>   
+<form class="form-horizontal" name="form_contact_<%- contactFormOptions.formId %>" id="<%- dynamicFormId %>" onsubmit="return false;" data-url="{{path('contact_application_save')}}?formId=<%-contactFormOptions.formId %>">
+    <% buttonText= 'Save'; %>
+    <% showHeading= true; %>   
+    <% hasCaptcha= false; %>
+    <div class="alert alert-success fg-marg-top-0 hide">
+        <a class="close closeIt" title="close" href="#">×</a>
+        <span><%- (formMessage['successmessage'][defLang]=='' || _.isUndefined(formMessage['successmessage'][defLang])) ? formMessage['successmessagemain']:formMessage['successmessage'][defLang] %></span>
+    </div>
+    <div class="alert alert-danger fg-marg-top-0 hide">
+        <a class="close closeIt" title="close" href="#">×</a>
+        <span data-virmsg="{{'VIRUS_FILE_CONTACT'|trans}}" data-error="{{'FORM_ERROR_DISPLAY'|trans}}">{{'FORM_ERROR_DISPLAY'|trans}}</span>
+    </div>
+    <fieldset>
+     <% var fieldCount = 0 %>
+    <% _.each(formDetails, function(fieldDetails,fieldId){ %>
+         <% fieldCount = fieldCount + 1 %>
+        <% dataKey = (fieldDetails.fieldCategory == 'contact') ? fieldDetails.fieldCategory+'.'+ fieldDetails.attributeSetId +'.'+fieldDetails.attributeId : fieldDetails.fieldCategory+'.'+ fieldDetails.formFieldId %>        
+        <% if(fieldDetails.fieldType=='singleline') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8">
+                  <input id="textinput<%- fieldDetails.formFieldId %>" data-key="<%- dataKey %>" name="textinput<%- fieldDetails.formFieldId %>" type="text" placeholder="<%- fieldDetails['placeholder'][defLang]=='' ? fieldDetails['placeholderValue'] : fieldDetails['placeholder'][defLang] %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> value="<%- fieldDetails['predefined'][defLang]=='' ? fieldDetails['predefinedValue']:fieldDetails['predefined'][defLang] %>" class="form-control input-md">
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='select') { %>
+            <% if(fieldDetails.isFieldHiddenWithDefaultValue){ %>
+                <input type="hidden" id="selectbasic<%- fieldDetails.formFieldId %>" value="<%- fieldDetails.predefinedValue %>" data-key="<%- dataKey %>" name="selectbasic<%- fieldDetails.formFieldId %>" class="form-control bs-select">
+            <% } else if(fieldDetails.fieldCategory=='contact' && (contactFormOptions.countryFields).indexOf(parseInt(fieldDetails.attributeId)) >= 0 ) { %>
+            
+                <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                    <label for="selectbasic<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label">
+                        <% var fieldLabel = (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang]; %>
+                        <span data-content="<%- fieldDetails.tooltip[defLang] %>"><%- fieldLabel %></span>
+                    </label>
+                    <div class="col-sm-8">
+                      <select id="selectbasic<%- fieldDetails.formFieldId %>" <%- fieldDetails.isMultiSelectable==1 ? 'multiple':'' %> data-none-selected="{{'SELECT_DEFAULT'|trans}}" data-key="<%- dataKey %>" name="selectbasic<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> class="form-control bs-select" data-live-search="true" data-size="7" >
+                      <% if(fieldDetails.isMultiSelectable !=1){ %><option data-showTick="false" class="fg-select-hide-icon" value="">{{'SELECT_DEFAULT'|trans}}</option><% } %>
+                    <% _.each(contactFormOptions.countryList,function(fieldOptions,optionId){  %>
+                        <option value="<%- optionId %>"><%- fieldOptions %></option>
+                      <% }); %>
+                      </select>
+                    </div>
+                </div>
+            <% } else if(fieldDetails.fieldCategory=='contact' && fieldDetails.attributeId == contactFormOptions.systemFieldGender) { %>
+
+                <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                    <label for="selectbasic<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label">
+                        <% var fieldLabel = (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang]; %>
+                        <span data-content="<%- fieldDetails.tooltip[defLang] %>"><%- fieldLabel %></span>
+                    </label>
+                    <div class="col-sm-8">
+                      <select id="selectbasic<%- fieldDetails.formFieldId %>" <%- fieldDetails.isMultiSelectable==1 ? 'multiple':'' %> data-none-selected="{{'SELECT_DEFAULT'|trans}}" data-key="<%- dataKey %>" name="selectbasic<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> class="form-control bs-select">
+                      <% if(fieldDetails.isMultiSelectable !=1){ %><option data-showTick="false" class="fg-select-hide-icon" value="">{{'SELECT_DEFAULT'|trans}}</option><% } %>
+                        <option value="Male">{{'CM_MALE'|trans}}</option>
+                        <option value="Female">{{'CM_FEMALE'|trans}}</option>
+                      </select>
+                    </div>
+                </div>
+            
+            <% } else if(fieldDetails.fieldCategory=='contact' && fieldDetails.attributeId == contactFormOptions.systemFieldSalutation ) { %>
+                <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                    <label for="selectbasic<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label">
+                        <% var fieldLabel = (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang]; %>
+                        <span data-content="<%- fieldDetails.tooltip[defLang] %>"><%- fieldLabel %></span>
+                    </label>
+                    <div class="col-sm-8">
+                      <select id="selectbasic<%- fieldDetails.formFieldId %>" <%- fieldDetails.isMultiSelectable==1 ? 'multiple':'' %> data-none-selected="{{'SELECT_DEFAULT'|trans}}" data-key="<%- dataKey %>" name="selectbasic<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> class="form-control bs-select">
+                      <% if(fieldDetails.isMultiSelectable !=1){ %><option data-showTick="false" class="fg-select-hide-icon" value="">{{'SELECT_DEFAULT'|trans}}</option><% } %>
+                        <option value="Formal">{{'CM_FORMAL'|trans}}</option>
+                        <option value="Informal">{{'CM_INFORMAL'|trans}}</option>
+                      </select>
+                    </div>
+                </div>
+            <% } else if(fieldDetails.fieldCategory=='contact' && fieldDetails.attributeId == contactFormOptions.systemFieldCorrLang ) { %>
+                <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                    <label for="selectbasic<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label">
+                        <% var fieldLabel = (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang]; %>
+                        <span data-content="<%- fieldDetails.tooltip[defLang] %>"><%- fieldLabel %></span>
+                    </label>
+                    <div class="col-sm-8">
+                      <select id="selectbasic<%- fieldDetails.formFieldId %>" <%- fieldDetails.isMultiSelectable==1 ? 'multiple':'' %> data-none-selected="{{'SELECT_DEFAULT'|trans}}" data-key="<%- dataKey %>" name="selectbasic<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> class="form-control bs-select">
+                      <% if(fieldDetails.isMultiSelectable !=1){ %><option data-showTick="false" class="fg-select-hide-icon" value="">{{'SELECT_DEFAULT'|trans}}</option><% } %>
+                        <% _.each(contactFormOptions.clubLanguages,function(fieldOptions,optionId){  %>
+                        <option value="<%- optionId %>"><%- fieldOptions %></option>
+                      <% }); %>
+                      </select>
+                    </div>
+                </div>
+            <% } else { %>
+                <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                    <label for="selectbasic<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label">
+                        <% var fieldLabel = (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang]; %>
+                        <span data-content="<%- fieldDetails.tooltip[defLang] %>"><%- fieldLabel %></span>
+                    </label>
+                    <div class="col-sm-8">
+                      <select id="selectbasic<%- fieldDetails.formFieldId %>" <%- fieldDetails.isMultiSelectable==1 ? 'multiple':'' %> data-none-selected="{{'SELECT_DEFAULT'|trans}}" data-key="<%- dataKey %>" name="selectbasic<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> class="form-control bs-select">
+                      <% if(fieldDetails.isMultiSelectable !=1){ %><option data-showTick="false" class="fg-select-hide-icon" value="">{{'SELECT_DEFAULT'|trans}}</option><% } %>
+                      <% _.each(fieldDetails.options,function(fieldOptions,optionId){  %>
+                        <option value="<%- fieldOptions.id %>"><%- (fieldOptions['value'][defLang]==''|| _.isUndefined(fieldOptions['value'][defLang])) ? fieldOptions['selectionValueName']:fieldOptions['value'][defLang] %></option>
+                      <% }); %>
+                      </select>
+                    </div>
+                </div>
+            <% } %>
+        <% } else if(fieldDetails.fieldType=='radio') { %>
+            <% if(fieldDetails.fieldCategory=='contact' ){ %>
+                <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                    <label for="radios<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label fg-pad-top-0">
+                        <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                    </label>
+                    <div class="col-sm-8 fg-radio-wrapper" id="check-wrap-<%- fieldDetails.formFieldId %>">
+                    <% _.each(fieldDetails.options,function(fieldOptions,optionId){  %>
+                        <% if(fieldDetails['showInline']==0) { %><div class="radio-block"><% } %>  
+                        <label for="radios-<%- fieldDetails.formFieldId %>-<%- optionId %>" <% if(fieldDetails['showInline']==1) { %>class="radio-inline"<% } %> >
+                            <input id="radios-<%- fieldDetails.formFieldId %>-<%- optionId %>" data-error-container="#check-wrap-<%- fieldDetails.formFieldId %>" data-key="<%- dataKey %>" type="radio" name="radios<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> value="<%- fieldOptions.id %>" >
+                            <%- (_.isUndefined(fieldOptions['value'][defLang]) || fieldOptions['value'][defLang]=='' ) ? fieldOptions['selectionValueName']:fieldOptions['value'][defLang] %>
+                        </label>
+                        <% if(fieldDetails['showInline']==0) { %></div><% } %>
+                    <% }); %>
+                    </div>
+                </div>
+            <% } else { %>
+                <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                    <label for="radios<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label fg-pad-top-0">
+                        <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                    </label>
+                    <div class="col-sm-8 fg-radio-wrapper" id="check-wrap-<%- fieldDetails.formFieldId %>">
+                    <% _.each(fieldDetails.options,function(fieldOptions,optionId){  %>
+                        <% if(fieldDetails['showInline']==0) { %><div class="radio-block"><% } %>  
+                        <label for="radios-<%- fieldDetails.formFieldId %>-<%- optionId %>" <% if(fieldDetails['showInline']==1) { %>class="radio-inline"<% } %> >
+                            <input id="radios-<%- fieldDetails.formFieldId %>-<%- optionId %>" data-error-container="#check-wrap-<%- fieldDetails.formFieldId %>" data-key="<%- dataKey %>" type="radio" name="radios<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> value="<%- fieldOptions.id %>" ><%- (fieldOptions['value'][defLang]==''|| _.isUndefined(fieldOptions['value'][defLang])) ? fieldOptions['selectionValueName']:fieldOptions['value'][defLang] %>
+                        </label>
+                        <% if(fieldDetails['showInline']==0) { %></div><% } %>
+                    <% }); %>
+                    </div>
+                </div>
+            <% } %>
+            
+        <% } else if(fieldDetails.fieldType=='checkbox') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="checkboxes"  class="col-sm-4 control-label  fg-pad-top-0">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8 fg-checkbox-wrapper" id="check-wrap-<%- fieldDetails.formFieldId %>">
+                    <% _.each(fieldDetails.options,function(fieldOptions,optionId){  %>
+                    <% if(fieldDetails['showInline']==0) { %><div class="checkbox-block"><% } %>    
+                        <label for="checkboxes-<%- fieldDetails.formFieldId %>-<%- optionId %>" <% if(fieldDetails['showInline']==1) { %>class="checkbox-inline"<% } %>>
+                          <input id="checkboxes-<%- fieldDetails.formFieldId %>-<%- optionId %>" data-error-container="#check-wrap-<%- fieldDetails.formFieldId %>" data-key="<%- dataKey %>.<%- fieldOptions.sortOrder %>" type="checkbox" <%- (fieldDetails.isRequired==1) ? 'required':'' %> name="checkboxes<%- fieldDetails.formFieldId %>" value="<%- fieldOptions.id %>"><%- (fieldOptions['value'][defLang]==''|| _.isUndefined(fieldOptions['value'][defLang])) ? fieldOptions['selectionValueName']:fieldOptions['value'][defLang] %>
+                        </label>
+                    <% if(fieldDetails['showInline']==0) { %></div><% } %>
+                    <% }); %>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='multiline') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textarea<%- fieldDetails.formFieldId %>" class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8">
+                    <textarea id="textarea<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> data-key="<%- dataKey %>" placeholder="<%- fieldDetails['placeholder'][defLang]=='' ? fieldDetails['placeholderValue']:fieldDetails['placeholder'][defLang] %>" name="textarea<%- fieldDetails.formFieldId %>" class="form-control"><%- fieldDetails['predefined'][defLang]=='' ? fieldDetails['predefinedValue']:fieldDetails['predefined'][defLang] %></textarea>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='email' || fieldDetails.fieldType=='login email') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput<%- fieldDetails.formFieldId %>" class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8">
+                  <input id="textinput<%- fieldDetails.formFieldId %>" data-key="<%- dataKey %>" name="textemail<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> type="email" placeholder="<%- fieldDetails['placeholder'][defLang]=='' ? fieldDetails['placeholderValue'] : fieldDetails['placeholder'][defLang] %>"  class="form-control input-md">
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='number') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8">
+                    <div class="fg-input-plus-minus">
+                        <button data-field="columnCount<%- fieldDetails.formFieldId %>" data-type="minus" onClick="return false;" class="left minus form-control FL selectButton btn-number">-</button>
+                        <input name="number<%- fieldDetails.formFieldId %>" id="columnCount<%- fieldDetails.formFieldId %>" data-key="<%- dataKey %>" type="text" <%- (fieldDetails.isRequired==1) ? 'required':'' %> min="<%- fieldDetails.minValue %>" <% if(fieldDetails.maxValue!=='0.00' && fieldDetails.maxValue!==null ) { %>max="<%- fieldDetails.maxValue %>"<% } %> stepto="<%- fieldDetails.stepValue %>" data-rule-min="<%- fieldDetails.minValue %>" <% if(fieldDetails.maxValue!=='0.00' && fieldDetails.maxValue!==null ) { %>data-rule-max="<%- fieldDetails.maxValue %>"<% } %> data-rule-number="true" data-msg-min="<%- "{{'GN_VALIDATE_MIN_LIMIT'|trans}}".replace('{0}',FgClubSettings.formatDecimalMark(fieldDetails.minValue)) %>" data-msg-max="<%- "{{'GN_VALIDATE_MAX_LIMIT'|trans}}".replace('{0}',FgClubSettings.formatDecimalMark(fieldDetails.maxValue)) %>" class="form-control FL number input-number">
+                        <button data-field="columnCount<%- fieldDetails.formFieldId %>" data-type="plus" onClick="return false;" class="right plus form-control FL selectButton btn-number">+</button>
+                    </div>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='date') { %>
+         <% var calendarIcon = (iconSettingsType == 'backend') ? 'fa fa-calendar' : 'fg-icon-calendar' %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput"  class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8">
+                  <div class="input-group date fg-datepicker1" data-startDate="<%- _.isUndefined(fieldDetails.dateMin) ? '':fieldDetails.dateMin %>" data-endDate="<%- _.isUndefined(fieldDetails.dateMax) ? '':fieldDetails.dateMax %>">
+                    <input type="text" id="<%- fieldDetails.formFieldId %>" data-key="<%- dataKey %>" name="datefield<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> class="form-control">
+                    <div class="input-group-addon"><i class="<%- calendarIcon %>"></i></div>
+                  </div>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='time') { %>
+         <% var clockIcon = (iconSettingsType == 'backend') ? 'fa fa-clock-o' : 'fg-icon-clock-o' %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput<%- fieldDetails.formFieldId %>" class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8">
+                <div id="timepickerWrap<%- fieldDetails.formFieldId %>" type="text" class="input-group bootstrap-timepicker timepicker timepicker-24">
+                    <input id="timepicker<%- fieldDetails.formFieldId %>" data-timepic data-key="<%- dataKey %>" data-field="time" name="timepicker<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> class="form-control timeclick">
+                     <div class="input-group-addon open-timepicker">
+                                <i class="<%-clockIcon %>"></i>
+                     </div>
+                 </div>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='url') { %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput<%- fieldDetails.formFieldId %>" class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8">
+                  <input id="textinput<%- fieldDetails.formFieldId %>" name="textinput<%- fieldDetails.formFieldId %>" data-key="<%- dataKey %>" type="url" <%- (fieldDetails.isRequired==1) ? 'required':'' %> placeholder="<%- fieldDetails['placeholder'][defLang]=='' ? fieldDetails['placeholderValue'] : fieldDetails['placeholder'][defLang] %>"  value="<%- fieldDetails['predefined'][defLang]=='' ? fieldDetails['predefinedValue']:fieldDetails['predefined'][defLang] %>" class="form-control input-md fg-urlmask ">
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='fileupload' || fieldDetails.fieldType=='imageupload') { %>
+           <% var fileIcon = (iconSettingsType == 'backend') ? 'fa fa-file' : 'fg-icon-file' %>
+            <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                <label for="textinput<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label">
+                    <span data-content="<%- (fieldDetails['tooltip'][defLang]=='' || _.isUndefined(fieldDetails['tooltip'][defLang])) ? fieldDetails['tooltipValue']:fieldDetails['tooltip'][defLang] %>"><%- (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %></span>
+                </label>
+                <div class="col-sm-8">
+                    <div class="fg-web-fileupload-wrapper" data-file-wrap>
+                      <input type="text" name="uploadFile<%- fieldDetails.formFieldId %>" class="hide" data-file id="formfile<%- fieldDetails.formFieldId %>" data-key="<%- dataKey %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %>>
+                      <input type="file" data-exceedmsg="{{'SIZE_EXCEED'|trans}}" fieldtype = "<%- fieldDetails.fieldType %>" data-fieldid="<%- fieldDetails.formFieldId %>" name="file-uploader" id="forminput<%- fieldDetails.formFieldId %>" data-url="{{path('website_public_file_upload_check',{'type':'form'})}}" style="position: absolute; clip: rect(0px, 0px, 0px, 0px);"  data-buttonText="{%trans%}CONTACT_FIELDS_SELECT_FILE{%endtrans%}"  class="filestyle">
+                        <div class="bootstrap-filestyle input-group">
+                            <input type="text" data-file-name disabled="" placeholder="" class="form-control fg-contact-form-field-fileupload"> 
+                            <span class="group-span-filestyle input-group-btn" tabindex="0">
+                            <label class="btn fg-upload-btn " for="forminput<%- fieldDetails.formFieldId %>">
+                                <span class="icon-span-filestyle <%-fileIcon %>"></span> 
+                                <span class="buttonText">{%trans%}CONTACT_FIELDS_SELECT_FILE{%endtrans%}</span>
+                            </label>
+                            </span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+        <% } else if(fieldDetails.fieldType=='button') {  %> <% buttonText = (fieldDetails['label'][defLang]==''|| _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang]; %>
+        <% } else if(fieldDetails.fieldType=='captcha') { showCaptcha = true; hasCaptcha = true; %><% if(showHeading==true) { showHeading=false; %></fieldset><% } %>
+            <fieldset>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-4">              
+                    <div class="g-recaptcha" id="fg-captcha-<%- dynamicFormId %>"></div>
+                </div>
+            </div>
+        <% } else if(fieldDetails.fieldType=='heading') { %>
+            <% if(showHeading==true && fieldCount > 1) { %></fieldset><% } %>
+             <% if( fieldCount > 1) { %> <fieldset> <% } %>
+            <% headingLabel = (fieldDetails['label'][defLang]=='' || _.isUndefined(fieldDetails['label'][defLang])) ? fieldDetails['fieldName']:fieldDetails['label'][defLang] %>
+            <% if(headingLabel != '' && headingLabel != null ) { %><legend><%- headingLabel %></legend><span class="fg-hidden-span"></span> <% } %>
+        <% showHeading = true; } %>
+        
+        <% if(fieldDetails.fieldCategory=='club-membership') { %>
+            <% if(fieldDetails.isFieldHiddenWithDefaultValue){ %>
+                <input type="hidden" id="selectbasic<%- fieldDetails.formFieldId %>" value="<%- fieldDetails.defaultClubMembership %>" data-key="<%- fieldDetails.fieldCategory %>" name="selectbasic<%- fieldDetails.formFieldId %>" class="form-control bs-select">
+            <% } else { %>
+                <div class="form-group <%- (fieldDetails.isRequired==1) ? 'required':'' %>">
+                    <label for="selectbasic<%- fieldDetails.formFieldId %>"  class="col-sm-4 control-label">
+                                {{'MEMBER_CATEGORY'|trans}}
+                            </label>
+                    <div class="col-sm-8">
+                      <select id="selectbasic<%- fieldDetails.formFieldId %>" <%- fieldDetails.isMultiSelectable==1 ? 'multiple':'' %> data-none-selected="{{'SELECT_DEFAULT'|trans}}" data-key="<%- fieldDetails.fieldCategory %>.<%- fieldDetails.formFieldId %>" name="selectbasic<%- fieldDetails.formFieldId %>" <%- (fieldDetails.isRequired==1) ? 'required':'' %> class="form-control bs-select">
+                      <% if(fieldDetails.isMultiSelectable !=1){ %><option data-showTick="false" class="fg-select-hide-icon" value="">{{'SELECT_DEFAULT'|trans}}</option><% } %>
+                        <% var selectOptions = fieldDetails.clubMembershipSelection == 'SELECTED' ? fieldDetails.clubMembership : contactFormOptions.allClubMemberships; %>
+                        <% _.each(selectOptions, function(fieldOptions,optionId){  %>
+                            <%
+                            var fieldValue = fieldOptions.titleLang;
+                            if(fieldDetails.clubMembershipSelection == 'SELECTED') {
+                                var selectedObj = _.findWhere(contactFormOptions.allClubMemberships, {id: fieldOptions.id});
+                                if(typeof selectedObj != 'undefined') {
+                                    fieldValue = selectedObj.titleLang;
+                                }
+                            }
+                            %>
+                                <option value="<%- fieldOptions.id %>"><%- fieldValue %></option>
+                          <% }); %>
+                      </select>
+                    </div>
+                </div>
+            <% } %>    
+        <% } %>
+    
+    <% }); %>
+     
+    <% if(showHeading==true) { showHeading=false; %></fieldset><% } %>
+    <%  if(hasCaptcha == false) { %> <fieldset> <% } %>
+        <div class="form-group fg-marg-btm-0">
+            <div class="col-sm-8 col-sm-offset-4">
+              <input type="submit" class="btn <%- (typeof formType == 'undefined') ? 'btn-default': 'btn green pull-right' %>  fg-form-element-submit" value="<%- _.isUndefined(buttonText) ? 'Save': buttonText %>">
+            </div>
+        </div>
+    </fieldset>
+    <div class="clearfix"></div>
+</form>
+</script>

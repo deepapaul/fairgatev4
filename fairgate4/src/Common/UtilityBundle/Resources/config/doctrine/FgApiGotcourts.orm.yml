@@ -1,0 +1,93 @@
+Common\UtilityBundle\Entity\FgApiGotcourts:
+    repositoryClass: Common\UtilityBundle\Repository\Api\FgApiGotcourtsRepository
+    type: entity
+    table: fg_api_gotcourts
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        apitoken:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        status:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        isActive:
+            type: smallint
+            nullable: true
+            column: is_active
+        bookedOn:
+            type: datetime
+            nullable: false
+            column: booked_on
+        generatedOn:
+            type: datetime
+            nullable: true
+            column: generated_on
+        registeredOn:
+            type: datetime
+            nullable: true
+            column: registered_on
+        regeneratedOn:
+            type: datetime
+            nullable: true
+            column: regenerated_on
+        cancelledOn:
+            type: datetime
+            nullable: true
+            column: cancelled_on
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        bookedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                booked_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        generatedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                generated_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        regeneratedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                regenerated_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        cancelledBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                cancelled_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

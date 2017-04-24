@@ -1,0 +1,82 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = cmsNavPageTitle|trans %}
+{% set isAdditional = (isAdditional is defined) ? isAdditional : 0  %}
+{% block pagecontent %}
+
+    <div class="row">
+        <div class="col-lg-12">
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+        </div>
+    </div>
+
+    <!-- PAGE TITLE -->
+    {% include 'global/page-title-bar.html.twig' with {'pageTitle': title|trans, 'tabs': {}, 'clubLanguages':clubLanguages, 'clubDefaultLang':clubDefaultLang} %}
+    {% block customstylesheets %}
+        <link href="{{ asset('fgassets/assets/global/plugins/jquery-nestable/jquery.nestable.css') }}" rel="stylesheet" type="text/css"/>
+    {% endblock %}
+
+    <!-- BEGIN CONTENT -->
+    <div class="fg-cms-nav-list-wrapper">
+        <form id="cms_navigation_settings" name="cms_nav_settings_data" class="form-horizontal" method="post" onsubmit="return false;" novalidate="novalidate">
+            <!-- FORM ERROR DISPLAY STARTS-->
+            <div class="alert alert-danger display-hide">
+                <button class="close" data-close="alert"></button>
+                {{ 'FORM_ERROR_DISPLAY' | trans }}
+            </div>
+            <!-- FORM ERROR DISPLAY ENDS -->
+
+            <div id="cms_navigation_point_list_wrapper" class="fg-cms-nav-wrapper">
+                <div class="dd fg-nestable fg-nestable-no-toggle">
+                    <ol class="dd-list fg-bookmark-list-wrapper-draggable" id="cms_navigation_points_list">
+                        <!-- NAVIGATION POINTS LISTING HERE -->
+                    </ol>
+                </div>
+            </div>
+
+            <!-- ADD NAVIGATION POINT - STARTS -->
+            <div class="btn-group  fg-common-add-item">
+                <a id="addNewMenu" href="javascript:void(0)" class="add-membership"><i class="fa fa-plus-circle fa-2x"></i><span class="fg-left-move">{{ 'CMS_ADD_NAVIGATION_MENU' | trans }}</span></a>
+            </div>
+            <!-- ADD NAVIGATION POINT - ENDS -->
+            <div class="clearfix">  </div>
+
+            {% include 'internal/savebutton.html.twig' with {'backLink' : breadCrumb.back} %}
+        </form>
+    </div>
+    <!-- END CONTENT -->
+    
+{% endblock %}
+
+{% block underscoretemplate %}
+    {% include 'WebsiteCMSBundle:NavigationPoints:templateNavigationPoint.html.twig' %}
+
+{% endblock %}
+
+{% block javascripts %}
+    <div class="custom-popup">
+        <div class="popover bottom"><div class="arrow"></div><div class="popover-content"></div></div>
+    </div>
+    <script src="{{ asset('fgassets/assets/global/plugins/jquery-nestable/jquery.nestable.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/listRow.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/internal/js/page/fgCmsMenuSettings.js') }}" type="text/javascript"></script>
+    <script type="text/javascript">
+            var clubLanguages = {{ clubLanguages|json_encode|raw }};
+            var defaultLang = selectedLang = '{{ clubDefaultLang }}';
+            var isAdditional = '{{isAdditional}}';
+            var navigationDataUrl = '{{ path('website_cms_getnavigations', {'isAdditional':isAdditional}) }}';
+            var saveDataUrl = '{{ path('website_cms_savenavigations', {'isAdditional':isAdditional}) }}';
+            var pagePreviewUrl = '{{ path("website_cms_editpage_preview", {'pageId': "**dummyId**" }) }}';
+            var listallpages = '{{ path('website_cms_getnavigations') }}';
+            var pageListPath = '{{path('website_cms_listpages')}}';
+        
+         $('#cms_navigation_settings').submit(function(){
+            $(':input').each(function(){
+              $(this).val($.trim($(this).val()))
+           })
+          return true;
+        });
+
+
+        
+    </script>
+{% endblock %}

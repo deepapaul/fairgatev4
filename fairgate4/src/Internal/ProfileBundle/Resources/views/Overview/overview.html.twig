@@ -1,0 +1,118 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = 'PERSONAL_OVERVIEW_PAGE_TITLE'|trans %}
+{% block pagecontent %}
+    <div id="personal-overview">
+        <div class="clearfix"> </div>
+        
+        <!-- BEGIN BREADCRUMB-->
+        <div class="row">
+            <div class="col-lg-12">
+                {% include 'internal/breadcrumb.html.twig' %}
+            </div>
+        </div>
+        <!-- END BREADCRUMB-->
+        <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+        {% include 'global/page-title-bar.html.twig' with {'pageTitle': 'DASHBOARD_WELCOME'|trans~", "~contactName~"!" , 'contactId': contactId, 'tabs': contactDetails.tabs, 'type':'overview', 'hrefLink' : true, 'url':"#"} %}
+        <!-- BEGIN CONTENT BOXES -->
+        <div class="row">
+            <div class="col-lg-2 col-sm-3 col-xs-12 fg-profile-left-block">
+                <div id ="profileBoxDiv"></div>
+                <div id ="groupsBoxDiv"></div>
+            </div>
+            <div class="col-lg-10 col-sm-9 col-xs-12" id="fg-personal-overview">
+                <div class="row">
+                    {% if (fgtwig.inArray(fgclub.get('id'), staticBoxEnabledClubs)) %}
+                        <div class="col-lg-6 col-sm-12 col-xs-12">
+                            <div>
+                                {% include 'InternalProfileBundle:Overview:staticbox.html.twig' with {'overviewType' : 'personal'} %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="col-lg-6 col-sm-12 col-xs-12">
+                        <div id ="messagesBoxDiv"></div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 col-xs-12">
+                        <div id ="nextBirthdaysBoxDiv"></div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 col-xs-12 fg-dis-none">
+                        <div id ="forumsBoxDiv"></div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 col-xs-12 fg-dis-none">
+                        <div id ="documentsBoxDiv"></div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 col-xs-12 fg-dis-none">
+                        <div id ="connectionsBoxDiv"></div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 col-xs-12 fg-dis-none">
+                        <div id ="calendarBoxDiv"></div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 col-xs-12 fg-dis-none">
+                        <div id ="articlesBoxDiv"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END CONTENT BOXES -->
+    </div>
+{% endblock %}
+{% block underscoretemplate %}
+        {% include 'InternalProfileBundle:Overview:templateOverview.html.twig' with {'page' : 'personalOverview'} %} 
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgassets/internal/js/page/fgOverview.js') }}" type="text/javascript"></script> 
+    <script src="{{ asset('fgassets/internal/js/fg_tab_selection_process.js') }}" type="text/javascript"></script> 
+    <script>
+        $(document).ready(function() {
+            var tabCondition = {{ (contactDetails.tabs|length > 0) ? 'true' : 'false' }};
+            $( ".fg-action-menu-wrapper" ).FgPageTitlebar({
+                title       : true,
+                tab       : tabCondition,
+                search     :false,
+                actionMenu  : false,
+                tabType  :'server'
+               
+            });  
+            var currentClubId = '{{currentClubId}}';
+            var options = {
+                contactId : {{ contactId }},
+                contactProfileData : {{contactDetails |json_encode()|raw}},
+                connections : {
+                    title : '{{ 'DASHBOARD_MY_CONTACT_CONNECTIONS'|trans }}',
+                    dataUrl : '{{ path('get_my_connections') }}',
+                },
+                groups : {
+                    title : '{{ 'DASHBOARD_MY_GROUPS'|trans }}',
+                    data : {{assignedTeamsandWorkgroups |json_encode()|raw}},
+                } ,
+                nextbirthdays : {
+                    title : '{{ 'INTERNAL_OVERVIEW_NEXT_BIRTHDAYS'|trans }}',
+                    dataUrl : '{{ path('next_birthdays_overview') }}',
+                    params : {'roleType' : '', 'roleId' : ''}
+                },
+                messages: {
+                    title: '{{ 'DASHBOARD_NEW_MESSAGES'|trans }}', // title for new messages box
+                    dataUrl: '{{ path('messsges_overview') }}'
+                },
+                forums: {
+                    title: '{{ 'DASHBOARD_LAST_FORUM'|trans }}', // title for new forum box
+                    dataUrl: '{{ path('forum_listing_overview') }}'
+                },  
+                documents: {
+                    title: '{{ 'DASHBOARD_LAST_DOCUMENTS'|trans }}', // title for new documents box
+                    dataUrl: '{{ path('document_listing__overview') }}',
+                    showBadge : '1'
+                },
+                 calendar: {
+                    title: '{{ 'DASHBOARD_CALENDAR'|trans }}', // title for new calendar box
+                    dataUrl: '{{ path('role_overview_calendar') }}',
+                    params : {'roleType' : '', 'roleId' : '', 'currentClubId':currentClubId}
+                },        
+                  articles: {
+                    title: '{{ 'DASHBOARD_ARTICLE'|trans }}', // title for new article box
+                    dataUrl: '{{ path('article_listing_overview') }}',
+                },      
+            };        
+            FgOverview.initPersonalOverview(options);
+        });
+    </script>
+{% endblock %}

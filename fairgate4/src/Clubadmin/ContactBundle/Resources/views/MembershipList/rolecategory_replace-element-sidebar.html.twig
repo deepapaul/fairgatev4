@@ -1,0 +1,22 @@
+ {% set roleTypes = (roleType)?roleType:'' %} 
+<li id="role_id_selected{{elementId}}">
+    <div class="fg-no-data-sidebar-sub">
+        <span class="fg-without-arrow"></span>
+        <span class="title">{{elementTitle}}</span>
+    </div>
+    <ul class="sub-menu sub-page-clickable" style="display: none;"></ul>
+    <div class="btn-group pull-left btngrpdiv">
+        <button data-toggle="dropdown" class="btn"> 
+            <i class="fa fa-bars"></i> 
+        </button>
+        <ul class="dropdown-menu dropdown-menu-align-left pull-right drpmenu-new">
+         
+          {% if (roleTypes == 'filterrole' and roleTypes !='') %}
+                <li> <a href="contact/filterrolesettings/{{elementId}}">{%trans%}SIDEBAR_FILTER_ROLE_CATEGORY_SETTINGS{%endtrans%}&hellip;</a> </li>  
+          {% else %}
+                <li class="create_new_element" role_type="clubrole" element_type="role" data-target="#role_id_selected{{elementId}}" data-fntype="none" data-fncount="0" data-catid="{{elementId}}" data-placeholder="Add role" hierarchy="1"> <a href="javascript:void(0)">{%trans%}SIDEBAR_CREATE_ROLE{%endtrans%}</a> </li>
+                <li> <a href="contact/categorysettings/{{elementId}}">{%trans%}SIDEBAR_ROLE_CATEGORY_SETTINGS{%endtrans%}&hellip;</a> </li>  
+          {% endif %}
+        </ul>
+    </div>
+</li>

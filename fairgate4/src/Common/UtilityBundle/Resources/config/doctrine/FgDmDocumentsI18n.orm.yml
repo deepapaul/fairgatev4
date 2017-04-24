@@ -1,0 +1,37 @@
+Common\UtilityBundle\Entity\FgDmDocumentsI18n:
+    type: entity
+    table: fg_dm_documents_i18n
+    fields:
+        lang:
+            id: true
+            type: string
+            length: 2
+            fixed: true
+            nullable: false
+        nameLang:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: name_lang
+        descriptionLang:
+            type: text
+            nullable: true
+            column: description_lang
+        authorLang:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: author_lang
+    oneToOne:
+        id:
+            targetEntity: FgDmDocuments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

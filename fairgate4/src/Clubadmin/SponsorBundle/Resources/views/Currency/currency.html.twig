@@ -1,0 +1,72 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'SM_CURRENCY'|trans %}
+{% block pagecontent %}
+
+    <!-- BREADCRUMB -->
+    {% include 'clubadmin/breadcrumb.html.twig' %}
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="portlet-body fg-theme-yellow fg-executive-area">
+        <form id="clubCurrency" class="form-horizontal fg-default-subscriber" method="post" data-validation="true" onsubmit="return false;" novalidate="novalidate">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Starts title area -->
+                    {% include 'clubadmin/language_swtich.html.twig' with {'clubLanguages': '', 'title': pageTitle} %}
+                </div>
+            </div>
+            <div class="alert alert-danger display-none">
+                <button class="close" data-dismiss="alert"></button>
+                <span data-error>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet-body form">
+                        <!-- BEGIN FORM-->
+                        <div class="form-body">
+
+                            <input id="settingsId" type="hidden" name="settingsId" value={{details.settingsId|default('0')}}>
+                            <div class="form-group fg-subscibers-list currency-list fg-salutation-clear dataerror-group">
+                                <dl>
+                                    <dt>{{'SM_CURRENCY'|trans}}</dt>
+                                    <dd>
+                                        <input type="text" name="currency" class="form-control text fg-dev-autocomplete" required="required" maxlength="3" value="{{ details.currency|default('CHF') }}">
+                                        
+                                        <span  for="currency" class="help-block"></span>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <!-- END FORM-->
+                    </div>
+                </div>
+            </div>
+            {% include 'clubadmin/savebutton.html.twig' with {'settings':settings} %}
+        </form>
+    </div>
+    <!-- END PAGE CONTENT -->
+
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            FgApp.init();
+        });
+        FormValidation.init('clubCurrency', 'saveChanges');
+        function saveChanges()
+        {
+            var paramobj = {'url': "{{path('sponsor_currency_save')}}", 'form': $(clubCurrency)};
+            FgXmlHttp.formPost(paramobj);
+        }
+
+        $('form').on('click', '#reset_changes', function () {
+            $(".currency-list").removeClass('has-error');
+            $(".help-block").hide();
+            $(".alert-danger").hide();
+
+        });
+
+
+
+
+
+    </script>
+{% endblock %}

@@ -1,0 +1,46 @@
+Common\UtilityBundle\Entity\FgGmBookmarks:
+    repositoryClass: Common\UtilityBundle\Repository\Gallery\FgGmBookmarksRepository
+    type: entity
+    table: fg_gm_bookmarks
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: sort_order
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        album:
+            targetEntity: FgGmAlbum
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                album_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

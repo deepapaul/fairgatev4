@@ -1,0 +1,58 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close fg-save-contact-app" aria-hidden="true"></button>
+        <h4 class="modal-title">{{'INSERT_CONTACT_FORM_ELEMENT'|trans }}</h4>
+    </div>
+    <form id="fg-cms-edit-pagetitle-form">
+        <div class="modal-body fg-cms-edit-existing-modal">
+            <div class="form-group fg-clear fg-cms-edit-pagetitle-formgroup">
+                <label class="col-md-5 control-label fg-marg-top-5  text-right" for="from-date">{{'CMS_CONTACT_APPLICATION_FORM'|trans}}</label>  
+                    <div class="col-md-6  col-lg-5 ">
+                        <select name="contactForm" id="contactForm" class="form-control selectpicker" placeholder="">
+                            <option value="">{{'SELECT_DEFAULT'|trans}}</option>
+                            {% for key,val in appFormArray %}
+                                <option  value="{{val['id']}}">{{val['title']}}</option>
+                            {% endfor %}
+                        </select>  
+                    </div>
+                    <div class="col-md-6 has-error col-lg-5 col-md-offset-5 hide" id="required-form"><span class="help-block ">{{'REQUIRED'|trans}}</span></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn default" data-dismiss="modal" >{{ 'CANCEL'|trans }}</button>
+            <button type="button" class="btn green" id="insertForm">{{ 'INSERT'|trans }}</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    var path = "{{path('website_cms_contact_app_save',{'pageId' : 'dummyPageId','boxId' : 'dummyBoxId','sortOrder' : 'dummySortOrder','formId' : 'dummyFormId','countForm' : 'dummyCountForm'})}}";
+    var formCount = "{{formCount}}";
+    $(document).off('click', '.fg-save-contact-app');
+    $(document).on('click', '.fg-save-contact-app', function () {
+        FgModelbox.hidePopup();
+    });
+    $(document).off('click', '#insertForm');
+    $(document).on('click', '#insertForm', function () {
+        $('#formElementId').val($("#contactForm").val());
+        if($('#formElementId').val()!= ''){ 
+            $('#required-form').addClass('hide');
+            var pathFinal = path.replace('dummyPageId',$("#droppedpageId").val()).replace('dummyBoxId',$("#droppedboxId").val()).replace('dummySortOrder',$("#droppedboxSortorder").val()).replace('dummyFormId',$('#formElementId').val()).replace('dummyCountForm',formCount);
+            FgXmlHttp.post(pathFinal, {}, '', function (response) {
+                if(response.status == 'SUCCESS'){
+                   var cmspage = new Fgcmspage();
+                   jsonData = response.data;
+                    FgXmlHttp.post(pageJsonSavePath, {
+                        'pageId': response.data.page.id,
+                    }, false);
+                    FgInternal.breadcrumb(FgInternal.extraBreadcrumbTitle);
+                    cmspage.reloadData();
+                    cmspage.callClipBoard(response.clipboardData);
+                    FgFormTools.handleUniform();
+                }
+            }, false, 'false');
+            FgModelbox.hidePopup();
+        }else{
+            $('#required-form').removeClass('hide');
+        }
+    });
+</script>

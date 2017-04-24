@@ -1,0 +1,50 @@
+{{ form_start(form, { 'attr': {'name':'fg-myDataForm', 'id': 'fg-myDataForm' ,'enctype' :'multipart/form-data','class': 'form-horizontal','action':'metronic_form_submit','autocomplete':'off','novalidate':'novalidate', 'onSubmit': 'return false;'} }) }}
+{# for more tab #}
+<div class="fg-internal-data-tab">
+    <ul class="nav nav-tabs data-more-tab fg-visibility-hidden" id="data-tabs">
+        {% set ul_li_var = '' %}
+        {% set i = 1 %}
+        {% for key,value in catTitlesarray %}
+            {% if key !='137' %}
+                {% if (key == activeTab) %}
+                    {% set active = 'active' %}
+                {% else %}
+                    {% set active = '' %}
+                {% endif %}
+                {% if (value.fedFlag == 1) %}
+                    {% set upload = '<img alt="logo" src="'~fedlogoPath~'" />'  %}
+                {% elseif (value.subfedFlag == 1) %}
+                    {% set upload = '<img alt="logo" src="'~subfedlogoPath~'" />'  %}
+                {% else %}
+                    {% set upload = '' %}
+                {% endif %}
+                {% set li_var = '<li id="data_li_'~key~'" data-type="'~key~'" class="'~active~'">
+                    <a data-toggle="tab" href="#fg_field_category_'~key~'">
+                        '~value.title~' '~upload~' <i class="fa fa-exclamation-triangle fg-data-error hide"></i></a>
+                </li>' %}
+
+                {% set ul_li_var = ul_li_var ~ li_var %}
+                {{li_var|raw}}
+
+                {% set i=i+1 %}
+            {% endif %}
+        {% endfor %}
+        <li class="datahideshow dropdown" ><a href="#"  id="fg-contact-more-tab" class="dropdown-toggle" data-toggle="dropdown">{%trans%}MORE{%endtrans%} <i class="fa fa-angle-down"></i><i class="fa fa-exclamation-triangle fg-data-error"></i> </a>
+            <ul class="dropdown-menu">
+                {{ul_li_var|raw}}
+            </ul>
+        </li>
+    </ul>
+</div>
+<div class="fg-clear"></div>
+{# ends#}
+<div id="data-tabs-content">
+    {{ form_rest(form) }}
+    <input type="hidden" name="mainContactId" id="mainContactId" value="{{mainContactId}}" />
+    <input type="hidden" name="deletedFiles" id="deletedFiles" value="" />
+    <input type="hidden" name="deleteddragFiles" id="deleteddragFiles" value="" />
+    <input type="hidden" name="active_tab" id="active_tab" value="{{activeTab}}" />
+    <input type="hidden" name="duplicateFileAttrs" id="duplicateFileAttrs" value="" />
+</div>
+{% include 'internal/savebutton.html.twig' with {'backLink': path('internal_dashboard') }%}
+{{ form(form) }}

@@ -1,0 +1,156 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = 'TOP_NAV_MESSAGES'|trans %}
+{% block pagecontent %}   
+    <div  id="message-conversation">
+
+        <!-- BEGIN BREADCRUMB-->
+        <div class="row">
+            <div class="col-lg-12">
+                {% include 'internal/breadcrumb.html.twig' %}
+            </div>
+        </div>
+        <!-- END BREADCRUMB-->
+        <!-- PAGE TITLE -->
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="fg-border-wrap no-border">           
+                    <div class="fg-title-first-block fg-text-block">
+                        <h3 class="page-title"> {{ messageHeaders.subject }} </h3>
+                        <div class="fg-msg-text-details">
+                            {{ messageHeaders.subtitle }} {{ messageHeaders.receiverNames }}</div>
+                    </div>        </div> 
+            </div>
+        </div>
+        <!-- END PAGE TITLE -->
+        <!-- BEGIN CONTENT -->
+
+        <div class="row"> 
+            <div class="col-lg-12"> 
+                <ul class="timeline" >    
+                    {% if(messageHeaders.replyLink is not empty ) %}
+                    <li class="timeline-purple fg-reply-wrapper fg-reply-link">                        
+                        <div class="timeline-body"><div class="fg-reply-div"><a class="fg-reply-link-a"><i class="fa fa-plus-circle fa-2x"></i>{{ messageHeaders.replyLink }} <span class="reply-sender"></span></a></div></div>                        
+                    </li>
+                    {% endif %}
+                    <li class="timeline-purple fg-reply-wrapper fg-reply-area hide ">
+                        <div class="timeline-time"> <span class="date" id="current-date" > {{ messageHeaders.currentDate }} </span> <span class="time" id="current-time">Time</span> <span class="time"> {{ messageHeaders.currentContact }} </span> </div>
+                        <div class="timeline-icon"> 
+                            <div class="fg-avatar-default fg-profile-img-blk45 fg-round-img " style="background-image:url('{{ ( messageHeaders.contactImage is empty) ? '' : messageHeaders.contactImage  }} ')">
+                            </div>
+                        </div>
+                        <div class="timeline-body">
+                            <form action="post" id="submit_reply" name="submit_reply" enctype="multipart/form-data" > 
+                                <div class="timeline-content fg-width-P"><textarea rows="6" name="message" id="message" class="form-control" style=""></textarea></div>
+                                <span class="help-block fg-dev-errorblock">{{ 'VALIDATION_THIS_FIELD_REQUIRED'|trans }}</span>
+                                <div class="tools timeline-close-btn"> <a href="javascript:;" class="remove"> </a> </div>
+                                <div class="timeline-footer">
+                                    <a class="fg-advanced-editor" href="javascript:void(0)" style="display: block;">
+                                        <i class="fa fa-caret-square-o-down"></i><span> {{'CKEDITOR_ADVANCED_EDITOR'|trans}}</span>
+                                    </a>
+                                    <a class="fg-simple-editor" href="javascript:void(0)" style="display: none;">
+                                        <i class="fa fa-caret-square-o-up"></i><span> {{'CKEDITOR_SIMPLE_EDITOR'|trans}}</span>
+                                    </a>
+                                </div>
+                                <div class="fg-timeline-footer"> <div class="form-group last"> <div class="form-actions right">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="fg-createmail-fileupload">
+                                                        <div class="drop">
+                                                            {{'FILE_UPLOAD'|trans}}
+                                                            <input type="file" id="attachments" name="upl" multiple="multiple" method="post" upload-url="{{path('internal_message_attachment_upload',{'type':'message'})}}"/>
+                                                        </div>
+                                                        <ul id='file-uploaded-attachements'>
+
+                                                        </ul>
+                                                    </div>                                                
+                                                    <div class="fg-msg-btn pull-right"><a class="btn default fg-display fg-reply-cancel" id="back">{{'CONVERSATION_CANCEL_BUTTON'|trans}}</a> <a class="btn default fg-display green add-reply" id="btn-add-reply">{{'CONVERSATION_SEND_BUTTON'|trans}}</a></div></div>
+                                            </div>
+                                        </div></div></div>
+                            </form>
+                        </div>
+                    </li>
+
+
+                </ul>
+
+                <div id="lastPostsLoader"></div>
+                <div class="fg-lazy-loader-wrapper">                    
+                </div>
+            </div>
+        </div>
+
+        <!-- END CONTENT -->
+    </div>
+
+    <script type="text/template" id="imageUploadContent">
+        <li class="fg-dev-attachmentcontent" id="<%- id %>">
+        <p><%- name %> <span class="fg-bytes fg-replacewith-errormsg"><%- size %></span></p>
+        <span class="removeUpload"><i class="fa fa-times-circle fa-2x"></i></span>
+        <input type="hidden" name='uploaded_attachments[]' value="<%- value %>"> {#temporary name#}
+        <input type="hidden" name='uploaded_attachment_names[]' value="<%- name %>"> {#original name#}
+        <input type="hidden" name='uploaded_attachments_size[]' value="<%- size_raw %>">        
+        </li>
+    </script>
+    <script type="text/template" id="msgContent"> 
+        <li class="timeline-purple" id="message-wrapper-<%- data.id %>">
+        <div class="timeline-time"><span class="date"><%- data.msgDate %> </span>
+        <span class="time">  <%- data.msgTime %> </span>
+        <span class="time"><%- data.senderName %></span></div>
+        <div class="timeline-icon">
+        <div class="fg-avatar-default fg-profile-img-blk45 fg-round-img " style="background-image:url('<%- (data.senderImage == '' ) ? '' : data.senderImage%>')">
+        </div>
+        </div>
+        <div class="timeline-body"><div class="timeline-content"><%= data.message %></div><div class="fg-attachment-wrapper-<%- data.id %>"></div></div>
+        </li>
+    </script>
+    <script type="text/template" id="replyContent"> 
+        <li class="timeline-purple" id="message-wrapper-<%- dataId %>">
+        <div class="timeline-time"><span class="date">{{ messageHeaders.currentDate }} </span>
+        <span class="time">  <%- msgTime %> </span>
+        <span class="time">{{ messageHeaders.currentContact }}</span></div>
+        <div class="timeline-icon">
+        <div class="fg-avatar-default fg-profile-img-blk45 fg-round-img " style="background-image:url('{{ (messageHeaders.contactImage == '') ? '' : messageHeaders.contactImage }}')">
+        </div>
+        </div>
+        <div class="timeline-body"><div class="timeline-content"><%= message %></div><div class="fg-attachment-wrapper-<%- dataId %>"></div></div>
+        </li>
+    </script>
+    <script type="text/template" id="fileUploadError">
+        <span class="help-block">
+        <% if (error == 0) { %> {{'FILEMANAGER_UPLOAD_FILETYPE_ERROR'|trans}}
+        <% } else if (error == 1) { %> {{'FILEMANAGER_UPLOAD_VIRUS_ERROR'|trans}}
+        <% } else if (error == 2) { %> {{'VIRUS_FILE_CONTACT'|trans}}
+        <% } else { %> <%- error %> <% } %></span>
+    </script>
+{% endblock %}
+
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/internal/css/timeline.css') }}" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('fgassets/assets/global/plugins/ckeditor/ckeditor.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/ckEditor-config.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.ui.widget.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.iframe-transport.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.fileupload.js')}}" type="text/javascript"></script> 
+    <script src="{{ asset('fgassets/global/js/FgFileUpload.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery.lazyjson.min.js')}}" type="text/javascript"></script>    
+    
+    <script type="text/javascript">
+        var addReplyPath = '{{ path('internal_message_addreply') }}';
+        var conversationListingUrl = '{{ path('internal_message_conversation_listing', {'messageId': messageId, 'page': 'PAGE', 'limit': 'LIMIT' } ) }}';    
+        var pathSetRead = '{{ path('internal_message_set_read') }}';
+        var attachmentDownloadPath  = '{{ path('internal_message_download_attachment', {'attachmentName': 'FILENAME'} ) }}'; 
+        var addReplyParams = {"messageId": '{{ messageId }}', "contactId": '{{ contactId }}', "receiversCount": '{{ messageHeaders.receiversCount }}'};
+        var totalMessages = parseInt('{{ messageHeaders.totalMessages }}');
+        var messageType = '{{ messageHeaders.message_type }}';
+        var currentDateTime = '{{ messageHeaders.currentDateTime }}'; 
+        var messageId = '{{ messageId }}'; 
+        var contactId = '{{ contactId }}'; 
+        var usedOf = '{{'FILE_SIZE_USED_OF'|trans}}';        
+    </script>
+    <script src="{{ asset('fgassets/internal/js/page/fgMessageWizard.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/internal/js/page/fgMessageConversation.js')}}" type="text/javascript"></script>
+{% endblock %}

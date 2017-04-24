@@ -1,0 +1,102 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'SM_ANALYSIS'|trans %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet-body fg-theme-yellow">
+                        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                        {% include 'clubadmin/breadcrumb.html.twig' with {'breadCrumb':{'back': path('clubadmin_sponsor_homepage') }} %}
+                        <!-- END PAGE TITLE & BREADCRUMB-->
+                        <div id="servicemenuBar">
+                            {% include 'ClubadminSponsorBundle:Analysis:dynamicMenubar.html.twig' with {'title':'SM_ANALYSIS'|trans,'tabs':tabs,'fiscalYears':fiscalYears,'tab11':tab1 } %}      
+                       {# {% include 'clubadmin/dynamicmenu.html.twig' with {'title':'SM_ANALYSIS'|trans,'tabs':tabs,'fiscalYears':fiscalYears,'listType':'sponsoranalysis' } %}      
+                 #}
+                        </div>
+                        <div class="row fg-common-top fg-contact-data">
+                            <div class="col-md-12">
+                                <div class="portlet-body">
+                                    <div class="tabbable-custom" id="data-tabs-content">
+                                        <ul  class="nav nav-tabs data-more-tab" id="data-tabs">
+                                            {% for key,headerTab in headerTabs %}
+                                                {% set active = (key == activeTab) ? 'active': '' %}
+                                                <li id="data_li_{{ key }}" class="{{ active }}">
+                                                    <a class="commonSMClass" data-toggle="tab" data-datatableId="service_display_{{ contactId }}_{{ key }}" type_id="{{ key }}" href="#service-table_{{contactId}}_{{ key }}">{{ trans[headerTab]|trans|capitalize }}</a>
+                                                </li> 
+                                            {% endfor %}  
+                                        </ul>
+                                        <div class="fg-clear"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                        <input type="hidden" name="csv_text" id="csv_text">
+                                         <input type="hidden" name="csv_text" id="csv_text1">
+                     <div id="data-tabs-content" class="tab-content">   
+                            {% for key,headerTab in headerTabs %} 
+                                {% set active = (key == activeTab) ? 'active': '' %}
+                                <div class="portlet-body tab-pane new-table-height {{ active }} fg-dev-analysis" id="service-table_{{contactId }}_{{ key }}">
+                                    <div class="row">
+                                        {% if headerTab == "service" %}
+                                            {% include 'ClubadminSponsorBundle:Analysis:headerTemplate.html.twig' with {'activeTab' : 'service', 'typeId' : 0,'contactId':contactId } %}
+                                        {% else %}
+                                            {% include 'ClubadminSponsorBundle:Analysis:headerTemplate.html.twig' with { 'activeTab' : 'sponsor', 'typeId' : 1,'contactId':contactId,'catHead':fgtwig.jsonDecode(catHead),'colSpan':colSpan } %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}                             
+                        </div>
+                    </div>
+                        <!--  Custom pop over html -->
+                        <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+                            <div class="modal-dialog modal-wide">
+                                <div class="modal-content fg-popup-wrap" id="popup_contents">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End area -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {#<script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>#}
+    <script src="{{ asset('fgcustom/js/sidebar.js') }}" type="text/javascript"></script>
+        <script>
+            /*-------------- Page title bar configuration --------*/ 
+                FgPageTitlebar.init({
+
+                 });
+        var startDate ='{{startDate}}';
+        var endDate ='{{endDate}}';
+        var servicePath = "{{path('sponsor_service_analysis_list',{'startDate':'#startDate#','endDate':'#endDate#'})}}";
+        var sPath ='{{path('edit_services',{'catId':'#catId#'})}}';
+        var headerTabs = {{headerTabs|json_encode()|raw}};
+        var activeTab = '{{activeTab}}';
+        var contactId = '{{contactId}}';
+        var catHead = '{{catHead|raw}}';
+        catHead= JSON.parse(catHead);
+        var currency = FgClubSettings.currency ;
+        var  servicesPath = '{{path('edit_services',{'catId':'#catId#'})}}';
+        var sponsorPath = '{{path('sponsor_analysis_sponsor_list',{'startDate':'#startDate#','endDate':'#endDate#'})}}';
+        var serviceGroup = {};
+        var pdfPath = '{{ path('sponsor_analysis_pdf') }}';
+        var baseUrl = '{{baseUrl}}';
+        var overviewPath1="{{path('render_sponsor_overview',{'offset':0,'sponsor': 'dummyContactId'})}}";
+        var actionMenuSelectedText = {
+            'sa_export_pdf': {'title': "{{'EXPORT_PDF'|trans}}", 'dataUrl': pdfPath,'visibility':true},
+            'sa_export_csv': {'title': "{{'EXPORT_CSV'|trans}}", 'dataUrl': '{{path('sponsor_analysis_export_popup')}}','visibility':true},
+        };
+        var actionMenuText = {'active' : {'none': actionMenuSelectedText}};
+        var analysisexportcsvPath = '{{path('sponsor_analysis_export_popup')}}';
+        FgSidebar.dynamicMenus.push({actionmenu: actionMenuText});
+         /*-------------- Tab correction in sponsor analysis--------*/ 
+      FgPageTitlebar.makeTabCorrect('.fg-sm-analysis-list')
+        </script>
+        <script src="{{ asset('fgcustom/js/fg-sponsors-analysis.js') }}" type="text/javascript"></script>   
+{% endblock %}  

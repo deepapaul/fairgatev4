@@ -1,0 +1,124 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">
+            {% if type =='team'%}
+                {% set addTitle = 'ASSIGN_TO_TM_FUNC'|trans({'%team members%' :fgtwig.getTerminolgyName('Team member',plural),'%team%':itemName}) %}                 
+            {% else %}
+                {% set addTitle = 'ASSIGN_TO_WR_FUNC'|trans({'%team members%' :fgtwig.getTerminolgyName('Team member',plural),'%team%':itemName}) %} 
+            {% endif %}
+            {{addTitle}}
+        </h4>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="#" class="form-horizontal form-row-sepe fg-team-modal" name="addExisting" id="addExisting">
+                    <div class="form-body fg-autocomplete-parent" >
+                        <div class="form-group fg-dev-cntct">
+                            <label class="control-label col-lg-4 col-md-4" for="currentpassword">{{ 'IN_CONTACT'|trans }}</label>
+                            <div class="col-lg-7 col-md-7 fg-pop-up-search">
+                                <i class="fa fa-search"></i>
+                                <div>
+                                    <input type="text" class="form-control" name="nonmemberContact" id="nonmemberContacts" placeholder="{{ 'SEARCH_CONTACT'|trans }}" auto_url="{{path('get_nonmember_club_contact',{'roleId':roleId}) }}"> 
+                                </div>
+                                <div id="contactError" class="fg-label-error hide" ></div> 
+                            </div>
+                        </div>
+
+                        <div class="form-group fg-dev-functn">
+                            <label class="control-label col-lg-4 col-md-4" for="function">{{ 'IN_FUNCTIONS'|trans }} <span class="required">*</span></label>
+                            <input type="hidden" value="{{roleId}}" name="teamId" />
+                            <div class="col-lg-7 col-md-7">
+                                <select id="teamFunctions" name="functions[]" multiple class="bs-select"></select> 
+                                <div id="functionError" class="fg-label-error"></div>
+                            </div>
+
+                        </div> 
+
+
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+    {% include 'internal/savebuttonPopup.html.twig' %}
+</div>
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/global/css/fbautocomplete.css')}}" type="text/css" rel="stylesheet" />
+{% endblock %}
+{% block javascripts %}
+
+    <script>
+      var category={{categoryId}};
+      var role ={{roleId}};
+      var element ='{{type}}';
+      var executive = '{{executive}}';
+      var dropdownData = {{resultArray|raw}} ;
+      var clubType = '{{clubType}}';
+     var searchPlaceholder = '{{ 'SEARCH_CONTACT'|trans }}';
+      var is_fed_categoryGroup = FgInternal.groupByMulti(dropdownData, ['is_fed_category']);
+       nonfederationGroup= is_fed_categoryGroup[0];
+       var arrayTeams ='';
+      if(element=='team') {           
+             arrayTeams = _(nonfederationGroup).filter(function (x) { return x['is_team']==1;}); // Seperating all team categories 
+        } else {
+           if((executive==1)&&(clubType !='federation')){
+              arrayTeams = _(nonfederationGroup).filter(function (x) { return (x['is_workgroup']==1);});
+            }else{
+                 arrayTeams = _(nonfederationGroup).filter(function (x) { return (x['is_workgroup']==1 && x['functionIsFederation']!=1);});
+            }
+              
+        }
+     if((executive==1)&&(clubType!='federation')){
+         dummyFunctionArray  = _(arrayTeams).filter(function (x) { return (x['is_executive_board']==1) ;})
+        
+     }else{
+         dummyFunctionArray = _(arrayTeams).filter(function (x) { return (x['catId'] ==category && x['roleId']==role) ;});
+     }   
+      
+
+      var options='';
+      $.each(dummyFunctionArray,function(key,values){
+            var filterArrayKey = values.functionId
+            var functionId = filterArrayKey.replace("E", "")
+          options+="<option value='"+functionId+"'>"+values.functionTitle+"</option>" ; 
+
+        });
+        $("#teamFunctions").append(options);
+        FgFormTools.handleBootstrapSelect();
+
+
+        $('#savePopup').on('click', function () {
+            $("#contactError").html('');
+            $("#functionError").html('');
+            if ($('input[name^=non_memberlist]').length == 0) {
+                $('#contactError').removeClass('hide');
+                $('#addExisting .fg-dev-cntct').addClass('has-error');
+                $("#contactError").html("{{ 'CONTACT_ERROR'|trans }}");
+                return false;
+            } else if ($("select[name='functions[]'] option:selected").length == 0) {
+                $('#addExisting .fg-dev-functn').addClass('has-error');
+                $("#functionError").html("{{ 'FUNCTION_ERROR'|trans }}");
+                return false;
+            } else {
+                $('#addExisting .form-group').removeClass('has-error');
+                FgXmlHttp.post("{{ path('add_non_existing_contact') }}", $('#addExisting').serialize(), false, updateSuccess, updateFailure);
+            }
+
+
+            return false;
+        });
+
+        function updateSuccess() {
+            FgModelbox.hidePopup();
+            listTable.search('').draw();
+        }
+
+        function updateFailure(result) {
+            return false;
+        }
+    </script>
+{% endblock %}

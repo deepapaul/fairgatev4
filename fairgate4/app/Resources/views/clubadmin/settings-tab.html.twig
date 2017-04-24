@@ -1,0 +1,58 @@
+<div class="row">   
+    <div class="row-same-height">
+        <div class="col-md-2 col-sm-12 col-xs-12 col-md-height fg-nav-tab-border">
+            <div class="btn-group">
+                <h3 class="page-title fg-page-title fg-left-zero">
+                    {{"GENERAL_SETTINGS"|trans}}
+                </h3>
+            </div>
+        </div>
+        {% set litagdata =''%}
+        {% set morelitagdata =''%}
+        {% set targetIndex = 6 %}   
+        {% for tab in tabs %}
+            {% if tab == "language" %}
+                {% set litagdata = litagdata ~ '<li name="fg-dev-settings-language-tab" data-target="1" class="'~(active=='language' ? 'active':'')~'"> <a  href="'~path("settings_language")~'" >'~"GENERAL_SETTINGS_LANGUAGE"|trans~'</a> </li>' %}
+                {% set morelitagdata = morelitagdata ~ '<li name="fg-dev-settings-language-tab" data-target="1" class="'~(active=='language' ? 'active':'')~'"> <a  href="'~path("settings_language")~'" tabindex="-1" >'~"PANEL_TABS_OVERVIEW"|trans~'</a> </li>' %}
+            {% elseif tab == "salutations" %}
+                {% set litagdata = litagdata ~ '<li name="fg-dev-settings-salutations-tab" data-target="2" class="'~(active=='salutations' ? 'active':'')~'"> <a  href="'~path("settings_salutations")~'" >'~"GENERAL_SETTINGS_SALUTATION"|trans~'</a> </li>' %}
+                {% set morelitagdata = morelitagdata ~ '<li name="fg-dev-settings-salutations-tab" data-target="2" class="'~(active=='salutations' ? 'active':'')~'"> <a  href="'~path("settings_salutations")~'" tabindex="-1" >'~"GENERAL_SETTINGS_SALUTATION"|trans~'</a> </li>' %}
+            {% elseif tab == "terminology" %}
+                {% set litagdata = litagdata ~ '<li name="fg-dev-settings-terminology-tab" data-target="3" class="'~(active=='terminology' ? 'active':'')~'"> <a  href="'~path("settings_terminology")~'" >'~"GENERAL_SETTINGS_TERMINOLOGY"|trans~'</a> </li>' %}
+                {% set morelitagdata = morelitagdata ~ '<li name="fg-dev-settings-terminology-tab" data-target="3" class="'~(active=='terminology' ? 'active':'')~'"> <a  href="'~path("settings_terminology")~'" tabindex="-1" >'~"GENERAL_SETTINGS_TERMINOLOGY"|trans~'</a> </li>' %}
+            {% elseif tab == "agelimits" %}
+                {% set litagdata = litagdata ~ '<li name="fg-dev-settings-agelimits-tab" data-target="4" class="'~(active=='agelimits' ? 'active':'')~'"> <a  href="'~path("settings_agelimits")~'" >'~"GENERAL_SETTINGS_AGELIMITS"|trans~'</a> </li>' %}
+                {% set morelitagdata = morelitagdata ~ '<li name="fg-dev-settings-agelimits-tab" data-target="4" class="'~(active=='agelimits' ? 'active':'')~'"> <a  href="'~path("settings_agelimits")~'" tabindex="-1" >'~"GENERAL_SETTINGS_AGELIMITS"|trans~'</a> </li>' %}
+            {% elseif tab == "groups" %}
+                {% set litagdata = litagdata ~ '<li name="fg-dev-settings-groups-tab" data-target="5" class="'~(active=='groups' ? 'active':'')~'"> <a  href="'~path("settings_groups")~'" >'~"GENERAL_SETTINGS_GROUPS"|trans~'</a> </li>' %}
+                {% set morelitagdata = morelitagdata ~ '<li name="fg-dev-settings-groups-tab" data-target="5" class="'~(active=='groups' ? 'active':'')~'"> <a  href="'~path("settings_groups")~'" tabindex="-1" >'~"GENERAL_SETTINGS_GROUPS"|trans~'</a> </li>' %}
+            {% elseif tab == "misc" %}
+                {% set litagdata = litagdata ~ '<li name="fg-dev-settings-misc-tab" data-target="6" class="'~(active=='misc' ? 'active':'')~'"> <a  href="'~path("settings_misc")~'" >'~"GENERAL_SETTINGS_MISC"|trans~'</a> </li>' %}
+                {% set morelitagdata = morelitagdata ~ '<li name="fg-dev-settings-misc-tab" data-target="6" class="'~(active=='misc' ? 'active':'')~'"> <a  href="'~path("settings_misc")~'" tabindex="-1" >'~"GENERAL_SETTINGS_MISC"|trans~'</a> </li>' %}
+            {% endif %}
+        {% endfor %}
+        <div class="col-md-4 col-sm-8 col-xs-12 col-md-height col-bottom fg-nav-tab-border fg-paneltab-right-align">
+            <ul id="paneltab" class="nav fg-nav-links data-more-tab fg-visibility-hidden">
+                {{litagdata|raw}} 
+                <li name="fg-dev-more-tab" class="datahideshow dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">{%trans%}MORE{%endtrans%} <i class="fa fa-angle-down"></i></a>
+                    <ul class="dropdown-menu fg-dropdown-more" role="menu">
+                        {{morelitagdata|raw}}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-2 col-sm-8 col-xs-12 col-md-height col-bottom fg-nav-tab-border fg-paneltab-right-align">
+            {% if langSwitch|default(0)==1 %}
+                <div class="btn-toolbar fg-lang-tab FR">
+                    <div class="btn-group  fg-language-left fg-marg-btm-5 fg-marg-top-0">
+                        {% if (clubLanguages|length > 1) %}
+                            {% for clubLanguage in clubLanguages %}
+                                <button type="button" id="{{clubLanguage}}"  lang="{{clubLanguage}}" class=" {% if(clubLanguage == clubDefaultLang) %} adminbtn-ash {% else %} fg-lang-switch-btn {% endif %}  btn  btlang" data-elem-function="switch_lang" data-selected-lang="{{clubLanguage}}">{{clubLanguage|upper}}</button>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>  
+</div>

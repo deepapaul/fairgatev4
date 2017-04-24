@@ -1,0 +1,27 @@
+<script type='template' id='gallerySpecialPageTemplate'>
+<div class="fg-cms-elements-head-edit-wrapper">
+    
+        <div class="alert alert-danger display-none">
+            <button class="close" data-dismiss="alert"></button>
+            <span data-error>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+        </div>
+        <div class="form-body">
+
+            <div class="form-group required fg-clear" >
+                <label class="col-md-2 control-label fg-marg-top-5  text-right" for="cmsGalleris">{{'CMS_GALLERIES'|trans}}</label>  
+                <div class="col-md-6  col-lg-5 ">
+                    <select name="cmsGalleris" id="cmsGalleris" class="form-control selectpicker" multiple="multiple" required>
+                        <option class="single fg-arrow-all" value="ALL_GALLERIES">{{'CMS_ALL_GALLERIES'|trans}}</option> 
+                        {% for key, data in allGalleries %}
+                            <option class="multiple" value="{{key}}">{{data}}</option>
+                        {% endfor %}
+                    </select>  
+                    <div id="cmsGalleris-formgroup-error" class="fg-label-error hide">{{ 'FIELD_REQUIRED_MESSAGE'|trans }}</div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="hiddenPageId" id="hiddenPageId" value="<%- data.page.id %>"/> 
+        {% include 'internal/savebutton.html.twig' with {'second_btn_val':'CMS_ELEMENT_SAVE_AND_BACK_BUTTON'|trans, 'second_button_id':'save_bac', 'discard_button_val':'DISCARD_CHANGES'|trans}   %}
+
+</div>
+</script>

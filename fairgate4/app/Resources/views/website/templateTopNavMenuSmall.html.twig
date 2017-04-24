@@ -1,0 +1,47 @@
+<div class="page-container">      
+    <div class="page-sidebar navbar-collapse collapse">
+        <ul class="page-sidebar-menu visible-sm visible-xs fg-topnav-orientation" data-keep-expanded="true" data-slide-speed="200">
+            <% 
+            _.each(topNavArr,function(topMenuArr, key){
+                if (key != 'switch' && key != 'logo') { %>
+                    <% 
+                    _.each(topMenuArr,function(mainMenu){ %>
+                        <% if (mainMenu.url != 'search') { %>
+                            <%  if ((_.isUndefined(mainMenu.submenu)) && (mainMenu.url != '#')) { %>
+                                <li class="<%- mainMenu.class %>"> <a name="fg-dev-topnav-contactmenu" href="<%- mainMenu.url %>" data-title="<%- mainMenu.breadcrumbTitle %>"> <%- mainMenu.title %></a>
+                            <% } else { %>
+                                <li class="<%- mainMenu.class %>"> <a name="fg-dev-topnav-contactmenu" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" href="<%- mainMenu.url %>" data-title="<%- mainMenu.breadcrumbTitle %>"> <%- mainMenu.title %> <span class="arrow <%- mainMenu.arrowClass %>"></span> </a>   
+                                    <ul class="sub-menu">
+                                        <% 
+                                        _.each(mainMenu.submenu,function(subMenu){ %>
+                                            <li class="<%- subMenu.class %>"> <a id="<%- subMenu.id %>" href="<%- subMenu.url %>" data-toggle="<%- subMenu.toggle %>" data-title="<%- subMenu.breadcrumbTitle %>"><%- subMenu.title %> <% if (subMenu.showNewBadge) { %> <span id="<%- subMenu.newBadgeId %>" class="badge fg-badge-blue badge-round badge-important <%- ((subMenu.newCount > 0) ? '' : 'hide') %>" data-count="<%- subMenu.count %>"> {{ 'INTERNAL_TOP_NAV_NEW'|trans }} </span>  <% } %></a> 
+                                                <% if (!(_.isUndefined(subMenu.subMenu))) { %>
+                                                    <ul class="sub-menu">
+                                                        <% 
+                                                        _.each(subMenu.subMenu,function(subSubMenu){ %>
+                                                            <li class="<%- subSubMenu.class %>"> <a id="<%- subSubMenu.id %>" href="<%- subSubMenu.url %>" data-toggle="<%- subSubMenu.toggle %>" data-title="<%- subSubMenu.breadcrumbTitle %>"><%- subSubMenu.title %></a> </li>
+                                                            <% }); %> 
+                                                    </ul>
+                                                <% } %>
+                                            </li>
+                                        <% }); %>  
+                                    </ul>
+                                <% } %> 
+                                </li>
+                        <% } else { %>
+                            
+                                <!-- BEGIN HEADER SEARCH BOX -->
+                                <div class="search-form">
+                                    <div class="input-group">
+                                        <input type="text" name="query" id="internalTopNavSearchSmallRes" class="form-control">
+                                    </div>
+                                </div>
+                                <!-- END HEADER SEARCH BOX -->
+                            
+                        <% } %>
+                    <% }); %>
+                <% } %>
+            <% }); %>
+        </ul>
+    </div>
+</div>

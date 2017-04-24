@@ -1,0 +1,121 @@
+<script type="text/template" id="fg-dev-internal-calendar-userrights"> 
+<%    internalAdmin = FgUtility.groupByMulti(internalAdmin, ['contact_id']);    %>
+    
+<div class="row">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12 fg-common-top">
+                <div class="panel-heading fg-theme-head">
+                    <h3 class="fg-panel-title">
+                        {{'USER_RIGHTS_ADMINISTRATION_SECTIONS'|trans }}
+                    </h3>
+                </div> 
+            </div>
+            <div class="col-md-12 fg-user-div fg-common-top fg-dev-user-rights-elements">
+                <% if(internalAdmin.length!=0) { %>  
+                <%  var teamsAdmin = [];        
+                    _.each(internalAdmin ,function(contentVal1,contentKey1){ 
+                         teamsAdmin.push(contentKey1);        
+                %>
+                         <% var contactName = '';var createdAt = '';var stealth=0; var userid = contentVal1[0]['user_id']; var contact_id = contentVal1[0]['contact_id']; %>
+                        
+                         <div class="row fg-border-line sortables" id="fg-clrChangeBlk_<%- contentKey1 %>" >
+                            <div class="col-md-5 col-sm-5 col-xs-8">
+                                 <% if(contentVal1[0]['stealth'] == 0) { 
+                                     var communityLink = communityPath.replace('dummyContactId',contentKey1); %>
+                                    <a target="_blank" href="<%- communityLink %>"> 
+                                 <% }%>
+                                    <%- contentVal1[0]['contactname'] %> 
+                                <% if(stealth == 0) { %>
+                                    </a> 
+                                    <% }%>
+                            </div>
+                             <div class="col-md-6 col-sm-12 col-xs-12">
+                                <div class="fg-adminstration-wrap">
+                                    <div class="fg-adminstration-area"><i class="fa fa-plus-square-o"></i><i class="fa fa-minus-square-o"></i></div>
+                                    <div class="fg-adminstration-area-icons">
+
+                                        <%
+                                        var rights = [];
+                                        _.each(contentVal1,function(allAdminsVal,allAdminsKey){ 
+                                            rights.push(allAdminsVal['module_type']);
+                                        }); %>
+                                         <% _.each(internalAdminList, function(list,key){                                             
+                                            if(list['name'] == 'Article')  {
+                                                if(_.contains(rights,'article')){  %>
+                                                    <a href="#"><i class="fa fa-newspaper-o text-green"  data-toggle="tooltip"></i></a>
+                                                <% }else{ %>
+                                                    <a href="#"><i class="fa fa-newspaper-o text-red"  data-toggle="tooltip"></i></a>
+                                                <% }
+                                            } else if(list['name'] == 'Calendar') {
+                                                if(_.contains(rights,'calendar')){  %>
+                                                    <a href="#"><i class="fa fa-calendar text-green"  data-toggle="tooltip"></i></a>
+                                                <% }else{ %>
+                                                    <a href="#"><i class="fa fa-calendar text-red"  data-toggle="tooltip"></i></a>
+                                                <% }
+                                            } else if(list['name'] == 'Gallery')  {
+                                                if(_.contains(rights,'gallery')){  %>
+                                                    <a href="#"><i class="fa fa-image text-green"  data-toggle="tooltip"></i></a>
+                                                <% }else{ %>
+                                                    <a href="#"><i class="fa fa-image text-red"  data-toggle="tooltip"></i></a>
+                                                <% }
+                                            } 
+                                          }); %>       
+                                    </div>
+                                </div>                    
+                            </div>
+                            <div class="fg-last-icon">
+                                <% if(contentKey1 == loggedContactId ) { %>
+                                    <i class="fa fa-lock fa-2x ash"></i>
+                                <% } else { %>
+                                <div class="closeico">  
+                                    <input type="checkbox" class="make-switch" id="contact_<%- contentVal1[0]['user_id'] %>_is_deleted" data-key="delete_all.admin.<%- contentVal1[0]['user_id'] %>"  name="contact_<%- contentVal1[0]['user_id'] %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- contentKey1 %>">
+                                    <label for="contact_<%- contentVal1[0]['user_id'] %>_is_deleted"></label>
+                                </div>
+                                <% } %>
+                            </div>
+                            <div class="random" data-id="{{random()}}"></div>
+                        
+                         <div class="fg-adminstration-area-open fg-dev-chk-area "> <div class="clearfix"></div>
+                            <ul>
+                               <% var rights = [];
+                                _.each(contentVal1,function(allAdminsVal,allAdminsKey){ 
+                                    rights.push(allAdminsVal['module_type']);
+                                }); %>
+                                 <% _.each(internalAdminList, function(list,key){
+                                    if(list['name'] == 'Article') {
+                                        if(_.contains(rights,'article')){  %>
+                                            <li><input type="checkbox" data-key="delete.group.<%- list['id'] %>.user.<%- userid %>" id="admin_delete_group_<%- list['id'] %>_user_<%- userid %>" name="admin_delete_group_<%- list['id'] %>_user_<%- userid %>" checked <% if(contentKey1 == loggedContactId ){ %> disabled <% } %>  /> {{'ARTICLE'|trans}}</li>                                        
+                                        <% }else{ %>
+                                            <li><input type="checkbox" data-key="new.group.<%- list['id'] %>.contact.<%- contact_id %>" id="admin_new_group_<%- list['id'] %>_contact_<%- contact_id %>" name="admin_new_group_<%- list['id'] %>_contact_<%- contact_id %>" <% if(contentKey1 == loggedContactId ){ %> disabled <% } %>  />  {{'ARTICLE'|trans}}</li>                                         
+                                        <% }
+                                    } else if(list['name'] == 'Calendar') {
+                                        if(_.contains(rights,'calendar')){  %>
+                                            <li><input type="checkbox" data-key="delete.group.<%- list['id'] %>.user.<%- userid %>" id="admin_delete_group_<%- list['id'] %>_user_<%- userid %>" name="admin_delete_group_<%- list['id'] %>_user_<%- userid %>" checked <% if(contentKey1 == loggedContactId ){ %> disabled <% } %>  /> {{'CALENDAR'|trans}}</li>
+                                        <% }else{ %>
+                                            <li><input type="checkbox" data-key="new.group.<%- list['id'] %>.contact.<%- contact_id %>" id="admin_new_group_<%- list['id'] %>_contact_<%- contact_id %>" name="admin_new_group_<%- list['id'] %>_contact_<%- contact_id %>" <% if(contentKey1 == loggedContactId ){ %> disabled <% } %>  />  {{'CALENDAR'|trans}}</li> 
+                                        <% }
+                                    } else if(list['name'] == 'Gallery') {
+                                        if(_.contains(rights,'gallery')){  %>
+                                              <li><input type="checkbox" data-key="delete.group.<%- list['id'] %>.user.<%- userid %>" id="admin_delete_group_<%- list['id'] %>_user_<%- userid %>" name="admin_delete_group_<%- list['id'] %>_user_<%- userid %>" checked <% if(contentKey1 == loggedContactId ){ %> disabled <% } %>  /> {{'GALLERY'|trans}}</li>
+                                        <% }else{ %>
+                                              <li><input type="checkbox" data-key="new.group.<%- list['id'] %>.contact.<%- contact_id %>" id="admin_new_group_<%- list['id'] %>_contact_<%- contact_id %>" name="admin_new_group_<%- list['id'] %>_contact_<%- contact_id %>" <% if(contentKey1 == loggedContactId ){ %> disabled <% } %>  /> {{'GALLERY'|trans}}</li> 
+                                       <% }
+                                    }
+                                  }); %>     
+                            </ul>
+                        </div> 
+                    </div>
+                <% }); %>
+               </div>
+              <%   }%> 
+            
+            <div class="fg-clear"></div>
+      
+            <div class="col-lg-12  fg-common-add-item"><a class="fg-dev-add-calendar-admin" data-toggle="modal" href="#basic" id="pencil"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text">{{'USER_RIGHTS_ADD_ADMINISTRATOR'|trans}}</span></a></div> 
+       
+        </div>    
+        
+    </div>
+     </div>    
+</script>

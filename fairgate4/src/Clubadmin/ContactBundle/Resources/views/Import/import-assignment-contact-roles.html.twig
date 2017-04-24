@@ -1,0 +1,45 @@
+<script type="text/template" id="fg-dev-import-assign-RolesContact">
+        <% arrayRoleName = FgUtility.groupByMulti(normalArray, ['roleId']);  %>
+        <% if(element=='Workgroup') {
+            var executiveBoardCount=0;
+        } %>
+
+        <div class="col-md-3 col-sm-3 fg-left-zero fg-dev-roleDp-blk">
+            <select insert-flag="0" class="bs-select form-control fg-select-font fg-dev-roleDropDown">
+                <option value="" option-text-role="1">{%trans%}ASSIGNMENT_SELECT_DROPDOWN{%endtrans%}</option>
+                <% if(element=='Workgroup') { %>
+                    
+                    <% _.each(filterArray,function(filterArrayValue,filterArrayKey){ %>
+                            <% if(arrayRoleName[filterArrayKey][0]['is_executive_board']== 1 && executiveBoardCount==0) { 
+                                executiveBoardCount=1;
+                            %>
+                                <option name="<%- arrayRoleName[filterArrayKey][0]['catId'] %>_role_<%- filterArrayKey %>" id="<%- arrayRoleName[filterArrayKey][0]['catId'] %>_role_<%- filterArrayKey %>" data-key="<%- arrayRoleName[filterArrayKey][0]['catId'] %>.role.<%- filterArrayKey %>.is_fed_cat.<%- arrayRoleName[filterArrayKey][0]['is_fed_category'] %>" executive-board="<%- arrayRoleName[filterArrayKey][0]['is_executive_board'] %>" element-type="<%- element %>" category="<%- arrayRoleName[filterArrayKey][0]['catId'] %>" value="<%- filterArrayKey %>">{{fgtwig.getTerminolgyName('Executive Board',singular,'UCF')}}</option>
+                            <% } else if(arrayRoleName[filterArrayKey][0]['is_executive_board']== 0) { %>
+                                <option name="<%- arrayRoleName[filterArrayKey][0]['catId'] %>_role_<%- filterArrayKey %>" id="<%- arrayRoleName[filterArrayKey][0]['catId'] %>_role_<%- filterArrayKey %>" data-key="<%- arrayRoleName[filterArrayKey][0]['catId'] %>.role.<%- filterArrayKey %>.is_fed_cat.<%- arrayRoleName[filterArrayKey][0]['is_fed_category'] %>" executive-board="<%- arrayRoleName[filterArrayKey][0]['is_executive_board'] %>" element-type="<%- element %>" category="<%- arrayRoleName[filterArrayKey][0]['catId'] %>" value="<%- filterArrayKey %>"><%- arrayRoleName[filterArrayKey][0]['roleTitle'] %></option>
+                            <% } %>
+                    <% }); %>
+                    
+                <% } else {
+                    if(element=='Team') { 
+                        dummyRolesArray = _(normalArray).filter(function (x) { return (x['teamCatId'] ==category ) ;});
+                    } else {
+                        dummyRolesArray = _(normalArray).filter(function (x) { return (x['catId'] ==category ) ;});
+                    }
+                    var previousRoleId='';
+                    _.each(dummyRolesArray,function(arrayNormalRolesValue,arrayNormalRolesKey){ 
+                        if(filterArray[arrayNormalRolesValue['roleId']] != undefined ) { 
+                            if(previousRoleId != arrayNormalRolesValue['roleId']) {
+                                previousRoleId=arrayNormalRolesValue['roleId'];
+
+                                if(element=='Team') { %>
+                                    <option name="<%- arrayRoleName[arrayNormalRolesValue['roleId']][0]['teamCatId'] %>_role_<%- arrayNormalRolesValue['roleId'] %>" id="<%- arrayRoleName[arrayNormalRolesValue['roleId']][0]['teamCatId'] %>_role_<%- arrayNormalRolesValue['roleId'] %>" data-key="<%- arrayRoleName[arrayNormalRolesValue['roleId']][0]['teamCatId'] %>.role.<%- arrayNormalRolesValue['roleId'] %>.is_fed_cat.<%- arrayNormalRolesValue['is_fed_category'] %>" insert-flag="0" element-type="<%- element %>" category="<%- arrayRoleName[arrayNormalRolesValue['roleId']][0]['teamCatId'] %>" value="<%- arrayNormalRolesValue['roleId'] %>"><%- arrayRoleName[arrayNormalRolesValue['roleId']][0]['roleTitle'] %></option>
+                                <% } else { %>
+                                    <option name="<%- category %>_role_<%- arrayNormalRolesValue['roleId'] %>" id="<%- category %>_role_<%- arrayNormalRolesValue['roleId'] %>" data-key="<%- category %>.role.<%- arrayNormalRolesValue['roleId'] %>.is_fed_cat.<%- arrayNormalRolesValue['is_fed_category'] %>" element-type="<%- element %>" category="<%- category %>" value="<%- arrayNormalRolesValue['roleId'] %>"><%- arrayRoleName[arrayNormalRolesValue['roleId']][0]['roleTitle'] %></option>
+                                <% } 
+                            }
+                        }
+                    }); %>
+                <% } %>
+            </select>
+        </div>
+</script>

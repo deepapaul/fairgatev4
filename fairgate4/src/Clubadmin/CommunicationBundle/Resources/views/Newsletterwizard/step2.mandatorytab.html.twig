@@ -1,0 +1,342 @@
+<div class="row">
+    <table 
+        class="table 
+        table-bordered
+        table-hover
+        table-condensed
+        dataTable-scroll-y
+        dataTable-ajax
+        dataTable-rows
+        dataTable-scroll-x
+        dataTables_scrollBody
+        lastcolumn_sort dataTable-initialSort data-count"   xWidth="100" yHeight="300" data-table-name="dataTables" data_row_change="fgrowchange1"   dataTable-hover="true" data-sort="0#asc" data-storage="communication_receiverlist" data-columnstorage="communication_receiverlist_column" data-column-def="true" data_table_type="nl_mandatory_recipient" id="nl_recipient_table" serverside_process="0">
+        <thead>
+            <tr>
+                <th>{%trans%}RL_EMAIL_ADDRESS{%endtrans%}</th>
+                <th>{%trans%}NL_EMAILFIELD{%endtrans%}</th>
+                <th>{%trans%}CONTACT_NAME{%endtrans%}</th>
+                <th>{%trans%}SL_SALUTATION{%endtrans%}</th>
+                    {% if(fgclub.get('type') == 'federation' or fgclub.get('type') == 'sub_federation') %}
+                    <th>{{ fgtwig.getTerminolgyName('Club',singular)|capitalize }}</th>
+                    {% endif %}
+                    {% if(fgclub.get('type') == 'federation')%}
+                    <th>{{ fgtwig.getTerminolgyName('Sub-federation',singular)|capitalize }}</th>
+                    {% endif %} 
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+
+<div class="row fg-common-top">
+    <div class="col-md-7 fg-common-top-btm">
+        <div class="fg-title-wrapper">
+            <h3 class="fg-mailings-head fg-left-zero">
+                <div class="page-title-sub">{% trans %}NL_EXCLUDED_RECIPIENT_TITLE {% endtrans %}</div>
+            </h3>
+        </div>
+    </div> 
+    <div class="col-md-5 fg-common-top-btm">
+        <div class="fg-search-div">
+            <div class="input-icon"> <i class="fa fa-search"></i>
+                <input type="text" placeholder="{{'SEARCH_TABLE'|trans}}" class="form-control control2" id="removesearch" >
+            </div>
+        </div>
+        <div class="btn-group pull-right">
+            <button class="btn tableactionright" data-toggle="dropdown"> <i class="fa fa-table fa-2x"></i> </button>
+            <ul class="dropdown-menu pull-right fg-drpmenu-new dropdown-menu-form padinten hold-on-click" >
+                <li> <div id="fgremoverowchange" ></div>          </li>
+            </ul>
+        </div>
+    </div> 
+</div>  
+<div class="row">
+    <table  class="table 
+            table-bordered
+            table-hover
+            table-condensed
+            dataTable-scroll-y
+            dataTable-ajax
+            dataTable-rows
+            dataTable-scroll-x
+            dataTables_scrollBody
+            lastcolumn_sort dataTable-initialSort data-count"   xWidth="100" yHeight="300" data-table-name="dataTables"  dataTable-hover="true" data-sort="0#asc"  id="nl_recipient_remove_table" data-search="false" data-row-selection="false" data-column-def-name="columnDefs1" data-column-def="true" data_table_type="nl_mandatory_recipient" serverside_process="0">
+        <thead>
+            <tr>
+                <th>{%trans%}RL_EMAIL_ADDRESS{%endtrans%}</th>
+                <th>{%trans%}NL_EMAILFIELD{%endtrans%}</th>
+                <th>{%trans%}CONTACT_NAME{%endtrans%}</th>
+                <th>{%trans%}SL_SALUTATION{%endtrans%}</th>
+                    {% if(fgclub.get('type') == 'federation' or fgclub.get('type') == 'sub_federation') %}
+                    <th>{{ fgtwig.getTerminolgyName('Club',singular)|capitalize }}</th>
+                    {% endif %}
+                    {% if(fgclub.get('type') == 'federation')%}
+                    <th>{{ fgtwig.getTerminolgyName('Sub-federation',singular)|capitalize }}</th>
+                    {% endif %} 
+                <th></th>
+            </tr>
+        </thead>
+
+    </table>                       
+</div>              
+
+<script>
+    var activedatatable, removeTable, columnDefs, columnDefs1, dataSet, removedata;
+    var clubType = '{{ fgclub.get('type') }}';
+    var hasSeperator = true;
+    $("#searchbox").on("keyup", function () {
+        activedatatable.api().search(this.value).draw();
+    });
+    $("#removesearch").on("keyup", function () {
+        removeTable.api().search(this.value).draw();
+    });
+    
+    columnDefs = [
+        {"name": "Email", "targets": 0, data: function (row, type, val, meta) {
+                return  row['email'];
+            }},
+        {"name": "E-mail field", "targets": 1, data: function (row, type, val, meta) {
+                return  row['emailfield'];
+            }},
+        {"name": "Contact name", "targets": 2, data: function (row, type, val, meta) {
+                if (row['name'] != '') {
+                    hasSeperator = false;
+                    var splitString = FgCommon.splitContactname(row['name']);
+                    hasSeperator = true;//reset value
+                    return  splitString;
+                } else {
+                    return '-';
+                }
+            }},
+        {"name": "salutation", "targets": 3, data: function (row, type, val, meta) {
+                return  row['salutation'];
+            }}
+    ];
+
+    if (clubType == 'federation') {
+        columnDefs.push({"name": "club", "targets": 4, data: function (row, type, val, meta) {
+                return ((row['contactClub'] !== null && row['contactClub'] !== '') ? row['contactClub'] : '-');
+            }});
+        columnDefs.push({"name": "contactSubFederation", "targets": 5, data: function (row, type, val, meta) {
+                return ((row['contactSubFederation'] !== null && row['contactSubFederation'] !== '') ? row['contactSubFederation'] : '-');
+            }});
+        columnDefs.push({"name": "exclude", "targets": 6, sortable: false, data: function (row, type, val, meta) {
+                return  '<i class="fa fa-times-circle fa-2x remove" contactEmail="' + row['email'] + '" contactSalutation="' + row['salutation'].replace('"', '') + '"></i>';
+            }});
+
+    } else if (clubType == 'sub_federation') {
+        columnDefs.push({"name": "club", "targets": 4, data: function (row, type, val, meta) {
+                return ((row['contactClub'] !== null) ? row['contactClub'] : '-');
+            }});
+        columnDefs.push({"name": "exclude", "targets": 5, sortable: false, data: function (row, type, val, meta) {
+                return  '<i class="fa fa-times-circle fa-2x remove" contactEmail="' + row['email'] + '" contactSalutation="' + row['salutation'].replace('"', '') + '"></i>';
+            }});
+    } else {
+        columnDefs.push({"name": "exclude", "targets": 4, sortable: false, data: function (row, type, val, meta) {
+                return  '<i class="fa fa-times-circle fa-2x remove" contactEmail="' + row['email'] + '" contactSalutation="' + row['salutation'].replace('"', '') + '"></i>';
+            }});
+    }
+
+    columnDefs1 = [
+        {"name": "Email", "targets": 0, data: function (row, type, val, meta) {
+                return  row['email'];
+            }},
+        {"name": "E-mail field", "targets": 1, data: function (row, type, val, meta) {
+                return  row['emailfield'];
+            }},
+        {"name": "Contact name", "targets": 2, data: function (row, type, val, meta) {
+                return ((row['name'] != '') ? FgCommon.splitContactname(row['name']) : '-');
+            }},
+        {"name": "salutation", "targets": 3, data: function (row, type, val, meta) {
+                return  row['salutation'];
+            }}
+    ];
+
+    if (clubType == 'federation') {
+        columnDefs1.push({"name": "club", "targets": 4, data: function (row, type, val, meta) {
+                return ((row['contactClub'] !== null) ? row['contactClub'] : '-');
+            }});
+        columnDefs1.push({"name": "contactSubFederation", "targets": 5, data: function (row, type, val, meta) {
+                return ((row['contactSubFederation'] !== null) ? row['contactSubFederation'] : '-');
+            }});
+        columnDefs1.push({"name": "exclude", "targets": 6, sortable: false, data: function (row, type, val, meta) {
+                return  '<i class="fa fa-undo fa-2x fg-cursor refract" contactEmail="' + row['email'] + '" contactSalutation="' + row['salutation'].replace('"', '') + '"></i>';
+            }});
+
+    } else if (clubType == 'sub_federation') {
+        columnDefs1.push({"name": "club", "targets": 4, data: function (row, type, val, meta) {
+                return ((row['contactClub'] !== null) ? row['contactClub'] : '-');
+            }});
+        columnDefs1.push({"name": "exclude", "targets": 5, sortable: false, data: function (row, type, val, meta) {
+                return  '<i class="fa fa-undo fa-2x fg-cursor refract" contactEmail="' + row['email'] + '" contactSalutation="' + row['salutation'].replace('"', '') + '"></i>';
+            }});
+    } else {
+        columnDefs1.push({"name": "exclude", "targets": 4, sortable: false, data: function (row, type, val, meta) {
+                return  '<i class="fa fa-undo fa-2x fg-cursor refract" contactEmail="' + row['email'] + '" contactSalutation="' + row['salutation'].replace('"', '') + '"></i>';
+            }});
+    }
+
+    var recipientData = JSON.stringify({{recipientData|raw}});
+    var exceptionData = JSON.stringify({{exceptiondata|raw}});
+    var clubData = JSON.stringify({{clubData|raw}});
+    var parsedRecipientData = $.parseJSON(recipientData);
+    var parsedExceptionData = $.parseJSON(exceptionData);
+    var parsedClubData = $.parseJSON(clubData);
+    var removedRecipientString = getRemovedRecipientString($.parseJSON(JSON.stringify({{exceptiondata|raw}})));
+    dataSet = FgNewsletterWizardGroupresults.reciepientList(parsedRecipientData, parsedClubData);
+    console.log(dataSet);
+    removedata = FgNewsletterWizardGroupresults.partitionedData(dataSet, parsedExceptionData);console.log(removedata);
+    $("#removedRecipient").val($("#removedRecipient").val() + removedRecipientString);
+
+    $(function () {
+        activedatatable = $('#nl_recipient_table').dataTable({
+            stateSave: true,
+            autoWidth: false,
+            data: removedata[1],
+            columnDefs: columnDefs,
+            dom: "<'row_select_datatow col-md-12'l><'col-md-12't><'col-md-4'i><'col-md-8'p>",
+            pagingType: "full_numbers",
+            language: {
+                sSearch: "<span>" + datatabletranslations['data_Search'] + ":</span> ",
+                sInfo: datatabletranslations['data_showing'] + " <span>_START_</span> " + datatabletranslations['data_to'] + " <span>_END_</span> " + datatabletranslations['data_of'] + " <span>_TOTAL_</span> " + datatabletranslations['data_entries'],
+                sZeroRecords: datatabletranslations['no_matching_records'],
+                sInfoEmpty: datatabletranslations['data_showing'] + " <span>0</span> " + datatabletranslations['data_to'] + " <span>0</span> " + datatabletranslations['data_of'] + " <span>0</span> " + datatabletranslations['data_entries'],
+                sEmptyTable: datatabletranslations['no_record'],
+                sInfoFiltered: "(" + datatabletranslations['filtered_from'] + " <span>_MAX_</span> " + datatabletranslations['total_entries'] + ")",
+                lengthMenu: '<select>' +
+                        '<option value="10">10 ' + datatabletranslations['row'] + '</option>' +
+                        '<option value="20">20 ' + datatabletranslations['row'] + '</option>' +
+                        '<option value="50">50 ' + datatabletranslations['row'] + '</option>' +
+                        '<option value="100">100 ' + datatabletranslations['row'] + '</option>' +
+                        '<option value="200">200 ' + datatabletranslations['row'] + '</option>' +
+                        '</select> ',
+                oPaginate: {
+                    "sFirst": '<i class="fa fa-angle-double-left"></i>',
+                    "sLast": '<i class="fa fa-angle-double-right"></i>',
+                    "sNext": '<i class="fa fa-angle-right"></i>',
+                    "sPrevious": '<i class="fa fa-angle-left"></i>'
+                }
+            },
+            fnDrawCallback: function () {
+                //stop the pageloading process
+                setTimeout(function () {
+                    FgUtility.stopPageLoading();
+                }, 200);
+            }
+        });
+        $("#fgrowchange").html('');
+        $("#nl_recipient_table_length").detach().prependTo("#fgrowchange");
+        //add our own classes to the selectbox
+        $("#nl_recipient_table_length").find('select').addClass('form-control cl-bs-select');
+        $("#nl_recipient_table_length").find('select').select2();
+        var pageinfo = activedatatable.api().page.info();
+        $("#activerecipientCount").val(pageinfo.recordsTotal);
+        activedatatable.on('length.dt', function (e, settings, len) {
+            FgUtility.startPageLoading();
+        });
+    })
+
+
+    removeTable = $('#nl_recipient_remove_table').dataTable({
+        stateSave: true,
+        data: removedata[0],
+        autoWidth: false,
+        columnDefs: columnDefs1,
+        dom: "<'row_select_datatow col-md-12'l><'col-md-12't><'col-md-4'i><'col-md-8'p>",
+        pagingType: "full_numbers",
+        language: {
+            sSearch: "<span>" + datatabletranslations['data_Search'] + ":</span> ",
+            sInfo: datatabletranslations['data_showing'] + " <span>_START_</span> " + datatabletranslations['data_to'] + " <span>_END_</span> " + datatabletranslations['data_of'] + " <span>_TOTAL_</span> " + datatabletranslations['data_entries'],
+            sZeroRecords: datatabletranslations['no_matching_records'],
+            sInfoEmpty: datatabletranslations['data_showing'] + " <span>0</span> " + datatabletranslations['data_to'] + " <span>0</span> " + datatabletranslations['data_of'] + " <span>0</span> " + datatabletranslations['data_entries'],
+            sEmptyTable: datatabletranslations['no_record'],
+            sInfoFiltered: "(" + datatabletranslations['filtered_from'] + " <span>_MAX_</span> " + datatabletranslations['total_entries'] + ")",
+            lengthMenu: '<select>' +
+                    '<option value="10">10 ' + datatabletranslations['row'] + '</option>' +
+                    '<option value="20">20 ' + datatabletranslations['row'] + '</option>' +
+                    '<option value="50">50 ' + datatabletranslations['row'] + '</option>' +
+                    '<option value="100">100 ' + datatabletranslations['row'] + '</option>' +
+                    '<option value="200">200 ' + datatabletranslations['row'] + '</option>' +
+                    '</select> ',
+            oPaginate: {
+                "sFirst": '<i class="fa fa-angle-double-left"></i>',
+                "sLast": '<i class="fa fa-angle-double-right"></i>',
+                "sNext": '<i class="fa fa-angle-right"></i>',
+                "sPrevious": '<i class="fa fa-angle-left"></i>'
+            }
+        },
+        fnDrawCallback: function () {
+            //stop the pageloading process
+            setTimeout(function () {
+                FgUtility.stopPageLoading();
+            }, 200);
+        }
+
+    });
+    removeTable.on('length.dt', function (e, settings, len) {
+        FgUtility.startPageLoading();
+    });
+    $("#searchbox").val($.parseJSON(localStorage.getItem("DataTables_nl_recipient_table_" + window.location.pathname)).search.search);
+    $("#removesearch").val($.parseJSON(localStorage.getItem("DataTables_nl_recipient_remove_table_" + window.location.pathname)).search.search);
+
+    $("#fgremoverowchange").html('');
+    $("#nl_recipient_remove_table_length").detach().prependTo("#fgremoverowchange");
+    //add our own classes to the selectbox
+    $("#nl_recipient_remove_table_length").find('select').addClass('form-control cl-bs-select');
+
+    $("#nl_recipient_remove_table_length").find('select').select2();
+
+
+
+</script>
+
+<script>
+
+    $("body").off('click', '.remove');
+    $('body').on('click', '.remove', function () {
+        var removedRecipient = $('#removedRecipient').val();
+        var emailSalutaion = $(this).attr('contactEmail') + '#' + $(this).attr('contactSalutation');
+        if (removedRecipient != '') {
+            splitRecipient = removedRecipient.split(',');
+            if ($.inArray(emailSalutaion, splitRecipient) == '-1') {
+                addedRecipient = removedRecipient + "," + emailSalutaion;
+                $('#removedRecipient').val(addedRecipient);
+            }
+        } else {
+            $('#removedRecipient').val(emailSalutaion);
+        }
+
+        var clickedTr = $(this).parents('tr');
+        var rowNode = activedatatable.api().row(clickedTr).data();
+        activedatatable.api().row(clickedTr).remove().draw(false);
+
+        removeTable.api()
+                .row.add(rowNode)
+                .draw(false);
+
+    });
+    $("body").off('click', '.refract');
+    $('body').on('click', '.refract', function () {
+        var removedRecipient = $('#removedRecipient').val();
+        if (removedRecipient != '') {
+            splitRecipient = removedRecipient.split(',');
+            var emailSalutaion = $(this).attr('contactEmail') + '#' + $(this).attr('contactSalutation');
+            if ($.inArray(emailSalutaion, splitRecipient) != '-1') {
+                splitRecipient.splice($.inArray(emailSalutaion, splitRecipient), 1);
+                var addedRecipient = splitRecipient.join();
+                $('#removedRecipient').val(addedRecipient);
+            }
+        }
+
+        var clickedTr = $(this).parents('tr');
+        var rowNode = removeTable.api().row(clickedTr).data();
+        removeTable.api().row(clickedTr).remove().draw(false);
+
+        activedatatable.api()
+                .row.add(rowNode)
+                .draw(false);
+
+    });
+
+</script>

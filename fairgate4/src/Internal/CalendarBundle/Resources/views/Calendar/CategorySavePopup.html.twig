@@ -1,0 +1,71 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">{{ title|raw }}</h4>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form id="category" class="form-horizontal" method="post" onsubmit="return false;" novalidate="novalidate">
+                    <div class="alert alert-danger display-hide">
+                        <button class="close" data-close="alert"></button>
+                        {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+                    </div>
+                    <div class="form-group required">            
+                        <div class="col-md-12 fg-marg-top-15">
+                            <label class="col-lg-3 col-md-4 text-right control-label fg-pad-0">
+                                {{ text|raw }}
+                            </label> 
+                            <div class="col-lg-9 col-md-8">
+                                <input type="text" class="form-control input-sm fg-input-area fg-dev-newfield fg-dev-valid" data-key="new_cat.{{ catId|raw }}.title.{{ defaultLang|raw }}" id="{{ catId }}_title_{{ defaultLang }}_titleLang" name="new_cat_{{ catId }}_title_{{ defaultLang }}_titleLang" data-lang="{{ defaultLang }}" value="" required="true" />
+
+                                {% for clubLanguage in clubLanguages %}
+                                    {% if clubLanguage != defaultLang%}
+                                        <input type="hidden" class="form-control input-sm fg-input-area fg-dev-newfield" data-key="new_cat.{{ catId|raw }}.title.{{ clubLanguage|raw }}" id="{{ catId }}_title_{{ clubLanguage }}_titleLang" name="new_cat_{{ catId }}_title_{{ clubLanguage }}_titleLang" data-lang="{{ clubLanguage }}" value="" required="true" />
+                                    {% endif %}
+                                {%endfor%}
+                                <div id="contactError" class="fg-label-error hide" ></div>   
+                            </div>
+                            <input type="hidden" class="form-control input-sm fg-input-area fg-dev-newfield" data-key="new_cat.{{ catId|raw }}.sort_order" id="{{ catId }}_sort_order" name="new_cat_{{ catId }}_.sort_order" data-lang="{{ defaultLang }}" value="{{ sortOrder|raw  + 1}}" required="true" />
+                            <input type="hidden" class="form-control input-sm fg-input-area fg-dev-newfield" data-key="new_cat.{{ catId|raw }}.is_deleted" id="{{ catId }}_is_deleted" name="new_cat_{{ catId }}_.is_deleted" data-lang="{{ defaultLang }}" value="0" required="true" />
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+     {% include 'internal/savebuttonPopup.html.twig' with {'button_val' : 'SAVE'|trans}  %}
+</div>
+<script type="text/javascript">
+    var catId = '{{ catId|raw }}';
+    var sidebarCreate = '{{ sidebarCreate|raw }}';
+    $(document).off('click', '#savePopup');
+    $(document).on('click', '#savePopup', function () {
+         $("#contactError").html('');
+        var objectGraph = {};
+        objectGraph = FgInternalParseFormField.fieldParse();
+        var catArr = JSON.stringify(objectGraph);
+        if ($('.fg-dev-valid').val() == ''){
+            $('#contactError').removeClass('hide');
+            $('#category .form-group').addClass('has-error');
+            $("#contactError").html("{{ 'FIELD_REQUIRED_MESSAGE'|trans }}");
+        }else{
+            $('#category .form-group').removeClass('has-error');
+            FgModelbox.hidePopup();
+            FgXmlHttp.post("{{ path('internal_calendar_addcategory') }}", {'catArr': catArr, 'noParentLoad': '{{ noParentLoad }}'}, false, callback);
+        }
+    });
+        function callback(result) {
+            if (sidebarCreate) {
+                $('#fg-category-filter-levels li:last').before('<li><div class="filter-content"><label><input data-list="no" class ="fg-filter-checkbox" event="all" own-event="yes" type="checkbox" data-id="' + result['Catid'] + '" data-type="CA"><span class="fg-filter-label">' + result['CatTitle'] + '</span></label></div></li>');
+                $(".fg-calendar-filter-list input[type=checkbox],.fg-calendar-filter-list input[type=radio]").uniform();
+                FgCalenderSidebar.setTristate();
+            } else {
+                FgFormTools.selectpickerViaAjax("{{ path('calendar_categories') }}", 0);
+            }
+        }
+
+</script>    
+

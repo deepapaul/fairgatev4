@@ -1,0 +1,305 @@
+/* ------------------------------------
+* Calendar pages design styles
+* 01 - calendar detail page
+* 02 - calendar special page
+---------------------------------------------*/
+
+/* ----------------------------------------------------
+* 01 - calendar detail page
+-------------------------------------------------------*/
+.fg-calendar-detail-wrapper{
+	.fg-calendar-meta-details-block{
+		@include break-hyphens;
+		>li{
+			border-bottom: 1px solid;
+			font-size: 16px;
+			padding: 3px 0;
+			@extend %clearfix;
+			>.fg-left{
+				font-weight: 400;
+				display: inline-block;
+				width: 45%;
+				vertical-align: top;
+			}
+			>.fg-right{
+				display: inline-block;
+				font-weight: lighter;
+				width:50%;
+			}
+			.fg-cat-tags,.fg-area-tags{
+				>span{
+
+					background: #ccc;
+					padding: 2px 8px;
+					margin: 0 5px 5px 0;
+					display: inline-block;
+					font-size: 14px;
+				}
+			}
+			.fg-cat-tags{
+
+			}
+			.fg-area-tags{
+			}
+		}
+	}
+	.fg-caledar-event-dtls-map-wrapper{
+		min-height: 250px;
+		position: relative;
+		padding: 0;
+		margin-top: 20px;
+		@include bpMin('768px'){
+			min-height: 500px;
+		}
+		#googleMap{
+			width:100% !important;
+			height: 100%!important;
+			margin: auto;
+			padding: 0;
+			@include position(absolute,0,0,0,0);
+		}
+	}
+	.fg-article-contents{
+		font-size: 17px;
+	}
+}
+
+/* ----------------------------------------------------
+* 02 - calendar special page
+-------------------------------------------------------*/
+.fg-calendar-special-contents-wrapper{
+
+	.fg-calendar-month-block{
+		margin-bottom: 50px;
+		.fg-event-duration{
+			line-height: 24px;
+		}
+		.fg-event-title{
+			
+		}
+	}
+	.fg-event-teams{
+		margin:-2px;
+		>.fg-team{
+			display: inline-block;
+			padding: 2px 5px;
+			margin: 2px;
+			font-size: 14px;
+		}
+	}
+	.fg-event-cats{
+		margin:-2px;
+		.fg-cat{
+			display: inline-block;
+			padding: 2px 5px;
+			margin:2px;
+			font-size: 14px;
+			background: #ccc;
+		}
+	}
+	/*------- Calendar month /week view ----*/
+	#fg-calendar-fullcalendar{
+		margin-top:20px;
+
+		.fc-toolbar{
+			.fc-button-group{
+				button{
+					background: #fff;
+					height: auto;
+					padding: 6px 10px;
+					border-color: #ddd;
+					@include border-radius(0);
+					outline: none;
+					&#fg-calendar-title{
+						text-transform: none;
+						min-width: 150px;
+						text-align: left;
+					}
+					&.fc-today-button{
+						text-transform: uppercase;
+						margin:0 0 0 5px;
+						font-weight: bold;
+						font-style: normal;
+						padding: 6px 15px;
+
+					}
+				}
+			}
+			.fc-prev-button,
+			.fc-next-button{
+				.fc-icon{
+					font-style: normal;
+					font-family:  FontAwesome;
+					
+				}
+			}
+			.fc-prev-button{
+				.fc-icon{
+					&:after{
+						content: "\f104";
+						font-size: 18px;
+						position: static;
+					}
+				}
+			}
+			.fc-next-button{
+				.fc-icon{
+					&:after{
+						content: "\f105";
+						font-size: 18px;
+						position: static;
+					}
+				}
+			}
+		}
+		.fc-view-container{
+			background: #fff;
+
+			.fc-widget-header{
+				th{
+					color: #333;
+					font-style: normal;
+					font-weight: 700;
+				}
+			}
+			.fc-widget-content{
+				td{
+					color: #333;
+					font-style: normal;
+					font-weight: 700;
+
+				}
+				.fc-day-grid-event.fc-event{
+					color:#333;
+					display: block;
+					padding: 0;
+					border: 2px solid rgba(0, 0, 0, 0.10);
+					margin: 3px auto 0 auto;
+					@include border-radius(0);
+
+					.fc-content {
+						padding: 2px 5px 2px 5px;
+						margin: 0px -2px;
+						color: #333;
+						span{
+							font-weight: normal;
+							font-style: normal;
+
+						}
+						.fg-event-teamcolor{
+							display: block;
+							height: 3px;
+							border: 1px solid rgba(0, 0, 0, 0.10);
+							background: #DCFFF7;
+							margin: 1px -6px 1px -4px;
+
+							&:last-child{
+								margin-bottom: -2px;
+							}
+						}
+
+					}
+				}
+				a.fc-time-grid-event{
+					color: #333 !important;
+				}
+			}
+		}
+
+	}
+
+	/*------- Calendar popover ----*/
+	.popover{
+		width: 377px;
+		max-width: 100%;
+		@include border-radius(0);
+
+		.popover-content{
+			padding: 0;
+		}
+		.fg-calendar-popover{
+			margin:0;
+			border: 0;
+			.panel-heading{
+				padding: 5px 20px 5px 5px;
+				min-height: 30px;
+				@include border-radius(0);
+				span.fa.fa-close {
+
+					cursor: pointer;
+					color: #aaaaaa;
+					vertical-align: middle;
+					@include position(absolute,5px,5px,auto,auto);
+				}
+				.panel-title{
+
+					line-height: 1.3em;
+					padding: 0 0 0 10px;
+					font-size: 18px;
+					margin:0;
+					>a{
+						text-decoration: none;
+					}
+				}
+			}
+			.panel-body{
+				padding: 10px 0 0 0;
+				min-height: 150px;
+
+				.fg-calendar-popover-loader{
+					min-height: 150px;
+					background: #eee url("../../../assets/global/img/loading-spinner-grey.gif") no-repeat center;
+				}
+			}
+			.event-desicription{
+				font-size: 16px;
+				font-weight: lighter;
+				@include break-hyphens;
+				.fg-readmore{
+					margin:0 5px;
+					.fa{
+						font-size: 18px;
+						margin-right:5px;
+					}
+				}
+			}
+			.fg-event-dtls{
+				list-style: none;
+				padding: 0;
+				margin:20px 0 0 0;
+				font-size: 16px;
+				li{
+					@extend %clearfix;
+					padding: 0;
+					border-bottom: 1px solid #ddd;
+					margin:0 0px 4px 0px;
+					&:last-child{
+						border:0;
+					}
+					>label{
+						padding-left: 0;
+						font-weight: 400;
+					}
+					>div{
+						padding-right: 0;
+						font-weight: lighter;
+						@include break-hyphens;
+					}
+				}
+			}
+		}
+	}
+
+	/*------- Calendar list view ----*/
+	#fg-calendar-list{
+		.fg-event-teams,
+		.fg-event-duration,
+		.fg-event-title,
+		.fg-event-cats{
+
+			@include bpMax('767px'){
+				margin-bottom: 5px;
+			}
+		}
+	}
+}

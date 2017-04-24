@@ -1,0 +1,28 @@
+Common\UtilityBundle\Entity\FgCnSmsExcludedNumbers:
+    type: entity
+    table: fg_cn_sms_excluded_numbers
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        mobileNumber:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: mobile_number
+    manyToOne:
+        sms:
+            targetEntity: FgCnSms
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                sms_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

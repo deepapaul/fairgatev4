@@ -1,0 +1,218 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">{{ titleText }}</h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="{{path('contact_profile_settings_save')}}" class="form-horizontal form-row-sepe fg-PR" id="contact-profile-settings" method = "post">
+                    <div class="form-body">
+                        {% if(type == 'fedmembership')%}
+                            <select id="fedmembership" name="fedmembership" class="form-control bs-select fg-option-left" data-fieldname=" {%trans%}MEMBER_CATEGORY{%endtrans%}" data-attrid="fedmembership">
+                                {% if(fedMembershipMandatory != 1) %}
+                                    <option value="">{{'NO_FED_MEMBERSHIP'|trans}}</option>
+                                {% else %}
+                                    <option value="">{{'SELECT_DROPDOWN'|trans}}</option>
+                                {% endif %}
+                                {% for key,fedmemb in fed_memberships_array %}
+                                    <option  data-content="{{fedmemb}} <img src='{{fedlogoPath}}' /> " value="{{key}}"{{(key == existingFedMembership)?'selected = selected':''}}  > {{fedmemb}}</option>
+                                {% endfor %}
+                            </select>
+                        {% elseif(type == 'clubmembership')%}
+                            <select id="clubmembership" name="clubmembership" class="form-control bs-select fg-option-left" data-fieldname=" {%trans%}MEMBER_CATEGORY{%endtrans%}" data-attrid="clubmembership">
+                                <option value="">{{'NO_MEMBERSHIP'|trans}}</option>
+                                {% for key,clubmem in club_memberships_array %}
+                                    <option  data-content="{{clubmem}}" value="{{key}}"{{(key == existingClubMembership)?'selected = selected':''}}  > {{clubmem}}</option>
+                                {% endfor %}
+                            </select>
+                        {% elseif(type == 'clubAssignments') %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>   
+                                        <tr>
+                                            <th>{%trans%}CLUB_ASSIGNMENTS_FROM{%endtrans%}</th>
+                                            <th>{%trans%}CLUB_ASSIGNMENTS_TO{%endtrans%}</th>
+                                            <th>{%trans%}CLUB_ASSIGNMENTS_CLUB{%endtrans%}</th>
+                                            <th>{%trans%}CLUB_ASSIGNMENTS_MAINCLUB{%endtrans%}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for ca in clubAssignments %}
+                                        <tr>
+                                            <td><span class="inline-editable editable-click" data-edit-row="{{ca.clubAssignmentId}}" data-edit-col="fromDate" data-edit-val="{{ca.fromDate}}" data-edit-type="date" >{{ca.fromDate}}</span></td>
+                                            <td>{% if(ca.toDate == '')%} - {% else %}<span class="inline-editable editable-click" data-edit-row="{{ca.clubAssignmentId}}" data-edit-col="toDate" data-edit-val="{{ca.toDate}}" data-edit-type="date" >{{ca.toDate}}</span>{% endif %}</td>
+                                            <td>{{ca.title}}</td>
+                                            <td><input type="radio" name="mainclubVal" value="{{ca.clubId}}" {% if(ca.clubId==ca.mainClubId and ca.toDate == '') %} checked="checked" {% endif %} {% if(ca.toDate != '')%} disabled {% endif %}></td>
+                                        </tr>
+                                        {% endfor %}
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div id="block_0" class="fg-dev-archive-content">
+                                <p class="fg-dev-archive-status-txt">{{ descText }}</p>
+                            </div>
+                        {% endif %}                                               
+
+                    </div>
+                    <input type="hidden" name="type" id="type" value="" />
+                    <input type="hidden" name="contactId" id="contactId" value="" /> 
+                    <input type="hidden" name="existingFedMembership" id="existingFedMembership" value="" /> 
+                    <input type="hidden" name="existingClubMembership" id="existingClubMembership" value="" /> 
+                    <input type="hidden" name="isActive" id="isActive" value="" />
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'clubadmin/savebuttonpopup.html.twig' with {'save_button_val': buttonText} %}
+<script type="text/javascript">
+    var type = '{{type}}';
+    var contactId = '{{contactId}}';
+    var isActive = '{{active}}'
+    var existingFedMembership = '{{existingFedMembership}}';
+    var existingClubMembership = '{{existingClubMembership}}';
+    var inlineEditClubAssignmentPath = '{{ path('inlineedit_clubAssignment',{'contact':contactId}) }}';
+    var emailValidationPath = "{{path('validate_email_for_fedmembership',{'contacts':'##','fedmembership':'++'})}}";
+    var mergeSavePath = "{{path('save_fedmembership')}}";
+    var fedmembership = '{{existingFedMembership}}';
+   var fedMembershipMandatory = '{{fedMembershipMandatory}}';
+    $(document).off('click', 'button[data-function=save], button[data-function=cancel]');
+    $(document).on('click', 'button[data-function=save], button[data-function=cancel]', function() {
+        $('form#contact-profile-settings .help-block').remove();
+        $('form#contact-profile-settings .has-error').removeClass('has-error');
+        var buttonId = this.id;
+        if (buttonId == 'save') {
+           if(type == 'fedmembership' ){
+               if(fedmembership == '' ){
+                      if(fedMembershipMandatory == 1){
+                           $('form#contact-profile-settings select#fedmembership').parent().addClass('has-error');
+                           $('<span class="help-block fg-marg-top-5">required</span>').insertAfter($('form#contact-profile-settings select#fedmembership + .btn-group.bootstrap-select'));
+                       return false;
+                   }
+                   saveProfileData();
+               }
+               else{
+                    validateEmail();}
+           }else{
+                saveProfileData();
+           }
+            
+        }
+    });
+    
+    $('form').off('change', 'select#fedmembership');
+    $('form').on('change', 'select#fedmembership', function() {
+        fedmembership = $(this).val();
+    });
+    
+    {% if inlineEditData is defined %}
+        var inlineEditData = '{{ inlineEditData|json_encode()| raw }}';
+        FgOverview.inlineEditClubAssignment(inlineEditData);
+    {% endif %}
+    FgFormTools.handleBootstrapSelect();
+    
+    FgFormTools.handleUniform();
+    
+    function validateEmail(){
+        var pathEmail = emailValidationPath.replace('%23%23', contactId).replace('%2B%2B',fedmembership);
+        $.ajax({
+            type: 'GET',
+            url: pathEmail,
+            success: function(data) {
+                if(data.mergeable){
+                    FgMergeAssignPopup.handleMergerablePopup(data);
+                }else{
+                    if(data.status == 'FAILURE'){
+                        $('#popup').modal('hide');
+                        FgUtility.showToastr(data.flash, 'warning');
+                    }else{
+                        saveProfileData();
+                    }
+                }
+            },
+            async: false
+        });
+    }
+    function saveProfileData() {
+        $('#type').val(type);
+        $('#contactId').val(contactId);
+        $('#existingFedMembership').val(existingFedMembership);
+        $('#existingClubMembership').val(existingClubMembership);
+        $('#isActive').val(isActive);
+        $('#popup').modal('hide');
+        FgXmlHttp.post('{{path('contact_profile_settings_save')}}', $("#contact-profile-settings").serialize(), false, callBackFn);
+        
+    }
+    function callBackFn() { 
+      Breadcrumb.load();
+    }    
+        
+FgMergeAssignPopup = {
+    handleMergerablePopup : function (response) {
+        fedMem={};
+        var duplicates = (response['mergeEmail'].length>0) ? response.mergeEmail:response.duplicates;
+        var typeMer= (response['mergeEmail'].length>0) ? 'email':'fields';
+        var countMergeable = (response['mergeEmail'].length>0) ? 1:duplicates.length;
+        var currentContactData = response['currentContactData'];
+
+        yours={'firstname':currentContactData['2']};
+        yours['lastname'] = currentContactData['23'];
+        yours['gender'] = currentContactData['Gender'];
+        yours['dob'] = currentContactData['4'];
+        yours['location']= currentContactData['77'];
+        yours['email']= currentContactData['3'];
+        yours['isCompany']=currentContactData['Iscompany'];
+        yours['contactName']=currentContactData['contactName'];
+        fedMem[response['currentContactData']['fedMembershipId']]= response['currentContactData']['fedMembershipTitle'];
+        
+        var htmlFinal = _.template($('#merge-popup-template').html(),{'duplicates': duplicates,'fedMem':fedMem,'typeMer':typeMer,'countMergeable':countMergeable,'yours':yours});
+
+        $('#popup_contents').html(htmlFinal);
+        FgFormTools.handleUniform();
+        $('#popup').addClass('fg-membership-merge-modal');
+        $('#popup').modal('show');
+        FgMergeAssignPopup.mergePopupHandling(typeMer, currentContactData);
+    },
+    mergePopupHandling:function(typeMer, currentContactData){
+        $('#cancel_merging').on('click', function() {
+            FgUtility.stopPageLoading();
+            FgMergeAssignPopup.cancelMerging(typeMer, currentContactData);
+        });
+         $('#save_merging').on('click', function() {
+             FgUtility.startPageLoading();
+            var mergerValue=$('.merge-value-radio:checked').val();
+            if(mergerValue == 'fed_mem'){
+                FgXmlHttp.post('{{path('contact_profile_settings_save')}}', {'type':type,'contactId':contactId,'existingFedMembership':existingFedMembership,'isActive':isActive}, false, callBackFn);
+                $('#popup').removeClass('fg-membership-merge-modal');
+                $('#popup').modal('hide');
+            }else{
+                extraData = {'merging':'save','mergeTo':mergerValue,'typeMer':typeMer, 'contactData' : currentContactData};
+                $.get(mergeSavePath, extraData, function (response) {
+                    $('#popup').removeClass('fg-membership-merge-modal');
+                    $('#popup').modal('hide');
+                    if (response.status == 'FAILURE') {
+                        FgUtility.showToastr(response.flash, 'warning');
+                    } else {
+                      // FgUtility.showToastr(response.flash, 'success');
+                       var path = '{{path('render_contact_overview',{'offset':0,'contact': '##'})}}';
+                       var overviewPath = path.replace('%23%23',response.id);
+                        FgXmlHttp.replaceContentFromUrl(overviewPath, response.flash, callBackFn, false);
+                    }
+                });
+            }
+             FgUtility.stopPageLoading();
+             
+        });
+    },
+    cancelMerging:function(typeMer, currentContactData){
+        $('#popup').removeClass('fg-membership-merge-modal');
+        $('#popup').modal('hide');
+    }
+}
+
+</script>

@@ -1,0 +1,68 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = 'FILE_TITLE'|trans %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTAINER -->
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN BREADCRUMB-->
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <!-- END BREADCRUMB-->
+            <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+            {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'contactId': '', 'tabs': '', 'roleCount' : '' , 'type':'', 'url' : '','columnsUrl':''} %}
+            <!-- END PAGE TITLE AND PANEL TABS -->
+            <!-- BEGIN UPLOAD AREA -->
+            <div class="" id="filemanager-upload-error-container">
+            </div>
+            <!-- END UPLOAD AREA -->
+            <!--- START DATATABLE AREA  -->
+            <div class="fg-filemanager-filelist-wrapper">
+
+                <div class="row" id="fg-personal-datatable">
+                    <div class="portlet-body new-table-height fg-datatable-wrapper" id="tableWrapper">
+                        <table class="dataTable
+                               table
+                               table-bordered
+                               table-hover
+                               table-condensed"
+                               id="datatable-file-manager-documents" dataTable-popover="true" dataTable-hover="true">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" class="dataTable_checkall fg-dev-avoidicon-behaviour">&nbsp;<i class="chk_cnt"></i></th>
+                                    <th> {{'FILE_NAME'|trans}}  </th>
+                                    <th> {{'FILE_SIZE'|trans}} </th>                               
+                                    <th> {{'FILE_UPLOAD_ON'|trans}}</th>
+                                    <th> {{'FILE_UPLOADED_BY'|trans}} </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block customstylesheets %}
+    <link href="{{ asset('bundles/commonFilemanager/css/fg-filemanager-styles.css')}}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+{% block javascripts %}
+    <script>
+         var mbtranslation = '{{'FILE_MB'|trans}}';
+         var datatableAjaxPath = "{{path('filemanager_document_list_data')}}";
+         var downloadPath = "{{ path('document_download', {'docId' : '|docId|', 'versionId': '|versionId|' }) }}";
+         var teamDocEditUrl = "{{ path('document_settings_team', {'documentId' : '|docId|', 'offset': 0 }) }}"; 
+         var workgroupDocEditUrl = "{{ path('document_settings_workgroup', {'documentId' : '|docId|', 'offset': 0 }) }}";
+         var contactDocEditUrl = "{{ path('document_settings_contact', {'documentId' : '|docId|', 'offset': 0 }) }}";
+         var clubDocEditUrl = "{{ path('document_settings_club', {'documentId' : '|docId|', 'offset': 0 }) }}";
+        
+    </script>
+    <script src="{{ asset('bundles/commonFilemanager/js/Filemanager_datatable_actions.js')}}" type="text/javascript"></script>    
+    <script src="{{ asset('bundles/commonFilemanager/js/Filemanager_datatable_documents_settings.js')}}" type="text/javascript"></script>
+<script>
+    $(document).ready(function(){
+        
+    });
+</script>
+{% endblock %}

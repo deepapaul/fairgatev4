@@ -1,0 +1,32 @@
+Common\UtilityBundle\Entity\FgRmRoleFunction:
+    repositoryClass: Common\UtilityBundle\Repository\FgRmRoleFunctionRepository
+    type: entity
+    table: fg_rm_role_function
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        function:
+            targetEntity: FgRmFunction
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                function_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        role:
+            targetEntity: FgRmRole
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                role_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

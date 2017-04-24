@@ -1,0 +1,32 @@
+Common\UtilityBundle\Entity\FgMessageAttachments:
+    repositoryClass: Common\UtilityBundle\Repository\Message\FgMessageAttachmentsRepository
+    type: entity
+    table: fg_message_attachments
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        file:
+            type: string
+            length: 999
+            fixed: false
+            nullable: true
+        size:
+            type: integer
+            unsigned: false
+            nullable: false
+    manyToOne:
+        messageData:
+            targetEntity: FgMessageData
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                message_data_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

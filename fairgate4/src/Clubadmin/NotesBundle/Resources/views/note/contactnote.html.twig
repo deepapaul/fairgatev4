@@ -1,0 +1,164 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = contactName %}
+{% set module = (module is defined) ? module : 'contact' %} 
+{% block customstylesheets %}
+    <link href="{{ asset('fgcustom/css/timeline.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+{% if type is defined %}
+   {% set type = type%}
+{% else %}
+   {% set type ='club' %} 
+{% endif%} 
+{% block pagecontent %}
+    <!-- BEGIN PAGE CONTENT-->
+    {% set federationTerminology = fgtwig.getTerminolgyName('Federation',singular)%}
+    <div class="row" id="contactnoteid">
+        <div class="col-md-12">
+            <!-- BREADCRUMB STARTS -->
+            {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+            {% if pageViewType == 'contact' %}
+            {% if missingReqAssgment > 0 and isReadOnlyContact == 0 %}
+                    <div id="MissingReqAssgmtError" class="alert alert-warning alert-dismissable ">
+                        <button class="close" data-close="alert"></button>
+                        <strong>{{'ATTENTION'|trans}}! </strong><span>{% trans with {'%fedmember%':  federationTerminology,'%a%':"<a href='"~path('contact_assignments',{'offset':offset,'contact':contactid})~"'>",'%b%':"</a>"} %}REQ_FED_SUBFED_ROLE_MISSING_ASSIGNMT_CONTACT{% endtrans %} </span>
+                    </div>
+                {% endif %}
+            {% endif %}     
+           {# {% if module == 'contact' %}#}
+          {#  {% include 'clubadmin/panel-tabs.html.twig' with {'contactName':displayContactName,'contactId':contactid,'active':'contactnote','contactType':type, 'documentsCount':documentsCount} %}
+            #}
+          <div class="row">
+             {% set page_settings = { 'pagetitle':'true','tabs':'true'}  %}
+             {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': displayContactName ,'page_settings': page_settings, 'tabs': tabs, 'type':'overview', 'hrefLink' : true, 'url':"#",'contactType':contactType} %}   
+            </div>
+           {# {% else %}
+            {% include 'clubadmin/sponsor-panel-tabs.html.twig' with {'contactName':displayContactName,'contactId':contactid,'active':'contactnote', 'contactType':type, 'tabs':tabs, 'documentsCount':documentsCount|default(0), 'servicesCount':servicesCount|default(0), 'adsCount':adsCount|default(0)} %}
+            {% endif %}    #}
+            <!-- BREADCRUMB ENDS -->
+
+            <input type='hidden' id='totalrecords' class='totalrecords' name='totalrecords' value={{count}}>
+            <input type='hidden' id='pages' class='pages' name='pages' value={{pages}}>
+            <input type='hidden' id='limit' class='limit' name='limit' value={{limit}}>
+            <form id="form1" class="form-horizontal fg-contact-notes fg-notes" onsubmit="return false;" autocomplete="off">
+                <div class="alert alert-danger display-hide">
+                    <button class="close" data-close="alert"></button>
+                    {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+                </div>
+                <!-- BEGIN PAGE CONTENT-->
+                <div class="row contactnote">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="portlet-body">
+                                    <div class="row fg-common-top">
+                                        <div class="col-md-12">
+                                            <div class="tab-content">
+                                                <div class="tab-pane fade active in" id="tab_1_1">
+                                                    <!-- BEGIN PAGE CONTENT-->
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="col-md-3"></div>
+                                                            <div class="col-md-9 fg-note-link-txt">
+                                                                {% if type !='archive' and type !='formerfederationmember' and contactModuleType != 'archivedsponsor'%}
+                                                                <a data-toggle="modal" href="#basic" id="pencil" class="addField"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text">{{'ADD_NOTE'|trans}}</span></a>
+                                                                {% endif%}
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12" >
+
+                                                            <ul class="timeline ulcls {% if((type == 'archive' or type == 'formerfederationmember' or contactModuleType == 'archivedsponsor') and count == 0)%}fg-note-nodata{% endif %}" id="pagdiv"  >
+
+                                                                {% include 'NotesBundle:note:notepagination.html.twig' with {'type': pageViewType} %}
+
+                                                            </ul>
+
+
+                                                            <div class="col-md-12 ajaxpag_show">
+                                                                {% if(count > 0) %}
+                                                                    <div class="timeline-show-text pull-left pagshow">
+                                                                        {% set start =1 %}
+                                                                        {% set Limit  %} {% if(count < limit) %} {{count}} {%else%} {{limit}} {% endif %} {% endset %}
+                                                                       {{'SHOWING_ENTRIES'|trans ({'%start%':start,'%limit%' : Limit,'%count%' : count})}}
+                                                                    </div>
+                                                                {% endif %}
+                                                                <div class="pull-right timeline-page">
+                                                                    <ul class="pagination bootpag">
+
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <!-- END PAGE CONTENT-->
+                                                </div>
+                                                <div class="tab-pane fade in" id="tab_1_2">  </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if type !='archive' and type !='formerfederationmember' and contactModuleType != 'archivedsponsor' %}                                        
+                                {% include 'clubadmin/savebutton.html.twig' with {'backLink': breadCrumb.back} %}
+                        {% endif%}
+                    </div>
+                </div>
+                <!-- END PAGE CONTENT-->
+            </form>
+        </div>
+    </div>
+    <div id="divTemplates">
+        {% include 'NotesBundle:note:addnewnote.html.twig' %}
+    </div> 
+    <!-- Connection Popup -->
+    <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog modal-wide">
+            <div class="modal-content fg-popup-wrap" id="popup_contents">
+            </div>
+        </div>
+    </div>
+    {% include 'ClubadminContactBundle:Archive:mergeContact.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>  
+    <script src="{{ asset('fgcustom/js/jquery-bootpag/jquery_bootpag_min.js')}}" type="text/javascript"></script>
+    <script type="text/javascript">
+          $(document).ready(function() {
+            FgPageTitlebar.init({
+                title       : true,
+                tab       : true,
+                search     :false,
+                actionMenu  : false,
+                tabType  :'server'
+               
+            }); 
+       });
+        
+        var pagetype = '{{pageViewType}}';
+        var noteUrl =  (pagetype == 'sponsor') ? "{{ path('sponsor_note',{ 'offset':offset,'contactid':contactid})}}" : "{{ path('contact_note',{ 'offset':offset,'contactid':contactid})}}";
+        var updateUrl =  (pagetype == 'sponsor') ? "{{path('sponsornote_update',{'contactid':contactid,'clubId':clubId})}}" : "{{path('contactnote_update',{'contactid':contactid,'clubId':clubId})}}";
+        var pages = {{pages}};
+        var count= {{count}};
+        var type = '{{type}}';
+        var paginationMsg =  "{{'SHOWING_ENTRIES'|trans ({'%start%':'#groupA#','%limit%' : '#groupB#','%count%' : '#groupC#'})}}";
+        var dirtyformconfirm = "{{'DIRTY_FORM_CONFIRM'|trans}}";
+        var clickClass = 'contactnote';
+        FgPopOver.customPophover('.fg-dev-tabicon-right-Popovers');
+        FgMoreMenu.initServerSide('paneltab');
+        
+        //handle  reactivate click 
+        reactivateOverviewPath = "{{path('get_all_contactids_reactivate')}}";
+        reactivateOverviewPopup = "{{path('get_reactivate_popup')}}";
+        reactivateSavePath = "{{ path('save_reactivate_contact')}}";
+        reactivateOerviewContactId = {{contactid}};
+        // Checking whether the logged user has only readonly permission.
+        // In that case need to disable all textareas
+        if(($('body').hasClass('fg-readonly-contact') && $('body').hasClass('fg-contact-module-blk')) || ($('body').hasClass('fg-readonly-sponsor') && $('body').hasClass('fg-sponsor-module-blk'))) {
+            $('textarea').attr("disabled", true);
+        }
+    </script>
+    <script src="{{ asset('fgcustom/js/note.js')}}" type="text/javascript"></script>
+{% endblock %}

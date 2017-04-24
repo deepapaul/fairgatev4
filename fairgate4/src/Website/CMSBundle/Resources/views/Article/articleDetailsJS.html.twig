@@ -1,0 +1,93 @@
+<script src="{{ asset('fgassets/website/js/FgCmsArticleDetails.js') }}" type="text/javascript"></script>
+<script src="{{ asset('fgassets/internal/js/page/ForumCkEditorBBCodeConfig.js')}}" type="text/javascript"></script>
+<script src="{{ asset('fgassets/internal/js/thumbnail.js') }}" type="text/javascript"></script>
+<script src="{{ asset('fgassets/global/js/accounting.js') }}" type="text/javascript"></script>
+<script type="text/javascript" src="{{ asset('fgassets/global/js/flaviusmatis-simplePagination/jquery.simplePagination.js')}}"></script>
+<script type="text/javascript" src="{{ asset('fgassets/website/js/fg-cms-frontend-portrait.js')}}"></script> 
+<script type="text/javascript">
+    var sitekey = '{{ pagecontentData.googleCaptchaSitekey }}';
+    var FgCmsArticleDetails = new FgCmsArticleDetails();
+    var defaultClubLang = '{{defaultClubLang}}';
+    var clubId = '{{ fgclub.get('id') }}';
+    var commentSavePath = '{{path('website_save_article_comments')}}';
+    var downloadPath = "{{path('website_download_article_attachment')}}";
+    var contactName = '{{contactName}}';
+    var isGuestContact = '{{isGuestContact}}';
+    var contactImage = '{{contactImage}}';
+    var commentCount = {{commentCount}};
+    var transArray = {
+        commentSingle: '{{'ARTICLE_COMMENT_SINGLE'|trans}}',
+        commentMultiple:'{{ 'ARTICLE_COMMENT_MULTIPLE'|trans}}',
+        onTrans: '{{'WEBSITE_ARTICLE_ON_TEXT'|trans}}'
+    }
+    var navigationLinks = {{navigation|json_encode()|raw}};
+    var articleData = {{articleData|json_encode()|raw}};
+    var portraitElementSettings = {{ pagecontentData.portraitElementSettings|json_encode()|raw }};
+        
+    if(typeof portraitElementSettings == 'object') {
+        var portContactNameTmplte = _.template($('#templateContactName').html());
+        var portEmailTmplte = _.template($('#templateEmail').html());
+        var portImageUpldTmplte = _.template($('#porttemplateImage').html());
+        var portDefaultTmplte = _.template($('#defaultTemplate').html());
+        var portFileUploadTemplate = _.template($('#portFileUploadTemplate').html());
+        var portProfilepicTemplate = _.template($('#portProfilepicTemplate').html());
+    }  
+    $(document).ready(function () {
+
+        var option = {
+            contactId: '',
+            currentClubId: clubId,
+            articleDataUrl: '{{ url('website_get_article_data')}}',
+            articleCommentsUrl: '{{ url('website_get_article_comments_data', {'articleId':articleId})}}',
+            articleId: '{{articleId}}',
+            encodedString: '{{encodedString}}'  
+        };
+
+        FgCmsArticleDetails.init(option);
+        FgCmsArticleDetails.renderArticleData();
+        FgCmsArticleDetails.renderArticleComments();
+        FgCmsArticleDetails.handleComments();
+        FgCmsArticleDetails.downloadAttachment();
+        ;
+    });
+</script>
+
+<script>
+    var articleTitle = FgCmsArticleDetails.getArticleTitle(articleData);
+    var pageTitleBarOptions = {
+        titleBar: true,
+        title: articleTitle,
+        hideNextPreviousOnSmallDevices: true,
+        nextPrevious: true,
+        nextPreviousLinks: ['',''],
+        nextPreviousLabel: ['',''],
+        nextPreviousSubLabel: ['',''],
+        backButton: true,
+        hideBackOnSmallDevices: true,
+        backButtonData: '',
+        backButtonLabel: '',
+        backButtonSubLabel: ''
+    };
+
+    if(typeof navigationLinks.articleDetailPrevLink !== 'undefined'){
+        pageTitleBarOptions.nextPreviousLinks[0] = navigationLinks.articleDetailPrevLink;
+        pageTitleBarOptions.nextPreviousLabel[0] = navigationLinks.articleDetailPrevLabel;
+        pageTitleBarOptions.nextPreviousSubLabel[0] = navigationLinks.articleDetailPrevSubLabel;
+    }
+    if(typeof navigationLinks.articleDetailNextLink !== 'undefined'){
+        pageTitleBarOptions.nextPreviousLinks[1] = navigationLinks.articleDetailNextLink;
+        pageTitleBarOptions.nextPreviousLabel[1] = navigationLinks.articleDetailNextLabel;
+        pageTitleBarOptions.nextPreviousSubLabel[1] = navigationLinks.articleDetailNextSubLabel;
+    }
+    if(typeof navigationLinks.articleDetailBackLink !== 'undefined'){
+        pageTitleBarOptions.backButtonData = navigationLinks.articleDetailBackLink;
+        pageTitleBarOptions.backButtonLabel = navigationLinks.articleDetailBackLabel;
+        pageTitleBarOptions.backButtonSubLabel = navigationLinks.articleDetailBackSubLabel;
+    }
+
+    var FgWebsitePageTitleBarObj = new FgWebsitePageTitleBar('fg-dev-pagetitle-container', pageTitleBarOptions);
+
+</script>
+
+  {# for google captcha in login internal #}
+<script src='https://www.google.com/recaptcha/api.js?hl={{ fgclub.get('default_system_lang') }}'></script>

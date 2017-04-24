@@ -1,0 +1,131 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'TOPNAV_TERMINOLOGY'|trans %}
+{% block pagecontent %}
+    <div class="portlet-body fg-theme-blue">
+        <div class="row">
+            <div class="col-md-12">    
+                <!-- BREADCRUMB STARTS -->
+                {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+                <!-- BREADCRUMB ENDS -->
+                <!-- Starts title And Language area -->  
+                {% include 'clubadmin/language_swtich.html.twig' with {'clubLanguages': clubLanguages,'clubDefaultLang':clubDefaultLang ,'title':'TOPNAV_TERMINOLOGY'} %}
+                <!-- Ends title And Language area -->  
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN COLUME AREA-->
+        <form  novalidate="novalidate"  class="form-horizontal" role="form" id="form" method="post">
+            <div class="row">        
+                <div class="col-md-12">
+                    <div class="panel panel-primary fg-bordernon panel-bg">                    
+                        {% if clubType == federation%}   {% include 'clubadmin/panel-heading.html.twig' with {'panel_title':'TERMINOLOGY_GENERAL_HEADING'} %} {% endif %}
+                        <div class="row">
+                            <div class="col-md-12">                            
+                                <div class="form-body fg-common-top">
+                                    {% for languages in clubLanguages %}                                     
+                                        {% for det in details %}                                                                                          
+                                                <div class="fg-terms-blk {% if(languages != clubDefaultLang) %} hide {% endif %}" data-lang={{languages}}>
+                                                    <div class="col-md-6 col-sm-6 col-lg-6">
+                                                        <label class="col-md-4 col-sm-4 control-label"><div class="fg-label-wrap">{{ form_label(form[det.defaultSingularTerm|replace({" " : "_"})~'_'~languages]) }}</div></label>
+                                                        <div class="col-md-8 col-sm-8">
+                                                            {{ form_widget(form[det.defaultSingularTerm|replace({" " : "_"})~'_'~languages], {'attr': {'class': 'form-control'}}) }}    
+                                                            {{ form_errors(form[det.defaultSingularTerm|replace({" " : "_"})~'_'~languages]) }}
+                                                        </div>
+                                                    </div>
+                                                    {% if det.defaultPluralTerm != '' %}
+                                                        <div class="col-md-6 col-sm-6 col-lg-6">
+                                                            <label class="col-md-4 control-label col-sm-4"><div class="fg-label-wrap">{{ form_label(form[det.defaultPluralTerm|replace({" " : "_"})~'_'~languages]) }}</div></label>
+                                                            <div class="col-md-8 col-sm-8">
+                                                                {{ form_widget(form[det.defaultPluralTerm|replace({" " : "_"})~'_'~languages], {'attr': {'class': 'form-control'}}) }}       
+                                                                {{ form_errors(form[det.defaultPluralTerm|replace({" " : "_"})~'_'~languages]) }}
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>                                                                                        
+                                        {% endfor %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {% if clubType == federation %}
+                <div class="row form-horizontal">
+                    <div class="col-md-12">
+                        <div class="panel panel-primary fg-bordernon panel-bg">                
+                            {% include 'clubadmin/panel-heading.html.twig' with {'panel_title':'TERMINOLOGY_FEDERATION_HEADING'} %}
+                            <div class="row">
+                                <div class="col-md-12 ">
+                                    <div class="form-body fg-common-top">
+
+                                        {% for languages in clubLanguages %}
+                                            {% for det in feddetails %}
+                                                <div class="fg-terms-blk {% if(languages != clubDefaultLang) %} hide {% endif %} " data-lang={{languages}}>
+                                                    <div class="col-md-6 col-sm-6 col-lg-6">
+                                                        <label class="col-md-4 col-sm-4 control-label"><div class="fg-label-wrap">{{ form_label(form1[det.defaultSingularTerm|replace({" " : "_"})~'_'~languages]) }}</div></label>
+                                                        <div class="col-md-8 col-sm-8">
+                                                            {{ form_widget(form1[det.defaultSingularTerm|replace({" " : "_"})~'_'~languages], {'attr': {'class': 'form-control'}}) }}    
+
+                                                            {{ form_errors(form1[det.defaultSingularTerm|replace({" " : "_"})~'_'~languages]) }}
+                                                        </div>
+                                                    </div>
+                                                    {% if det.defaultPluralTerm != ''%}
+                                                        <div class="col-md-6 col-sm-6 col-lg-6">
+                                                            <label class="col-md-4 col-sm-4 control-label">  <div class="fg-label-wrap"> {{ form_label(form1[det.defaultPluralTerm|replace({" " : "_"})~'_'~languages]) }}</div></label>
+                                                            <div class="col-md-8 col-sm-8">
+                                                                {{ form_widget(form1[det.defaultPluralTerm|replace({" " : "_"})~'_'~languages], {'attr': {'class': 'form-control'}}) }}       
+                                                                {{ form_errors(form1[det.defaultPluralTerm|replace({" " : "_"})~'_'~languages]) }}
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END PAGE CONTENT-->
+                    </div> 
+                </div>
+            {% endif %}
+            {% include 'clubadmin/savebutton.html.twig' with {'settings':'settings'} %}
+        </form>
+    </div>
+    <!-- END PAGE CONTENT-->
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/common.js')}}"></script>
+    <script type="text/javascript">
+        pageLoad();
+        var defaultLang = selectedLang = '{{clubDefaultLang}}';
+        FgUtility.showTranslation(defaultLang);
+        FgUtility.changeColorOnDelete();
+        $(document).ready(function () {
+            FgApp.init();
+
+        });
+        FormValidation.init('form', 'saveChanges');
+
+        function saveChanges() {
+            var objectGraph = {};
+            $("form :input").each(function () {
+                if ($(this).hasClass("fairgatedirty")) {
+                    var inputVal = ''
+                    inputVal = $(this).val();
+                    // if (inputVal !== '') {
+                    if (typeof $(this).attr('data-key') !== 'undefined') {
+                        converttojson(objectGraph, $(this).attr('data-key').split('.'), inputVal);
+                    }
+                    // }
+                }
+            });
+            var attributes = JSON.stringify(objectGraph);
+            FgXmlHttp.post("{{path('terminology_save')}}", {'attributes': attributes}, false);
+
+        }
+
+    </script>
+{% endblock %}

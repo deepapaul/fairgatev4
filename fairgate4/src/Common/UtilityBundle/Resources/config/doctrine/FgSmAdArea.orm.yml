@@ -1,0 +1,32 @@
+Common\UtilityBundle\Entity\FgSmAdArea:
+    repositoryClass: Common\UtilityBundle\Repository\FgSmAdAreaRepository
+    type: entity
+    table: fg_sm_ad_area
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        isSystem:
+            type: boolean
+            nullable: false
+            column: is_system
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,89 @@
+<script type="text/template" id="template-category-add">
+    <% dataKey = isNew ? 'new.' + catId : catId %>
+    <% dataName = isNew ? 'new_' + catId : catId %>
+    <div <% if (isNew) { %>style="display:none;"  <% } %> class="row fg-border-line sortables fg-sort-drag-hover <% if (isNew) { %> addednew <% } %>" id="<%- dataName %>">
+          <div class="fg-col-first-icon fg-sort-drag" name="fg-dev-sorting"><i class="fa fg-sort ui-draggable handle"  data-toggle="tooltip"></i></div>
+        <div class="col-md-12 fg-col-hack"> {#colordarkash#}
+            <div class="row">
+                <div class="col-sm-5 col-lg-5 col-xs-12 fg-clear-left">
+                    <div class="bookmark">
+                        <input type="checkbox" class="make-switch" id="box1">
+                        <% _.each(clubLanguages, function(clubLang) { %>
+                            <% catTitleLang = attributes['title']; %>
+                            <% if (typeof attributes['titleLang'] !== 'undefined') { %>
+                                <% catTitleLang = (typeof attributes['titleLang'][clubLang] !== 'undefined') ? attributes['titleLang'][clubLang] : ''; %>
+                            <% } %>
+                            <div dataerror-group="" data-lang="<%- clubLang %>">
+                                <input type="text" placeholder="<%- attributes['title'] %>" class="form-control input-sm fg-input-area <%- clubLang %>" data-key="<%- dataKey %>.i18n.<%- clubLang %>.titleLang" id="<%- dataName %>_i18n_<%- clubLang %>_titleLang" name="<%- dataName %>_i18n_<%- clubLang %>_titleLang" data-lang="<%- clubLang %>" value="<%- catTitleLang %>" <% if (clubLang == defaultLang) { %> required="true" <% } else { %>data-notrequired="true"<% } %> />
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+                <div class="col-sm-2 col-lg-2 fg-padding-tp-three"> 
+                    <% if (catType == 'team') { %>
+                        <% if (attributes['team_count'] == 1) { %>
+                            <%- attributes['team_count'] %> {%trans with {'%team%': fgtwig.getTerminolgyName('Team', singular)}%}TEAMS_%team%{%endtrans%}
+                        <% } else if (attributes['team_count'] > 0) { %>
+                            <%- attributes['team_count'] %> {%trans with {'%team%': fgtwig.getTerminolgyName('Team', plural)}%}TEAMS_%team%{%endtrans%}
+                        <% } else { %>
+                            0 {%trans with {'%team%': fgtwig.getTerminolgyName('Team', plural)}%}TEAMS_%team%{%endtrans%}
+                        <% } %>
+                    <% } else { %>
+                        <% if (attributes['role_count'] == 1) { %>
+                            <%- attributes['role_count'] %> {%trans%}role{%endtrans%} 
+                        <% } else if (attributes['role_count'] > 0) { %>
+                            <%- attributes['role_count'] %> {%trans%}roles{%endtrans%}
+                        <% } else { %>
+                            0 {%trans%}roles{%endtrans%}
+                        <% } %>
+                    <% } %>
+                </div>
+                <div class="col-sm-3 col-lg-3 fg-padding-tp-three" name="fg-dev-manage">
+                    <% if (!isNew) { %>
+                        <% if (catType == 'team') { %>
+                            <a href="#" data-type="redirect" data-catType="<%- catType %>" data-catid="<%- catId %>">{%trans with {'%teams%': fgtwig.getTerminolgyName('Team',plural)}%}SIDEBAR_TEAM_SETTINGS{%endtrans%}&hellip;</a>
+                        <% } else if(catType == 'filter_role') { %>
+                            <a href="#" data-type="redirect" data-catType="<%- catType %>" data-catid="<%- catId %>">{%trans%}SIDEBAR_FILTERROLE_CATEGORY_SETTINGS{%endtrans%}&hellip;</a>
+                        <% } else { %>
+                            <a href="#" data-type="redirect" data-catType="<%- catType %>" data-catid="<%- catId %>">{%trans%}SIDEBAR_ROLE_CATEGORY_SETTINGS{%endtrans%}&hellip;</a>
+                        <% } %>
+                    <% } %>
+                </div>
+            <!--    <div class="col-sm-2 col-lg-2">
+                    {#<!-- For render the switch key(on/off) button -->#}
+                    <%  if (!(catType == 'team' || catType == 'filter_role' || catType == 'club')) {   %>
+                        <% disableRow = ((attributes['cat_count'] > 0) && (attributes['isActive'] == '1')) ? true : false %>
+                        <% isActive = attributes['isActive'] %>
+                        {#% include 'clubadmin/common.html.twig' with {'type': 'underscorejs_switch', 'section': '', 'hasDataKey': true}%#}
+                    <% } %>
+                </div>!-->
+            </div>
+        </div>
+        {#<!-- For render the delete button -->#}
+        <% if (catType == 'team') { %>
+            <% if (attributes['team_count'] > 0) { %>
+                <div class="fg-col-last-icon" name="fg-dev-close-icon"><div class="pull-right deletediv"><i class="fa fa-lock fa-2x ash"></i></div></div>
+            <% } else { %>
+                {% include 'clubadmin/common.html.twig' with {'type': 'underscorejs_delete'} %}
+            <% } %>
+        <% } else { %>
+            <% if (attributes['contactCount'] > 0) { %>
+                <div class="fg-col-last-icon" name="fg-dev-close-icon"><div class="pull-right deletediv"><i class="fa fa-lock fa-2x ash"></i></div></div>
+            <% } else { %>
+                {% include 'clubadmin/common.html.twig' with {'type': 'underscorejs_delete'} %}
+            <% } %>
+        <% } %>
+        <% if ((catType == 'fed_cat')) { %>
+            <input type="hidden" data-key="<%- dataKey %>.is_fed_category" name="<%- dataName %>_is_fed_category" id="<%- dataName %>_is_fed_category" value="1" />
+        <% } %> 
+        <% if (catType == 'filter_role') { %>
+            <% assign_value = 'filter-driven'%>
+        <% } else { %>
+            <% assign_value = 'manual'%>
+        <% } %> 
+        <% if (catType != 'team') { %>
+            <input type="hidden" data-key="<%- dataKey %>.contact_assign" name="<%- dataName %>_contact_assign" id="<%- dataName %>_contact_assign" value="<%- assign_value%>" />
+        <% } %> 
+        <input type="hidden" class="sorthidden" data-key="<%- dataKey %>.sort_order" name="<%- dataName %>_sort_order" id="<%- dataName %>_sort_order" value="" data-element="sortorder" data-sort-parent="role_category_sort" />
+    </div>
+</script>

@@ -1,0 +1,92 @@
+<script type="text/template" id="template_header_navigation">
+    <% var mainMenus = _.filter(data, function(row) { return (row.parentId == 1); }); %>
+    <% mainMenus = _.sortBy(mainMenus, 'sortOrder'); %>
+    <% var subData = _.difference(data, mainMenus); %>
+    <div class="row fg-web-main-nav-bar ">
+        <div class="container">
+            <div class="fg-logo-wrapper">
+                <a href="<%- logoPath %>" class="fg-logo">
+                <% _.each(config.header_options.header_label,function(itemI,keyI){ %>
+                    <% if(keyI == 'TM_DEFAULT_LOGO'){ %>
+                     <img src="<%- headerPath.original %>/<%- itemI.file_name %>" class="fg-original fg-web-logo-md <%- classO %>">
+                     <img src="<%- headerPath.original %>/<%- itemI.file_name %>" class="fg-invisible fg-placeholder-logo <%- classO %>">
+                    <% }else if(keyI == 'TM_SHRINKED_LOGO'){ %>
+                       <img src="<%- headerPath.original %>/<%- itemI.file_name %>" class="fg-shrinked fg-web-logo-sm <%- classS %>" >
+                      <% if(typeof(config.header_options.header_label.TM_DEFAULT_LOGO)=='undefined' ){ %>
+                           <img src="<%- headerPath.original %>/<%- itemI.file_name %>" class="fg-invisible fg-placeholder-logo <%- classO %>">
+                      <% }%>
+                    
+                    <% }else{ %>
+                       <img src="<%- headerPath.original %>/<%- itemI.file_name %>" class="fg-web-logo-xs <%- classM %>">
+                       <% if(typeof(config.header_options.header_label.TM_DEFAULT_LOGO)=='undefined' && typeof(config.header_options.header_label.TM_SHRINKED_LOGO)=='undefined'){ %>
+                           <img src="<%- headerPath.original %>/<%- itemI.file_name %>" class="fg-invisible fg-placeholder-logo <%- classO %>">
+                      <% }%>
+                    <% }
+                    }); %>
+                </a>
+            </div>
+            <div class="fg-web-top-nav-icon visible-xs visible-sm" ><i class="fa fa fa-ellipsis-v"></i></div>
+            <div class="fg-web-nav-icon visible-xs visible-sm"><i class="fa fa-bars fa-3x"></i></div>
+            <nav class="navbar navbar-default fg-web-main-nav">
+                <ul class="nav navbar-nav" id="fg-web-header-menus">
+                </ul>
+            </nav>
+        </div>
+    </div>
+</script>
+<script type="text/template" id="template_header_navigation_level1">
+    <% if (!_.isEmpty(levelObject.content.trim()) || item.page_id !== null || item.external_link !== null) { %>
+        <% var subNav = (item.page_id !== null || item.external_link !== null) ? false : true; %>
+        <% var navigationUrl = (subNav) ? levelObject.subNavigationData[item.id].navigation_url : item.navigation_url; %>
+        <% var navExternalLink = (subNav) ? levelObject.subNavigationData[item.id].external_link : item.external_link; %> 
+
+        <li class="<% if (navigationUrl == levelObject.activeHeaderMenu) { %>active <% } %><% if (!_.isEmpty(levelObject.content)) { %>dropdown <% } %>">
+            <% if (navExternalLink !== null) { %>
+                <a data-id="<%- item.id %>" href = "<%- navExternalLink %>" target="_blank">
+            <% } else { %>
+                <a data-id="<%- item.id %>" href = "<%- levelObject.navPath.replace('**dummy**', navigationUrl) %>">
+            <% } %>
+            <% var defaultTitle = (_.has(item.langTitle, levelObject.clubLang)) ? (!_.isEmpty(item.langTitle[levelObject.clubLang].title_lang) ? item.langTitle[levelObject.clubLang].title_lang : item.title) : item.title;  %>
+            <%- (_.has(item.langTitle, levelObject.lang)) ? (!_.isEmpty(item.langTitle[levelObject.lang].title_lang) ? item.langTitle[levelObject.lang].title_lang : defaultTitle) : defaultTitle %></a>
+            <% if (!_.isEmpty(levelObject.content.trim())) { %>
+                <span href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="caret dropdown-toggle"></span>
+                <ul class="dropdown-menu">
+                    <%= levelObject.content %>
+                </ul>
+            <% } %>
+        </li>
+    <% } %>
+</script>
+<script type="text/template" id="template_header_navigation_level2">
+    <% if (!_.isEmpty(levelObject.content.trim()) || item.page_id !== null || item.external_link !== null) { %>
+        <% var subNav = (item.page_id !== null || item.external_link !== null) ? false : true; %>
+        <% var navigationUrl = (subNav) ? levelObject.subNavigationData[item.id].navigation_url : item.navigation_url; %>
+        <% var navExternalLink = (subNav) ? levelObject.subNavigationData[item.id].external_link : item.external_link; %> 
+        
+        <li class="<% if (navigationUrl == levelObject.activeHeaderMenu) { %>active fg-dev-nav-active <% } %><% if (!_.isEmpty(levelObject.content)) { %>dropdown-submenu <% } %>">
+            <% if (navExternalLink !== null) { %>
+                <a data-id="<%- item.id %>" href = "<%- navExternalLink %>" target="_blank">
+            <% } else { %>
+                <a data-id="<%- item.id %>" href = "<%- levelObject.navPath.replace('**dummy**', navigationUrl) %>">
+            <% } %>
+            <% var defaultTitle = (_.has(item.langTitle, levelObject.clubLang)) ? (!_.isEmpty(item.langTitle[levelObject.clubLang].title_lang) ? item.langTitle[levelObject.clubLang].title_lang : item.title) : item.title;  %>
+            <%- (_.contains(item.langTitle, levelObject.lang)) ? (!_.isEmpty(item.langTitle[levelObject.lang].title_lang) ? item.langTitle[levelObject.lang].title_lang : defaultTitle) : defaultTitle %></a>
+            <% if (!_.isEmpty(levelObject.content.trim())) { %>
+                    <span class="fg-dropdown-toggle"></span>
+                    <ul class="dropdown-menu fg-web-open-left">
+                        <%= levelObject.content %>
+                    </ul>
+            <% } %>
+        </li>
+    <% } %>
+</script>
+
+<script type="text/template" id="template_lang_navigation"> 
+ <div class="current-language"><a href="javascript:void(0);"><%- deflang.toUpperCase() %></a> 
+ <ul id="fg-website-lang-ul" class="dropdown-menu pull-right fg-web-language-list">
+          <% _.each(langNav,function(itemI,keyI){ %>
+           <li  class="<% if (keyI == deflang) { %> active  <% } %>"><a data-id="<%- keyI  %>" href="javascript:void(0);"><%-  itemI.toUpperCase() %> </a></li>
+               <% }); %>
+            </ul>
+</div>    
+</script>

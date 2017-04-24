@@ -1,0 +1,102 @@
+Common\UtilityBundle\Entity\FgCmChangeLog:
+    repositoryClass: Common\UtilityBundle\Repository\FgCmChangeLogRepository
+    type: entity
+    table: fg_cm_change_log
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        date:
+            type: datetime
+            nullable: true
+        kind:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+        field:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        valueBefore:
+            type: text
+            nullable: true
+            column: value_before
+        valueAfter:
+            type: text
+            nullable: true
+            column: value_after
+        isConfirmed:
+            type: boolean
+            nullable: true
+            column: is_confirmed
+        historicalId:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: historical_id
+        isHistorical:
+            type: boolean
+            nullable: false
+            column: is_historical
+        attributeId:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: attribute_id
+        confirmedDate:
+            type: datetime
+            nullable: true
+            column: confirmed_date
+    manyToOne:
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        changedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                changed_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        confirmedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                confirmed_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        newsletter:
+            targetEntity: FgCnNewsletter
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                newsletter_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

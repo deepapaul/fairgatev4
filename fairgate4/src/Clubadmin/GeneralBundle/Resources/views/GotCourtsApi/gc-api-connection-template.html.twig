@@ -1,0 +1,44 @@
+<script type="text/template" id="templateContactApplicationFormField">
+    <% if(step == 2 || step == 3 || step == 4) { %>    
+    <div>
+        <label class="alert alert-success fg-marg-top-0  fg-marg-btm-15 show">{{'GN_SETTINGS_GOTCOURT_API_CONNECTION_LABEL_STEP2'|trans}}
+            <% if (step == 4){ %>
+                <br />{{'GN_SETTINGS_GOTCOURT_API_CONNECTION_LABEL_STEP4'|trans}}
+            <% } %>
+        </label>
+        <div class="col-sm-12 fg-pad-0 fg-marg-btm-15">
+            <button type="button" class=" btn default" id="fg-api-video-btn" name="fg-api-video-btn" data-toggle="modal" data-target="#gc-api-video" ><i class="fg-marg-right-5 fa fa-video-camera"></i>{{'GN_SETTINGS_GOTCOURT_API_VIDEO'|trans}}</button>
+        </div>
+        <div class="col-sm-6 fg-pad-0 fg-marg-btm-15">
+            <input type="text" class="form-control ays-ignore" name="fg-dev-api-token-text" id="fg-dev-api-token-text" value="<%- token %>" readonly/> 
+            <input type="hidden" class="form-control ays-ignore" name="fg-dev-club-api-id" id="fg-dev-club-api-id" value="<%- clubApiId %>"/> 
+        </div>
+        
+        <div class="clearfix"></div>
+        <% if (step == 2){ %>
+            <button type="button" class="btn default" name="fg-dev-generate-new-token-btn" id="fg-dev-generate-new-token-btn"><i class="fa fa-refresh" ></i> {{'GN_SETTINGS_GENERATE_NEW_TOKEN_BUTTON'|trans}}</button>
+        <% } else { %>    
+            <button type="button" class="btn default" name="fg-dev-copy-token-clipboard-btn"  id="fg-dev-copy-token-clipboard-btn"  data-rel="tooltip" title="{{'GN_SETTINGS_COPY_TOKEN_POPOVER_MESSAGE'|trans}}" data-clipboard-target="#fg-dev-api-token-text"><i class="fa fa-paste" ></i> {{'GN_SETTINGS_COPY_TOKEN_TO_CLIPBOARD_BUTTON'|trans}}</button>
+            <button type="button" class="btn default text-red" name="fg-dev-regenerate-token-btn" id="fg-dev-regenerate-token-btn"  data-rel="tooltip" title="{{'GN_SETTINGS_REGENERATE_TOKEN_POPOVER_MESSAGE'|trans}}"><i class="fa fa-refresh text-red" ></i> {{'GN_SETTINGS_REGENERATE_TOKEN_BUTTON'|trans}}</button>
+        <% } %>      
+            <button type="button" class="btn default text-red" name="fg-dev-cancel-api-service-btn" id="fg-dev-cancel-api-service-btn" data-rel="tooltip" title="{{'GN_SETTINGS_CANCEL_SERVICE_POPOVER_MESSAGE'|trans}}"><i class="fa fa-times-circle text-red" ></i> {{'GN_SETTINGS_CANCEL_API_SERVICE_BUTTON'|trans}}</button>
+    </div>
+    <% } else { %> 
+        <div>
+            <label class="fg-marg-btm-15">{{'GN_SETTINGS_GOTCOURT_API_CONNECTION_LABEL_STEP1'|trans|raw}}</label>
+            <div class="fg-clear">                
+                <input type="checkbox" class="ays-ignore fg-dis-IB fg-v-top" name="fg-dev-book-gcapi-checkbox" value="1" id="fg-dev-book-gcapi-checkbox"/>
+                <label for="fg-dev-book-gcapi-checkbox" class="fg-cursor fg-dis-IB fg-v-top">{{'GN_SETTINGS_BOOK_API_CONNECTION_LABEL'|trans|raw}}</label>
+            </div>
+    
+            <div class="clearfix"></div>
+            <button type="button" class="btn default fg-disabled-link" disabled="disabled" id="fg-book-gcapi-connection-btn" name="fg-book-gcapi-connection-btn" ><i class="fa fa-check-square-o" ></i> {{'GN_SETTINGS_GOTCOURT_API_CONNECTION_SAVE_BUTTON'|trans}}</button>
+            <button type="button" class="btn default" id="fg-legal-term-btn" name="fg-legal-term-btn" data-toggle="modal" data-target="#gc-legalterms" >{{'GN_SETTINGS_GOTCOURT_API_LEGAL_TERMS_BUTTON'|trans}}</button>
+            <button type="button" class=" btn default" id="fg-api-video-btn" name="fg-api-video-btn" data-toggle="modal" data-target="#gc-api-video" ><i class="fg-marg-right-5 fa fa-video-camera"></i>{{'GN_SETTINGS_GOTCOURT_API_VIDEO'|trans}}</button>
+        </div>
+    <% } %>
+
+    <div class="clearfix"></div>
+
+    {% include 'ClubadminGeneralBundle:GotCourtsApi:gc-legalterms.html.twig' %}
+</script>

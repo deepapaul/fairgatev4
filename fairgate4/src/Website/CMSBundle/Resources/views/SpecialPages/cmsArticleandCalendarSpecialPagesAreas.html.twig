@@ -1,0 +1,29 @@
+<div class="form-group fg-clear fg-cms-article-areas">
+    <label class="control-label text-right fg-label-valign col-lg-3 col-md-3" for="articleTitle">{{'ARTICLE_AREAS'|trans}}</label>
+    <div class="col-lg-9 col-md-8 fg-error-add-required ">
+        <select class="form-control selectpicker"  multiple="multiple" name='specialPageArea' id='specialPageArea'>
+            <optgroup label="">
+                <option value="ALL_AREAS" class="single fg-arrow-all" >{{'CMS_ALL_AREAS'|trans }}</option>
+            </optgroup>
+            <optgroup label="">
+                <option class="multiple"  value="{{fgclub.get('id')}}">{{fgclub.get('title')|capitalize}}</option>
+            </optgroup>
+            {% if areas.teams is not empty %}
+                <optgroup label="{{fgtwig.getTerminolgyName('Team',plural)}}">
+                    {% for key, data in areas.teams %}
+                        <option class="multiple" {{selected|default('')}} value="{{ key }}"  >{{ data }}</option>
+                    {% endfor %}
+                </optgroup>
+            {% endif %}
+            {% if areas.workgroups is not empty %}
+                <optgroup label="{{'CMS_WORKGROUP'|trans}}">
+                    {% for key, data in areas.workgroups %}
+                        <option class="multiple" {{selected|default('')}} value="{{ key }}" > {% if (data=='Executive Board') %} {{fgtwig.getTerminolgyName('Executive Board',singular)}} {% else %} {{ data }} {% endif %}</option>
+                    {% endfor %}
+                </optgroup>
+            {% endif %}
+
+        </select>
+
+    </div>
+</div>

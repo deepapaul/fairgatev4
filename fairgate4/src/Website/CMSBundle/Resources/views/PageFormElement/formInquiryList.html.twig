@@ -1,0 +1,70 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/website/css/style-cms.css') }}" type="text/css" rel="stylesheet" />
+{% endblock %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTAINER -->
+    <div class="row fg-theme-green">
+        <div class="col-md-12">
+            <!-- BEGIN BREADCRUMB-->
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <!-- END BREADCRUMB-->
+            <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+            {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'contactId': '', 'tabs': tabs, 'activeTab': 2, 'hrefLink':'1', 'roleCount' : '' , 'type':'', 'url' : '', 'clubLanguages':meta.clubLanguages, 'clubDefaultLang':meta.clubDefaultLang} %}
+            <!-- END PAGE TITLE AND PANEL TABS -->
+            <!-- BEGIN CONTENT -->
+            <div class="clearfix"></div>
+            <div class="fg-inquiry-list-wrapper row">
+                <div class="col-md-12">
+                    <div class="pull-right fg-dev-form-row-select" id="fg_dev_formedit_row_length"></div>
+                </div>
+                <table class="dataTable
+                       table
+                       table-bordered
+                       table-hover
+                       table-condensed
+                       dataTable-dragable
+                       fg-brdr-btm"
+                       id="datatable-inquiry-list" dataTable-popover="true" dataTable-hover="true">
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block underscoretemplate %}
+    {% include 'WebsiteCMSBundle:FormElementInquiries:templateInquiryList.html.twig' %} 
+{% endblock %}
+{% block javascripts %}
+    <script src="/fgassets/website/js/Fg_cms_inquiry_list.js" type="text/javascript"></script>
+    <script src="/fgassets/global/js/datatable/buttons/buttons.html5.min.js" type="text/javascript"></script>
+    <script src="/fgassets/global/js/datatable/buttons/dataTables.buttons.js" type="text/javascript"></script>
+    <script>
+        
+        var CmsInquiryList = new FgCmsInquiryList();
+        var actionMenu = {{actionMenu|json_encode()|raw}};
+        var formId = '{{formId}}';
+        $(function () {
+            $(".fg-action-menu-wrapper").FgPageTitlebar({
+                title: true,
+                tab: true,
+                tabType: 'server',
+                row2: true
+            });
+            CmsInquiryList.inquiryListAjaxPath = "{{ path("website_cms_edit_inquiries_form",{'elementId' : "placeholder"}) }}";
+            CmsInquiryList.isAllFormInquiries = false;
+            CmsInquiryList.contactProfilePath = "{{ path('internal_community_profile', {'contactId': "placeholder" }) }}";
+            CmsInquiryList.inquiryDeletePath = '{{ path("website_cms_delete_inquiry") }}';
+            CmsInquiryList.inquityDetailsPopupPath = '{{ path("website_cms_get_inquiries_form_data", {'inquiryId' : "placeholder"}) }}';
+            CmsInquiryList.exportAttachmantpath = '{{ path("website_cms_download_inquiries_form_attachments", {'elementId' : "placeholder"}) }}'; 
+            CmsInquiryList.target = 'formEdit';
+            CmsInquiryList.formFileUploadDir = "{{formUploadDirectory}}";
+            CmsInquiryList.attachmentDownloadPath = "{{ path('website_cms_inquiriy_attachment_download', {'fileName':'|placeholder|'}) }}";
+            CmsInquiryList.renderFormInquiryList(formId); 
+        });
+
+        function manipulationFn(data){
+            CmsInquiryList.tableData = data;
+        }
+    </script>
+{% endblock %}

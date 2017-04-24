@@ -1,0 +1,40 @@
+
+                            <ul class="fg-files-uploaded-lists-wrapper">
+                                <%
+                              _.each(backgroundDetails.full_screen,function(media,key){ %> 
+                                       
+                            <li class="fg-files-uploaded-list sortables fileimgcontent fg-image-area" id="<%- media.itemId %>">
+                                <i class="fa fa-ellipsis-v fg-drag fg-media-sort"></i>
+                                <div class="col-sm-2 fg-thumb-wrapper">
+                                    <img src="<%- media.imgSrc %>" class="fg-thumb" id="article-img-preview-<%- media.itemId %>" >
+                                    <input type="text" name="imageSort" data-key="backgroundimage.fullscreen.media.images.media.update.<%- media.itemId %>.sort_order" class="hide sort-val fg-dev-sortable image-order" value="<%- media.sortOrder %>">
+                                    <input class="hide" name="imageItemId" type="text" value="<%- media.itemId %>" data-key="backgroundimage.fullscreen.media.images.media.update.<%- media.itemId %>.itemid">
+                                    <input type="text" class="hide" value="" id="<%-media.itemId %>_is_deleted-hid" data-key="backgroundimage.fullscreen.media.images.media.update.<%- media.itemId %>.delete" name="hid-is_deleted" >
+                                    
+                                </div>
+                                <div class="col-sm-2 col-sm-offset-5 fg-file-size"><%- FgFileUpload.formatFileSize(parseInt(media.fileSize)) %></div>
+                                <div class="col-sm-3">
+
+                                </div>                                
+                                
+                                    <div class="closeico">
+                                        <input type="checkbox" class="make-switch fg-delicon delete-article-attachment" value="1" id="<%-media.itemId %>_is_deleted" data-key="backgroundimage.fullscreen.media.images.media.update.<%- media.itemId %>.is_deleted" name="is_deleted" data-inactiveblock="changecolor" data-parentid="<%-media.itemId %>">
+                                        <label for="<%-media.itemId %>_is_deleted"></label>
+                                    </div>
+                        
+                                
+                                
+                                <div class="clearfix"></div>
+                            </li>
+                            
+                            
+                            
+                            
+                            
+                        <% }) %>                    
+                             
+                           </ul>                            
+                                                   
+                                                   
+                                                   
+                                                   

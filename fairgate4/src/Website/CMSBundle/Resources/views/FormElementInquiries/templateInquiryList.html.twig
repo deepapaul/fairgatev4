@@ -1,0 +1,140 @@
+<script type="text/template" id="inquiryListHeaderTemplate">
+    <thead>
+        <tr>
+        <% if(isAllFormInquiries){ %>
+            <th> {{'CMS_CREATED_AT'|trans}} </th>
+            <th> {{'CMS_FORM'|trans}} </th>
+            <th> {{'CMS_REQUEST'|trans}} </th>
+            <th> {{'CMS_USER'|trans}} </th>
+        <% } else { %>
+            <th><div><input type="checkbox" name="check_all" id="check_all" class="dataTable_checkall fg-dev-avoidicon-behaviour"><i class='chk_cnt' ></i></div></th>
+            <th> {{'CMS_CREATED_AT'|trans}} </th>
+            <% _.each(tableColumns, function(el,index){ %>
+                <% var isActiveIcon = '';
+                    if(el.isActive == false){
+                        isActiveIcon = '<i class="fa fa-eye-slash fg-pad-left-5"></i>'
+                } %>
+                <th class="<%- el.fieldType == "fileupload" ? "fileField" : "" %>"> <%- el.fieldname %><%= isActiveIcon %> </th>
+            <% }); %>
+        <% } %>
+            
+        
+        </tr>
+    </thead>
+</script>
+
+<script type="text/template" id="inquiryDetailPopupTemplate">
+<div class="modal-content">
+    <div class="modal-header fg-modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title"><%- formTitle %></h4>
+    </div>
+    <div class="modal-body fg-modal-text">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet-body form">
+                    <div class="form-body">
+                        <div class="form-group fg-overview-list">                       
+                            <dl>   
+                                <% var sortedData =  _.sortBy(data, 'fieldSortOrder');
+                                _.each(sortedData, function(el, i){ %>
+                                    <dt><%- el.fieldName %></dt>
+                                    <dd><% if(el.fieldType == 'fileupload'){ %>
+                                        <% var downloadFilePath =  downloadPath.replace("|placeholder|", el.fieldValue); %>
+                                            <a href="<%- downloadFilePath %>"><%- el.fieldValue %></a>
+                                        <% } else if(el.fieldType == 'url') { %>
+                                            <a target="_blank" href="<%- el.fieldValue %>"><%- el.fieldValue %></a>
+                                        <% } else if(el.fieldType == 'number') { %>
+                                        <%  
+                                            var val = el.fieldValueForPopup;
+                                                if(val.search(',')){
+                                                   val = val.replace(',', '.');
+                                                }
+                                        %>
+                                            <%- FgClubSettings.formatNumber(val) %>
+                                        <% } else { %>
+                                            <%= el.fieldValueForPopup %>
+                                        <% } %>
+                                    </dd>
+                                 <% }); %> 
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</script>
+<script type="text/template" id="inquiryDeletePopupTemplate">
+    <%
+        if(data.length >1){
+            var title = '{{'DELETE_FORM_INQUIRY_POPUP_TITLE_PLURAL'|trans}}';
+            var msg = '{{'DELETE_FORM_INQUIRY_CONFIRM_MESSAGE_PLURAL'|trans({'%count%': '**placeholder**'})}}';
+            msg = msg.replace('**placeholder**', data.length);
+            
+        } else if(data.length ==1){
+            var title = '{{'DELETE_FORM_INQUIRY_POPUP_TITLE_SINGULAR'|trans}}';
+            var msg = '{{'DELETE_FORM_INQUIRY_CONFIRM_MESSAGE_SINGULAR'|trans}}';
+        }else{
+            var title = '{{'DELETE_FORM_INQUIRY_POPUP_TITLE_PLURAL'|trans}}'; 
+            var msg = '{{'DELETE_FORM_INQUIRY_CONFIRM_MESSAGE_ALL'|trans}}';
+    }
+    var inquiryIds = (data.length > 0) ? data.join() : 'ALL';
+    %>
+<div class="modal-content">
+    <div class="modal-header fg-modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+      <h4 class="modal-title"><%-title%></h4>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="form-group">
+                        <label class="col-lg-12 col-md-12 col-xs-12">
+                            <%-msg%>
+                        </label>
+                    </div>
+                </div>
+                <input type="hidden" id="hiddenInquiryIds" value="<%- inquiryIds %>">
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+    {% include 'internal/savebuttonPopup.html.twig' with {'button_val':'DELETE'|trans} %}
+</div>
+</script>
+<script type="text/template" id="inquiryExportPopupTemplate">    
+<div class="modal-content">
+    <div class="modal-header fg-modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+      <h4 class="modal-title">{{'FORM_INQUIRY_EXPORT'|trans}}</h4>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body form-horizontal">                    
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="radios">{{'CSV_TYPE'|trans}}</label>
+                        <div class="col-sm-9 fg-marg-top-5"> 
+                        <label class="radio-inline" for="exportSeparator0">                        
+                          <input type="radio" name="exportSeparator" id="exportSeparator0" value=";" checked >
+                          {{'SEMICOLON_SEPARATED'|trans}}
+                        </label> 
+                        <label class="radio-inline" for="exportSeparator1">
+                          <input type="radio" name="exportSeparator" id="exportSeparator1" value="," >
+                          {{'COMMA_SEPARATED'|trans}}
+                        </label>
+                    </div>
+                  </div>
+                </div>                
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+    {% include 'internal/savebuttonPopup.html.twig' with {'button_val':'EXPORT'|trans, 'button_id':'exportInquryBtn'} %}
+</div>
+</script>

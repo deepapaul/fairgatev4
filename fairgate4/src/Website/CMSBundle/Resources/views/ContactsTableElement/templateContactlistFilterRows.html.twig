@@ -1,0 +1,40 @@
+<script type="text/template" id="contactListFilterData">
+    <% dataKey = dataKey %>
+    <% linkFlag = 0; %>
+    <div class="row fg-border-line sortables fg-sort-drag-hover" id="<%- dataKey %>">
+        <div class="fg-col-first-icon fg-sort-drag" name="fg-dev-contact-list-sorting">
+        <i class="fa fg-sort ui-draggable handle fg-dev-field-sort-handle"></i>
+        <input type="text" class="fg-dev-newfield fg-dev-sortOrder optionSort sortVal hide" data-key="<%- selectedFieldType %>.<%- dataKey %>.sortOrder"
+                id="<%- selectedFieldType %>_<%- dataKey %>_sortOrder" name ="<%- selectedFieldType %>_<%- dataKey %>_sortOrder" value="<%- sortOrder %>">
+        </div>
+        <div class="col-md-12 fg-col-hack">
+            <div class="row">
+                <div class="col-xs-12 col-sm-5 col-md-4 col-lg-3" data-toggle="tooltip" title="{{'CONTACT_LIST_FILTER_TOOLTIP_INPUT_FIELD'|trans({}, 'tooltip') }}">
+                    <% _.each(clubLanguages, function(clubLang) { %>
+                        <% requiredAttr = ((clubLang == defaultLang) ? ' required=true ':' data-notrequired = true')%>
+                        <div dataerror-group data-lang="<%- clubLang %>">
+                            <input type="text" data-key="<%- selectedFieldType %>.<%- dataKey %>.title.<%- clubLang %>" name="<%- selectedFieldType %>_<%- dataKey %>_title_<%- clubLang %>" id="<%- selectedFieldType %>_<%- dataKey %>_title_<%- clubLang %>" class="form-control input-sm fg-input-area <%- clubLang %>" placeholder="<%- inputFieldNameDefault %>" data-lang="<%- clubLang %>" value="<%- inputFieldArray[clubLang] %>" <%- requiredAttr %> />
+                        </div>
+                    <% }); %>
+                </div>
+                <input type="text" class="hide" data-key="<%- selectedFieldType %>.<%- dataKey %>.attributeId" id="<%- selectedFieldType %>_<%- dataKey %>_attributeId" name="<%- selectedFieldType %>_<%- dataKey %>_attributeId" data-key="<%- selectedFieldType %>_<%- dataKey %>_attributeId" value="<%- selectedField %>">
+                <div class="col-sm-5 col-md-6 col-lg-6 ">
+                    <label class="fg-marg-btm-0 fg-marg-top-3"><%- selectedFieldLable %></label>
+                    <% if(addressType == 'invoice') { %>
+                        <i class="fa fa-money"></i>
+                    <% } else if(addressType == 'correspondance') { %>
+                        <i class="fa fa-home"></i>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    {#<!-- For render the delete button -->#}
+        <div class="<%- (type == 'new')?'fg-last-icon  new_row_rmv':'fg-last-icon' %>">
+            <div class="closeico">
+                <input type="checkbox" class="make-switch" data-key="<%- selectedFieldType %>.<%- dataKey %>.is_deleted" name="<%- selectedFieldType %>_<%- dataKey %>_is_deleted"  id="<%- selectedFieldType %>_<%- dataKey %>_is_deleted"  <% if(type == 'old') { %>  data-inactiveblock="changecolor" data-parentid="<%- dataKey %>" <% } %>>
+                <label for="<%- selectedFieldType %>_<%- dataKey %>_is_deleted"></label>
+            </div>
+        </div>
+    </div>
+</script>
+

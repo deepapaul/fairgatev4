@@ -1,0 +1,37 @@
+Common\UtilityBundle\Entity\FgSmCategory:
+    repositoryClass: Common\UtilityBundle\Repository\FgSmCategoryRepository
+    type: entity
+    table: fg_sm_category
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        isSystem:
+            type: boolean
+            nullable: false
+            column: is_system
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sort_order
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

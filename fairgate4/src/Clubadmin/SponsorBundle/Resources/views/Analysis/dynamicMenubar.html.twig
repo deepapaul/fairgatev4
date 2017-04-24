@@ -1,0 +1,29 @@
+<div class="btn-group col-md-12 col-sm-12 col-xx-12 fg-left-zero">
+    <button class="btn tableaction fgContactdrop" data-toggle="dropdown" data-type="active"> <i class="fa fa-bars fa-2x"></i></button>
+    <ul class="dropdown-menu pull-left " ></ul>
+    <div class="fg-title-wrapper fg-sm-analysis-list" id="data-tabs-contents">
+        <h3 class="page-title fg-page-title"><div class="page-title-sub">{{ title }} </div>  </h3>
+        <ul id="data-tabss" class="nav nav-tabs fg_sm_analysis_nav_tab">
+            {% for key,tab in tabs %}
+                {% set tab1 = (key == 0) ? 'active': '' %}
+                {% set show = (key >= 3) ? 'hide': 'show' %}
+                <li id="data_li_{{ key }}" class="{{show}} {{ tab1 }} ">
+                    <a data-toggle="tab" data-startDate="{{tab.start}}" data-endDate="{{tab.end}}">{{ tab.label }}</a>
+                </li> 
+            {% endfor %}  
+            {% if tab11 is not empty%}    
+            <li id="past-tab">
+                <a data-toggle="dropdown" class="dropdown-toggle" id="fg-contact-more-tab" href="#">{% trans%}PAST{% endtrans%}<i class="fa fa-angle-down"></i></a>
+                
+                <ul class="dropdown-menu">
+                    {% for key,tab in tab11 %}
+                        <li id="data_li_{{ key+3 }}" class="show  ">
+                            <a data-toggle="tab" data-startDate="{{tab.start}}" data-endDate="{{tab.end}}" >{{ tab.label }}</a>
+                        </li> 
+                    {% endfor %}  
+                </ul>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>

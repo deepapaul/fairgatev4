@@ -1,0 +1,328 @@
+/* -----------------
+Website front end stylesheet ---- 
+* 01 - Widget styles
+* 02 - web layout common styles
+* 03 - background styles
+* 04 - Page titlebar styles
+* 05 - Article page styles
+* 06 - admin navbar
+* 07 - Calendar page related styles
+* 08 - Gallery page related styles
+
+* 81 - Theme one style scheme styles
+* 82 - Common plugin overrides
+* 83 - Common widget elements overrides
+*/
+
+
+@import '../global/utilities/variables'; //- added variables and functions
+@import 'utilities/variables'; //- Theme based colors
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,100,300,700,500,400italic,300italic,900);
+@import 'https://fonts.googleapis.com/css?family=Open+Sans';
+
+@import '../global/utilities/_bootstrap-mixins-grid-5'; //- added variables and functions
+/* -------------------------------------------------------------------------
+* 01 - Widget styles
+-----------------------------------------------------------------------------*/
+@import '../website/partials/pages/_cms-widget-styles'; // CMS widget styles
+
+/* -------------------------------------------------------------------------
+* 02 - web layout common styles
+-----------------------------------------------------------------------------*/
+body{
+	background: #fbfce9;
+	font-family: 'Roboto', sans-serif;
+	
+}
+
+.fg-widget-block{
+	padding: 0;
+	margin: 0 0 20px 0;
+	min-height: 0;
+	overflow: inherit;
+	overflow: initial;
+	@include break-hyphens;
+
+}
+.fg-dotted-br {
+    border-bottom: 1px dotted #212121;
+}
+.fg-sidebar-layout-1{
+	@media (min-width:768px){
+
+		*[class^='fg-grid-col'], 
+		*[class*=' fg-grid-col']{
+			@include make-col(30px);
+		}
+		.fg-grid-col-1{
+			@include make-col-span(1);
+		}
+		.fg-grid-col-2{
+			@include make-col-span(2);		
+		}
+		.fg-grid-col-3{
+			@include make-col-span(3);
+		}
+		.fg-grid-col-4{
+			@include make-col-span(4);
+		}
+		.fg-grid-col-5{
+			@include make-col-span(5);
+		}
+	}
+}
+
+.fg-web-promobox-wrapper{
+	background: rgba(0, 0, 0, 0.5);
+	color: #fff !important;
+	@include position(fixed,auto,auto,10%,-270px);
+	z-index: 10001;
+	width: 270px;
+	padding: 15px 15px 15px 40px;
+	font-family: 'Roboto', sans-serif !important;
+	//@include transform(scale(0));
+	@include transition(all .3s ease);
+	.fg-web-promobox-header{
+		position: relative;
+	}
+	.fg-web-promobox-caption{
+		text-align: right;
+		font-size: 10px;
+		font-family: 'Roboto', sans-serif !important;
+		font-weight: 300 !important;
+		font-style: normal !important;
+	}
+	.fg-web-promobox-content{
+		font-size: 11px;
+		font-family: 'Roboto', sans-serif !important;
+		font-weight: 300 !important;
+		font-style: normal !important;
+	}
+	.fg-web-promo-title{
+		font-size: 13px;
+		font-family: 'Roboto', sans-serif !important;
+		font-weight: 300 !important;
+		font-style: normal !important;
+	}
+	.fg-web-promobox-footer {
+	    margin-top: 20px;
+		font-weight: 300 !important;
+		font-style: normal !important;
+	}
+	.fg-web-promo-toggle-btn{
+		cursor: pointer;
+		font-weight: 300 !important;
+		font-size: 11px;
+		font-style: normal !important;
+	}
+	a.btn{
+		display: inline-block;
+		height: 28px;		
+		font-size: 11px;
+		font-weight: 300;
+		&:hover{
+			color: #fff !important;
+		}
+	}
+	a{
+
+		font-style: normal !important;
+	}
+	a.fg-btn-link{
+		text-transform: uppercase;
+		background: #006837 !important;
+		color: #fff !important;
+		&:hover{
+			background: #014c29 !important;
+		}
+	}
+	a.fg-btn-remove{
+		background: #666666 !important;
+		float: right;
+		color: #fff !important;
+		&:hover{
+			background: #525252 !important;
+		}
+	}
+
+
+	.fg-web-promo-drawer-wrapper{
+		background: rgba(0, 0, 0, 0.5);
+		width: 150px;
+		height: 20px;
+	    padding: 2px 5px;
+	    margin: 0 auto;
+	    display: block;
+	    line-height: 10px;
+	    font-size: 12px;
+	    @include position(absolute,auto,-150px,auto,auto);
+		@include transform(rotate(-90deg));
+		@include transform-orgin(left top 0);
+		.fg-arrow{
+			float: right;
+		}
+	}
+	&.open{
+		left:0;
+		//@include transform(scale(1));
+		.fg-web-promo-drawer-wrapper{
+			display: none;
+		}
+	}
+	@include bpMax('767px'){
+		left:0;
+		bottom: -100%;
+		width: auto;
+		padding: 15px;
+	    &.open{
+
+		    bottom: 0;
+	    }
+	}
+}
+.fg-cms-page-iframe-wrapper{
+	width: 80%;
+	height: 80%;
+	height: 80vh;
+}
+
+.fg-avatar-default{
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #a9a9a9;    
+    margin: auto;
+    width: 45px;
+    height: 45px;    
+    max-width: 100%;
+    max-height: 100%;
+}
+.g-recaptcha{
+	margin-bottom: 5px;
+}
+
+.fg-border-rows{
+	>.fg-rows{
+		padding: 10px 0px;
+		border-top:1px solid #ddd;
+		&:last-child{
+			border-bottom:1px solid #ddd;
+		} 
+
+		>div{}
+	}
+}
+strong,b{
+	font-weight: bold !important;
+}
+.fg-btn-grey-icon{
+    display: inline-block;
+    background: #eeeeee;
+    color: #666666;
+    padding: 7px 10px 6px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold !important;
+    vertical-align: middle;
+    span{
+    	font-size: 15px;
+    	font-weight: bold !important;
+    }
+}
+/* -------------------------------------------------------------------------
+* 03 - background styles
+-----------------------------------------------------------------------------*/
+
+.fg-web-bg-wrapper{
+	@include position(fixed,0,0,0,0);
+	z-index: -1;
+	.fg-web-bg{
+
+		@include position(absolute,0,0,0,0);
+	}
+}
+.fg-web-bg-no-repeat{
+	background-repeat: no-repeat;
+}
+.fg-web-bg-repeat{
+	background-repeat: repeat;
+}
+.fg-web-bg-repeat-horizontal{
+	background-repeat: repeat-x;
+}
+.fg-web-bg-repeat-vertical{
+	background-repeat: repeat-y;
+}
+.fg-web-bg-scroll{
+	background-attachment: fixed;
+}
+.fg-web-pos-left{
+	background-position-x: left;
+}
+.fg-web-pos-center{
+	background-position-x: center;
+}
+.fg-web-pos-right{
+	background-position-x: right;
+}
+.fg-web-pos-top{	
+	background-position-y: top;
+}
+.fg-web-pos-middle{
+	background-position-y: center;
+}
+.fg-web-pos-bottom{
+	background-position-y: bottom;
+}
+.fg-web-size-cover{
+	background-size: cover;
+}
+.fg-web-size-auto{
+	background-size: auto;
+}
+.fg-web-page-container {
+	@extend %clearfix;
+}
+/* -------------------------------------------------------------------------
+* 04 - Page titlebar styles
+-----------------------------------------------------------------------------*/
+//@import '_partials/_page-titlebar-styles';
+
+/* -------------------------------------------------------------------------
+* 05 - Article page styles
+-----------------------------------------------------------------------------*/
+
+@import '_partials/pages/_article-pages';
+
+
+/* -------------------------------------------------------------------------
+* 06 - admin navbar
+-----------------------------------------------------------------------------*/
+@import '_partials/_admin-navbar';
+
+/* -------------------------------------------------------------------------
+* 07 - Calendar page related styles
+-----------------------------------------------------------------------------*/
+@import '_partials/pages/_calendar-pages';
+
+/* -------------------------------------------------------------------------
+* 08 - Gallery page related styles
+-----------------------------------------------------------------------------*/
+@import '_partials/pages/_gallery-pages';
+
+
+
+
+/* -------------------------------------------------------------------------
+* 81 - Common plugin overrides
+-----------------------------------------------------------------------------*/
+@import '_partials/fg-web-plugin-override';
+
+/* -------------------------------------------------------------------------
+* 82 - Common widget elements overrides
+-----------------------------------------------------------------------------*/
+@import '_partials/fg-web-widget-override';

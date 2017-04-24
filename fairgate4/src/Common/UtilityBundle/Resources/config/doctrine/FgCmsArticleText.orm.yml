@@ -1,0 +1,49 @@
+Common\UtilityBundle\Entity\FgCmsArticleText:
+    repositoryClass: Common\UtilityBundle\Repository\Article\FgCmsArticleTextRepository
+    type: entity
+    table: fg_cms_article_text
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        teaser:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        text:
+            type: text
+            nullable: true
+        lastEditedon:
+            type: datetime
+            nullable: true
+            column: last_editedon
+    manyToOne:
+        lastEditedby:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                last_editedby:
+                    referencedColumnName: id
+            orphanRemoval: false
+        article:
+            targetEntity: FgCmsArticle
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                article_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

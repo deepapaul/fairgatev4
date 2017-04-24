@@ -1,0 +1,372 @@
+{% extends app.request.xmlHttpRequest ? '::layout-ajax.html.twig' : '::clubadmin/layout.html.twig' %}
+{% form_theme form  'CommonUtilityBundle:Form:clubData.html.twig' %}
+
+    {% block pagecontent %}
+        <!-- BEGIN CONTENT -->
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="portlet-body fg-theme-yellow">
+                            <!-- BEGIN PAGE TITLE & BREADCRUMB-->                            
+                            {% if (settings is not defined) %}
+                                {% include 'clubadmin/breadcrumb.html.twig' with {'breadCrumb':{'back': path('club_homepage') }} %}   
+                                {% set page_settings = { 'pagetitle':'true','tabs':'true','lang_switch_left':true}  %}
+                                {% set langSwitch = 1  %}
+                                {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': clubName ,'page_settings': page_settings, 'tabs': tabs, 'type':'overview', 'hrefLink' : true, 'url':"#"} %} 
+
+                            {% else %}
+                                {% include 'clubadmin/breadcrumb.html.twig' %} 
+                                <div class="row">
+                                    {% set page_settings = { 'pagetitle':'true','lang_switch_left':true}  %}
+                                    {% set langSwitch = 1  %}
+                                    {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': 'SUBFEDCLUB_DATA'|trans ,'page_settings': page_settings} %} 
+                                </div>
+                            {% endif %}
+                            <!-- END PAGE TITLE & BREADCRUMB-->
+                            <div class="alert alert-danger {{ isError|default(0) ? '':'display-hide' }}"> {{'FORM_ERROR_DISPLAY'|trans}}
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                            </div>
+                            {{ form_start(form, { 'attr': {'name':'form1', 'id': 'form1' ,'enctype' :'multipart/form-data','class': 'form-horizontal','action':'metronic_form_submit','autocomplete':'off','novalidate':'novalidate', 'onSubmit': 'return false;', 'data-scrollToFirstError' : 'true'} }) }}
+                            {{ form_rest(form) }} 
+                                
+                            {% if (settings is not defined) %}
+                                {% include 'clubadmin/savebutton.html.twig' with {'backLink':path('club_homepage') }  %} 
+                            {% else %}
+                                {% include 'clubadmin/savebutton.html.twig' with {'settings':'settings' }  %}
+                            {% endif %}
+                            {# Dirty Field For Logo  #}
+                            <input type='text' value="{{clublogo}}" style="display:none" name='logo_dirty' id='logo_dirty'>
+                            <input type='text' value="{{fedicon}}" style="display:none" name='icon_dirty' id='icon_dirty'>
+                            {{ form(form) }}
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>  
+    {% endblock %}
+    {% if not app.request.xmlHttpRequest %}
+    {% block javascripts %}
+        <script src="{{ asset('fgcustom/js/fg_more_menu.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.ui.widget.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.iframe-transport.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.fileupload.js')}}" type="text/javascript"></script>
+        <script>
+           {% set logoI18nDetails = (editData.i18n.logo is defined)?editData.i18n.logo:[] %} 
+           path = "{{ path('club_data',{'offset':offset ,'clubid': clubid})}}";
+           var clubLanguages = {{clubLanguages|json_encode()|raw}}
+           clubLogoLocationTemp = '/uploads/temp/';
+           clubLogoLocation = '/uploads/'+{{clubid}}+'/admin/clublogo/';
+           fedLogoLocation = '/uploads/'+{{clubid}}+'/admin/federation_icon/';
+          
+           var addedLogosArray = {{logoI18nDetails|json_encode()|raw}}
+            $(function(){
+                FgFormTools.handleInputmask();
+                FgUtility.showTranslation('{{clubDefaultLang}}');
+                checkMissingTranslation();
+                FgGlobalSettings .handleLangSwitch()
+                FgPageTitlebar.init({
+                title       : true,
+                tab       : true,
+                search     :false,
+                actionMenu  : true,
+                tabType  :'server',
+                languageSettings: true,
+                languageSwitch: true
+               
+            }); 
+                saveAndReset();
+            });
+             
+            function saveAndReset()
+            {
+                $('#save_changes').click(function() {
+                    FgXmlHttp.iframepost(path,$('#form1'),false,false,clubcallbackfn);
+                });
+                
+                $('#reset_changes').on('click', function() {
+                FgUtility.startPageLoading();
+                FgXmlHttp.replaceContentFromUrl(document.location.href, false, clubcallbackfn, false);
+                setTimeout(function(){ //update uniform
+                    $('.bs-select').selectpicker('refresh');$.uniform.update();
+                    FgUtility.stopPageLoading();
+                },200);
+                });
+                $('div[data-catId=1] input#same_invoice_address').on('click', function() {
+                    clubData.handleSameAs();
+                });
+            }
+            function clubcallbackfn(responseText){
+               if (typeof responseText == 'object'){
+                    setTimeout(function(){ window.location.reload(); }, 3000);
+               } else {
+                   FgPageTitlebar.init({
+                        title       : true,
+                        tab       : true,
+                        search     :false,
+                        actionMenu  : true,
+                        tabType  :'server',
+                        languageSettings: true,
+                        languageSwitch: true
+                        }); 
+                    FgPageTitlebar.setMoreTab(); //make dynamic tab design
+                    FgFormTools.handleUniform();
+                    FgFormTools.handleInputmask();
+                    FgFormTools.handleBootstrapSelect();
+                    FgDirtyForm.init();
+                    Breadcrumb.load();
+                   // FgApp.init();
+                    _.each(clubLanguages, function(l){
+                         initializeClubLogoUpload(l);
+                    })
+                   initializeFedIconUpload();
+
+                   saveAndReset();
+               }
+            } 
+            
+            clubData = {
+                init: function(){
+                    clubData.handleSameAs();
+                },
+                handleSameAs:function(){
+                    if($('input#same_invoice_address').is(':checked')){
+                        $('div[data-catId=2]').hide();
+                    }
+                    else{
+                        $('div[data-catId=2]').show();
+                    }
+                }
+            }
+        </script>
+        
+        <script>
+            $(document).ready(function () {
+                
+                _.each(clubLanguages, function(l){
+                    initializeClubLogoUpload(l);
+                })
+               initializeFedIconUpload();
+                FgUtility.showTranslation('{{clubDefaultLang}}');
+                checkMissingTranslation()
+                FgGlobalSettings .handleLangSwitch()
+                FgPageTitlebar.init({
+                    title       : true,
+                    tab       : true,
+                    search     :false,
+                    actionMenu  : false,
+                    tabType  :'server',
+                    languageSettings: true,
+                    languageSwitch: true
+                }); 
+             });  
+               
+               function initializeClubLogoUpload(lang){
+                    var wrapperHtml = _.template($('#uploader-container-template').html(), {lang: lang});
+                    $('#club_logo_'+lang).wrap(wrapperHtml);
+                    $('#logo-remove-'+lang).click(function(){
+                        
+                        $('#club_uploaded_logo-'+lang).val('');
+                        $('#logo-remove-'+lang).hide();
+                        $('#uploader-container-'+lang+' .dz-message').show();
+                        $('#club_logo_preview-'+lang).hide();
+                        $('#uploader-container-'+lang+' .file-preview').hide().html("");
+                        $('#logo_dirty').attr('value','').trigger('change');
+                    });
+
+                    $('.drop-logo').off('click');
+                    $('.drop-logo').on('click', function(){
+                         $(this).parent().find('input[type="file"]').trigger('click')
+                    });
+                    $('#club_logo_'+lang).hide();
+                    $('#club_logo_'+lang).fileupload({
+                       singleFileUploads: true,
+                       limitConcurrentUploads: 1,
+                       autoUpload:true,
+                       url: '{{path('club_logo_upload')}}',
+                       dropZone: '.dropzone',
+                       add: function (e, data) {   
+                           //check if image
+                            var validImageTypes = ['image/bmp','image/x-windows-bmp','image/gif','image/jpeg','image/pjpeg','image/png'];
+                            $('#logo-validation-error-'+lang).remove();
+                            if(_.contains(validImageTypes, data.files[0].type)){
+                               $('#uploader-container-'+lang+' .file-preview').hide().html("");
+                               $('#uploader-container-'+lang+' .dz-message').show();
+                               var thisId = $.now();
+                               var fileName = thisId+'_'+(data.files[0].name.replace(/[^a-zA-Z0-9.]/g,function(){return Math.ceil(Math.random()*10);}));
+                               data.formData = {title: fileName};
+                               data.submit();
+                           } else {
+                               $('#logo-remove-'+lang).after('<p style="color:#b94a48" id="logo-validation-error-'+lang+'">'+datatabletranslations.INVALID_FILE_TYPE+'</p>');
+                           }
+                       },
+                       progress: function(e, data){
+                           $('#logo_progress-'+lang).show();
+                           $('#logo_progress-'+lang+'>.progress-bar').width(parseInt(data.loaded / data.total * 100, 10)+'%');
+                       },
+                       done: function(e,data){
+                           
+                           //create the hidden element
+                           $('#logo_progress-'+lang).hide();
+                           $('#logo_progress-'+lang+'>.progress-bar').width('0%');
+
+                           $('#club_uploaded_logo-'+lang).remove();
+                           $('#club_logo_'+lang).after('<input type="hidden" name="club_uploaded_logo['+lang+']" value="'+data.formData.title+'" id="club_uploaded_logo-'+lang+'"/>');
+                           $('#logo-remove-'+lang).show();
+                           $('#uploader-container-'+lang+' .dz-message').hide();
+
+                            //set preview
+                            $('#club_logo_preview-'+lang).show();
+                            $('#uploader-container-'+lang+' .file-preview').show().html("<img alt='uploading..' style='margin: auto;max-height: 100%;max-width: 100%' height='70px' src='"+clubLogoLocationTemp+data.formData.title+"' id='club_logo_preview-"+lang+"'/>");
+                            $('#logo_dirty').attr('value',data.formData.title).trigger('change');
+                        },
+                       fail: function(e,data){
+                          
+                       }
+                   });
+                   
+                   //set the preview of already uploaded logos
+                   _.each(addedLogosArray, function(d,l){
+                       if(d != null && d != ''){
+                           $('#club_uploaded_logo-'+l).remove();
+                           $('#logo-remove-'+l).show();
+                           $('#uploader-container-'+l+' .dz-message').hide();
+                           $('#club_logo_preview-'+l).show();
+                           $('#club_logo_'+l).after('<input type="hidden" name="club_uploaded_logo['+l+']" value="'+d+'" id="club_uploaded_logo-'+l+'"/>');
+                           $('#uploader-container-'+l+' .file-preview').show().html("<img alt='logo' style='margin: auto;max-height: 100%;max-width: 100%' height='70px' src='"+clubLogoLocation+d+"' id='club_logo_preview-"+l+"'/>");
+                       }
+                   })
+               } 
+            // federation icon upload
+                function initializeFedIconUpload(){
+      
+                    $('#fed_logo').wrap($('#fed_uploader-container-template').html());
+                    $('#fedlogo-remove').click(function(){
+                        $('#fed_uploaded_logo').remove();
+                        $('#fedlogo-remove').hide();
+                        $('.fed-dz-message').show();
+                        $('#fed_logo_preview').hide();
+                        $('.fed-file-preview').hide().html("");
+                        $('#icon_dirty').attr('value','').trigger('change');
+                    });
+
+
+                    $('.fed-drop-logo').on('click', function(){
+                         $('#fed_logo').trigger('click');
+                    });
+                    $('#fed_logo').hide();
+                    $('#fed_logo').fileupload({
+                       singleFileUploads: true,
+                       limitConcurrentUploads: 1,
+                       autoUpload:true,
+                       url: '{{path('club_logo_upload')}}',
+                       dropZone: '.dropzone2',
+                       add: function (e, data) {   
+                           //check if image
+                            var validImageTypes = ['image/bmp','image/x-windows-bmp','image/gif','image/jpeg','image/pjpeg','image/png'];
+                            $('#logo-validation-error').remove();
+                            if(_.contains(validImageTypes, data.files[0].type)){
+                               $('.fed-file-preview').hide().html("");
+                               $('.fed-dz-message').show();
+                              var fileName = data.files[0].name.replace(/'/g,"");
+                              var fileName = fileName.replace(/""/g, "-");
+                               data.formData = {title: fileName};
+                               data.submit();
+                           } else {
+                               $('#fedlogo-remove').after('<p style="color:#b94a48" id="logo-validation-error">'+datatabletranslations.INVALID_FILE_TYPE+'</p>');
+                           }
+                       },
+                       progress: function(e, data){
+                           $('#fed_logo_progress').show();
+                           $('#fed_logo_progress>.progress-bar').width(parseInt(data.loaded / data.total * 100, 10)+'%');
+                       },
+                       done: function(e,data){
+                           
+                           //create the hidden element
+                           $('#fed_logo_progress').hide();
+                           $('#fed_logo_progress>.progress-bar').width('0%');
+
+                           $('#fed_uploaded_logo').remove();
+                           $('#fed_logo').after('<input type="hidden" name="fed_uploaded_logo" value="'+data.formData.title+'" id="fed_uploaded_logo"/>');
+                           $('#fedlogo-remove').show();
+                           $('.fed-dz-message').hide();
+
+                            //set preview
+                            $('#fed_logo_preview').show();
+                            $('.fed-file-preview').show().html("<img alt='uploading..' src='"+clubLogoLocationTemp+data.formData.title+"' id='fed_logo_preview'/>");
+                            $('#icon_dirty').attr('value',data.formData.title).trigger('change');
+                        },
+                       fail: function(e,data){
+                          
+                       }
+                   });
+
+                   if($('#icon_dirty').val() != ''){
+                       $('#fedlogo-remove').show();
+                       $('.fed-dz-message').hide();
+                       $('.fed-file-preview').show().html("<img alt='icon' src='"+fedLogoLocation+$('#icon_dirty').val()+"' id='fed_logo_preview'/>");
+                       $('#fed_logo').after('<input type="hidden" name="fed_uploaded_logo" value="'+$('#icon_dirty').val()+'" id="fed_uploaded_logo"/>');
+                   }
+               }
+               
+               function checkMissingTranslation(){
+                    missingTrans = []
+                    $('#form1').find('textarea[data-lang],input[data-lang]').each(function () {
+                        if($(this).val() == ''){
+                          missingTrans.push($(this).attr('data-lang'));
+                        }
+                     });
+                     missingTrans = _.uniq(missingTrans);
+
+                     //show error on missing tranlstions
+                     $.each( missingTrans, function( key, value ) {
+                         $('#'+value+'.btlang').addClass('error');
+                     });
+               }
+        </script>
+
+        <script type="text/template" id="uploader-container-template">
+            <div class="fg-contact-data" id="uploader-container-<%-lang%>">
+            <div style="height:200px" class="well drop-logo dropzone">
+                <div style="margin: 20px; height: 150px;display:none;text-align:center;" class="file-preview">
+                
+                </div>
+                <div class="dz-default dz-message">
+                    <div class="dz-drop-text">{{'CLUB_DATA_PICTURE_UPLOAD'|trans}}</div>
+                    <div class="dz-drop-click">{{'CLUB_DATA_PICTURE_UPLOAD_CLICK'|trans}}</div>
+                </div>
+                <div class="progress progress-striped active" style='display:none;height:5px;bottom:0px' id='logo_progress-<%-lang%>'>
+                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="0%">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+            <button href="javascript:void(0);" class="btn btn-sm btn-block" id='logo-remove-<%-lang%>' style='display:none'>{{'CLUB_DATA_PICTURE_REMOVE'|trans}}</button>
+            <div class='file-error-container'></div>
+            </div>
+        </script>
+        <script type="text/template" id="fed_uploader-container-template">
+            <div class="fg-contact-data">
+            <div style="height:200px" class="well fed-drop-logo dropzone2">
+                <div style="margin: 20px; height: 150px;display:none;text-align:center;" class="fed-file-preview">
+                
+                </div>
+                <div class="dz-default fed-dz-message">
+                    <div class="dz-drop-text">{{'FED_DATA_PICTURE_UPLOAD'|trans}}</div>
+                    <div class="dz-drop-click">{{'FED_DATA_PICTURE_UPLOAD_CLICK'|trans}}</div>
+                </div>
+                <div class="progress progress-striped active" style='display:none;height:5px;bottom:0px' id='fed_logo_progress'>
+                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="0%">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+            <button href="javascript:void(0);" class="btn btn-sm btn-block" id='fedlogo-remove' style='display:none'>{{'CLUB_DATA_PICTURE_REMOVE'|trans}}</button>
+            <div class='file-error-container'></div>
+             <div> {{'FED_ICON_PICTURE_FILETYPE'|trans}}</div>
+            </div>
+        </script>
+    {% endblock %}
+{% endif %}

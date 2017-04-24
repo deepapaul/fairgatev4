@@ -1,0 +1,76 @@
+{% set connectionCount = (connectionCount is defined) ? connectionCount : 0 %}
+{% set asgmntsCount = (asgmntsCount is defined) ? asgmntsCount : 0 %}
+{% set notesCount = (notesCount is defined) ? notesCount : 0 %}
+{% set documentsCount = (documentsCount is defined) ? documentsCount : 0 %}  
+{% set hasUserRights = (hasUserRights is defined) ? hasUserRights : 0 %}  
+<div class="row">   
+    <div class="row-same-height">
+        <div class="col-md-4 col-sm-12 col-xs-12 col-md-height fg-nav-tab-border">
+            {% if contactType is defined  %}
+                {% set contactType = contactType  %}
+            {% else %}
+                {% set contactType = 'contact'  %}
+            {% endif %}
+            <div class="btn-group">
+                <h3 class="page-title fg-page-title fg-left-zero">
+                    {% if contactType =='archive' %}
+                        <button id="fg-dev-reactivate" data-toggle="dropdown" class="btn tableaction fg-cursor-point"> <i id="fg-dev-reactivate" class="fa fa-undo fa-2x fg-cursor"></i></button>
+                    {% endif %}
+                    {% if contactTab is defined %}
+                        
+                        <button class="btn tableaction fgContactdrop" data-toggle="dropdown" data-type="active"> <i class="fa fa-bars fa-2x"></i></button>
+                        <ul class="dropdown-menu pull-left fgdropmenu" ></ul>
+                    {% endif %}    
+                    {{ contactName }}  
+                </h3>
+            </div>
+        </div>
+        {% set litagdata =''%}
+        {% set morelitagdata =''%}
+        {% set targetIndex = 6 %}   
+        {% for tab in tabs %}
+            {% if tab == "overview" %}
+                {% set litagdata = litagdata ~ '<li name="fg-dev-overview-tab" data-target="1" class="'~(active=='overview' ? 'active':'')~'"> <a  href="'~path("render_contact_overview",{"offset":offset,"contact": contactId})~'" >'~"PANEL_TABS_OVERVIEW"|trans~'</a> </li>' %}
+                {% set morelitagdata = morelitagdata ~ '<li name="fg-dev-overview-tab" data-target="1" class="'~(active=='overview' ? 'active':'')~'"> <a  href="'~path("render_contact_overview",{"offset":offset,"contact": contactId})~'" tabindex="-1" >'~"PANEL_TABS_OVERVIEW"|trans~'</a> </li>' %}
+            {% elseif tab == "data" %}
+                {% set litagdata = litagdata ~ '<li name="fg-dev-data-tab" data-target="2" class="'~(active=="data" ? "active":"")~'"> <a  href="'~path("contact_data",{"offset":offset,"contact": contactId})~'" >'~"PANEL_TABS_DATA"|trans~'</a> </li>' %}
+                {% set morelitagdata = morelitagdata ~ '<li name="fg-dev-data-tab" data-target="2" class="'~(active=="data" ? "active":"")~'"> <a  href="'~path("contact_data",{"offset":offset,"contact": contactId})~'" tabindex="-1" >'~"PANEL_TABS_DATA"|trans~'</a> </li>' %}    
+            {% elseif tab == "connection" %}
+                {% set litagdata = litagdata ~ '<li name="fg-dev-connection-tab" data-target="3" class="'~(active=="connection" ? "active":"")~'"> <a  href="'~path("contact_connection",{"offset":offset,"contact": contactId})~'" >'~"PANEL_TABS_CONNECTION"|trans~' <span class="badge badge-round badge-important fg-dev-connection-tab"> '~connectionCount~' </span></a> </li>' %}
+                {% set morelitagdata = morelitagdata ~ '<li name="fg-dev-connection-tab" data-target="3" class="'~(active=="connection" ? "active":"")~'"> <a class="dropdown-toggle" href="'~path("contact_connection",{"offset":offset,"contact": contactId})~'" tabindex="-1" >'~"PANEL_TABS_CONNECTION"|trans~' <span class="badge badge-round badge-important"> '~connectionCount~' </span></a> </li>' %}
+            {% elseif tab == "assignment" %}
+                {% set litagdata = litagdata ~ '<li  name="fg-dev-assignment-tab" data-target="4" class="'~(active=="assignments" ? "active":"")~'"> <a  href="'~path("contact_assignments",{"offset":offset,"contact": contactId})~'" >'~"PANEL_TABS_ASSIGNMENTS"|trans~' <span class="badge badge-round badge-important">'~ asgmntsCount~' </span></a></li>' %}
+                {% set morelitagdata = morelitagdata ~ '<li  name="fg-dev-assignment-tab" data-target="4" class="'~(active=="assignments" ? "active":"")~'"> <a  href="'~path("contact_assignments",{"offset":offset,"contact": contactId})~'" tabindex="-1" >'~"PANEL_TABS_ASSIGNMENTS"|trans~' <span class="badge badge-round badge-important">'~ asgmntsCount~' </span></a> </li>' %}
+            {% elseif tab == "note" %}
+                {% set litagdata = litagdata ~ '<li name="fg-dev-notes-tab" data-target="5" class="'~(active=='contactnote' ? 'active':'')~'"> <a href="'~path('contact_note',{'offset':offset,'contactid': contactId})~'" >'~"NOTES"|trans~' <span class="badge badge-round badge-important"> '~notesCount~' </span></a> </li>'  %}
+                {% set morelitagdata = morelitagdata ~ '<li name="fg-dev-notes-tab" data-target="5" class="'~(active=='contactnote' ? 'active':'')~'"> <a class="dropdown-toggle" href="'~path('contact_note',{'offset':offset,'contactid': contactId})~'" tabindex="-1" >'~"NOTES"|trans~'<span class="badge badge-round badge-important"> '~notesCount~' </span></a> </li>'  %}  
+            {% elseif tab == "document" %}
+                {% set litagdata = litagdata ~ '<li name="fg-dev-documents-tab" data-target="6" class="'~(active=='documents' ? 'active':'')~'"> <a href="'~path('contact_documents',{'offset':offset,'contact': contactId})~'" >'~"PANEL_TABS_DOCUMENTS"|trans~' <span class="badge badge-round badge-important count-document-tab"> '~documentsCount~' </span></a> </li>'  %}
+                {% set morelitagdata = morelitagdata ~ '<li name="fg-dev-documents-tab" data-target="6" class="'~(active=='documents' ? 'active':'')~'"> <a class="dropdown-toggle" href="'~path('contact_documents',{'offset':offset,'contact': contactId})~'" tabindex="-1" >'~"PANEL_TABS_DOCUMENTS"|trans~'<span class="badge badge-round badge-important count-document-tab"> '~documentsCount~' </span></a> </li>'  %}
+                {% set targetIndex = 7 %} 
+            {% elseif tab == "userright" %}
+                {% set litagdata = litagdata ~ '<li name="fg-dev-userrights-tab" data-target="'~targetIndex~'" class="'~(active=="contactuserrights" ? "active":"")~'"> <a  href="'~path("contact_user_rights",{"offset":offset,"contact": contactId})~'" >'~"PANEL_TABS_USERRIGHTS"|trans~(hasUserRights==1 ? '<span class="fg-more-icons"><i class="fa fg-fa-check-circle-o "></i></span>':'<span class="fg-more-icons"><i class="fa fg-fa-ban "></i></span>')~'</a> </li>' %}
+                {% set morelitagdata = morelitagdata ~ '<li name="fg-dev-userrights-tab" data-target="'~targetIndex~'" class="'~(active=="contactuserrights" ? "active":"")~'"> <a class="dropdown-toggle" href="'~path("contact_user_rights",{"offset":offset,"contact": contactId})~'" tabindex="-1">'~"PANEL_TABS_USERRIGHTS"|trans~(hasUserRights==1 ? '<span class="fg-more-icons-nav"><i class="fa fg-fa-check-circle-o "></i></span>':'<span class="fg-more-icons-nav"><i class="fa fg-fa-ban "></i></span>')~'</a> </li>' %}
+                {% set targetIndex = targetIndex+1 %}  
+            {% elseif tab == "log" %}
+                {% set litagdata = litagdata ~ ' <li name="fg-dev-log-tab" data-target="'~targetIndex~'" class="'~(active=="loglisting" ? "active":"")~'"> <a  href="'~path("log_listing",{"offset":offset,"contact": contactId})~'" >'~ "LOG"|trans ~'</a> </li>' %}
+                {% set morelitagdata = morelitagdata ~ ' <li name="fg-dev-log-tab" data-target="'~targetIndex~'" class="'~(active=="loglisting" ? "active":"")~'"> <a  href="'~path("log_listing",{"offset":offset,"contact": contactId})~'" tabindex="-1" >'~ "LOG"|trans ~'</a> </li>' %}
+            {% endif %}
+        {% endfor %}
+        <div class="col-md-5 col-sm-8 col-xs-12 col-md-height col-bottom fg-nav-tab-border fg-paneltab-right-align">
+            <ul id="paneltab" class="nav fg-nav-links data-more-tab fg-visibility-hidden">
+                {{litagdata|raw}} 
+                <li name="fg-dev-more-tab" class="datahideshow dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">{%trans%}MORE{%endtrans%} <i class="fa fa-angle-down"></i></a>
+                    <ul class="dropdown-menu fg-dropdown-more" role="menu">
+                        {{morelitagdata|raw}}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+   {#     <div class="col-md-3 col-sm-4 col-xs-12 col-md-height col-bottom fg-nav-tab-border">
+            <ul class="nav nav-tabs">
+                {% render url('render_icon_tab',{'contact': contactId}) %}
+            </ul>
+        </div>#}
+    </div>  
+</div>

@@ -1,0 +1,215 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title"></h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <span id="remove_text">{{'DO_YOU_REALLY_WANT_TO_REMOVE'|trans}}</span>
+
+                <!-- NOT ALLOWED TO REMOVE ERROR STARTS -->
+                <div class="alert  alert-danger fg-poup-alert hide" id="notallowed_error">
+                    <p><strong>{{'ERROR'|trans}}: </strong><span>{{'NOT_ALLOWED_TO_REMOVE'|trans}}</span></p>
+                    <div class="fg-popup-link"></div>
+                </div>
+                <!-- NOT ALLOWED TO REMOVE ERROR ENDS -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer form-actions fg-modal-footer">
+    <button type="button" class="btn default" id="cancel" data-dismiss="modal">{{'CANCEL'|trans}}</button>
+    <button type="button" class="btn green" id="removeassignments">{{'REMOVE'|trans}}</button>
+</div>
+<script type="text/javascript">
+    var clubType = '{{clubType}}';
+    var clubTeamId = '{{clubTeamId}}';
+    var selActionType = '{{selActionType}}';
+    var dragCatType = '{{dragCatType}}';
+    var dragCat = '{{dragCat}}';
+    var dragRole = '{{dragRole}}';
+    var dragCatName = '{{dragCatName}}';
+    dragCatName = $("<div/>").html(unescape($("<div/>").html(unescape(dragCatName)).text())).text();
+    var dragRoleName = '{{dragMenuTitle}}';
+    dragRoleName = $("<div/>").html(unescape($("<div/>").html(unescape(dragRoleName)).text())).text();
+    var isRequiredAsgmnt = '{{isRequiredAsgmnt}}';
+    var isAllowedAsgmnt = '{{isAllowedAsgmnt}}';
+    var removeAsgmntData = {};
+    var removeTxt = '';
+    /* get details of selected contacts starts */
+    var selContIds = [];
+    var selContNames = [];
+    if (selActionType == 'all') {
+        var allContactsData = $.parseJSON($('#selcontacthidden').val());
+        $.each(allContactsData, function(cdKey, contactData) {
+            var contactId = contactData.id;
+            if ($.inArray(contactId, selContIds) == -1) {
+                selContIds.push(contactId);
+                selContNames.push({'id': contactId, 'name': contactData.contactname});
+            }
+        });
+    } else {
+        $(".dataClass:checked").each(function() {
+            var contactId = $(this).attr('id');
+            if ($.inArray(contactId, selContIds) == -1) {
+                selContIds.push(contactId);
+                selContNames.push({'id': contactId, 'name': $(this).parents('tr').find('.fg-dev-contactname').html()});
+            }
+        });
+    }
+    selContNames = selContNames.sort(function (a, b) {
+        return a.name.localeCompare( b.name );
+    });
+    displayPopupData();
+    /* get details of selected contacts ends */
+    $(document).off('click', '.modal-title .fg-dev-contact-names');
+    $(document).on('click', '.modal-title .fg-dev-contact-names', function(e) {
+        $(this).parent().toggleClass('fg-arrowicon');
+    });
+    //pop-up remove button click
+    $(document).off('click', '#removeassignments');
+    $(document).on('click', '#removeassignments', function() {
+        if (selContIds.length <= 0) {
+            removeAsgmntData = {};
+            var catArr = JSON.stringify(removeAsgmntData);
+            $('#popup').modal('hide');
+            var passingData = {'catArr': catArr, 'contact_id': selContIds.join(), 'selCount': 0, 'totalCount': selContIds.length, 'fromPage': 'contactlist', 'actionType': 'remove'};
+            FgXmlHttp.post('{{path("update_contact_assignments")}}', passingData, false, callBackFn);
+        } else {
+            removeAsgmntData = {};
+            $.getJSON('{{path("get_assigned_function")}}', {'contactId': selContIds.join(), 'catId': dragCat, 'roleId': dragRole, 'dragCatType': dragCatType}, function(assignment) {
+                $.each(assignment, function(contactId, asgmnt) {
+                    var roleId = asgmnt['roleid'];
+                    if (asgmnt['functionids'].length > 0) {
+                        $.each(asgmnt['functionids'], function(fkey, funId) {
+                            renderRemoveJson(contactId, dragCat, roleId, funId, 'is_deleted');
+                        });
+                    }
+                });
+                var catArr = JSON.stringify(removeAsgmntData);
+                $('#popup').modal('hide');
+                var passingData = {'catArr': catArr, 'contact_id': selContIds.join(), 'selCount': selContIds.length, 'totalCount': selContIds.length, 'fromPage': 'contactlist', 'actionType': 'remove'};
+                FgXmlHttp.post('{{path("update_contact_assignments")}}', passingData, false, callBackFn);
+
+            });
+        }
+    });
+
+    function displayPopupData() {
+        var singleHeadTxt = '{{'REMOVE_%contname%_FROM_%dragrole%'|trans}}';
+        var multipleHeadTxt = '{{'REMOVE_%contcount%_CONTACTS_FROM_%dragrole%'|trans}}';
+        var singleRemoveTxt = '{{'DO_YOU_REALLY_WANT_TO_REMOVE_%contname%_FROM_%dragrole%'|trans}}' + '?';
+        var multipleRemoveTxt = '{{'DO_YOU_REALLY_WANT_TO_REMOVE_%contcount%_CONTACTS_FROM_%dragrole%'|trans}}' + '?';
+        if (selContIds.length == 1) {
+            $('h4.modal-title').html('<div class="fg-popup-text" id="popup_head_text"></div>');
+            $('div#popup_head_text').text(singleHeadTxt.replace('%contname%', selContNames[0].name).replace('%dragrole%', dragRoleName));
+            removeTxt = singleRemoveTxt.replace('%contname%', selContNames[0].name);
+        } else {
+            var popupHeadText = multipleHeadTxt.replace('%contcount%', selContIds.length).replace('%dragrole%', dragRoleName);
+            if (selActionType == 'all') {
+                $('h4.modal-title').html('<div class="fg-popup-text" id="popup_head_text"></div>');
+                $('div#popup_head_text').text(popupHeadText);
+                removeTxt = multipleRemoveTxt;
+            } else {
+                var contactNameLinks = {};
+                var contNamesHtml = '';
+                var i = 0;
+                $.each(selContNames, function(ckey, selContName) {
+                    i++;
+                    if (i == 11) {
+                        contNamesHtml += '<li>&hellip;</li>';
+                        return false;
+                    } else {
+                        contactNameLinks[selContName.id] = selContName.name;
+                        contNamesHtml += '<li><a href="contact/overviewcontact/0/'+selContName.id+'" target="_blank" data-cont-id="'+selContName.id+'"></a></li>';
+                    }
+                });
+                $('h4.modal-title').html('<span class="fg-dev-contact-names"><a href="#" class="fg-plus-icon"></a><a href="#" class="fg-minus-icon"></a></span><div class="fg-popup-text" id="popup_head_text"></div>\n\
+                    <div class="fg-arrow-sh"><ul>' + contNamesHtml + '</ul></div>');
+                $('div#popup_head_text').text(popupHeadText);
+                displayContactNames(contactNameLinks);
+                removeTxt = multipleRemoveTxt;
+            }
+        }
+        if ((isRequiredAsgmnt == 1) || (isRequiredAsgmnt == '1')) {
+            $.getJSON('{{path("validate_assignments")}}', {'contactIds': selContIds.toString(), 'catId': dragCat, 'roleId': dragRole, 'dragCatType': dragCatType, 'actionType' : 'remove_req_assn'}, function(assignments) {
+                var alreadyAssignedConts = Object.keys(assignments);
+                var cantRemoveConts = $(selContIds).not(alreadyAssignedConts).get();
+                selContIds = alreadyAssignedConts;
+                if (cantRemoveConts.length > 0) {
+                    var contactNameLinks = {};
+                    var errorContsHtml = '';
+                    $.each(selContNames, function(ckey, selContName) {
+                        if ($.inArray(selContName.id, cantRemoveConts) != -1) {
+                            contactNameLinks[selContName.id] = selContName.name;
+                            errorContsHtml += '<a href="contact/overviewcontact/0/'+selContName.id+'" target="_blank" data-cont-id="'+selContName.id+'"></a>';
+                        }
+                    });
+                    var removeErrorTxt = '{{'SOME_CONTACTS_CANT_BE_REMOVED_FROM_%group1%_BECAUSE_THEY_ARE_REQUIRED_ASSIGNMENTS'|trans}}.'.replace('%group1%', dragCatName);
+                    showError(removeErrorTxt, errorContsHtml);
+                    displayContactNames(contactNameLinks);
+                }
+            });
+        }
+        if ((isAllowedAsgmnt == 0) || (isAllowedAsgmnt == '0')) {
+            selContIds = [];
+            var removeErrorTxt = '{{'CONTACTS_ARE_NOT_ALLOWED_TO_REMOVE_FROM_%catname%'|trans}}.'.replace('%catname%', dragCatName);
+            showError(removeErrorTxt, '');
+        }
+    }
+    function renderRemoveJson(cntctId, catId, roleId, funId, type) {
+        if (catId == clubTeamId) {
+            catId = 'team' + clubTeamId;
+        }
+        if (removeAsgmntData[cntctId] == undefined) {
+            removeAsgmntData[cntctId] = {};
+        }
+        if (catId != '') {
+            if (removeAsgmntData[cntctId][catId] == undefined) {
+                removeAsgmntData[cntctId][catId] = {};
+            }
+            if (roleId != '') {
+                if (removeAsgmntData[cntctId][catId]['role'] == undefined) {
+                    removeAsgmntData[cntctId][catId]['role'] = {};
+                }
+                if (removeAsgmntData[cntctId][catId]['role'][roleId] == undefined) {
+                    removeAsgmntData[cntctId][catId]['role'][roleId] = {};
+                }
+                if (!((funId == '') || (funId == 'null') || (funId == null))) {
+                    if (removeAsgmntData[cntctId][catId]['role'][roleId]['function'] == undefined) {
+                        removeAsgmntData[cntctId][catId]['role'][roleId]['function'] = {};
+                    }
+                    if (removeAsgmntData[cntctId][catId]['role'][roleId]['function'][funId] == undefined) {
+                        removeAsgmntData[cntctId][catId]['role'][roleId]['function'][funId] = {};
+                    }
+                }
+            }
+        }
+        if ((funId == '') || (funId == 'null') || (funId == null)) {
+            removeAsgmntData[cntctId][catId]['role'][roleId][type] = 1;
+        } else {
+            removeAsgmntData[cntctId][catId]['role'][roleId]['function'][funId][type] = 1;
+        }
+    }
+    function callBackFn(result) {
+        FgCountUpdate.update('assignment','contact','active',result.sidebarCountArray, result.assignedCount);
+        oTable.api().draw();
+        //FgTable.init();
+    }
+    function showError(removeErrorTxt, errorContactsHtml) {
+        $('span#remove_text').text(removeTxt.replace('%contcount%', selContIds.length).replace('%dragrole%', dragRoleName));
+        if (selContIds.length <= 0) {
+            $('span#remove_text').remove();
+            $('button#removeassignments').attr('disabled', 'true');
+        }
+        $('div#notallowed_error p span').text(removeErrorTxt);
+        $('div#notallowed_error .fg-popup-link').html(errorContactsHtml);
+        $('div#notallowed_error').removeClass('hide');
+    }
+    function displayContactNames(contactNameLinks) {
+        $.each(contactNameLinks, function(selContId, selContName) {
+            $('a[data-cont-id='+selContId+']').text(selContName);
+        });
+    }
+</script>

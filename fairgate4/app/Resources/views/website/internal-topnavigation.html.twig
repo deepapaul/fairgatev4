@@ -1,0 +1,9 @@
+<script src="{{ asset('fgassets/global/js/fbautocomplete/fbautocomplete.js') }}" type="text/javascript"></script>
+<script type="text/javascript">
+    {% set contactSearchUrl = path('search_contacts') %}
+    var FgWebsiteObj = new FgWebsite();
+    FgWebsiteObj.topNavigation("{{ path('common_internal_header') }}", 'webpage-admin-header', '{{ {"module":'internal', 'clubId' : fgclub.get('id'),'contactSearchUrl': contactSearchUrl}|json_encode|raw}}');
+    $( window ).resize(function() {
+       FgWebsiteObj.renderTopNavHtml('webpage-admin-header', '{{ {"module":'internal', 'clubId' : fgclub.get('id'),'contactSearchUrl': contactSearchUrl}|json_encode|raw}}');
+    });
+</script>

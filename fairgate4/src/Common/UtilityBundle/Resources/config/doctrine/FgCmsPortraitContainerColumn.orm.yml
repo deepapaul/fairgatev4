@@ -1,0 +1,32 @@
+Common\UtilityBundle\Entity\FgCmsPortraitContainerColumn:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPortraitContainerColumnRepository
+    type: entity
+    table: fg_cms_portrait_container_column
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        size:
+            type: integer
+            unsigned: false
+            nullable: false
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sort_order
+    manyToOne:
+        container:
+            targetEntity: FgCmsPortraitContainer
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                container_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

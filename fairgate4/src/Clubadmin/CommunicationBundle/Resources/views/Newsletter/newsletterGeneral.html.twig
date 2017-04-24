@@ -1,0 +1,87 @@
+
+<form id="form-tab1" method="post" data-url="{{ path('nl_generalsave')}}" skipDirtyCheck data-validation="true" onsubmit="return false;" autocomplete="off" novalidate="novalidate" class="form-horizontal">
+     <div class="alert alert-danger display-none">
+      <button class="close" data-dismiss="alert"></button>
+      <span data-error>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+    </div>
+  <div class="fg-tab-list fg-nl-lang-drop">
+   {%if(dataArray.type == 'GENERAL')%}
+    <h3 class="block">{{'NL_GENERAL_HEADER'|trans}}</h3>
+    {% else %}
+    <h3 class="block">{{'SIMPLEMAIL_GENERAL_HEADER'|trans}}</h3>
+    {% endif %}
+    <dl>
+        <div dataerror-group>
+         <dt class="control-label">{{'NL_SUBJECT'|trans}} <span class="required" aria-required="true"> * </span></dt>
+         <dd>
+            <input type="text" required name="subject" class="form-control" value="{{editData.subject|default('')}}">
+         </dd>
+        </div>
+        <dt>{{'NL_SENDERNAME'|trans}}</dt>
+        <dd>
+            <input type="text" name="username" class="form-control" value= "{{dataArray.contactname}}">
+            <input type="hidden" name="type" value="{{dataArray.type}}">
+        </dd>
+        <div dataerror-group>
+        <dt class="control-label">{{'NL_SENDER_EMAIL'|trans}}<span class="required" aria-required="true"> * </span></dt>
+        <dd>
+            <input type="text" name="email" class="form-control" value="{{editData.senderEmail|default('')}}">
+        </dd>
+        </div>
+        <dt>{{'NL_SALUTATION'|trans}}<span class="required" aria-required="true"> * </span></dt>
+        <dd>
+            <div class="radio-list">
+                <div class="fg-news-radio radio-inline">
+                      <label class="radio-inline">
+                    <input type="radio" name="salutationType" id="optionsRadios25" class="salutation-type-input" value="INDIVIDUAL" {%if newsletterId != 0%} {%if editData.salutationType == 'INDIVIDUAL'%} checked {%endif%}{%elseif(newsletterId == 0)%}checked {%endif%}>
+                    {{'NL_SALUTATION_PERSONAL'|trans}}</label>
+                    </div>
+                <div class="fg-news-radio" id="generalsalut">
+                     <label class="radio-inline">
+                    <input type="radio" name="salutationType" id="general-radio" value="SAME" {%if newsletterId != 0%} {%if editData.salutationType == 'SAME'%} checked {%endif%} {%endif%}>
+                    {{'NL_SALUTATION_GENERAL'|trans}}</label>
+                  
+                        <span>
+                         <div dataerror-group id="salutation-block">
+                         <input  type="text" id="salutation-general-input" name="salutation"  disabled="true" class="form-control" value="{{editData.salutation|default('')}}">
+                         <span  for="salutation-general-input" class="help-block"></span>
+                         </div>
+                        </span>
+                        
+                 
+                    </div>
+                <div class="fg-news-radio">
+                       <label class="radio-inline">
+                    <input type="radio" name="salutationType" id="optionsRadios25" class="salutation-type-input" value="NONE" {% if newsletterId != 0 %}{%if editData.salutationType == 'NONE'%} checked {% endif %} {% endif %}>
+                    {{'NL_SALUTATION_NONE'|trans}}</label></div>
+            </div>
+        </dd>
+        {%if dataArray.type == "GENERAL" %}
+        <dt>{{'NL_TYPE'|trans}}<span class="required" aria-required="true"> * </span></dt>
+        <dd>
+            <div class="radio-list">
+                <div class="fg-news-radio">
+                      <label class="radio-inline">
+                    <input type="radio" name="publishType" id="optionsRadios26" value="MANDATORY" {%if newsletterId != 0%} {%if editData.salutationType == 'MANDATORY'%} checked {%endif%}{%elseif(newsletterId == 0)%}checked {%endif%}>
+                    {{'NL_MANDATORY'|trans}}</label></div>
+                <div class="fg-news-radio">
+                         <label class="radio-inline">
+                    <input type="radio" name="publishType" id="optionsRadios26" value="SUBSCRIPTION"  {% if newsletterId != 0 %}{%if editData.publishType == 'SUBSCRIPTION'%} checked {%endif%} {%endif%}>
+                    {{'NL_NONMANDATORY'|trans}}</label></div>
+            </div>
+        </dd>
+        {% endif %}
+        <div dataerror-group>
+        <dt class="control-label">{{'NL_LANGUAGE'|trans}}<span class="required" aria-required="true"> * </span></dt>
+        <dd>
+            <select class="form-control bs-select fg-select-font selectpicker" multiple name="language[]" required="required">
+               <option value= "selectall" class="selectall fg-arrow-all">{{'SELECT_ALL'|trans}}</option>
+             {% for  key,value in dataArray.languages %}
+                <option value= "{{value}}" class="opt multiple">{{value}}</option>              
+              {% endfor %}
+            </select>
+        </dd>
+        </div>
+    </dl>
+    </div>
+</form>

@@ -1,0 +1,142 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = (mode == 'create') ? 'CREATE_ARTICLE'|trans : ((editorialMode == 'duplicate') ? 'ARTICLE_DUPLICATE'|trans : 'EDIT_ARTICLE'|trans)  %}
+{% block customstylesheets %}
+    <link rel="stylesheet" href="{{ asset('fgassets/global/js/DateTimePicker/src/DateTimePicker.css')}}" type="text/css"  />
+{% endblock %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+    <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+    <div class="row">
+        <div class="col-md-12">
+        <!-- BREADCRUMB STARTS -->
+        {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+        <!-- BREADCRUMB ENDS -->
+        </div>
+    </div>
+    {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'tabs':false, 'clubLanguages':clubLanguageArr, 'clubDefaultLang':defaultClubLang} %}
+    <div class="clearfix"></div>
+    <form id="fg-article-create-form" onsubmit="return false;" class="form form-horizontal"> 
+        <div data-list-wrap="" id="fg-article-create" ></div>        
+        {% include 'internal/savebutton.html.twig' with {'noBackLinkFlag':true,'save_button_val':'SAVE'|trans,'discard_button_val':'CANCEL'|trans, 'second_button_id': 'save-draft', 'second_btn_val': 'ARTICLE_SAVE_DRAFT'|trans} %}
+    </form>
+{% endblock %}
+{% block underscoretemplate %}
+    {% include 'InternalArticleBundle:Editorial:templateArticleCreate.html.twig' %}
+    {#for attachments upload#}
+    {% include 'InternalArticleBundle:Editorial:templateAttachmentsUpload.html.twig' %}
+    {#gallery browser#}
+    {% include 'InternalGalleryBundle:GalleryBrowser:templateGalleryBrowser.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+    <!--  Custom pop over html -->
+    <div class="custom-popup">
+        <div class="popover bottom">
+            <div class="arrow"></div>
+            <div class="popover-content"></div>
+        </div>
+    </div>
+    <!--  End Custom pop over html -->  
+    <script src="{{ asset('fgassets/assets/global/plugins/ckeditor/ckeditor.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/ckEditor-config.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/DateTimePicker/src/DateTimePicker.js')}}"></script>
+    <script src="{{ asset('fgassets/internal/js/page/FgCreateArticle.js')}}"></script>
+     <script src="{{ asset('fgassets/global/js/listRow.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.ui.widget.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.iframe-transport.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/jquery-fileupload/jquery.fileupload.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/internal/js/thumbnail.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/internal/js/page/FgGalleryBrowser.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/global/js/FgFileUpload.js')}}" type="text/javascript"></script>
+    <script>
+        var filemanagerImageBrowse = "{{path('filemanager_view', {'type' : 'image', 'module' : 'article' } )}}";
+        var filemanagerDocumentBrowse = "{{path('filemanager_view', {'type' : 'document', 'module' : 'article' } )}}";
+        var clubLanguagesArr = '{{clubLanguages|raw}}';
+        var defaultClubLang = '{{ defaultClubLang }}';
+        var clubLanguages = $.parseJSON( clubLanguagesArr ) ;        
+        var mode = '{{ mode }}';        
+        var articleId = '{{ articleId }}';
+        var editorialMode = '{{editorialMode}}';
+        var authorName = '{{ authorName }}';
+        var isCluborSuperAdmin = '{{ isCluborSuperAdmin }}';
+        var isClubArticleAdmin = '{{ isClubArticleAdmin }}';
+        var selectTrans = '{{'SELECT_DEFAULT'|trans}}';
+        var invalidUrl = '{{'INVALID_URL'|trans}}';
+        var pathTemplateArticleJson = '{{ path('internal_article_editorial_create_json',{'pagetype':'editorial'}) }}';
+        var pathArticleSave = "{{ (mode == "edit" and editorialMode== '') ? path('internal_article_editorial_save_edit', {'articleId': articleId} ) : path('internal_article_editorial_save') }}";
+        var browseServerPath = '{{path('filemanager_view',{'type':'document','module':'article'})}}';
+        var articleCategorySave = '{{ path('internal_article_category_save_popup') }}';  
+        var articleFilemanagerPath = '{{ path('filemanager_download',{'file':'__FILEID__'}) }}';   
+        var articleUploaderOptions = {
+            wrapperContainer: '.attachments-upload',
+            dropZoneElement: '#fg-cms-artcile-attachment',
+            fileListTemplate: 'attachments-upload',
+            fileListTemplateContainer: '.fg-article-upload-items',
+            progressBarContainer: '.fg-upload-progress',
+            progressBarElement: '.progress-bar',
+            removeElement: '.removeUploadedFile',
+            uploadUrl: '{{path('public_file_upload_check',{'type':'article'})}}',
+            extraDataToTemplate: {},
+            onFileListAdd: 'AttachmentsUploader.initElements',
+            errorContainer: '#articleattachments-upload-error-container',   
+            errorListTemplate: 'attachments-uploader-errorlist-template',
+            fileListTemplatePlacement: 'append',
+            validationErrorTemplateId:'fileUploadError',
+            onFileUploadError:'AttachmentsUploader.setUploadErrorMessage', 
+            validations: {
+                forbiddenFiletypes: globalForbiddenfiles,
+            }
+        };
+        var articleImgUploaderOptions = {
+            
+            dropZoneElement: '#fg-cms-artcile-media',
+            fileListTemplate: 'article-images-upload',
+            fileListTemplateContainer: '.fg-files-uploaded-lists-wrapper',
+            progressBarContainer: '.fg-upload-progress',
+            progressBarElement: '.progress-bar',
+            removeElement: '.removeUploadedFile',
+            uploadUrl: '{{path('internal_article_tmp_upload_file',{'type':'article'})}}',
+            extraDataToTemplate: {},
+            onFileListAdd: 'ImagesUploader.addImgCallback',
+            errorContainer: '#articleimg-upload-error-container',
+            errorListTemplate: 'attachments-uploader-errorlist-template',
+            fileListTemplatePlacement: 'append',
+            validationErrorTemplateId:'fileUploadError',
+            validations: {
+                fileType: 'image',
+                forbiddenFiletypes: globalForbiddenfiles,
+            },
+            onFileUploadError:'ImagesUploader.setUploadErrorMessage',        
+        };
+
+        var galleryBrowserSettings = {
+                browserUrl: '{{ url('internal_gallery_browser')}}',
+                galleryDataUrl: '{{ url('internal_gallery_gallerydetails_ajax')}}',
+                coverImagePath: '/uploads/{{clubId}}/gallery/width_300/',
+                hasInternalArea: true,
+                addFromGalleryText:'{{'ADD_FROM_GALLERY'|trans}}',
+                addedImagesTemplate: 'templateImagesFromGallery',
+                templatePlacementDiv: '.fg-files-uploaded-lists-wrapper',
+                addTemplateCallBackFlag: true,
+                addTemplateCallBack:  ImagesUploader.addGalleryImgCallback              
+            };
+            
+        $(function () {    
+            FgCreateArticle.handleTitleBar();
+            FgCreateArticle.renderTemplate('templateCreateArticle', pathTemplateArticleJson, pathArticleSave, 'fg-article-create-form');
+            FgGlobalSettings.handleLangSwitch(); 
+            FgCreateArticle.handleDateFields(); 
+            FgCreateArticle.categorysave();
+            FgCreateArticle.handleVideoUrls();
+            FgCreateArticle.handleSave();
+            FgInternal.toolTipInit();    
+            FgCreateArticle.handleShareDisable(); 
+            FgCreateArticle.handleDeleteArticleAttachments(); 
+            FgCreateArticle.handleDeleteIconColor();
+            FgCreateArticle.handleDeleteNewRow();
+        });
+        
+        
+    </script>
+{% endblock %}

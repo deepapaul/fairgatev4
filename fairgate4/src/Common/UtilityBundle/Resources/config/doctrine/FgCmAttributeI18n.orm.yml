@@ -1,0 +1,38 @@
+Common\UtilityBundle\Entity\FgCmAttributeI18n:
+    repositoryClass: Common\UtilityBundle\Repository\FgCmAttributeI18nRepository
+    type: entity
+    table: fg_cm_attribute_i18n
+    fields:
+        lang:
+            id: true
+            type: string
+            length: 2
+            fixed: true
+            nullable: false
+        fieldnameLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: fieldname_lang
+        fieldnameShortLang:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: fieldname_short_lang
+        isActive:
+            type: boolean
+            nullable: false
+            column: is_active
+    oneToOne:
+        id:
+            targetEntity: FgCmAttribute
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

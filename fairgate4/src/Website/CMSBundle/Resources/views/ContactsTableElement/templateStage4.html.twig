@@ -1,0 +1,64 @@
+<script type="text/template" id="contacts_table_stage4_template">   
+   <form class="form-horizontal" id="contacts_table_element_stage4">
+<div class="form-group">
+            <label class="col-sm-4 control-label">{{ 'CONTACTS_TABLE_ROWS_PER_PAGE'|trans }}</label>
+            <div class="col-sm-8 fg-right-col-1">
+                    <div class="fg-dis-IB  fg-width-200  fg-marg-left-10">
+                        <select name="tableRows" id="tableRows" class="form-control selectpicker" data-key="<%- tableId %>.filterId" >
+                                <option <% if(data.rowPerpage == '10'){ %> selected <% } %> value="10">10</option>
+                                <option <% if(data.rowPerpage == '20'){ %> selected <% } %> value="20">20</option>
+                                <option <% if(data.rowPerpage == '50' || data.rowPerpage == null){ %> selected <% } %> value="50">50</option>
+                                <option <% if(data.rowPerpage == '100'){ %> selected <% } %> value="100">100</option>
+                                <option <% if(data.rowPerpage == '200'){ %> selected <% } %> value="200">200</option>
+                                <option <% if(data.rowPerpage == '500'){ %> selected <% } %> value="500">500</option>
+                        </select>  
+                    </div>
+            </div>
+     </div>   
+     <div class="form-group">
+      <label class="col-sm-4 control-label">{{ 'CONTACTS_TABLE_OVERFLOW_BEHAVIOUR'|trans }}</label>
+            <div class="col-sm-8 fg-right-col-1">
+                    <div class="fg-dis-IB  fg-width-200  fg-marg-left-10">
+                        <select name="tableOverflow" id="tableOverflow" class="form-control selectpicker" data-key="<%- tableId %>.filterId" >
+                                <option <% if(data.overflowBehavior == 'horizontal'){ %> selected <% } %> value="horizontal">{{'CONTACTS_TABLE_OVERFLOW_HORIZONTAL'|trans }}</option>
+                                <option <% if(data.overflowBehavior == 'toggle'){ %> selected <% } %> value="toggle">{{'CONTACTS_TABLE_OVERFLOW_TOGGLE'|trans }}</option>
+                        </select>  
+                    </div>
+            </div>
+     </div> 
+      <div class="form-group">
+      <label class="col-sm-4 control-label">{{ 'CONTACTS_TABLE_ROW_HIGHLIGHTING'|trans }}</label>
+            <div class="col-sm-8 fg-right-col-1">
+                    <div class="fg-dis-IB fg-pad-top-7 fg-marg-left-10">
+                    <label> 
+                        <input data-id="" type="checkbox" <% if(data.rowHighlighting == '1'){ %> checked <% } %> name="highlightRow" id="highlightRow" class="uniform">
+                          {{'SHOW_TABLE_ROW_HIGHLIGHTING'|trans}}
+                    </label>
+                    </div>
+            </div>
+     </div> 
+     <div class="form-group">
+      <label class="col-sm-4 control-label">{{ 'CONTACTS_TABLE_SEARCH'|trans }}</label>
+            <div class="col-sm-8 fg-right-col-1">
+                    <div class="fg-dis-IB fg-pad-top-7 fg-marg-left-10">
+                    <label>
+                       <input data-id="" type="checkbox" <% if(data.tableSearch == '1'){ %> checked <% } %> name="tableSearch" id="tableSearch" class="uniform">
+                        {{'SHOW_CONTACTS_TABLE_SEARCH'|trans}}
+                     </label>
+                    </div>
+            </div>
+     </div> 
+     <div class="form-group">
+      <label class="col-sm-4 control-label">{{ 'CONTACTS_TABLE_EXPORT'|trans }}</label>
+            <div class="col-sm-8 fg-right-col-1">
+                    <div class="fg-dis-IB  fg-width-200  fg-marg-left-10">
+                        <select name="tableExport" id="tableExport" class="form-control selectpicker" data-key="<%- tableId %>.Export" >
+                                <option <% if(data.tableExport == 'none' || data.tableExport == 'null'){ %> selected <% } %> value="none">{{'CONTACTS_TABLE_EXPORT_NONE'|trans}}</option>
+                                <option <% if(data.tableExport == 'loggedin'){ %> selected <% } %> value="loggedin">{{'CONTACTS_TABLE_EXPORT_LOGGED_IN'|trans}}</option>
+                        <option <% if(data.tableExport == 'all'){ %> selected <% } %> value="all">{{'CONTACTS_TABLE_EXPORT_ALL'|trans}}</option>
+                        </select>  
+                    </div>
+            </div>
+     </div>
+  </form>
+</script>

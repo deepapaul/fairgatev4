@@ -1,0 +1,153 @@
+{# src/Clubadmin/ContactBundle/Resources/views/Role/categorysettings.html.twig #}
+{#{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}#}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = result_data.title %}
+{% block pagecontent %}
+     <!-- BREADCRUMB STARTS -->
+    {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+    <!-- BREADCRUMB ENDS -->
+    <div class="fg-theme-blue fg-theme-panel">
+        <!-- BEGIN PAGE CONTENT-->
+        <form id="filterrolecategorysettings" class="form-horizontal" action="filterrolecategorysettings" onSubmit="return false;">
+            <!-- CATEGORY DATA SECTION STARTS -->
+            <div class="row">
+                {#<div class="col-md-12">
+                    {% include 'clubadmin/inputbox_language_swtich.html.twig' with {'clubLanguages': clubLanguages, 'result_data':result_data} %}
+                </div>#}
+             {% set page_settings = { 'input_language_switch':'true','languageswitch':'true' }  %}
+             {% include 'clubadmin/page-title-bar.html.twig' with { 'page_settings': page_settings,'clubLanguages': clubLanguages, 'result_data':result_data,'clubDefaultLang':clubDefaultLang,'lang_switch_type':'role_filter'  } %}        
+            </div>
+            <!-- CATEGORY DATA SECTION ENDS -->  
+            <!-- ERROR DISPLAY STARTS-->
+            <div class="alert alert-danger display-hide">
+                <button class="close" data-close="alert"></button>
+                <span>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+            </div>
+            <!-- ERROR DISPLAY ENDS -->
+            <!-- DISPLAY STARTS -->
+{#            <form id="formFilter" class="form-horizontal" action="{{ path('save_filter_role')}}" novalidate="novalidate" onSubmit="return false;" autocomplete="off">            #}
+                <div id="filter_role_settings">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- PANEL HEADING STARTS-->
+                            <div class="panel panel-primary panel-bg">                        
+                                <div class="panel-heading fg-theme-head paneldisplay">
+                                    <h3 class="panel-title pull-left">{%trans%}SIDEBAR_FILTER_ROLE{%endtrans%}</h3>
+                                </div>
+                            </div>
+                            <!-- PANEL HEADING ENDS -->
+                            <!-- ROLE DISPLAY STARTS-->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div data-list-wrap class="admin-fontsize filterrole-list dragndrop excludejs" id="sortrole">
+                                            <!-- FILTER ROLES LISTING -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ADD ROLE DISPLAY STARTS-->
+                                <div class="row">
+                                    <div class="col-md-5 fg-common-top fg-common-btm pull-left">
+                                        <a id="addrow" href="#basic" data-toggle="modal" data-parentdiv-id="sortrole" data-add-type="role">
+                                            <i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> 
+                                            <span class="fg-add-text"> {%trans%}ADD_ROLE{%endtrans%}</span> 
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- ADD ROLE DISPLAY ENDS-->
+                            
+                            <!-- ROLE DISPLAY ENDS-->
+                        </div>    
+                    </div>
+                </div>
+{#            </form>#}
+            <!-- DISPLAY ENDS -->
+            <!-- SAVE SECTION STARTS -->
+            <div class="row">
+                <div class="col-md-12">
+
+                  <!--  Partial twig for savebutton-->
+                 {% include 'clubadmin/savebutton.html.twig' with {'backLink': backLink} %}
+
+                </div>
+            </div>
+            <!-- SAVE SECTION ENDS -->
+        </form>
+    </div>
+    <!-- UNDERSCORE TEMPLATES STARTS -->
+    <div id="divTemplates">
+        {# template for listing filter roles #}
+        {% include 'ClubadminContactBundle:Role:filterRoleTemplate.html.twig' with {'contactId': contactId} %}
+        {# template for adding new role #}
+        {% include 'ClubadminContactBundle:Role:addfilterrole.html.twig' with {'contactId': contactId} %}  
+        {# template for adding new role #}
+        {% include 'ClubadminContactBundle:Role:exceptionsfilterrole.html.twig' with {'contactId': contactId} %}
+        {# template for listing the log for team and function #}
+        {% include 'ClubadminContactBundle:Role:logdisplay.html.twig' %}
+    </div>
+    <!-- UNDERSCORE TEMPLATES ENDS -->
+{% endblock %}
+{% block javascripts %}
+    {% if not (app.request.xmlHttpRequest) %}
+        <script src="{{ asset('fgcustom/js/search-filter.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script> 
+        <script src="{{ asset('fgcustom/js/page/filter-settings.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/fg_filter_validate.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/sidebarfilter.js') }}" type="text/javascript"></script>
+    {% endif %}
+<script type="text/javascript">
+    var selectedLang = defaultLang = '{{clubDefaultLang}}';
+    var catId = {{result_data.id}};
+    var clubLanguages = {{clubLanguages|json_encode|raw}};
+    var role_section = 'role';
+    var clubId = {{clubId}};
+    var contactId = {{contactId}};
+    var filterClick = false;
+    var clubIdentifier = '{{clubIdentifier}}';
+    FgUtility.showTranslation(selectedLang);
+    FgUtility.changeColorOnDelete();
+    var formerror = '{{'FORM_ERROR_DISPLAY'|trans}}';
+    var extraBreadcrumbTitle = {text:'{{'BREADCRUMB_TITLE_FILTER_ROLECATEGORY'|trans}}', link:'{{path('edit_role_category', {'cat_type': 'filter_role'})}}'};
+    var clubId2 = '{{fgclub.clubId}}';
+    var clubUrlIdentifier = '{{fgclub.clubUrlIdentifier}}';
+    var filterCondition = FgFilter.getCondition('{{'CM_AND'|trans}}', '{{'CM_OR'|trans}}', '{{'CM_IS'|trans}}', '{{'CM_ISNOT'|trans}}', '{{'CM_IS_BETWEEN'|trans}}', '{{'CM_IS_NOTBETWEEN'|trans}}', '{{'CM_CONTAINS'|trans}}', '{{'CM_NOTCONTAINS'|trans}}', '{{'CM_BEGINSWITH'|trans}}' , '{{'CM_NOTBEGINSWITH'|trans}}', '{{'CM_ENDWITH'|trans}}', '{{'CM_NOTENDWITH'|trans}}');
+    var cm_activeasgmnts = '{{'CM_HAS_ACTIVE_ASSIGNMENTS'|trans}}';
+    var cm_noactiveasgmnts = '{{'CM_HAS_NOACTIVE_ASSIGNMENTS'|trans}}';
+    var cm_pastasgmnts = '{{'CM_HAS_PAST_ASSIGNMENTS'|trans}}';
+    var cm_nopastasgmnts = '{{'CM_HAS_NOPAST_ASSIGNMENTS'|trans}}';
+    var selectTitle = '{{'CM_SELECT_TYPE'|trans}}';
+    var cm_criteria = '{{'CM_CRITERIA'|trans}}';
+    var exceptionContsPath = '{{path('filter_exception_contacts')}}';
+    var logDataPath = '{{path('log_data',{})}}';
+    var filterContDataPath = "{{url('filter_contact_data')}}";
+    var updateBrokenPath = "{{url('filter_update_broken')}}";
+    var pathcontactSearch = "{{path('nl_collect_contactname')}}";
+    pathcontactSearch = pathcontactSearch.replace('replaceTerm', '');
+    var pathFilterData = "{{path('filter_contact_data')}}";
+    var pathFilterRoles = '{{path('filter_role_data',{'club_id': clubIdentifier, 'cat_id': result_data.id})}}';
+    var saveAction = "{{path('save_filter_role')}}";
+    var exceptionsData = {};
+    var exceptionContactIds = "";
+    var pathExceptionConts = "{{path('get_exception_filter_contact_names')}}";
+    var jsonTokenData = {};
+    var autoCompletePath = "{{path('nl_collect_contactname')}}";
+    var removestring = "{{'NL_AUTOCOMPLETE_REMOVE'|trans}} %s";
+    var langTitleArray = {};
+    var roleTitleLangs = {};
+    var titlePlaceholder = "{{'ROLE'|trans}}";
+    var translationTerms = {'contacts': '{{'Contacts'|trans}}', 'mandatory': '{{'MANDATORY'|trans}}', 'nonMandatory': '{{'NON-MANDATORY'|trans}}', 'selectTitle': '{{'CM_SELECT_TYPE'|trans}}', 'criteria': '{{'CM_CRITERIA'|trans}}'};
+    FgPopOver.init(".fg-dev-Popovers", true);
+    /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                     title: true,
+                     languageSettings: true
+
+             }); 
+</script>
+
+{% if not (app.request.xmlHttpRequest) %}
+    <script src="{{ asset('fgcustom/js/listRow.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/filter-role.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/tokenfield/js/bootstrap-tokenfield.js') }}" type="text/javascript"></script>
+{% endif %}
+{% endblock %}    
+    

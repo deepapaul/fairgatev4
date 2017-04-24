@@ -1,0 +1,99 @@
+<script type="text/template" id="clubrow">
+    <div class="col-md-12">
+        <div class="row fg-common-top-btm">
+            <div class="col-md-12">
+                <% 
+                var isVisibleSubfed = (content.isSystemField == 1 ? 1:content.isVisibleSubfed);
+                var isEditableSubfed = (content.isSystemField == 1 ? 1:content.isEditableSubfed);
+                var isVisibleClub = (content.isSystemField == 1 ? 1:content.isVisibleClub);
+                var isEditableClub = (content.isSystemField == 1 ? 1:content.isEditableClub);
+                var isVisibleSubfedDisabled = isVisibleClubDisabled = (content.isSystemField == 1 ? true : false);
+                var isEditableSubfedDisabled = ((content.isSystemField == 1 || isVisibleSubfed != 1 || content.disableStatus ==1) ? true : false);
+                var isEditableClubDisabled = ((content.isSystemField == 1 || isVisibleClub != 1 || content.disableStatus ==1) ? true : false);
+                var isRequiredFedmemberSubfedDisabled = ((content.isSystemField == 0 && isEditableSubfed != 1) || content.disableStatus ==1) ? true : false;
+                var isRequiredFedmemberClubDisabled = ((content.isSystemField == 0 && isEditableClub != 1) || content.disableStatus ==1) ? true : false;           
+                %>
+                <% if(content.clubtype == 'federation' && content.hasSubfederation==1) { %>                
+                <div class="panel panel-primary bordernon">
+                    <div class="panel-heading addash">
+                        <h3 class="panel-title">{{fgtwig.getTerminolgyName('Sub-federation',singular,'UCF')}}{#% trans %}CONTACT_FEDERATION_SUB_FED_TITLE{% endtrans %#}</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label class="fg-contact-field-label">{%trans with {'%subfederation%': fgtwig.getTerminolgyName('Sub-federation',singular)}%}CONTACT_FEDERATION_SUB_FED_IS_VISIBLE{% endtrans %}</label>
+                                <div class="col-md-2 col-sm-3 col-xs-5">
+                                    <label class="switch-light switch-light-med <% if(isVisibleSubfedDisabled){ %> fg-switch-inactive <% } %>" onClick="">
+                                        <input type="checkbox" name="isVisibleSubfed_<%- content.categoryId %>_<%- content.attributeId %>" <% if(isVisibleSubfed == 1 ) { %> value="1" checked <% } else { %> value="0" <% } %>class="toggle make-switch fedWrap" id="isVisibleSubfed_<%- content.categoryId %>_<%- content.attributeId %>" categoryId="<%- content.categoryId %>" attributeId="<%- content.attributeId %>" data-key="<%- content.categoryId %>.fields.<%- content.attributeId %>.isVisibleSubfed" <% if(isVisibleSubfedDisabled){ %> disabled="disabled"<% } %> />
+                                               <span name="fg-dev-visibleSubFed">  <span>{{'ON'|trans}}</span><span>{{'OFF'|trans}}</span></span> <a class="btn btn-primary"></a> </label>
+                                </div>
+                            </div>
+                            <div class="form-group" id="editableSubfedBlock<%- content.attributeId %>">
+                                <label class="fg-contact-field-label">{%trans with {'%subfederation%': fgtwig.getTerminolgyName('Sub-federation',singular)}%}CONTACT_FEDERATION_SUB_FED_IS_CHANGABLE{% endtrans %}</label>
+                                <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12 ">
+                                    <label class="switch-light switch-light-med pull-left <% if(isEditableSubfedDisabled){ %> fg-switch-inactive <% } %>" onClick="">
+                                        <input type="checkbox" name="isEditableSubfed_<%- content.categoryId %>_<%- content.attributeId %>" <% if(isEditableSubfed == 1 ) { %> value="1" checked <% } else { %> value="0" <% } %>class="toggle make-switch fedWrap" id="isEditableSubfed_<%- content.categoryId %>_<%- content.attributeId %>" categoryId="<%- content.categoryId %>" attributeId="<%- content.attributeId %>" data-key="<%- content.categoryId %>.fields.<%- content.attributeId %>.isEditableSubfed" <% if(isEditableSubfedDisabled ) { %> disabled="disabled" <% } %> />
+                                               <span name="fg-dev-editableSubFed">  <span>{{'ON'|trans}}</span><span>{{'OFF'|trans}}</span></span> <a class="btn btn-primary"></a> </label>
+                                
+                                    <div class="col-md-8 col-sm-9 col-xs-12 pull-left">
+                                        <div class="checkbox-list">
+                                            <label class="checkbox-inline <% if(isRequiredFedmemberSubfedDisabled ) { %>fg-label-inactive<% } %>">
+                                                <input type="checkbox" name="isRequiredFedmemberSubfed_<%- content.categoryId %>_<%- content.attributeId %>" <% if(isRequiredFedmemberSubfedDisabled ) { %> disabled="disabled" <% } else if(content.isRequiredFedmemberSubfed == 1 ) { %> value="1" checked <% } else { %> value="0" <% } %> id="isRequiredFedmemberSubfed_<%- content.categoryId %>_<%- content.attributeId %>" id="inlineCheckbox21" value="Required field for federation members." class="isRequiredFedmemberSubfed<%- content.attributeId %>" data-key="<%- content.categoryId %>.fields.<%- content.attributeId %>.requiredSubfed"  />
+
+                                                       {%trans %}CONTACT_FEDERATION_SUB_FED_REQUIRED{% endtrans %}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <% } %>
+            </div>
+        </div>
+        <div class="row fg-common-top-btm">
+            <div class="col-md-12">
+                 <div class="panel panel-primary bordernon">
+                    <div class="panel-heading addash">
+                        <h3 class="panel-title">{{ fgtwig.getTerminolgyName('Club',singular,'UCF') }}</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label class="fg-contact-field-label">  {%trans with {'%club%': fgtwig.getTerminolgyName('Club',singular)}%}CONTACT_FEDERATION_CLUB_IS_VISIBLE{% endtrans %}</label>
+                                <div class="col-md-2 col-sm-3 col-xs-5">
+                                    <label class="switch-light switch-light-med <% if(isVisibleClubDisabled){ %> fg-switch-inactive <% } %>" onClick="">
+                                        <input type="checkbox" name="isVisibleClub_<%- content.categoryId %>_<%- content.attributeId %>" <% if(isVisibleClub == 1 ) { %> value="1" checked <% } else { %> value="0" <% } %> class="toggle make-switch clubWrap" id="isVisibleClub_<%- content.categoryId %>_<%- content.attributeId %>" attributeId="<%- content.attributeId %>" categoryId="<%- content.categoryId %>" data-key="<%- content.categoryId %>.fields.<%- content.attributeId %>.isVisibleClub" <% if(isVisibleClubDisabled){ %> disabled="disabled"<% } %>/>
+                                               <span name="fg-dev-visibleClub">  <span>{{'ON'|trans}}</span><span>{{'OFF'|trans}}</span></span> <a class="btn btn-primary"></a> </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="editableClubBlock<%- content.attributeId %>">
+                                <label class="fg-contact-field-label"> {%trans with {'%club%': fgtwig.getTerminolgyName('Club',singular)}%}CONTACT_FEDERATION_CLUB_IS_CHANGABLE{% endtrans %}</label>
+                                <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
+                                    <label class="switch-light switch-light-med pull-left <% if(isEditableClubDisabled){ %> fg-switch-inactive <% } %>" onClick="">
+                                        <input type="checkbox" name="isEditableClub_<%- content.categoryId %>_<%- content.attributeId %>" <% if(isEditableClub == 1 ) { %> value="1" checked <% } else { %> value="0" <% } %> class="toggle make-switch clubWrap" id="isEditableClub_<%- content.categoryId %>_<%- content.attributeId %>" attributeId="<%- content.attributeId %>" categoryId="<%- content.categoryId %>" data-key="<%- content.categoryId %>.fields.<%- content.attributeId %>.isEditableClub" <% if(isEditableClubDisabled) { %> disabled="disabled" <% } %> />
+                                               <span name="fg-dev-editableclub">  <span>{{'ON'|trans}}</span><span>{{'OFF'|trans}}</span></span> <a class="btn btn-primary"></a> </label>
+                                
+                                    <div class="col-md-8 col-sm-9 col-xs-12 pull-left">
+                                        <div class="checkbox-list">
+                                            <label class="checkbox-inline <% if(isRequiredFedmemberClubDisabled) { %>fg-label-inactive<% } %>">
+                                                <input type="checkbox" name="isRequiredFedmemberClub_<%- content.categoryId %>_<%- content.attributeId %>" <% if(isRequiredFedmemberClubDisabled) { %> disabled="disabled" <% } else if(content.isRequiredFedmemberClub == 1 ) { %> value="1" checked <% } else { %> value="0" <% } %> id="isRequiredFedmemberClub_<%- content.categoryId %>_<%- content.attributeId %>" value="0" class="isRequiredFedmemberClub<%- content.attributeId %>" data-key="<%- content.categoryId %>.fields.<%- content.attributeId %>.requiredClub" />
+                                                {%trans %}CONTACT_FEDERATION_SUB_FED_REQUIRED{% endtrans %}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

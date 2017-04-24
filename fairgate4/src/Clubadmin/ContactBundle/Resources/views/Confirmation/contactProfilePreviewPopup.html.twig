@@ -1,0 +1,24 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">{{contactDatas.contactname}}</h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                
+                {% for fields in fieldDetails %}
+                    {% set indexVal = 'categoryset_CF_'~fields.attributeId %}
+                    {% if contactDatas[indexVal] is defined and contactDatas[indexVal] != '' %}
+                        <div class="row form-group">
+                            <div class="col-sm-6 text-right text-grey">{{fields.fieldnameShort}}</div>
+                            <div class="col-sm-6 ">{{contactDatas[indexVal]}}</div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>

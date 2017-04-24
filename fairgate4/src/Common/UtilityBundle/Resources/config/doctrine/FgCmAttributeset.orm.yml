@@ -1,0 +1,41 @@
+Common\UtilityBundle\Entity\FgCmAttributeset:
+    repositoryClass: Common\UtilityBundle\Repository\FgCmAttributesetRepository
+    type: entity
+    table: fg_cm_attributeset
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        isSystem:
+            type: boolean
+            nullable: false
+            column: is_system
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: sort_order
+        isFairgate:
+            type: boolean
+            nullable: false
+            column: is_fairgate
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

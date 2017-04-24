@@ -1,0 +1,43 @@
+<script type="text/template" id="newAssignmentFunctionsContact"> 
+    
+    <% arrayFunctionName = FgUtility.groupByMulti(normalArray, ['functionId']); 
+       dummyFunctionArray = _(normalArray).filter(function (x) { return (x['catId'] ==category && x['roleId']==role) ;}); 
+       if(element=='Team') { 
+           dummyFunctionArray = _(normalArray).filter(function (x) { return (x['teamCatId'] ==category && x['roleId']==role) ;}); 
+       } else {
+           dummyFunctionArray = _(normalArray).filter(function (x) { return (x['catId'] ==category && x['roleId']==role) ;});
+       }
+    %>
+
+    <div class="col-md-3 col-sm-12 col-xs-12 fg-left-zero functionDp  fg-dev-right-spacer">
+        <select class="bs-select form-control fg-select-font functionDropDown">
+
+            <option value="" option-text-role="1">{%trans%}ASSIGNMENT_SELECT_DROPDOWN{%endtrans%}</option>
+            <% if(element=='Workgroup') { %>
+                <% _.each(filterArray,function(filterArrayValue,filterArrayKey){
+                    filterArrayKey = filterArrayKey.replace('E','');
+                    if(clubType=='federation') { 
+                        if(filterArrayValue[0]['functionIsFederation']==0) { %>
+                            <option name="<%- category %>_role_<%- role %>_function_<%- filterArrayKey %>" id="<%- category %>_role_<%- role %>_function_<%- filterArrayKey %>" data-key="<%- category %>.role.<%- role %>.function.<%- filterArrayKey %>" element-type="<%- element %>" category="<%- category %>" role="<%- role %>" value="<%- filterArrayKey %>"><%- filterArrayValue[0]['functionTitle'] %></option>
+                        <% }
+                    } else { %>
+                        <option name="<%- category %>_role_<%- role %>_function_<%- filterArrayKey %>" id="<%- category %>_role_<%- role %>_function_<%- filterArrayKey %>" data-key="<%- category %>.role.<%- role %>.function.<%- filterArrayKey %>" element-type="<%- element %>" category="<%- category %>" role="<%- role %>" value="<%- filterArrayKey %>"><%- filterArrayValue[0]['functionTitle'] %></option>
+                    <% }
+                }); 
+            } else {      
+                var previousFunctionId='';
+                _.each(dummyFunctionArray,function(functionArrayValue,functionArrayKey){
+                    if(filterArray[functionArrayValue['functionId']] != undefined ) { 
+                        if(previousFunctionId != functionArrayValue['functionId']) { 
+                            previousFunctionId=functionArrayValue['functionId'];
+                            var filterArrayKeywithE = functionArrayValue['functionId'];
+                            filterArrayKey = functionArrayValue['functionId'].replace('E',''); %>
+                            <option name="<%- category %>_role_<%- role %>_function_<%- filterArrayKey %>" id="<%- category %>_role_<%- role %>_function_<%- filterArrayKey %>" data-key="<%- category %>.role.<%- role %>.function.<%- filterArrayKey %>" element-type="<%- element %>" category="<%- category %>" role="<%- role %>" value="<%- filterArrayKey %>"><%- arrayFunctionName[filterArrayKeywithE][0]['functionTitle'] %></option>
+                        <% }
+                    }
+                }); 
+            } %>
+
+        </select>
+    </div>
+</script>

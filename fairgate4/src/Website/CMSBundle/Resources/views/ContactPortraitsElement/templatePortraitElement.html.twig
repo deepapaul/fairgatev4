@@ -1,0 +1,55 @@
+{% if (type|default('') == 'stage3-preview') %}
+    {% set smallScreen = 'col-sm-12' %}
+    {% set colWidth = 'fg-col-6' %}
+{% else %}
+    {% set smallScreen = (portraitElement.portraitPerRow == 6) ? 'col-sm-4' : (portraitElement.portraitPerRow == 4 or portraitElement.portraitPerRow == 5) ? 'col-sm-6' :'' %}
+    {% set colWidth = 'fg-col-'~portraitElement.quotient %}
+{% endif %}
+
+<div class="fg-portrait {{colWidth}} {{smallScreen}}">
+   
+   
+  {% set elementId = portraitElement.elementId %}
+    {% set pwidth = portraitElement.columnWidth %}
+{% for key,container in portraitElement.container %}
+    {#container div#}
+    <div class="row">
+        {% for key2,columns in container.columns %}
+            <div class="fg-portrait-col fg-col-{{columns.gridSize}}">
+                <div class="fg-contents">
+                  {% if columns.data is defined %}
+                    {% for key3,data in columns.data %}
+                        {% set elementHtml = '' %}
+                       
+                        {% if (data.selectedFieldType == 'PROFILE_PIC')%}
+                      
+                            {% set elementHtml = '<%=portProfilepicTemplate({"cData":cData,"pwidth":'~columns.gridSize~',"portid":'~elementId~',"data":'~data|json_encode()~'})%>' %}
+                            
+                        {% elseif ((data.fieldType == 'imageupload')) %}
+                            {% set elementHtml = '<%=portImageUpldTmplte({"cData":cData,"data":'~data|json_encode()~'})%>' %}
+                            
+                        {% elseif ((data.fieldType == 'fileupload')) %}   
+                            {% set elementHtml = '<%= portFileUploadTemplate({"cData":cData,"data":'~data|json_encode()~'})%>' %}
+                            
+                        {% elseif ((data.fieldType == 'login email') or (data.fieldType == 'email') or (data.fieldType == 'url')) %}   
+                             {% set elementHtml = '<%=portEmailTmplte({"cData":cData,"data":'~data|json_encode()~'})%>' %}
+
+                        {% elseif (data.selectedFieldType == 'CONTACT_NAME') %}  
+                            {% set elementHtml = '<%=portContactNameTmplte({"cData":cData,"data":'~data|json_encode()~'})%>' %}   
+                            
+                         {% else %} 
+                            {% set elementHtml = '<%=portDefaultTmplte({"cData":cData,"data":'~data|json_encode()~'})%>' %} 
+                        {% endif %}
+                        
+                       {% if elementHtml is not empty %} 
+                         {% set newElement = elementHtml %} 
+                                {{newElement|raw}}
+                       {% endif %} 
+                    {% endfor %} 
+                 {% endif %}    
+                </div>
+            </div> 
+        {% endfor %}
+    </div>    
+{% endfor %}
+</div> 

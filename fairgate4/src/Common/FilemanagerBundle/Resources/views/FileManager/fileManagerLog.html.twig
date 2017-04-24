@@ -1,0 +1,67 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout_filemanager.html.twig' %}
+{% set pageTitle = filename %}
+{% block pagecontent %}
+    <!-- BEGIN BREADCRUMB CONTENT-->
+    <div class="row">
+        <div class="col-lg-12">
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+        </div>
+    </div>
+    <!-- END BREADCRUMB CONTENT-->
+    <!-- PAGE TITLE START-->
+    {% set page_Title =  'LOG_OF_FILE'|trans ({'%fileName%': filename}) %}
+    {% include 'global/page-title-bar.html.twig' with {'pageTitle':  page_Title, 'tabs': {}} %}  
+    <!-- PAGE TITLE END-->
+    <!-- BEGIN CONTENT -->
+   <div class="portlet-body tab-pane new-table-height" id="log-table_{{ filemanagerId }}">
+    {% include 'CommonFilemanagerBundle:FileManager:filelogList.html.twig' %}
+   </div>   
+    <!-- BEGIN CONTENT -->
+{% endblock %}
+{% block customstylesheets %}
+    <link href="{{ asset('bundles/commonFilemanager/css/fg-filemanager-styles.css')}}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+{% block javascripts %}
+<script src="{{ path('javascript_variables_handler', { 'contactId' : fgclub.get('contactId'), 'version': asset_version(),'updated': random(5000) }) }}" data-sr="{{fgclub.get('settingsUpdated')}}" type="text/javascript"></script>
+<script src="{{ asset('bundles/commonFilemanager/js/filemanager.js')}}" type="text/javascript"></script>    
+<script type="text/javascript">
+var filemanagerId = {{ filemanagerId }};
+var transArray = {{ transArray|raw }};
+var fileLogAjaxPath = '{{ path('filemanager_log_data', {'filemanagerId': filemanagerId}) }}';
+    var extraBreadcrumbTitle = {
+        0 : {text:'{{"FILES_LOG_BREADCRUMB"|trans}}'},
+        1 : {text:'{{"FILES_LOG_BREADCRUMB_TEXT"|trans}}'}
+    };   
+    FgInternal.extraBreadcrumbTitle = extraBreadcrumbTitle;
+    var errorMsgTranslations={
+    'Log_date_filter_err_msg1' : "{{ 'LOG_DATE_FILTER_ERR_MSG1'|trans }}",
+    'Log_date_filter_err_msg2' : "{{ 'LOG_DATE_FILTER_ERR_MSG2'|trans }}",
+    'Log_date_filter_err_msg3' : "{{ 'LOG_DATE_FILTER_ERR_MSG3'|trans }}",
+    'Log_date_filter_err_msg4' : "{{ 'LOG_DATE_FILTER_ERR_MSG4'|trans }}"
+};
+</script>
+<script src="{{ asset('bundles/commonFilemanager/js/Filemanager_datatable_actions.js')}}" type="text/javascript"></script>    
+ <script src="{{ asset('bundles/commonFilemanager/js/filemanagerLog.js')}}" type="text/javascript"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+            /*-------------- Page title bar configuration --------*/
+            $(".fg-action-menu-wrapper").FgPageTitlebar({
+                title: true,
+                row2: true,
+                                     }); 
+            scope = angular.element($("#BaseController")).scope();
+       }); 
+               $(function(){
+            var headerData = {
+                    'module': '{{fgclub.get('module') ? fgclub.get('module') : 'null'}}',
+                    'level1': '{{app.request.attributes.get('level1') ? app.request.attributes.get('level1') : 'null'}}',
+                    'level2': '{{app.request.attributes.get('level2') ? app.request.attributes.get('level2') : 'null'}}',
+                    'moduleMenu': '{{fgclub.get('moduleMenu') ? fgclub.get('moduleMenu') : 'null'}}'
+                };
+                FgHeader.init("{{ path('display_header') }}", headerData);
+            
+        })
+  </script>      
+
+{% endblock %}

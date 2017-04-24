@@ -1,0 +1,49 @@
+<script type="text/template" id="templateArticleLink">
+            <ul class="right-links no-style">
+                <% if(ArticleData.article.settings.publicationdate){ %>
+                <li><i class="fa fa-2x fa-calendar"></i>
+                <span class="fg-subtitle"><%- ArticleData.article.settings.publicationdate %></span>
+                <% if(ArticleData.article.settings.updatedOn){ %>
+                    <div class="fg-subtitle">{{'EDITORIAL_COMMENT_LAST_EDITED_TEXT'|trans}} <%- ArticleData.article.settings.updatedOn %></div>
+                <% } %>
+                </li>
+                <% } %>
+            
+                <% if(ArticleData.article.settings.author){ %>
+                <li><i class="fa fa-2x fa-user"></i> <span class="fg-subtitle"><%- ArticleData.article.settings.author %></span></li>
+                <% } %>
+            
+                <% if(ArticleData.commentCount !== '' && ArticleData.commentCount !== '0'){ %>
+                <li><i class="fa fa-2x fa-comment"></i> <span class="fg-subtitle"><%- ArticleData.commentCount %> <% if( ArticleData.commentCount > 1 ){ %>{{'ARTICLE_COMMENT_MULTIPLE'|trans}}<% } else { %>{{'ARTICLE_COMMENT_SINGLE'|trans}}<% } %></span></li>
+                
+                <% } %>
+                
+                <% if( ArticleData.article.settings.categoryTitles != null ){ %>
+                <li><i class="fa fa-2x fa-tag"></i> <span class="fg-subtitle"><%- (ArticleData.article.club !== clubId)  ? ArticleData.article.clubTitle : ArticleData.article.settings.categoryTitles %></span></li>
+                <% } %>
+            
+                
+                <% if( ArticleData.article.settings.areaTitles != null ){ %>
+                <li><i class="fa fa-2x fa-folder-open"></i><%- (ArticleData.article.club !== clubId) ? ArticleData.article.clubTitle :ArticleData.article.settings.areaTitles %></span></li>
+                <% } %>
+            
+            </ul>
+    
+   <% if(typeof ArticleData.article.attachment !== 'undefined'){ %>
+        <ul class="no-style fg-attachments hidden-xs">
+            <% if( _.size(ArticleData.article.attachment) > 0 ){
+                articleAttachments = _.sortBy(ArticleData.article.attachment, function (i) { return i.attachmentName.toLowerCase(); });
+                $.each(articleAttachments, function(i, v){
+                    var fileSize = FgClubSettings.formatNumber(v.attachmentSize/1024);
+            %>
+            <li><i class="fa fa-2x fa-paperclip"></i><a class="fg-article-attachment" data-clubId="<%= ArticleData.article.club %>" data-filemanagerId="<%= v.filemanagerId %>" href="#"><%= v.attachmentName %></a><span class="fg-size">(<%- fileSize %> {{'CALENDAR_DETAILS_ATTACHMENT_SIZE'|trans}})</span></li>
+            <%
+                });
+            %>
+        <% } %>
+        </ul>
+    <% } %>
+    
+    
+        
+</script>

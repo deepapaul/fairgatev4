@@ -1,0 +1,58 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">{{titleText}}</h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="#" class="form-horizontal form-row-sepe" id="stopservice">
+                    <div class="form-body">
+                        
+                        <div id="block_0" class="fg-dev-archive-content">
+                            <p class="fg-dev-archive-status-txt">{{stopDesc}}</p>
+                        </div>
+
+                    </div>
+                    
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'clubadmin/savebuttonpopup.html.twig' with {'save_button_val': buttonText} %}
+<script type="text/javascript">  
+   
+    var actionType = '{{actionType}}';
+    var selActionType = '{{selActionType}}';
+    var selContIds = [];
+    var bookedIds = '{{bookedIds|raw}}';
+    var pageType = '{{ pageType }}';
+    var pathSponsorServiceSkip = '{{path("sponsor_service_skip")}}';
+    var pathSponsorServiceStop = '{{path("sponsor_service_stop")}}';
+    var servicesCount = '{{ servicesCount }}';
+    var skippedServicesCount = '{{skippedServicesCount}}';
+    var sponsorSidebarCount = "{{url('sponsor_sidebar_count')}}";
+    
+    if (selActionType == 'selected') {
+        $("input.dataClass:checked").each(function() {
+           var contactId = $(this).attr('id');
+           if ($.inArray(contactId, selContIds) == -1) {
+               selContIds.push(contactId);
+            }
+        });
+    }
+    $(document).off('click', 'button[data-function=save], button[data-function=cancel]');
+    $(document).on('click', 'button[data-function=save], button[data-function=cancel]', function() {        
+        var buttonId = this.id;
+        if (buttonId == 'save') {
+            FgConfirmStop.stopServiceFun();            
+        }
+    });
+    
+</script>
+
+<script src="{{ asset('fgcustom/js/page/fg_confirmstop.js')}}" type="text/javascript"></script>
+

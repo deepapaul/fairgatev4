@@ -1,0 +1,19 @@
+<script type="text/template" id="template-help-videolisting">
+     <div class="fg-help-video-listing-content fg-clear">
+                     <h2 class="fg-subtitle"><%- details.Pname %></h2>
+                     <p><%- details.Pdescription %></p>
+                     <ul class="fg-help-video-lists col-md-10">
+                         <% _.each(data, function(d,i) { %>
+                        <li class="fg-help-video-list">
+                             <h3 class="fg-help-video-list-title"><%- d.Vtitle %></h3>
+{#                             <a class="fg-help-video-list-link" href="#" >There are many variations</a>#}
+                             <div class="fg-help-video-list-video-wrapper">
+                                <iframe id="ytplayer" type="text/html" width="640" height="390"
+                                   src="http://www.youtube.com/embed/<%- d.Vid %>"
+                                   frameborder="0"/></iframe>       
+                             </div>
+                         </li>
+                         <% });  %>
+                     </ul>
+                 </div>
+</script>

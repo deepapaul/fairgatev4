@@ -1,0 +1,162 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = 'TOP_NAV_MESSAGES'|trans %}
+{% block pagecontent %}   
+    <div  id="message-inbox">
+
+        <!-- BEGIN BREADCRUMB-->
+        <div class="row">
+            <div class="col-lg-12">
+                {% include 'internal/breadcrumb.html.twig' %}
+            </div>
+        </div>
+        <!-- END BREADCRUMB-->
+        <!-- PAGE TITLE -->
+        {% include 'global/page-title-bar.html.twig' with {'pageTitle': 'TOP_NAV_MESSAGES'|trans, 'tabs': tabs, 'url': '', 'type':'', 'counter': totalCount, 'showCountBadge' : true, 'countBadgeId' : 'fg-messages-count-' } %}
+        <!-- END PAGE TITLE -->
+        <!-- BEGIN CONTENT -->    
+        <div class="row " id="datatable-row-inbox">            
+            <div class="fg-message-table">
+                <table class="dataTable
+                        table
+                        table-bordered
+                        table-hover
+                        table-condensed
+                        table-hover" id="datatable-messages">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" class="dataTable_checkall fg-dev-avoidicon-behaviour">&nbsp;<i class="chk_cnt"></i></th>
+                            <th>{{ 'MESSAGE_SUBJECTDATE'|trans() }} </th>
+                            <th>{{ 'MESSAGE_REPLIES'|trans() }} </th>                               
+                            <th>{{ 'MESSAGE_NOTIFICATIONS_FOR_REPLIES'|trans() }} </th>
+                            <th>{{ 'MESSAGE_LAST_REPLY'|trans() }} </th>                                
+                            <th>{{ 'MESSAGE_CONVERSATION_START_BY'|trans() }} </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>                                           
+        </div>
+                            
+        {#  DRAFT         #}         
+        <div class="row hide" id="datatable-row-draft">            
+            <div class="fg-message-table">
+                <table class="dataTable
+                        table
+                        table-bordered
+                        table-hover
+                        table-condensed
+                       table-hover" id="datatable-messages-draft">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" class="dataTable_checkall fg-dev-avoidicon-behaviour">&nbsp;<i class="chk_cnt"></i></th>
+                            <th>{{ 'MESSAGE_SUBJECT'|trans() }} </th>
+                            <th>{{ 'MESSAGE_TO'|trans() }} </th>                               
+                            <th>{{ 'MESSAGE_CREATED_ON'|trans() }} </th>
+                        </tr>
+                    </thead>                        
+                </table>                    
+            </div>                            
+        </div>
+    {#  DRAFT    END     #}
+        <!-- END CONTENT -->
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('fgassets/internal/js/frondendDatatable.js') }}" type="text/javascript"></script>
+
+<script>   
+    var conversationPath = '{{ path('internal_message_conversation', {'messageId': 'MESSAGEID' } ) }}';
+
+    var pathConfirmationPopup = '{{ path('internal_message_confirmation_popup') }}';
+    var pathDeleteMessage = '{{ path('internal_message_delete') }}';
+    var pathUnreadMessage = '{{ path('internal_message_unread') }}';
+    var pathReadMessage = '{{ path('internal_message_read') }}';
+    var pathInboxListing = '{{ path('internal_message_inbox_listing') }}';
+    var pathInboxDrafts = '{{ path('internal_message_draft') }}';
+    var pathCreateStep1Contact = '{{ path('internal_create_message_step1_contact') }}';
+    var pathCreateStep1Team = '{{ path('internal_create_message_step1_team') }}';
+    var pathCreateStep1Workgroup = '{{ path('internal_create_message_step1_workgroup') }}';
+    var pathSetNotification = '{{ path('internal_message_setnotification') }}';
+    var pathMessageEditStep1 = '{{ path('internal_edit_message_step1', {'messageId':'MESSAGEID'}) }}';
+    var pathMessageEditStep2 = '{{ path('internal_create_message_step2', {'messageId':'MESSAGEID'}) }}';
+    var pathCommunityProfile = '{{ path('internal_community_profile', {'contactId':'CONTACTID'}) }}';
+    
+    var textNew = '{{ 'MESSAGE_NEW'|trans() }}';
+    var textBy = '{{ 'MESSAGE_BY'|trans }}';
+    var textOn = '{{ 'MESSAGE_ON'|trans }}';
+    var textOff = '{{ 'MESSAGE_OFF'|trans }}';
+    var textAnd = '{{ 'MESSAGE_AND'|trans }}';
+    var textMore = '{{ 'MESSAGE_MORE'|trans }}';
+    var currentContact = parseInt('{{ currentContact }}');
+    var countInbox = '{{ countInbox }}';
+    var countDrafts = '{{ countDrafts }}';
+    var limit = parseInt('{{ limit }}');    
+  
+    {# DEFINE DYNAMIC MENU TEXT HERE#}
+   
+    //inbox action menu
+    var actionMenuNoneSelectedText = {
+        'messageToContact': {'title': "{{'MESSAGE_TO_CONTACT'|trans}}...", 'dataUrl': '', 'hrefLink': pathCreateStep1Contact, 'isVisibleAlways': 'true' },
+        'messageToTeam': {'title': "{{'MESSAGE_TO_TEAMS'|trans({'%teams%': fgtwig.getTerminolgyName('Team', plural,'UCF')}) }}...", 'dataUrl': '',  'hrefLink': pathCreateStep1Team, 'isVisibleAlways': 'true' },
+        'messageToWorkgroup': {'title': "{{'MESSAGE_TO_WORKGROUPS'|trans}}...", 'dataUrl': '',  'hrefLink': pathCreateStep1Workgroup, 'isVisibleAlways': 'true', 'divider': 1},
+        'messageMarkAsRead': {'title': "{{'MESSAGE_MARK_ALL_AS_READ'|trans}}", 'dataUrl': pathUnreadMessage},
+        'messageMarkAsUnread': {'title': "{{'MESSAGE_MARK_ALL_AS_UNREAD'|trans}}", 'dataUrl': pathUnreadMessage},
+        'messageEnableNotification': {'title': "{{'MESSAGE_ENABLE_ALL_NOTIFICATION'|trans}}", 'dataUrl': pathSetNotification, 'isActive': 'true' },
+        'messageDisableNotification': {'title': "{{'MESSAGE_DISABLE_ALL_NOTIFICATION'|trans}}", 'dataUrl': pathSetNotification, 'isActive': 'true' },
+        'deleteMessage': {'title': "{{'MESSAGE_DELETE_ALL'|trans}}", 'dataUrl': pathDeleteMessage, 'isActive': 'true'}
+    };
+    var actionMenuSingleSelectedText = {
+        'messageToContact': {'title': "{{'MESSAGE_TO_CONTACT'|trans}}...", 'dataUrl': '',  'hrefLink': pathCreateStep1Contact, 'isActive': 'false'},
+        'messageToTeam': {'title': "{{'MESSAGE_TO_TEAMS'|trans({'%teams%': fgtwig.getTerminolgyName('Team', plural,'UCF')}) }}...", 'dataUrl': '',  'hrefLink': pathCreateStep1Team, 'isActive': 'false'},
+        'messageToWorkgroup': {'title': "{{'MESSAGE_TO_WORKGROUPS'|trans}}...", 'dataUrl': '',  'hrefLink': pathCreateStep1Workgroup, 'isActive': 'false', 'divider': 1},
+        'messageMarkAsRead': {'title': "{{'MESSAGE_MARK_AS_READ'|trans}}", 'dataUrl': pathUnreadMessage},
+        'messageMarkAsUnread': {'title': "{{'MESSAGE_MARK_AS_UNREAD'|trans}}", 'dataUrl': pathUnreadMessage},
+        'messageEnableNotification': {'title': "{{'MESSAGE_ENABLE_NOTIFICATION'|trans}}", 'dataUrl': pathSetNotification, 'isActive': 'true' },
+        'messageDisableNotification': {'title': "{{'MESSAGE_DISABLE_NOTIFICATION'|trans}}", 'dataUrl': pathSetNotification, 'isActive': 'true' },
+        'deleteMessage': {'title': "{{'MESSAGE_DELETE'|trans}}", 'dataUrl': pathDeleteMessage, 'isActive': 'true'  }
+    };
+    
+    var actionMenuMultipleSelectedText = {
+        'messageToContact': {'title': "{{'MESSAGE_TO_CONTACT'|trans}}...", 'dataUrl': '',  'hrefLink': pathCreateStep1Contact, 'isActive': 'false'},
+        'messageToTeam': {'title': "{{'MESSAGE_TO_TEAMS'|trans({'%teams%': fgtwig.getTerminolgyName('Team', plural,'UCF')}) }}...", 'dataUrl': '',  'hrefLink': pathCreateStep1Team, 'isActive': 'false'},
+        'messageToWorkgroup': {'title': "{{'MESSAGE_TO_WORKGROUPS'|trans}}...", 'dataUrl': '',  'hrefLink': pathCreateStep1Workgroup, 'isActive': 'false', 'divider': 1},
+        'messageMarkAsRead': {'title': "{{'MESSAGE_MARK_AS_READ'|trans}}", 'dataUrl': pathUnreadMessage},
+        'messageMarkAsUnread': {'title': "{{'MESSAGE_MARK_AS_UNREAD'|trans}}", 'dataUrl': pathUnreadMessage},
+        'messageEnableNotification': {'title': "{{'MESSAGE_ENABLE_NOTIFICATION'|trans}}", 'dataUrl': pathSetNotification, 'isActive': 'true' },
+        'messageDisableNotification': {'title': "{{'MESSAGE_DISABLE_NOTIFICATION'|trans}}", 'dataUrl': pathSetNotification, 'isActive': 'true' },
+        'deleteMessage': {'title': "{{'MESSAGE_DELETE'|trans}}", 'dataUrl': pathDeleteMessage, 'isActive': 'true'  }
+    };
+    
+    var actionMenuTextInbox = {'active' : {'none': actionMenuNoneSelectedText, 'single': actionMenuSingleSelectedText, 'multiple': actionMenuMultipleSelectedText}};
+    //inbox action menu end
+    //draft action menu
+    var actionMenuNoneSelectedTextDraft = {
+        'createMessage': {'title': "{{'MESSAGE_CREATE'|trans}}", 'dataUrl': '', 'hrefLink': pathCreateStep1Contact, 'isVisibleAlways': 'true'},
+        'deleteDraftMessage': {'title': "{{'MESSAGE_DELETE_ALL'|trans}}", 'dataUrl': pathDeleteMessage, 'isActive': 'true'  }
+    };
+    var actionMenuSingleSelectedTextDraft = {
+        'createMessage': {'title': "{{'MESSAGE_CREATE'|trans}}", 'dataUrl': '', 'hrefLink': pathCreateStep1Contact, 'isActive': 'false'},
+        'deleteDraftMessage': {'title': "{{'MESSAGE_DELETE'|trans}}", 'dataUrl': pathDeleteMessage, 'isActive': 'true'  } 
+    };
+    var actionMenuMultipleSelectedTextDraft = {
+        'createMessage': {'title': "{{'MESSAGE_CREATE'|trans}}", 'dataUrl': '', 'hrefLink': pathCreateStep1Contact, 'isActive': 'false'},
+        'deleteDraftMessage': {'title': "{{'MESSAGE_DELETE'|trans}}", 'dataUrl': pathDeleteMessage, 'isActive': 'true'  } 
+    };
+        
+    var actionMenuTextDraft = {'active' : {'none': actionMenuNoneSelectedTextDraft, 'single': actionMenuSingleSelectedTextDraft, 'multiple': actionMenuMultipleSelectedTextDraft}};    
+    
+    {% if not myTeams %}
+        delete actionMenuNoneSelectedText.messageToTeam;
+        delete actionMenuSingleSelectedText.messageToTeam;
+        delete actionMenuMultipleSelectedText.messageToTeam;
+    {% endif %}
+    {% if not myWorkgroups %}
+        delete actionMenuNoneSelectedText.messageToWorkgroup;
+        delete actionMenuSingleSelectedText.messageToWorkgroup;
+        delete actionMenuMultipleSelectedText.messageToWorkgroup;
+    {% endif %}
+    //draft action menu end
+    </script>       
+<script src="{{ asset('fgassets/internal/js/page/fgMessageInbox.js')}}" type="text/javascript"></script>
+
+{% endblock %}

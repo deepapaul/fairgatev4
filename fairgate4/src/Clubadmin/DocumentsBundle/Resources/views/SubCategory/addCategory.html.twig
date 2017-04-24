@@ -1,0 +1,47 @@
+<script type="text/template" id="template-category-add">
+    <% dataKey = isNew ? catId : catId %>
+    <% dataName = isNew ? 'new_' + catId : catId %>
+    <div <% if (isNew) { %>style="display:none;"  <% } %> class="row fg-border-line sortables fg-sort-drag-hover <% if (isNew) { %> addednew <% } %>" id="<%- dataName %>">
+        <div class="fg-col-first-icon fg-sort-drag" name="fg-dev-sorting"><i class="fa fg-sort ui-draggable handle"></i></div>
+        <div class="col-md-12 fg-col-hack"> {#colordarkash#}
+            <div class="row">
+                <div class="col-sm-5 col-lg-5 col-xs-12 fg-clear-left">
+                    <div class="bookmark">
+                        <input type="checkbox" class="make-switch" id="box1">
+                        <% _.each(clubLanguages, function(clubLang) { %>
+                            <% catTitleLang = attributes['title']; %>
+                            <% if (typeof attributes['titleLang'] !== 'undefined') { %>
+                                <% catTitleLang = (typeof attributes['titleLang'][clubLang] !== 'undefined') ? attributes['titleLang'][clubLang] : "" %>
+                            <% } %>
+                          <div dataerror-group data-lang="<%- clubLang %>">
+                            <input type="text" class="form-control input-sm fg-input-area <%- clubLang %>" data-key="<%- dataKey %>.title.<%- clubLang %>" id="<%- dataName %>_title_<%- clubLang %>_titleLang" name="<%- dataName %>_title_<%- clubLang %>_titleLang" placeholder = "<%- attributes['title'] %>" data-lang="<%- clubLang %>" value="<%- catTitleLang %>" <% if (clubLang == defaultLang) { %> required="true" <% } else { %> data-notrequired="true"<% } %> />
+                          </div>
+                     <% }); %>
+                    </div>
+                </div>
+            
+               <div class="col-sm-2 col-lg-2 fg-padding-tp-three"> 
+                    <% if (!isNew) { %>
+                     <a href="javascript:handleCountOrSidebarClick.updateFilter('DOCS-{{fgclub.clubId}}','documentfilterdisplayflag_<%- attributes['documentType'] %>-{{fgclub.clubId}}-{{contactId}}','<%- attributes['documentType'] %>','{{fgclub.clubId}}','{{contactId}}','<%- attributes['id'] %>','<%- attributes['catId'] %>','{{fgclub.clubUrlIdentifier}}','count','','','','','','','<%- attributes['catId'] %>','<%- attributes['id'] %>' )"> <% if (attributes['documentCount'] == 1) { %>
+                           {%trans with {'%count%': 1 }%}DOCUMENT_COUNT_SINGULAR{% endtrans %}
+                        <% } else if (attributes['documentCount'] > 0) { %>
+                           {% set docCount =  "<%- attributes['documentCount'] %>"%} {%trans with {'%count%': docCount }%}DOCUMENT_COUNT_PLURAL{% endtrans %}
+                        <% } else { %>
+                           {%trans with {'%count%': 0 }%}DOCUMENT_COUNT_PLURAL{% endtrans %}
+                        <% } %></a>
+                    <% } %>
+               </div>            
+            </div>
+        </div>
+        {#<!-- For render the delete button -->#} 
+        <% if (attributes['documentCount'] > 0) { %>
+                <div class="fg-col-last-icon" name="fg-dev-close-icon"><div class="pull-right deletediv"><i class="fa fa-lock fa-2x ash"></i></div></div>
+            <% } else { %>
+                {% include 'clubadmin/common.html.twig' with {'type': 'underscorejs_delete'} %}
+         <% } %>
+    
+        
+        <input type="hidden" data-key="<%- dataKey %>.catType" name="<%- dataName %>_catType" id="<%- dataName %>_catType" value="<%- catType %>" />
+        <input type="hidden" class="sorthidden" data-key="<%- dataKey %>.sortOrder" name="<%- dataName %>_sortOrder" id="<%- dataName %>_sortOrder" value="" data-element="sortorder" data-sort-parent="role_category_sort" />
+    </div>
+</script>

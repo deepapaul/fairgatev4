@@ -1,0 +1,80 @@
+{% extends 'ClubadminCommunicationBundle:Newsletterwizard:newsletterWizard.html.twig' %}
+{% block wizard_sending %}
+{% set count = recipientCount %}
+    
+{% if(pageType=="newsletter") %}
+    <h3 class="block">{% trans %}NL_SEND_TITLE{% endtrans %}</h3>
+{% endif %}
+{% if(pageType=="simplemail") %}
+    <h3 class="block">{% trans %}SM_SEND_TITLE{% endtrans %}</h3>
+{% endif %}
+<div id="failcallbackServerSide" class="alert alert-danger fg-clear" style="display:none;">
+        <button class="close" data-close="alert"></button>
+        <span>{{'FORM_ERROR_DISPLAY'|trans}}</span>
+    </div>
+    <div class="fg-tab-list">
+<dl>
+    <dt>{%trans%}NL_RECIPIENTS{% endtrans %}</dt>
+    <dd><span class="fg-rec-count">
+        {% if (recipientList != '') %}
+            <a href="{{recipientPath}}">{{recipientCount}}</a> &nbsp; <a href="#" id="updatenow" data-url="{{path('update_recipient_contacts', {'recipientId': 'recipientId'})}}" data-id="{{recipientList}}"><i class="fa fa-refresh"></i></a> <a href="#" id="updatenow" data-url="{{path('update_recipient_contacts', {'recipientId': 'recipientId'})}}" data-id="{{recipientList}}">{{'update_now'|trans}}</a>
+        {% else %}
+            {{recipientCount}}
+        {% endif %}
+    </span></dd>
+    <dt>{%trans%}NL_SENDING_TIME{% endtrans %} <span class="required" aria-required="true"> * </span></dt>
+    <dd>
+        <div class="radio-list">
+            <div class="fg-news-radio">
+                <input type="radio" name="optionsRadios" id="optionsRadios25" value="option1" checked>
+                <label for="optionsRadios25"> {% trans %}NL_NOW{% endtrans %}</label></div>
+            <div class="fg-news-radio col-md-9 col-sm-9 col-xs-12 fg-left-zero ">
+                <input type="radio" name="optionsRadios" id="optionsRadios26" value="option2" >
+                <label for="optionsRadios26">{% trans %}NL_PLANNED{% endtrans %}</label>
+              <span>
+                <div class="input-group date form_datetime"  >
+                        <input id="fg-dev-input6" disabled type="text" size="16" readonly class="form-control fg-disabled-icon" >
+                        <span class="input-group-btn fg-disabled-icon">
+                        <button class="btn default date-set disabled" id="fg-dev-calender" type="button"><i class="fa fa-calendar "></i></button>
+                        </span>
+                      </div></span>
+            </div>
+            <div class="fg-error fg-simplemail-error" id="templateError" style="display:none">{{"REQUIRED"|trans}}</div>  
+        </div> 
+    </dd>
+        {% if( flag == 1) %}
+    <dt>{% trans %}NL_WEBSITE{% endtrans %} </dt>
+    
+    <dd><div class="checkbox-list fg-chkbox-area-top" data-error-container="#form_2_services_error">
+            <label>
+                <input type="checkbox" value="1" name="service" checked/> {% trans %}NL_PUBLISH{% endtrans %}</label>                        
+        </div></dd>{% endif %}
+</dl>
+</div>
+    
+{% endblock %}                                                                                                                                        
+{% block customstylesheets %} 
+{% endblock %}
+{% block wizardscriptstart %}
+{% endblock %}
+{% block wizardscriptinit %}
+<script type="text/javascript">    
+    var newsletterId = "{{newsletterId}}";
+    var updateSendingPath = "{{path('nl_update_send')}}";
+    var flag='{{flag}}';
+    var pageType = '{{pageType}}';
+    var sendDate="{{sendDate}}";
+    var sendStatus = "{{status}}";
+    var manualContactIsSet="{{manualContactSet}}";
+    var recipientList="{{recipientList}}";
+    if(pageType =="simplemail"){
+        var sendPath = "{{path('newsletter_simplemailings')}}";
+    }
+    else {
+        var sendPath = "{{path('newsletter_mailings')}}";
+    }
+</script>
+<script src="{{ asset('fgcustom/js/page/newsletter-step6.js')}}" type="text/javascript"></script>
+{% endblock %}    
+{% block wizardscriptend %}
+{% endblock %}    

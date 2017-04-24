@@ -1,0 +1,42 @@
+<div class="tab-pane active fg-common-top " id="fg_category_privacy">
+    <form id="fg-privacySettingsForm" onsubmit="return false;">
+        <div class="row">
+            <div class="col-lg-12">
+                {#<h3 class="page-title fg-clear-marg">{{ 'INTERNAL_PRIVACY_SETTINGS_HEADING'|trans }}</h3>#}
+                {% if ( false ) %}
+                <label class="fg-privacy-checkbox">
+                    <input {% if(isStealthModeFlag==1) %} checked {% endif %} name="is_stealth_mode" id="is_stealth_mode" data-key="is_stealth_mode" type="checkbox">
+                    {{ 'INTERNAL_PRIVACY_SETTINGS_STEALTH_MODE'|trans }}                            
+                </label>   
+                {% endif %}
+            </div>
+        </div>
+        <!-- END PAGE TITLE -->
+        <div class="row">
+            <div class="col-md-12"> 
+                <div class="alert alert-info">
+                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
+                    <p>{{'INTERNAL_PRIVACY_SETTINGS_HINTMESSAGE'|trans}}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- BEGIN CONTENT -->
+        <div class="privacyContents"></div>       
+        {% include 'internal/savebutton.html.twig' with { 'backLink': path('internal_dashboard') }%}
+    </form>
+</div>
+<div class="tab-pane hide fg-common-top" id="fg_category_system_language" >
+    <form id="fg-languageSettingsForm" onsubmit="return false;">
+        <div class="languageSettingContents"></div>      
+        {% include 'internal/savebutton.html.twig' with {'reset_button_id':'cancelsettings','save_button_id':'applysettings', 'backLink': path('internal_dashboard') } %}
+    </form>
+    <div class="clearfix"></div>
+</div>
+<div class="tab-pane hide fg-common-top" id="fg_category_newsletter" >
+    <form id="fg-newsletterSettingsForm" onsubmit="return false;">
+        <div class="newsletterSubscriptionContents"></div>     
+        {% include 'internal/savebutton.html.twig' with {'reset_button_id':'cancel_newslettersettings','save_button_id':'apply_newslettersettings', 'backLink': path('internal_dashboard') } %}
+    </form>
+    <div class="clearfix"></div>
+</div>    

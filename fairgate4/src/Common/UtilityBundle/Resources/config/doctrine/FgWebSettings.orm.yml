@@ -1,0 +1,64 @@
+Common\UtilityBundle\Entity\FgWebSettings:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgWebSettingsRepository
+    type: entity
+    table: fg_web_settings
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        defaultLogo:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: default_logo
+        favicon:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        fallbackImage:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: fallback_image
+        siteDescription:
+            type: text
+            nullable: true
+            column: site_description
+        domainVerificationFilename:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: domain_verification_filename
+        googleAnalyticsTrackid:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: google_analytics_trackId
+        createdAt:
+            type: datetime
+            nullable: true
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: true
+            column: updated_at
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

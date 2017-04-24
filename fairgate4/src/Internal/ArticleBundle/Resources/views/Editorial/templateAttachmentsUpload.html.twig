@@ -1,0 +1,149 @@
+<script type='template' id='attachments-upload'>
+<li class="fg-article-upload-item fg-clear filecontent" id="<%- id %>">
+    <div class="col-sm-12 fg-pad-top-5 fg-calendar-item-name">
+        <div id="fg-uploadcalendar-name" class="row fg-uploadcalendar-name fg-replacewith-errormsg"> 
+            <div class="col-md-8"><%- name %>
+                <div class="col-sm-5 fg-upload-progress pull-right">
+                    <div class="progress ">
+                        <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="col-md-4"> <span class="fg-file-size"> <%- size %> </span></div></div>
+    </div>
+    <input class="hide" name="fileName" type="text" value="<%- name %>" data-key="article.attachment.new.<%- id %>.fileName">
+    <input class="hide" name="randFileName" type="text" value="<%- value %>" data-key="article.attachment.new.<%- id %>.randFileName">
+    <a href="javascript:void(0)" class="fg-delete"><i class="fa fa-times-circle fa-2x"></i></a>
+</li>
+</script>
+<script type="text/template" id="attachments-uploader-errorlist-template">   
+    <% if(errors.length > 0) { %>
+        <% _.each(errors, function(error) { %>
+            <% if (error == 0 || error == 1) { %>
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    {{'CALENDAR_UPLOAD_FILETYPE_ERROR'|trans}}
+                </div>
+            <% } %>
+        <% }) %> 
+    <% } %>   
+</script>
+<script type="text/template" id="fileUploadError">
+    <div class="col-md-8"><%- name %></div>
+    <div class="col-md-4">
+        <p>
+            <span class="help-block">
+                <% if (error == 0) { %> {{'FILEMANAGER_UPLOAD_FILETYPE_ERROR'|trans}}
+                <% } else if (error == 1) { %> {{'FILEMANAGER_UPLOAD_VIRUS_ERROR'|trans}}
+                <% } else if (error == 2) { %> {{'VIRUS_FILE_CONTACT'|trans}}
+                <% } else { %> <%- error %> <% } %>
+            </span>
+        </p>
+    </div>
+</script>
+
+<script type='template' id='article-images-upload'>
+<li class="fg-files-uploaded-list sortables fileimgcontent" id="<%- id %>">
+    <div class="fg-col-first-icon fg-sort-drag" ><i class="fa fg-sort ui-draggable handle"></i>
+    <input type="text" data-key="article.media.images.new.<%- id %>.sort_order" class="hide sort-val fg-dev-sortable" value="">
+    </div>
+    <div class=" fg-replacewith-errormsg">
+        <div class="col-sm-2 fg-thumb-wrapper">
+        <% ImagesUploader.createImagePreview(filedetails, 'article-img-preview-'+id); %>
+            <img src="" class="fg-thumb" id="article-img-preview-<%- id %>" >
+        </div>
+
+        <div class="col-sm-5">
+            <label class="control-label" for="teaser">{{ 'ARTICLE_DESC'|trans}}</label>  
+            <div class="">
+                <% if(_.size(clubLanguages) > 0) { 
+                    var selectedLang = (_.size(clubLanguages) == 1) ? defaultClubLang : $('button.btlang').attr('data-selected-lang');                
+                    _.each(clubLanguages,function(val,key){ %>
+                        <textarea class="form-control no-resize <% if(selectedLang!=val){ %> hide <% } %> " name="imageDesc-<%- id %>-<%- val %>" id="imageDesc-<%- id %>-<%- val %>" data-key="article.media.images.new.<%- id %>.description.<%- val %>" data-lang="<%- val %>" ></textarea>            
+                    <% }); %>
+                <% } %>   
+            </div>
+        </div>
+
+        <div class="col-sm-2 fg-file-size"><%- size %></div>
+
+        <div class="col-sm-5 fg-upload-progress">
+            <div class="progress ">
+                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="clearfix"></div>
+    <input class="hide" name="imageFileName" type="text" value="<%- name %>" data-key="article.media.images.new.<%- id %>.fileName">
+    <input class="hide" name="imageRandFileName" type="text" value="<%- value %>" data-key="article.media.images.new.<%- id %>.filepath">
+    <a href="javascript:void(0)" class="fg-delete-img"><i class="fa fa-times-circle fa-2x"></i></a>
+</li>
+</script>
+
+<script type='template' id='article-video-upload'>
+<li class="fg-files-uploaded-list sortables fileimgcontent" id="<%- id %>">
+    <div class="fg-col-first-icon fg-sort-drag" ><i class="fa fg-sort ui-draggable handle"></i>
+    <input type="text" data-key="article.media.videos.new.<%- id %>.sort_order" class="hide sort-val fg-dev-sortable" value="<%-sort%>">
+    </div>
+    <div class="col-sm-2 fg-thumb-wrapper">
+        <img src="/fgassets/internal/img/youtube-default-thumb.png" class="fg-thumb" id="article-img-preview-<%- id %>" >
+    </div>
+    <div class="col-sm-5 form-group">
+        <label class="control-label" for="teaser">{{ 'ARTICLE_VIDEO_URL'|trans}}</label>  
+        <div class="">
+            <input type="text" name="videoThumb<%- id %>"  data-key="article.media.videos.new.<%- id %>.videoThumb" class="form-control video-url" required value=""> 
+            <p>{{ 'ARTICLE_VIDEO_URL_DESC'|trans}}</p>
+            <input class="invalid-video-url-flag" id="invalid-video-url-flag-<%- id %>"  type="hidden" value="">
+        </div>
+    </div> 
+    <div class="col-sm-5">
+        <label class="control-label" for="teaser">{{ 'ARTICLE_DESC'|trans}}</label>
+        <div class="">
+            <% if(_.size(clubLanguages) > 0) { 
+                var selectedLang = (_.size(clubLanguages) == 1) ? defaultClubLang : $('button.btlang').attr('data-selected-lang');
+                _.each(clubLanguages,function(val,key){ %>
+                    <textarea class="form-control no-resize <% if(selectedLang!=val){ %> hide <% } %> " name="videoDesc-<%- id %>-<%- val %>" id="videoDesc-<%- id %>-<%- val %>" data-key="article.media.videos.new.<%- id %>.description.<%- val %>" data-lang="<%- val %>" ></textarea>            
+                <% }); %>
+            <% } %>   
+        </div>
+    </div>
+    
+    <div class="clearfix"></div>
+    <input class="hide video-thumb" name="videoThumbImg"  type="text" value="" data-key="article.media.videos.new.<%- id %>.videoThumbImg">
+    <a href="javascript:void(0)" class="fg-delete-img"><i class="fa fa-times-circle fa-2x"></i></a>
+</li>
+</script>
+
+<script type="text/template" id="templateImagesFromGallery">
+    <% _.each(data, function(d, i) { %>
+    <% var order = imageCount+i+1;  %> 
+        <li class="fg-files-uploaded-list sortables fileimgcontent" id="<%- d.itemId %>">
+            <div class="fg-col-first-icon fg-sort-drag" ><i class="fa fg-sort ui-draggable handle"></i>
+            <input type="text" data-key="article.media.images.media.<%- d.itemId %>.sort_order" class="hide sort-val fg-dev-sortable" value="">
+            </div>
+            <div class="col-sm-2 fg-thumb-wrapper">
+                <img src="<%- d.imgPath %>" class="fg-thumb" id="article-img-preview-<%- d.itemId %>" >
+            </div>
+            <div class="col-sm-5">
+                <label class="control-label" for="teaser">{{ 'ARTICLE_DESC'|trans}}</label>  
+                <div class="">
+                    <% if(_.size(clubLanguages) > 0) { 
+                        var selectedLang = (_.size(clubLanguages) == 1) ? defaultClubLang : $('button.btlang').attr('data-selected-lang');
+                        _.each(clubLanguages,function(val,key){ %>
+                            <textarea class="form-control no-resize <% if(selectedLang!=val){ %> hide <% } %> " name="imageDesc-<%- d.itemId %>-<%- val %>" id="imageDesc-<%- d.itemId %>-<%- val %>" data-key="article.media.images.media.<%- d.itemId %>.description.<%- val %>" data-lang="<%- val %>" ><%- d.itemDescription %></textarea>            
+                        <% }); %>
+                    <% } %>   
+                </div>
+            </div>
+            <div class="col-sm-5 fg-file-size"><%- FgFileUpload.formatFileSize(parseInt(d.fileSize)) %></div>
+            
+            <div class="clearfix"></div>
+            <input class="hide" name="imageItemId" type="text" value="<%- d.itemId %>" data-key="article.media.images.media.<%- d.itemId %>.itemid">
+            <a href="javascript:void(0)" class="fg-delete-img"><i class="fa fa-times-circle fa-2x"></i></a>
+        </li>
+
+    <% }); %>    
+</script>

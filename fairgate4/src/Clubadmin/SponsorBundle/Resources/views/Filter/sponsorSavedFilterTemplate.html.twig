@@ -1,0 +1,60 @@
+<script type="text/template" id="sponsorSavedFilter">
+    <% index=1 %>   
+    <% filterRoleIds = []; %>
+    <% _.each(data, function(item,key){ %>
+        
+        <div class="row fg-border-line sortables fg-sort-drag-hover" id="<%- item.filterId %>">
+            <div class="fg-col-first-icon fg-sort-drag">
+                <i class="fa fg-sort ui-draggable handle"></i>                               
+            </div>
+            <div class="col-md-12 fg-col-hack">
+                <div class="row" id="<%- item.filterId %>">
+                    <div class="col-sm-3 col-lg-3 col-xs-12" dataerror-group> 
+                        <input type="text" class="form-control input-sm fg-input-area" name="<%- item.filterId %>_title" value="<%- item.filterName %>" data-key="<%- item.filterId %>.name" id="<%- index %>_title" required="true" />
+                        <span id="saved-filter-title" for="<%- index %>_title" class="help-block"></span>
+                    </div>
+            
+                    <div class="bookmark fg-bkmrk-ico-new pull-left"><input id="box<%- index %>" type="checkbox" <% if (item.bookmarkid) { %> checked <% } %> class="make-switch" data-key="<%- item.filterId %>.book_marked" name="<%- item.filterId %>_bookmarked" id="<%- index %>_book_marked" />  <label for="box<%- index %>"><i class="fa fa-bookmark"></i></label></div>
+                    <div class="col-sm-6 col-lg-6 padding-tp-3"> <a href="#" class="filterCount replaceFilterClass<%- item.filterId %>" filter_id="<%- item.filterId %>" status="calculate" url="{{ path('update_sponsor_filter_count')}}">{%trans%}LISTING_CALCULATE_NUMBER_OF_CONTACTS{%endtrans%}</a> </div>    
+                    <div class="col-sm-2 col-lg-2 padding-tp-3"> <a href="#" class="fg-recipients-active" data-fn="filter" data-id="<%- item.filterId %>" data-val="<%- item.filterData %>" data-toggle="collapse" data-target="#data-<%- item.filterId %>" data-filtertype="sponsor"><i class="fa fa-plus-square-o"></i> {%trans%}LISTING_FILTER{%endtrans%}</a> </div>    
+            
+                    <input type="text" class="hide sort-val" data-key="<%- item.filterId %>.sort_order" name="<%- item.filterId %>_sort_order" id="<%- item.filterId %>_sort_order" value="<%- index %>" data-sort-parent="savedfilterlist_sort" />
+                    <input type="hidden" class="jsonDatahidden" name="<%- item.filterId %>_jsonData" id="<%- item.filterId %>_jsonData" value="<%- item.filterData %>" />
+                    <input type="hidden" id="<%- item.filterId %>_is_broken" data-key="<%- item.filterId %>.is_broken" name="<%- item.filterId %>_isBroken" value="<%- item.isBroken %>"/>
+                    <input type="hidden" class="bookmarkhidden"  data-key="<%- item.filterId %>.book_marked" name="<%- item.filterId %>_book_marked" id="<%- item.filterId %>_book_marked" value="<%- index %>"/>
+                    <div id="<%- item.filterId %>_doNotSumbmit" ></div>
+                </div>
+            </div>
+            <div class="fg-col-last-icon">
+            <% if(item.filterUsed > 0){ %>
+                <i class="fa fa-lock fa-2x ash"></i>
+            <% } else{ %>
+                <div class="pull-right deletediv "> <div class="closeico"> <input id="select<%- index %>" data-deletable="checknew" type="checkbox" class="make-switch" data-key="<%- item.filterId %>.is_deleted" name="<%- item.filterId %>_is_deleted" data-inactiveblock="changecolor" data-parentid="<%- item.filterId %>"/>  <label for="select<%- index %>"></label></div></div>
+            <% } %>
+            </div>
+    
+            <div class="collapse" id="data-<%- item.filterId %>">
+                <div class="fg-filter-blk">
+                    <div id="filter-<%- item.filterId %>" class="fg-filter-blk-open fg-filter-blk-wrapper"></div>
+                    <div class="row">
+                        <div class="col-md-5 fg-add-criteria fg-common-btm pull-left">
+                            <a class="add-<%- item.filterId %>" href="#">
+                                <i class="fa fg-plus-circle fa-2x pull-left"></i> <span class="fg-add-text">{{'SAVED_FILTER_ADD_CRITERION'|trans}}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <input type="text" data-key="<%- item.filterId %>.filter_data" name="<%- item.filterId %>_filter_data" id="filter_data_<%- item.filterId %>" value="<%- item.filterData %>" class="hide jsonDatahidden" role-id="<%- item.filterId %>" />
+            </div>
+            
+        </div>
+        
+        <% if (index == _.size(data)) { %>
+            <% initPageFunctions(); %>
+        <% } %>
+        <% index++%>
+    <%  }); %>
+    <% if (index == 1) { %>
+        <% initPageFunctions(); %>
+    <% } %>
+</script>

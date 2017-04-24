@@ -1,0 +1,277 @@
+
+@import '../utilities/variables'; // added variables and functions
+
+/*
+01 - Select 2
+02 - Bootstrap select
+03 - Autocomplete
+04 -Bootstrap Datepicker
+05 - data tabs
+06 - Nestable list
+*/
+//---------01 - Select 2 2---------
+//colors
+$white: white;
+$color_gallery_approx: #f0f0f0;
+
+.select2.select2-container,
+.select2-container,
+.select2-container.form-control {
+	padding: 0;
+	height: auto !important;
+
+	.select2-choice {
+		margin: 0;
+		background: $white;
+		border: none;
+		height: 30px !important;
+		&:hover {
+			background-color: $color_gallery_approx;
+		}
+		&:focus {
+			background-color: $color_gallery_approx;
+		}
+		&:active {
+			background-color: $color_gallery_approx;
+		}
+		&.active {
+			background-color: $color_gallery_approx;
+		}
+		.select2-arrow{
+			
+			background: none!important;
+		 	b {
+				background: none!important;
+			}
+		}
+	}
+	&.select2-container-disabled {
+		.select2-choice {
+
+			background: $clrDarkWhite;
+			cursor: not-allowed;
+		}
+	}
+	&.select2-dropdown-open {
+		.select2-choice{
+			border: none !important;
+		}
+	}
+}
+.select2-drop{
+	.select2-search{
+		input{
+			border-color: $clrGreyBtnBg;
+			margin: 3px auto;
+		}
+	}
+	.select2-results {
+		.select2-highlighted{
+			color: $clrPrimaryBlack;
+		}
+	}
+}
+.select2-drop-active{
+    z-index: 999999;
+    -webkit-box-shadow:none;
+    -moz-box-shadow:none;
+    -ms-box-shadow:none;
+    box-shadow:none;
+}
+.select2-drop-mask{
+    z-index: 10051;
+}
+.bootstrap-select.show-tick ul li a{
+	padding-left:30px !important;
+}
+
+//--------02 - Bootstrap select -----
+
+.bootstrap-select{
+	.btn-default.selectpicker {
+		border-color: $clrGreyBtnBg;
+		.has-error &{
+			border-color: #e73d4a;
+		}
+		.no-error &{
+			.has-error &{
+				border-color: $clrGreyBtnBg;
+			}
+		}
+		&.active {
+			background-color: $color_gallery_approx;
+		}
+		&:active {
+			background-color: $color_gallery_approx;
+		}
+		&:hover,&:focus {
+			background-color: $color_gallery_approx;
+			.caret{
+				background:none;
+			}
+		}
+		.caret{
+			background:none;
+		}
+	}
+	.dropdown-menu > li{
+		&:hover {
+		    background-color: $clrSandWhite;
+		}
+		&.selected a{
+			background-color: $clrSandWhite;
+		}
+		a {
+			color: $clrPrimaryBlack;
+		    font-weight: normal;
+			i.check-mark{
+				display: none;
+			}
+		}
+	}
+	&.btn-group{
+		&.show-tick {
+			.dropdown-menu {
+				li{
+					&.selected {
+						a {
+							i.check-mark{
+								display: block;
+							}
+						}
+					}
+					a{
+						span.text {
+							margin-left: 5px;
+							margin-right: 0;
+						}
+
+					}
+
+				}
+			}
+		}
+		.dropdown-menu{
+			> li.dropdown-header {
+				>.text {
+					font-weight: 600;
+					font-size: 14px;
+					color: #333333;
+				}
+			}
+		}
+		.btn .caret{
+			background: none !important;
+		}
+
+	}
+}
+
+.open > .btn-default.dropdown-toggle {
+	background-color: $color_gallery_approx;
+}
+.bootstrap-select .dropdown-menu > li.selected a.fg-option-mandatory .check-mark:after{
+	display:none;
+}
+.bootstrap-select.btn-group.show-tick .dropdown-menu li.selected a span.check-mark{
+    right: auto;
+    left: 8px;
+    top: 5px;
+    margin-top: 2.5px;
+    width: auto;
+}
+/*-------------------------------------
+---03 - Autocomplete --------------------*/
+.ui-autocomplete .ui-state-hover, 
+.ui-autocomplete .ui-widget-content .ui-state-hover, 
+.ui-autocomplete .ui-widget-header .ui-state-hover, 
+.ui-autocomplete .ui-state-focus, 
+.ui-autocomplete .ui-widget-content .ui-state-focus, 
+.ui-autocomplete .ui-widget-header .ui-state-focus{
+    border: none;
+    background: #fff;
+    font-weight: normal;
+    border-left: 1px solid #ebebeb;
+    border-right: 1px solid #ebebeb;
+    margin: 0;
+}
+
+//01-H-Autocomplete dropdown------------------------
+
+.tt-dropdown-menu {
+	min-width: 160px;
+	margin-top: 2px;
+	padding: 5px 0;
+	background-color: $clrWhite;
+	border: 1px solid $clrGreyBtnBgHvr;
+	//Instead of the line below you could use @include background-clip($clip)
+	background-clip: padding-box;
+	width: 100%;
+	overflow-y: auto;
+    max-height: 160px;
+    z-index: 99999 !important;
+	h3 {
+		margin: 5px 0;
+		padding: 6px 12px;
+		font-size: 18px;
+		font-weight: 700;
+		border-bottom: 1px solid $clrDarkWhite;
+	}
+}
+.page-content div.fbautocomplete-main-div input[type="text"]{	
+    outline: 0;
+}
+.page-content div.fbautocomplete-main-div
+{
+	 span{	
+	    background-color: #ededed;
+	    border: 1px solid #d9d9d9;
+        z-index: 5;
+		position: relative;
+	    a{
+	    	font-weight: normal;
+	    	margin: 0 5px;
+	    	&:hover{
+			    color: #767676;
+	    	}
+	    }
+	}
+
+
+}/*-------------------------------------
+---04 -Bootstrap Datepicker --------------------*/
+.datepicker.dropdown-menu:before,
+.datepicker.dropdown-menu:after{
+    display: none;
+
+}
+/*-------------------------------------
+---05 - data tabs --------------------*/
+.fg-tab-style-01 > .nav-tabs > li > a{
+	color: #428bca;
+}
+
+
+/*-------------------------------------
+---06 - Nestable list --------------------*/
+
+
+.fg-nestable{
+	>li.dd-item.row {		
+			&:first-child > .fg-nestable-row {
+				margin-top: 5px;
+			}
+			&:last-child > {
+				.fg-nestable-row {
+					margin-bottom: 5px;
+				}
+				.dd-list {
+					margin-top: -8px;
+					.dd-list {
+						margin-top: -5px;
+					}
+				}
+			}
+		}
+}
+

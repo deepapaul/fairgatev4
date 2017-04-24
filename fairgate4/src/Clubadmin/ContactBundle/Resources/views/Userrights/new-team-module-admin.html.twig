@@ -1,0 +1,24 @@
+<script type="text/template" id="fg-dev-add-new-team-module-admin"> 
+    
+    <% rand ='678'%>
+    <div class="fg-internal-blk-div">
+        <div class="fg-internal-blk-one col-md-5 col-sm-5 col-xs-8"> 
+            <select id="teams_new_module_admin_teams_<%- randomNumber %>" title="{{'SELECT_DEFAULT'|trans}}" name="teams_new_module_admin_teams_<%- randomNumber %>" data-key="teams.<%- type %>.new.<%- rand %>.module.<%- randomNumber %>.teams" class="selectpicker form-control show-tick ">
+            <% _.each(teamsArray,function(teamVal,teamKey){ %>
+                    <option value="<%- teamVal.roleId %>" <%  if(_.contains(excludeRoles,teamVal.roleId)) { %> disabled <% } %> class="multiple" ><%- teamVal.rTitle %></option>
+                <% }); %> 
+            </select>
+        </div>
+        <div class="fg-internal-blk-two col-md-6 col-sm-6 col-xs-12"> 
+            <select id="teams_new_module_admin_teams_module_<%- randomNumber %>" title="{{'SELECT_DEFAULT'|trans}}" name="teams_new_module_admin_teams_module_<%- randomNumber %>" data-key="teams.<%- type%>.new.<%- rand %>.module.<%- randomNumber %>.modules" multiple  class="selectpicker form-control show-tick">
+                <% _.each(allTeamGroups,function(groupVal,groupKey){ %>
+                    <option value="<%- groupVal.id %>" class="multiple" ><%- groupVal.transName %></option>
+                <% }); %>
+            </select>
+        </div>
+        <div class="fg-internal-blk-three new_contact_right_team_modules_rmv">
+            <i class="fa fa-times-circle"></i>
+        </div>
+    </div> 
+    <input type="text" name="teams.<%- type %>.new.<%- rand %>.contact" id="teams.<%- type %>.new.<%- rand %>.contact" data-key="teams.<%- type %>.new.<%- rand %>.contact" class="hide " value="<%- contactId %>" />
+</script>

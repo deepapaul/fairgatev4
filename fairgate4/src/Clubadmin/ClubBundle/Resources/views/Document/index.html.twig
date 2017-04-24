@@ -1,0 +1,212 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = clubName %}
+{% set clubTerminolgy = fgtwig.getTerminolgyName('Club',plural)%}
+{% block customstylesheets %}
+    
+{% endblock %}
+{% set clubTerminolgy = fgtwig.getTerminolgyName('Club',plural)%}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body fg-theme-blue">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                {% include 'clubadmin/breadcrumb.html.twig'  with {'breadCrumb':{'back': path('club_homepage') }} %}
+               {# {% include 'ClubadminClubBundle:ClubList:panel-tabs.html.twig' with {'offset':offset,'clubName':clubName,'clubId':clubId,'active':'clubdocuments','isDocumentModuleBooked':1, 'clubTab':'document','asgmntsCount':asgmntsCount,'notesCount':notesCount} %} 
+             #}
+               <div class="row">    
+                {% set page_settings = { 'pagetitle':'true','tabs':'true','actionmenu':'true'}  %}
+                {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': clubName ,'page_settings': page_settings,'tabs': tabs, 'type':'overview', 'hrefLink' : true, 'url':"#"} %}   
+            </div>
+                
+                <!-- END PAGE TITLE & BREADCRUMB-->                
+                <!-- ERROR MESSAGE-->
+                
+                <!-- DOCUMENT LISTING--->
+                <div id="data-tabs-content">
+                    <!-- DOCUMENT UPLOAD AREA--->
+{#                    {% if(docCategory|length>0) %}#}
+                    <div class="fg-common-btm hide" data-upload-doc-area="{{type|default('CLUB')}}">
+                        <form id="upload-form" skipDirtyCheck autocomplete="off" novalidate="novalidate" data-url="{{path('document_save', {'documentType':type|default('club')})}}" name="upload-form" method="post">
+                            {% include 'ClubadminDocumentsBundle:Documents:documentUpload.html.twig' %}
+                            {% include 'ClubadminClubBundle:Document:uploadTemplateClub.html.twig' with {'clubType':clubType,'contactName':contactName}%}
+                        </form>
+                    </div>  
+{#                    {% endif %}#}
+                    <!-- END PAGE HEADER-->
+                    <div id="sudscriber-tab" class="tab-pane">
+                        <div class="row fg-common-top"> 
+                            <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                            <div class="portlet-body new-table-height" id="tableWrapper">
+                                <table data-ajax-path="{{ path('club_documents_ajax', {'offset': 0, 'clubId':clubId }) }}"
+                                       class="table documentdataTable dataTable-y-height  doc-assignments dataTable-initialSort contain-add-doc-autocomplete
+                           table-bordered
+                           table-hover
+                           table-condensed
+                           dataTable-ajax
+                           dataTable-rows                           
+                           lastcolumn_sort " data-column-def="true"   xWidth="100%" yHeight="500" data-table-name="dataTables"  id="document-list" data-sort="1#asc"  
+                                       >
+                                    <thead>
+                                        <tr>                                
+                                            <th><input type="checkbox" class="dataTable_checkall fg-dev-avoidicon-behaviour" id="check_all" name="check_all"><i class="chk_cnt"></i></th>
+                                            <th>{{ 'CONTACTDOCUMENT_DOCUMENT_NAME'|trans }}</th>
+                                            <th>{{ 'CONTACTDOCUMENT_CATEGORY'|trans }}</th>
+                                            <th>{{ 'CONTACTDOCUMENT_SIZE'|trans }}</th>
+                                            <th>{{ 'CONTACTDOCUMENT_LAST_UPDATED'|trans }}</th>
+                                            <th>{{ 'CONTACTDOCUMENT_UPDATED_BY'|trans }}</th>
+                                            <th>{{ 'CONTACTDOCUMENT_DEPOSITED_WITH'|trans }}</th>
+                                            {% if (fgtwig.inArray('frontend1', bookedModulesDet)) %}
+                                                <th>{{ 'CONTACTDOCUMENT_VISIBLE_TO_CONTACT'|trans }}<div class="fg-static-on"></div></th>
+                                            {% endif %}
+                                             <th>  {{ 'DM_PUBLIC_VISIBILITY'|trans }}</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div id="callPopupFunction"></div>
+                            <!-- Connection Popup -->
+                            <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+                                <div class="modal-dialog modal-wide">
+                                    <div class="modal-content fg-popup-wrap" id="popup_contents">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END EXAMPLE TABLE PORTLET-->
+                        </div>
+                    </div>
+                </div> 
+                <script type="text/template" id="templateAddExisting"> 
+                    <div class="col-md-12 div-add-existing">
+                        <div data-id="intro" class="fg-save-template ">               
+                            <div class="fg-save-template-btn fg-add-exist template-action-btn-intro">
+                                <a onclick="showField();">
+                                    <i class="fa fa-plus-circle fa-2x"></i><span class="">{{'CONTACTDOCUMENT_ADD_EXISTING'|trans}}</span>
+                                </a>
+                            </div>
+                            <div data-id="intro" class="fg-name-template">
+                                <div class="fg-add-exist-input">
+                                    <input type="text" id="existingDocs" placeholder="{{'SEARCH_DOCS'|trans}}" data-type="intro" class="fg-template-name-intro fg-autocomplt-input">
+                                </div>
+                                <div class="fg-add-exist-icons">
+                                    <a class="fg-name-template-save-intro" onclick="addDocument();" ><i class="fa fa-check"></i></a>
+                                    <a class="fg-name-template-close" onclick="hideField();" ><i class="fa fa-times"></i></a>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>  
+                </script>  
+                <div id="callPopupFunction"></div>
+                <!-- Connection Popup -->
+                <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+                    <div class="modal-dialog modal-wide">
+                        <div class="modal-content fg-popup-wrap" id="popup_contents">
+                        </div>
+                    </div>
+                </div>                
+        <!---DOCUMENT LISTING END--->
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script> 
+    <script src="{{ asset('fgcustom/js/sidebar.js') }}" type="text/javascript"></script>    
+    <script src="{{ asset('fgcustom/js/count-update.js')}}" type="text/javascript"></script>  
+    <script src="{{ asset('fgcustom/js/fg_document_datatable.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/datetime-moment.js')}}" type="text/javascript"></script> 
+    <script src="{{ asset('fgcustom/js/fg-nullsort-handle-dataTable.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/dirtyfields/jquery.dirtyFields.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/fg_dirtyfields.js') }}" type="text/javascript"></script>
+    
+    <script>
+        
+       $(document).ready(function() {
+            FgPageTitlebar.init({
+                title       : true,
+                tab       : true,
+                search     :false,
+                actionMenu  : true,
+                tabType  :'server'
+               
+            }); 
+       });
+        var autocompleteUrl = '{{ path('club_documents_otherdocs_ajax', {'offset': 0, 'clubId':clubId}) }}';
+        var clubs={{subclubs|json_encode()|raw }};
+        var type = '{{type|default('CLUB')}}';
+        var removestring = "{{'NL_AUTOCOMPLETE_REMOVE'|trans}} %s";
+        var tableColumnTitleStorage = 'clubtableColumnTitle_{{clubId}}-{{contactId}}';
+        var docType = '{{type|default('club')|upper}}';
+        var clubId = '{{clubId}}';
+        var contactId = '{{contactId}}';
+        var clubType = '{{fgclub.get('type')}}';
+        var all='{{'ALL'|trans}}';
+        var none='{{'NONE'|trans}}';
+        var showUpload=1;
+       
+        FgDirtyFields.init('upload-form', {enableDragDrop : false, enableUpdateSortOrder : false});
+        {# DEFINE DYNAMIC MENU TEXT HERE#}
+        var actionMenuNoneSelectedText = {
+            {% if(docCategory|first['subCount']|default(0))>0 %}
+            'upload': {'title': "{{'DM_UPLOAD'|trans }}",'visibleAlways':true, 'dataUrl': ''},
+            {% else %}
+            'upload': {'title': "{{'DM_UPLOAD'|trans }}",'visibleAlways':false,'isActive':false, 'dataUrl': ''},
+            {% endif %}        
+            'deleteallclubdocument': {'title': "{{'CONTACTDOCUMENT_REMOVE_ALL_FILES'|trans }}", 'dataUrl': '{{path('club_documents_ajax_remove', {'offset': 0, 'clubId':clubId})}}', 'visibleAlways': false},
+        };
+        var actionMenuSingleSelectedText = {
+            'editassigneddocument': {'title': "{{'CONTACTDOCUMENT_EDIT_FILE'|trans }}", 'dataUrl': '', 'visibleAlways': true },
+            'deleteclubdocument': {'title': "{{'CONTACTDOCUMENT_REMOVE_FILE'|trans }}", 'dataUrl': '{{path('club_documents_ajax_remove', {'offset': 0, 'clubId':clubId})}}', 'visibleAlways': true},
+        };
+        var actionMenuMultipleSelectedText = {
+            'deleteclubdocument': {'title': "{{'CONTACTDOCUMENT_REMOVE_SELECTED_FILES'|trans }}", 'dataUrl': '{{path('club_documents_ajax_remove', {'offset': 0, 'clubId':clubId})}}'},
+        };
+
+        var actionMenuText = {'active' : {'none': actionMenuNoneSelectedText, 'single': actionMenuSingleSelectedText, 'multiple': actionMenuMultipleSelectedText}};
+        FgSidebar.dynamicMenus.push({actionmenu: actionMenuText});
+        var currentDateFormat = FgLocaleSettingsData.momentDateTimeFormat;
+        var columnDefs = [{ type: "checkbox", orderable: false, sortable:false, targets: 0, data:function(row, type, val, meta){
+                    return "<input type='checkbox' class='dataClass fg-dev-avoidicon-behaviour' onclick='handleClick(this)' id='"+row['documentId']+"' name='check' edit-url='"+row['editPath']+"'>";
+                } },
+                { "name": "docname",   "targets": 1 , data:function(row, type, val, meta){
+                    return  row['docname'];
+                }},
+                { "name": "category",  "targets": 2, data:function(row, type, val, meta){
+                    return  row['category']+"-"+row['subcategory'];
+                } },
+                { "name": "size", "targets": 3, "type":"less-symbol", data:function(row, type, val, meta){
+                    return  row['CL_FO_SIZE'];
+                } },
+                { "name": "uploadedOn",  "targets": 4, "type": "moment-"+currentDateFormat, data:function(row, type, val, meta){
+                    return  row['CL_DO_LAST_UPDATED'];
+                } },
+                { "name": "author",    "targets": 5, data:function(row, type, val, meta){
+                    return  row['author'];
+                } },
+                { "name": "otherContacts", "targets": 6, "type":"null-last", data:function(row, type, val, meta){
+                    return  row['CL_FO_DEPOSITED_WITH_FOR_ASSIGNED'];
+                }},  
+                { "name": "ispublic", "targets": 8, "type":"null-last", data:function(row, type, val, meta){
+                   
+                    return  row['isPublic']==="1" ? '<div class="fg-static-on">'+datatabletranslations.On+'</div>':'<div class="fg-static-off">'+datatabletranslations.Off+'</div>'; 
+                }}, 
+                {% if (fgtwig.inArray('frontend1', bookedModulesDet)) %}
+                    { "name": "company",    "targets": 7,  data:function(row, type, val, meta){
+                        return  row['isVisibleToContact']==="1" ? '<div class="fg-static-on">'+datatabletranslations.On+'</div>':'<div class="fg-static-off">'+datatabletranslations.Off+'</div>'; 
+                    }}
+                {% endif %}
+            ]  
+var docType = "CLUB";  
+var clubTerminology = '{{clubTerminolgy}}';
+var assignDocumentPath = '{{ path('club_documents_ajax_add', {'offset': 0, 'clubId': clubId } ) }} ';
+    </script>  
+    <script src="{{ asset('fgcustom/js/jquery-fileupload/jquery.fileupload.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/custom-fileupload.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/documentUploadList.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/documentUpload.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('fgcustom/js/page/documentAssignmentListing.js')}}" type="text/javascript"></script>
+{% endblock %} 

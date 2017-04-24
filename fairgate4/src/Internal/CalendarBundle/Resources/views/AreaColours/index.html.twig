@@ -1,0 +1,91 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = 'AREA_COLORS_TITLE'|trans %}
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/assets/global/plugins/jquery-minicolors/jquery.minicolors.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('fgassets/assets/global/plugins/jquery-nestable/jquery.nestable.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block pagecontent %}
+    <!-- BEGIN BREADCRUMB-->
+    <div class="row">
+        <div class="col-lg-12">
+          {% include 'internal/breadcrumb.html.twig' with breadCrumb%}
+        </div>
+    </div>
+    <!-- END BREADCRUMB-->
+    <!-- PAGE TITLE -->
+    {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle,'tabs':{}} %}
+     {% if clubType == "federation" or clubType == "sub_federation" %}
+         {% set colorCodeClub = defaultColorCodeFedLevel %}
+     {% else %}
+         {% set colorCodeClub = defaultColorCodeClub %}   
+     {% endif %}
+    <form id="area-colors" onsubmit="return false;" class="form-horizontal">
+        <!-- BEGIN CONTENT -->
+        <div class="fg-calendar-area-colors-wrapper">
+            <div class="dd fg-nestable ">
+                <ol class="dd-list">
+                    <li class="dd-item row" data-id="1">
+                        <div class="fg-nestable-row">
+
+                            <div class="fg-active-IB">
+                                <label class="fg-club-label">{{clubTitle}}</label>
+                            </div>
+                            <div class="fg-active-IB pull-right">
+                                <div class="">
+                                    <input type="text" name="club_{{clubId}}" data-key="club.{{clubId}}" id="position-top-right" class="form-control mini-color" data-position="top right" value="{{subLevelColorCodes[clubId]['colorCode']|default(colorCodeClub)}}">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                   {% if clubType == "sub_federation_club" or clubType == "federation_club" or clubType == "sub_federation"%}
+                   <li class="dd-item row" data-id="1">
+                        <div class="fg-nestable-row">
+
+                            <div class="fg-active-IB">
+                                <label class="fg-club-label">{{federation}}</label>
+                            </div>
+                            <div class="fg-active-IB pull-right">
+                                <div class="">
+                                    <input type="text"  disabled = "disabled" id="position-top-right" class="form-control mini-color" data-position="top right" value="{{subLevelColorCodes[fedId]['colorCode']|default(defaultColorCodeFedLevel)}}">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                   {% endif %}
+                    {% if clubType == "sub_federation_club" %}
+                    <li class="dd-item row" data-id="1">
+                        <div class="fg-nestable-row">
+
+                            <div class="fg-active-IB">
+                                <label class="fg-club-label">{{sub_federation}}</label>
+                            </div>
+                            <div class="fg-active-IB pull-right">
+                                <div class="">
+                                    <input type="text" disabled = "disabled" id="position-top-right" class="form-control mini-color" data-position="top right" value="{{subLevelColorCodes[subFedId]['colorCode']|default(defaultColorCodeFedLevel)}}">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    {% endif %}
+                    {% include 'InternalCalendarBundle:AreaColours:teamColorTemplate.html.twig' %}
+                    {% include 'InternalCalendarBundle:AreaColours:workgroupColorTemplate.html.twig' %}
+                </ol>
+
+            </div>
+        </div>
+        {% include 'internal/savebutton.html.twig' with {'backLink': path('internal_calendar_view') }%}
+     
+    </form>
+
+    <!-- END CONTENT -->
+
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgassets/assets/global/plugins/jquery-minicolors/jquery.minicolors.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/assets/global/plugins/jquery-nestable/jquery.nestable.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/internal/js/page/fg-area-color.js') }}" type="text/javascript"></script>
+    <script>
+        var savePath = "{{ path('area_colours_save') }}";
+    </script>
+{% endblock %}

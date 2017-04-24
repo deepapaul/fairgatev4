@@ -1,0 +1,25 @@
+<tr>
+    <td style="padding:20px; font-family: Calibri,Arial,sans-serif;">
+        <p>{{ salutation }},</p>
+    </td>  
+</tr>    
+<tr>
+    <td style="padding-bottom: 20px;  padding-left: 20px;   padding-right: 20px; font-family: Calibri,Arial,sans-serif;">
+        {% if(forumType == 'newTopic')%}  {# can be newTopic/newReply #}
+            {{ 'FORUM_NEWTOPIC_MAIL_CONTENT'|trans({'%topic_name%': topicName, '%created_by%': createdBy, '%team_name%': teamName })|raw }}
+            <a href="{{ forumLink }}">{{ 'FORUM_NEWTOPIC_READ'|trans }}<br />
+            {{ forumLink }} </a>
+            
+            <p>{{ 'FORUM_UNFOLLOW_MSG'|trans({ '%type%': 'forum'})}}<br />
+                <a href="{{ unfollowLink }}">{{ unfollowLink }}</a></p>
+        {% else %}   {#case newReply#}
+            {{ 'FORUM_NEWREPLY_MAIL_CONTENT'|trans({'%topic_name%': topicName, '%created_by%': createdBy, '%team_name%': teamName })|raw }}
+            <br />
+            <a href="{{ forumLink }}">{{ 'FORUM_NEWREPLY_READ'|trans }}<br />
+            {{ forumLink }} </a>
+            
+            <p style="margin-bottom: 0px;" >{{ 'FORUM_UNFOLLOW_MSG'|trans({ '%type%': 'topic'})}}<br />
+                <a href="{{ unfollowLink }}">{{ unfollowLink }}</a></p>
+        {% endif %} 
+    </td>
+</tr>

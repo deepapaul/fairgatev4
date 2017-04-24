@@ -1,0 +1,93 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout_login.html.twig' %}
+{% set pageTitle = 'LOGIN_TITLE'|trans %}
+{% block logincontent %}
+<!-- BEGIN LOGO -->
+
+<!-- END SIDEBAR TOGGLER BUTTON -->
+<!-- BEGIN LOGIN -->
+<div class="content">
+    {% if error %}
+        <div class="alert alert-danger display-show">
+            <button class="close" data-close="alert"></button>
+            {{ error|trans({}, 'FOSUserBundle') }}
+        </div>
+    {% endif %}
+                
+    <!-- BEGIN LOGIN FORM -->
+    <form action="{{ path("fairgate_user_security_check") }}" skipDirtyCheck method="post" class="login-form" novalidate="novalidate">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+            <h3 class="form-title">{% trans %}LOGIN_TITLE{% endtrans %}</h3>
+            <div class="alert alert-danger display-hide">
+                    <button data-close="alert" class="close"></button>
+                    <span>{% trans %}LOGIN_SUB_TITLE{% endtrans %}</span>
+            </div>
+            <div class="form-group">
+                    <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                    <label class="control-label visible-ie8 visible-ie9">{% trans %}LOGIN_USERNAME{% endtrans %}</label>
+                    <div class="input-icon">
+                            <i class="fa fa-user"></i>
+                            <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" placeholder="{% trans %}LOGIN_USERNAME{% endtrans %}" autocomplete="off" class="form-control placeholder-no-fix" autofocus="autofocus" />
+                    </div>
+            </div>
+            <div class="form-group">
+                    <label class="control-label visible-ie8 visible-ie9">{% trans %}LOGIN_PASSWORD{% endtrans %}</label>
+                    <div class="input-icon">
+                            <i class="fa fa-lock"></i>
+                            <input type="password" id="password" name="_password" required="required" placeholder="{% trans %}LOGIN_PASSWORD{% endtrans %}" autocomplete="off" class="form-control placeholder-no-fix"/>
+                    </div>
+            </div>
+            <div class="form-actions">
+                    <input type="checkbox" id="remember_me" name="_remember_me" value="1" >
+                    <label class="checkbox" for="remember_me">{% trans %}LOGIN_REMEMBERME{% endtrans %}</label>
+
+                    <button id="_submit" name="_submit" class="btn green pull-right" type="submit">
+                    {% trans %}LOGIN_LOGIN_BTN{% endtrans %} <i class="m-icon-swapright m-icon-white"></i>
+                    </button>
+            </div>
+            
+            <div class="forget-password">
+                    <h4>{% trans %}LOGIN_FORGOR_PASS{% endtrans %}</h4>
+                    <p>
+                             {% trans %}LOGIN_NO_WORRIES{% endtrans %}<a id="forget-password" href="{{ path('fos_user_resetting')}}">{% trans %}LOGIN_CLICK_HERE{% endtrans %}</a>
+                            {% trans %}LOGIN_RESET_PASS{% endtrans %}
+                    </p>
+            </div>
+            <div class="forget-password">
+                <h4>{% trans %}BACKEND_LOGIN_FIRST{% endtrans %}</h4>
+                <p>
+                    <a id="forget-password" href="{{ path('user_activate_account')}}">{% trans %}BACKEND_LOGIN_CLICK_HERE{% endtrans %}</a> {% trans %}BACKEND_LOGIN_ACTIVATE{% endtrans %}
+            </div>
+            {% if(regFormId != '')%}
+            <div class="forget-password">
+                <h4>{% trans with { '%club%': clubTitle} %}WANT_TO_JOIN_CLUB{% endtrans %}</h4>
+                <p>
+                    <a id="register" href="{{ path('external_contact_application', {'formId': regFormId, 'type': ''}) }}">{% trans %}BACKEND_LOGIN_CLICK_HERE{% endtrans %}</a> {% trans %}TO_REGISTER{% endtrans %}
+            </div>
+            {% endif%}
+
+            {% if ('communication' in fgclub.get('bookedModulesDet')) %}
+            <div class="forget-password">
+                <h4>{{'CMS_INTERNAL_NEWSLETTER_SUBSCRIPTION_TEXT'|trans}}</h4>
+                <p>
+                    <a id="subscribe" href="{{path('website_public_page_newsletter_subscribeform')}}">{{'CMS_INTERNAL_NEWSLETTER_SUBSCRIPTION_LINK'|trans}}</a>
+                </p>    
+            </div>
+            {% endif %}
+    </form>
+    <!-- END LOGIN FORM -->
+    <!-- BEGIN FORGOT PASSWORD FORM -->
+
+    <!-- END FORGOT PASSWORD FORM -->
+    <!-- BEGIN REGISTRATION FORM -->
+
+    <!-- END REGISTRATION FORM -->
+</div>
+            
+<!-- BEGIN PRESENTEDBY -->
+<div class="present-by">
+    <p class="text-right">{% trans %}PRESENTED_BY{% endtrans %} <a href="http://www.fairgate.ch" target="_blank" style="text-decoration: none;">Fairgate</a></p>
+</div>
+<!-- END PRESENTEDBY -->
+{% endblock %}
+

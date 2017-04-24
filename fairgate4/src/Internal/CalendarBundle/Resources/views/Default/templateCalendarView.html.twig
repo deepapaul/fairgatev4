@@ -1,0 +1,151 @@
+<script type="text/template" id="eventPopOverTemplate">
+<div class="panel panel-default fg-clear-marg fg-popover-ext"  style="min-width:332px;">
+    <div class="panel-heading">
+        <h3 class="panel-title"><%-e.title%></h3>
+        <span class="fa fa-close" onclick="$('.popover').popover('destroy')"></span>
+    </div>
+    <div class="panel-body" id="calendar-popover-body">
+        <div class="fg-loader-overlay">
+            <div class="fg-lazy-loader">
+                <div class="fg-page-loading">
+                    <img src="<%- Metronic.getGlobalImgPath() + 'loading-spinner-grey.gif'%>">&nbsp;&nbsp;<span><%-jstranslations.loadingVar%></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</script>
+<script type="text/template" id="eventPopOverSubTemplate">
+    <div class="fg-calendar-app-dtls-wrapper  col-lg-12">         
+        <div class="fg-marg-btm-10">
+            <%
+                var descHTML = d.description;
+                var tempDiv = document.createElement("div");
+                tempDiv.innerHTML = descHTML;
+                var desc = tempDiv.textContent || tempDiv.innerText || "";
+                $(tempDiv).remove();
+                var truncated = desc;
+                var maxLength = 120;
+                if (truncated.length > maxLength) {
+                    truncated = truncated.substr(0, maxLength) + '...';
+                }
+            %>
+            <%- truncated %>
+        </div>
+       
+            <div class="clearfix"></div>
+            <div class="row fg-calendar-app-dtls-content fg-marg-btm-0">
+                <div class="col-sm-12">
+                    <ul class="fg-event-dtls">
+                        <li><i class="fa fa-calendar"></i> <span class="fg-subtitle">
+                            <%-d.dateDetails.startDate%>
+                            <% if(d.dateDetails.endDate){ %>
+                                <%- ' - '+d.dateDetails.endDate%> 
+                            <% } %></span>
+                        </li>
+                        <li><i class="fa fa-folder-open"></i><span class="fg-subtitle">
+                            <% if(d.isClubAreaSelected >= 1){ %>
+                                <%- d.clubDetails[d.clubId]['title'] %><% }
+                            if (d.clubId == d.currentClubId){ 
+                                if (d.roleNames!='' && d.isClubAreaSelected == 1){ %><%- ',' %>         
+                                <% } %> 
+                                <%- d.roleNames %>
+                            <% } %>  
+                    <% if(d.eventCategories){ %>            
+                        <li><i class="fa fa-tag"></i><span class="fg-subtitle"><%- d.categoryNames %></span></li>
+                    <% } %>
+                    <% if(d.eventAttachments.length>0){ %>
+                        <li><i class="fa fa-paperclip"></i>
+                            <% $.each(d.eventAttachments,function(i,v){ %>   
+                                <div class="fg-subtitle"><a class="fg-calender-attachment" data-clubId="<%- d.clubId %>" data-encrypted="<%- v.encryptedFilename %>" data-filename="<%- v.filename %>" href="javascript:void(0)"><%- v.filename %></a> (<%- FgClubSettings.formatNumber( Math.round(v.size/1024) ) %>{{'CALENDAR_DETAILS_ATTACHMENT_SIZE'|trans}})</div>
+                            <% }) %>
+                        </li>
+                    <% } %>
+                    <% if(d.url){ %>
+                        <li><i class="fa fa-globe"></i><span class="fg-subtitle"><a href="<%- d.url %>" target="_blank"><%- d.url %></a></span></li>
+                    <% } %>
+                    <% if(d.location){ %>
+                        <li><i class="fa fa-map-marker"></i><span class="fg-subtitle"><%- d.location %></span></li>
+                    <% } %>
+                    </ul>
+                    <div class="fg-calendar-event-popup-footer1">
+                        <% if (calEvent.deletRight == 1) { %>
+                            <a class="fg-event-delete text-red" href="javascript:void(0)" onclick="FgFullCalendar.deleteEvent(<%-d.eventDetailId%>, <%-calEvent.id%>)"><i class="fa fa-remove "></i>{{'CALENDAR_POPOVER_DELETE_LINK'|trans}}</a>    
+                        <% } %>
+                        <% if (calEvent.editRight == 1) { %>    
+                            <a class="fg-event-edit" href="javascript:void(0)" onclick="FgFullCalendar.editEvent(<%-d.eventDetailId%>, <%-calEvent.id%>)"><i class="fa fa-edit"></i>{{'CALENDAR_POPOVER_EDIT_LINK'|trans}}</a>
+                        <% } %>    
+                            <a class="fg-event-details" href="javascript:void(0)" onclick="FgFullCalendar.viewEvent(<%-d.eventDetailId%>, <%-calEvent.id%>, this)" data-startTimestamp="<%-d.dateDetails['startTimestamp']%>" data-endTimestamp="<%-d.dateDetails['endTimestamp']%>"><i class="fa fa-arrow-circle-right "></i>{{'CALENDAR_POPOVER_DETAILS_LINK'|trans}}</a>
+                    </div>
+                </div>
+                
+            </div>
+                  
+        </div>
+</script>
+<script type="text/template" id="eventConfirmationModalTemplate">
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+     <% if (e.isMasterRepeat == 1) { %>
+        <h4 class="modal-title">{{'EDIT_REPEATING_APPOINTMENT_CONFIRMATION_TITLE'|trans}}</h4>
+    <% } else { %>
+        <h4 class="modal-title">{{'EDIT_NONREPEATING_APPOINTMENT_CONFIRMATION_TITLE'|trans}}</h4>
+    <% } %>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <form id="event-edit-form" class="form-horizontal form-row-sepe" action="#" novalidate="novalidate">
+            <div class="form-body">
+
+                <% if (e.isMasterRepeat == 1) { %>                
+                <div class="form-group">
+                    <label class="col-lg-12 col-md-12 col-xs-12 pop-uptext">{{'EDIT_APPOINTMENT_CONFIRMATION_SUBTITLE'|trans}}</label>
+                </div>
+                <div class="fg-calendar-popup"> 
+                    <div class="radio-list">
+                        <div class="fg-news-radio">
+                                 <label class="radio-inline">
+                                    <input class="fg-dev-newfield" data-key="edit_mode" type="radio" name="edit_mode" value="current" checked="checked" >
+                                    {{'EDIT_APPOINTMENT_OPTION_CURRENT'|trans}}
+                                </label>
+                        </div>
+                        <div class="fg-news-radio">
+                            <label class="radio-inline">
+                                <input class="fg-dev-newfield" data-key="edit_mode" type="radio" name="edit_mode" value="following" >
+                                {{'EDIT_APPOINTMENT_OPTION_FOLLOWING'|trans}}
+                            </label>
+                        </div> 
+                        <div class="fg-news-radio">
+                              <label class="radio-inline">
+                                <input class="fg-dev-newfield" data-key="edit_mode" type="radio" name="edit_mode" value="all" >
+                                {{'EDIT_APPOINTMENT_OPTION_ALL'|trans}}
+                            </label>
+                        </div> 
+                    </div>
+                </div>
+                <% } else { %>
+                    <div class="form-group">
+                        <label class="col-lg-12 col-md-12 col-xs-12 pop-uptext">{{'EDIT_NONREPEAT_APPOINTMENT_CONFIRMATION'|trans}}</label>
+                    </div>
+                <% } %>
+
+            </div>
+            <input type="hidden" class="fg-dev-newfield" data-key="calendar_detail_id"  name="calendar_detail_id" id="eventId" value="<%-e.eventdetailid%>"/>
+            <input type="hidden" class="fg-dev-newfield" data-key="start_date.date" name="start_date['date']" id="eventStartDate" value="<%-e.eventStartDate%>"/>
+            <input type="hidden" class="fg-dev-newfield" data-key="start_date.time" name="start_date['time']" id="eventStartTime" value="<%-e.eventStartTime%>"/>
+            <input type="hidden" class="fg-dev-newfield" data-key="end_date.date" name="end_date['date']" id="eventEndDate" value="<%-e.eventEndDate%>"/>
+            <input type="hidden" class="fg-dev-newfield" data-key="end_date.time" name="end_date['time']" id="eventEndTime" value="<%-e.eventEndTime%>"/>
+            <input type="hidden" class="fg-dev-newfield" data-key="edit_start_date" name="edit_start_date" id="oldEventStart" value="<%-e.oldEventStart%>"/>
+            <input type="hidden" class="fg-dev-newfield" data-key="edit_end_date" name="edit_end_date" id="oldEventEnd" value="<%-e.oldEventEnd%>"/>
+            </form>                                             
+            <!-- END FORM-->
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button data-dismiss="modal" id="saveEvent" class="btn green" type="button" onclick="FgFullCalendar.saveEvent()">{{'SAVE_CHANGES'|trans}}</button> 
+    <button data-dismiss="modal" id="cancelPopup" class="btn default" type="button">{{'CANCEL'|trans}}</button> 
+</div>
+</script>

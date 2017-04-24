@@ -1,0 +1,189 @@
+<script type="text/template" id="propertiesrow">    
+        <div class="col-md-12">
+                <div class="form-body">
+                    <% if(content.hideCategoryStatus== 0) { %>
+                        <div class="form-group">
+                            <label class="control-label col-lg-3 col-sm-4 col-xs-12"><div class="fg-label-wrap">{% trans %}CONTACT_PROPERTIES_CATEGORY{% endtrans %}</div></label>
+                            <div class="col-md-4 col-sm-7 col-xs-12">
+                                <select class="form-control select2 input-sm propCategory" id="category_<%- content.categoryId %>_<%- content.attributeId %>" name="category_<%- content.categoryId %>_<%- content.attributeId %>" <% if(content.grayedoutStatus == 1 ) { %> disabled <% } %> data-key="<%- content.categoryId %>.fields.<%- content.attributeId %>.categoryId" attributeId="<%- content.attributeId %>" categoryId="<%- content.categoryId %>">
+                                    {% for fieldDetail in fieldDetails %}
+                                        <option value="{{fieldDetail.catId}}" <% if("{{fieldDetail.catId}}" == content.categoryId) { %> selected <% } %> >
+                                            {% if fieldDetail.isSystem==1 or fieldDetail.isFairgate==1 %}
+                                                {{ (fieldDetail.titles[clubIdArray.defSysLang] is defined) ? fieldDetail.titles[clubIdArray.defSysLang] : fieldDetail.title }}
+                                            {% else %}
+                                                {{ (fieldDetail.titles[clubIdArray.sysLang] is defined) ? fieldDetail.titles[clubIdArray.sysLang] : fieldDetail.title }}
+                                            {% endif %}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    <% } %>
+                    <div class="form-group">
+                        <label class="control-label col-lg-3 col-sm-4 col-xs-12"><div class="fg-label-wrap">{% trans %}CONTACT_PROPERTIES_SHORT_NAME{% endtrans %}</div></label>
+                        <div class="col-md-4 col-sm-7 col-xs-12">
+                            
+                            <%  var valField='';
+                                _.each(content.langArray, function(langVal) { 
+                                    if(content.field.hasOwnProperty(langVal)) { 
+                                        valField = content.field[langVal]['fieldnameShortLang']; %>
+                                        <input type="text" class="form-control" id="shortname_<%- langVal %>_<%- content.categoryId %>_<%- content.attributeId %>" name="shortname_<%- langVal %>_<%- content.categoryId %>_<%- content.attributeId %>" placeholder="" value="<%- valField %>" data-lang="<%- langVal %>" <% if(content.grayedoutStatus == 1 ) { %> disabled <% } %> data-key="<%- content.categoryId %>.fields.<%- content.attributeId %>.shortname.<%- langVal %>" />
+                                    <% } else {
+                                        valDummyField = content.field['fieldnameShort']; %>
+                                        <input type="text" class="form-control" id="shortname_<%- langVal %>_<%- content.categoryId %>_<%- content.attributeId %>" name="shortname_<%- langVal %>_<%- content.categoryId %>_<%- content.attributeId %>" placeholder="" value="<%- valDummyField %>" data-lang="<%- langVal %>" <% if(content.grayedoutStatus == 1 ) { %> disabled <% } %> data-key="<%- content.categoryId %>.fields.<%- content.attributeId %>.shortname.<%- langVal %>" />
+                                    <% }
+                                }); %>
+                            <span class="help-block">{% trans %}CONTACT_PROPERTIES_FOR_TABLE_HEADERS{% endtrans %}</span>
+                        </div>
+                    </div>
+                        
+                    <div class="form-group" id="usedForWrapper_<%- content.categoryId %>_<%- content.attributeId %>" <% if(content.displayUsedForStatus == 1 ) { %> style="display:block;" <% } else { %> style="display:none;" <% } %> >
+                      <label class="control-label col-lg-3 col-sm-4 col-xs-12"><div class="fg-label-wrap">{% trans %}CONTACT_PROPERTIES_USED_FOR{% endtrans %}</div></label>
+                      <div class="col-md-4 col-sm-7 col-xs-12">
+                        <div class="radio-list">
+                          <label class="radio-inline">
+                            <input type="radio" name="usedFor_<%- content.categoryId %>_<%- content.attributeId %>" id="usedFor_<%- content.categoryId %>_<%- content.attributeId %>_correspondance" value="correspondance" <% if(content.field['addresType'] == 'correspondance' ) { %> checked <% } if(content.grayedoutStatus == 1 ) { %> disabled <% } %> data-key="<%- content.categoryId %>.fields.<%- content.attributeId %>.usedFor" />
+                            {% trans %}CONTACT_PROPERTIES_CORRESPONDANCE_ADDRESS{% endtrans %}</label>
+                          <label class="radio-inline">
+                            <input type="radio" name="usedFor_<%- content.categoryId %>_<%- content.attributeId %>" id="usedFor_<%- content.categoryId %>_<%- content.attributeId %>_invoice" value="invoice" <% if(content.field['addresType'] == 'invoice' ) { %> checked <% } if(content.grayedoutStatus == 1 ) { %> disabled <% } %>  data-key="<%- content.categoryId %>.fields.<%- content.attributeId %>.usedFor" />
+                            {% trans %}CONTACT_PROPERTIES_INVOICE_ADDRESS{% endtrans %}</label>
+                          <label class="radio-inline labelmrgn">
+                            <input type="radio" name="usedFor_<%- content.categoryId %>_<%- content.attributeId %>" id="usedFor_<%- content.categoryId %>_<%- content.attributeId %>_both" value="both" <% if(content.field['addresType'] == 'both' ) { %> checked <% } if(content.grayedoutStatus == 1 ) { %> disabled <% } %>  data-key="<%- content.categoryId %>.fields.<%- content.attributeId %>.usedFor" />
+                            {% trans %}CONTACT_PROPERTIES_USED_FOR_BOTH{% endtrans %}</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3 col-sm-4 col-xs-12"><div class="fg-label-wrap">{% trans %}CONTACT_PROPERTIES_CONTACT_FIELD_TYPE{% endtrans %}</div></label>
+                        <div class="col-md-4 col-sm-7 col-xs-12">
+                            <select class="form-control selectpicker input-sm propContactFieldType" id="fieldType_<%- content.categoryId %>_<%- content.attributeId %>" name="fieldType_<%- content.categoryId %>_<%- content.attributeId %>" <% if(content.grayedoutStatus == 1 ) { %> disabled <% } %>  data-key="<%- content.categoryId %>.fields.<%- content.attributeId %>.fieldType" attributeId="<%- content.attributeId %>" categoryId="<%- content.categoryId %>" >
+                                  <% 
+                                      var fieldArray = content.input_type;                                      
+                                      if (content.attributeId ==content.systemFields.primaryEmail) {
+                                        fieldArray['login email'] = "{{'CONTACT_PROPERTIES_FIELDTYPE_LOGIN_EMAIL'|trans}}";
+
+                                      }                                 
+                                        _.each(fieldArray, function(values,key) { 
+                                            var disabled = '';
+                                            if(!isNaN(attributeId)) { {#not new field#}
+                                                switch(content.field['inputType']) {
+                                                    case 'singleline':
+                                                    case 'multiline':
+                                                        if(key != 'singleline' && key != 'multiline' && key != 'number' && key != 'email' && key != 'url' ) {
+                                                            disabled = 'disabled'
+                                                        }
+                                                        break;
+                                                    case 'checkbox':
+                                                    case 'select':
+                                                    case 'radio':
+                                                        if(key != 'checkbox' && key != 'select' && key != 'radio' ) {
+                                                            disabled = 'disabled'
+                                                        }
+                                                        break;
+                                                    case 'number':
+                                                        if(key != 'singleline' && key != 'multiline' && key != 'number' ) {
+                                                            disabled = 'disabled'
+                                                        }
+                                                        break;
+                                                    case 'date':
+                                                        if(key != 'singleline' && key != 'multiline' && key != 'date' ) {
+                                                            disabled = 'disabled'
+                                                        }
+                                                        break;
+                                                    case 'email':
+                                                        if(key != 'singleline' && key != 'multiline' && key != 'email' ) {
+                                                            disabled = 'disabled'
+                                                        }
+                                                        break;
+                                                    case 'fileupload':
+                                                        if(key != 'fileupload' ) {
+                                                            disabled = 'disabled'
+                                                        }
+                                                        break;
+                                                    case 'imageupload':
+                                                        if(key != 'imageupload' && key != 'fileupload') {
+                                                            disabled = 'disabled'
+                                                        }
+                                                        break;
+                                                    default:
+                                                        break;
+                                                } 
+                                            }
+                                            %>
+                                                    
+                                        <option value="<%- key %>" <%-disabled%> <% if(key == content.field['inputType']) { %> selected <% } %> ><%- values %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                    </div>
+                        <div class="form-group" id="propValuesWrapper_<%- content.categoryId %>_<%- content.attributeId %>" <% if(content.inputTypeStatus == 1) { %> style="display:block;" <% } else { %> style="display:none;" <% } %> >
+                            <label class="control-label col-lg-3 col-sm-4 col-xs-12 required"><div class="fg-label-wrap">{% trans %}CONTACT_PROPERTIES_VALUES{% endtrans %} <span class="required">*</span></div></label>
+                            <div class="col-md-4 col-sm-7 col-xs-12">
+                                <% if(content.grayedoutStatus == 1 ) {
+                                    var splitArray=  content.field['predefinedValue']; 
+                                    splitArray= splitArray.split(','); %>
+                                    <div class="tagsinput" id="propertyValues_1_72_tagsinput" style="width: auto; height: 100px;">
+                                    <% _.each(splitArray, function(splitValues,splitKey) { 
+                                        if(splitValues!= '') { %>
+                                            <span class="tag"><span>
+                                            <% 
+                                            var optionValue = splitValues;                                             
+                                            switch(splitValues) {
+                                                case "Male":
+                                                    optionValue = '{{ 'CM_MALE'|trans }}';
+                                                    break;
+                                                case "Female":
+                                                    optionValue = '{{ 'CM_FEMALE'|trans }}';
+                                                    break;
+                                                case "Informal":
+                                                    optionValue = '{{ 'CM_INFORMAL'|trans }}';
+                                                    break;
+                                                case "Formal":
+                                                    optionValue = '{{ 'CM_FORMAL'|trans }}';
+                                                    break;
+                                                default:
+                                                    optionValue = splitValues; 
+                                            } 
+                                            %>
+                                            <%- optionValue %></span></span>
+                                        <% } 
+                                    }); %> 
+                                    </div>
+                                <% } else { %>
+                                    <input id="propertyValues_<%- content.categoryId %>_<%- content.attributeId %>" name="propertyValues_<%- content.categoryId %>_<%- content.attributeId %>" type="text" class="form-control tags" value="<%- content.field['predefinedValue'] %>" <% if(content.grayedoutStatus == 1 ) { %> disabled <% } else { if(content.inputTypeStatus == 1) { %> required="true"  <% } } %> data-key="<%- content.categoryId %>.fields.<%- content.attributeId %>.fieldValue" />
+                                <% } %>
+                                <span class="help-block txt-red" for="propertyValues_<%- content.categoryId %>_<%- content.attributeId %>"></span>
+                            </div>
+                        </div>
+                    <div class="form-group" id="propAvailableWrapper_<%- content.categoryId %>_<%- content.attributeId %>">
+                        <label class="control-label col-lg-3 col-sm-4 col-xs-12"><div class="fg-label-wrap">{% trans %}CONTACT_PROPERTIES_AVAILABLE_FOR{% endtrans %}</div></label>
+                        <div class="col-md-4 col-sm-7 col-xs-12">
+                            <div class="radio-list">
+                                <label class="radio-inline">
+                                <input type="radio" name="availableFor_<%- content.categoryId %>_<%- content.attributeId %>" id="availableFor_<%- content.categoryId %>_<%- content.attributeId %>_person" value="singleperson" <% if(content.availableFor == 'personal') { %> checked <% } if(content.grayedoutStatus == 1 ) { %> disabled <% } %> data-key="<%- content.categoryId %>.fields.<%- content.attributeId %>.availableFor" <% if(content.grayedOutAvailable == 1 ) { %> disabled <% } %>  <% if(content.field['categoryId'] == 1 ) { %> checked <% } %>/>
+                                {% trans %}CONTACT_PROPERTIES_SINGLE_PERSON{% endtrans %}</label>
+                                <label class="radio-inline">
+                                        <input type="radio" name="availableFor_<%- content.categoryId %>_<%- content.attributeId %>" id="availableFor_<%- content.categoryId %>_<%- content.attributeId %>_company" value="company" <% if(content.availableFor == 'company') { %> checked <% } if(content.grayedoutStatus == 1 ) { %> disabled <% } %> data-key="<%- content.categoryId %>.fields.<%- content.attributeId %>.availableFor" <% if(content.grayedOutAvailable == 1 ) { %> disabled <% } %>  <% if(content.field['categoryId'] == 3 ) { %> checked <% } %>/>
+                                {% trans %}CONTACT_PROPERTIES_COMPANIES{% endtrans %}</label>
+                                <label class="radio-inline">
+                                  <input type="radio" name="availableFor_<%- content.categoryId %>_<%- content.attributeId %>" id="availableFor_<%- content.categoryId %>_<%- content.attributeId %>_both" value="both" <% if(content.availableFor == 'both') { %> checked <% } if(content.grayedoutStatus == 1 ) { %> disabled <% } %> data-key="<%- content.categoryId %>.fields.<%- content.attributeId %>.availableFor" <% if(content.grayedOutAvailable == 1 ) { %> disabled <% } %> />
+                                  {% trans %}CONTACT_PROPERTIES_AVAILABLE_FOR_BOTH{% endtrans %}</label>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="form-group">
+                        <label class="control-label col-lg-3 col-sm-4 col-xs-12"><div class="fg-label-wrap">{% trans %}CONTACT_PROPERTIES_MULTI_EDIT{% endtrans %}</div></label>
+                        <div class="col-md-4 col-sm-7 col-xs-12">
+                        <div class="clearfix">
+                        <label class="switch-light switch-light-med <% if(content.grayedoutStatus == 1 ) { %>fg-switch-inactive<% } %>" onClick="">
+                            <input type="checkbox" id="multiEdit_<%- content.categoryId %>_<%- content.attributeId %>" name="multiEdit_<%- content.categoryId %>_<%- content.attributeId %>" <% if(content.field['isSingleEdit'] != 1) { %> checked <% } if(content.grayedoutStatus == 1 ) { %> disabled <% } %> class="toggle make-switch" data-key="<%- content.categoryId %>.fields.<%- content.attributeId %>.isMultiEdit" />
+                                <span name="fg-dev-multiedit"> <span>{{'ON'|trans}}</span><span>{{'OFF'|trans}}</span> </span> <a class="btn btn-primary <% if(content.grayedoutStatus == 1 ) { %>disable-field<% } %>"></a> </label>
+                        </div>
+                        <span class="help-block">{% trans %}CONTACT_PROPERTIES_MULTI_EDIT_DESC{% endtrans %}</span> </div>
+                    </div>
+                </div>
+        </div>
+</script>
+

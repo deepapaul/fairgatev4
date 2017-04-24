@@ -1,0 +1,35 @@
+<script type="text/template" id="template-filter-role-exceptions"> 
+    
+  <% 
+    newKey = isNew ? '.new' : '' ;
+    newVar = isNew ? '_new' : '' 
+    roleKey = '.role' + newKey + '.' + roleId ;
+    roleName = '_role' + newVar + '_' + roleId ;
+    dataKeyVar = catId + roleKey ;
+    dataNameVar = catId + roleName ;
+    includeContactIds = includecontactNames = excludeContactIds = excludecontactNames = '';
+    includeContactIds = (typeof includecontactId !== 'undefined') ? includecontactId: "";
+    includecontactNames = (typeof includecontactName !== 'undefined') ? includecontactName: "";
+    excludeContactIds = (typeof excludecontactId !== 'undefined') ? excludecontactId:"";
+    excludecontactNames = (typeof excludecontactName !== 'undefined') ? excludecontactName: "";
+    
+ %>
+    <div class="execeptions-filter-role-display fg-filter-role" id="exce-filter-<%- roleId%>">
+        <div class="col-md-12">
+            <div id="include-filter" class="include-filter">
+            <dl>
+                <dt>{%trans%}INCLUDED_CONTACTS{%endtrans%}</dt>
+                <dd><input type="text" data-filtertype= "role"  data-type = "include" data-key="<%- dataKeyVar %>.include_contact" name="<%- dataNameVar %>_include_contact"  class="form-control fg-filter-token-div" id="include-contact<%- roleId%>" data-val="<%- includeContactIds%>" value="<%- includecontactNames%>" placeholder="{{'AUTOCOMPLETE_ADD_CONTACT'|trans}}" />
+                </dd>
+                <dt>{%trans%}EXCLUDED_CONTACTS{%endtrans%}</dt>
+                <dd><input type="text"  data-filtertype= "role"  data-type = "exclude"  data-key="<%- dataKeyVar %>.exclude_contact" name="<%- dataNameVar %>_exclude_contact"   class="form-control fg-filter-token-div" id="exclude-contact<%- roleId%>" data-val="<%- excludeContactIds%>" value="<%- excludecontactNames%>" placeholder="{{'AUTOCOMPLETE_ADD_CONTACT'|trans}}" />
+                </dd>
+            </dl>
+            </div>
+        </div> 
+    </div>
+    <input type="hidden" class="include" data-filtertype= "role" name="<%- dataNameVar %>_execeptions_include_contact_id" data-key="<%- dataKeyVar %>.execeptions.include_contact_id" id="include-<%- roleId%>"  value="<%- includeContactIds%>">
+    <input type="hidden" class="exclude" data-filtertype= "role" name="<%- dataNameVar %>_execeptions_exclude_contact_id" data-key="<%- dataKeyVar %>.execeptions.exclude_contact_id" id="exclude-<%- roleId%>"  value="<%- excludeContactIds%>">
+    <input type="hidden" id="include-existing<%- roleId%>" value="">
+    <input type="hidden" id="exclude-existing<%- roleId%>"  value="">
+</script> 

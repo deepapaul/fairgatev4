@@ -1,0 +1,74 @@
+Common\UtilityBundle\Entity\FgFileManagerViruscheckLog:
+    repositoryClass: Common\UtilityBundle\Repository\FgFileManagerViruscheckLogRepository
+    type: entity
+    table: fg_filemanager_viruschecklog
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        fileName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: file_name
+        fileDetails:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: file_details
+        requestSenton:
+            type: datetime
+            nullable: false
+            column: request_senton
+        responseStatus:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: response_status
+        responseReceivedon:
+            type: datetime
+            nullable: true
+            column: response_receivedon
+        responseDetail:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: response_detail
+        avastscanOption:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: avastscan_option
+        logDate:
+            type: datetime
+            nullable: false
+            column: log_date
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

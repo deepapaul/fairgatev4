@@ -1,0 +1,65 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'Channel Playlist videos'|trans %}
+{% set hasPageHeader = 0 %}
+{% block pagecontent %}
+    <div class="fg-help-videolisting-wrapper row">
+        <div class="fg-help-videolisting-main-wrapper col-md-8">
+            <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+            <!--
+               Global Actionmenu bar HTML
+            -->
+            <div class="row">
+            <div class="fg-action-menu-wrapper">
+                <div class="fg-page-title-block-1 fg-active-IB">
+                    <div class="fg-title-first-block fg-test-block  fg-action-title fg-active-IB">
+                        <h1 class="page-title ">
+                            <span class="page-title-text">Video Hilfin</span>
+                            <span class="fg-action-counter fg-dis-none">
+                                <small>
+                                    <div class="fg-count-text"><span id="fcount" class="hide"></span><small id="slash" class="hide"> <span id="fg-slash">/</span> </small> <span id="tcount"></span></div>
+                                </small>
+                                <span class="fg-action-filter fg-dis-none">
+                                    <i class="fa fa-filter "></i>
+                                </span>
+                            </span>
+                        </h1>
+                    </div>
+
+                </div>
+                <div class="clearfix"></div>
+            </div>
+             </div>
+            <div id="playlistsVideos">
+
+            </div>
+        </div>
+        <div class="fg-help-videolisting-sidebar-wrapper col-md-4">
+        </div>
+    </div>
+    <div id="divTemplates">
+        {# template for adding new category #}
+        {% include 'CommonHelpBundle:Default:videoTemplate.html.twig' %}
+    </div>
+{% endblock %}
+{#{% block underscoretemplate %}
+{% include 'CommonHelpBundle:Default:videoTemplate.html.twig' %}
+{% endblock %}#}
+    {% block customstylesheets %}
+     {# <link href="{{ asset('fgassets/assets/global/plugins/colorbox-master/example5/colorbox.css') }}" rel="stylesheet" type="text/css"/>#}
+      <link href="{{asset('bundles/commonHelp/css/fg-help-styles.css')}}" rel="stylesheet" type="text/css"/>
+    {% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('fgassets/backend/js/page/FgHelp.js') }}" type="text/javascript"></script>
+<script src="{{ asset('fgassets/assets/global/plugins/colorbox-master/jquery.colorbox-min.js')}}" type="text/javascript"></script>
+<script>
+    var youtubeurl= '{{youTubeUrl}}';
+    var playlistUrl= '{{playlistUrl}}';
+  $(document).ready(function(){
+      FgVideos.getDetails(true);
+  });
+</script>
+{% endblock %}
+
+
+

@@ -1,0 +1,124 @@
+<script type="text/template" id="fg-dev-add-new-team_admin"> 
+    <div class="row fg-border-line sortables fg-dev-new-contact-div" >
+        <div class="col-md-5 col-sm-8 col-xs-8 ">
+            <div class="input-icon"> <i class="fa fa-search"></i>
+        <% if( roleType == 'teamAdmin') { %>
+                <input id="include-team-admin-<%- randomNumber %>"  name="include-team-admin-<%- randomNumber %>" type="text"  class="form-control input-sm dFExclude" />
+        <% }else { %>
+                <input id="include-wg-admin-<%- randomNumber %>"  name="include-wg-admin-<%- randomNumber %>" type="text"  class="form-control input-sm dFExclude" />
+        <% } %>
+            </div>
+        </div>
+        <% if( roleType == 'teamAdmin') { %>
+            <input class="fg-dev-auto-complete-val hide" type="text"  name="new-include-team-admin-<%- randomNumber %>" id="new-include-team-admin-<%- randomNumber %>" value=""/>
+            <% } else{ %>
+            <input class="fg-dev-auto-complete-val hide" type="text"  name="new-include-wg-admin-<%- randomNumber %>" id="new-include-wg-admin-<%- randomNumber %>" value=""/>
+            <% } %>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+        {#data-selected-text-format="count>3"#}
+            <select id="teams_<%- roleType%>_<%- randomNumber %>"  title="{{'SELECT_DEFAULT'|trans}}" multiple name="teams_<%- roleType%>_<%- randomNumber %>" data-key="teams.<%- roleType%>.<%- randomNumber %>.teams" class="selectpicker form-control show-tick  ">
+           
+                
+                <% _.each(teamList,function(team){ %> 
+                    <% var select= "multiple" ; %>
+                    <option value="<%- team.roleId %>" class=<%- select%> ><%- team.rTitle %></option>
+                <% }); %>
+            </select>   
+        </div>
+        <div class="fg-last-icon new_contact_team_right_rmv">
+            <div class="closeico">
+                <input type="checkbox" class="make-switch" id="select">
+                <label for="select"></label>
+            </div>
+        </div>
+    </div> 
+</script>
+<script type="text/template" id="fg-dev-add-new-team_admin_section"> 
+    <div class="row fg-border-line sortables fg-dev-new-contact-div" >
+        <div class="col-md-5 col-sm-8 col-xs-8">
+            <div class="input-icon"> <i class="fa fa-search"></i>
+                <% if( roleType == 'teamSection') { %>
+                    <input id="include-team-admin-section-<%- randomNumber %>" name="include-team-admin-section-<%- randomNumber %>" type="text"  class="form-control input-sm dFExclude" />
+                <% }else{ %>
+                    <input id="include-wg-admin-section-<%- randomNumber %>" name="include-wg-admin-section-<%- randomNumber %>" type="text"  class="form-control input-sm dFExclude" />
+                <% } %>
+            </div>
+        </div>
+        <% if( roleType == 'teamSection') { %>
+            <input class="fg-dev-auto-complete-val hide" type="text" name="new-include-team-admin-section-<%- randomNumber %>" id="new-include-team-admin-section-<%- randomNumber %>" value=""/>
+        <% }else{ %>
+            <input class="fg-dev-auto-complete-val hide" type="text" name="new-include-wg-admin-section-<%- randomNumber %>" id="new-include-wg-admin-section-<%- randomNumber %>" value=""/>
+        <% } %>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="fg-adminstration-wrap">
+                <div class="fg-adminstration-area">
+                    <i class="fa fa-plus-square-o"></i>
+                    <i class="fa fa-minus-square-o"></i> 
+              <% if( roleType == 'teamSection') { %>
+                    0 {{fgtwig.getTerminolgyName('Team',plural,'LCF')}} 
+              <% }else{ %>
+              0 {{'WORKGROUP'|trans}}
+              <% } %>
+                </div>
+            </div>                    
+        </div>   
+        <div class="fg-last-icon new_contact_team_right_rmv">
+            <div class="closeico">
+                <input type="checkbox" id="select" class="make-switch">
+                <label for="select"></label>
+            </div>
+        </div>
+        <div class="fg-adminstration-area-open " style="display: none;"> <div class="clearfix"></div>
+            <div class="fg-internal-blk">
+                <div class="fg-internal-team-block">
+                    <div class="fg-internal-blk-div"></div>
+                </div>
+                <% if( roleType == 'teamSection') { %>
+                    <div class="fg-internal-add">
+                <% }else{ %> 
+                    <div id="fg-internal-add-wgsection" class="fg-internal-add">
+                <% } %>
+                        <a id="pencil" href="#basic" data-toggle="modal">
+                        <i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> 
+                <% if( roleType == 'teamSection') { %>
+                        <span class="fg-add-text">{{'ADD_USER_RIGHTS_TEAM'|trans ({'%Team%' : fgtwig.getTerminolgyName('Team',singular,'UCF')})}}</span></a>
+                <% }else{ %>  
+                         <span class="fg-add-text">{{'ADD_USER_RIGHTS_WORKGROUP'|trans}}</span></a>
+                  <% } %>
+              </div>
+            </div>
+        </div>
+        <div class="random" data-id="<%- randomNumber %>"></div>
+    </div> 
+</script>
+
+<script type="text/template" id="fg-dev-add-new-team"> 
+    
+    <div class="fg-internal-blk-div">
+    <% if(typeof contact != "undefined"){ %>
+            <input type="text" data-key="teams.<%- roleType%>.new.<%- rand1%>.contact.<%-contact%>" class=" hide" >
+    <% } %>
+        <div class="fg-internal-blk-one col-md-5 col-sm-5 col-xs-8">
+             <select id="teams_<%- roleType%>_new_<%- randomNumber %>_module" title="{{'SELECT_DEFAULT'|trans}}" name="teams_<%- roleType%>_new_<%-rand1%>_module_<%- randomNumber %>" data-key="teams.<%- roleType%>.new.<%-rand1%>.module.<%- randomNumber %>.teams" class="selectpicker form-control show-tick">
+                   <% _.each(teamList,function(team){ %> 
+                       <option value="<%- team.roleId %>" <%  if(_.contains(excludeRoles,team.roleId)) { %> disabled <% } %> class="single" ><%- team.rTitle %></option>
+                   <% }); %>  
+               </select>   
+        </div>
+        <div class="fg-internal-blk-two col-md-6 col-sm-6 col-xs-12"> 
+                <select id="teams_<%- roleType%>_new_<%- randomNumber %>_module" multiple title="{{'SELECT_DEFAULT'|trans}}" name="teams_<%- roleType%>_new_<%-rand1%>_module_<%- randomNumber %>" data-key="teams.<%- roleType%>.new.<%-rand1%>.module.<%- randomNumber %>.modules" class="selectpicker form-control show-tick ">
+                   <% _.each(admins,function(admin){ %> 
+                       <option value="<%- admin.id %>"  ><%- admin.transName %></option>
+                   <% }); %>  
+               </select>   
+        </div>
+
+        <div class="fg-internal-blk-three new_team_right_rmv"> 
+            <div class="closeico">
+                <input type="checkbox" class="make-switch" id="select">
+                <label for="select"></label>
+            </div>
+        </div>
+    </div> 
+             
+</script>

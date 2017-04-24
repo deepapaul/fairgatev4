@@ -1,0 +1,296 @@
+<script type="text/template" id="listAllAssigments">
+<div class="row">
+    <%
+        var isFederationMember=content.is_federation_member;
+        var isClubmember = content.is_club_member;
+    %>    
+    <%  if(isClubmember == false) { %>
+            <div class="col-md-12 fg-common-top">
+                <div class="alert alert-danger">
+                    <button class="close" data-close="alert"></button>
+                    <span>{{'ASSIGNMENT_NO_ACCESS'|trans}}</span>
+                </div> 
+            </div>
+    <% } else { %>    
+            <% if(arrayTeam.length===0 && arrayWorkgroup.length===0 && arrayNormalRoles.length===0 && arrayFederation.length===0 && arraySubfederation.length===0) { %>
+                <div class="col-md-12 fg-common-top">
+                    <div class="alert alert-info">
+                        <button class="close" data-close="alert"></button>
+                        <span>{{'ASSIGNMENT_NO_ENTRY'|trans}}</span>
+                    </div> 
+                </div>
+            <% } else { %>
+                <div class="col-md-6 fg-common-top">
+                    <% if(arrayNormalRoles.length!=0) { %>
+                        <div class="portlet box fg-contact-width" id="fg-dev-normalrole">
+                            <div class="panel">
+                                    <div class="panel-heading fg-theme-head fg-common-btm">
+                                        <h3 class="fg-panel-title">{%trans%}ASSIGNMENT_ROLES{%endtrans%}</h3>
+                                    </div>
+                                     <% if(content.hasOwnProperty('NormalRoles')) {
+                                        var rolesArray=content.NormalRoles;
+                                    %>
+                               
+                                    <div class="insert_new_assignment_panel">
+                                        <% _.each(rolesArray,function(rolesVal,rolesKey){ %>
+                                            <div class="row fg-border-line" id="fg-clrChangeBlk_<%- rolesVal.rmCatId %>_<%- rolesVal.roleId %>_<%- rolesVal.functionId %>">
+                                                <div class="col-lg-5 col-sm-5 fg-panel-move fg-font-frt" data-name="fg-dev-col1"><%- rolesVal.roleTitle %><% if(rolesVal.functionId != null) { %>: <%- rolesVal.functionTitle %> <% } %></div>
+                                                <div class="col-lg-4 col-sm-4 fg-panel-move" data-name="fg-dev-cat"><span class="fg-category fg-blue-box"><%- rolesVal.rmCatTitle %></span></div>
+                                                <div class="col-lg-3 col-sm-3 fg-panel-move" data-name="fg-dev-cont-cnt"><a class="fg-link-font-siz" href="javascript:handleCountOrSidebarClick.updateFilter('role', 'filterdisplayflag_contact{{fgclub.clubId}}-<%- loggedContactId %>', '', '{{fgclub.clubId}}', '<%- loggedContactId %>', '', '', '{{fgclub.clubUrlIdentifier}}', 'count', '', '', '', '', 'contact', '', '<%- rolesVal.rmCatId %>', '<%- rolesVal.roleId %>', '')"><% if(rolesVal.role_count > 0) { %><%-rolesVal.role_count %><% if(rolesVal.role_count==1) { %> {%trans%}ASSIGNMENT_CONTACT{%endtrans%}<% } else { %> {%trans%}ASSIGNMENT_CONTACTS{%endtrans%}<% } } %></a></div>
+                                                <div class="fg-last-icon" data-name="fg-dev-lasticon">
+                                                    <div class="closeico">
+                                                        <% if(rolesVal.functionId==null) { %>
+                                                            <input type="checkbox" class="make-switch" id="{{contactId}}_<%- rolesVal.rmCatId %>_role_<%- rolesVal.roleId %>_is_deleted" data-key="{{contactId}}.<%- rolesVal.rmCatId %>.role.<%- rolesVal.roleId %>.is_deleted" name="{{contactId}}_<%- rolesVal.rmCatId %>_role_<%- rolesVal.roleId %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- rolesVal.rmCatId %>_<%- rolesVal.roleId %>_<%- rolesVal.functionId %>">
+                                                            <label for="{{contactId}}_<%- rolesVal.rmCatId %>_role_<%- rolesVal.roleId %>_is_deleted"></label>
+                                                        <% } else { %>
+                                                            <input type="checkbox" class="make-switch" id="{{contactId}}_<%- rolesVal.rmCatId %>_role_<%- rolesVal.roleId %>_function_<%- rolesVal.functionId %>_is_deleted" data-key="{{contactId}}.<%- rolesVal.rmCatId %>.role.<%- rolesVal.roleId %>.function.<%- rolesVal.functionId %>.is_deleted" name="{{contactId}}_<%- rolesVal.rmCatId %>_role_<%- rolesVal.roleId %>_function_<%- rolesVal.functionId %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- rolesVal.rmCatId %>_<%- rolesVal.roleId %>_<%- rolesVal.functionId %>">
+                                                            <label for="{{contactId}}_<%- rolesVal.rmCatId %>_role_<%- rolesVal.roleId %>_function_<%- rolesVal.functionId %>_is_deleted"></label>
+                                                        <% } %>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% }); %>
+
+                                    </div>
+                                <% } %>
+                                </div>
+                             <% if(arrayNormalRoles.length!=0) { %>
+                            <div class="col-lg-12 fg-common-btm-seven fg-clear-left">
+                                <a element-title="Roles" element-type="NormalRoles" class="create_new_assignment" data-toggle="modal" href="#basic" id="pencil"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i><span class="fg-add-text"> {%trans%}ASSIGNMENT_ASSIGN_TO_ROLE{%endtrans%}</span></a>
+                            </div>
+                            <% } %>
+                        </div>
+                    <% } %>
+                    {#    jira687            #}
+                <% if(arrayFederation.length!=0 || content.hasOwnProperty('Federation')) { %>
+                        <% if(isFederationMember == true) { %>
+                            <div class="portlet box fg-contact-width" id="fg-dev-federationrole">
+                                    <div class="panel">
+                                        <div class="panel-heading fg-theme-head fg-common-btm">
+                                            <h3 class="fg-panel-title">{{fgtwig.getTerminolgyName('Federation',singular,'UCF')}} {%trans%}ASSIGNMENT_ROLES{%endtrans%} <img src="{{fedLogoPath}}" /></h3>
+                                        </div>
+                                <% if(content.hasOwnProperty('Federation')) { 
+                                    var federationInheritRolesArray=content.Federation;
+                                %>
+                                        <div class="insert_new_assignment_panel">
+                                            <% 
+                                        _.each(federationInheritRolesArray,function(federationInheritVal,federationInheritKey){ %>
+                                            <div class="row fg-border-line" id="fg-clrChangeBlk_<%- federationInheritVal.rmCatId %>_<%- federationInheritVal.roleId %>_<%- federationInheritVal.functionId %>">
+                                                <div class="col-lg-5 col-sm-5 fg-panel-move fg-font-frt" data-name="fg-dev-col1"><%- federationInheritVal.roleTitle %><% if(federationInheritVal.functionId != null) { %>: <%- federationInheritVal.functionTitle %> <% } %></div>
+                                                <div class="col-lg-4 col-sm-4 fg-panel-move" data-name="fg-dev-cat"><span class="fg-category fg-blue-box"><%- federationInheritVal.rmCatTitle %></span></div>
+                                                <div class="col-lg-3 col-sm-3 fg-panel-move" data-name="fg-dev-cont-cnt"><a class="fg-link-font-siz" href="javascript:handleCountOrSidebarClick.updateFilter('frole', 'filterdisplayflag_contact{{fgclub.clubId}}-<%- loggedContactId %>', '', '{{fgclub.clubId}}', '<%- loggedContactId %>', '', '', '{{fgclub.clubUrlIdentifier}}', 'count', '', '', '', '', 'contact', '', '<%- federationInheritVal.rmCatId %>', '<%- federationInheritVal.roleId %>', '<%- federationInheritVal.catClubId %>')"><% if(federationInheritVal.role_count > 0) { %><%-federationInheritVal.role_count %><% if(federationInheritVal.role_count==1) { %> {%trans%}ASSIGNMENT_CONTACT{%endtrans%}<% } else { %> {%trans%}ASSIGNMENT_CONTACTS{%endtrans%}<% } } %></a></div>
+                                                <div class="fg-last-icon" data-name="fg-dev-lasticon">
+                                                    <div class="closeico">
+                                                        <% if(federationInheritVal.functionId==null) { %>
+                                                            <% if(content.clubType=='sub_federation' && federationInheritVal.is_allowed_fedmember_subfed==1)  { %>
+                                                                <input type="checkbox" class="make-switch" id="{{contactId}}_<%- federationInheritVal.rmCatId %>_role_<%- federationInheritVal.roleId %>_is_deleted" data-key="{{contactId}}.<%- federationInheritVal.rmCatId %>.role.<%- federationInheritVal.roleId %>.is_deleted" name="{{contactId}}_<%- federationInheritVal.rmCatId %>_role_<%- federationInheritVal.roleId %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- federationInheritVal.rmCatId %>_<%- federationInheritVal.roleId %>_<%- federationInheritVal.functionId %>">
+                                                                <label for="{{contactId}}_<%- federationInheritVal.rmCatId %>_role_<%- federationInheritVal.roleId %>_is_deleted"></label>
+                                                            <% } else if((content.clubType=='sub_federation_club' || content.clubType=='federation_club') && (federationInheritVal.is_allowed_fedmember_club==1)) { %>
+                                                                <input type="checkbox" class="make-switch" id="{{contactId}}_<%- federationInheritVal.rmCatId %>_role_<%- federationInheritVal.roleId %>_is_deleted" data-key="{{contactId}}.<%- federationInheritVal.rmCatId %>.role.<%- federationInheritVal.roleId %>.is_deleted" name="{{contactId}}_<%- federationInheritVal.rmCatId %>_role_<%- federationInheritVal.roleId %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- federationInheritVal.rmCatId %>_<%- federationInheritVal.roleId %>_<%- federationInheritVal.functionId %>">
+                                                                <label for="{{contactId}}_<%- federationInheritVal.rmCatId %>_role_<%- federationInheritVal.roleId %>_is_deleted"></label>
+                                                            <% } else if((content.clubType=='federation' || content.clubType=='standard_club')) { %>
+                                                                <input type="checkbox" class="make-switch" id="{{contactId}}_<%- federationInheritVal.rmCatId %>_role_<%- federationInheritVal.roleId %>_is_deleted" data-key="{{contactId}}.<%- federationInheritVal.rmCatId %>.role.<%- federationInheritVal.roleId %>.is_deleted" name="{{contactId}}_<%- federationInheritVal.rmCatId %>_role_<%- federationInheritVal.roleId %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- federationInheritVal.rmCatId %>_<%- federationInheritVal.roleId %>_<%- federationInheritVal.functionId %>">
+                                                                <label for="{{contactId}}_<%- federationInheritVal.rmCatId %>_role_<%- federationInheritVal.roleId %>_is_deleted"></label>
+                                                            <% } else { %>
+                                                                <i class="fa fa-lock fa-2x ash"></i>
+                                                            <% } %>
+                                                        <% } else { %>
+                                                            <% if(content.clubType=='sub_federation' && federationInheritVal.is_allowed_fedmember_subfed==1)  { %>
+                                                                <input type="checkbox" class="make-switch" id="{{contactId}}_<%- federationInheritVal.rmCatId %>_role_<%- federationInheritVal.roleId %>_function_<%- federationInheritVal.functionId %>_is_deleted" data-key="{{contactId}}.<%- federationInheritVal.rmCatId %>.role.<%- federationInheritVal.roleId %>.function.<%- federationInheritVal.functionId %>.is_deleted" name="{{contactId}}_<%- federationInheritVal.rmCatId %>_role_<%- federationInheritVal.roleId %>_function_<%- federationInheritVal.functionId %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- federationInheritVal.rmCatId %>_<%- federationInheritVal.roleId %>_<%- federationInheritVal.functionId %>">
+                                                                <label for="{{contactId}}_<%- federationInheritVal.rmCatId %>_role_<%- federationInheritVal.roleId %>_function_<%- federationInheritVal.functionId %>_is_deleted"></label>
+                                                            <% } else if((content.clubType=='sub_federation_club' || content.clubType=='federation_club') && (federationInheritVal.is_allowed_fedmember_club==1)) { %>
+                                                                <input type="checkbox" class="make-switch" id="{{contactId}}_<%- federationInheritVal.rmCatId %>_role_<%- federationInheritVal.roleId %>_function_<%- federationInheritVal.functionId %>_is_deleted" data-key="{{contactId}}.<%- federationInheritVal.rmCatId %>.role.<%- federationInheritVal.roleId %>.function.<%- federationInheritVal.functionId %>.is_deleted" name="{{contactId}}_<%- federationInheritVal.rmCatId %>_role_<%- federationInheritVal.roleId %>_function_<%- federationInheritVal.functionId %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- federationInheritVal.rmCatId %>_<%- federationInheritVal.roleId %>_<%- federationInheritVal.functionId %>">
+                                                                <label for="{{contactId}}_<%- federationInheritVal.rmCatId %>_role_<%- federationInheritVal.roleId %>_function_<%- federationInheritVal.functionId %>_is_deleted"></label>
+                                                            <% } else if((content.clubType=='federation' || content.clubType=='standard_club')) { %>
+                                                                <input type="checkbox" class="make-switch" id="{{contactId}}_<%- federationInheritVal.rmCatId %>_role_<%- federationInheritVal.roleId %>_function_<%- federationInheritVal.functionId %>_is_deleted" data-key="{{contactId}}.<%- federationInheritVal.rmCatId %>.role.<%- federationInheritVal.roleId %>.function.<%- federationInheritVal.functionId %>.is_deleted" name="{{contactId}}_<%- federationInheritVal.rmCatId %>_role_<%- federationInheritVal.roleId %>_function_<%- federationInheritVal.functionId %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- federationInheritVal.rmCatId %>_<%- federationInheritVal.roleId %>_<%- federationInheritVal.functionId %>">
+                                                                <label for="{{contactId}}_<%- federationInheritVal.rmCatId %>_role_<%- federationInheritVal.roleId %>_function_<%- federationInheritVal.functionId %>_is_deleted"></label>
+                                                            <% } else { %>  
+                                                                <i class="fa fa-lock fa-2x ash"></i>
+                                                            <% } %>
+                                                        <% } %>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% }); %>
+                                        </div>
+                                        <% } %>
+                                    </div>
+                                
+                                <% if(arrayFederation.length!=0) { %>
+                                    <div class="col-lg-12 fg-common-btm-seven fg-clear-left"><a element-title="Federation Roles" element-type="Federation" class="create_new_assignment" data-toggle="modal" href="#basic" id="pencil"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i><span class="fg-add-text"> {{ 'ASSIGNMENT_ASSIGN_TO_FEDERATION'|trans ({'%federation%': fgtwig.getTerminolgyName('Federation', singular)}) }} </span></a></div>
+                                <% } %>
+                            </div>
+                        <% } %>
+                    <% } %>
+                <% if(arraySubfederation.length!=0 || content.hasOwnProperty('Subfederation')) { %>
+                        <% if(isFederationMember == true) { %>
+                            <div class="portlet box fg-contact-width" id="fg-dev-subfederationrole">
+                                
+                                    <div class="panel">
+                                        <div class="panel-heading fg-theme-head fg-common-btm">
+                                            <h3 class="fg-panel-title">{{fgtwig.getTerminolgyName('Sub-federation',singular,'UCF')}} {%trans%}ASSIGNMENT_ROLES{%endtrans%} <img src="{{subfedLogoPath}}" /></h3>
+                                    </div>
+                                <% if(content.hasOwnProperty('Subfederation')) {
+                                    var subfederationInheritRolesArray=content.Subfederation;
+                                %>
+                                        <div class="insert_new_assignment_panel">
+                                            <% _.each(subfederationInheritRolesArray,function(subfederationInheritVal,subfederationInheritKey){ %>
+                                                <div class="row fg-border-line" id="fg-clrChangeBlk_<%- subfederationInheritVal.rmCatId %>_<%- subfederationInheritVal.roleId %>_<%- subfederationInheritVal.functionId %>">
+                                                    <div class="col-lg-5 col-sm-5 fg-panel-move fg-font-frt" data-name="fg-dev-col1"><%- subfederationInheritVal.roleTitle %><% if(subfederationInheritVal.functionId != null) { %>: <%- subfederationInheritVal.functionTitle %> <% } %></div>
+                                                    <div class="col-lg-4 col-sm-4 fg-panel-move" data-name="fg-dev-cat"><span class="fg-category fg-blue-box"><%- subfederationInheritVal.rmCatTitle %></span></div>
+                                                    <div class="col-lg-3 col-sm-3 fg-panel-move" data-name="fg-dev-cont-cnt"><a class="fg-link-font-siz" href="javascript:handleCountOrSidebarClick.updateFilter('frole', 'filterdisplayflag_contact{{fgclub.clubId}}-<%- loggedContactId %>', '', '{{fgclub.clubId}}', '<%- loggedContactId %>', '', '', '{{fgclub.clubUrlIdentifier}}', 'count', '', '', '', '', 'contact', '', '<%- subfederationInheritVal.rmCatId %>', '<%- subfederationInheritVal.roleId %>', '<%- subfederationInheritVal.catClubId %>')"><% if(subfederationInheritVal.role_count > 0) { %><%-subfederationInheritVal.role_count %><% if(subfederationInheritVal.role_count==1) { %> {%trans%}ASSIGNMENT_CONTACT{%endtrans%}<% } else { %> {%trans%}ASSIGNMENT_CONTACTS{%endtrans%}<% } } %></a></div>
+                                                    <div class="fg-last-icon" data-name="fg-dev-lasticon">
+                                                        <div class="closeico">
+                                                            <%
+                                                            var catClubId = (content.catClubId != undefined) ? content.catClubId : subfederationInheritVal.catClubId;
+                                                            var clubId = (content.clubId != undefined) ? content.clubId : subfederationInheritVal.clubId;
+                                                            var clubId = {{ fgclub.clubId }};
+
+                                                            if(subfederationInheritVal.functionId==null) {                                                                 
+                                                                %>
+                                                                <% if((clubId == catClubId) || ((clubId != catClubId) && (subfederationInheritVal.is_allowed_fedmember_club==1))) { %>
+                                                                    <input type="checkbox" class="make-switch" id="{{contactId}}_<%- subfederationInheritVal.rmCatId %>_role_<%- subfederationInheritVal.roleId %>_is_deleted" data-key="{{contactId}}.<%- subfederationInheritVal.rmCatId %>.role.<%- subfederationInheritVal.roleId %>.is_deleted" name="{{contactId}}_<%- subfederationInheritVal.rmCatId %>_role_<%- subfederationInheritVal.roleId %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- subfederationInheritVal.rmCatId %>_<%- subfederationInheritVal.roleId %>_<%- subfederationInheritVal.functionId %>">
+                                                                    <label for="{{contactId}}_<%- subfederationInheritVal.rmCatId %>_role_<%- subfederationInheritVal.roleId %>_is_deleted"></label>
+                                                                <% } else { %>
+                                                                    <i class="fa fa-lock fa-2x ash"></i>
+                                                                <% } %>
+                                                            <% } else { %>
+                                                                <% if((clubId == catClubId) || ((clubId != catClubId) && (subfederationInheritVal.is_allowed_fedmember_club==1))) { %>
+                                                                    <input type="checkbox" class="make-switch" id="{{contactId}}_<%- subfederationInheritVal.rmCatId %>_role_<%- subfederationInheritVal.roleId %>_function_<%- subfederationInheritVal.functionId %>_is_deleted" data-key="{{contactId}}.<%- subfederationInheritVal.rmCatId %>.role.<%- subfederationInheritVal.roleId %>.function.<%- subfederationInheritVal.functionId %>.is_deleted" name="{{contactId}}_<%- subfederationInheritVal.rmCatId %>_role_<%- subfederationInheritVal.roleId %>_function_<%- subfederationInheritVal.functionId %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- subfederationInheritVal.rmCatId %>_<%- subfederationInheritVal.roleId %>_<%- subfederationInheritVal.functionId %>">
+                                                                    <label for="{{contactId}}_<%- subfederationInheritVal.rmCatId %>_role_<%- subfederationInheritVal.roleId %>_function_<%- subfederationInheritVal.functionId %>_is_deleted"></label>
+                                                                <% } else { %>
+                                                                    <i class="fa fa-lock fa-2x ash"></i>
+                                                                <% } %>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <% }); %>
+                                        </div>
+                                         <% } %>
+                                    </div>
+                               
+                                <% if(arraySubfederation.length!=0) { %>
+                                    <div class="col-lg-12 fg-common-btm-seven fg-clear-left"><a element-type="Subfederation" element-title="Sub-Federation Roles" class="create_new_assignment" data-toggle="modal" href="#basic" id="pencil"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i><span class="fg-add-text"> {{ 'ASSIGNMENT_ASSIGN_TO_SUB_FEDERATION'|trans ({'%sub-federation%': fgtwig.getTerminolgyName('Sub-federation', singular)}) }}</span></a></div>
+                                <% } %>
+                            </div>
+                        <% } %>
+                    <% } %>
+                    {#    jira687            #}
+            
+                 <% if(content.hasOwnProperty('filterRole')) { %>
+                        <div class="portlet box fg-contact-width" id="fg-dev-filterRole">
+                                <div class="panel">
+                                    <div class="panel-heading fg-theme-head fg-common-btm">
+                                        <h3 class="fg-panel-title">{{'ASSIGNMENT_FILTER_ROLE'|trans}}</h3>
+                                    </div>
+                             <% if(content.hasOwnProperty('filterRole')) { 
+                                var filterRoleArray=content.filterRole;
+                            %>
+                                    <div class="insert_new_assignment_panel">
+                                        <% _.each(filterRoleArray,function(filterRoleVal,filterRoleKey){ %>
+                                            <div class="row fg-border-line" id="fg-clrChangeBlk_<%- filterRoleVal.rmCatId %>_<%- filterRoleVal.roleId %>">
+                                                <div class="col-lg-5 col-sm-5 fg-panel-move fg-font-frt" data-name="fg-dev-col1"><%- filterRoleVal.roleTitle %></div>
+                                                <div class="col-lg-4 col-sm-4 fg-panel-move" data-name="fg-dev-cat"><span class="fg-category fg-blue-box"><%- filterRoleVal.rmCatTitle %></span></div>
+                                                
+                                                <div class="col-lg-3 col-sm-3 fg-panel-move" data-name="fg-dev-cont-cnt"><a class="fg-link-font-siz" href="javascript:handleCountOrSidebarClick.updateFilter('filterrole', 'filterdisplayflag_contact{{fgclub.clubId}}-<%- loggedContactId %>', '', '{{fgclub.clubId}}', '<%- loggedContactId %>', '', '', '{{fgclub.clubUrlIdentifier}}', 'count', '', '', '', '', 'contact', '', '<%- filterRoleVal.rmCatId %>', '<%- filterRoleVal.roleId %>', '')"><% if(filterRoleVal.role_count > 0) { %><%-filterRoleVal.role_count %><% if(filterRoleVal.role_count==1) { %> {% trans %}ASSIGNMENT_CONTACT{%endtrans%}<% } else { %> {% trans %}ASSIGNMENT_CONTACTS{% endtrans %}<% } } %></a></div>
+                                                <div class="fg-last-icon" data-name="fg-dev-lasticon">
+                                                    <a href="javascript:FgAssignment.pathReplace('<%- content.filterPath %>','<%- filterRoleVal.rmCatId %>')" ><i class="fa fa-filter " style="display: inline-block;"></i></a>
+                                                </div>
+                                            </div>
+                                        <% }); %>
+                                    </div>
+                                 <% } %>
+                                </div>
+                        </div>
+                     <% }  %>
+                </div>
+           
+                <div class="col-md-6 fg-common-top"> 
+                    <% if(arrayTeam.length!=0) { %>
+                        <div class="portlet box fg-contact-width" id="fg-dev-team">
+                           
+                                <div class="panel">
+                                    <div class="panel-heading fg-theme-head fg-common-btm">
+                                        <h3 class="fg-panel-title">{{fgtwig.getTerminolgyName('Team',plural,'UCF')}}</h3>
+                                    </div>
+                             <% if(content.hasOwnProperty('Team')) { 
+                                var teamArray=content.Team;
+                            %>
+                                    <div class="insert_new_assignment_panel">
+                                        <% _.each(teamArray,function(teamVal,teamKey){ %>
+                                            <div class="row fg-border-line" id="fg-clrChangeBlk_<%- teamVal.rmCatId %>_<%- teamVal.roleId %>_<%- teamVal.functionId %>">
+                                          <div class="col-lg-5 col-sm-5 fg-panel-move fg-font-frt" data-name="fg-dev-col1"><%- teamVal.roleTitle %><% if(teamVal.functionId != null) { %>: <%- teamVal.functionTitle %> <% } %>
+                                        <% if(( teamVal.isRoleActive == 0 )){  %> 
+                                            <i class="fa fa-eye-slash fg-pop-icon  fg-dev-contact-detail-assignments-popover popover" data-content="{{'TEAM_CONTACT_DETAILS_ASSIGNMENTS_POPOVER_INVISIBILE'|trans}}"></i> 
+                                         <% }%>
+                                             </div>
+                                                <div class="col-lg-4 col-sm-4 fg-panel-move" data-name="fg-dev-cat"><span class="fg-category fg-blue-box"><%- teamVal.rmCatTitle %></span></div>
+                                                <div class="col-lg-3 col-sm-3 fg-panel-move" data-name="fg-dev-cont-cnt"><a class="fg-link-font-siz" href="javascript:handleCountOrSidebarClick.updateFilter('team', 'filterdisplayflag_contact{{fgclub.clubId}}-<%- loggedContactId %>', '', '{{fgclub.clubId}}', '<%- loggedContactId %>', '', '', '{{fgclub.clubUrlIdentifier}}', 'count', '', '', '', '', 'contact', '', '<%- teamVal.teamCatId %>', '<%- teamVal.roleId %>', '')"><% if(teamVal.role_count > 0) { %><%-teamVal.role_count %><% if(teamVal.role_count==1) { %> {%trans%}ASSIGNMENT_CONTACT{%endtrans%}<% } else { %> {%trans%}ASSIGNMENT_CONTACTS{%endtrans%}<% } } %></a></div>
+                                                <div class="fg-last-icon" data-name="fg-dev-lasticon">
+                                                    <div class="closeico">
+                                                        <% if(teamVal.functionId==null) { %>
+                                                            <input type="checkbox" class="make-switch" id="{{contactId}}_<%- teamVal.rmCatId %>_role_<%- teamVal.roleId %>_is_deleted" data-key="{{contactId}}.<%- teamVal.rmCatId %>.role.<%- teamVal.roleId %>.is_deleted" name="{{contactId}}_<%- teamVal.rmCatId %>_role_<%- teamVal.roleId %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- teamVal.rmCatId %>_<%- teamVal.roleId %>_<%- teamVal.functionId %>">
+                                                            <label for="{{contactId}}_<%- teamVal.rmCatId %>_role_<%- teamVal.roleId %>_is_deleted"></label>
+                                                        <% } else { %>
+                                                            <input type="checkbox" class="make-switch" id="{{contactId}}_<%- teamVal.rmCatId %>_role_<%- teamVal.roleId %>_function_<%- teamVal.functionId %>_is_deleted" data-key="{{contactId}}.<%- teamVal.rmCatId %>.role.<%- teamVal.roleId %>.function.<%- teamVal.functionId %>.is_deleted" name="{{contactId}}_<%- teamVal.rmCatId %>_role_<%- teamVal.roleId %>_function_<%- teamVal.functionId %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- teamVal.rmCatId %>_<%- teamVal.roleId %>_<%- teamVal.functionId %>">
+                                                            <label for="{{contactId}}_<%- teamVal.rmCatId %>_role_<%- teamVal.roleId %>_function_<%- teamVal.functionId %>_is_deleted"></label>
+                                                        <% } %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% }); %>
+                                    </div>
+                                 <% } %>
+                                </div>
+                           
+                            <div class="col-lg-12 fg-common-btm-seven fg-clear-left"><a element-type="Team" element-title="Teams" class="create_new_assignment" data-toggle="modal" href="#basic" id="pencil"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i><span class="fg-add-text"> {{ 'ASSIGNMENT_ASSIGN_TO_TEAM'|trans ({'%Team%': fgtwig.getTerminolgyName('Team', singular)}) }}</span></a></div>
+                        </div>
+                    <% } %>
+                    <% if(arrayWorkgroup.length!=0) { %>
+                        <div class="portlet box fg-contact-width" id="fg-dev-workgroup">
+                            
+                                <div class="panel">
+                                    <div class="panel-heading fg-theme-head fg-common-btm">
+                                        <h3 class="fg-panel-title">{%trans%}ASSIGNMENT_WORKGROUPS{%endtrans%}</h3>
+                                    </div>
+                            <% if(content.hasOwnProperty('Workgroup')) { 
+                                var workgroupArray=content.Workgroup;
+                            %>
+                                    <div class="insert_new_assignment_panel">
+                                        <% _.each(workgroupArray,function(workgroupVal,workgroupKey){ %>
+                                            <div class="row fg-border-line" id="fg-clrChangeBlk_<%- workgroupVal.rmCatId %>_<%- workgroupVal.roleId %>_<%- workgroupVal.functionId %>">
+                                              <div class="col-lg-5 col-sm-5 fg-panel-move fg-font-frt" data-name="fg-dev-col1"><% if(workgroupVal.is_executive_board==1) { %>{{fgtwig.getTerminolgyName('Executive Board',singular,'UCF')}}<% } else { %><%- workgroupVal.roleTitle %><% } %>: <%- workgroupVal.functionTitle %>
+                                                <% if(( workgroupVal.isRoleActive == 0 )) { %> 
+                                                <i class="fa fa-eye-slash fg-pop-icon fg-dev-contact-detail-assignments-popover popover" data-content="{{'WORKGROUP_CONTACT_DETAILS_ASSIGNMENTS_POPOVER_INVISIBILE'|trans}}"></i> 
+                                                <% }%>
+                                              </div>
+                                                <div class="col-lg-4 col-sm-4 fg-panel-move" data-name="fg-dev-cat"><span class="fg-category fg-blue-box"><%- workgroupVal.rmCatTitle %></span></div>
+                                                <div class="col-lg-3 col-sm-3 fg-panel-move" data-name="fg-dev-cont-cnt"><a class="fg-link-font-siz" href="javascript:handleCountOrSidebarClick.updateFilter('workgroup', 'filterdisplayflag_contact{{fgclub.clubId}}-<%- loggedContactId %>', '', '{{fgclub.clubId}}', '<%- loggedContactId %>', '', '', '{{fgclub.clubUrlIdentifier}}', 'count', '', '', '', '', 'contact', '', '<%- workgroupVal.rmCatId %>', '<%- workgroupVal.roleId %>', '')"><% if(workgroupVal.role_count > 0) { %><%-workgroupVal.role_count %><% if(workgroupVal.role_count==1) { %> {%trans%}ASSIGNMENT_CONTACT{%endtrans%}<% } else { %> {%trans%}ASSIGNMENT_CONTACTS{%endtrans%}<% } } %></a></div>
+                                                <div class="fg-last-icon" data-name="fg-dev-lasticon">
+                                                    <div class="closeico">
+                                                        <% if(workgroupVal.functionId==null) { %>
+                                                            <input type="checkbox" class="make-switch" id="{{contactId}}_<%- workgroupVal.rmCatId %>_role_<%- workgroupVal.roleId %>_is_deleted" data-key="{{contactId}}.<%- workgroupVal.rmCatId %>.role.<%- workgroupVal.roleId %>.is_deleted" name="{{contactId}}_<%- workgroupVal.rmCatId %>_role_<%- workgroupVal.roleId %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- workgroupVal.rmCatId %>_<%- workgroupVal.roleId %>_<%- workgroupVal.functionId %>">
+                                                            <label for="{{contactId}}_<%- workgroupVal.rmCatId %>_role_<%- workgroupVal.roleId %>_is_deleted"></label>
+                                                        <% } else { %>
+                                                            <input type="checkbox" class="make-switch" id="{{contactId}}_<%- workgroupVal.rmCatId %>_role_<%- workgroupVal.roleId %>_function_<%- workgroupVal.functionId %>_is_deleted" data-key="{{contactId}}.<%- workgroupVal.rmCatId %>.role.<%- workgroupVal.roleId %>.function.<%- workgroupVal.functionId %>.is_deleted" name="{{contactId}}_<%- workgroupVal.rmCatId %>_role_<%- workgroupVal.roleId %>_function_<%- workgroupVal.functionId %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- workgroupVal.rmCatId %>_<%- workgroupVal.roleId %>_<%- workgroupVal.functionId %>">
+                                                            <label for="{{contactId}}_<%- workgroupVal.rmCatId %>_role_<%- workgroupVal.roleId %>_function_<%- workgroupVal.functionId %>_is_deleted"></label>
+                                                        <% } %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% }); %>
+                                    </div>
+                                 <% } %>
+                                </div>
+                           
+                            <div class="col-lg-12 fg-common-btm-seven fg-clear-left"><a class="create_new_assignment" element-type="Workgroup" element-title="Workgroups" data-toggle="modal" href="#basic" id="pencil"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i><span class="fg-add-text"> {%trans%}ASSIGNMENT_ASSIGN_TO_WORKGROUP{%endtrans%}</span></a></div>
+                        </div>
+                    <% } %>
+                </div>
+        <% } %>
+    <% } %>
+</div>
+</script>

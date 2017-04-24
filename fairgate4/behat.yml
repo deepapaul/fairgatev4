@@ -1,0 +1,25 @@
+## behat.yml
+#default:
+#    #autoload: [ %paths.base%/../ ]
+#    extensions:
+#        Behat\MinkExtension:
+#            base_url: 'http://127.0.0.1:4042' # this will be the url of our application
+#            goutte: ~
+#            selenium2: ~
+
+default:
+    autoload:
+        '': %paths.base%/features/bootstrap
+    extensions:
+        Behat\MinkExtension:
+            show_auto: true
+            show_cmd: firefox %s
+            base_url: 'http://localhost:8083/'
+            goutte: ~
+            selenium2: ~
+    suites:
+        default:
+            contexts: [ApiFeatureContext]
+            
+            
+            

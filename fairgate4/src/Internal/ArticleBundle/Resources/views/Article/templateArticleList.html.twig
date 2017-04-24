@@ -1,0 +1,77 @@
+<script type="text/template" id="template-article-listing">
+    <div class="row fg-clear fg-news-overview-article-list  fg-marg-btm-20 fg-pad-btm-10" id="<%- data.articleId %>">
+        <div class="detail-page-redirect-wrapper" id="<%- data.articleId %>">
+            <h2 class="fg-article-title fg-marg-top-0 fg-marg-btm-20 hidden-lg" ><%- data.title %></h2>
+            <% if(data.FIRST_IMAGE) { %>
+                <figure class="col-lg-2 fg-pad-left-0 col-sm-4 col-xs-4">
+                    <img src="/uploads/<%- data.club_id %>/gallery/width_300/<%- data.FIRST_IMAGE %>">
+                </figure>
+                <section class="col-lg-7 col-sm-8 col-xs-8">
+            <% } else { %>
+                <section class="col-lg-9 fg-pad-left-0 col-sm-12">
+            <% } %>
+                <h2 class="fg-article-title fg-marg-top-0 fg-marg-btm-20 visible-lg" ><%- data.title %></h2>
+                <div class="fg-content">
+                <% if(data.teaser) { %>
+                    <%- data.teaser %>
+                <% } else if(data.text) { %>
+                    <%- data.text %>
+                <% } %>
+                </div>
+
+                <ul class="footer-list list-inline hidden-lg hidden-xs">
+                <% if (data.PUBLICATION_DATE) { %>
+                    <li><i class="fa fa-2x fa-calendar"></i> <span class="fg-subtitle"><%- FgLocaleSettings.formatDate(data.PUBLICATION_DATE, 'date', 'YYYY-MM-DD hh:mm:ss') %></span></li>   
+                <% } %>
+                <% if (data.COMMENTS > 0) { %>
+                    <li><i class="fa fa-2x fa-comment"></i><span class="fg-subtitle"><%- data.COMMENTS %> {%trans%}AR_COMMENTS{%endtrans%}</span></li>
+                <% } %>
+                </ul>
+                <div class="btn-group  fg-common-add-item fg-clear-marg hidden-xs">
+                    <a href="<%- data.detailPath %>" class="add-membership">
+                        <i class="fa fa-arrow-circle-right fa-2x"></i>
+                        <span class="fg-left-move"> {%trans%}READ_MORE{%endtrans%}</span>
+                    </a>
+                </div>
+            </section>
+        </div>
+        <div class="col-md-3 visible-lg">
+            <ul class="fg-news-links right-links no-style">
+                <% if (data.PUBLICATION_DATE) { %>
+                    <li><i class="fa fa-2x fa-calendar"></i> <span class="fg-subtitle"><%- FgLocaleSettings.formatDate(data.PUBLICATION_DATE, 'date', 'YYYY-MM-DD hh:mm:ss') %></span></li>
+                <% } %>
+                <% if (data.AUTHOR) { %>
+                    <li><i class="fa fa-2x fa-user"></i><span class="fg-subtitle"><%- data.AUTHOR %></span></li>
+                <% } %>
+                <% if (data.COMMENTS > 0) { %>
+                    <li><i class="fa fa-2x fa-comment"></i><span class="fg-subtitle"><%- data.COMMENTS %> {%trans%}AR_COMMENTS{%endtrans%}</span></li>
+                <% } %>
+                <%  var isClub = (data.isClub == 1) ? '{{fgclub.get('title')|capitalize}}' : '';
+                    var areasStr = (data.AREAS) ? data.AREAS : '';
+                    var areas = (!isClub || !areasStr) ? (!isClub) ? areasStr : (!areasStr) ? isClub : '' : isClub+'*##*'+areasStr;
+                %>
+                <% if (data.CATEGORIES) { %>
+                    <li><i class="fa fa-2x fa-tag"></i><span class="fg-subtitle"><% if(data.areaCatTooltip) { %><%- data.areaCatTooltip %> <% } else { %><%= FgInternal.createPopover(data.CATEGORIES, data.translations.cat) %><% } %></span></li>
+                <% } %>
+                <% if (areas) { %>
+                    <li><i class="fa fa-2x fa-folder-open"></i><span class="fg-subtitle"><% if(data.areaCatTooltip) { %><%- data.areaCatTooltip %> <% } else { %><%= FgInternal.createPopover(areas, data.translations.areas) %><% } %></span></li>
+                <% } %>
+            </ul>
+        </div>
+        <div class="clearfix"></div>
+        <ul class="footer-list list-inline fg-marg-TB-10 visible-xs">
+            <% if (data.PUBLICATION_DATE) { %>
+                <li><i class="fa fa-2x fa-calendar"></i> <span class="fg-subtitle"><%- FgLocaleSettings.formatDate(data.PUBLICATION_DATE, 'date', 'YYYY-MM-DD hh:mm:ss') %></span></li>                                           
+            <% } %>
+            <% if (data.COMMENTS > 0) { %>
+                <li><i class="fa fa-2x fa-comment"></i><span class="fg-subtitle"><%- data.COMMENTS %> {%trans%}AR_COMMENTS{%endtrans%}</span></li>
+            <% } %>
+            <li>
+                <a href="<%- data.detailPath %>" class="add-membership">
+                    <i class="fa fa-arrow-circle-right fa-2x"></i>
+                    <span class="fg-left-move"> {%trans%}READ_MORE{%endtrans%}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</script>

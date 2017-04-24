@@ -1,0 +1,57 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">{{titleText}}</h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="#" class="form-horizontal form-row-sepe" id="archivecontacts">
+                    <div class="form-body">
+                        
+                        <div id="block_0" class="fg-dev-archive-content">
+                            <p class="fg-dev-archive-status-txt">{{deleteDesc}}</p>
+                        </div>
+
+                    </div>
+                    
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer form-actions fg-modal-footer">
+    <button type="button" class="btn default" id="cancel" data-dismiss="modal" data-function="cancel">{{'CANCEL'|trans}}</button> 
+    <button type="button" class="btn green" id="save" data-function="save">{{'DC_DELETE_BUTTON'|trans}}</button>        
+</div> 
+
+
+<script type="text/javascript">
+    var clubId = '{{clubId}}';
+    var clubType = '{{clubType}}';
+    var actionType = '{{actionType}}';
+    var selActionType = '{{selActionType}}';
+    var docId ='{{docId}}';
+    var docType ='{{docType}}';
+      
+    $(document).off('click', 'button[data-function=save], button[data-function=cancel]');
+    $(document).on('click', 'button[data-function=save], button[data-function=cancel]', function() {
+        var buttonId = this.id;
+        if (buttonId == 'save') {
+            deleteDocumentFun();
+        }
+    });
+    function deleteDocumentFun() {
+        $('#popup').modal('hide');
+        var passingData = {'docId':docId,'actionType': actionType,'docType':docType};
+        FgXmlHttp.post('{{path("document_settings_editpage_delete")}}', passingData, false, callBackFn);
+    }
+    function callBackFn(resultParms) {
+     window.location.href =resultParms.redirect;
+
+    }
+
+</script>
+

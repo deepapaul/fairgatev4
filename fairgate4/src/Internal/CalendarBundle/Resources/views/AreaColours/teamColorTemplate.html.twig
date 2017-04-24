@@ -1,0 +1,39 @@
+<li class="dd-item row" data-id="2">
+    <div class="fg-nestable-row">
+
+        <div class="fg-active-IB">
+            <label class="fg-club-label">{{fgtwig.getTerminolgyName('Team',plural,'UCF')}}</label>
+        </div>
+        <div class="fg-active-IB pull-right">
+            <div class="">
+                <input name="category_{{teamId}}" data-key="category.{{teamId}}" type="text" id="position-top-right" class="form-control mini-color" data-position="top right" value="{{categoryColourCodes[teamId]['colorCode']|default(defaultColorCodeClub)}}">
+            </div>
+        </div>
+    </div>
+    <ol class="dd-list">
+        {% for teamId,team in teams %}
+            <li class="dd-item row" data-id="3">
+                <div class="fg-nestable-row">
+                    <div class="fg-active-IB">
+                        <label class="fg-club-label">{{team}}</label>
+                    </div>
+                    
+                        <div id= "select_role_{{teamId}}" data-type-id="role_{{teamId}}" class="fg-active-IB pull-right choose-colour-div    {% if colorCode[teamId]['colorCode'] != '' %} hide{% endif %}">
+                            <div class="fg-active-IB">
+                                <a href="javascript:void(0)" class="fg-choose-ind-color" data-id="role_{{teamId}}">{{'AREA_COLORS_CHOOSE_COLOR_TEXT'|trans}}</a>
+                            </div>
+                        </div>
+                    
+                        <div id= "remove_role_{{teamId}}" data-type-id="role_{{teamId}}" class="fg-active-IB pull-right remove-color-div {% if colorCode[teamId]['colorCode'] == '' %} hide{% endif %}">
+                            <div class="fg-active-IB fg-marg-right-10 fg-v-middle"><a href="javascript:void(0)" class="fg-remove-ind-color" data-id="role_{{teamId}}">{{'AREA_COLORS_REMOVE_COLOR_TEXT'|trans}}</a>   </div>
+                            <div class="fg-active-IB fg-v-middle">
+                                <input name="role_{{teamId}}" data-value="{{colorCode[teamId]['colorCode']|default(defaultColorCodeClub)}}" data-key="role.{{teamId}}" type="text" id="color_role_{{teamId}}" class="form-control mini-color" data-position="top right" value="{{colorCode[teamId]['colorCode']}}" data-notrequired="true">
+                            </div>
+                        </div>
+                    
+                </div>
+            </li>
+        {% endfor %}
+
+    </ol>
+</li>

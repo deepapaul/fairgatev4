@@ -1,0 +1,40 @@
+<table class= "dataTable
+                table
+                table-bordered
+                table-hover
+                table-condensed
+                dataTable-rows
+                dataTable-scroll-x
+                dataTable-initialSort" xWidth="100" data-table-name="dataTables" id="log_display_{{subscriberId}}_{{typeId}}" data-sort="0#desc">
+    <thead>
+        <tr>
+            <th>{%trans%}LOG_DATE{%endtrans%}</th>
+            <th>{%trans%}LOG_DATA_FIELDS{%endtrans%}</th>
+            <th>{%trans%}LOG_BEFORE{%endtrans%}</th>
+            <th>{%trans%}LOG_AFTER{%endtrans%}</th>
+            <th>{%trans%}LOG_EDITED_BY{%endtrans%}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for logEntry in logEntries %}
+            <tr>
+                <td data-sort="{{ logEntry.dateOriginal }}">{{ logEntry.date }}</td>
+                {% set colorFlag = (logEntry.status != "none") ? logEntry.status : '' %}
+                {% set colorLabel = (colorFlag != '') ? transKindFields[colorFlag]|trans|capitalize : '' %}
+                <td>{{transKindFields[logEntry.field]|trans}} <span class="label label-sm fg-color-{{colorFlag}}">{{ colorLabel }}</span></td>
+                {% if ((logEntry.value_before in transKindFields|keys) and (logEntry.field != 'last_name') and (logEntry.field != 'first_name')) %}
+                    <td>{{transKindFields[logEntry.value_before]|trans}}</td>
+                {% else %}
+                    <td>{{ logEntry.value_before }}</td>
+                {% endif %}
+                
+                {% if ((logEntry.value_after in transKindFields|keys) and (logEntry.field != 'last_name') and (logEntry.field != 'first_name')) %}
+                    <td>{{transKindFields[logEntry.value_after]|trans}}</td>
+                {% else %}
+                    <td>{{ logEntry.value_after }}</td>
+                {% endif %}
+                <td>{{ logEntry.editedBy }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

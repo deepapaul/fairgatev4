@@ -1,0 +1,110 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = 'USER_RIGHTS_PAGE_TITLE'|trans %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+            <!-- BREADCRUMB STARTS -->
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <!-- BREADCRUMB ENDS -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="portlet-body fg-theme-blue">
+                                <div class="col-md-4 fg-left-zero fg-page-title-nav">
+                                    <div class="btn-group pull-left fg-full-width fg-internal-title">
+                                        <h3 class="page-title fg-page-title">{{'TOP_NAV_ARTICLE_USERRIGHTS'|trans}}</h3>
+                                    </div>
+                                </div>              
+                                <div class="clearfix"></div>
+                                <form id="userRightsForm" onsubmit="return false;" class="form-horizontal  fg-article-userrights-wrapper"> 
+                                    <div id="failcallbackServerSide" class="alert alert-danger" style="display:none;">
+                                        <button class="close" data-close="alert"></button>
+                                        <span>{{'FORM_ERROR_DISPLAY'|trans}}</span>
+                                    </div>
+                                    <div id="fg-dev-user-rights-div" style="display:none;"></div> 
+                                    {% include 'internal/savebutton.html.twig' with {'settings':true} %}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}
+{% block underscoretemplate %} 
+     {% include 'InternalArticleBundle:Settings:templateUserrightsExisting.html.twig' %}
+     {% include 'InternalArticleBundle:Settings:new-userrights.html.twig' %}        
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/page/fg_userrights.js') }}" type="text/javascript"></script>  
+    <script>            
+            var loggedContactId = {{loggedContactId}};
+            var articleAdmin = JSON.stringify({{articleAdmin|raw}});
+            articleAdmin = JSON.parse(articleAdmin);
+            var excluded = JSON.stringify({{exclude|raw}});
+            var newExcludedAdmins = JSON.parse(excluded);
+            var roleExcluded = JSON.stringify({{roleAdminExclude|raw}});
+            var newExcludeRoleAdmins = JSON.parse(roleExcluded);
+            console.log(newExcludeRoleAdmins);
+            var communityPath = '{{path('internal_community_profile',{'contactId': 'dummyContactId'})}}'; // Overview link  
+            var dropDownList = JSON.stringify({{dropdown|raw}});       
+            dropDownList = JSON.parse(dropDownList);
+            var teamList = _(dropDownList).filter(function(list){ return (list['type']=='T');});
+            var workgroupList = _(dropDownList).filter(function(list){ return (list['type']=='W');});
+            var groupAdmin = JSON.stringify({{groupAdmin|raw}});        
+            groupAdmin = JSON.parse(groupAdmin);
+        $(document).ready(function() {            
+            initPageFunctions();
+           // pageLoadFn();
+            FgFormTools.changeColorOnDelete();
+             // Global variable for user rights which need to be passed to js
+                var options = {
+                    newExclude                  : newExcludedAdmins,
+                    newTeamExclude              : newExcludeRoleAdmins.existingTeamUserDetails,
+                    newWGExclude                : newExcludeRoleAdmins.existingWGUserDetails,
+                    contactNameUrl              : "{{contactNameUrl}}",
+                    saveUrl                     : "{{path('internal_article_save_userrights')}}",
+                    saveFlag                    : 0,
+                    workgroupList               : workgroupList,
+                    teamList                    : teamList,
+                };
+            FgUserRights.initArticleAdmin(options); // Initing all the underlying functionalities of user rights including create and delete
+        });
+   
+     function initPageFunctions(){
+         
+        FgInternal.breadcrumb(FgInternal.extraBreadcrumbTitle);
+        var result_data = FGTemplate.bind('fg-dev-internal-article-userrights', {articleAdmin:articleAdmin,communityPath:communityPath,loggedContactId: loggedContactId});
+        $('#fg-dev-user-rights-div').html(result_data); // Displaying user rights from underscore
+        $('select.selectpicker').selectpicker('render');
+        $('#fg-dev-user-rights-div').show();
+        pageInit(); 
+        FgFormTools.handleUniform();
+        ComponentsDropdowns.init();
+        
+    }    
+       // Page init
+    function pageInit() {
+        FgDirtyFields.init('userRightsForm', {
+                dirtyFieldSettings :{}, 
+                enableDragDrop : false, 
+                enableUpdateSortOrder : false, 
+                enableDiscardChanges : false
+            });
+    }
+   
+</script>
+<script src="{{ asset('fgassets/global/js/tokenfield/js/bootstrap-tokenfield.js') }}" type="text/javascript"></script>
+ <script src="{{asset('fgassets/assets/global/plugins/typeahead/typeahead.bundle.js')}}" type="text/javascript"></script>
+{% endblock %} 
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/global/js/tokenfield/css/bootstrap-tokenfield.css')}}" rel="stylesheet" type="text/css"/> 
+    <link href="{{ asset('fgassets/assets/global/plugins/typeahead/typeahead.css') }}" type="text/css" rel="stylesheet" />
+{% endblock %}

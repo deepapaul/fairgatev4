@@ -1,0 +1,178 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'TITLE_BOOKMARK'|trans %}
+
+{% block pagecontent %}
+<!-- BEGIN PAGE CONTENT-->
+<div class="row" id="bookmark_form">
+    <div class="col-md-12">
+            <!-- BREADCRUMB STARTS -->
+            {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+            <!-- BREADCRUMB ENDS -->
+       {# <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3 class="page-title fg-inner-title">{%trans%}TITLE_BOOKMARK{%endtrans%}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>#}
+       <!-- PAGE TITLE BAR BEGIN-->
+       <div class="row">
+        {% set page_settings = { 'pagetitle':'true' }  %}
+        {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': 'TITLE_BOOKMARK'|trans, 'page_settings': page_settings } %}    
+      </div>
+        <!-- PAGE TITLE BAR END-->
+        <!-- BEGIN FORM-->
+        <form id="form" class="form-horizontal fg-bookmark-club-wrap" action="/backend/club/updatbookmarks" novalidate="novalidate" onSubmit="return false;" autocomplete="off">
+            <div class="row fg-border-line fairdragg fg-connan-br-btm fg-sort-drag-hover fg-last-item">
+                <div class="fg-col-first-icon fg-sort-drag">
+                    <i class="fa fg-sort ui-draggable inactive"></i>
+                </div>
+                <!-- LISTING FOR ACTIVE CLUB STARTS-->
+                <div class="col-md-12 fg-col-hack">
+                    <div class="row">
+                        <div class="col-sm-6  col-xs-12 fg-pad-left-20 fg-bookmark-active-contact">
+                            <label class="input-sm fg-input-area">{{ 'GN_ALL_CLUBS'|trans ({'%clubs%' : fgtwig.getTerminolgyName('Club', plural)})}}</label>
+                        </div>
+                        <div class="col-sm-4 fg-padding-tp-three">
+                            <a href="javascript:handleCountOrSidebarClick.updateFilter('ACTIVECLUB', 'clubfilterdisplayflag_{{fgclub.clubId}}-{{contactId}}', '', '{{fgclub.clubId}}', '{{contactId}}', '', '', '{{fgclub.clubUrlIdentifier}}', 'count', '', '', '', '', 'club', '', '', '', '')">
+                                {% if activeClubs == 1%} {{activeClubs}} {{fgtwig.getTerminolgyName('Club', singular, 'UCF')}}
+                                {% elseif activeClubs > 0%} {{activeClubs}} {{fgtwig.getTerminolgyName('Club', plural, 'UCF')}}
+                                {% else %}{{activeClubs}} {{fgtwig.getTerminolgyName('Club', plural, 'UCF')}}{% endif %}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- LISTING FOR ACTIVE CLUB ENDS -->
+            <div id="bookmarklist_sort" class="excludejs">
+                <!-- LISTING FOR ACTIVE CLUB ENDS-->
+                <!--  STARTS LISTING FOR OTHER BOOKMARKS, IF EXIST-->
+                {% set i=1 %}
+                {% set bookmark_Type=''%}
+                {% set cat_Id=''%}
+                {% set role_Id=''%}
+                {% set j='bookmark'%}
+                {% set bookmark_details_length = bookmark_details|length %}
+                    {% for bookMarkId,attributes in bookmark_details %}
+
+                        <div class="row fg-border-line fairdragg sortables fg-sort-drag-hover {%if i == bookmark_details_length %}fg-last-item {% endif %}" id="{{attributes.bookMarkId}}">
+                            <div class="fg-col-first-icon fg-sort-drag">
+                                <i class="fa fg-sort ui-draggable handle"></i>
+                            </div>
+                            <div class="col-md-12 fg-col-hack">
+                                <div class="row" id="{{attributes.bookMarkId}}">
+                                    <div class="col-sm-6  col-xs-12 fg-clear-left">
+                                        <div class="bookmark fg-bkmrk-ico-new fg-bkmrk-left"><input id="box{{i}}" type="checkbox" checked class="make-switch" data-key="{{attributes.bookMarkId}}.is_deleted" name="{{attributes.bookMarkId}}_is_deleted" id="{{attributes.bookMarkId}}_is_deleted" />  <label for="box{{i}}"><i class="fa fa-bookmark"></i></label></div>
+                                        <label class="input-sm fg-input-area"> {{ attributes.title }}</label>
+                                    </div>
+                                     {% set filter_Id= '' %}
+                                     {% if (attributes.itemType == 'filter') %}
+                                        {% set bookmark_Type= j~"_"~attributes.itemType|lower %}
+                                        {% set cat_Id= attributes.filterData %}
+                                        {% set filter_Id= attributes.id %}
+                                     {% elseif (attributes.itemType == 'class') %}
+                                        {% set bookmark_Type= j~"_"~attributes.itemType|lower %}
+                                        {% set cat_Id= attributes.categoryId %}
+                                     {% elseif (attributes.itemType == 'subfed') %}
+                                        {% set bookmark_Type= j~"_"~attributes.itemType|lower %}
+                                        {% set cat_Id= attributes.itemType%}
+                                     {% endif %}
+                                     {% set Id= attributes.id%}
+                                        <div class="col-sm-4  fg-padding-tp-three"> <a href="#">    {% include 'clubadmin/common.html.twig' with {'type':'totalCount', 'tCount': attributes.count|default(0),'id':attributes.bookMarkId,'filterid':filter_Id|default(0),'categoryId':cat_Id,'roleId':Id,'book_type':bookmark_Type,'contactId':contactId,'item':'club'}%}  </a> </div>
+                                    <input type="hidden" class="sorthidden" data-key="{{attributes.bookMarkId}}.sort_order" name="{{attributes.bookMarkId}}_sort_order" id="{{attributes.bookMarkId}}_sort_order" value="{{i}}" data-sort-parent="bookmarklist_sort" />
+                                </div>
+                            </div>
+                        </div>
+
+                    {% set i=i+1 %}                 
+                {% endfor %}
+            </div>
+            <!--  ENDs LISTING FOR OTHER BOOKMARKS, IF EXIST-->
+            <!--  Partial twig for savebutton-->
+            {% include 'clubadmin/savebutton.html.twig' with  {'backLink': breadCrumb.back} %}
+        </form>
+        <!-- END FORM-->
+    </div>
+</div>
+<!-- END PAGE CONTENT-->
+{% endblock %}
+{% block javascripts %}
+<script src="{{ asset('fgcustom/js/sidebarfilter.js') }}" type="text/javascript"></script>
+<script type="text/javascript">
+        var initialOrderArray = new Array();
+        $(document).ready(function() {
+            initialOrderArray = FgUtility.getOrderOfChildElements('#bookmarklist_sort');
+            FgDirtyForm.init();
+            FgDirtyForm.disableButtons();
+            FgDragAndDrop.sortWithOrderUpdation('#bookmarklist_sort', false);
+            var resetSections = {
+                '0': {
+                    'parentElement': '#bookmarklist_sort',
+                    'initialOrder': initialOrderArray,
+                    'addClass': false,
+                    'className': 'blkareadiv'
+                }
+            };
+            FgResetChanges.init(resetSections);
+        });
+
+        $('form').on('click', '#save_changes', function(){
+            var objectGraph = {};
+            $("form :input").each(function(){
+                if($(this).hasClass( "fairgatedirty" )) {
+                   var inputVal = ''
+                   if ($(this).attr('type') == 'checkbox') {
+                       inputVal = $(this).attr('checked')? 1: 0;
+                   } else {
+                       inputVal = $(this).val();
+                   }
+                   if(inputVal !== '') {
+                       converttojson(objectGraph, $(this).attr('data-key').split('.'), inputVal);
+                   }
+                }
+            });
+
+            var bookmarkArr = JSON.stringify(objectGraph);
+            FgXmlHttp.post("{{ path('club_bookmarks_update')}}", {'bookmarkArr': bookmarkArr}, false, callbackfn);
+        });
+
+        function callbackfn() {
+            FgApp.init();
+            FgDragAndDrop.sortWithOrderUpdation('#bookmarklist_sort', false);
+        }
+        $('.filtercount').off('click');
+        $('.filtercount').on('click', function() {
+            var filter_id = $(this).attr('filter_id');
+            var status = $(this).attr('status');
+            var club = '{{fgtwig.getTerminolgyName('Club',singular,'UCF')}}';
+            var clubs = '{{fgtwig.getTerminolgyName('Club',plural,'UCF')}}';
+            if(status=='calculate')
+            {
+                var replacediv = '.replaceFilterClass' + $(this).attr('filter_id');
+                var url = $(this).attr('url');
+               $(this).attr('status','contact');
+                $.post(url, {filter_id: filter_id}, function(data) {
+                     if(data=='-1')
+                            $(replacediv).html('<i class="fa fa-warning fg-warning"></i>');
+                         else if(data=='1')
+                    $(replacediv).html(data + ' '+ club);
+                else
+                     $(replacediv).html(data + ' ' + clubs);
+               });
+                return false;
+            }
+           else
+            {
+                 var filter_json = $(this).attr('filter_json');
+                 var book_id = $(this).attr('book_id');
+                 handleCountOrSidebarClick.updateFilter(book_id, 'clubfilterdisplayflag_{{fgclub.clubId}}-{{contactId}}', '', '{{fgclub.clubId}}', '{{contactId}}', '', '', '{{fgclub.clubUrlIdentifier}}', 'count', '', '', '', '', 'club', '', filter_json, filter_id, '');
+            }
+        });
+         /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                     title: true
+             }); 
+    </script>
+{% endblock %}

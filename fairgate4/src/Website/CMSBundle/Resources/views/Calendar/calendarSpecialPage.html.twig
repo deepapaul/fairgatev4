@@ -1,0 +1,75 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::website/layout.html.twig' %}
+
+
+{% block websiteContentArea %}  
+{% endblock %}
+
+{% block websiteCustomContentArea %}
+    <div class="fg-calendar-special-contents-wrapper col-sm-12" id='fg-calendar-container'>
+        <div id="fg-calendar-fullcalendar"></div>
+        <div id="fg-calendar-list" class="row"></div>
+    </div>
+{% endblock %}
+
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/global/css/fullcalendar.css')}}" rel="stylesheet" type="text/css"  />
+{% endblock %}
+
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset('fgassets/global/js/fullcalendar.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('fgassets/global/js/fullcalendar-lang.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('fgassets/website/js/FgWebsiteCalendar.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('fgassets/global/js/flaviusmatis-simplePagination/jquery.simplePagination.js')}}"></script>
+
+    <script type="text/javascript" src="{{ asset('fgassets/website/js/fg-cms-frontend-portrait.js')}}"></script>
+
+    <script>
+        var clubTitles = {{ (clubTitles|escape('js')|json_encode()|raw ) }};
+        var clubLogoUrl = '{{clubLogoUrl}}'; 
+        var clubId ='{{clubId}}';
+        var calendarView ='{{view}}';
+        var contactTableListUrl = '{{path('website_list_contacts',{'contactType':'dummyType'})}}';
+        
+        var calendarSpecialPageTitle = "{{calendarPageTitle}}";
+        var todayText = '{{'CREATE_CALENDAR_SWITCH_TODAY'|trans}}';
+        var options = {
+            titleBar: true,
+            title: calendarSpecialPageTitle,
+            searchBox: true,
+            searchBoxType: 'calendar',
+            timeperiod: true,
+            timeperiodData: {{timeperiod|json_encode()|raw}},
+            calendarViewSwitch: true
+        };
+        var FgWebsitePageTitleBarObj = new FgWebsitePageTitleBar('fg-dev-pagetitle-container', options);
+        var detailJsonUrlPath = "{{path('website_appointment_details_ajax',{'eventId':'dummyId', 'startTimeStamp':'**startTime**', 'endTimeStamp':'**endTime**'})}}";
+        var eventDataPath = "{{path('website_calendar_getevents')}}";
+        var detailPath = "{{ path('website_calendar_appointment_details', { 'navIdentifier': (menu == '')?'menu':menu, 'eventId': '__EVENTID__', 'startTimeStamp': '__START__', 'endTimeStamp': '__END__' }) }}";
+        var downloadPath = "{{path('website_calendar_appointment_details_download_attachments')}}";
+        
+        var websiteCalendarObj;
+        $( document ).ready(function() { 
+            websiteCalendarObj = new FgWebsiteCalendar({{pageId}});
+            websiteCalendarObj.render(true);
+        });
+        var portraitElementSettings = {{ pagecontentData.portraitElementSettings|json_encode()|raw }};        
+        if(typeof portraitElementSettings == 'object') {
+            var portContactNameTmplte = _.template($('#templateContactName').html());
+            var portEmailTmplte = _.template($('#templateEmail').html());
+            var portImageUpldTmplte = _.template($('#porttemplateImage').html());
+            var portDefaultTmplte = _.template($('#defaultTemplate').html());
+            var portFileUploadTemplate = _.template($('#portFileUploadTemplate').html());
+            var portProfilepicTemplate = _.template($('#portProfilepicTemplate').html());
+        }
+        var contactLang ='{{contactLang}}';
+        var portUploadPath = {{uploadPath|json_encode()|raw }};
+        var notApplicable =  '{{'PORTRAIT_NOT_APPLICABLE_VALUE'|trans}}';
+    </script>
+{% endblock %}
+
+
+{% block underscoretemplate %}
+    {% include 'WebsiteCMSBundle:Website:displayContentUnderscore.html.twig' %} 
+    {% include 'WebsiteCMSBundle:Calendar:templateCalendar.html.twig' %} 
+{% endblock %}

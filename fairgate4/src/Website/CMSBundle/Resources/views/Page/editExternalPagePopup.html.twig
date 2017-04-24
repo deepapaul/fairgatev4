@@ -1,0 +1,60 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">{{'EDIT_EXISTING_PAGE_TITLE'|trans}}</h4>
+    </div>
+    <form id="fg-cms-edit-existing-form">
+        <div class="modal-body fg-cms-edit-existing-modal">
+            <div class="form-group fg-clear fg-cms-external-existing-form">
+                <label class="control-label text-right fg-label-valign col-lg-3 col-md-3">{{'URL_NAME'|trans}}</label>
+                <div class="col-lg-9 col-md-8 fg-error-add-required">
+                    <input type="text" class="form-control input-md" name="externalUrl" id="externalUrl" value="{{externalLink}}">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn default" data-dismiss="modal" id="editExternalPageCancel">{{ 'CANCEL'|trans }}</button>
+            <button type="button" class="btn green" id="editExternalDelete">{{ 'DELETE'|trans }}</button>
+            <button type="button" class="btn green" id="editExternalPageBtn">{{ 'SAVE'|trans }}</button>
+        </div>
+    </form>
+</div>
+<script>
+    FgCmsPage.dirtyInitExternalEdit();
+    $('#externalUrl').on('blur', function(){
+        FgCmsPage.appendHttp(this);
+    });
+    $(document).off('click', '#editExternalPageBtn');
+    $(document).on('click', '#editExternalPageBtn', function () {
+        $('div.has-error').removeClass('has-error');
+        $('span.required').remove();
+        var externalUrlVal = $('#externalUrl').val();
+        if (externalUrlVal === '') {
+            FgCmsPage.intiValidate();
+            return false;
+        } else {
+            if (!(/^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(externalUrlVal))) {
+                $('.fg-cms-external-existing-form').addClass('has-error');
+                $('.fg-error-add-required').append('<span class=required>'+invalidUrl+'</span>');
+                return false;
+            }
+        }
+        FgModelbox.hidePopup();
+        FgXmlHttp.post(assignExistingPageSave, {'module': 'editExternal', 'navId': {{navId}}, 'pageId': externalUrlVal, 'pageFlag': 'assign'}, '', function (response) {
+            FgCmsPageList.updateSidebarElements('li_PAGES_all_pages');
+        });
+    });
+    $(document).off('click', '#editExternalDelete');
+    $(document).on('click', '#editExternalDelete', function () {
+        FgModelbox.hidePopup();
+        FgXmlHttp.post(assignExistingPageSave, {'module': 'delete', 'navId': {{navId}}, 'pageId': '', 'pageFlag': 'assign'}, '', function (response) {
+            FgCmsPageList.updateSidebarElements('li_PAGES_all_pages');
+        });
+    });
+    
+    //On clicking cancel, shoud redirected to All pages
+    $(document).off('click', '#editExternalPageCancel');
+    $(document).on('click', '#editExternalPageCancel', function () {
+       FgSidebar.handleSidebarClick('li_PAGES_all_pages');//It will always be static. Needs to update if it is updated in CMS sidebar
+    });
+</script>

@@ -1,0 +1,82 @@
+{% if(articleData|length > 0) %}
+    {% for key, data in articleData %}
+        {% set fgClubTag = '' %}
+        {% set areaArray = [] %}
+        {% set categoryArray = [] %}
+        <section class="fg-article-wrapper fg-article-left-img">
+            {% if(data.FIRST_IMAGE == '' or displayWidth != 'width_580') %}
+                <header>
+                    <h4>{{data.title}}</h4>
+                </header>
+            {% endif %}
+            <div class="col-md-12 fg-pad-0 fg-content">
+                {% set teaser = (data.teaser == '')?data.text:data.teaser %}
+                 {% if(data.isAllArea == 1 or data.sharedClub == 1 or data.areaCount != 1) %}
+                    {% if (data.isClub == 1 and data.isCurrentClub) %}
+                        {% set fgClubTag = fgtwig.getTerminolgyName('Club',singular,'UCF') %}
+                    {% endif %}
+                    {% if(data.AREAS != '' and data.AREAS != null)  %}
+                        {% set areaArray = data.AREAS|split("*##*")  %}   
+                    {% endif %}
+                {% endif %}
+                
+                {% if(data.isAllCategory == 1 or data.categoryCount != 1 or data.sharedClub == 1) %}
+                    {% if(data.CATEGORIES != '' and data.CATEGORIES != null) %}
+                        {% set categoryArray = data.CATEGORIES|split("*##*")  %}
+                   {% endif %}
+                {% endif %}
+                {% if(data.FIRST_IMAGE) %}
+                    <figure class="col-sm-4">
+                        <img src="/uploads/{{data.club_id}}/gallery/{{displayWidth}}/{{data.FIRST_IMAGE}}" alt =""/>
+                    </figure>                
+                    <div class="col-sm-8 fg-right-col">
+                        {% if(displayWidth == 'width_580') %}
+                        <header>
+                            <h4>{{data.title}}</h4>
+                        </header>
+                        {% endif %}
+                        {{teaser|raw}}
+                        <a href="#" class="fg-read-more"><i class="fa fa-arrow-circle-right"></i>{{'CMS_ADD_ARTICLE_READ_MORE'|trans}}</a>
+                        <footer>
+                           <div class="fg-post-date pull-left">{{fgclub.formatDate(data.PUBLICATION_DATE,'date')}}</div>
+                            <div class="pull-right fg-block fg-cat-tags">
+                           {% if fgClubTag is defined and fgClubTag != ''%}<span class="fg-club-tag">{{ fgClubTag }}</span>{% endif %}
+                            {% for index, area in areaArray  %}
+                                <span class="fg-club-tag">{{ area }}</span>
+                            {% endfor %}
+                            {% for index,category in categoryArray %}
+                                <span class="fg-cat-tag">{{ category }}</span>
+                            {% endfor %}
+                            </div>
+                        </footer>
+                    </div>
+                {% else %}
+                    <div class="">
+                        {{teaser|raw}}
+                        <a href="#" class="fg-read-more"><i class="fa fa-arrow-circle-right"></i>{{'CMS_ADD_ARTICLE_READ_MORE'|trans}}</a>
+
+                        <footer>
+                            <div class="fg-post-date pull-left">{{fgclub.formatDate(data.PUBLICATION_DATE,'date')}}</div>
+                            <div class="pull-right fg-block fg-cat-tags">
+                                
+                                {% if fgClubTag is defined and fgClubTag != ''%}<span class="fg-club-tag">{{ fgClubTag }}</span>{% endif %}
+                                {% for index, area in areaArray  %}
+                                <span class="fg-club-tag">{{ area }}</span>
+                            {% endfor %}
+                            
+                            {% for index,category in categoryArray %}
+                                <span class="fg-cat-tag">{{ category }}</span>
+                            {% endfor %}
+                            </div>
+                        </footer>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="clearfix"></div>
+        </section>
+    {% endfor %}
+ {% else %}
+     <div class="fg-cms-empty-box-wrapper">
+        <p class="text-center">{{'CMS_NO_ARTICLE_MESSAGE'|trans}}</p>
+    </div>        
+{% endif %}

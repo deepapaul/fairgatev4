@@ -1,0 +1,55 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::website/layout.html.twig' %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN BREADCRUMB-->
+    <div class="row">
+        <div class="col-lg-12">
+            {% include 'website/breadcrumb.html.twig' %}
+        </div>
+    </div>
+    <!-- END BREADCRUMB-->
+{% endblock %}
+{% block underscoretemplate %}
+    {% include 'WebsiteCMSBundle:Website:displayContentUnderscore.html.twig' %} 
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset('fgassets/global/js/flaviusmatis-simplePagination/jquery.simplePagination.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('fgassets/website/js/fg-cms-frontend-portrait.js')}}"></script>
+    <script>
+        var iconSettingsType = "website";
+        var systemEnvironment = '{{ app.environment }}';
+        var systemClubUrlIdentifier = '{{ fgclub.clubUrlIdentifier }}';
+        var sitekeys = '{{ pagecontentData.googleCaptchaSitekey }}';
+        var pagePreviewType = '{{pagePreview}}';
+        var noElemText = " {{'CMS_WEBSITE_NO_PREVIEW'|trans}}";
+        var pgCount = {{pagecontentData.pageElemCount}};
+        var sidecount = {{pagecontentData.sideCount}};
+        if(( sidecount== 0) && (pgCount ==0)) {
+            var noHtml = '<div class="fg-cms-create-page-preview-wrapper "><h3>'+noElemText+'</h3></div>';
+         $('.fg-web-page-container').html(noHtml);
+        }
+        var contactTableListUrl = '{{path('website_list_contacts',{'contactType':'dummyType'})}}';
+        var fileDownloadPath = "{{url('filemanager_download_files', {'module':'contact','source':'**source**', 'name':'**name**'})}}";
+        var uploadPath = '/uploads/**clubId**/';
+
+        var pageTitle = '{{pageTitle}}';
+        var titleOptions = {
+            titleBar: true,
+            title:pageTitle 
+
+        };
+        var FgWebsitePageTitleBarObj = new FgWebsitePageTitleBar('fg-dev-pagetitle-container', titleOptions);
+        var notApplicable =  '{{'PORTRAIT_NOT_APPLICABLE_VALUE'|trans}}';
+        var portUploadPath = {{uploadPath|json_encode()|raw }};
+        var portraitElementSettings = {{ pagecontentData.portraitElementSettings|json_encode()|raw }};
+        var contactLang = '{{contactLang}}';     
+        if(typeof portraitElementSettings == 'object') {
+            var portContactNameTmplte = _.template($('#templateContactName').html());
+            var portEmailTmplte = _.template($('#templateEmail').html());
+            var portImageUpldTmplte = _.template($('#porttemplateImage').html());
+            var portDefaultTmplte = _.template($('#defaultTemplate').html());
+            var portFileUploadTemplate = _.template($('#portFileUploadTemplate').html());
+            var portProfilepicTemplate = _.template($('#portProfilepicTemplate').html());
+        }
+    </script>
+{% endblock %}

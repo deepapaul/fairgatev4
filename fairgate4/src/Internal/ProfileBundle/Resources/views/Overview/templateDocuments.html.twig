@@ -1,0 +1,55 @@
+<script type="text/template" id="overviewDocumentsBox">
+    <ul>
+        <% if (!_.isEmpty(settings.myDocuments)) { %>
+            <% var sortedDocuments = _.sortBy(settings.myDocuments, 'updated_at').reverse(); %>
+            <% var i = 0; %>
+            <% _.each(sortedDocuments,function(value,key){ %>
+                <% var j = 0; %>
+                <% if ( i < 7 ) { %>
+                    <li>
+                        <span class="fg-forum-blk <%- (showBadge === '1') ? 'fg-badge-wrapper' : '' %>"><i class="fa <%= value.imageIcon %> fg-datatable-icon"></i> <a class="fg-doc-unread <%- (value.isUnread == 1) ? 'fg-strong' : '' %>" href="<%= value.downloadLink %>" target="_blank" ><%= value.docName %></a>
+                            <% if (showBadge === '1') { %>
+                                <% if ((value.document_type == 'TEAM') || (value.document_type == 'WORKGROUP')) { %>
+                                    <% var roleIds =  (value.badge != '') ? value.badge.split('~#~').map(Number) : ''; %> 
+                                    <% var roleIdsLength =  roleIds.length; %>
+                                    <% if (showBadge === '1') { %>
+                                        <% _.each(roleIds,function(roleId,key) { %>
+                                            <% var roleTitle =  (settings.myRoles[roleId]) ? settings.myRoles[roleId] : ''; %>
+                                            <% if ( j < 3 ) { %>
+                                                <span class="fg-note-block fg-doc-block">
+                                                    <%= roleTitle %>  
+                                                </span>
+                                            <% } else { %> 
+                                                <span class="fg-note-block fg-doc-block-more hide" >
+                                                    <%= roleTitle %>  
+                                                </span>
+                                            <% }%>
+                                            <% j++; %> 
+                                        <% }); %> 
+                                    <% } %>
+                                    <% if (roleIdsLength > 3 && showBadge === '1' ) { %>
+                                        <a class="fg-plus-click">{{ 'DASHBOARD_DOCUMENT_MORE_TEXT'|trans }}</a>
+                                        <a class="fg-minus-click hide">{{ 'DASHBOARD_DOCUMENT_LESS_TEXT'|trans }}</a>
+                                    <% } %>
+                                <% } else { %> 
+                                    <span class="fg-note-block" >
+                                        <%= value.badge %>  
+                                    </span>
+                                <% } %>
+                            <% } %>
+                        </span>
+                        <div class="fg-doc-right-blk">
+                            <span class="fg-doc-size">
+                                <%= value.fileSize %>
+                            </span>
+                            <span>
+                                <%= value.updatedDate %> <%= value.updatedTime %>
+                            </span>
+                        </div>    
+                    </li>
+                    <% i++; %> 
+                <% } %> 
+            <% }); %>
+        <% } %> 
+    </ul>
+</script>

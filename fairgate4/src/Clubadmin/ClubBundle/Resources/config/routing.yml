@@ -1,0 +1,144 @@
+club_homepage:
+    path:  /club
+    defaults: { _controller: ClubadminClubBundle:Club:viewclub , level1: club}
+    
+filter_club_data:
+    path:  /club/filter/data
+    defaults: { _controller: ClubadminClubBundle:Filter:getClubData }
+classification_list:
+    path:  /club/classification
+    defaults: { _controller: ClubadminClubBundle:Category:classificationList , level1: club}
+update_classification:
+    path:  /club/updateclassification
+    defaults: { _controller: ClubadminClubBundle:Category:updateClassification }
+manage_classes:
+    path:  /club/manageclasses/{cat_id}
+    defaults: { _controller: ClubadminClubBundle:Category:manageClass , level1: club}
+update_classes:
+    path:  /club/updateclasses
+    defaults: { _controller: ClubadminClubBundle:Category:updateClasses , level1: club}
+list_clubs:
+    path:  /club/listclub
+    defaults: { _controller: ClubadminClubBundle:Club:listclub , level1: club}
+club_bookmarks:
+    path:  /club/bookmarks
+    defaults: { _controller: ClubadminClubBundle:Bookmark:bookmarkList , level1: club}  
+club_bookmarks_update:
+    path:  /club/updatbookmarks
+    defaults: { _controller: ClubadminClubBundle:Bookmark:updatebookmark }
+club_handle_bookmark:
+    path: /club/handlebookmark
+    defaults: { _controller: ClubadminClubBundle:Bookmark:handleBookmark , level1: club}
+club_filter_data:
+    path:  /club/filter/data/{id}
+    defaults: { _controller: ClubadminClubBundle:Filter:getFilterData }
+club_filter_count:
+    path:  /club/filter/count/{id}
+    defaults: { _controller: ClubadminClubBundle:Filter:getFilterCount }     
+club_get_sidebar_bookmarks:
+    path:  /club/getbookmark
+    defaults: { _controller: ClubadminClubBundle:Bookmark:getBookmarks } 
+club_get_sidebar_filter:
+    path:  /club/getfilter
+    defaults: { _controller: ClubadminClubBundle:Filter:sidebarSavedFilter } 
+update_club_filter_data:
+    path:  /club/filter/save
+    defaults: { _controller: ClubadminClubBundle:Filter:savedClubfilter }  
+club_get_classes:
+    path:  /club/getclasses
+    defaults: { _controller: ClubadminClubBundle:Category:getClasses } 
+clubcolumnsettings:
+    path: /club/columnsettings/{settings_id}
+    defaults: { _controller: ClubadminClubBundle:Columnsettings:index , level1: club}
+update_club_columnsettings:
+    path:  /club/updatecolumnsettings
+    defaults: { _controller: ClubadminClubBundle:Columnsettings:updateClubColumnsettings }
+delete_club_columnsettings:
+    path: /club/deletecolumnsettings
+    defaults: { _controller: ClubadminClubBundle:Columnsettings:deleteClubColumnsettings }
+filter_club_data_single:
+    path:  /club/singlefilter/data
+    defaults: { _controller: ClubadminClubBundle:Filter:clubsidebarSingleFilter }
+club_class_logs:
+    path:  /club/classlogs
+    defaults: { _controller: ClubadminClubBundle:Category:getClassLogs , level1: club}   
+saved_club_filter_settings:
+    path:  /club/filter/settings
+    defaults: { _controller: ClubadminClubBundle:Club:savedClubfilter , level1: club}    
+update_club_filter_count:
+    path:  /club/filter/count
+    defaults: { _controller: ClubadminClubBundle:Club:sidebarFilterCount }    
+filter_club_update_broken:
+    path:  /club/filter/broken
+    defaults: { _controller: ClubadminClubBundle:Filter:updateClubBrokenFilter }
+update_club_filter_settings:
+    path:  /club/filter/update
+    defaults: { _controller: ClubadminClubBundle:Filter:updateSavedClubfilter }
+club_export:
+    path:  /club/export
+    defaults: { _controller: ClubadminClubBundle:Export:index , level1: club}
+club_export_data:
+    path:  /club/exportdata
+    defaults: { _controller: ClubadminClubBundle:Export:export }
+club_sidebar_new_element:
+    path:  /club/sidebar/new
+    defaults: { _controller: ClubadminClubBundle:Club:newElementFromSidebar }    
+manage_class:
+    path:  /club/manageclass/{cat_id}/{list}
+    defaults: { _controller: ClubadminClubBundle:Category:manageClass, level1: club,list:1 }
+club_assignments:
+    path: /club/assignments/{offset}/{clubid}
+    defaults: { _controller: ClubadminClubBundle:Assignment:index , level1: club}
+list_all_club_assignments:
+    path: /club/listallAssignments/{clubid}
+    defaults: { _controller: ClubadminClubBundle:Assignment:listAllAssignments }
+    
+get_all_club_assignment_dropdown:
+    path: /club/getassignmentselectvalues
+    defaults: { _controller: ClubadminClubBundle:Assignment:getDropdownValues }
+update_club_assignments:
+    path: /club/updateclubassignment
+    defaults: { _controller: ClubadminClubBundle:Assignment:updateClubAssignment }
+update_assignments_clubs:
+    path: /club/updateassignmentclubs
+    defaults: { _controller: ClubadminClubBundle:Assignment:updateAssignment }
+validate_club_assignments:
+    path: /club/validateassignment
+    defaults: { _controller: ClubadminClubBundle:Assignment:validator}
+club_data:
+    path:  /club/data/{offset}/{clubid}
+    defaults: { _controller: ClubadminClubBundle:Data:clubDataEdit , level1: club}
+club_overview:
+    path: /club/overview/{offset}/{clubId}
+    defaults: { _controller: ClubadminClubBundle:Overview:index , level1: club}
+get_all_clubids_assignment:
+    path:  /getallclubidsassignment
+    defaults: { _controller: ClubadminClubBundle:Assignment:getAllClubIdsHandler }
+club_log:
+    path: /club/loglisting/{offset}/{clubId}
+    defaults: { _controller: ClubadminClubBundle:Log:index , level1: club}
+club_documents:
+    path: /club/documents/{offset}/{clubId}
+    defaults: { _controller: ClubadminClubBundle:Document:listDocuments , level1: club}
+    
+club_documents_ajax:
+    path: /club/documents/{offset}/{clubId}/ajax
+    defaults: { _controller: ClubadminClubBundle:Document:clubDocumentListingAjax }
+club_documents_ajax_add:
+    path: /club/documents/{offset}/{clubId}/ajaxAddDocument
+    defaults: { _controller: ClubadminClubBundle:Document:clubDocumentAddAjax }   
+club_documents_ajax_remove:
+    path: /club/documents/{offset}/{clubId}/ajaxShowDeletePopup
+    defaults: { _controller: ClubadminClubBundle:Document:clubDocumentShowDeletePopup }
+club_documents_otherdocs_ajax:    
+    path: /club/documents/{offset}/{clubId}/ajaxGetOtherExistingDocs
+    defaults: { _controller: ClubadminClubBundle:Document:GetOtherExistingClubDocsAjax }
+club_documents_remove:
+    path: /club/documents/{offset}/{clubId}/ajaxRemoveDocument
+    defaults: { _controller: ClubadminClubBundle:Document:clubDocumentRemoveAjax }        
+club_settings_data:
+    path:  /settings/club/{offset}/{clubid}
+    defaults: { _controller: ClubadminClubBundle:Data:clubDataEdit , level1: clubsettings }      
+club_logo_upload:
+    path:     /club/logo/upload
+    defaults: { _controller: ClubadminDocumentsBundle:Default:uploadFile,type: "clublogo" }

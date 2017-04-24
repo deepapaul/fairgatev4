@@ -1,0 +1,73 @@
+<div class="modal-content">
+    <div class="modal-header fg-modal-has-languagebar">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title fg-modal-title">{{'CMS_EDIT_PAGE_TITLE'|trans}}</h4>
+        <div class="fg-modal-language-switch pageTitle-popup-lang-switch">
+                    <div class="btn-toolbar fg-lang-tab ">
+                        <div class="btn-group">
+                            {% if (clubLanguages|length > 1) %}
+                                {% for clubLanguage in clubLanguages %}
+                                    <button type="button" id="{{clubLanguage}}"  lang="{{clubLanguage}}" class="btn  btlang {% if(clubLanguage == clubDefaultLang) %} active {% endif %}" data-elem-function="switch_lang" data-selected-lang="{{clubLanguage}}">{{clubLanguage|upper}}</button>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+    </div>
+    <form id="fg-cms-edit-pagetitle-form">
+        <div class="modal-body fg-cms-edit-existing-modal">
+            <div class="form-group fg-clear fg-cms-edit-pagetitle-formgroup">
+                <label class="control-label text-right fg-label-valign col-lg-3 col-md-3">{{'CMS_PAGE_TITLE'|trans}}</label>
+                <div class="col-lg-9 col-md-8 fg-error-add-required">
+                    {% for clubLanguage in clubLanguages %}
+                        <input type="text" data-key="cmsPageTitle.text.{{clubLanguage}}.title" class="form-control input-md {% if(clubDefaultLang!=clubLanguage) %} hide {% endif %} cms-page-title-input" name="cmsPageTitle[{{clubLanguage}}][]" id="cmsPageTitle_{{clubLanguage}}" data-lang="{{clubLanguage}}" {% if pageTitlesArray[clubLanguage] is defined %}value="{{pageTitlesArray[clubLanguage]}}"{%endif%} {% if pageTitlesArray[clubDefaultLang] is defined %}placeholder="{{pageTitlesArray[clubDefaultLang]}}"{%endif%} required>
+                    {% endfor %}
+                    <div id="pagename-formgroup-error" class="fg-label-error"></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn default" data-dismiss="modal" >{{ 'CANCEL'|trans }}</button>
+            <button type="button" class="btn green" id="editPageTitleBtn">{{ 'SAVE'|trans }}</button>
+        </div>
+    </form>
+</div>
+<script>
+    var clubDefaultLang = '{{clubDefaultLang}}';
+    var pageId = '{{pageId}}';
+    var savePagetitlePath = '{{path('website_cms_save_pagetitle')}}';
+    FgDirtyFields.init('fg-cms-edit-pagetitle-form',{saveChangeSelector: '#editPageTitleBtn'});
+    FgLanguageSwitch.checkMissingTranslation(clubDefaultLang); 
+    $(document).off('click', '#editPageTitleBtn');
+    $(document).on('click', '#editPageTitleBtn', function () {
+        $('div.has-error').removeClass('has-error');
+        $('span.required').remove();
+        if($('#cmsPageTitle_'+clubDefaultLang).val() === ''){
+            $('.fg-cms-edit-pagetitle-formgroup').addClass('has-error');
+            $('.fg-error-add-required').append('<span class=required>' + jstranslations.VALIDATION_THIS_FIELD_REQUIRED + '</span>');
+            $('#fg-popup').find('.btn-group .btlang').removeClass('active');
+            $('#fg-popup').find('.btn-group .btlang[lang="'+clubDefaultLang+'"]').addClass('active');
+            FgUtility.showTranslation(clubDefaultLang);
+        }else{
+            var data = {};
+            $.each( $('.cms-page-title-input'), function(i, v){
+                data[$(v).attr('data-lang')] = $(v).val();
+            });
+            FgModelbox.hidePopup();
+            FgXmlHttp.post(savePagetitlePath, {'pageId': pageId, 'titleArray':data}, '', function (res) {
+                $('.fg-action-menu-wrapper span.page-title-text').html(res.pageTitle);
+                FgPageTitlebar.setMoreTab();
+                FgLanguageSwitch.checkMissingTranslation(clubDefaultLang);
+                FgDirtyFields.removeAllDirtyInstances();
+            });
+        }
+    });    
+    /* function to show data in different languages on switching language */
+    $(document).off('click', '.pageTitle-popup-lang-switch button[data-elem-function=switch_lang]');
+    $(document).on('click', '.pageTitle-popup-lang-switch button[data-elem-function=switch_lang]', function (e) {
+        selectedLang = $(this).attr('data-selected-lang');
+        $('.pageTitle-popup-lang-switch button[data-elem-function=switch_lang]').removeClass('active');
+        $(this).addClass('active');
+        FgUtility.showTranslation(selectedLang);
+    });
+</script>    

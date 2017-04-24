@@ -1,0 +1,28 @@
+Common\UtilityBundle\Entity\FgCmsPageCategories:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPageCategoriesRepository
+    type: entity
+    table: fg_cms_page_categories
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        categoryId:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: category_id
+    manyToOne:
+        page:
+            targetEntity: FgCmsPage
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                page_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,223 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% if (elementId == 'new')%}
+    {% set pageTitle = 'CMS_ADD_SPONSOR_AD_ELEMENT'|trans %}
+    
+{% else %}
+    {% set pageTitle = 'CMS_EDIT_SPONSOR_AD_ELEMENT'|trans %}
+{% endif %}
+
+{% block pagecontent %}
+
+    <div class="row">
+        <div class="col-lg-12">
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <div id="failcallbackClientSide" class="alert alert-danger" style="display:none;">
+               <button class="close" data-close="alert"></button>
+               <span>{{'CMS_ELEMENT_FORM_ERROR'|trans}}</span>
+           </div>
+            <!-- PAGE TITLE -->
+            {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle , 'contactId': '', 'tabs': tabs, 'roleCount' : '' , 'type':'', 'url' : '' } %}
+            <!-- BEGIN CONTENT -->
+            <div class="row fg-cms-elements-head-edit-wrapper" id="elementSponsorAdWrapper">
+                <div class="col-md-12">
+                    <div class="form-body">
+                        <form id="cms_sponsorad_element" name="cms_sponsorad_element_data" class="form-horizontal" method="post" onsubmit="return false;" novalidate="novalidate">
+                            <div id="sponsorad_element_list" class="fg-cms-sponsor-ad-wrapper">
+                               <div class="form-group fg-clear" >
+                                    <label class="col-sm-4 control-label" for="displayType">{% trans %}SPONSOR_AD_DISPLAY_TYPE{% endtrans %}<span class="required"> * </span></label>  
+                                    <div class="col-sm-6  col-lg-5 ">
+                                       <label class="radio-inline fg-pad-left-0" for="vertical">
+                                            <input type="radio" name="adView" id="vertical" class="uniform" value="vertical" {% if savedData is not empty and savedData.sponsorAdDisplayType == 'vertical' %} checked="checked"{% else %}checked="checked"{% endif %}>
+                                              <span data-toggle="tooltip">{{'SPONSOR_AD_VERTICAL'|trans}}</span>
+                                        </label>       
+                                    </div>
+                                        
+                                </div>
+                                <div class="form-group fg-clear" >
+                                    <div class="col-sm-8 col-sm-offset-4 ">
+                                       <label class="radio-inline fg-pad-left-0 fg-v-middle" for="fader">
+                                            <input type="radio" name="adView" id="fader" class="uniform" value="fader"{% if savedData is not empty and savedData.sponsorAdDisplayType == 'fader' %} checked="checked"{% endif %}>
+                                              <span>{{'SPONSOR_AD_FADER'|trans}}</span>
+                                            
+                                       </label> 
+                                       <div class="fg-active-IB fg-v-middle fg-width-200">
+                                           <input id="faderInterval" name="faderInterval" type="text" data-key=""  class="form-control numbermask" required="" value="{% if savedData is not empty and savedData.sponsorAdDisplayType == 'fader' %}{{savedData.sponsorAdDisplayTime}} {% else %} 4 {% endif %}" >
+                                       </div>
+                                    </div>    
+                                </div>
+                                 <div class="form-group fg-clear" >
+                                    <label class="col-sm-4 control-label "></label> 
+                                    <div class="col-sm-8">
+                                       <label class="radio-inline fg-pad-left-0 fg-v-middle" for="horizontal">
+                                            <input type="radio" name="adView" id="horizontal" class="uniform" value="horizontal"{% if savedData is not empty and savedData.sponsorAdDisplayType == 'horizontal' %} checked="checked"{% endif %} >
+                                              <span>{{'SPONSOR_AD_HORIZONTAL'|trans}}</span>
+                                        </label>    
+                                        <div class="fg-active-IB fg-v-middle fg-width-200">
+                                            <select name="horizontalWidth" id="horizontalWidth" class="form-control selectpicker" placeholder="">
+                                              <option value = ''>{{'WIDTH_SELECT'|trans}}</option>
+                                              <option {% if savedData is not empty and savedData.sponsorAdMaxWidth == 'small'%} selected {% endif %} value = 'small'>{{'WIDTH_SMALL'|trans}}</option>
+                                              <option {% if savedData is not empty and savedData.sponsorAdMaxWidth == 'medium'%} selected {% endif %} value = 'medium'>{{'WIDTH_MEDIUM'|trans}}</option>
+                                              <option {% if savedData is not empty and savedData.sponsorAdMaxWidth == 'large'%} selected {% endif %} value = 'large'>{{'WIDTH_LARGE'|trans}}</option>
+                                            </select> 
+                                            
+                                        </div> 
+                                    </div>    
+                                </div>
+                                <div class="form-group fg-clear" >
+                                    <label class="col-sm-4 control-label" for="adServices">{% trans %}ADD_SPONSOR_SERVICES{% endtrans %}<span class="required"> * </span></label>  
+                                    <div class="col-sm-6  col-lg-5 ">
+                                        <select name='sponsorServices' id="serviceSelectpicker" class="form-control selectpicker fg-sponsor-services required"  multiple="multiple" data-key="services">
+                                           
+                                            {% if sponsorServices is not empty %}
+                                                {% for serviceArr in sponsorServices %}
+                                                        {% if savedData is not empty %}
+                                                            {% set selected = (fgtwig.inArray(serviceArr.serviceId, savedData.sponsorServices|split(','))) ? 'selected' : ''  %}
+                                                        {% endif %}
+                                                        <option class="multiple" {{selected|default('')}}  value="{{ serviceArr.serviceId }}" >{{ serviceArr.serviceTitle }}</option>
+                                                    {% endfor %}
+                                            {% endif %}
+                                        </select>       
+                                    </div>
+                                </div>
+                              {% if sponsorAdAreas is not empty%}
+                                <div class="form-group fg-clear" >
+                                    <label class="col-sm-4 control-label" for="adCatgory">{% trans %}ADD_BANNER_CATEGORIES{% endtrans %}<span class="required"> * </span></label>  
+                                    <div class="col-sm-6  col-lg-5 ">
+                                        <select name="" id="areaSelectpicker" class="form-control selectpicker fg-sponsor-areas required"  data-key="sponsorAreas">
+                                          <option class=""  value="">{{ '- Select -' }}</option>
+                                            {% for adAreas in sponsorAdAreas %}
+                                                {% if savedData is not empty %}
+                                                    {% set selected = (savedData.adAreaIds == adAreas.adId) ? 'selected' : ''  %}
+                                                {% endif %}
+                                                <option class="" {{selected|default('')}} value="{{ adAreas.adId }}">{{ adAreas.adTitle }}</option>
+                                            {% endfor %}
+                                        </select>        
+                                    </div>
+                                </div>
+                            {% endif %}
+                           </div>
+                            <div class="clearfix">  </div>
+                            {% if (elementId == 'new')%}
+                                  {% include 'internal/savebutton.html.twig' with {'save_button_id':'save_bac', 'save_button_val':'ADD'|trans, 'second_btn_val':'CANCEL'|trans, noDiscardChange:'1','backLink': backLink} %}
+                            {% else %}
+                               {% include 'internal/savebutton.html.twig' with {'save_button_val':'CMS_ELEMENT_SAVE_BUTTON'|trans,'second_btn_val':'CMS_ELEMENT_SAVE_AND_BACK_BUTTON'|trans, 'second_button_id':'save_bac', 'discard_button_val':'CMS_ELEMENT_DISCARD_BUTTON'|trans,'backLink': backLink } %}
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% include 'WebsiteCMSBundle:PageContentElements:cmsElementLogHeaderTemplate.html.twig' %}      
+        </div>
+    </div>
+    <!-- END CONTENT -->
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgassets/internal/js/fg_tab_selection_process.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/website/js/Fg_cms_sponsor_ad.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('fgassets/assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js')}}" type="text/javascript"></script>
+    <script type="text/javascript">
+            var defaultlanguage = '{{defLang|raw}}';
+            var pageId = '{{pageId}}';
+            var boxId = '{{boxId}}';
+            var elementId = '{{elementId}}';
+            var contactId = '{{contactId}}';
+            var clubId = '{{clubId}}'
+            var sortOrder = '{{sortOrder}}';
+            var type = 'sponsorAdElement';
+            var tabheadingArray = {{ tabs|json_encode()|raw }};
+            var elementLogDetailsPath = "{{path('website_cms_element_log_data')}}";
+            var saveSponsorAdElementPath = "{{ path('website_cms_save_sposnor_ad_element') }}";
+            var contentEditPagePath = '{{path('website_cms_page_edit',{'pageId': pageId})}}';
+            var profilePath = "{{ path('internal_community_profile', {'contactId': "**placeholder**" }) }}";
+            statusTranslations = {
+                'added': "{{ 'LOG_FLAG_ADDED'|trans }}",
+                'changed': "{{ 'LOG_FLAG_CHANGED'|trans }}",
+                'removed': "{{ 'LOG_FLAG_REMOVED'|trans }}",
+                'select': "{{ 'DROPDOWN_SELECT_OPTION'|trans }}",
+                'page_assignment' :"{{ 'CMS_PAGE_ASSIGNMENT'|trans }}",
+                'element' : "{{ 'CMS_ELEMENT'|trans }}",
+                'invalid' : "{{ 'INVALID_MESSAGE'|trans }}",
+            };
+           var CmsSponsorElement = new FgCmsSponsorAdElement();
+         
+                $('input[type=radio][name=adView]').change(function() {
+                   var disp = this.value;
+                   enableField(disp);
+               });
+           $(document).ready(function () {
+                scope = angular.element($("#BaseController")).scope();
+                $(".fg-action-menu-wrapper").FgPageTitlebar({
+                    title: true,
+                    row2: true,
+                    tab: true,
+                    tabType: 'client'
+                }); 
+            $('select.selectpicker').selectpicker({noneSelectedText: statusTranslations['select']});
+            initPageFunctions();
+            });
+                
+            function initPageFunctions() 
+            {
+                var option = {
+                    pageType: 'cmsAddElement',
+                    contactId: contactId,
+                    currentClubId: clubId,
+                    localStorageName: type + '_' + clubId + '_' + contactId,
+                    tabheadingArray: tabheadingArray
+                };
+                var dpsval = $("input[name=adView]:checked").val();
+                enableField(dpsval);
+                Fgtabselectionprocess.initialize(option);
+                FgFormTools.handleInputmask();
+                FgDirtyFields.init('cms_sponsorad_element', {saveChangeSelector: "#save_changes, #save_bac",discardChangesCallback:CmsSponsorElement.discardChangesCallback });
+                var SponsorElementLog = new FgCmsSponsorElementLog();
+                SponsorElementLog.init();
+                FgUtility.handleSelectPicker();
+                CmsSponsorElement.renderContent();
+            }
+            $('body').on('click', '#preview', function (e) {
+             window.location.href = contentEditPagePath;
+            });
+           
+        function enableField(disp){
+            if(disp == 'fader'){
+                $("#faderInterval").removeAttr("disabled");
+                $("#horizontalWidth").attr("disabled",true);
+                $("#horizontalWidth").val('');
+            }else if(disp == 'horizontal'){
+                $("#horizontalWidth").removeAttr("disabled");
+                $("#faderInterval").attr("disabled",true);
+                //$("#faderInterval").val('');
+            }else{
+                $("#faderInterval").attr("disabled",true);
+                $("#horizontalWidth").attr("disabled",true);
+                $("#horizontalWidth").val('');
+                //$("#faderInterval").val('');
+            }
+            $('select#horizontalWidth').selectpicker('refresh');
+        }   
+            $('body').off('click', '#save_changes,#save_bac');
+            $('body').on('click', '#save_changes,#save_bac', function (e) {
+                
+           {#     $('form#cms_sponsorad_element .help-block').remove();
+                $('form#cms_sponsorad_element .has-error').removeClass('has-error');#}
+                var currentSelectedButton = $(this).attr('id');
+                var isValid = CmsSponsorElement.validateForm();
+                if(isValid){
+                var sponsorServices = $('.fg-sponsor-services').val();
+                var sponsorAreas = $('.fg-sponsor-areas').val();
+                sponsorAreas = (typeof sponsorAreas != 'undefined') ? sponsorAreas : '';
+                var adDisplay = $("input[name=adView]:checked").val();
+                var faderTime = $("#faderInterval").val();
+                var horizontalWidth = $("#horizontalWidth").val();
+                
+                var saveType =  (currentSelectedButton == 'save_changes') ? 'save' : 'saveBack';
+                var param = {'sponsorServices': sponsorServices, 'sponsorAreas': sponsorAreas,'adDisplay':adDisplay,'faderTime':faderTime,'horizontalWidth':horizontalWidth, 'pageId': pageId, 'boxId': boxId, 'elementId': elementId,'sortOrder':sortOrder, 'saveType': saveType }
+                FgDirtyFields.removeAllDirtyInstances();
+                FgXmlHttp.post(saveSponsorAdElementPath, {'param': param}, false,CmsSponsorElement.saveElementCallback);
+                $('#save_changes,#save_bac').attr('disabled', 'disabled');
+            }
+            });
+    </script>
+
+{% endblock %}

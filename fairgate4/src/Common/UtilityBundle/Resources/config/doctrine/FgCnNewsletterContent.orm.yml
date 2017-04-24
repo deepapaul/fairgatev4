@@ -1,0 +1,109 @@
+Common\UtilityBundle\Entity\FgCnNewsletterContent:
+    repositoryClass: Common\UtilityBundle\Repository\FgCnNewsletterContentRepository
+    type: entity
+    table: fg_cn_newsletter_content
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        contentType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: content_type
+        articleLang:
+            type: string
+            length: 4
+            fixed: false
+            nullable: true
+            column: article_lang 
+        imagePath:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: image_path
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sort_order
+        isActive:
+            type: boolean
+            nullable: false
+            column: is_active
+        introClosingWords:
+            type: text
+            nullable: true
+            column: intro_closing_words
+        picturePosition:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: picture_position
+        imageLink:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: image_link
+        sponsorAdWidth:
+            type: string
+            length: 5
+            fixed: false
+            nullable: true
+            column: sponsor_ad_width
+        contentTitle:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: content_title
+        includeAttachments:
+            type: boolean
+            nullable: true
+            column: include_attachments
+    manyToOne:
+        article:
+            targetEntity: FgCmsArticle
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                article_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        newsletter:
+            targetEntity: FgCnNewsletter
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                newsletter_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        items:
+            targetEntity: FgGmItems
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                items_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        sponsorAdArea:
+            targetEntity: FgSmAdArea
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                sponsor_ad_area_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

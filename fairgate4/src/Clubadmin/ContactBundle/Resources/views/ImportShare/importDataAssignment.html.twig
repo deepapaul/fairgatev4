@@ -1,0 +1,130 @@
+<form id="form-tab2" method="post"       
+      data-url="{{ path('import_share_file_correction') }}"
+      onsubmit="return false;" autocomplete="off" novalidate="novalidate" class="form-horizontal">
+    <div class="alert alert-danger display-none">
+        <button class="close" data-dismiss="alert"></button>
+        <strong>{%trans%}IMPORT_ERROR{%endtrans%}: </strong><span data-error>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+    </div>
+    <h3 class="block">{{'YOU_ARE_IMPORT'|trans}} <span data-colCount>{{contactCount==1 ? contactCount:contactCount-1}}</span> 
+        {%trans%}IMPORTING_DATA_SETS{%endtrans%}
+    </h3>
+    <div class="form-group">
+        <div class="col-md-9">
+            <div class="checkbox-list">
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="not_import_first_row" name="not_import_first_row" {{contactCount==1 ? 'disabled':'checked'}} value="1"> {%trans%}NOT_IMPORT_FIRST_ROW{%endtrans%} </label>
+            </div>
+        </div>
+    </div>
+    <!-- Table -->
+    <div class="fg-table-wrap">
+        <table class="table fg-import-table table-hover">
+            <thead>
+                <tr>
+                    <th class=" col-sm-3 col-lg-3">
+                        <span data-firstRow="sample" class="display-none">{%trans%}SAMPLE_DATA{%endtrans%}  ({%trans%}FIRST_ROW{%endtrans%})</span><span data-firstRow="source">{%trans%}SOURCE_HEADER{%endtrans%}  ({%trans%}FIRST_ROW{%endtrans%})</span>
+                    </th>
+                    <th class="col-sm-4 col-lg-3">
+                        {%trans%}SAMPLE_DATA{%endtrans%} ({%trans%}SECOND_ROW{%endtrans%})
+                    </th>
+                    <th class="col-sm-4 col-lg-3">
+                        {%trans%}FAIRGATE_FIELD{%endtrans%}
+                    </th>   
+                    <th class="col-sm-1 col-lg-3"></th>                 
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <!-- End Table -->
+    <div class="row">
+        <div class="col-md-12 fg-import-add" data-addMore="">
+            <a data-toggle="modal" href="#basic" id="pencil"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text"><span class="fg-more-count">10</span> {%trans%}IMPORT_MORE_COLUMN{%endtrans%}</span></a>
+        </div>
+    </div>
+    <input type="hidden" name="step" value="data" />
+    {% if (clubMembershipAvailable == '1' and (clubtype == 'federation_club' or clubtype == 'sub_federation_club' or clubtype == 'standard_club' ) ) %}
+        <input type="hidden" name="hidmemtype" id="hidmemtype" value="member_category" />
+    {% endif %}  
+    {% if (clubtype == 'federation') %}
+        <input type="hidden" name="hidmemtype" id="hidmemtype" value="fed_membership" />
+    {% endif %}  
+    <input type="hidden" name="hidclubtype" id="hidclubtype" value="{{clubtype}}" /> 
+    <input type="hidden" name="hidfedavail" id="hidfedavail" value="{{fedMembershipMandatory}}" />     
+</form>
+    <script type="text/template" id="assign-data-fields-selection" data-rows='{{data|json_encode()|raw}}' data-mandatory="{{requiredIds|join(':')}}" data-manFileds="{ {% for requiredId in requiredIds %}{% endfor %} }">
+    
+    <% for(i=data.offset;i<data.limit;i++) { %>
+    <tr>
+    <td>
+    <%- data.csvData[0][i] %>
+    </td>                    
+    <td>
+    <%- (_.isUndefined(data.csvData[1]) || _.isNull(data.csvData[1])) ? '':data.csvData[1][i]  %>
+    </td>
+    <td>
+    <span data-field="field">
+         
+    <select class="bs-select form-control fg-select-font" name="maping[]">
+    <option value="">{%trans%}SELECT_DEFAULT{%endtrans%}</option>
+    <optgroup label="{%trans%}SYSTEM{%endtrans%}">
+        <option data-req <%- (data.csvData[0][i].toLowerCase() =="{%trans%}Fed membership{%endtrans%}".toLowerCase() ) ? 'selected' :'' %> value="fed_membership">{%trans%}Fed membership{%endtrans%} * </option>
+        {% if(fgtwig.inArray('frontend2', bookedModules)) %}    
+        <option <%- (data.csvData[0][i].toLowerCase() == 'Intranet access'.toLowerCase() ) ? 'selected' :'' %> value="intranet_access">{{'INTRANET_ACCESS'|trans}}</option>
+        {% endif %}
+        {% if(fgtwig.inArray('communication', bookedModules)) %}
+        <option <%- (data.csvData[0][i].toLowerCase() == "{%trans%}NEWSLETTER_SUBSCRIPTION{%endtrans%}".toLowerCase() ) ? 'selected' :'' %> value="is_newsletter_subscriber">{%trans%}NEWSLETTER_SUBSCRIPTION{%endtrans%}</option>
+        {% endif %}
+        {% if(fgtwig.inArray('invoice', bookedModules)) %}
+        <option <%- (data.csvData[0][i].toLowerCase() == "{%trans%}INVOICE_DISPATCH_TYPE{%endtrans%}".toLowerCase() ) ? 'selected' :'' %> value="dispatch_type_invoice">{%trans%}INVOICE_DISPATCH_TYPE{%endtrans%}</option>
+        <option <%- (data.csvData[0][i].toLowerCase() =="{%trans%}DUNS_DISPATCH_TYPE{%endtrans%}".toLowerCase() ) ? 'selected' :'' %> value="dispatch_type_dun">{%trans%}DUNS_DISPATCH_TYPE{%endtrans%}</option>
+        {% endif %}
+        <option <%- (data.csvData[0][i].toLowerCase() == "{%trans%}CM_JOINING_DATE{%endtrans%}".toLowerCase() ) ? 'selected' :'' %> value="joining_date">{%trans%}CM_JOINING_DATE{%endtrans%}</option>
+        <option data-req <%- (data.csvData[0][i].toLowerCase() == "{%trans%}CM_CLUB_IDS_TO_SHARE{%endtrans%}".toLowerCase() ) ? 'selected' :'' %> value="club_ids">{%trans%}CM_CLUB_IDS_TO_SHARE{%endtrans%} *</option>
+    </optgroup>
+    {% for fieldDetail in fieldDetails.fieldsArray %}
+        {% if (fieldDetail.values|length) %}            
+            <optgroup label="
+            {% if fieldDetail.isSystem==1 or fieldDetail.isFairgate==1 %}
+                {{ (fieldDetail.titles[defSysLang] is defined) ? fieldDetail.titles[defSysLang]|replace({'<': '&lt;', '>': "&gt;"}) : fieldDetail.title|replace({'<': '&lt;', '>': "&gt;"}) }}
+            {% else %}
+                {{ (fieldDetail.titles[sysLang] is defined) ? fieldDetail.titles[sysLang]|replace({'<': '&lt;', '>': "&gt;"}) : fieldDetail.title|replace({'<': '&lt;', '>': "&gt;"}) }}
+            {% endif %}">
+            {% for fieldValue in fieldDetail.values %}   
+                {% if (fieldValue.inputType != 'fileupload' and fieldValue.inputType != 'imageupload' and (fieldValue.attrId not in skipFields)) %}
+                    {% if ( fieldDetail.catId == invoiceCatId ) %}
+                        {% set invoiceFieldName = fieldValue.fieldname~'('~'CL_INVOICE'|trans~')' %}
+                        <option {{fieldValue.attrId in requiredIds ? 'data-req':''}} <%- (data.csvData[0][i].toLowerCase().replace(/ /g, "")=='{{invoiceFieldName}}'.toLowerCase().replace(/ /g, "") ) ? 'selected' :'' %> value="{{fieldValue.attrId}}" class="fg-option-money">{{fieldValue.fieldname|replace({'<': '&lt;', '>': "&gt;"})}}{{fieldValue.attrId in requiredIds ? ' *':''}}                   
+                        </option>
+                    {% elseif ( fieldDetail.catId == correspondanceCatId ) %}
+                        {% set correspondenceFieldName = fieldValue.fieldname~'('~'CL_CORRESPONDENCE'|trans~')' %}
+                        <option {{fieldValue.attrId in requiredIds ? 'data-req':''}} <%- (data.csvData[0][i].toLowerCase().replace(/ /g, "")=='{{correspondenceFieldName}}'.toLowerCase().replace(/ /g, "") ) ? 'selected' :'' %> value="{{fieldValue.attrId}}" class="fg-option-home" >{{fieldValue.fieldname|replace({'<': '&lt;', '>': "&gt;"})}}{{fieldValue.attrId in requiredIds ? ' *':''}}                                   
+                        </option>
+                    {% else %}
+                        {% set attrFieldName =  (fieldDetails['attrTitles'][fieldValue.attrId][defSysLang] is defined) ? fieldDetails['attrTitles'][fieldValue.attrId][defSysLang] : fieldValue.fieldname %}
+                        <option {{fieldValue.attrId in requiredIds ? 'data-req':''}} <%- (data.csvData[0][i].toLowerCase() == '{{fieldValue.fieldname}}'.toLowerCase() ) ? 'selected' :'' %> value="{{fieldValue.attrId}}">{{attrFieldName|replace({'<': '&lt;', '>': "&gt;"})}}{{fieldValue.attrId in requiredIds ? ' *':''}}                   
+                    </option>
+                    {% endif %}                    
+                {% endif %}
+            {% endfor %}
+            </optgroup>
+        {% endif %}
+    {% endfor %}
+    </select>
+    </span>
+    <span data-field="skipped" class="fg-table-italic display-none">{%trans%}IMPORT_COLUMN_SKIPPED{%endtrans%}</span>
+    </td>
+    <td>
+    <div class="fg-table-delete">
+    <div class="fg-last-icon">
+    <div class="closeico">
+    <input type="checkbox" data-inactiveblock="changecolor" class="make-switch" id="fieldMap<%- i %>" name="fieldMap[<%- i %>]">
+    <label for="fieldMap<%- i %>"></label>
+    </div>
+    </div>
+    </div>
+    </td>                    
+    </tr> 
+    <% } %>
+</script>

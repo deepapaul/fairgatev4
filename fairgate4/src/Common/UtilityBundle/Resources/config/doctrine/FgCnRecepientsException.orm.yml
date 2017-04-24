@@ -1,0 +1,36 @@
+Common\UtilityBundle\Entity\FgCnRecepientsException:
+    type: entity
+    table: fg_cn_recepients_exception
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        type:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+    manyToOne:
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        recepientList:
+            targetEntity: FgCnRecepients
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                recepient_list_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

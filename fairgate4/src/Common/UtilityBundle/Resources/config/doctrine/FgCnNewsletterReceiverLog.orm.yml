@@ -1,0 +1,110 @@
+Common\UtilityBundle\Entity\FgCnNewsletterReceiverLog:
+    repositoryClass: Common\UtilityBundle\Repository\FgCnNewsletterReceiverLogRepository  
+    type: entity
+    table: fg_cn_newsletter_receiver_log
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        corresLang:
+            type: string
+            length: 2
+            fixed: false
+            nullable: false
+            column: corres_lang
+        sendDate:
+            type: datetime
+            nullable: false
+            column: send_date
+        contactId:
+            type: text
+            nullable: false
+            column: contact_id
+        email:
+            type: string
+            length: 160
+            fixed: false
+            nullable: false
+        isSent:
+            type: boolean
+            nullable: false
+            column: is_sent
+        openedAt:
+            type: datetime
+            nullable: true
+            column: opened_at
+        isBounced:
+            type: boolean
+            nullable: false
+            column: is_bounced
+        bounceMessage:
+            type: text
+            nullable: true
+            column: bounce_message
+        resentEmail:
+            type: string
+            length: 160
+            fixed: false
+            nullable: false
+            column: resent_email
+        salutation:
+            type: string
+            length: 250
+            fixed: false
+            nullable: false
+        bounceCount:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: bounce_count
+        emailFieldIds:
+            type: text
+            nullable: false
+            column: email_field_ids
+        linkedContactIds:
+            type: text
+            nullable: false
+            column: linked_contact_ids
+        isEmailChanged:
+            type: boolean
+            nullable: false
+            column: is_email_changed
+        systemLanguage:
+            type: string
+            length: 8
+            fixed: false
+            nullable: false
+            column: system_language
+    manyToOne:
+        newsletter:
+            targetEntity: FgCnNewsletter
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                newsletter_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        subscriber:
+            targetEntity: FgCnSubscriber
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                subscriber_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

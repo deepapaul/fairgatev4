@@ -1,0 +1,124 @@
+extends ../layout-fullwidth.jade
+
+block title
+  title Popup
+
+block content    
+    //Metronic mandatory styles
+    include ../partials/header-nav.jade
+    .clearfix
+    .page-container
+    .page-content-wrapper
+      #fg-wrapper.page-content
+        .clearfix  
+        // BEGIN CONTAINER
+        .row
+          .col-md-12
+            // BEGIN BREADCRUMB
+            ul.page-breadcrumb.breadcrumb.fg-brdcrb-left
+              li.fg-dynamic-links(data-auto='breadcrumb_level1')
+                a(href='/federation/internal/dashboard')
+                  i.fa.fa-home
+            // END BREADCRUMB
+
+
+            // BEGIN titleblock
+            .row
+                include ../partials/fg-action-menu-wrapper.jade
+            // End titleblock
+
+
+
+            // BEGIN Content AREA
+            p
+              a.btn.default(data-toggle='modal', href='#tab') data tabs
+            #tab.modal.fg-membership-merge-modal.fade.fg-popup-wrap(tabindex='-1', aria-hidden='true')
+              .modal-dialog
+                .modal-content
+                  .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-hidden='true')
+                    h4.modal-title.fg-clear Add Hans Muster to Federation Memebership
+                  .modal-body
+                    .portlet-body
+                        p.fg-marg-top-0 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+                        .fg-membership-merge-table-wrapper
+                            .table-responsive
+                              table.table.fg-marg-btm-0
+                                thead
+                                    tr
+                                        th  Field 
+                                        th  Your contact
+                                        th  Existing contact
+                                        th  Existing contact
+                                        th  Existing contact
+                                tbody
+                                    tr
+                                        td  First name 
+                                        td  Hans 
+                                        td  Hans Jakobl 
+                                        td  Hans 
+                                        td  Hans
+                                    tr
+                                        td  Last name  
+                                        td  Muster  
+                                        td  Muster 
+                                        td  <Muster></Muster>
+                                        td  Muster
+                                    tr
+                                        td  Gender     
+                                        td  male 
+                                        td  male 
+                                        td  male 
+                                        td  male
+                                    tr
+                                        td  Birth date 
+                                        td  12.12.2016  
+                                        td  12.12.2016 
+                                        td  12.12.2016
+                                        td  12.12.2016
+                                    tr
+                                        td  Location  
+                                        td  London  
+                                        td  London 
+                                        td  London
+                                        td  London
+                                    tr
+                                        td  Clubs      
+                                        td  
+                                        td  Club A,Club B
+                                        td  Club C
+                                        td  Club C
+                                    tr
+                                        td  Federation membership    
+                                        td    
+                                        td  Active 
+                                        td  Youth member
+                                        td  Youth member
+                            .modal-footer.form-actions.fg-modal-footer
+                                button#cancel.btn.default(type='button', data-dismiss='modal', data-function='cancel') Cancel
+                                button#save.btn.green(type='button', data-function='save') Save
+
+
+
+            // END Content AREA
+            // - START DATATABLE AREA
+        #fg-popup.modal.fade(aria-hidden='true', role='dialog', tabindex='-1')
+          .modal-dialog.modal-full
+            #fg-dev-popup-model.modal-content
+      // END CONTENT
+block footerPageLevelScripts
+    
+    script(type='text/javascript').
+      jQuery(document).ready(function() {
+      // initiate layout and plugins
+      Metronic.init(); // init metronic core components
+      Layout.init(); // init current layout
+      FgPageTitlebar.init({
+        actionMenu: true,
+        title: true,
+        search: false,
+        tab: false
+      })
+      });
+
+

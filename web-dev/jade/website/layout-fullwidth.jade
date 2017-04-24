@@ -1,0 +1,52 @@
+doctype html
+//if IE 8
+  html.ie8.no-js(lang='en')  
+//if IE 9
+  html.ie9.no-js(lang='en')  
+// [if !IE] <!
+html.no-js(lang='en')
+  // <![endif]
+  // BEGIN HEAD
+  head
+    meta(charset='utf-8')
+    block title
+      title Layout wrapper
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(content='width=device-width, initial-scale=1.0', name='viewport')
+    meta(content='', name='description')
+    meta(content='', name='author')
+    meta(name='MobileOptimized', content='320')
+
+    //Metronic mandatory styles
+    include ../global/metronic-mandatory-styles.jade 
+    
+    block pageLevelStyles
+    // BEGIN PAGE LEVEL STYLES
+    link(href='../../assets/global/plugins/bootstrap-toastr/toastr.min.css', type='text/css', rel='stylesheet')
+    // END PAGE LEVEL STYLES
+
+    //Metronic theme styles    
+    include ../global/metronic-theme-styles.jade
+
+    //Fairgate Styles
+    include partials/fg-custom-backend-styles.jade
+
+    link(rel='shortcut icon', href='../../global/img/favicon.ico')
+
+
+
+
+  // BEGIN BODY
+  body.page-header-fixed.page-full-width
+    block content
+      content h1 asdadadsadsad
+
+    //Fairgate Scripts
+    include ../global/metronic-scripts 
+
+    //Custom  Scripts
+    include partials/custom-scripts
+
+    block footerPageLevelScripts
+   
+  // END BODY

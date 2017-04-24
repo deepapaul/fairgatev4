@@ -1,0 +1,13 @@
+<div class="form-group fg-clear fg-cms-special-page-categories">
+    <label class="control-label text-right fg-label-valign col-lg-3 col-md-3" for="from-date">{{'ARTICLE_CATEGORIES'|trans}}</label>
+    <div class="col-lg-9 col-md-8 fg-error-add-required">
+        <select name="specialPageCategory" id="specialPageCategory" class="form-control selectpicker" multiple="multiple" >
+            <optgroup label="">
+                <option value="ALL_CATS" class="single fg-arrow-all" >{{'CMS_ALL_CATEGORIES'|trans }}</option>
+            </optgroup>
+                {% for data in categories %}
+                    <option class="multiple" value="{{ data.id }}"  >{{ data.title }}</option>
+                {% endfor %}
+        </select>
+    </div>
+</div>

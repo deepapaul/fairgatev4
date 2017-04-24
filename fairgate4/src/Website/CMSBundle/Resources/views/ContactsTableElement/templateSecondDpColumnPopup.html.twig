@@ -1,0 +1,35 @@
+<script type="text/template" id="contactListSecondDp">
+    <div class="col-sm-6 fg-dev-contact-secondDp" data-name="fg-dev-contact-secondDp">
+        <select name="fg-dev-contact-list-table-secondDp" data-key="" class="selectpicker form-control fg-dev-contact-list-table-secondDp">
+            <option value="default"><%- datas['defaultOption'] %></option>
+            <% _.each(datas.fieldValue, function(data) { %>
+                <% if(selectedVal == 'CONTACT_FIELD') { %>
+                    <optgroup value="<%- data['catId'] %>" label="<%- data['catName'] %>">
+                        <% _.each(data.attrDetails, function(attrData) { 
+                            if(attrData['isSystemField'] == 1) { 
+                                if ((attrData['fieldNameLang'][clubLangDetails[defaultLang]['systemLang']] != '') && (attrData['fieldNameLang'][clubLangDetails[defaultLang]['systemLang']] != undefined )) { %>
+                                    <option value="<%- attrData['attrId'] %>" opt_type=""><%- attrData['fieldNameLang'][clubLangDetails[defaultLang]['systemLang']] %></option>
+                                <% } else { %>
+                                    <option value="<%- attrData['attrId'] %>" opt_type=""><%- attrData['fieldName'] %></option>
+                                <% }
+                            } else {
+                                if ((attrData['fieldNameLang'][defaultLang] != '') && (attrData['fieldNameLang'][defaultLang] != undefined)) { %>
+                                    <option value="<%- attrData['attrId'] %>" opt_type=""><%- attrData['fieldNameLang'][defaultLang] %></option>
+                                <% } else { %>
+                                    <option value="<%- attrData['attrId'] %>" opt_type=""><%- attrData['fieldName'] %></option>
+                                <% } %>
+                            <% } %>
+                        <% }); %>
+                    </optgroup>
+                <% } else {
+                    if ((data['attrNameLang'][defaultLang] != '') && (data['attrNameLang'][defaultLang] != undefined)) { %>
+                        <option value="<%- data['attrId'] %>"><%- data['attrNameLang'][defaultLang] %></option>
+                    <% } else { %>
+                        <option value="<%- data['attrId'] %>"><%- data['attrName'] %></option>
+                    <% } %>
+                <% } %>
+            <% }); %>
+        </select>   
+    </div>
+</script>
+

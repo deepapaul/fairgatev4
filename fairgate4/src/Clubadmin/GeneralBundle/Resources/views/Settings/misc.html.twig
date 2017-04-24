@@ -1,0 +1,130 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = "GENERAL_SETTINGS"|trans %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body fg-theme-green">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                {% include 'clubadmin/breadcrumb.html.twig' with {'breadCrumb':{}} %}
+
+                <!-- END PAGE TITLE & BREADCRUMB-->
+
+                {# {% include 'clubadmin/settings-tab.html.twig' with {'tabs':tabs,'active':'misc'} %}
+                 #} 
+                <div class="row">
+                    {% set page_settings = { 'pagetitle':'true','tabs':'true'}  %}
+                    {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle':pageTitle ,'page_settings': page_settings,'tabs': tabs,'hrefLink' : true, 'url':"#",'type':'agelimit' } %}
+                </div>    
+                <form id="clubCurrency" class="form-horizontal" method="post" data-validation="true" onsubmit="return false;" novalidate="novalidate">
+                    <div class="alert alert-danger display-none">
+                        <button class="close" data-dismiss="alert"></button>
+                        <span data-error>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="portlet-body form fg-common-top">
+                                <!-- BEGIN FORM-->
+                                <div class="form-body">
+
+                                    <input id="settingsId" type="hidden" name="settingsId" value={{details.settingsId|default('0')}}>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2 col-md-3 col-sm-4 fg-pad-top-7">
+                                            {{'SM_CURRENCY'|trans}}
+                                        </label>    
+                                        <div class="col-lg-1 col-md-2 col-sm-3">
+                                            <input type="text" name="currency" class="form-control text fg-dev-autocomplete" required="required" maxlength="3" value="{{ details.currency|default('CHF') }}">
+
+                                            <span  for="currency" class="help-block"></span>
+                                        </div>    
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2 col-md-3 col-sm-4">
+                                            {{'GN_SETTINGS_SUBSCRIPTION'|trans}}
+                                        </label>    
+                                        <div class="col-lg-7 col-sm-8">
+                                            <label for="fg-dev-default-subscription" class="fg-cursor"><input type="checkbox" {% if (clubDefaultSubscription) %} checked {% endif %}  name="fg-dev-default-subscription" value="1" id="fg-dev-default-subscription" data-key="fg-dev-default-subscription" /> {{'SUBSCRIBER_SETTINGS_MESSAGE'|trans}}</label>
+                                        </div>    
+                                    </div>
+                                    {% if isAdmin|default(false) == true %}    
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-2 col-md-3 col-sm-4">
+                                            {{'GN_SETTINGS_GOTCOURT_API_CONNECTION'|trans}}
+                                        </label>   
+                                        <div class="col-lg-10 col-md-9 col-sm-8">
+                                            <div id="gc-api-connection-wrapper">
+                                                <!---Render gcApiConnectionTemplate template here--->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}    
+                                </div>
+                                <!-- END FORM-->
+                            </div>
+                        </div>
+                    </div>
+                    {% include 'clubadmin/savebutton.html.twig' with {'settings':settings} %}
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+        
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>  
+    <script src="{{ asset('fgassets/backend/js/page/settings.js') }}" type="text/javascript"></script> 
+    {% if isAdmin|default(false) == true %}
+        {% include 'ClubadminGeneralBundle:GotCourtsApi:gc-api-connection-template.html.twig' %} 
+        <script src="{{ asset('fgassets/backend/js/page/FgGotcourtsApiService.js') }}" type="text/javascript"></script> 
+        <script src="{{ asset('fgassets/global/js/clipboard.min.js') }}"></script>
+    {% endif %}
+    <script>
+                    $(document).ready(function () {
+                        // FgSettings.initPage();
+                        FgPageTitlebar.init({
+                            title: true,
+                            tab: true,
+                            search: false,
+                            actionMenu: false,
+                            tabType: 'server'
+
+                        });
+                    {% if isAdmin|default(false) == true %}    
+                        new FgGotcourtsApiService({
+                            gcBookingUrl: '{{path('settings_book_gc_api_service')}}',
+                            generateTokenUrl: '{{path('settings_generate_gc_api_token')}}',
+                            cancelGcServiceUrl: '{{path('settings_cancel_gc_api_service')}}',
+                            step: '{{gcApiDetails['step']|default('1')}}',
+                            clubApiToken: '{{gcApiDetails['tokenWithClub']|default('')}}',
+                            clubApiId: '{{gcApiDetails['gcApiId']|default('')}}'
+                        });
+                    {% endif %}
+                    });
+                    FormValidation.init('clubCurrency', 'saveChanges');
+                    function saveChanges()
+                    {
+                        var paramobj = {'url': "{{path('settings_misc_save')}}", 'form': $('#clubCurrency'), 'successCallback': successCallback};
+                        FgXmlHttp.formPost(paramobj);
+                    }
+                    function successCallback(responce) {
+                        FgDirtyForm.init();
+                        FgDirtyForm.disableButtons();
+                        FgPageTitlebar.setMoreTab();
+                    }
+                    $('form').on('click', '#reset_changes', function () {
+                        $(".currency-list").removeClass('has-error');
+                        $(".help-block").hide();
+                        $(".alert-danger").hide();
+                        FgResetChanges.checkboxReset();
+                    });
+    </script>
+{% endblock %} 
+{#Custom style for GotCourts api booking page #}
+{% block customstylesheets %}
+    <style>
+    .tooltip.fg-custom-tooltip > .tooltip-inner { white-space: normal;}
+    </style>
+{% endblock %}

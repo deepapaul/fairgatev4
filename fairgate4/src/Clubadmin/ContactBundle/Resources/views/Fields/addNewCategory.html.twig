@@ -1,0 +1,45 @@
+<script type="text/template" id="addNewCategory">
+<div class="row sortable">
+    <div class="col-md-12 fieldArea newRow">
+        <div class="panel panel-primary bordernon panel-bg">
+            <div class="panel-heading fg-theme-head">
+                <div class="fg-col-first-icon fg-sort-drag">
+                    <i class="fa fg-sort ui-draggable catHandle white"  data-toggle="tooltip"></i>
+                </div>
+                <div class="col-md-12 fg-heading-editable">
+                    <div class="col-md-3 fg-clear-left">
+                        <input type="hidden" data-key="<%- data.catId %>.sort" value="0" class="catOrder " id="sort_<%- data.catId %>" name="sort_<%- data.catId %>">
+                        {%for languages in clubIdArray.clubLanguages %}
+                            <div dataerror-group data-lang="{{languages}}" >    
+                                <input type="text" data-lang="{{languages}}" data-key="<%- data.catId %>.title.{{languages}}" value="" class=" form-control input-sm  {{languages}} {% if languages!=clubIdArray.sysLang %}hide{% else %}" required="true{% endif %}" id="title_{{languages}}_<%- data.catId %>" name="title_{{languages}}_<%- data.catId %>">
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <span class="txticonnew"> </span>
+                </div>
+                <div class="fg-col-last-icon">
+                    <div class="col-md-1 closebtn">
+                        <div class="closeico ">
+                            <input type="checkbox" class="make-switch newCatDelete " data-key="<%- data.catId %>.isDeleted" name="isDeleted_<%- data.catId %>" id="isDeleted_<%- data.catId %>" data-inactiveblock="changecolor" data-parentid="<%- data.catId %>" />
+                            <label for="isDeleted_<%- data.catId %>" class="contact-cat-delete"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="fieldSort<%- data.catId %>" class="fgborder catFieldSort ui-sortable">
+        </div>
+        <div class="row">            
+            <div class="col-md-12 fg-common-top-btm clearfix">
+                <a data-add="fg-dev-field" data-toggle="modal" href="#basic" class="addField" data-catid="<%- data.catId %>" id="pencil">
+                    <i class="fa fa-plus-circle fa-2x pull-left"></i> <span class="fg-add-text">{%trans%}ADD_CONTACT_FIELD{%endtrans%}</span>
+                </a>
+                <a id="pencil" data-add="fg-dev-category" class="addCategory pull-left" href="#basic" data-toggle="modal">
+                    <i class="fa fa-plus-circle fa-2x pull-left"></i><span class="fg-add-text">{%trans%}ADD_CONTACT_FIELD_CATEGORY{%endtrans%}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</script>
+

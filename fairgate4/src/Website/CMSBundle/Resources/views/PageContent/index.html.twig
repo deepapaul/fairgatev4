@@ -1,0 +1,294 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'GLOBAL_CONTACT_OVERVIEW_SETTINGS'|trans %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->  
+    <div id="settingsDiv">
+        <form id="form1" onsubmit="return false;" class="form-horizontal"> 
+            {{ include('::clubadmin/savebutton.html.twig', {'save_button_id':'overviewSettingsSave','noBackLinkFlag':'1'}) }}
+        </form>
+    </div>
+
+{% endblock %}
+{% block javascripts %}  
+    <script>
+        
+        
+        //Handlying overview saving
+        $('#settingsDiv').on('click', '#overviewSettingsSave', function() {
+            var NewJson = {"page": {"1":[]};
+            var jsonData = {"page":{
+ 	"pageId": 1,
+ 	"title": "Home",
+ 	"container": [{
+ 			"container_id": 1,
+ 			"sortOrder": 1,                        
+ 			"columns": [{
+ 				"column_id": 2,
+ 				"width_value": 2,
+ 				"column_sort_order": 1,
+ 				"box": [{
+ 						"id": 3,
+ 						"sort_order": 1,
+ 						"Element": [{
+ 							"id": 4,
+ 							"box_sort_order": 1,
+ 							"type": "heading"
+ 						}, {
+ 							"id": 5,
+ 							"sort_order": 2,
+ 							"type": "image"
+ 						}]
+ 					}, {
+ 						"id": 6,
+ 						"sort_order": 1,
+ 						"Element": [{
+ 							"id": 7,
+ 							"sort_order": 1,
+ 							"type": "heading"
+ 						}]
+ 					}
+
+
+
+ 				]
+ 			}, {
+ 				"column_id": 8,
+ 				"width_value": 1,
+ 				"sort_order": 1,
+ 				"box": [{
+ 						"id": 9,
+ 						"sort_order": 1,
+ 						"Element": [{
+ 							"id": 10,
+ 							"sort_order": 1,
+ 							"type": "heading"
+ 						}, {
+ 							"id": 11,
+ 							"sort_order": 2,
+ 							"type": "image"
+ 						}]
+ 					}, {
+ 						"id": 12,
+ 						"sort_order": 1,
+ 						"Element": [{
+ 							"id": 13,
+ 							"sort_order": 1,
+ 							"type": "heading"
+ 						}]
+ 					}
+
+
+
+ 				]
+ 			}]
+ 		}, {
+ 			"container_id": 14,
+ 			"sortOrder": 1,
+ 			"columns": [{
+ 				"column_id": 15,
+ 				"width_value": 2,
+ 				"sort_order": 1,
+ 				"box": [{
+ 						"id": 16,
+ 						"sort_order": 1,
+ 						"Element": [{
+ 							"id": 17,
+ 							"sort_order": 1,
+ 							"type": "heading"
+ 						}, {
+ 							"id": 18,
+ 							"sort_order": 2,
+ 							"type": "image"
+ 						}]
+ 					}, {
+ 						"id": 19,
+ 						"sort_order": 2,
+ 						"Element": [{
+ 							"id": 20,
+ 							"sort_order": 1,
+ 							"type": "heading"
+ 						}]
+ 					}
+
+
+
+ 				]
+ 			}, {
+ 				"column_id": 21,
+ 				"width_value": 1,
+ 				"sort_order": 1,
+ 				"box": [{
+ 						"id": 22,
+ 						"sort_order": 1,
+ 						"Element": [{
+ 							"id": 23,
+ 							"sort_order": 1,
+ 							"type": "heading"
+ 						}, {
+ 							"id": 24,
+ 							"sort_order": 2,
+ 							"type": "image"
+ 						}]
+ 					}, {
+ 						"id": 25,
+ 						"sort_order": 1,
+ 						"Element": [{
+ 							"id":26,
+ 							"sort_order": 1,
+ 							"type": "heading"
+ 						}]
+ 					}
+
+
+
+ 				]
+ 			}]
+ 		}
+
+ 	]},
+	"sidebar": {
+	  "side":"left",
+	  "sidebar_id":1,
+          "type"      :"normal",
+          "size"      :"narrow",
+ 	"container": [{
+ 			"container_id": 27,
+ 			"sortOrder": 1,
+ 			"columns": [{
+ 				"column_id": 28,
+ 				"width_value": 2,
+ 				"sort_order": 1,
+ 				"box": [{
+ 						"id": 29,
+ 						"sort_order": 1,
+ 						"Element": [{
+ 							"id": 30,
+ 							"sort_order": 1,
+ 							"type": "heading"
+ 						}, {
+ 							"id": 31,
+ 							"sort_order": 2,
+ 							"type": "image"
+ 						}]
+ 					}, {
+ 						"id": 32,
+ 						"sort_order": 1,
+ 						"Element": [{
+ 							"id": 33,
+ 							"sort_order": 1,
+ 							"type": "heading"
+ 						}]
+ 					}
+
+
+
+ 				]
+ 			}, {
+ 				"column_id": 34,
+ 				"width_value": 1,
+ 				"sort_order": 1,
+ 				"box": [{
+ 						"id": 35,
+ 						"sort_order": 1,
+ 						"Element": [{
+ 							"id": 36,
+ 							"sort_order": 1,
+ 							"type": "heading"
+ 						}, {
+ 							"id": 37,
+ 							"sort_order": 2,
+ 							"type": "image"
+ 						}]
+ 					}, {
+ 						"id": 38,
+ 						"sort_order": 1,
+ 						"Element": [{
+ 							"id": 39,
+ 							"sort_order": 1,
+ 							"type": "heading"
+ 						}]
+ 					}
+
+
+
+ 				]
+ 			}]
+ 		}, {
+ 			"container_id": 40,
+ 			"sortOrder": 1,
+ 			"columns": [{
+ 				"column_id": 41,
+ 				"width_value": 2,
+ 				"sort_order": 1,
+ 				"box": [{
+ 						"id": 42,
+ 						"sort_order": 1,
+ 						"Element": [{
+ 							"id": 43,
+ 							"sort_order": 1,
+ 							"type": "heading"
+ 						}, {
+ 							"id": 44,
+ 							"sort_order": 2,
+ 							"type": "image"
+ 						}]
+ 					}, {
+ 						"id": 45,
+ 						"sort_order": 2,
+ 						"Element": [{
+ 							"id": 46,
+ 							"sort_order": 1,
+ 							"type": "heading"
+ 						}]
+ 					}
+
+
+
+ 				]
+ 			}, {
+ 				"column_id": 47,
+ 				"width_value": 1,
+ 				"sort_order": 1,
+ 				"box": [{
+ 						"id": 48,
+ 						"sort_order": 1,
+ 						"Element": [{
+ 							"id": 49,
+ 							"sort_order": 1,
+ 							"type": "heading"
+ 						}, {
+ 							"id": 50,
+ 							"sort_order": 2,
+ 							"type": "image"
+ 						}]
+ 					}, {
+ 						"id": 51,
+ 						"sort_order": 1,
+ 						"Element": [{
+ 							"id":52,
+ 							"sort_order": 1,
+ 							"type": "heading"
+ 						}]
+ 					}
+
+
+
+ 				]
+ 			}]
+ 		}
+
+ 	]
+ }
+ }
+            var overviewArr = JSON.stringify(objectGraph);
+            FgXmlHttp.post("{{path('save_overview_settings')}}", { 'postArr': overviewArr} , false, initPageFunctions);
+        });
+        function initPageFunctions() {
+            FgApp.init();
+            FgDragAndDrop.categorySort('.fg-splDragDrop',true);
+        }
+        
+    </script>
+{% endblock %} 

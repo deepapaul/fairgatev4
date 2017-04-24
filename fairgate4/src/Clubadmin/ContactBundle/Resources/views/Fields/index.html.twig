@@ -1,0 +1,135 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::layout-ajax.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'CONTACT_FIELDS'|trans %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                        <!-- BREADCRUMB STARTS -->
+            {% include 'clubadmin/breadcrumb.html.twig' %}
+            <!-- BREADCRUMB ENDS -->
+          {#  {% include 'clubadmin/language_swtich.html.twig' with {'clubLanguages': clubIdArray.clubLanguages,'clubDefaultLang':clubIdArray.sysLang, 'title':'CONTACT_FIELDS'|trans} %}#}
+        </div>
+      
+        {% set page_settings = { 'pagetitle':'true','languageswitch':'true' }  %}
+        {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'page_settings': page_settings,'clubLanguages': clubIdArray.clubLanguages,'clubDefaultLang': clubIdArray.sysLang  } %}
+  
+    </div>
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN FORM-->
+    <form id="form1" class="form-horizontal col-md-12 fg-clear fg-contact-field-form" method="post" onsubmit="return false;" autocomplete="off">
+        <!-- BEGIN COLUME AREA-->  
+        <div class="alert alert-danger display-hide">
+                <button class="close" data-close="alert"></button>
+                {{'FORM_ERROR_DISPLAY'|trans}}
+        </div>
+        <div data-auto="contact" class="contact_area fg-theme-blue">
+            {% for fieldDetail in fieldDetails %}
+                <div class="row {% if clubId == fieldDetail.catClubId %}sortable{% endif %}" {% if( (fgtwig.inArray(fieldDetail.catClubId,fgclub.get('clubHeirarchy'))) and (fieldDetail.values|length==0)) %}style="display:none"{% else %} data-visible="1" {% endif %} data-catSortOrder="{{loop.index}}">
+                    <div class="col-md-12 fieldArea" >
+                        <div class="panel panel-primary bordernon panel-bg">
+                            <div class="panel-heading fg-theme-head">
+                                {% if clubId == fieldDetail.catClubId %}
+                                    <div class="fg-col-first-icon fg-sort-drag">   <i class="fa fa fg-sort ui-draggable catHandle white"></i></div>
+                                    <div class="col-md-12 fg-heading-editable">
+                                        <div class="col-md-3 fg-clear-left">
+                                            <input type="hidden" name="sort_{{fieldDetail.catId}}" id="sort_{{fieldDetail.catId}}" class="catOrder" value="{{fieldDetail.catSortOrder}}" data-key="{{fieldDetail.catId}}.sort" />
+                                            {%for languages in clubIdArray.clubLanguages %}
+                                                <div dataerror-group data-lang="{{languages}}" > 
+                                                <input type="text" data-required-lang {% if clubIdArray.sysLang==languages %}required="true"{% endif %} name="title_{{languages}}_{{fieldDetail.catId}}" data-lang="{{languages}}" id="title_{{languages}}_{{fieldDetail.catId}}" class="form-control input-sm {% if clubIdArray.sysLang!=languages %}hide{% endif %}" {% if (fieldDetail.titles[languages]) is not defined %} placeholder="{{fieldDetail.title}}" {% endif %} value="{% if (fieldDetail.titles[languages]) is defined %}{{fieldDetail.titles[languages]}}{% endif %}" data-key="{{fieldDetail.catId}}.title.{{languages}}" />
+                                                </div>
+                                            {% endfor %}  
+                                        </div>
+                                {% else %}
+                                    <div class="col-md-12  fg-heading-editable">
+                                    <h3 class="panel-title pull-left">
+                                        {% if fieldDetail.isSystem==1 or fieldDetail.isFairgate==1 %}
+                                            {{ (fieldDetail.titles[clubIdArray.defSysLang] is defined) ? fieldDetail.titles[clubIdArray.defSysLang] : fieldDetail.title }}
+                                        {% else %}
+                                            {{ (fieldDetail.titles[clubIdArray.sysLang] is defined) ? fieldDetail.titles[clubIdArray.sysLang] : fieldDetail.title }}
+                                        {% endif %}
+                                    </h3>
+                                {% endif %}
+                                {% if fieldDetail.catId==1 %}<span class="txticonnew"> {%trans%}CONTACT_FIELDS_ONLY_FOR{%endtrans%} <i class="fa fa-user fg-contact-Popovers" data-content="{%trans%}FOR_SINGLE_PERSONS{%endtrans%}"></i></span>
+                                    <h3 class="panel-title txtsub"> {%trans%}CF_MAIN_CONTACT_MANUAL{%endtrans%}</h3> {% endif %}
+                                    {% if fieldDetail.catId==1 or fieldDetail.catId==3 %}<span class="txticonnew"> {%trans%}CONTACT_FIELDS_ONLY_FOR{%endtrans%}<i class="fa fa-building-o fg-contact-Popovers" data-content="{%trans%}FOR_COMPANIES{%endtrans%}"></i> </span>{% endif %}
+                                </div>
+                                <div class="fg-col-last-icon">
+                                    {% if clubId == fieldDetail.catClubId and (fieldDetail.values|length==0)%}
+                                        <div class="col-md-1 closebtn">
+                                            <div class="closeico">
+                                                <input type="checkbox" class="make-switch" data-key="{{fieldDetail.catId}}.isDeleted" name="isDeleted_{{fieldDetail.catId}}" id="isDeleted_{{fieldDetail.catId}}" data-inactiveblock="changecolor" data-parentid="{{fieldDetail.catId}}" />
+                                                <label for="isDeleted_{{fieldDetail.catId}}"></label>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>   
+                                </div>
+                            </div>
+                            <div class="fgborder catFieldSort" id="fieldSort{{fieldDetail.catClubId}}">
+                                    {% for fieldValue in fieldDetail.values %}  
+                                        {% if(fieldValue.attrId !='')%}
+                                            {% include 'ClubadminContactBundle:Fields:contactFieldRow.html.twig' with {'memberships': memberships,'clubIdArray':clubIdArray,'fieldValue':fieldValue,'fieldDetail':fieldDetail,'fieldList':fieldList,'bookedModules':bookedModules} %}
+                                         {% endif %}
+                                    {% endfor %}
+                             </div>
+                             <div class="row">
+                                <div class="col-md-12 fg-common-top-btm clearfix">
+                                    {% if(not(fgtwig.inArray(fieldDetail.catClubId,fgclub.get('clubHeirarchy'))))%}
+                                        <a data-add="fg-dev-field" id="pencil" data-catId="{{fieldDetail.catId}}" class="addField" href="#basic" data-toggle="modal">
+                                            <i class="fa fa-plus-circle fa-2x pull-left "></i>
+                                            <span class="fg-add-text">{%trans%}ADD_CONTACT_FIELD{%endtrans%}</span>
+                                        </a>
+                                    {% endif %}                                        
+                                    <a data-add="fg-dev-category" data-toggle="modal" href="#basic" class="addCategory pull-left" style= "display:none" id="pencil">
+                                        <i class="fa fa-plus-circle fa-2x pull-left"></i> 
+                                        <span class="fg-add-text">{%trans%}ADD_CONTACT_FIELD_CATEGORY{%endtrans%}</span>
+                                    </a>
+                                </div>
+                             </div>
+                            </div>
+                        </div>                
+                        {% endfor %}
+                        </div>                       <!-- END PAGE CONTENT-->            
+                        {% include 'clubadmin/savebutton.html.twig' with {'settings':'settings' } %}
+                        <!-- END FORM-->
+     </form>
+    <div id="divTemplates">
+        {% include 'ClubadminContactBundle:Fields:contactproperties.html.twig' with {'fieldDetailsArray': fieldDetails, 'clubIdArray':clubIdArray,"systemFields":systemFields} %}
+        {% include 'ClubadminContactBundle:Fields:fedclub.html.twig' %}
+        {% include 'ClubadminContactBundle:Fields:newContactField.html.twig' with {'memberships': memberships,'clubIdArray':clubIdArray,'bookedModules':bookedModules} %}           
+        {% include 'ClubadminContactBundle:Fields:addNewCategory.html.twig' with {'clubIdArray':clubIdArray} %}
+    </div>  
+    {% endblock %}
+    {% block javascripts %}
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js')}}" type="text/javascript"></script>
+    <script>
+        var system_category_address ='{{system_category_address}}';
+        var clubType ='{{clubIdArray.clubType}}';
+        var clubmembershipAval = '{{clubmembershipAval}}';
+        var pathProperty = '{{path("contact_field_properties",{'club_id':clubUrlIdentifier})}}';
+        var pathFederation = '{{path("fed_club_permission",{'club_id':clubUrlIdentifier})}}';
+        var pathProfile = '{{path("contact_profile_popup",{'club_id':clubUrlIdentifier})}}';
+        var clubUrlIdentifier = '{{clubUrlIdentifier}}';
+        var sysLang='{{clubIdArray.sysLang}}';
+        var pathFieldUpdate= '{{path('field_update')}}';
+        var confirmNote = "{%trans%}CONTACT_CONFIRM_DELETE_FIELD{%endtrans%}";
+        var cancelLabel = "{%trans%}CANCEL{%endtrans%}";
+        var saveLabel = '{%trans%}CONFIRM_CONTINUE{%endtrans%}';
+        var textAddTag = '{{ 'CONTACT_ADDTAG'|trans }}'
+        $('.popovers').popover();     
+        
+         /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                    
+                     title: true,
+                     languageSettings: true
+                    
+
+             });
+             
+    </script>                                    
+    <script src="{{ asset('fgcustom/js/page/contact-field.js')}}" type="text/javascript"></script>
+    {% endblock %} 

@@ -1,0 +1,223 @@
+/* -----------------
+Stylesheet for CMS related pages ---- 
+
+* 01 - common styles
+* 888 - include pages
+* 80 - Theme one style scheme styles
+* 999 - mediaqueries
+*/
+
+@import '../global/utilities/variables'; //- added variables and functions
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,100,300,700,500,400italic,300italic,900);
+/* -------------------------------------------------------------------------
+* 01 - common styles
+-----------------------------------------------------------------------------*/
+.modal .fg-label-valign{
+	vertical-align: middle;
+	line-height: 30px;
+}
+.fg-page-title-block-1 {
+	@extend %clearfix;
+	
+	.fg-action-menu-wrapper.fg-has-tab.fg-eq-height & {
+		> .fg-active-IB{
+			vertical-align: bottom;
+			height: 40px;
+		}
+	}
+}
+.page-sidebar .page-sidebar-menu .sub-menu li > a > i.fg-assigned,
+.page-sidebar .page-sidebar-menu li > a > .fg-assigned{
+    font-size: 19px;
+    position: absolute !important;
+    right: 10px;
+    margin-right: 5px;
+    top: 8px;
+}
+.page-sidebar .page-sidebar-menu.side_main_menu > li > ul.firstleval > li > a.fg-no-data-sidebar-sub > i.fg-assigned{
+    margin-right: 5px;	
+}
+
+.fg-files-upload-wrapper{
+	padding: 20px;
+	.fg-files-upload-button-wrapper{
+		margin-bottom: 20px;
+	}
+    .fg-files-uploaded-lists-wrapper{
+		padding: 0;
+        .fg-files-uploaded-list{
+			position: relative;
+			display: block;
+			border: 1px solid #ddd;
+			border-bottom: 0;
+			padding: 10px 20px 10px 15px;
+			&:last-child{
+				border-bottom: 1px solid #ddd;
+			}
+        	.fg-thumb-wrapper{
+				max-width: 170px;
+				margin: auto;
+				padding: 0;
+				.fg-thumb{
+					width: auto;
+					height: auto;
+					max-width: 100%;
+					max-height: 100%;
+				}
+        	}
+        	.control-label{
+        		padding-top:0;
+        	}
+
+			.fg-link-external{
+				font-size: 14px;
+				.fa,span{
+					vertical-align: middle;
+				}
+			}
+			.fg-link-page{
+				background: #f1c40f;
+				color:$clrPrimaryBlack;
+				padding: 1px 3px;
+				.fa,span{
+					vertical-align: middle;
+				}
+			}
+			.fg-add-link{
+				font-size: 14px;
+				.fa,span{
+					vertical-align: middle;
+				}
+			}
+			.fg-delete-icon{
+				font-size: 16px;
+				color: $clrGrey2;
+				cursor: pointer;
+			}
+
+			.closeico{
+				@include position(absolute,7px,10px,auto,auto);
+				
+				.fg-delete-img {
+					position: relative;
+					color: #7A7A7A;
+					left: 6px;
+				}
+			}
+			
+			>.fg-drag{
+				display: none;
+				@include position(absolute,10px,auto,auto,0);
+				cursor: pointer;
+			}
+
+			
+			&:hover{
+
+				>.fg-drag{
+					display: block;
+				}
+
+			}
+
+        }
+    }
+}
+.fg-file-upload-footer {
+	.fg-add-video{
+		font-size: 14px;
+		.fa,span{
+			vertical-align: middle;
+		}
+	}
+}
+
+.fg-cms-page-iframe-wrapper{
+    width: 100%;
+    height: 75%;
+    height: calc(100vh - 270px);
+    position: relative;
+    overflow: auto;
+    z-index: 1;
+	iframe{
+		width: 100%;
+		height: 98%;
+		overflow: hidden;
+		border: 1px solid #ddd;
+	}
+	.fg-iframe-overlay{
+		display: block;
+		background: rgba(204, 204, 204, 0);
+		z-index: 99999;
+		@include position(absolute,0,0,0,0);
+		outline: none;
+	}
+}
+.fg-no-hand-icon .dataTable-dragable td.fghover .fg-sort, 
+.fg-no-hand-icon .fg-sort-drag .fg-sort {
+	cursor: default;
+}
+
+.fg-overview-list{
+	margin:0;
+    dl{
+    	dt,dd{
+
+			display:inline-block;
+			width:35%;
+			line-height:24px;
+			font-size: 14px;
+    	}
+
+    	dt{
+			color:#666;
+			text-align:right;
+			margin-right:30px;
+			font-weight: 300;
+    	}
+    	dd{
+				
+			width:55%;
+			color:#000;
+			vertical-align: top;   
+			@include break-hyphens; 
+    	}
+    	@include bpMax('767px'){
+    		dt,dd{
+    			display: block;
+    			width: 100%;
+    			line-height:normal;
+    			margin-bottom: 0px;
+    			text-align:left;
+    		}
+    		dd{
+    			margin-bottom: 10px;
+    		}
+    	}
+    }
+}
+
+/* -------------------------------------------------------------------------
+* 888 - include pages
+-----------------------------------------------------------------------------*/
+
+@import 'partials/pages/_cms-create-page'; // CMS create page style
+@import 'partials/pages/_cms-modals'; // CMS modal designs
+@import 'partials/pages/_cms-page-design-canvas'; // CMS add or remove element design page
+@import 'partials/pages/_cms-page-contentpreview-heading'; // CMS Element heading edit page
+@import 'partials/pages/_cms-widget-styles'; // CMS widget styles
+@import 'partials/pages/_cms-image-video-edit'; // CMS widget styles
+@import 'partials/pages/_cms-theme-config'; // Theme configuration related css
+@import 'partials/pages/_cms-create-form-element'; // Create form element styles
+@import 'partials/pages/_cms-other-pages'; // minor styles for other pages
+@import 'partials/pages/_cms-plugin-overrides'; // minor styles for other pages
+@import 'partials/pages/_cms-contacts-table'; // minor styles for other pages
+@import 'partials/pages/_website-settings'; // minor styles for other pages
+@import 'partials/pages/_cms-create-portrait-element'; // Portrait element create area
+
+
+
+/* -------------------------------------------------------------------------
+* 80 - Theme one style scheme styles
+-----------------------------------------------------------------------------*/
+@import '../website-frontend/_partials/themes/_theme-01';

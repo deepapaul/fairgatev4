@@ -1,0 +1,53 @@
+Common\UtilityBundle\Entity\FgFileManager:
+    repositoryClass: Common\UtilityBundle\Repository\FgFileManagerRepository
+    type: entity
+    table: fg_file_manager
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        virtualFilename:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: virtual_filename
+        encryptedFilename:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: encrypted_filename
+        isRemoved:
+            type: boolean
+            nullable: true
+            column: is_removed
+        source:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        latestVersion:
+            targetEntity: FgFileManagerVersion
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                latest_version_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

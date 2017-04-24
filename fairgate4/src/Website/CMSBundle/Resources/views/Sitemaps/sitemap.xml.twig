@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {% for url in urls %}
+        <url>
+            <loc>
+                {{ [host, url.navigation_url]|join('/') }}
+            </loc>
+            {% if url.edited_at is defined and url.edited_at is not empty %}
+                <lastmod>{{ url.edited_at|date('Y-m-d') }}</lastmod>
+            {% endif %}
+        </url>
+    {% endfor %}
+</urlset>

@@ -1,0 +1,72 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'OVERVIEW'|trans %}
+{% block pagecontent %}
+ 
+<div class="fg-theme-green">
+    
+    <div class="row">
+     {#{% set page_settings = { 'pagetitle':'true' }  %}
+     {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': 'DASHBOARD_WELCOME'|trans ~", "~contactName, 'page_settings': page_settings } %}    
+       #}</div> 
+     <div id='tooltip' class="tooltip"></div>
+    <div class="row">
+        <div class="col-md-12  fg-right-zero fg-left-zero">     
+            <div class="col-md-6">
+                <div class="portlet box fg-theme-head">
+                    <div class="portlet-title">
+                        <div class="caption"> 
+                            <span class="step-title"> {{'TOTAL_SPACE'|trans}}</span> 
+                        </div>
+                    </div>
+                    <div class="portlet-body fg-dashboard-wrap">
+                        <div class="fg-totalspace-block">
+                                <div id="fg-dev-piechart-totalspace" class="fg-piechart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="portlet box fg-theme-head">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <span class="step-title">{{'SECTIONS'|trans}}</span>
+                        </div>
+                    </div>    
+                    <div class="portlet-body fg-dashboard-wrap">
+                            <div class="fg-sectionoverview-block">  
+                                <div id="fg-dev-pie-chart-section" class="fg-piechart"></div>
+                            </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
+
+{% endblock %} 
+
+{% block javascripts %}
+{#<script src="{{ asset('fgcustom/js/charts/jquery.flot.min.js')}}" type="text/javascript"></script> 
+<script src="{{ asset('fgcustom/js/charts/jquery.flot.pie.min.js')}}" type="text/javascript"></script> 
+<script src="{{ asset('fgcustom/js/fg_custom_charts.js')}}" type="text/javascript"></script>#}
+{#<script type = "text/javascript">    
+    var totalOverviewPath = '{{path('filemanager_totaloverview')}}';
+    var sectionOverviewPath = '{{path('filemanager_sectionoverview')}}';
+        $.getJSON(totalOverviewPath, function(data){
+            var width = $('#fg-dev-piechart-totalspace').outerWidth();
+            var height = $('#fg-dev-piechart-totalspace').outerHeight();
+            var radius = (width>height)?height*45/100:width*45/100;
+            plotGraph.init_pie(data, '#fg-dev-piechart-totalspace', radius, 0);
+        });
+       $.getJSON(sectionOverviewPath, function(data){
+            var width = $('#fg-dev-pie-chart-section').outerWidth();
+            var height = $('#fg-dev-pie-chart-section').outerHeight();
+            var radius = (width>height)?height*45/100:width*45/100;
+            plotGraph.init_pie(data, '#fg-dev-pie-chart-section', radius, 0);
+       });
+      
+ 
+</script>#}
+    
+{% endblock %}       
+

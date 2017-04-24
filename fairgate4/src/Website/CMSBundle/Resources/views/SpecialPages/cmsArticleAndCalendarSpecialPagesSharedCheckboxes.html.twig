@@ -1,0 +1,28 @@
+{% if (clubType != 'federation' and clubType != 'standard_club') %}
+    <div class="form-group fg-clear">
+        <div class="col-md-6 col-sm-8 col-lg-6 col-md-offset-3">
+            <label class="checkbox-inline fg-pad-left-0 " for="fedShared">
+                <input data-id="" {%if fedLowerLevelCount is defined and fedLowerLevelCount == 0 %} disabled {% endif %} type="checkbox" name="fedShared" id="fedShared" class="uniform">
+                {% if pageType == 'article' %} 
+                    {{'CMS_FEDERATION_SHARED_ARTICLES'|trans}} 
+                    {% else %}
+                        {{'CMS_FEDERATION_SHARED_EVENTS'|trans}} 
+                    {% endif %}    
+            </label>
+        </div>
+    </div>
+{% endif %}
+{% if (clubType == 'sub_federation_club') %}
+    <div class="form-group fg-clear">
+        <div class="col-md-6 col-sm-8 col-lg-6 col-md-offset-3">
+            <label class="checkbox-inline fg-pad-left-0 " for="subFedShared">
+                <input data-id="" {%if subFedLowerLevelCount is defined and subFedLowerLevelCount == 0 %} disabled {% endif %} type="checkbox" name="subFedShared" id="subFedShared" class="uniform">
+                {% if pageType == 'article' %} 
+                    {{'CMS_SUB_FEDERATION_SHARED_ARTICLES'|trans}}
+                    {% else %}
+                        {{'CMS_SUB_FEDERATION_SHARED_EVENTS'|trans}}
+                    {% endif %} 
+            </label>
+        </div>
+    </div>
+{% endif %}

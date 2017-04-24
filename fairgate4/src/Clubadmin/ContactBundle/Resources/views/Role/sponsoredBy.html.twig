@@ -1,0 +1,23 @@
+
+<script type="text/template" id="teamSponsoredBy">
+    <% if(!_.isEmpty(details)) {  %>
+            <% _.each(details,function(value,key){ %>
+                <div class="form-group fg-overview-list fg-team-sponsoredby">
+                        <dl> 
+                                <% if(!_.isEmpty(value.endDate)) {  %>
+                                        <dt><%- value.startDate %> - <%- value.endDate %></dt>
+                                <% } else { %>
+                                        <dt>{{ 'CONTACT>{{_OVERVIEW_SETTINGS_SPONSORED_SINCE'|trans }} <%- value.startDate %></dt>
+                                <% } %>
+                                <dd>
+                                    <a href="<%- contactpath.replace('dummyContactId', value.sponsorId).replace('dummyOffset',key) %>" target="_blank" ><%- value.sponsorName %></a>
+                                    <span class="fg-ovr-service-name"><%- value.serviceName %></span> 
+                                </dd>
+                        </dl>
+                </div>
+    <% 	}); %>
+ <% } else { %>
+ {{'SM_TEAM_NO_SPONSOR'|trans({'%team%': fgtwig.getTerminolgyName('Team', singular)}) }}
+ <% } %>
+  
+</script>

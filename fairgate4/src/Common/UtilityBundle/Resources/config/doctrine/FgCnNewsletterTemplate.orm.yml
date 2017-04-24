@@ -1,0 +1,125 @@
+Common\UtilityBundle\Entity\FgCnNewsletterTemplate:
+    repositoryClass: Common\UtilityBundle\Repository\FgCnNewsletterTemplateRepository
+    type: entity
+    table: fg_cn_newsletter_template
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        headerImage:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: header_image
+        articleDisplay:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: article_display
+        senderName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: sender_name
+        senderEmail:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: sender_email
+        salutationType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: salutation_type
+        salutation:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        languageSelection:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: language_selection
+        colorBg:
+            type: string
+            length: 10
+            fixed: false
+            nullable: true
+            column: color_bg
+        colorTocBg:
+            type: string
+            length: 10
+            fixed: false
+            nullable: true
+            column: color_toc_bg
+        colorStdText:
+            type: string
+            length: 10
+            fixed: false
+            nullable: true
+            column: color_std_text
+        colorTocText:
+            type: string
+            length: 10
+            fixed: false
+            nullable: true
+            column: color_toc_text
+        colorTitleText:
+            type: string
+            length: 10
+            fixed: false
+            nullable: true
+            column: color_title_text
+        lastUpdated:
+            type: datetime
+            nullable: true
+            column: last_updated
+        createdOn:
+            type: datetime
+            nullable: false
+            column: created_on
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        editedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                edited_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

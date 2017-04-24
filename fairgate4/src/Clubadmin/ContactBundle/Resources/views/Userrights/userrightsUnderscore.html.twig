@@ -1,0 +1,337 @@
+<script type="text/template" id="fg-dev-user-rights-us-list">
+
+    <%
+        clubAdmin = _(content).filter(function (x) { return (x['type']=='club' && x['module_type']=='all');});
+        fedAdmin = _(content).filter(function (x) { return (x['type']=='federation' && x['module_type']=='all');});
+        moduleAdmins = _(content).filter(function (x) { return (x['is_security_admin']=='1' && x['module_type']!='all');});
+        readonlyAdmins = _(content).filter(function (x) { return (x['is_readonly_admin']=='1' && x['module_type']!='all');});
+        allAdmins = _(allGroups).filter(function (x) { return (x['type']=='club' && x['module_type']!='all');});
+
+        allUserGroups=FgUtility.groupByMulti(allUserGroups, ['contact_id']);
+        
+    %>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row" data-auto="fg-clubadmin-section">
+                <div class="col-md-12 fg-common-top"><div class="panel-heading fg-theme-head"><h3 class="fg-panel-title">{{'USER_RIGHTS_CLUB_ADMINISTRATOR'|trans ({'%Club%' : fgtwig.getTerminolgyName('Club',singular,'UCF')})}}</h3></div> </div>
+                <div class="col-md-12 fg-user-div fg-common-top fg-dev-user-rights-elements">
+                    <% if(clubAdmin.length!=0) { %>          
+                        <% _.each(clubAdmin,function(contentVal,contentKey){ %>
+                            <div class="row fg-border-line sortables" id="fg-clrChangeBlk_<%- contentVal.group_id %>_<%- contentVal.user_id %>" >
+                                <div class="col-md-9 col-sm-9 col-xs-8">
+                                    <% var overviewLink = overviewPath.replace("dummyContactId", contentVal.contact_id); %>
+                                    <a target="_blank" href="<%- overviewLink %>"><%- contentVal.contactName %></a>
+                                </div>
+                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                    <span class="fg-date-text">{{'USER_RIGHTS_PAGE_SINCE_DATE'|trans }} <%- contentVal.createdAt %></span>
+                                </div>
+                                <div class="fg-last-icon">
+
+                                    <% if(contentVal.contact_id != loggedContactId) { %>
+                                        <div class="closeico">
+                                            <input type="checkbox" class="make-switch" id="group_<%- contentVal.group_id %>_<%- contentVal.user_id %>_is_deleted" data-key="delete.clubAdmin.user.<%- contentVal.user_id %>" name="group_<%- contentVal.group_id %>_user_<%- contentVal.user_id %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- contentVal.group_id %>_<%- contentVal.user_id %>">
+                                            <label for="group_<%- contentVal.group_id %>_<%- contentVal.user_id %>_is_deleted"></label>
+                                        </div>
+                                    <% } else { %>
+                                        <i class="fa fa-lock fa-2x ash"></i>
+                                    <% } %>
+                                </div>
+                            </div>
+                        <% }); %>
+                    <% } %>
+                </div>
+                <div class="fg-clear"></div>
+                <div class="col-lg-12 fg-common-top"><a class="fg-dev-add-club-admin" data-toggle="modal" href="#basic" id="fg-add-club-admin"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text">{{'USER_RIGHTS_ADD_LINK'|trans ({'%Team%' : fgtwig.getTerminolgyName('Club',singular,'LCF')})}} </span></a></div> 
+            </div>  
+            <% if(clubType == 'federation' && c5 == 1){  %>
+            <div class="clearfix"></div>
+                <div class="row" data-auto="fg-fedadmin-section">
+                    <div class="col-md-12 fg-common-top"><div class="panel-heading fg-theme-head"><h3 class="fg-panel-title">{{'USER_RIGHTS_FED_ADMINISTRATOR'|trans }}</h3></div> </div>
+                    <div class="col-md-12 fg-user-div fg-common-top fg-dev-user-rights-fed-elements">
+                        <% if(fedAdmin.length!=0) { %>          
+                            <% _.each(fedAdmin,function(contentVal,contentKey){ %>
+                                <div class="row fg-border-line sortables" id="fg-clrChangeBlk_<%- contentVal.group_id %>_<%- contentVal.user_id %>" >
+                                    <div class="col-md-9 col-sm-9 col-xs-8">
+                                        <% var overviewLink = overviewPath.replace("dummyContactId", contentVal.contact_id); %>
+                                        <a target="_blank" href="<%- overviewLink %>"><%- contentVal.contactName %></a>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                        <span class="fg-date-text">{{'USER_RIGHTS_PAGE_SINCE_DATE'|trans }} <%- contentVal.createdAt %></span>
+                                    </div>
+                                    <div class="fg-last-icon">
+
+                                        <% if(contentVal.contact_id != loggedContactId) { %>
+                                            <div class="closeico">
+                                                <input type="checkbox" class="make-switch" id="group_<%- contentVal.group_id %>_<%- contentVal.user_id %>_is_deleted" data-key="delete.fedAdmin.user.<%- contentVal.user_id %>" name="group_<%- contentVal.group_id %>_user_<%- contentVal.user_id %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- contentVal.group_id %>_<%- contentVal.user_id %>">
+                                                <label for="group_<%- contentVal.group_id %>_<%- contentVal.user_id %>_is_deleted"></label>
+                                            </div>
+                                        <% } else { %>
+                                            <i class="fa fa-lock fa-2x ash"></i>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        <% } %>
+                    </div>
+                    <div class="fg-clear"></div>
+                    <div class="col-lg-12 fg-common-top"><a class="fg-dev-add-fed-admin" data-toggle="modal" href="#basic" id="fg-add-fed-admin"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text">{{'USER_RIGHTS_ADD_LINK'|trans ({'%Team%' : fgtwig.getTerminolgyName('Federation',singular,'LCF')})}} </span></a></div> 
+            </div>
+        <% } %>
+        </div>
+
+        <div class="col-md-6 col-sm-12 col-xs-12">
+            <div class="row" data-auto="fg-admin-section">
+                <div class="col-md-12 fg-common-top"><div class="panel-heading fg-theme-head"><h3 class="fg-panel-title">{{'USER_RIGHTS_ADMINISTRATION_SECTION'|trans}}</h3></div></div>
+                <div class="col-md-12 fg-user-div fg-common-top fg-dev-user-rights-admin-elements">
+                    <% if(moduleAdmins.length!=0) { %>     
+                        <% var selUser = []; %>
+                        <% _.each(moduleAdmins,function(groupDetailsVal,groupDetailsKey){ %>
+                            <% if ($.inArray(groupDetailsVal['user_id'], selUser) == -1) { 
+                                selUser.push(groupDetailsVal['user_id']); %>
+                                <div class="row fg-border-line sortables" id="fg-other-admin-clrChangeBlk_<%- groupDetailsVal['group_id'] %>_<%- groupDetailsVal['user_id'] %>" >
+                                    <div class="col-md-5 col-sm-12 col-xs-12">
+                                        <% var overviewLink = overviewPath.replace("dummyContactId", groupDetailsVal.contact_id); %>
+                                        <a target="_blank" href="<%- overviewLink %>"><%- groupDetailsVal['contactName'] %></a>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12 col-xs-12">
+                                        <div class="fg-adminstration-wrap">
+                                            <div class="fg-adminstration-area"><i class="fa fa-plus-square-o"></i><i class="fa fa-minus-square-o"></i></div>
+                                            <div class="fg-adminstration-area-icons">
+
+                                                <% _.each(allAdmins,function(allAdminsVal,allAdminsKey){ 
+                                                    if(allAdminsVal['module_type'] != 'contact' && allAdminsVal['is_readonly'] != 1) { 
+                                                        if(typeof(bookedModuleDetails) != "undefined" && bookedModuleDetails !== null) { 
+                                                            if(bookedModuleDetails.hasOwnProperty(allAdminsVal['module_type'])) { 
+                                                                if(allUserGroups.hasOwnProperty(groupDetailsVal['contact_id'])) {
+                                                                    allUserGroupsByContact=allUserGroups[groupDetailsVal['contact_id']];
+                                                                    allUserGroupsByContact=FgUtility.groupByMulti(allUserGroupsByContact, ['group_id']);
+                                                                    if(allUserGroupsByContact.hasOwnProperty(allAdminsVal['group_id'])) {
+                                                                        if(groupDetailsVal['contact_id']==allUserGroupsByContact[allAdminsVal['group_id']][0]['contact_id']) { %>
+                                                                            <a href="#"><i class="fa fg-fa-<%- allAdminsVal['module_type'] %>"></i></a>
+                                                                        <% } else { %>
+                                                                            <a href="#"><i class="fa fg-fa-<%- allAdminsVal['module_type'] %> red"></i></a>
+                                                                        <% } %>
+                                                                    <% } else { %>
+                                                                        <a href="#"><i class="fa fg-fa-<%- allAdminsVal['module_type'] %> red"></i></a>
+                                                                    <% } 
+                                                                } else { %>
+                                                                    <a href="#"><i class="fa fg-fa-<%- allAdminsVal['module_type'] %> red"></i></a>
+                                                                <% } 
+                                                            } 
+                                                        } %>
+                                                    <% } else if(allAdminsVal['module_type'] == 'contact' && allAdminsVal['is_readonly'] != 1) {
+                                                        if(allUserGroups.hasOwnProperty(groupDetailsVal['contact_id'])) {
+                                                            allUserGroupsByContact=allUserGroups[groupDetailsVal['contact_id']];
+                                                            allUserGroupsByContact=FgUtility.groupByMulti(allUserGroupsByContact, ['group_id']);
+                                                            if(allUserGroupsByContact.hasOwnProperty(allAdminsVal['group_id'])) {
+                                                                if(groupDetailsVal['contact_id']==allUserGroupsByContact[allAdminsVal['group_id']][0]['contact_id']) { %>
+                                                                    <a href="#"><i class="fa fg-fa-<%- allAdminsVal['module_type'] %>"></i></a>
+                                                                <% } else { %>
+                                                                    <a href="#"><i class="fa fg-fa-<%- allAdminsVal['module_type'] %> red"></i></a>
+                                                                <% } %>
+                                                            <% } else { %>
+                                                                <a href="#"><i class="fa fg-fa-<%- allAdminsVal['module_type'] %> red"></i></a>
+                                                            <% }
+                                                        } else { %>
+                                                            <a href="#"><i class="fa fg-fa-<%- allAdminsVal['module_type'] %> red"></i></a>
+                                                        <% }
+                                                    }
+                                                }); %>
+                                            </div>
+                                        </div>                    
+                                    </div>
+                                    <% if(groupDetailsVal.contact_id != loggedContactId) { %>
+                                        <div class="fg-last-icon">
+                                            <div class="closeico">
+                                                <input type="checkbox" class="make-switch fg-dev-ur-admin-close" id="administrator_admin_group_<%- groupDetailsVal.group_id %>_<%- groupDetailsVal.contact_id %>_is_deleted" data-key="delete_all.administrator.admin.contact.<%- groupDetailsVal.contact_id %>.user.<%- groupDetailsVal.user_id %>" name="administrator_admin_group_<%- groupDetailsVal.group_id %>_user_<%- groupDetailsVal.user_id %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-other-admin-clrChangeBlk_<%- groupDetailsVal.group_id %>_<%- groupDetailsVal.user_id %>">
+                                                <label for="administrator_admin_group_<%- groupDetailsVal.group_id %>_<%- groupDetailsVal.contact_id %>_is_deleted"></label>
+                                            </div>
+                                        </div>
+                                    <% } else { %>
+                                        <div class="fg-last-icon">
+                                            <i class="fa fa-lock fa-2x ash"></i>
+                                        </div>
+                                    <% } %>
+                                    <div class="fg-adminstration-area-open fg-dev-chk-area "> <div class="clearfix"></div>
+                                        <ul>
+                                            <% _.each(allAdmins,function(allAdminsVal,allAdminsKey){
+                                                if(allAdminsVal['module_type'] != 'contact' && allAdminsVal['is_readonly'] != 1) {
+                                                    if(typeof(bookedModuleDetails) != "undefined" && bookedModuleDetails !== null) {
+                                                        if(bookedModuleDetails.hasOwnProperty(allAdminsVal['module_type'])) {
+                                                            if(allUserGroups.hasOwnProperty(groupDetailsVal['contact_id'])) {
+                                                                allUserGroupsByContact=allUserGroups[groupDetailsVal['contact_id']];
+                                                                allUserGroupsByContact=FgUtility.groupByMulti(allUserGroupsByContact, ['group_id']);
+                                                                if(allUserGroupsByContact.hasOwnProperty(allAdminsVal['group_id'])) { 
+                                                                    if(groupDetailsVal['contact_id']==allUserGroupsByContact[allAdminsVal['group_id']][0]['contact_id']) { %>
+                                                                        <li><input type="checkbox" data-key="delete.admin.group.<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['group_id'] %>.user.<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['user_id'] %>" id="admin_delete_group_<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['group_id'] %>_user_<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['user_id'] %>" name="admin_delete_group_<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['group_id'] %>_user_<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['user_id'] %>" checked <% if(loggedContactId == allUserGroupsByContact[allAdminsVal['group_id']][0]['contact_id']) { %> disabled <% } %>  /> <%- transAdministration[allAdminsVal['module_type']] %></li>
+                                                                    <% } else { %>
+                                                                        <li><input type="checkbox"  data-key="new.admin.contact.<%- groupDetailsVal['contact_id'] %>.group.<%- allAdminsVal.group_id %>" id="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" name="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" /><%- transAdministration[allAdminsVal['module_type']] %></li>
+                                                                    <% }
+                                                                } else { %>
+                                                                    <li><input type="checkbox"  data-key="new.admin.contact.<%- groupDetailsVal['contact_id'] %>.group.<%- allAdminsVal.group_id %>" id="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" name="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" /><%- transAdministration[allAdminsVal['module_type']] %></li>
+                                                                <% }
+                                                            } else { %>
+                                                                <li><input type="checkbox"  data-key="new.admin.contact.<%- groupDetailsVal['contact_id'] %>.group.<%- allAdminsVal.group_id %>" id="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" name="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" /><%- transAdministration[allAdminsVal['module_type']] %></li>
+                                                            <% }
+                                                        }
+                                                    }
+                                                } else if(allAdminsVal['module_type'] == 'contact' && allAdminsVal['is_readonly'] != 1) {
+                                                    if(allUserGroups.hasOwnProperty(groupDetailsVal['contact_id'])) {
+                                                        allUserGroupsByContact=allUserGroups[groupDetailsVal['contact_id']];
+                                                        allUserGroupsByContact=FgUtility.groupByMulti(allUserGroupsByContact, ['group_id']);
+                                                        if(allUserGroupsByContact.hasOwnProperty(allAdminsVal['group_id'])) { 
+                                                            if(groupDetailsVal['contact_id']==allUserGroupsByContact[allAdminsVal['group_id']][0]['contact_id']) { %>
+                                                                <li><input type="checkbox" data-key="delete.admin.group.<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['group_id'] %>.user.<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['user_id'] %>" id="delete_admin_group_<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['group_id'] %>_user_<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['user_id'] %>" name="delete_admin_group_<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['group_id'] %>_user_<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['user_id'] %>" checked <% if(loggedContactId == allUserGroupsByContact[allAdminsVal['group_id']][0]['contact_id']) { %> disabled <% } %>  /> <%- transAdministration[allAdminsVal['module_type']] %></li>
+                                                            <% } else { %>
+                                                                <li><input type="checkbox"  data-key="new.admin.contact.<%- groupDetailsVal['contact_id'] %>.group.<%- allAdminsVal.group_id %>" id="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" name="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" /><%- transAdministration[allAdminsVal['module_type']] %></li>
+                                                            <% } %>
+                                                        <% } else { %>
+                                                            <li><input type="checkbox"  data-key="new.admin.contact.<%- groupDetailsVal['contact_id'] %>.group.<%- allAdminsVal.group_id %>" id="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" name="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" /><%- transAdministration[allAdminsVal['module_type']] %></li>
+                                                        <% }
+                                                    } else { %>
+                                                        <li><input type="checkbox"  data-key="new.admin.contact.<%- groupDetailsVal['contact_id'] %>.group.<%- allAdminsVal.group_id %>" id="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" name="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" /><%- transAdministration[allAdminsVal['module_type']] %></li>
+                                                    <% }
+                                                }
+                                            }); %>
+                                        </ul>
+                                    </div>
+                                </div>
+                            <% } %>
+                        <% }); %>
+                        
+                    <% } %>
+                </div>
+                <div class="fg-clear"></div>
+                <div class="col-lg-12 fg-common-top"><a class="fg-dev-add-other-admins" data-toggle="modal" href="#basic" id="fg-add-admin-section"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text">{{'USER_RIGHTS_ADMINISTRATOR_ADD_LINK'|trans}} </span></a></div> 
+            </div>  
+    
+            
+            <div class="row" data-auto="fg-readonly-section">
+                <div class="col-md-12 fg-common-top"><div class="panel-heading fg-theme-head"><h3 class="fg-panel-title">{{'USER_RIGHTS_READONLY_SECTION'|trans}}</h3></div></div>
+                <div class="col-md-12 fg-user-div fg-common-top fg-dev-user-rights-readonly-admin-elements">
+                    <% if(readonlyAdmins.length!=0) { %>     
+                        <% var selUser = []; %>
+                        <% _.each(readonlyAdmins,function(groupDetailsVal,groupDetailsKey){ %>
+                            <% if ($.inArray(groupDetailsVal['user_id'], selUser) == -1) { 
+                                selUser.push(groupDetailsVal['user_id']); %>
+                                <div class="row fg-border-line sortables" id="fg-readonly-admin-clrChangeBlk_<%- groupDetailsVal['group_id'] %>_<%- groupDetailsVal['user_id'] %>" >
+                                    <div class="col-md-5 col-sm-12 col-xs-12">
+                                        <% var overviewLink = overviewPath.replace("dummyContactId", groupDetailsVal.contact_id); %>
+                                        <a target="_blank" href="<%- overviewLink %>"><%- groupDetailsVal['contactName'] %></a>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12 col-xs-12">
+                                        <div class="fg-adminstration-wrap">
+                                            <div class="fg-adminstration-area"><i class="fa fa-plus-square-o"></i><i class="fa fa-minus-square-o"></i></div>
+                                            <div class="fg-adminstration-area-icons">
+
+                                                <% _.each(allAdmins,function(allAdminsVal,allAdminsKey){ 
+                                                    if(allAdminsVal['module_type'] != 'contact' && allAdminsVal['is_readonly'] == 1) { 
+                                                        if(typeof(bookedModuleDetails) != "undefined" && bookedModuleDetails !== null) { 
+                                                            if(bookedModuleDetails.hasOwnProperty(allAdminsVal['module_type'])) { 
+                                                                if(allUserGroups.hasOwnProperty(groupDetailsVal['contact_id'])) {
+                                                                    allUserGroupsByContact=allUserGroups[groupDetailsVal['contact_id']];
+                                                                    allUserGroupsByContact=FgUtility.groupByMulti(allUserGroupsByContact, ['group_id']);
+                                                                    if(allUserGroupsByContact.hasOwnProperty(allAdminsVal['group_id'])) {
+                                                                        if(groupDetailsVal['contact_id']==allUserGroupsByContact[allAdminsVal['group_id']][0]['contact_id']) { %>
+                                                                            <a href="#"><i class="fa fg-fa-<%- allAdminsVal['module_type'] %>"></i></a>
+                                                                        <% } else { %>
+                                                                            <a href="#"><i class="fa fg-fa-<%- allAdminsVal['module_type'] %> red"></i></a>
+                                                                        <% } %>
+                                                                    <% } else { %>
+                                                                        <a href="#"><i class="fa fg-fa-<%- allAdminsVal['module_type'] %> red"></i></a>
+                                                                    <% } 
+                                                                } else { %>
+                                                                    <a href="#"><i class="fa fg-fa-<%- allAdminsVal['module_type'] %> red"></i></a>
+                                                                <% } 
+                                                            } 
+                                                        } %>
+                                                    <% }  else if(allAdminsVal['module_type'] == 'contact' && allAdminsVal['is_readonly'] == 1) {
+                                                        if(allUserGroups.hasOwnProperty(groupDetailsVal['contact_id'])) {
+                                                            allUserGroupsByContact=allUserGroups[groupDetailsVal['contact_id']];
+                                                            allUserGroupsByContact=FgUtility.groupByMulti(allUserGroupsByContact, ['group_id']);
+                                                            if(allUserGroupsByContact.hasOwnProperty(allAdminsVal['group_id'])) {
+                                                                if(groupDetailsVal['contact_id']==allUserGroupsByContact[allAdminsVal['group_id']][0]['contact_id']) { %>
+                                                                    <a href="#"><i class="fa fg-fa-<%- allAdminsVal['module_type'] %>"></i></a>
+                                                                <% } else { %>
+                                                                    <a href="#"><i class="fa fg-fa-<%- allAdminsVal['module_type'] %> red"></i></a>
+                                                                <% } %>
+                                                            <% } else { %>
+                                                                <a href="#"><i class="fa fg-fa-<%- allAdminsVal['module_type'] %> red"></i></a>
+                                                            <% }
+                                                        } else { %>
+                                                            <a href="#"><i class="fa fg-fa-<%- allAdminsVal['module_type'] %> red"></i></a>
+                                                        <% }
+                                                    }
+                                                }); %>
+                                            </div>
+                                        </div>                    
+                                    </div>
+                                    <% if(groupDetailsVal.contact_id != loggedContactId) { %>
+                                        <div class="fg-last-icon">
+                                            <div class="closeico">
+                                                <input type="checkbox" class="make-switch fg-dev-ur-admin-close" id="readonly_admin_group_<%- groupDetailsVal.group_id %>_<%- groupDetailsVal.contact_id %>_is_deleted" data-key="delete_all.readonly.admin.contact.<%- groupDetailsVal.contact_id %>.user.<%- groupDetailsVal.user_id %>" name="readonly_admin_group_<%- groupDetailsVal.group_id %>_user_<%- groupDetailsVal.user_id %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-readonly-admin-clrChangeBlk_<%- groupDetailsVal.group_id %>_<%- groupDetailsVal.user_id %>">
+                                                <label for="readonly_admin_group_<%- groupDetailsVal.group_id %>_<%- groupDetailsVal.contact_id %>_is_deleted"></label>
+                                            </div>
+                                        </div>
+                                    <% } else { %>
+                                        <div class="fg-last-icon">
+                                            <i class="fa fa-lock fa-2x ash"></i>
+                                        </div>
+                                    <% } %>
+                                <div class="clearfix"></div>
+                                    <div class="fg-adminstration-area-open fg-dev-chk-area "> <div class="clearfix"></div>
+                                        <ul>
+                                            <% _.each(allAdmins,function(allAdminsVal,allAdminsKey){
+                                                if(allAdminsVal['module_type'] != 'contact' && allAdminsVal['is_readonly'] == 1) {
+                                                    if(typeof(bookedModuleDetails) != "undefined" && bookedModuleDetails !== null) {
+                                                        if(bookedModuleDetails.hasOwnProperty(allAdminsVal['module_type'])) {
+                                                            if(allUserGroups.hasOwnProperty(groupDetailsVal['contact_id'])) {
+                                                                allUserGroupsByContact=allUserGroups[groupDetailsVal['contact_id']];
+                                                                allUserGroupsByContact=FgUtility.groupByMulti(allUserGroupsByContact, ['group_id']);
+                                                                if(allUserGroupsByContact.hasOwnProperty(allAdminsVal['group_id'])) { 
+                                                                    if(groupDetailsVal['contact_id']==allUserGroupsByContact[allAdminsVal['group_id']][0]['contact_id']) { %>
+                                                                        <li><input type="checkbox" data-key="delete.admin.group.<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['group_id'] %>.user.<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['user_id'] %>" id="admin_delete_group_<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['group_id'] %>_user_<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['user_id'] %>" name="admin_delete_group_<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['group_id'] %>_user_<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['user_id'] %>" checked <% if(loggedContactId == allUserGroupsByContact[allAdminsVal['group_id']][0]['contact_id']) { %> disabled <% } %>  /> <%- transAdministration[allAdminsVal['module_type']] %></li>
+                                                                    <% } else { %>
+                                                                        <li><input type="checkbox"  data-key="new.admin.contact.<%- groupDetailsVal['contact_id'] %>.group.<%- allAdminsVal.group_id %>" id="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" name="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" /><%- transAdministration[allAdminsVal['module_type']] %></li>
+                                                                    <% }
+                                                                } else { %>
+                                                                    <li><input type="checkbox"  data-key="new.admin.contact.<%- groupDetailsVal['contact_id'] %>.group.<%- allAdminsVal.group_id %>" id="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" name="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" /><%- transAdministration[allAdminsVal['module_type']] %></li>
+                                                                <% }
+                                                            } else { %>
+                                                                <li><input type="checkbox"  data-key="new.admin.contact.<%- groupDetailsVal['contact_id'] %>.group.<%- allAdminsVal.group_id %>" id="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" name="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" /><%- transAdministration[allAdminsVal['module_type']] %></li>
+                                                            <% }
+                                                        }
+                                                    }
+                                                } else if(allAdminsVal['module_type'] == 'contact' && allAdminsVal['is_readonly'] == 1) {
+                                                    if(allUserGroups.hasOwnProperty(groupDetailsVal['contact_id'])) {
+                                                        allUserGroupsByContact=allUserGroups[groupDetailsVal['contact_id']];
+                                                        allUserGroupsByContact=FgUtility.groupByMulti(allUserGroupsByContact, ['group_id']);
+                                                        if(allUserGroupsByContact.hasOwnProperty(allAdminsVal['group_id'])) { 
+                                                            if(groupDetailsVal['contact_id']==allUserGroupsByContact[allAdminsVal['group_id']][0]['contact_id']) { %>
+                                                                <li><input type="checkbox" data-key="delete.admin.group.<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['group_id'] %>.user.<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['user_id'] %>" id="delete_admin_group_<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['group_id'] %>_user_<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['user_id'] %>" name="delete_admin_group_<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['group_id'] %>_user_<%- allUserGroupsByContact[allAdminsVal['group_id']][0]['user_id'] %>" checked <% if(loggedContactId == allUserGroupsByContact[allAdminsVal['group_id']][0]['contact_id']) { %> disabled <% } %>  /> <%- transAdministration[allAdminsVal['module_type']] %></li>
+                                                            <% } else { %>
+                                                                <li><input type="checkbox"  data-key="new.admin.contact.<%- groupDetailsVal['contact_id'] %>.group.<%- allAdminsVal.group_id %>" id="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" name="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" /><%- transAdministration[allAdminsVal['module_type']] %></li>
+                                                            <% } %>
+                                                        <% } else { %>
+                                                            <li><input type="checkbox"  data-key="new.admin.contact.<%- groupDetailsVal['contact_id'] %>.group.<%- allAdminsVal.group_id %>" id="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" name="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" /><%- transAdministration[allAdminsVal['module_type']] %></li>
+                                                        <% }
+                                                    } else { %>
+                                                        <li><input type="checkbox"  data-key="new.admin.contact.<%- groupDetailsVal['contact_id'] %>.group.<%- allAdminsVal.group_id %>" id="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" name="new_admin_group_<%- allAdminsVal.group_id %>_contact_<%- groupDetailsVal['contact_id'] %>" /><%- transAdministration[allAdminsVal['module_type']] %></li>
+                                                    <% }
+                                                }
+                                            }); %>
+                                        </ul>
+                                    </div>
+                                </div>
+                            <% } %>
+                        <% }); %>
+                        
+                    <% } %>
+                </div>
+                <div class="fg-clear"></div>
+                <div class="col-lg-12 fg-common-top"><a class="fg-dev-add-readonly-admins" data-toggle="modal" href="#basic" id="fg-add-readonly"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text">{{'USER_RIGHTS_READONLY_ADD_LINK'|trans}} </span></a></div> 
+            </div>
+        </div>
+        
+    </div>
+</script>

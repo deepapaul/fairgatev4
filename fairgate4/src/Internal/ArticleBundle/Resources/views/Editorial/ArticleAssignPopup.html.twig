@@ -1,0 +1,133 @@
+<div class="modal-content">
+      <div class="modal-header fg-modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        {% if articleCount > 1 %}
+            <h4 class="modal-title">
+                <span class="fg-dev-event-names">
+                    <a href="#" class="fg-plus-icon"></a>
+                    <a href="#" class="fg-minus-icon"></a>
+                </span>
+                <div class="fg-popup-text" id="popup_head_text">{{title}}</div>
+                <div class="fg-arrow-sh">
+                    <ul>
+                        {% for key, value in articleArray %}
+                            <li>
+                                <a data-event-id="{{value.id}}" href="{{path('internal_article_editorial_details',{'articleId':value.id})}}" target="_blank" class="fg-event-detail-popup-link">{{value.title}}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </h4>
+        {% else %}
+            <h4 class="modal-title">{{title}}</h4>
+        {% endif %}
+
+    </div>
+
+    <div class="portlet-body form">
+        <!-- BEGIN FORM-->
+        <div class="form-body">     
+            <div class="alert alert-info" style="margin-top: 0px;">
+                <p>{{'ARTICLE_ASSIGN_MESSAGE'|trans}}</p>
+            </div>
+
+            <div class="form-group fg-clear">
+                <label class="control-label text-right fg-label-valign col-lg-3 col-md-3">{{'ARTICLE_AREAS'|trans}}</label>
+                <div class="col-lg-9 col-md-8">
+                    <select class="form-control selectpicker" required multiple="multiple" name='articleArea' id='articleArea'> 
+                        {% if areaCat.clubTerminology is not null and isAdmin %}
+                            <option value="Club">{{ areaCat.clubTerminology }}</option>
+                        {% endif %}
+                        {% if areaCat.assignedTeams is not empty %}
+                            <optgroup label="{{fgtwig.getTerminolgyName('Team',plural)}}">
+                                {% for key, data in areaCat.assignedTeams %}
+                                    <option value="{{ key }}"  >{{ data }}</option>
+                                {% endfor %}
+                            </optgroup>
+                        {% endif %}
+                        {% if areaCat.assignedWorkgroups is not empty %}
+                            <optgroup label="{% trans %}WORKGROUP{% endtrans %}">
+                                {% for key, data in areaCat.assignedWorkgroups %}
+                                    <option value="{{ key }}"  >{{ data }}</option>
+                                {% endfor %}
+                            </optgroup>
+                        {% endif %}
+
+                    </select>     
+                </div>
+            </div>
+            <div class="form-group fg-clear">
+                <label class="control-label text-right fg-label-valign col-lg-3 col-md-3">{{'ARTICLE_CATEGORIES'|trans}}</label>
+                <div class="col-lg-9 col-md-8">
+
+
+                    <select name="articleCategory" id="articleCategory" class="form-control selectpicker" required multiple="multiple" data-key="article.settings.categories">
+
+                        {% for data in areaCat.category %}
+                            <option value="{{ data.id }}"  >{{ data.title }}</option>
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+            </div>                                                
+        </div>
+        <!-- END FORM-->
+    </div>        
+
+    {% set button_val = (button_val is not defined) ? 'SAVE'|trans : button_val%}
+    {% include 'internal/savebuttonPopup.html.twig' with { 'button_val' : button_val } %}
+</div>
+<script type="text/javascript">
+
+    var checkedIds = '{{ checkedIds|raw }}';
+    var params = {{params|json_encode()|raw}};
+    var selected = '{{selected}}';
+    
+    $(document).off('click', '#savePopup');
+    $(document).on('click', '#savePopup', function () {
+        var articleCategory = $('[name=articleCategory]').val();
+        var articleArea = $('[name=articleArea]').val();
+        FgModelbox.hidePopup();
+        FgXmlHttp.post("{{ path('internal_article_editorial_assign_area_category') }}", {'areas': articleArea, 'categories': articleCategory, checkedIds: checkedIds, 'noParentLoad': '1'}, false, articleAssigncallback);
+
+    });
+    function articleAssigncallback(data) {
+        listTable.ajax.reload();
+        FgArticleSidebar.generateSidebar();       
+    }
+    $('#savePopup').attr('disabled', true);
+    $('select.selectpicker').selectpicker({noneSelectedText: '{{'SELECT_DEFAULT'|trans}}'});
+
+    $('#articleArea, #articleCategory').change(function () {
+        handleSubmitBtn();
+    });
+    if (selected !== '') {
+        if (params.type === 'CAT') {
+            $('#articleCategory').val(params.selectedId);
+            $('.selectpicker').selectpicker('render');
+        } else if (params.type === 'AREAS') {
+            $('#articleArea').val(params.selectedId);
+            $('.selectpicker').selectpicker('render');
+        }
+        if(params.selectedId === 'CLUB'){
+            $('#articleArea').val('Club');
+            $('.selectpicker').selectpicker('render');
+        }
+        handleSubmitBtn();
+    }
+
+    function handleSubmitBtn() {
+        var articleArea = $('#articleArea').val();
+        var articleCategory = $('#articleCategory').val();
+        if (articleArea === null && articleCategory === null) {
+            $('#savePopup').attr('disabled', true);
+        } else {
+            $('#savePopup').attr('disabled', false);
+        }
+    }
+      $('.modal-title').on('click', function(){
+           
+              $(this).toggleClass('fg-arrowicon');
+         }); 
+</script>    

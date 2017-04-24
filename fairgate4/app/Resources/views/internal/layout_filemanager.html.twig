@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<!--Template Name: Metronic 4.0.2-->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" data-ng-app="fairgate">
+<!--<![endif]-->
+    <!-- BEGIN HEAD -->
+    <head>
+        {{ include('::internal/meta.html.twig', {'title': pageTitle}) }}
+        <!-- BEGIN CSS -->
+        {% block stylesheets %}                                   
+            <!-- BEGIN GLOBAL MANDATORY STYLES -->
+            {{ include('::internal/corelevel-styles.html.twig') }}
+            <!-- END GLOBAL MANDATORY STYLES -->
+            
+            <!-- BEGIN PAGELEVEL -->
+            {{ include('::internal/applevel-styles.html.twig') }}
+            <!-- END DYMANICLY LOADED CSS FILES -->
+            
+            <!-- BEGIN THEME STYLES -->
+            {{ include('::internal/theme-styles.html.twig') }}
+            <!-- END THEME STYLES -->
+            
+            <!-- BEGIN FAIRGATE CUSTOM STYLES -->
+            {{ include('::internal/fairgate-styles.html.twig') }}
+            <!-- END FAIRGATE CUSTOM STYLES -->
+            
+            <link href="{{ asset('/bundles/commonHelp/css/fg-help-styles.css') }}" type="text/css" rel="stylesheet"/>
+            <link href="{{ asset('/assets/global/plugins/colorbox-master/example5/colorbox.css') }}" rel="stylesheet" type="text/css"/>
+            
+            <!-- BEGIN PAGE STYLES -->
+            {% block customstylesheets %}
+                
+            {% endblock %}
+            <!-- END PAGE STYLES -->                        
+        {% endblock %}
+        <link rel="shortcut icon" href="{{ asset('fgassets/global/img/favicon.ico') }}" />
+        {{ include('::global/google-analytic.html.twig') }}
+        <!-- END CSS -->
+    </head>
+    <!-- END HEAD -->
+    <!-- BEGIN BODY -->
+    {% set navigation_active = (navigation_active is defined ) ? navigation_active : 'true' %}
+    {% set navigation_class = (navigation_active == 'true' ) ? '' : 'fg-no-navigation' %}
+    <body class="page-header-fixed page-footer-fixed page-full-width fg-file-override-internal {{navigation_class}}" id="BaseController" data-ng-controller="BaseController">
+        <!-- BEGIN HEADER -->
+        <div id="intranet-header">
+        <!-- HEADER UNDERSCORE TEMPLATE -->
+        </div>
+        <!-- END HEADER -->
+        <div class="clearfix"> </div>
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container">
+            <div class="page-content-wrapper">
+                <!-- BEGIN CONTENT -->
+                <div id="fg-wrapper" class="page-content">
+                    {% set moduleName = fgclub.get('module') %}
+                    {% block pagecontent %}
+                    <!-- PAGE LEVEL CONTENT WILL BE DISPLAYED HERE -->
+                    {% endblock %}                                      
+                    <div id="fg-popup" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-full">
+                            <div class="modal-content" id="fg-dev-popup-model">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END CONTENT -->
+            </div>
+        </div>
+        <!-- END CONTAINER -->
+        <!-- BEGIN FOOTER -->
+        {{ include('::clubadmin/footer.html.twig') }}
+        <!-- END FOOTER -->
+
+        <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+        <!-- BEGIN PAGE LEVEL UNDERSCORE TEMPLATE -->
+        <div id="divTemplates">
+       {# {{ include('::internal/templateTopNavMenu.html.twig') }}#}
+        {% block underscoretemplate %}    
+            
+        {% endblock %}
+        </div>
+        <!-- END PAGE LEVEL UNDERSCORE TEMPLATE -->
+        {% block scripts %}
+            <!-- BEGIN CORE JQUERY AND ANGULARJS PLUGINS -->           
+            {{ include('::internal/corelevel-scripts.html.twig') }}
+            <!-- END CORE JQUERY AND ANGULARJS PLUGINS -->                        
+            
+            <!-- BEGIN APP LEVEL JQUERY SCRIPTS -->
+            {{ include('::internal/applevel-scripts.html.twig') }}
+            <!-- END APP LEVEL JQUERY SCRIPTS -->
+            
+            <!-- BEGIN FAIRGATE SCRIPTS -->
+            {{ include('::internal/fairgate-scripts.html.twig') }}
+            <!-- END FAIRGATE SCRIPTS -->           
+                                    
+           <script src="{{ asset('/assets/global/plugins/colorbox-master/jquery.colorbox-min.js') }}" type="text/javascript"></script>
+           <script src="{{ asset('bundles/commonHelp/js/fg-helper-main.js') }}" type="text/javascript"></script> 
+            <script type="text/javascript">
+		/* Init Metronic's core jquery plugins and layout scripts */
+                var index_url = "{{ path('show_dashboard') }}";
+                var currentModule = '{{moduleName}}';
+		$(document).ready(function() {
+                        //FgInternal.topNavigation("{{ path('internal_header') }}", 'intranet-header', '{{ {"module":(app.request.attributes.get('module') ? app.request.attributes.get('module') : 'null'), 'level1':(app.request.attributes.get('level1') ? app.request.attributes.get('level1') : 'null'), 'level2':(app.request.attributes.get('level2') ? app.request.attributes.get('level2') : 'null')}|json_encode|raw }}');
+			Metronic.init(); // Run metronic theme
+                        Layout.init(); // init current layout  
+                        FgStickySaveBarInternal.init(0); //Sticky Save button bar
+                        
+                        //Set the current locale to the moment object
+                        var currentLocale = jstranslations.localeName;
+                        moment.locale(currentLocale);
+		});
+            </script>            
+            <!-- BEGIN PAGE LEVEL SCRIPTS -->            
+            {% block javascripts %}
+                
+            {% endblock %}
+            <!-- END PAGE LEVEL SCRIPTS -->
+                        
+        {% endblock %}
+        
+        <!-- END JAVASCRIPTS -->
+        
+        <!-- BEGIN QUICKSTART WINDOW -->
+        {{ render(path('help_quickstart_resource')) }}
+        <!-- End QUICKSTART WINDOW -->
+        
+    </body>
+    <!-- END BODY -->
+</html>

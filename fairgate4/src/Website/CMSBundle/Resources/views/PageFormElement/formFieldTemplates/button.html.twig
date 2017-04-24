@@ -1,0 +1,16 @@
+<script type="text/template" id="form_field_templates_button">   
+    <% _.each(data.clubLanguages, function(clubLang) { %>
+        <div dataerror-group="" data-lang="<%- clubLang %>" id="fieldTypeContainer_<%- data.formFieldId %>">
+            <input type="hidden" name="<%- data.formFieldId %>_fieldType"  id="fieldType_<%- data.formFieldId %>" class="form-control fg-dev-newfield" 
+                                data-key="<%- data.formId %>.<%- data.formFieldId %>.fieldType" value="button"/>
+            <input type="text" data-lang="<%- clubLang %>" class="form-control fg-dev-newfield <%- clubLang != data.clubDefaultLanguage ? 'hide':''  %>" 
+                                <% var placeholderDefaultValue = (_.contains(_.keys(data.label),data.clubDefaultLanguage)) ? data.label[data.clubDefaultLanguage]:'' %>
+                                placeholder="<%- (clubLang != data.clubDefaultLanguage)?placeholderDefaultValue:(data.default_label != '' && typeof data.default_label != 'undefined')?data.default_label:'' %>" 
+                                name="<%- data.formId %>.<%- data.formFieldId %>_label_<%- clubLang %>" 
+                                id="<%- data.formFieldId %>_label_<%- clubLang %>" 
+                                data-key="<%- data.formId %>.<%- data.formFieldId %>.label.<%- clubLang %>" 
+                                value="<%- (_.contains(_.keys(data.label),clubLang)) ? data.label[clubLang]:'' %>"
+                                <%=(clubLang == data.clubDefaultLanguage) ? 'required="true"':'' %> >
+        </div>                    
+    <% }); %>
+</script>

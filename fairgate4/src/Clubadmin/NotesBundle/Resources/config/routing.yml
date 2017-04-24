@@ -1,0 +1,23 @@
+notes_homepage:
+    path:  /test/{name}
+    defaults: { _controller: NotesBundle:Default:index }
+contact_note:
+    path: contact/contactnote/{offset}/{contactid}
+    defaults: { _controller: NotesBundle:Default:contactnote , level1: activecontact, module: contact}
+
+contactnote_update:
+    path: contact/contactnoteupdate/{contactid}/{clubId}
+    defaults: { _controller: NotesBundle:Default:contactNotesCommonUpdate }
+club_note:
+    path: /club/note/{offset}/{clubid}
+    defaults: { _controller: NotesBundle:Default:clubNotes , level1: club}
+clubnote_update:
+    path: /club/noteupdate/{clubid}
+    defaults: { _controller: NotesBundle:Default:updateClubNotes }
+
+sponsor_note:
+    path: /sponsor/note/{offset}/{contactid}
+    defaults: { _controller: NotesBundle:Default:sponsornote , level1: sponsor,module: sponsor}
+sponsornote_update:
+    path: /sponsor/sponsornoteupdate/{contactid}/{clubId}
+    defaults: { _controller: NotesBundle:Default:contactNotesCommonUpdate }

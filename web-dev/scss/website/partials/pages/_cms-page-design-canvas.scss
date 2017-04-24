@@ -1,0 +1,603 @@
+/* ------------------------------------Pid = 3
+Stylesheet for CMS add / remove elements page  ---- 
+
+* 01 - Navbar design
+* 02 - Elements block design
+* 03 - Clipboard block design
+* 04 - Sidebar designs
+* 05 - dragging element block style
+--------------------------------------------------*/
+
+@import '../global/utilities/_bootstrap-mixins-grid-5'; //- added variables and functions
+/*
+=============================================================================
+* 01 - Navbar design
+========================================================================== 
+*/
+
+.fg-cms-page-canvas-wrapper{
+	.fg-widget-list{
+		list-style: none;
+		padding:0;
+		background: #bfcad1;
+		display: table;
+		width: 100%;
+		padding: 10px 0;
+		table-layout: fixed;
+		.fg-widget{
+			display: table-cell;
+			cursor: url('../../internal/img/openhand.cur.ico'), move;
+			cursor: -moz-grab;
+			cursor: -webkit-grab;
+			cursor: grab;
+			width: 10%;
+			width: inherit;
+			
+			.fg-widget-icon{
+				.fa{
+					color: #2c3e50;
+				    font-size: 25px;
+    				line-height: 40px;
+				}
+				.fg-widget-title{
+					font-size: 10px;
+					color: #2c3e50;
+					text-transform:initial; 
+					opacity: 1;
+				}
+
+
+			}
+
+			&.fg-non-draggable{
+				cursor:not-allowed;
+				opacity: .5;
+				.fg-widget-icon{
+					.fa{
+					}
+					.fg-widget-title{
+					}
+				}
+			}
+
+			&:hover{
+				
+			}
+		}
+	}
+	&.fixed-header{
+		.fg-cms-page-widget-nav{
+			@include position(fixed,46px,5px,auto,5px);
+			z-index: 2;
+			min-width: 95%;
+			min-width: calc(100% - 10px);
+			max-width: calc(100% - 10px);
+			width: auto;
+		}
+		.fg-cms-page-elements-outer-wrapper{
+			padding-top: 70px;
+		}
+	}
+	.fg-add-box{
+		.fa{
+			margin-right:5px;
+		}
+	}
+}
+
+/*
+=============================================================================
+* 02 - Elements block design
+========================================================================== 
+*/
+
+.fg-cms-page-elements-container{
+	z-index: 1;
+	.fg-cms-page-elements-block-row{
+		border:1px solid $clrbrdrDflt;
+		border-bottom: 0;
+		padding-left: 25px;
+		position: relative;
+		min-height: 100px;
+		&:last-child{
+			border-bottom: 1px solid $clrbrdrDflt;
+		}
+		.fg-page-elements-block-col{
+			background: $clrLightGrey1;
+			padding: 10px;	
+			border: 5px solid #fff;
+			.fg-page-elements-block-col-inner{
+			}
+			.fg-drop-holder{
+				@extend %clearfix;
+			    color: #666;
+			    background: #fff;
+			    padding:10px 10px 0px 10px;
+			    border: 1px dashed #ddd;
+			    margin-bottom: 10px;
+			    overflow: hidden;
+		        min-height: 50px;
+		        >div{
+
+			        &:nth-child(2){
+			        	margin-top: -10px;
+
+			        	&.ui-sortable-placeholder +.fg-dev-element-box{
+							margin-top: -10px;
+			        	}
+			        	&.ui-sortable-placeholder{
+			        		margin-top: -18px;
+			        	}
+			        }
+			        &:last-of-type{
+			        	// margin-bottom: -10px;
+			        	// padding-bottom: 10px;
+
+			        	&.ui-sortable-placeholder{
+							
+			        	}
+			        }
+		        }
+				.fg-placeholder{
+					font-size: 12px;
+					font-style: italic;
+				} 	
+			    .fg-widget-block:not(.ui-sortable-placeholder){
+			    	&:after{
+			    		content: '';
+			    		display: block;
+			    		border-bottom: 1px solid $clrbrdrDflt;
+			    		margin: 0px -10px;
+			    		@include position(absolute,auto,0,0,0);
+			    	}
+			    	
+			    	&:last-of-type{
+			    		&:after{
+							border-color:$clrWhite;
+						}
+			    	}
+			    }
+
+		    	.ui-sortable-placeholder{
+		    		display: block;
+					text-align: center;
+					background: #35aa47;
+					min-height: 15px;
+					position: absolute;
+					visibility: visible !important;
+				    min-width: calc(100% - 20px);
+				    height: 35px !important;
+				    margin:-17px auto auto auto;
+					left: 10px;
+					right: 20px;
+					/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#35aa47+47,35aa47+56,ffffff+100&0+43,1+47,1+55,0+58,0+100 */
+					//-background: -moz-linear-gradient(top,  rgba(53, 170, 71, 0) 47%, #35aa47 48%, #35aa47 54%, rgba(53, 170, 71, 0.67) 54%, rgba(62, 174, 79, 0) 51%, rgba(255, 255, 255, 0) 100%); /* FF3.6-15 */
+					//-background: -webkit-linear-gradient(top,  rgba(53, 170, 71, 0) 47%, #35aa47 48%, #35aa47 54%, rgba(53, 170, 71, 0.67) 54%, rgba(62, 174, 79, 0) 51%, rgba(255, 255, 255, 0) 100%); /* Chrome10-25,Safari5.1-6 */
+					//-background: linear-gradient(to bottom,  rgba(53, 170, 71, 0) 47%, #35aa47 48%, #35aa47 54%, rgba(53, 170, 71, 0.67) 54%, rgba(62, 174, 79, 0) 51%, rgba(255, 255, 255, 0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+					//-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0035aa47', endColorstr='#00ffffff',GradientType=0 ); /* IE6-9 */
+					background: url("../img/ui-placeholder.png") repeat-x center;
+					background-size: 3px;
+
+					&:before,
+					&:after{
+						@include position(absolute,0px,auto,-0,auto);
+						margin: auto;
+						display: block !important;
+						content: '' !important;
+					}
+					&:before{		
+						left:0;				
+						width: 0; 
+						height: 0; 
+						border-top: 7px solid transparent;
+						border-bottom: 7px solid transparent;
+						border-left: 7px solid green;
+					}
+					&:after{
+						right:0;
+						width: 0; 
+						height: 0; 
+						border-top: 7px solid transparent;
+						border-bottom: 7px solid transparent;
+						border-right: 7px solid green;
+					}
+		    	}
+
+			    &.fg-empty-drop-holder{
+			    	position: relative;
+			    	height: auto;
+			    	text-align: center;
+			    	overflow: initial;
+			    	.fg-dev-drop-box-comment{
+			    		display: block;
+		    		    line-height: 28px;
+			    	}
+			    	.ui-sortable-placeholder{
+						background: rgba(53, 170, 71, 0.43);
+						border:1px dashed  #35aa47;
+						padding-top: 12px;
+					    height:auto !important;
+					    margin: 0;
+			    		width: auto !important;
+						@include position(absolute,-1px,-1px,-1px,-1px);
+						&:before,
+						&:after{
+							display: none !important;
+						}
+					    
+			    	}
+			    }
+			}
+			.fg-add-box{
+				display: inline-block;
+				margin: 5px 0;
+				.fa{
+					position: relative;
+					top: 1px;
+				}
+			}
+			.fg-block-width-controls{
+				@include position(absolute,auto,10px,10px,auto);
+				a.fg-left{
+					margin-right: 10px;
+				}
+			}
+		}
+
+
+		.fg-cms-elements-row-option{
+			display: none;
+			@include position(absolute,10px,auto,0,0);
+			li{
+				margin-bottom: 15px;
+				cursor: pointer;
+				&.fg-dev-delete{
+					@include position(absolute,auto,auto,0,0);
+					margin: auto;
+				}
+				.fg-container-sortable {
+				    line-height: 20px;				    
+					cursor: url('../../internal/img/openhand.cur.ico'), move;
+					cursor: -moz-grab;
+					cursor: -webkit-grab;
+					cursor: grab;
+				}
+			}
+		}
+
+		&:hover{
+			.fg-cms-elements-row-option{
+				display: block;
+			}
+		}
+
+
+// Sortable div items
+		&.ui-sortable-helper{
+			background: #fff;
+			.fg-cms-elements-row-option{
+					//background: blue;
+					display: block;
+				li{
+					cursor: -moz-grabbing;
+					cursor: -webkit-grabbing;
+					cursor: grabbing;
+					cursor: url("../../internal/img/closedhand.cur.ico"), move; /* for ie fix*/
+			
+					.fg-container-sortable {
+						cursor: -moz-grabbing;
+						cursor: -webkit-grabbing;
+						cursor: grabbing;
+						cursor: url("../../internal/img/closedhand.cur.ico"), move; /* for ie fix*/
+					}
+				}
+			}
+
+		}
+
+		// &.original-placeholder{			
+		// 	&:before{
+		// 		content: '';
+		// 		display: block;
+		// 		@include position(absolute,0,0,0,0);
+		// 		background: #eaeaea;
+		// 		z-index: 100;
+		// 	}
+		// }
+	}
+
+	&.fg-drag-start{
+		.fg-cms-page-elements-block-row{
+			border-bottom: 1px solid $clrbrdrDflt;
+			margin-top:-1px;
+
+			&.ui-sortable-placeholder{
+			    background: #eaeaea !important;
+		        visibility: visible !important;
+			}
+		}
+	}
+}
+
+#editContainer .fg-input-plus-minus{
+	background: #ccc;
+	.input-number{
+		width:90px;	
+	}
+} 
+// .fg-cms-page-elements-container .fg-cms-page-elements-block-row .fg-page-elements-block-col .fg-drop-holder.fg-empty-drop-holder .fg-dev-drop-box-comment
+// .fg-grid-col-1 .fg-drop-holder.fg-empty-drop-holder .fg-dev-drop-box-comment 
+.fg-page-elements-block-col{
+	&.fg-grid-col-1{
+		.fg-cms-page-elements-container .fg-cms-page-elements-block-row  &{
+
+			.fg-drop-holder{
+				&.fg-empty-drop-holder{
+					.fg-dev-drop-box-comment{
+						@include bpMax('1480px'){
+							line-height: 1;
+						}
+					}
+				} 
+			}
+		}
+	}
+
+}
+/*
+=============================================================================
+* 03 - Clipboard block design
+========================================================================== 
+*/
+.fg-cms-page-clipboard-wrapper{
+	border-top: 4px solid #333333;
+	margin: auto;
+	height: 180px;
+	background:#bfcad1;
+	@include position(fixed,auto,0,-143px,0);
+	@include transition(all .3s ease);
+	padding:13px 0 13px 0;
+	z-index: 1000;
+	.fg-clipboard-tray-open &{
+		bottom: 33px;
+	}
+
+	.fg-clipboard-nav{
+		background: #333333;
+		color:#fff;
+		width: 200px;
+		height: 35px;
+		margin:-52px auto auto auto;
+		font-size: 14px;
+		cursor: pointer;
+
+		.fg-title{
+			float: left;
+			margin: 9px 0 0 6px;	
+			max-width: 75%;
+
+			.fa{
+				margin: 0 7px 0 5px;
+				position: relative;
+				top: 2px;
+				@include transition(all .3s ease);
+
+				.fg-clipboard-tray-open &{
+					&:before{
+						content:"\f103"
+					}
+				}
+			}
+
+		}
+
+		.fg-count{
+			float: right;
+			margin: 10px 6px 0 0;
+		}
+	}
+
+	.fg-clipboard-element-wrapper {
+		margin-top: 23px;
+		height: 150px !important;
+		>.col-sm-2{
+			padding-left: 5px;
+			padding-right: 10px;
+		}
+		.fg-clipboard-item{
+			color: #2c3e50;
+			border:1px solid #9aadb7;
+			@extend %clearfix;
+			padding: 15px;
+			margin-bottom: 10px;
+			cursor: pointer;
+			.fg-icon{
+				display: inline-block;
+				vertical-align: middle;				
+				font-size: 25px;
+				line-height: 1;
+				margin-right: 10px;
+			}
+			.fg-item-details{
+				display: inline-block;
+				vertical-align: middle;
+				font-size: 12px;
+				max-width: 75%;
+				max-width: calc(100% - 48px);
+				.fg-title,
+				.fg-date{
+					max-width: 100%;
+					white-space: pre;				
+					overflow:hidden;
+					text-overflow:ellipsis;
+				}
+			}
+		}
+	}
+}
+//- style when start dragging element to canvas area
+.fg-dev-drag-active{
+	.fg-cms-page-clipboard-wrapper{
+		.slimScrollDiv{
+			overflow: inherit;
+			.fg-clipboard-element-wrapper{
+				overflow: inherit;
+			}
+		}
+	}
+}
+
+/*
+=============================================================================
+* 04 - Sidebar designs
+========================================================================== 
+*/
+.fg-cms-page-elements-outer-wrapper{
+	width: 100%;
+	margin-bottom: 30px;
+}
+.fg-cms-page-sidebar{
+	
+	.fg-sidebar-content-wrapper{
+
+	}
+	.fg-sidebar-header{
+
+		background: #c6e0f7;
+		.fg-title{
+			margin: auto;
+			font-size: 14px;
+			font-weight: normal;	
+			padding: 10px 5px 10px 10px;	
+		}
+	}
+	.fg-sidebar-content{
+		padding: 10px;
+		ul{
+			padding: 0;
+			list-style: none;
+		}
+		.fg-sidebar-link{
+			li{
+				margin-bottom: 10px;
+			}
+			.fa{
+				font-size: 16px;
+			}
+		}
+	}
+	
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#eaf0f8+0,ffffff+100 */
+	background: rgb(234,240,248); /* Old browsers */
+	background: -moz-linear-gradient(top,  rgba(234,240,248,1) 0%, rgba(255,255,255,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top,  rgba(234,240,248,1) 0%,rgba(255,255,255,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom,  rgba(234,240,248,1) 0%,rgba(255,255,255,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eaf0f8', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+	background-clip: content-box;
+}
+
+.fg-sidebar-layout-1{
+	*[class^='fg-grid-col'], 
+	*[class*=' fg-grid-col']{
+		@include make-col(30px);
+	}
+	.fg-grid-col-1{
+		@include make-col-span(1);
+	}
+	.fg-grid-col-2{
+		@include make-col-span(2);		
+	}
+	.fg-grid-col-3{
+		@include make-col-span(3);
+	}
+	.fg-grid-col-4{
+		@include make-col-span(4);
+	}
+	.fg-grid-col-5{
+		@include make-col-span(5);
+	}
+}
+.fg-cms-page-sidebar-left{
+	.fg-cms-page-sidebar{
+		padding: 0 0 0 15px;
+	}
+}
+.fg-cms-page-sidebar-right{
+	.fg-cms-page-sidebar{
+		padding: 0 15px 0 0 ;
+	}
+}
+
+/*
+=============================================================================
+* 05 - dragging element block style
+============================================================================*/
+.fg-dragging-element {
+	&:not(.ui-sortable-placeholder) {
+		opacity: 1 !important;
+		background: #bfcad1 !important;
+		color: #2c3e50 !important;
+		width: 85px !important;
+		height: 70px !important;
+		min-height: 0;
+		-webkit-box-shadow: 5px 5px rgba(57, 57, 57, 0.2);
+		-moz-box-shadow: 5px 5px rgba(57, 57, 57, 0.2);
+		box-shadow: 5px 5px rgba(57, 57, 57, 0.2);
+		z-index: 9999;
+		cursor: -moz-grabbing;
+		cursor: -webkit-grabbing;
+		cursor: grabbing;
+		cursor: url("../../internal/img/closedhand.cur.ico"), move; /* for ie fix*/
+		>.fg-drag-holder-item {
+			display: block;
+			font-size: 10px;
+			height: 40px;
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			margin: auto;
+		}
+		.fa {
+			color: #2c3e50;
+			font-size: 25px;
+			line-height: 40px;
+		}
+		.fg-widget-title {
+			font-size: 10px;
+		}
+	}
+	text-align: center;
+}
+.fg-clipboard-item.fg-dragging-element {
+	&:not(.ui-sortable-placeholder) {
+		width: 203px !important;
+		height: 70px !important;
+		color: #2c3e50;
+		border: 1px solid #9aadb7;
+		padding: 15px;
+		.fg-icon {
+			display: inline-block;
+			vertical-align: middle;
+			font-size: 26px;
+			line-height: 1;
+			margin-right: 10px;
+		}
+		.fg-item-details {
+			display: inline-block;
+			vertical-align: middle;
+			font-size: 12px;
+			max-width: 75%;
+			max-width: calc(100% - 48px);
+			text-align: left;
+			.fg-title {
+				max-width: 100%;
+				white-space: pre;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
+	}
+}
+

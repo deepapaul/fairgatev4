@@ -1,0 +1,35 @@
+gotcourt_activate_club:
+    path:  /fed/{fid}/club/{cid}/activateclub
+    defaults: { _controller: FairgateApiBundle:Gotcourts:activate, _format: json}
+    requirements:
+        _method: GET
+        
+gotcourt_get_contact:
+    path:  /fed/{fid}/club/{cid}/member/{contactId}
+    defaults: { _controller: FairgateApiBundle:Gotcourts:getContactById, _format: json}
+    requirements:
+        _method: GET
+        
+gotcourt_filter_contact:
+    path:  /fed/{fid}/club/{cid}/member
+    defaults: { _controller: FairgateApiBundle:Gotcourts:filterContact, _format: json}
+    requirements:
+        _method: GET
+        
+gotcourt_club_verifytoken:
+    path:  /fed/{fid}/club/{cid}/clubtoken
+    defaults: { _controller: FairgateApiBundle:Gotcourts:verifytoken, _format: json}
+    requirements:
+        _method: GET
+        
+gotcourt_get_playercategory:
+    path:  /fed/{fid}/club/{cid}/categories
+    defaults: { _controller: FairgateApiBundle:Gotcourts:getPlayercategory, _format: json}
+    requirements:
+        _method: GET
+        
+gotcourt_verify_mainadmin:
+    path:  /fed/{fid}/club/{cid}/mainadmin
+    defaults: { _controller: FairgateApiBundle:Gotcourts:verifyMainAdmin, _format: json}
+    requirements:
+        _method: GET

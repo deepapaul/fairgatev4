@@ -1,0 +1,31 @@
+
+{% if(navDet|length > 0) %} 
+    <div class="fg-supplementary-widget fg-widget-block">
+        <div id="accordion1" class="panel-group">
+            <div class="panel">
+                {% for keyVal, detail in navDet %}
+                    <div class="panel-heading {% if ((keyVal == active) or ( detail.child is defined and active in detail.child|keys)) %} active {% endif %}">
+                        <h4 class="panel-title fg-title"><a href="{{detail.parentUrl}}">{{ detail.parentTitle }}</a>
+                            {% if detail.child is defined %}<i data-toggle="collapse" data-parent="#accordion1" data-target="#collapse_{{ keyVal }}" class="fa fa-angle-down fg-arrow {% if not(keyVal == active or (detail.child is defined and active in detail.child|keys)) %} collapsed {% endif %}"></i>{% endif %} </h4>
+                    </div>
+                    {% if detail.child is defined %}
+                        <div id="collapse_{{ keyVal }}" class="panel-collapse collapse {% if (keyVal == active or ( active in detail.child|keys)) %} in {% endif %}">
+                            <div class="panel-body">
+                                <ul class="fg-menu-links">
+                                    {% for key, childData in detail.child %}     
+                                        <li {% if (key == active)  %} class="active" {% endif %} ><a href="{{ childData.url }}">{{ childData.title }}</a></li>
+                                        {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    {% endif %}       
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div>
+        {% set message = ((pageType.default == 'sidebar') or (pageType.default == 'footer')) ? 'SUPPLEMENTARY_SIDEBAR_MESSAGE_TEXT'|trans : 'SUPPLEMENTARY_NO_SUBMENU_MESSAGE_TEXT'|trans %}
+        {{message}}
+    </div>
+{% endif %}

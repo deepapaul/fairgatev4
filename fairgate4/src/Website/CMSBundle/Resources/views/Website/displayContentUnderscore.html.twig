@@ -1,0 +1,509 @@
+{#   Container template area #}
+<script type="text/template" id="containerBox">
+    <div class="row fg-marg-btm-10" id="<%- containerid %>" page-id=<%- pageId %> container-id=<%- details.containerId %>>
+    <%= columnDetails %>
+    </div>
+</script>
+
+{#Column template#}
+<script type="text/template" id="columnBox">
+<%
+    var expandVlaue = 2;
+    var widthValue = 2;
+    if(settingDetails.containerType =='sidebar') {
+          expandVlaue = 6;
+    }
+    if(settingDetails.containerType =='content' && settingDetails.data.sidebar.size =='wide') {
+       widthValue = details.widthValue*3;
+    }  else if(settingDetails.containerType =='content' && settingDetails.data.sidebar.size =='small') {
+       widthValue = details.widthValue*2;
+    } else if(settingDetails.containerType =='content' && ((settingDetails.data.sidebar.size =='')||settingDetails.data.sidebar.size ==null) ) {
+       widthValue = details.widthValue*2;
+    } else if((settingDetails.data.sidebar.size =='wide')&& (settingDetails.containerType =='sidebar') ) {
+       widthValue = details.widthValue*6;
+    }  else if((settingDetails.data.sidebar.size =='small')&& (settingDetails.containerType =='sidebar') ) {
+        widthValue = 12;
+        details.widthValue = 1;
+    } else if(settingDetails.containerType =='footer' ) {
+       widthValue = details.widthValue*2;
+    }
+%>
+    <div class="col-sm-<%- widthValue %>  fg-grid-col-<%- details.widthValue %> " id="<%- columnid  %>" column-width=<%- widthValue %> column-size=<%- details.widthValue %> column-id=<%- details.columnId %>>
+        <%= boxDetails %>
+    </div>
+
+</script>
+
+{#Box template#}
+<script type="text/template" id="Box">
+    <%
+    nullClass = "";
+    if (elementDetails =='') {
+    nullClass = "fg-empty-drop-holder";
+    }  %>
+
+    <div class=" columnBox <%- nullClass %>" id="<%- boxid  %>" box-id="<%- details.boxId %>">
+    <%= elementDetails %>
+    </div>
+</script>
+
+
+{% if(pagecontentData.pageElementsArray is defined) %}
+    {% for elements in pagecontentData.pageElementsArray %}
+
+        {# Header Element Template#}
+        {% if(elements == 'header') %}
+            <script type="text/template" id="templateHeader">
+                <div  id="<%- elementid  %>"  class='fg-header-widget fg-widget-block fg-dev-element-box elementBox' element-id=<%- details.elementId %> >
+                <%
+                elementValue ='';
+                elemTitle = _.escape(details.elementTitle);
+                switch(details.headerElementSize){
+                case 'large':
+                elementValue = '<h2 class="col-md-12">'+elemTitle+'</h2>';
+                break;
+                case 'medium':
+                elementValue = '<h3 class="col-md-12">'+elemTitle+'</h3>';
+                break;
+                case 'small':
+                elementValue = '<h4 class="col-md-12">'+elemTitle+'</h4>';
+                break;
+                case 'mini':
+                elementValue = '<h5 class="col-md-12">'+elemTitle+'</h5>';
+                break;
+                case 'nano':
+                elementValue = '<h6 class="col-md-12">'+elemTitle+'</h6>';
+                break;
+                }
+                %>
+
+                <%= elementValue %>
+                </div>
+            </script>
+        {% endif %}
+
+        {# Article Template #}
+        {% if(elements == 'articles') %}
+            <script type="text/template" id="templateArticle">
+                <div  id="<%- elementid  %>"  class='fg-article-widget fg-widget-block fg-dev-element-box elementBox' element-id=<%- details.elementId %>>
+                {#  DISPLAY CONTEN HERE#}
+                </div>
+            </script>
+        {% endif %}
+
+        {# Login Template #}
+        {% if(elements == 'login') %}
+            {#Login template#}
+            <script type="text/template" id="templateLogin">
+                <div  id="<%- elementid  %>"  class='fg-login-widget fg-widget-block fg-dev-element-box elementBox' element-id=<%- details.elementId %>>
+                <%= details.htmlContent %>
+                </div>
+            </script>
+
+            {#Forgot password template#}
+            <script type="text/template" id="templateLoginForgotPassword">
+                <form method="POST" skipDirtyCheck class="fg-form-forgot-password" novalidate="novalidate" >
+                <div class="alert alert-danger hide fg-dev-alert-div">
+                <span class="fg-dev-alert-span"></span>
+                </div>
+                <% if(templateName == 'forgotPassword') {  %>
+                <div class="fg-marg-btm-15"><h5 class="fg-dis-IB fg-marg-right-5">{{ 'FORGOT_TITLE'|trans|upper }} </h5>{% trans %}FORGOT_SUB_TITLEMSG{% endtrans %}</div>
+                <% } else { %> {#activateLogin#}
+                <div class="fg-marg-btm-15"><h5 class="fg-dis-IB fg-marg-right-5"> {{ 'INTERNAL_LOGIN_ACTIVATE_ACCOUNT'|trans|upper }}: </h5>{{ "INTERNAL_LOGIN_ACTIVATE_ACCOUNT_MSG"|trans({ '%club%': fgclub.get('title') }) }}</div>
+                <% } %>
+                <div class="form-group fg-input-box-left">
+                <input type="text" id="username" name="username" required="required" placeholder="{% trans %}FORGOT_EMAIL{% endtrans %}" autocomplete="off" class="form-control input-md placeholder-no-fix">
+                <% if(templateName == 'activateLogin') {  %>
+                <input type="hidden" id="activateaccount" name="activateaccount" value="1" />
+                <% } %>
+                </div>
+                <div class="form-group">
+                <div class="g-recaptcha" id="fg-captcha<%-elementId%>"></div>
+                </div>
+                <div class="form-group fg-button-block">
+                <div class="fg-button">
+                <button id="activate_submit" name="activate_submit" class="btn btn-primary fg-submit fg-dev-activate-submit" type="submit" disabled>
+                {% trans %}FORGOT_SUBMIT_BTN{% endtrans %} <i class="m-icon-swapright m-icon-white"></i>
+                </button>
+                <a href="javascript:void(0)" class="fg-back-button fg-dev-back-button"><i class="fa fa-arrow-circle-left fa-2x"></i>{% trans %}BACK{% endtrans %}</a>
+                </div>
+                <div class="clearfix"></div>
+                </div>
+                </form>
+            </script>
+
+            {#Forgot password|activate login, success template#}
+            <script type="text/template" id="templateLoginForgotPasswordSuccess">
+                <form class="fg-form-login-msg" novalidate="novalidate" >
+                    <div class="fg-marg-btm-15"><h5 class="fg-dis-IB fg-marg-right-5"><%- messages.pageFormTitle.toUpperCase() %>: </h5><%- messages.pageFormMsg %></div>
+                    <div class="form-group fg-button-block">
+                        <div class="fg-button">
+                          <a href="javascript:void(0)" class="fg-back-button fg-dev-back-button fg-clear-left"><i class="fa fa-arrow-circle-left fa-2x"></i>{% trans %}BACK{% endtrans %}</a>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </form>
+            </script>
+        {% endif %}
+
+        {# Calendar Template#}
+        {% if(elements == 'calendar') %}
+            <script type="text/template" id="templateCalendar">
+                <div  id="<%- elementid  %>"  class='fg-calendar-event-widget fg-widget-block fg-dev-element-box elementBox' element-id=<%- details.elementId %>>
+                {#  DISPLAY CONTEN HERE#}
+                </div>
+            </script>
+        {% endif %}
+
+        {#  Image Template #}
+        {% if(elements == 'image') %}
+            {#Image template#}
+            <script type="text/template" id="templateImage">
+                <div  id="<%- elementid  %>"  class='fg-image-gallery-widget fg-widget-block fg-dev-element-box elementBox' element-id=<%- details.elementId %>>
+                {#  DISPLAY CONTEN HERE#}
+                </div>
+            </script>
+
+            <script type="text/template" id="templateImageBaseTemplate">
+
+            <% if( _.size(imageData) > 0) { %>
+                <% if( imageData[0].image_element_display_type == 'column' || imageData[0].image_element_display_type == 'row') {  %>
+                    <% var targetType = (imageData[0].image_element_display_type != 'slider' && imageData[0].image_element_click_type == 'link' ) ? '_'+((imageData[0].image_element_link_opentype !='')?imageData[0].image_element_link_opentype:'blank') : ''; %>
+                    <div id= "<% if(imageData[0].image_element_display_type == 'column'){ %>column-gallery-<%- elementId %><%} else { %>row-gallery-<%- elementId %><% } %>" class="fg-cms-website-gallery" data-image_view_type ="<%- imageData[0].image_element_click_type %>" style="display:none;" target="<%- targetType %>">
+                        <% _.each(imageData, function(data,key){  %>
+                            <% var imagePath = (data.type == 'VIDEO') ? data.video_thumb_url : data.filepath; %>
+                            <% if(data.type == 'IMAGE') { %>
+                                <% var imageLink = ''; %>
+                                <% if((data.image_element_click_type == 'link') && (data.image_element_link_type != '')) { %>
+                                    <% if (data.image_element_link_type == 'external' && data.image_element_external_link!='') { %>
+                                        <% var imageLink = data.image_element_external_link %>
+                                    <% } else if (data.image_element_link_type == 'internal' && data.navigation_id!='') { %>
+                                        <% var imageLink = navPath.replace('**dummy**',data.navigation_url); %>
+                                    <% } %>
+                                <% } %>
+                                <% if(imageLink != '') { %>
+                                     <a href="<%- imageLink %>">
+                                <% } %>
+                                    <% var desc = (_.size(data.description))?data.description.replace("'", "") : ''; %>
+                                    <img  alt="<%- desc %>"
+                                          src="/uploads/<%- club_id %>/gallery/<%- imageWidth %>/<%- imagePath %>"
+                                          data-image="/uploads/<%- club_id %>/gallery/width_1920/<%- imagePath %>"
+                                         <% if(data.image_element_click_type == 'detail' & typeof data.description != "undefined" & _.size(data.description)) { %> data-description=" <%- desc %>" <% } %>
+                                          data-image-type ="<%- data.type %>"
+                                          style="display:none;">
+                                <% if(imageLink != ''){ %>
+                                    </a>
+                                <% } %>
+                            <% } else { %>
+                                 <% var desc = (_.size(data.description))?data.description.replace("'", "") : ''; %>
+                                <img onload="cmspage.getCmsVideoDetails('<%- data.filepath %>', this);"
+                                         alt="<%- desc %>"
+                                         data-type=""
+                                         data-image-type =" <%- data.type %>"
+                                          src="/uploads/<%- club_id %>/gallery/<%- imageWidth %>/<%- imagePath %>"
+                                        data-image="/uploads/<%- club_id %>/gallery/width_1920/<%- imagePath %>"
+                                         <% if(data.image_element_click_type == 'detail' & typeof data.description != "undefined" & _.size(data.description)) { %>data-description="<%- desc %>"<% } %>
+                                         data-videoid=""
+                                         style="display:none;">
+
+                             <% } %>
+                            <% }); %>
+                    </div>
+                <% } else if(imageData[0].image_element_display_type == 'slider'){ %>
+                    <div id="slider-gallery-<%- elementId %>"  class="fg-cms-website-gallery" style="display:none;" data-slider-time="<%- imageData[0].image_element_slider_time %>" data-image_view_type ="<%- imageData[0].image_element_click_type %>" >
+                        <% _.each(imageData, function(data,key){  %>
+                            <% var imagePath = (data.type == 'VIDEO') ? data.video_thumb_url : data.filepath; %>
+                             <% var desc = (_.size(data.description))?data.description.replace("'", "") : ''; %>
+                            <% if(data.type == 'IMAGE'){ %>
+                                        <img  alt="<%- desc %>"
+                                         data-image-type =" <%- data.type %>"
+                                     src="/uploads/<%- club_id %>/gallery/<%- imageWidth %>/<%- imagePath %>"
+                                     data-image="/uploads/<%- club_id %>/gallery/<%- imageWidth %>/<%- imagePath %>"
+                                       <% if(data.image_element_click_type == 'detail' & typeof data.description != "undefined" & _.size(data.description)) { %>data-description="<%- desc %>"<% } %>
+                                         style="display:none;">
+                            <% } else { %>
+                                 <img onload="cmspage.getCmsVideoDetails('<%- data.filepath %>', this);"
+                                     alt="<%- desc %>"
+                                     data-type=""
+                                     data-image-type =" <%- data.type %>"
+                                     src="/uploads/<%- club_id %>/gallery/<%- imageWidth %>/<%- imagePath %>"
+                                     data-image="/uploads/<%- club_id %>/gallery/<%- imageWidth %>/<%- imagePath %>"
+                                    <% if(data.image_element_click_type == 'detail' & typeof data.description != "undefined") { %>data-description="<%- desc %>"<% } %>
+                                     data-videoid=""
+                                     style="display:none;">
+
+                            <% } %>
+                        <% }); %>
+                    </div>
+                <% } %>
+                <input type="hidden" id="hideimage-<%- elementId %>"  value="image" />
+            <% } else { %>
+                <div class="fg-cms-empty-box-wrapper">
+                    <p class="text-center">{{'NO_IMAGE_MESSAGE'|trans}}</p>
+                </div>
+            <% } %>
+            </script>
+        {% endif %}
+
+        {# Map Template #}
+        {% if(elements == 'map') %}
+            {#map template#}
+            <script type="text/template" id="templateMap">
+                <div  id="<%- elementid  %>"  class='fg-map-widget fg-widget-block fg-dev-element-box elementBox fg-dev-map-element' element-id=<%- details.elementId %>>
+                <div id="googleMap-<%- details.elementId %>" class="fg-map-wrapper" style="height:<%- details.mapElementHeight %>px;"></div>
+                <input type="hidden" id="mapDisplay-<%- details.elementId %>" value="<%- details.mapElementDisplayStyle %>">
+                <input type="hidden" id="latitude-<%- details.elementId %>" value="<%- details.mapElementLatitude %>">
+                <input type="hidden" id="longitude-<%- details.elementId %>" value="<%- details.mapElementLongitude %>">
+                <input type="hidden" id="mapMarker-<%- details.elementId %>" value="<%- details.mapElementShowMarker %>">
+                <input type="hidden" id="mapZoom-<%- details.elementId %>" value="<%- details.mapElementZoomValue %>">
+                </div>
+            </script>
+        {% endif %}
+
+        {# Text Template#}
+        {% if(elements == 'text') %}
+            <script type="text/template" id="templateText">
+            <div  id="<%- elementid  %>"  class='fg-text-widget fg-widget-block fg-dev-element-box elementBox' element-id=<%- details.elementId %>>
+                {#  DISPLAY CONTEN HERE#}
+            </div>
+            </script>
+
+            <script type="text/template" id="templateTextBaseTemplate">
+                <% if(_.size(textelement.text) > 0) { %>
+                    <section class="fg-text-widget-wrapper <% if(textelement.position == 'rightColumn'){ %>fg-text-right-img <% } else { %>fg-text-left-img <% } %>" columnWidth = <%- textelement.columnWidth %> >
+                    <% var textValue = textelement.text.text; %>
+                    <% if(typeof textelement.media != "undefined") { %>
+                        <input type="hidden" id="hidetextimage-<%- textelement.element %>"  value="image" />
+                        <input type="hidden" id="hidetextslider<%- textelement.element %>"  value="<%- textelement.slider.slider %>" />
+                        <% if(textelement.position == 'rightColumn' || textelement.position == 'leftColumn') { %>
+
+                            <div class=" <% if(textelement.columnWidth >= 3) { %> col-sm-4 <% } else { %> col-sm-2 <% } %> fg-thumb">
+                                <figure class="fg-cms-website-gallery " id="row-gallery-<%- textelement.element %>">
+                                    <% _.each(textelement.media, function(data) { %>
+                                        <% if(typeof data.imgsrc != "undefined") {
+                                            var desc = '';
+                                            if (data.description != '') {
+                                               desc = data.description.replace("'", "");
+                                            } %>
+                                            <% if (data.type == 'videos'){ %>
+                                                <img onload="cmspage.getCmsVideoDetails('<%- data.videoUrl %>', this);" alt="<%- desc %>" data-type="" src="<%- data.imgsrc %>" data-image="<%- data.imgsrc1920 %>" <% if (desc != '') {  %>data-description="<%- desc %>" <%  }  %> data-videoid="" style="display:none;" />
+                                            <% } else { %>
+                                                <img src="<%- data.imgsrc %>" alt="<%- desc %>"  data-image="<%-data.imgsrc1920%>"  <% if (desc != '') {  %>data-description="<%- desc %>" <%  }  %>  style="display:none;" />
+                                            <%  }  %>
+                                        <%  }  %>
+                                    <% }); %>
+                                </figure>
+                            </div>
+                            <%= textValue %>
+                        <% } else if(textelement.position == 'topSlider'){ %>
+                            <div class="col-md-12 fg-pad-0 fg-content">
+                                <div class="fg-slider fg-marg-btm-20">
+                                    <div id="gallery-textelement-<%- textelement.element %>" class="fg-cms-website-gallery" style="display:none;">
+                                        <%_.each(textelement.media, function(data) { %>
+                                            <% if(typeof data.imgsrc != "undefined") {
+                                                var desc = '';
+                                                if (data.description != '') {
+                                               desc = data.description.replace("'", "");
+                                            }    %>
+                                                <% if (data.type == 'videos') { %>
+                                                    <img onload="cmspage.getCmsVideoDetails('<%- data.videoUrl %>', this);" alt="<%- desc %>" data-type="" src="<%-data.imgsrc%>" data-image="<%-data.imgsrc%>" <% if (desc != '') {  %>data-description="<%- desc %>" <%  }  %> data-videoid="" style="display:none;" />
+                                                <% } else { %>
+                                                    <img alt="<%- desc %>"  src="<%- data.imgsrc %>" data-image="<%-data.imgsrc%>" <% if (desc != '') {  %>data-description="<%- desc %>" <%  }  %> style="display:none;" >
+                                                <%  }  %>
+                                            <%  }  %>
+                                        <% }); %>
+                                    </div>
+                                </div>
+                                 <%= textValue %>
+                            </div>
+                          <% } else if(textelement.position == 'bottomSlider'){ %>
+                            <div class="col-md-12 fg-pad-0 fg-content">
+                                  <%= textValue %>
+                                  <div class="fg-slider">
+                                    <div id="gallery-textelement-<%- textelement.element %>" class="fg-cms-website-gallery" style="display:none;">
+                                        <%_.each(textelement.media, function(data) { %>
+                                            <% if(typeof data.imgsrc != "undefined") {
+                                                var desc = '';
+                                                if (data.description != '' ) {
+                                               desc = data.description.replace("'", "");
+                                            } %>
+                                                <% if (data.type == 'videos') { %>
+                                                    <img onload="cmspage.getCmsVideoDetails('<%- data.videoUrl %>', this);" alt="<%- desc %>" data-type="" src="<%-data.imgsrc%>" data-image="<%-data.imgsrc%>" <% if (desc != '') {  %>data-description="<%- desc %>" <%  }  %> data-videoid="" style="display:none;" />
+                                                <% } else {  %>
+                                                    <img alt="<%-desc %>"  src="<%-data.imgsrc%>" data-image="<%-data.imgsrc%>"
+                                                         <% if (desc != '') {  %>data-description="<%- desc %>" <%  }  %>  style="display:none;" >
+                                                <%  }  %>
+                                            <%  }  %>
+                                        <% }); %>
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+                    <% } else { %>
+                         <%= textValue %>
+                    <%  }  %>
+                    <div class="clearfix"></div>
+                </section>
+            <% } %>
+            </script>
+        {% endif %}
+
+        {# Iframe Template #}
+        {% if(elements == 'iframe') %}
+            <script type="text/template" id="templateIframe">
+                <div  id="<%- elementid  %>" data-id="<%- elementid  %>" class='fg-iframe-widget fg-iframe-parent  fg-widget-block fg-dev-element-box elementBox' element-id="<%- details.elementId %>" style='height:<%- details.iframeHeight %>px'>
+                <iframe class="fg-iframe" src="" data-url="<%- details.iframeUrl %>" onload="FgIframeSettings.loadIframe(this)"></iframe>
+                </div>
+            </script>
+        {% endif %}
+
+        {# Supplementary Element #}
+        {% if(elements == 'supplementary-menu') %}
+            <script type="text/template" id="templateSupplementary">
+                <% if(details.htmlContent != '') { %>
+                <div  id="<%- elementid  %>" data-id="<%- elementid  %>" class='fg-fa-sitemap fg-widget-block fg-supplementary-widget fg-dev-element-box elementBox' element-id='<%- details.elementId %>' >
+                <%= details.htmlContent %>
+                </div>
+                <% } %>
+            </script>
+        {% endif %}
+
+        {# Sponsor ads #}
+        {% if(elements == 'sponsor-ads') %}
+            <script type="text/template" id="templateSponsorAd">
+                <div  id="<%- elementid  %>" data-id="<%- elementid  %>" class='fg-sponsor-widget fg-widget-block fg-dev-element-box elementBox' element-id='<%- details.elementId %>' >
+                {#  DISPLAY CONTEN HERE#}
+                </div>
+            </script>
+        {% endif %}
+
+        {# Contacts Table Template#}
+        {% if(elements == 'contacts-table') %}
+            <script type="text/template" id="templateContactTableElement">
+                <div  id="<%- elementid  %>" data-id="<%- elementid  %>" class='fg-contact-table-widget fg-widget-block fg-datatable fg-dev-element-box elementBox' element-id='<%- details.elementId %>' >
+                <div class="fg-contact-table-header fg-has-export fg-has-search">
+                <div class="fg-left-col FL fg-contact-table-filter-<%- elementid  %>" id="fg-contact-table-filter-<%- elementid  %>">
+                </div>
+                <div class="fg-right-col FR" id="fg-contact-table-export-search-<%- elementid  %>">
+
+                </div>
+                </div>
+                <table class="row-border nowrap" id="website-datatable-list-<%- elementid  %>"></table>
+                </div>
+            </script>
+
+            <script type="text/template" id="templateContactTableElementHeader">
+                <thead>
+                <tr>
+                <% if(settings.overflowBehavior == 'toggle'){ %>
+                <th></th>
+                <%  } %>
+                <% _.each(tableColumns, function(el,index){  %>
+                <th class="<%- (index == 0 && settings.overflowBehavior == 'toggle' )?'all':'' %>"> <%- (el.title != '' && el.title != null)?el.title:el.defaultTitle %></th>
+                <%  });   %>
+                </tr>
+                </thead>
+            </script>
+
+            <script type="text/template" id="templateContactTableExportSearch">
+                <% if(data.tableExport =='all' ||  (data.tableExport =='loggedin' && data.contactId > 0)) { %>
+                <div class="fg-btn-grey-icon fg-contact-export fg-export"><span data-toggle="dropdown" id="menu1">{{'EXPORT_CAPS'|trans}}</span>
+                <ul role="menu" aria-labelledby="menu1" class="dropdown-menu">
+                <li><a href="#"> <input type="hidden" class="form-control" value="semiColon"/>{{'SEMICOLON_SEPERATED'|trans}}</a></li>
+                <li><a href="#"><input type="hidden" class="form-control" value="commaSep"/>{{'COMMA_SEPERATED'|trans}}</a></li>
+                </ul></div>
+                <% } %>
+                <% if(data.tableSearch){ %>
+                <div class="fg-table-search fg-dis-IB fg-v-middle">
+                <input type="text" placeholder="{{'WEBSITE_ARTICLE_SEARCH_PALCEHOLDER'|trans}}" id="<%- searchTextBoxId  %>" class="form-control fg-contact-table-search-box">
+                </div>
+                <% } %>
+            </script>
+
+            <script type="text/template" id="templateContactTableFilter">
+                <% _.each(data, function(el,index){ %>
+                <div class="fg-dis-IB dgdf">
+                <% if(typeof el.input != 'undefined' && _.size(el.input) > 0) { %>
+                <select class="fg-marg-right-20 fg-contact-table-filter-selectbox" title="<%- el.title %>" multiple="multiple" data-id="<%- el.id %>"  data-type="<%- el.type %>">
+
+                <% _.each(el.input, function(opt,i){  %>
+                <% if(opt.id != 'any' && opt.id != '' ){ %>
+                <option value="<%- opt.id %>"><%- opt.title %></option>
+                <% } %>
+                <% }); %>
+
+                </select>
+                <% } %>
+                </div>
+                <% }); %>
+            </script>
+        {% endif %}
+
+        {# Twitter Template#}
+        {% if(elements == 'twitter') %}
+            {# For contact twitter element #}
+            <script type="text/template" id="templateTwitter">
+                <div  id="<%- elementid  %>" data-id="<%- elementid  %>" class='fg-fa-twitter fg-widget-block fg-dev-element-box elementBox' element-id='<%- details.elementId %>' >
+               <% twitterAccName = (details.accountNameLang && details.accountNameLang[clubDefaultLang]) ? (details.accountNameLang[clubDefaultLang]) : details.accountName;  %>
+                <% twitterName = _.escape(twitterAccName);  %>
+                <a class="twitter-timeline" <% if(details.twitterContentHeight >= 0) { %> data-height="<%- details.twitterContentHeight %>" <% } %> data-dnt="true" href="https://twitter.com/<%- twitterName %>">{{"CMS_TWEET_BY"|trans}} <%- twitterName %></a>
+               </div>
+            </script>
+        {% endif %}
+
+        {# Portrait Element#}
+        {% if(elements == 'portrait-element') %}
+            {# For portrait element #}
+            <script type="text/template" id="templatePortraitElement">
+                <div  id="<%- elementid  %>" data-id="<%- elementid  %>" class='fg-portrait-widget fg-widget-block' element-id='<%- details.elementId %>' >
+
+                </div>
+            </script>
+            {% include 'WebsiteCMSBundle:Website:templatePortraitElement.html.twig' %}
+        {% endif %}
+
+        {# Form Element / Contact Application Form #}
+        {% if(elements == 'form' or elements == 'contact-application-form') %}
+            <script type="text/template" id="templateForm">
+            <div  id="<%- elementid  %>"  class='fg-form-widget fg-widget-block fg-dev-element-box elementBox' element-id=<%- details.elementId %>>
+                {#  DISPLAY CONTEN HERE#}
+            </div>
+            </script>
+            {{ include(themeFiles['themeChangedFiles']['theme'~themeId].formElementTemplate) }}
+        {% endif %}
+        {% if(elements == 'contact-application-form') %}                        
+            {{ include(themeFiles['themeChangedFiles']['theme'~themeId].contactApplicationForm) }}
+        {% endif %}
+
+        {# Newsletter Subscription #}
+        {% if(elements == 'newsletter-subscription') %}
+            <script type="text/template" id="templateSubscriptionForm">
+                <div  id="<%- elementid  %>" data-id="<%- elementid  %>" class='fg-nl-subscription-widget fg-widget-block fg-dev-element-box elementBox' element-id='<%- details.elementId %>' >
+
+
+                </div>
+            </script>
+        {% endif %}
+
+        {# Newsletter Archive #}
+        {% if(elements == 'newsletter-archive') %}
+            <script type="text/template" id="templateNewsletterArchive">
+                <div  id="<%- elementid  %>" data-id="<%- elementid  %>" class='fg-nl-archive-widget fg-widget-block fg-datatable fg-dev-element-box elementBox fg-datatable-noheader' element-id='<%- details.elementId %>' >
+                    <table class="row-border " id="website-datatable-list-<%- elementid  %>">
+                    </table>
+                </div>
+            </script>
+
+            <script type="text/template" id="templateNewsletterArchiveElementHeader">
+                <thead>
+                <tr>
+                <th></th>
+                <% _.each(tableColumns, function(el,index){  %>
+                <th> <%- el %></th>
+                <%  });   %>
+                </tr>
+                </thead>
+            </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}

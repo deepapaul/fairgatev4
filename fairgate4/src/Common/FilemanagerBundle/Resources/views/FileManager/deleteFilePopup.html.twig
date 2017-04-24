@@ -1,0 +1,32 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">{{ title|raw }}</h4>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">                    
+                    <div class="form-group">
+                        <label class="col-lg-12 col-md-12 col-xs-12">
+                            {{ text|raw }}
+                        </label>                                
+                    </div>                                             
+                </div>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+    {% include 'internal/savebuttonPopup.html.twig' with {'button_val' : button_val}  %}
+</div>
+<script type="text/javascript">
+    var fieldIds = '{{ filearray|raw }}';
+    $(document).off('click', '#savePopup');
+    $(document).on('click', '#savePopup', function () {
+        FilemanagerDatatable.deleteFiles(fieldIds);  
+    });
+
+
+</script>    
+

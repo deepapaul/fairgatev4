@@ -1,0 +1,135 @@
+{% block form_errors %}
+{% for error in errors %}
+<span class="help-block">{{ error.messageTemplate|trans(error.messageParameters, 'validators')|trans }}</span>
+{% endfor %}
+{% endblock form_errors %}
+
+{% block form_label %}
+{% spaceless %}
+     {% set type = type|default('text') %}
+     {% set requiredType = label_attr['data-required']|default('not_required') %}
+    {% if not compound %}
+        {% set label_attr = label_attr|merge({'for': id}) %}
+    {% endif %}
+    {% if required %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+    {% endif %}
+    {% if label is empty %}
+        {% set label = name|humanize %}
+    {% endif %}
+{% if label != ' ' %}<label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}><div class="fg-label-wrap">{{ label|trans ({'%club%': fgtwig.getTerminolgyName('Club', singular, 'UCF')}, translation_domain) }}{% if required and requiredType !='exclude' %} <span class="required" aria-required="true"> *</span>{% elseif(requiredType=='all_members' or requiredType=='selected_members') %}<span style="display:none" class="required" aria-required="true"> *</span>{% endif %}</div></label>{% endif %}
+    
+{% endspaceless %}
+{% endblock form_label %}
+{% block choice_widget_expanded %}
+{% spaceless %}
+    <div {{ block('widget_container_attributes') }}>
+    {% for child in form %}            
+            <label class="radio-inline {{ child.vars.disabled|default(0) ? 'fg-label-inactive' : ''}}">
+                {{ form_widget(child) }}
+                {{child.vars.label|trans({}, translation_domain)}}
+            </label>
+    {% endfor %}
+    </div>
+{% endspaceless %}
+{% endblock choice_widget_expanded %}
+    
+{% block form_widget_compound %}
+{% spaceless %}
+    <div class="form-body">
+        {% if form.parent is empty %}
+            {{ form_errors(form) }}
+        {% endif %}
+        {{ block('form_rows') }}
+        {{ form_rest(form) }}
+    </div>
+{% endspaceless %}
+{% endblock form_widget_compound %}
+
+{% block form_row %}
+{% spaceless %}
+<div class="row" {{((form.vars.attr["data-same"]|default(1)==1) and (form.vars.attr["data-catId"]=='2')) ? 'style="display:none"':''}} {{ block('widget_container_attributes') }} >
+      <div class="col-md-12">
+        <div class="panel panel-primary fg-bordernon">
+          {% if(form.vars.attr["data-catId"]!='0') %}  
+          <div class="panel-heading">
+            {% if(form.vars.attr["data-catId"]=='1') %}
+            <h3 class="panel-form-title  pull-left">{{ form_label(form,null, { 'label_attr': {'data-required': 'exclude'}}) }}</h3>      
+            <div class="form-group">
+                <div class="checkbox-list pull-left panel-contact-right">
+                      <label class="checkbox-inline" for="same_invoice_address">
+                          <span class=""><input type="checkbox" name="same_invoice_address" value="1" {{(form.vars.attr["data-same"]|default(1)==1) ? 'checked':''}} id="same_invoice_address"></span>
+                        {%trans%}SAME_INVOICE_ADDRESS{%endtrans%}</label>
+                </div>
+            </div>
+            {% else %}<h3 class="panel-form-title">{{ form_label(form,null, { 'label_attr': {'data-required': 'exclude'}}) }}</h3>
+            {% endif %}
+          </div>
+          {% endif %}
+          <div class="row">
+            <div class="col-md-12 fg-common-top">
+               {{ form_widget(form) }} 
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+{% endspaceless %}
+{% endblock form_row %}
+
+{% block form_rows %}
+{% spaceless %}
+    {% set loopIndex = 0 %}
+    <div class="row">
+        {% for child in form %}
+            <div class="col-md-6 {{ (child.vars.attr["data-lang"] is defined and child.vars.attr["data-lang"] != child.vars.attr["data-def-lang"])?'hide':''}} " {{ (child.vars.attr["data-lang"] is defined)?'data-lang='~child.vars.attr["data-lang"]:''}} {{(child.vars.attr["data-attrId"]=='mainContactName') ? 'style="display:none"':''}}>
+                <div data-attrId="{{child.vars.attr["data-attrId"]}}" data-members=":{{child.vars.attr["data-members"]|default('')}}:" data-reqType="{{child.vars.attr["data-reqType"]|default('')}}" data-required="{{child.vars.attr["data-required"]|default('not_required')}}" class="form-group {% if not child.vars.valid %}has-error{% endif %}">
+                    {{ form_label(child, null, { 'label_attr': {'class': 'control-label col-md-4','data-required':child.vars.attr["data-required"]|default('not_required')} }) }}
+                     <div class="col-md-{{(child.vars.attr["data-attrId"]=='mainContact') ? '11 pull-right' :'8'}} {{(child.vars.attr["data-attrId"]=='mainContactName') ? 'input-icon':''}}">
+                        {% if(child.vars.attr["data-attrId"]=='mainContactName') %}<i class="fa fa-search"></i>{% endif %}
+                        {{ form_widget(child) }}
+                        {{ form_errors(child) }}
+                    </div>
+                </div> 
+           </div>
+        {% endfor %}
+    </div>
+{% endspaceless %}
+{% endblock form_rows %}
+    
+{% block form_widget_simple %}
+    {% spaceless %}
+        {% set type = type|default('text') %}
+        {% set isDate = attr.isDate|default('0') %}
+        {% set attrId = attr["data-attrId"]|default('') %}    
+        {%if isDate=='1' %}
+            <div class='input-group date'>
+                <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+                
+        {% elseif(type=='file' and name starts with 'logo') %}
+            <input type="{{ type }}" name='logo' id='{{'club_'~name}}'/>
+        {% elseif(type=='file' and name == 'fed_logo') %}
+            <input type="{{ type }}" name='fed_logo' id='fed_logo'/>        
+        {% elseif(type=='file') %}
+            {% set dataValue = attr['data-value']|default('0') %}
+            <div {{name}} class="fileinput fileinput-{{ (dataValue) ? 'exists' :'new'}}" data-provides="fileinput">
+                <span class="btn default btn-file">
+                    <span class="fileinput-new">
+                        {%trans%}CONTACT_FIELDS_SELECT_FILE{%endtrans%} </span>
+                    <span class="fileinput-exists">
+                        {%trans%}CONTACT_FIELDS_FILE_CHANGE{%endtrans%} </span>
+                    <input {{ block('widget_attributes') }} title="" type="file">
+                </span>
+                <span class="fileinput-filename">{{ (dataValue) ? dataValue :''}}
+                </span>
+                &nbsp; <a href="#" class="close fileinput-exists" data-dismiss="fileinput" data-fileId="{{ attrId }}">
+                </a>
+            </div>
+        {% else %}
+            <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_widget_simple %}

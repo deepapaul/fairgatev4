@@ -1,0 +1,68 @@
+Common\UtilityBundle\Entity\FgClubFilter:
+    repositoryClass: Common\UtilityBundle\Repository\FgClubFilterRepository
+    type: entity
+    table: fg_club_filter
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        tableRows:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: table_rows
+        updatedAt:
+            type: datetime
+            nullable: false
+            column: updated_at
+        filterData:
+            type: text
+            nullable: false
+            column: filter_data
+        isBroken:
+            type: boolean
+            nullable: false
+            column: is_broken
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sort_order
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        tableAttributes:
+            targetEntity: FgClubTableSettings
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                table_attributes:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

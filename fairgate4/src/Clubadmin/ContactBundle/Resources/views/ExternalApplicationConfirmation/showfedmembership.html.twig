@@ -1,0 +1,141 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    
+    {% set message='' %}
+    {% if contactnames|length == 1 %}
+     
+        {% set message='Do you really want to confirm these  contacts ?'  %}
+        <h4 class="modal-title fileinput-filename">{%trans%} Activate  {% endtrans %} 
+             
+            {% for reactivatecontact in contactnames %}
+                {{ reactivatecontact }}
+            {% endfor %} 
+            <div class="fg-arrow-sh">
+            </div>
+        </h4>
+    {% else %}
+        {% set message='Do you really want to confirm these  contacts ?' %}
+        <h4 class="modal-title"><span> <a href="javascript:void(0)" class="fg-plus-icon"></a><a href="#" class="fg-minus-icon"></a> </span>{%trans%}Activate  {% endtrans %}  {{contactnames|length}} {%trans%}contacts  {% endtrans %}  <div class="fg-arrow-sh">
+                <ul>
+                    {% set iCount=0 %}
+                    {% for key,reactivatecontact in contactnames %}
+                        <li><a href="{{ path('contact_data',{'offset':iCount ,'contact': key})}}" target="_blank" data-cont-id="">{{ reactivatecontact }}</a></li>
+                      {% set iCount=iCount+1 %} 
+                    {% endfor %}           
+                </ul>
+            </div>
+        </h4>
+
+    {% endif %}
+
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="#" class="form-horizontal form-row-sepe" id="archivecontacts">
+                    <div class="form-body">
+                        {% if (fedMembershipMandatory is defined) %}
+                            {% if(fedMembershipMandatory == 1)%}
+                                <div class="form-group">
+                                    <label class="fg-membership control-label col-sm-5 " for="select">{{fedTitle}}<span class="required" aria-required="true"> *</span></label>
+                                    <div class="col-sm-7">
+                                    <select id="fedmembership" name="fedmembership" class="form-control select2" data-fieldname=" {%trans%}MEMBER_CATEGORY{%endtrans%}" data-attrid="fedmembership">
+                                        <option value="">{{'SELECT_DROPDOWN'|trans}}</option>
+                                        {% for key,fedmemb in fed_memberships_array %}
+                                            {% if(key == userMembership)%}
+                                                      <option  data-content="{{fedmemb}} <img src='{{fedlogoPath}}' /> " value="{{key}}" selected> {{fedmemb}}</option>
+                                                 {% else %}
+                                                    <option  data-content="{{fedmemb}} <img src='{{fedlogoPath}}' /> " value="{{key}}"> {{fedmemb}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                   </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                        <p class="row"> 
+                            {{message|trans}}
+                            <input type="hidden" name="selectedId" id="selectedId" value="{{selectedId}}" />
+                            <input type="hidden" name="selectedAction" id="selectedAction" value="{{selActionType}}" />
+                        </p>
+                    </div>
+
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer form-actions fg-modal-footer">
+    <button type="button" class="btn default" data-dismiss="modal">{%trans%}Cancel{%endtrans%}</button>
+    <button type="button" class="btn green" id="externalconfirm">{%trans%}Save{%endtrans%}</button>
+</div>
+
+<script>
+    $('.modal-title').on('click', function() {
+        $(this).toggleClass('fg-arrowicon');
+    })
+    $('.select2').selectpicker();
+    var selConfirmIds = [];
+    var selectionClass =  'dataClass:checked';
+    $("input." + selectionClass).each(function () {
+        var confirmId = $(this).attr('id');
+        if ($.inArray(confirmId, selConfirmIds) == -1) {
+             selConfirmIds.push(confirmId);
+        }
+    });
+    data = {}
+    data.selectedId = JSON.stringify(selConfirmIds);    
+    var reactivateOerviewContactId = data.selectedId;
+      //Path External Aplication
+    var reactivateOverviewPath = "{{path('get_all_external_application_confirm')}}";
+$("#externalconfirm").on('click', function () {
+   
+         
+            $('form#archivecontacts .help-block').remove();
+            $('form#archivecontacts .has-error').removeClass('has-error');
+            if($('#fedmembership').length > 0) {
+                fedMembershipVal = $('#fedmembership').val();
+                if(fedMembershipVal == ''){
+                    $('form#archivecontacts select#fedmembership').parent().addClass('has-error');
+                    $('<span class="help-block fg-marg-top-5">required</span>').insertAfter($('form#archivecontacts select#fedmembership + .btn-group.bootstrap-select'));
+                    return false;
+                }
+            } else {
+                fedMembershipVal = false;
+            }
+           
+            contactid = reactivateOerviewContactId;
+            var type = $('#selectedAction').val();
+            
+            if(type=='all'){
+                contactid = $('#selectedId').val();
+            }
+           
+            assignmentJsonAr = {'selcontactIds': contactid, 'contactType': 'confirm', 'fedMembershipVal': fedMembershipVal};
+            $('#popup').modal('hide');
+            $.get(reactivateOverviewPath, {'archivedData': assignmentJsonAr}, function (response) {
+                 if(response.mergeable){
+                if(contactid.split(",").length > 1)
+                   FgMultipleMergePopup.handleMergerablePopup(response);
+                else
+                    FgMergePopup.handleMergerablePopup(response);
+            }else{
+                   if (response.status == 'FAILURE') {
+                       
+                        FgUtility.showToastr(response.flash, 'warning');
+                    } else {
+                        FgUtility.showToastr(response.flash, 'success');
+                    }
+                    
+                    location.reload();
+            }
+                 
+                
+               
+            });
+        });
+</script>
+

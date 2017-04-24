@@ -1,0 +1,398 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title"></h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="#" class="form-horizontal form-row-sepe" id="assignclubs">
+                    <div class="form-body">
+
+                        <div id="block_0">
+                            <!-- CLassification SECTION STARTS -->
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 col-md-3">{{'CL_CLASSIFICATION'|trans}}</label>
+                                <div class="col-lg-9 col-md-8">
+                                    <select class="form-control select2me" data-placeholder="Club fields" id="classification_dropdown">
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- CLassification SECTION ENDS -->
+
+                            <!-- cLaSs SECTION STARTS -->
+                            <div class="form-group hide" data-id="show_class_section">
+                                <label id="fg-dev-class-label" class="control-label col-lg-3 col-md-3">{{'CLASSES'|trans}}</label>
+                                <div class="col-lg-9 col-md-8">
+                                    <select class="form-control select2me" data-placeholder="Club fields" id="class_dropdown">
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- cLaSs SECTION ENDS -->
+                            <!-- NOT ALLOWED TO ASSIGN ERROR STARTS -->
+                            <div class="alert  alert-danger fg-poup-alert hide" id="notallowed_error">
+                                <p><strong>{{'ERROR'|trans}}: </strong><span></span></p>
+                            </div>
+                            <!-- NOT ALLOWED TO ASSIGN ERROR ENDS -->
+                            <!-- MULTIPLE ASSIGNMENT ERROR STARTS -->
+                            <div class="alert  alert-danger fg-poup-alert hide" id="multiassignment_error">
+                            </div>
+                            <!-- MULTIPLE ASSIGNMENT ERROR ENDS -->
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer form-actions fg-modal-footer">
+    <button type="button" class="btn default" id="cancel" data-dismiss="modal" data-function="cancel">{{'CANCEL'|trans}}</button>
+    <button type="button" class="btn green" id="save" data-function="save">{{'SAVE'|trans}}</button>
+</div>
+<!-- UNDERSCORE TEMPLATES STARTS -->
+<div id="divTemplates">
+    <script type="text/template" id="display_dropdown">
+        <% if (Object.keys(options).length > 0) { %>
+            <option value="">{{'SELECT_DROPDOWN'|trans}}</option>
+            <% _.each(options, function(option) { %>
+                <option value="<%- option['id'] %>" <% if (option['id'] == selectedId) { %> selected <% } %>><%- option['title'] %></option>
+            <% }); %>
+        <% } %>
+    </script>
+    <!-- Template for mutiple-assignment error -->
+    {% include 'ClubadminClubBundle:Assignment:multipleassignmenterror.html.twig' %}
+</div>
+<!-- UNDERSCORE TEMPLATES ENDS -->
+<script src="{{ asset('fgcustom/js/fgtemplate.js')}}" type="text/javascript"></script>
+<script type="text/javascript">
+    
+    var actionType = '{{actionType}}';
+    var clubType = '{{clubType}}';
+    var labelArr = '{{labelArr}}';
+    var dragClfn = '{{dragClassification}}';
+    var dragClass = '{{dragClass}}';
+    var selectedClfn  = '{{dropClassification}}';
+    var selectedClass = '{{dropClass}}';
+    var clfnArray = {};
+    var classArray = {};
+    var clfnNames = {};
+    var classNames = {};
+    var singleAssignmentClfn = [];
+    //var notAllowedClfn = [];
+    var selectedClubIds = [];
+    var selectedClubNames = [];
+    var popupHeadText = '';
+    var saveAssignmentData={};
+    var updateAssignmentPath = '{{path("update_club_assignments")}}';
+    var dropdownPath = "{{path('get_all_club_assignment_dropdown')}}";
+    var selActionType = '{{selActionType}}';
+    var singleAssignTxt = '{{'ASSIGN_%clubname%_TO'|trans}}' + ' ';
+    var multipleAssignTxt = '{{'ASSIGN_%clubcount%_%CLUBS%_TO'|trans}}' + ' ';
+    var singleMoveTxt = '{{'MOVE_%clubname%_FROM_%dragClass%_TO'|trans}}' + ' ';
+    var multipleMoveTxt = '{{'MOVE_%clubcount%_%CLUBS%_FROM_%dragClass%_TO'|trans}}' + ' ';
+    var terminology = '{{ clubterminology|escape()}}';
+    if ((selActionType == 'all') || (selActionType == 'single-select')) {
+        var allClubData = $.parseJSON($('#selcontacthidden').val());
+        $.each(allClubData, function(key, clubData) {
+            var clubId = clubData.id;
+            if ($.inArray(clubId, selectedClubIds) == -1) {
+                selectedClubIds.push(clubId);
+                selectedClubNames.push({'id': clubId, 'name': clubData.clubname});
+            }
+        });
+    }else {
+        var selectedIdsElement = ($(".dataTables_wrapper div").hasClass('DTFC_LeftBodyWrapper')) ? ".DTFC_LeftBodyWrapper input.dataClass:checked" : "input.dataClass:checked";
+        $(selectedIdsElement).each(function() {
+            var clubId = $(this).attr('id');
+            if ($.inArray(clubId, selectedClubIds) == -1) {
+                selectedClubIds.push(clubId);
+                selectedClubNames.push({'id': clubId, 'name': $(this).parents('tr').find('.fg-dev-clubname').text()});
+            }
+        });
+    }
+    toAssignClubs = selectedClubIds;
+    selectedClubNames = selectedClubNames.sort(function (a, b) {
+        return a.name.localeCompare( b.name );
+    });
+        $.getJSON(dropdownPath,function(assignments){
+            arrayRslt = FgUtility.groupByMulti(assignments.resultArray, ['classificationId']);
+             
+            $.each(arrayRslt, function(key,assignment) {
+                var clfnId = key;
+                if ((clfnId != null) && (clfnId != 'null')) {
+                    var clfnTitle = assignment[0].classificationTitle;
+                    sortOrder = assignment[0].CLorder;
+                    ordering = sortOrder+clfnId;
+                    clfnArray[ordering] = {'id': clfnId, 'title': clfnTitle};
+                    clfnNames[clfnId] = clfnTitle;
+                        if (assignment[0].classAssign == 'single') {
+                             singleAssignmentClfn.push(assignment[0]['classificationId']);
+                        }
+                    
+                    } 
+                   //get classification-wise class
+                    $.each(assignment,function(key,classs){
+                        var classId = classs.classId;
+                        if ((classId != null) && (classId != 'null')) {
+                                if (classArray[clfnId] == undefined) {
+                                    classArray[clfnId] = {};
+                                }
+                                var classTitle = classs.classTitle;
+                                classOrder = classs.CCorder;
+                                orderingclass = classOrder+classId;
+                                classArray[clfnId][orderingclass] = {'id': classId, 'title': classTitle};
+                                classNames[classId] = classTitle;
+                        }
+                    }); 
+                });
+            //Popup Heading
+            displayPopupHeading();
+            //classification and class dropdown display
+            displayDropdown();
+            
+             $('#popup_contents input').uniform();
+        });
+    
+    $('form').off('change', 'select#classification_dropdown');
+    $('form').on('change', 'select#classification_dropdown', function() {
+        toAssignClubs = selectedClubIds;
+        selectedClfn = $(this).val();
+        selectedClass = '';
+        displayDropdown();
+    });
+     $('form').on('change', 'select#class_dropdown', function() {
+        toAssignClubs = selectedClubIds;
+        selectedClass = $(this).val();
+        displayDropdown();
+    });
+    
+      
+    function displayDropdown(){
+        renderTemplateContent('display_dropdown', {'options':clfnArray , 'selectedId': selectedClfn}, 'classification_dropdown');
+        $('#fg-dev-class-label').text(labelArr['class']);
+        var classOptions = classArray[selectedClfn] ? classArray[selectedClfn]: {};
+        renderTemplateContent('display_dropdown', {'options':classOptions , 'selectedId': selectedClass}, 'class_dropdown');
+        if (Object.keys(classOptions).length > 0) {
+            $('div[data-id=show_class_section]').removeClass('hide');
+        } else {
+            $('div[data-id=show_class_section]').addClass('hide');
+        }
+        $('#popup_contents select').select2();
+        
+        noMultiAssigmentClubs = [];
+        //remove error divs
+        notAllowedClubs = [];
+        //notAllowedClfn = [];
+        cantAssignClubs = [];
+        $('div#req_asgmnt_error .fg-popup-link, div#multiassignment_error').html('');
+        $('div#notallowed_error,  div#req_asgmnt_error, div#multiassignment_error').addClass('hide');
+
+           //check whether the selected clubs are already assigned to any class of this classification
+            if (((actionType == 'assign') && ($.inArray(selectedClfn, singleAssignmentClfn) != -1) && (selectedClass != '')) || ((actionType == 'move') && ($.inArray(selectedClfn, singleAssignmentClfn) != -1) && (dragClfn != selectedClfn))) {
+                $.getJSON('{{path("validate_club_assignments")}}', {'clubIds': selectedClubIds.toString(), 'clfnId': selectedClfn, 'classId': selectedClass}, function(assignments) {
+                    var assignedClubs = Object.keys(assignments);
+                    if (assignedClubs.length > 0) {
+                        noMultiAssigmentClubs = assignedClubs;
+                        renderTemplateContent('template-multiple-asgmnt-error', {'selClubNames':selectedClubNames, 'assignedClubs':assignedClubs, 'classNames':classNames, 'assignments':assignments}, 'multiassignment_error');
+                        $('div#multiassignment_error input:checkbox').uniform()
+                        $('div#multiassignment_error').removeClass('hide');
+                        toAssignClubs = $(toAssignClubs).not(noMultiAssigmentClubs).get();
+                    }
+                });
+            }
+        
+        setTimeout(saveOption,1000);
+    }
+    function renderTemplateContent(templateScriptId, jsonData, parentDivId) {
+        var htmlFinal = FGTemplate.bind(templateScriptId, jsonData);
+        $('#' + parentDivId).html(htmlFinal);
+    }
+    function displayPopupHeading() {
+        if (selectedClubIds.length == 1) {
+            if (actionType == 'assign') {
+                popupHeadText = singleAssignTxt.replace('%clubname%', selectedClubNames[0].name);
+            } else if (actionType == 'move') {
+                popupHeadText = singleMoveTxt.replace('%clubname%', selectedClubNames[0].name).replace('%dragClass%', classNames[dragClass]);
+            }
+            $('h4.modal-title').html('<div class="fg-popup-text" id="popup_head_text"></div>');
+            $('div#popup_head_text').text(popupHeadText + '...');
+        } else {
+            if (actionType == 'assign') {
+                popupHeadText = multipleAssignTxt.replace('%clubcount%', selectedClubIds.length).replace('%CLUBS%',terminology);
+                
+            } else if (actionType == 'move') {
+                popupHeadText = multipleMoveTxt.replace('%clubcount%', selectedClubIds.length).replace('%dragClass%', classNames[dragClass]).replace('%CLUBS%',terminology);
+            }
+            if (selActionType == 'all') {
+                $('h4.modal-title').html('<div class="fg-popup-text" id="popup_head_text"></div>');
+                $('div#popup_head_text').text(popupHeadText + '...');
+            } else {
+                var clubNamesHtml = '';
+                var clubNameLinks = {};
+                var i = 0;
+                $.each(selectedClubNames, function(key, selClubName) {
+                    i++;
+                    if (i == 11) {
+                        clubNamesHtml += '<li>&hellip;</li>';
+                        return false;
+                    } else {
+                        clubNameLinks[selClubName.id] = selClubName.name;
+                        clubNamesHtml += '<li><a href="club/overview/0/'+selClubName.id+'" target="_blank" data-club-id="'+selClubName.id+'"></a></li>';
+                    }
+                });
+                $('h4.modal-title').html('<span class="fg-dev-club-names"><a href="#" class="fg-plus-icon"></a><a href="#" class="fg-minus-icon"></a></span><div class="fg-popup-text" id="popup_head_text"></div>\n\
+                    <div class="fg-arrow-sh"><ul>' + clubNamesHtml + '</ul></div>');
+                $('div#popup_head_text').text(popupHeadText + '...');
+                displayClubNames(clubNameLinks);
+            }
+        }
+    }
+    function displayClubNames(clubNameLinks) {
+        $.each(clubNameLinks, function(selClubId, selClubName) {
+            $('a[data-club-id='+selClubId+']').text(selClubName);
+        });
+    }
+    $(document).off('click', '.modal-title .fg-dev-club-names');
+    $(document).on('click', '.modal-title .fg-dev-club-names', function() {
+        //toggle class to showhide the selected clubs
+        $(this).parent().toggleClass('fg-arrowicon');
+    });
+    $(document).off('click','button[data-function=save]','button[data-function=cancel]');
+    $(document).on('click','button[data-function=save]','button[data-function=cancel]',function(){
+        var buttonFn = (this).id;
+        if(buttonFn != 'cancel'){
+            if(buttonFn == 'save'){
+                 $('form#assignclubs .help-block').remove();
+                 $('form#assignclubs .has-error').removeClass('has-error');
+                 //validation for required fields
+                 var hasError = false;
+                 if(selectedClfn == ''){
+                     hasError = true;
+                     $('form#assignclubs select#classification_dropdown').parent().addClass('has-error');
+                     $('<span class="help-block">{{'REQUIRED'|trans}}</span>').insertAfter($('form#assignclubs select#classification_dropdown'));
+                 }
+                 if(selectedClass == ''){
+                     hasError = true;
+                     $('form#assignclubs select#class_dropdown').parent().addClass('has-error');
+                     $('<span class="help-block">{{'REQUIRED'|trans}}</span>').insertAfter($('form#assignclubs select#class_dropdown'));
+                 }
+
+
+                 if (hasError) {
+                     var errorBlockId = $('form#assignclubs .has-error:first').parents('.form-group').parent().attr('id');
+                     return false;
+                } else {
+                    saveAssignmentData = {};
+                   
+                    //multi assignment error checked club - remove assignments
+                    $.each($('div#multiassignment_error table tbody input:checkbox:checked'), function(key, obj) {
+                        var remClubId = $(obj).val();
+                        var remClassId = $(obj).attr('data-classid');
+                        renderSaveJson(remClubId,selectedClfn,remClassId , 'is_deleted');
+
+                    });
+                    if (actionType == 'move' && (selectedClubIds.length >0)) {
+                         $.each(toAssignClubs, function(ckey, toAssignClub) {
+                             renderSaveJson(toAssignClub, dragClfn, dragClass, 'is_deleted');
+                        });
+                    }
+                    //add assignments
+                    $.each(toAssignClubs, function(ckey, toAssignClub) {
+                        renderSaveJson(toAssignClub, selectedClfn, selectedClass, 'is_new');
+                    });
+                    
+                     if (actionType == 'move' && (selectedClubIds.length >0)) {
+                        saveAssignments();
+                     }
+                     else if(actionType == 'assign' && (selectedClubIds.length >0)){
+                        saveAssignments();
+                     }
+                }
+
+            }
+        }
+    });
+    
+     //select or de-select multiple assignment restricted contacts
+    $(document).off('click', '#nomulti_check_all');
+    $(document).on('click', '#nomulti_check_all', function() {
+        $('div#multiassignment_error input:checkbox').attr('checked', this.checked);
+        $.uniform.update('div#multiassignment_error input:checkbox');
+        if (this.checked) {
+            $.each($('div#multiassignment_error table tbody input:checkbox'), function(key, obj) {
+                noMultiAssigmentClubs = _.without(noMultiAssigmentClubs, $(obj).val());
+                toAssignClubs.push($(obj).val());
+            });
+        } else {
+            $.each($('div#multiassignment_error table tbody input:checkbox'), function(key, obj) {
+                toAssignClubs = _.without(toAssignClubs, $(obj).val());
+                noMultiAssigmentClubs.push($(obj).val());
+            });
+        }
+        saveOption();
+    });
+    $(document).off('change', 'input[data-type=select_club]');
+    $(document).on('change', 'input[data-type=select_club]', function() {
+        if (this.checked) {
+            noMultiAssigmentClubs = _.without(noMultiAssigmentClubs, this.value);
+            toAssignClubs.push(this.value);
+        } else {
+            toAssignContacts = _.without(toAssignClubs, this.value);
+            noMultiAssigmentClubs.push(this.value);
+        }
+        if ($('div#multiassignment_error table tbody input:checkbox').not(':checked').length == 0) {
+            $('#nomulti_check_all').attr('checked', true);
+        } else {
+            $('#nomulti_check_all').attr('checked', false);
+        }
+        $.uniform.update('#nomulti_check_all');
+        saveOption();
+    });
+    
+    function saveAssignments() {
+        var Arr = JSON.stringify(saveAssignmentData);
+        var passingData = {'classificationArr': Arr,'from':'clublist','totalClubs':selectedClubIds.length,actionType:actionType};
+        FgXmlHttp.post(updateAssignmentPath, passingData, false, callBackFn);
+         $('#popup').modal('hide');
+    }
+    function callBackFn() {
+        FgTable.init();
+    }
+     function renderSaveJson(clbId, clfId, clsId, type) {
+
+        if (saveAssignmentData[clbId] == undefined) {
+            saveAssignmentData[clbId] = {};
+        }
+        if (clfId != '') {
+            if (saveAssignmentData[clbId][clfId] == undefined) {
+                saveAssignmentData[clbId][clfId] = {};
+            }
+            if (clsId != '') {
+                if (saveAssignmentData[clbId][clfId]['class'] == undefined) {
+                    saveAssignmentData[clbId][clfId]['class'] = {};
+                }
+                if (saveAssignmentData[clbId][clfId]['class'][clsId] == undefined) {
+                    saveAssignmentData[clbId][clfId]['class'][clsId] = {};
+                }
+                if (saveAssignmentData[clbId][clfId]['class'][clsId][type] == undefined) {
+                    saveAssignmentData[clbId][clfId]['class'][clsId][type] = {};
+                }
+                if(type == 'is_deleted'){
+                    saveAssignmentData[clbId][clfId]['class'][clsId][type] = 1;
+                }else if(type == 'is_new'){
+                    saveAssignmentData[clbId][clfId]['class'][clsId][type] = clsId;
+                }
+            }
+        }
+       
+    }
+    function saveOption() {
+        if (toAssignClubs.length <= 0) {
+            $('button#save').attr('disabled', 'true');
+        } else {
+            $('button#save').removeAttr('disabled');
+        }
+    }
+</script>

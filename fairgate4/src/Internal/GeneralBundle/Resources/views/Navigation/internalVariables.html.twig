@@ -1,0 +1,87 @@
+var Sprint ={'currentSprint':"{{fgclub.get('currentSprint')}}"};
+
+var jstranslations = {
+    'VALIDATION_THIS_FIELD_REQUIRED' : "{{ 'VALIDATION_THIS_FIELD_REQUIRED'|trans }}",
+    'dirtyformAlert' : "{{ 'DIRTYFORM_ALERT_DID_U_FORGET_TO_SAVE_FIRST_FORM'|trans }}",
+    'dirtyformConfirm' : "{{ 'DIRTY_FORM_CONFIRM'|trans }}",
+    'validateMinLength' : "{{ 'VALIDATE_MINLENGTH_MSG'|trans }}",
+    'localeName' : '{{fgclub.get('default_system_lang')}}',
+    'EMAIL_VALIDATION' : "{{ 'EMAIL_VALIDATION'|trans }}",
+    'invalidurl' : "{{ 'INVALID_URL'|trans }}",
+    'validateMax':"{{'GN_VALIDATE_MAX_LIMIT'|trans}}",
+    'validateMin':"{{'GN_VALIDATE_MIN_LIMIT'|trans}}",
+    'noneSelectedText' : "{{ 'NONE'|trans }}",
+    'countSelectedText' : "{{ 'COUNT_SELECTED_TEXT'|trans }}",
+    'loadingVar' : "{{ 'COMMON_LOADING_VAR'|trans }}",
+    'data_Search' : "{{ 'DATA_SEARCH'|trans }}",
+    'data_showing' : "{{ 'DATA_SHOW'|trans }}",
+    'data_to' : "{{ 'DATA_TO'|trans }}",
+    'data_of' : "{{ 'DATA_OF'|trans }}",
+    'data_entries' : "{{ 'DATA_ENTRIES'|trans }}",
+    'no_matching_records' : "{{ 'LOADING'|trans }}",
+    'no_record' : "{{ 'NO_RECORD'|trans }}",
+    'filtered_from' : "{{ 'FILTERED_FROM'|trans }}",
+    'total_entries' : "{{ 'TOTAL_ENTRIES'|trans }}",
+    'row' : "{{ 'ROW'|trans }}",
+    'Reg' : "{{ 'CL_INVOICE'|trans }}",
+    'Korr' : "{{ 'CL_CORRESPONDENCE'|trans }}",
+    'contact_name' : "{{ 'CONTACT_NAME'|trans }}",
+    'Function' : "{{ 'CONTACT_FUNCTION'|trans }}",
+    'waitingForConfirmation': '{{ 'WAITING_FOR_CONFIRMATION'|trans }}',
+    'currentActiveValue': '{{ 'CURRENT_ACTIVE_VALUE'|trans }}',
+    'More' : "{{ 'CM_MORE'|trans }}",
+    'PrivateText':"{{ 'IN_PRIVATE_TEXT'|trans }}",
+    'fedmemConfirmTootipMsg':"{{'CONTACT_FED_MEMBER_TOOLTIP'|trans}}",
+    'allSelected':"{{'ALL'|trans}}",
+    'chars':"{{ 'ARTICLE_CHARS'|trans }}",
+    'cmsNavMenuDeleteTooltip':"{{ 'TOOLTIP_DISABLED_DELETE_MENU_ICON'|trans({}, 'tooltip') }}",
+    'invalidFormat':"{{'FG_INVALID_FORMAT'|trans}}",
+    'validateMaxLength' : "{{ 'VALIDATE_MAXLENGTH_MSG'|trans }}"
+};
+FgInternalVariables = {  
+    'topNavSearchUrl' : "{{ path('search_contacts') }}",
+    'topNavChangePasswordUrl' : "{{ path('user_change_password') }}"
+};
+FgLocalStorageNames = {
+    'personalDocuments' : {         
+        "sidebarActiveMenu" : "activePersonalDocumentsMenu{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+        "sidebarActiveSubMenu" : "activePersonalDocumentsSubMenu{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+        "sidebarActiveOptions" : "activePersonalDocumentsMenuOptions{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+        "sidebarActiveMenuDet": "activePersonalDocumentsMenuDet{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+    },
+    'teamDocuments' : {         
+        "sidebarActiveMenu" : "activeTeamDocumentsMenu{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+        "sidebarActiveSubMenu" : "activeTeamDocumentsSubMenu{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+        "sidebarActiveOptions" : "activeTeamDocumentsMenuOptions{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+        "sidebarActiveMenuDet": "activeTeamDocumentsMenuDet{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+    },
+    'workgroupDocuments' : {         
+        "sidebarActiveMenu" : "activeWorkgroupDocumentsMenu{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+        "sidebarActiveSubMenu" : "activeWorkgroupDocumentsSubMenu{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+        "sidebarActiveOptions" : "activeWorkgroupDocumentsMenuOptions{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+        "sidebarActiveMenuDet": "activeWorkgroupDocumentsMenuDet{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+    },
+    'gallery' : {
+        "selectedAlbum" : "gallerySelectedAlbum{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+        "currentViewMode" : "galleryCurrentViewMode{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+        "activeMenuVar" : "galleryActiveMenuVar{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+        "activeSubMenuVar" : "galleryActiveSubMenuVar{{fgclub.get('id')}}-{{fgclub.get('contactId')}}",
+    },
+    'calendar' : {
+        "selectedDate" : "selectedDate{{fgclub.get('id')}}-{{fgclub.get('contactId')}}"
+    }
+};
+  
+FgLocaleSettingsData = {
+    jqueryDateFormat: "{{fgclub.get('jquerydate')}}",
+    jqueryDateTimeFormat: "{{fgclub.get('jquerydatetime')}}",
+    jqueryDtimeFormat: "{{fgclub.get('jquerytime')}}",
+    momentDateFormat: "{{fgclub.get('momentdate')}}",
+    momentDateTimeFormat: "{{fgclub.get('momentdatetime')}}",
+    momentTimeFormat: "{{fgclub.get('momenttime')}}",
+    currency : '{{fgclub.get('clubCurrency')}}',
+    currencyPosition : '{{fgclub.get('clubCurrencyPosition')}}',
+    decimalMark:'{{fgclub.get('decimalmarker')}}',
+    thousendSeperator:'{{fgclub.get('thousandseperator')|raw}}'
+}
+globalForbiddenfiles = '{{ forbiddenFiletypes }}';

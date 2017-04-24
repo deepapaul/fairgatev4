@@ -1,0 +1,74 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::global/layout-sidebar.html.twig' %}
+{% set pageTitle = 'CMS_ALL_FORM_INQUIRIES'|trans %}
+{% block customstylesheets %}
+     <link href="{{ asset('fgassets/website/css/style-cms.css')}}" type="text/css" rel="stylesheet" />
+{% endblock %}
+{% block pagecontent %}
+    <div class="clearfix"> </div>
+    <!-- BEGIN CONTAINER -->
+    <div class="row fg-theme-green">
+        <div class="col-md-12">
+            <!-- BEGIN BREADCRUMB-->
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+            <!-- END BREADCRUMB-->
+            <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+            {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'contactId': '', 'tabs': '', 'roleCount' : '' , 'type':'', 'url' : '', 'clubLanguages':meta.clubLanguages, 'clubDefaultLang':meta.clubDefaultLang} %}
+            <!-- END PAGE TITLE AND PANEL TABS -->
+            <!-- BEGIN CONTENT -->
+            <div class="clearfix"></div>
+            <div class="fg-inquiry-list-wrapper row">
+                <table class="dataTable
+                       table
+                       table-bordered
+                       table-hover
+                       table-condensed
+                       dataTable-dragable
+                       fg-brdr-btm"
+                       id="datatable-inquiry-list" dataTable-popover="true" dataTable-hover="true">
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--  Custom pop over html -->
+    <div class="custom-popup">
+        <div class="popover bottom">
+            <div class="arrow"></div>
+            <div class="popover-content"></div>
+        </div>
+    </div>
+    <!--  End Custom pop over html -->  
+{% endblock %}
+{% block underscoretemplate %}
+    {% include 'WebsiteCMSBundle:FormElementInquiries:templateInquiryList.html.twig' %} 
+{% endblock %}
+{% block javascripts %}
+    <script src="/fgassets/website/js/Fg_cms_inquiry_list.js" type="text/javascript"></script>
+    <script src="/fgassets/global/js/datatable/buttons/buttons.html5.min.js" type="text/javascript"></script>
+    <script src="/fgassets/global/js/datatable/buttons/dataTables.buttons.js" type="text/javascript"></script>
+    <script>
+      var jsonData = {{ sidebarData|json_encode()|raw }};
+      var actionMenu = {{actionMenu|json_encode()|raw}};
+      var clubId = {{clubId}};
+      var profilePath = "{{ path('internal_community_profile', {'contactId': "placeholder" }) }}";
+      var CmsInquiryList = new FgCmsInquiryList();
+        $(function () {
+            CmsInquiryList.inquiryListAllAjaxPath = '{{ path("website_cms_form_get_inquiries") }}';
+            CmsInquiryList.inquiryListAjaxPath = "{{ path("website_cms_get_inquiries_form",{'elementId' : "placeholder"}) }}";
+            CmsInquiryList.isAllFormInquiries = true;
+            CmsInquiryList.defaultPageTitle = '{{pageTitle}}';
+            CmsInquiryList.contactProfilePath = profilePath;
+            CmsInquiryList.inquiryDeletePath = '{{ path("website_cms_delete_inquiry") }}';
+            CmsInquiryList.editFormPath = '{{ path("website_cms_form_element_edit", {'formId' : "placeholder"}) }}';
+            CmsInquiryList.inquityDetailsPopupPath = '{{ path("website_cms_get_inquiries_form_data", {'inquiryId' : "placeholder"}) }}';
+            CmsInquiryList.exportAttachmantpath = '{{ path("website_cms_download_inquiries_form_attachments", {'elementId' : "placeholder"}) }}'; 
+            CmsInquiryList.getSidebarDataPath = "{{ path('website_cms_get_sidebar_updatedata') }}";
+            CmsInquiryList.formFileUploadDir = "{{formUploadDirectory}}";
+            CmsInquiryList.attachmentDownloadPath = "{{ path('website_cms_inquiriy_attachment_download', {'fileName':'|placeholder|'}) }}";
+            CmsInquiryList.initSidebar(); 
+        });
+
+        function manipulationFn(data){
+            CmsInquiryList.tableData = data;
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,88 @@
+<script type="text/template" id="template-role-add">
+
+    <% newClass = isNew ? 'addednew' : '' %>
+    <% newKey = isNew ? '.new' : '' %>
+    <% newVar = isNew ? '_new' : '' %>
+    <% roleKey = '.class' + newKey + '.' + roleId %>
+    <% roleName = '_class' + newVar + '_' + roleId %>
+    <% roleType = (typeof roleType !== 'undefined') ? roleType : 'role' %>
+    <% dataKeyVar = catId + roleKey %>
+    <% dataNameVar = catId + roleName %>
+    <% disableRow = (typeof disable_row !== 'undefined') ? disable_row : false %>
+    <% changeActivation = (typeof change_activation !== 'undefined') ? change_activation : false %>
+    <% placeHolderName = '{{'CL_CLASS'|trans}}' %>
+    <% linkCatType = roleType %>
+    <div <% if (isNew) { %>style="display:none;"  <% } %> class="row <% if (!disableRow) { %> sortables fg-sort-drag-hover <% } %> <%- newClass %> fg-border-line" id="<%- dataNameVar %>">
+    <div class="fg-col-first-icon fg-sort-drag"><i class="fa fa fg-sort ui-draggable <% if (!disableRow) { %> handle <% } else { %> inactive <% } %>"></i></div>
+    <div class="col-md-12 fg-col-hack ">
+        <div class="row">
+         <div class="col-md-3 col-sm-4 fg-clear-left">
+                <% if (!disableRow) { %><div class="fg-txt-area"><% } %>
+                    <% _.each(clubLanguages, function(clubLang) { %>
+                        <% roleTitleLang = ''; %>
+                        <% roleTitle = ''; %>
+                        <% roleCount = '';%>
+                        <% bookMarkId = 0; %>
+                        <% isRoleActive = true %>
+                        <% if (typeof rolecontent_data !== 'undefined') { %>
+                            <% if (clubLang in rolecontent_data) { %>
+                                <% roleTitleLang = rolecontent_data[clubLang][0]['title_lang'] %>
+                                <% firstLang = FgUtility.getFirstKeyOfArray(rolecontent_data) %>
+                                <% roleTitle = rolecontent_data[firstLang][0]['title'] %>
+                                <% bookMarkId = rolecontent_data[clubLang][0]['bookMarkId'] %>
+                                <% roleCount = rolecontent_data[clubLang][0]['clubCount'];%>
+                                <% isRoleActive = rolecontent_data[clubLang][0]['isActive'] %>
+                            <% } else { %>
+                                <% firstLang = FgUtility.getFirstKeyOfArray(rolecontent_data) %>
+                                <% roleTitleLang = '' %>
+                                <% roleTitle = rolecontent_data[firstLang][0]['title'] %>
+                                <% bookMarkId = rolecontent_data[firstLang][0]['bookMarkId'] %>
+                                <% roleCount = rolecontent_data[firstLang][0]['clubCount'] ;%>
+                                <% isRoleActive = rolecontent_data[firstLang][0]['isActive'] %>
+                            <% } %>
+                        <% } %>
+                    <div dataerror-group data-lang="<%- clubLang %>">
+                            <input type="text" data-key="<%- dataKeyVar %>.i18n.<%- clubLang %>.title" name="<%- dataNameVar %>_i18n_<%- clubLang %>_title" id="<%- dataNameVar %>_i18n_<%- clubLang %>_title" data-lang="<%- clubLang %>" data-roleid="<%- roleId %>" class="form-control input-sm" placeholder="<%- roleTitle %>" value="<%- roleTitleLang %>" data-property="change_title" <%- (clubLang == defaultLang) ? 'required=true' : 'data-notrequired=true'%> >
+                   </div>
+                <% }); %>
+                <% if (!disableRow) { %></div><% } %>
+                <div class="bookmark fg-bkmrk-icon fg-bkmrk-ico-new">
+                    <input type="checkbox" <% if (bookMarkId) { %> checked="" <% } %> class="make-switch" data-key="<%- dataKeyVar %>.book_marked" name="<%- dataNameVar %>_book_marked" id="<%- dataNameVar %>_book_marked" value="<%- bookMarkId %>">
+                    <label for="<%- dataNameVar %>_book_marked"><i class="fa fa-bookmark"></i></label>
+                </div>
+            </div>
+            <div class="col-md-9 col-sm-8">
+                <div class="col-md-2 switchmargintop">
+                    <% if (changeActivation) { %>
+                        <!-- For render the switch button -->
+                        {% include 'clubadmin/common.html.twig' with {'type':'underscorejs_switch','section':'role'}%}
+                    <% } %>
+                </div>
+                <div class="col-md-3 col-sm-3" name="fg-contact-click"><% if (!isNew) { %><a href="javascript:handleCountOrSidebarClick.updateFilter('<%- linkCatType %>', 'clubfilterdisplayflag_{{fgclub.clubId}}-<%- {{contactId}} %>', '', '{{fgclub.clubId}}', '<%- {{contactId}} %>', '', '', '{{fgclub.clubUrlIdentifier}}', 'count', '', '', '', '', 'club', '', '<%- catId %>', '<%- roleId %>', '')">  <%if(roleCount == 1){ %> <%- roleCount %> {{fgtwig.getTerminolgyName('Club',singular)}}<% }else if(roleCount > 1){ %> <%- roleCount %> {{fgtwig.getTerminolgyName('Club',plural)}}  <% } else { %> 0  {{fgtwig.getTerminolgyName('Club',singular)}}<% } %>  </a><% } %></div>
+                <div class="col-md-3 col-sm-3">
+                </div>
+                <div class="col-md-3 col-sm-3 log_role" name="fg-log-display" id = "<%- dataNameVar %>_role">
+                    <% if (!isNew) { %>
+                        <i class="fa fa-plus-square-o fg-plus-icon-log" data-id="<%- roleId %>" data-showlog="true" data-parent-div="<%- dataNameVar %>" data-placeholder="log_<%- roleId %>" data-loaded="false"><span class="fg-icon-span">{%trans%}LOG{%endtrans%}</span></i>
+                    <% } %>
+                </div>
+            </div>
+          </div>
+                    </div>
+            <input type="hidden" data-key="<%- dataKeyVar %>.sort_order" name="<%- dataNameVar %>_sort_order" id="<%- dataNameVar %>_sort_order" value="0" data-element="sortorder" class="<%- newClass %>" data-sort-parent="sortrole" />
+             <div class="fg-col-last-icon closeico" name="fg-dev-close-icon">
+                    <% if (roleCount > 0 || disableRow) { %>
+                        <i class="fa fa-lock fa-2x ash"></i>
+                    <% } else { %>
+                        <div class="closeico">
+                            <input type="checkbox" data-key="<%- dataKeyVar %>.is_deleted" name="<%- dataNameVar %>_is_deleted" id="<%- dataNameVar %>_is_deleted" class="make-switch" value="0" data-inactiveblock="changecolor" data-parentid="<%- dataNameVar %>" data-deletable="checknew" />
+                            <label for="<%- dataNameVar %>_is_deleted"></label>
+                        </div>
+                    <% } %>
+                </div>
+
+        <div id="displaydetails_<%- dataNameVar %>" class="col-md-12 hide fg-control-aranew fg-pad-0"> {# To display functions or log #}
+            <div id="log_<%- roleId %>" class="hide " showdetail="true"><div class="fg-pad-20"></div></div>
+        </div>
+</div>
+</script>

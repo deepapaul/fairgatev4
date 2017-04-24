@@ -1,0 +1,33 @@
+<script type="text/template" id="sidebarLevel4Template">
+    <% 
+        var parentId = levelObject.ids.join('_'); //This string contains '_' seperated parent_ids of a menu
+        var noHover = (levelObject.hoverable) ? '' : 'no-hover';
+        var nonDroppable = (levelObject.droppable) ? '' : 'non-dropable';
+        var nonClickable = (levelObject.clickable) ? '' : 'non-clickable';
+        var menuId = 'li_'+ parentId + '_' + levelData.id;
+        var active = (levelObject.active) ? 'active' : (levelObject.activeMenu == menuId) ? 'active' : '';
+        var open = (levelObject.open) ? 'open' : ((_.contains(levelObject.openedSidebarMenus, menuId) || (active == 'active' && !_.isEmpty(levelObject.content))) ? 'open' : '');
+        var dropDown = _.isEmpty(levelObject.content) ? 'empty' : 'arrow';
+        var dropDownOpen = (dropDown == 'arrow') ? open : ''; 
+        var toggle = _.isEmpty(levelObject.content) ? '' : 'nav-toggle';
+        var inactiveIcon = (!levelData.isActive) ? '<i class="fa fa-2x fa-eye-slash" data-placement="top" data-toggle="tooltip" title="{{ 'TOOLTIP_SIDEBAR_INACTIVE_NAVIGATION_POINT'|trans({}, 'tooltip') }}"></i>' : '';
+        var internalIcon = (!levelData.isPublic) ? '<i class="fa fa-2x fa-lock" data-placement="top" data-toggle="tooltip" title="{{ 'TOOLTIP_SIDEBAR_INTERNAL_NAVIGATION_POINT'|trans({}, 'tooltip') }}"></i>' : '';
+        var pageAssignmentIcons = {external : 'fa-globe', page : 'fa-dot-circle-o', article : 'fa-newspaper-o', gallery : 'fa-picture-o', calendar : 'fa-calendar'};
+    %>
+    
+    <li id="li_<%= parentId %>_<%= levelData.id %>" class="nav-item <%- noHover %> <%- active %> <%- open %>">
+        <a href="javascript:void(0);" class="nav-link <%- toggle %> <%- nonDroppable %> <%- nonClickable %>" data-type="<%= levelData.itemType %>" data-pagetype="<%= levelData.pageType %>" data-pageid="<%= levelData.pageId %>" data-externallink="<%= levelData.hasExLink %>" data-id="<%= levelData.id %>"  <% if(!_.isEmpty(levelData.pageTitle)) {  %>data-pagetitle="<%=levelData.pageTitle%>"<% } %> > 
+            <span class="<%- dropDown %> <%- dropDownOpen %>"></span><span class="title"><%- levelData.title %></span>
+            <% if (levelObject.showIcon) { %>
+                <%= inactiveIcon %>
+                <%= internalIcon %>
+                <i class="fa fa-2x fg-sidebar-icon-right <%- _.isEmpty(pageAssignmentIcons[levelData.pageType]) ? 'fa-circle-o' : pageAssignmentIcons[levelData.pageType] %>"></i>
+            <% } %>
+        </a>
+        <% if(!_.isEmpty(levelObject.content)) { %>
+            <ul class="sub-menu sidebar-level5 "> 
+                <%= levelObject.content %>
+            </ul>
+        <% } %>
+    </li>
+</script>

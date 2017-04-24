@@ -1,0 +1,36 @@
+    
+{% set litagdata =''%}
+{% set morelitagdata =''%}
+{% for key,tab in privacytabs %}
+    {% set litagdata = litagdata ~ '<li id="fg_tab_'~ key ~'" class="'~tab.activeClass~'" data-type="'~ tab.dataType ~'">
+                            <a href="'~ tab.url ~'" data-toggle="tab" >'~ tab.text ~'
+                            <i class="fa fa-exclamation-triangle fg-data-error hide"></i></a>
+                        </li>' %}
+
+    {% set morelitagdata = morelitagdata ~ '
+                       <li id="fg_tab_'~ key ~'" class="'~tab.activeClass~'" data-type="'~ tab.dataType ~'">
+                            <a href="'~ tab.url ~'" data-toggle="tab" >'~ tab.text ~'
+                            <i class="fa fa-exclamation-triangle fg-data-error hide"></i></a>
+                        </li>' %}
+
+{% endfor %}
+
+<div class="fg-internal-data-tab">                    
+    <ul class="nav nav-tabs data-more-tab fg-visibility-hidden"  id="data-tabs">                         
+        {{litagdata|raw}} 
+        <li name="fg-dev-more-tab" class="datahideshow dropdown">
+            <a href="#" class="dropdown-toggle"  data-toggle="dropdown">{{ 'MORE'|trans }} 
+                <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu fg-dropdown-more pull-right {{ moreClass|default('') }}">
+                {{morelitagdata|raw}}
+            </ul>
+        </li>
+    </ul>
+</div>
+
+
+
+
+
+

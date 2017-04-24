@@ -1,0 +1,222 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' :'::clubadmin/layout.html.twig' %}
+{% set title='STATISTICS_SIMPLEMAIL'|trans %}       
+{% set pageTitle = title %}
+{% block pagecontent %} 
+    <div class="fg-theme-green">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+            </div>
+        </div>
+
+        <!-- BEGIN PAGE CONTENT-->
+        {#<div class="row">
+            <div class="col-md-12">
+                <div class="col-md-5 col-sm-5 col-xs-12 fg-left-zero">
+                    <h3 class="page-title">{%trans%}STATISTICS_SIMPLEMAIL{%endtrans%}</h3>
+                </div>
+            </div>
+        </div>#}
+         <div class="row">
+           {% set page_settings = { 'pagetitle':'true' }  %}
+           {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': 'STATISTICS_SIMPLEMAIL'|trans, 'page_settings': page_settings  } %}          
+       </div>
+           <div class="row">
+            <form name="form_statistics" id="form_statistics" action="/newsletter/statistics" method="POST" skipDirtyCheck >
+                <div class="col-md-12">
+                    <div class="form-body">
+                        <div class="form-group fg-statistics-wrap"> 
+                            <div class="radio-list">
+                                <label class="radio-inline">
+                                    <input type="radio" name="radio_type" id="radio_type1" value="year" checked onclick="getResults('select_year');">     
+                                    {%trans%}STATISTICS_YEAR{%endtrans%}                   
+                                </label>
+                            </div>
+                            <div class="fg-statistics-select fg-year-select">                             
+                                <select class="form-control select2me" aria-invalid="false" id="select_year" name="select_year" onchange="getResults(this.id);">
+                                    <option value="">{%trans%}STATISTICS_SELECT{%endtrans%}</option>
+                                    {% for i in startYear..currentYear %}
+                                        <option value="{{ i }}" 
+                                                {% if(i == currentYear)%} selected {% endif %} >{{ i }}</option>
+                                    {% endfor %}
+                                </select> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-body">
+                        <div class="form-group fg-statistics-wrap fg-date-space"> 
+                            <div class="radio-list">
+                                <label class="radio-inline">
+                                    <input type="radio" name="radio_type" id="radio_type2" value="datebetween" onclick="getResults('select_date');">     
+                                    {%trans%}STATISTICS_DATE_BETWEEN{%endtrans%}                   
+                                </label>
+                            </div>
+                            <div class="col-md-4 col-sm-5 col-xs-12 pull-left">
+                                <div class="input-group date date-picker" data-date-end-date="+0d">
+                                    <input type="text" id="select_datefrom" name="select_datefrom" class="form-control datemask" readonly="" disabled="" onchange="getResults(this.id);" >
+                                    <span class="input-group-btn fg-disabled-icon">
+                                        <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                                    </span> </div>
+                            </div>
+                            <span class="col-md-1 col-sm-2 col-xs-12 fg-stat-and">{%trans%}STATISTICS_AND{%endtrans%}</span>
+                            <div class="col-md-4 col-sm-5 col-xs-12 pull-left">
+                                <div class="input-group date date-picker" data-date-end-date="+0d">
+                                    <input type="text" id="select_dateto" name="select_dateto"  class="form-control datemask" readonly="" disabled="" onchange="getResults(this.id);" >
+                                    <span class="input-group-btn fg-disabled-icon">
+                                        <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                                    </span> </div>
+                            </div>
+                            <span style="display: none;" class="fg-error-hide fg-error fg-error-statistics col-md-12 col-sm-12 col-xs-12 fg-left-zero" >{%trans%}LOG_DATE_FILTER_ERR_MSG1{%endtrans%}</span>
+                        </div>
+                    </div>
+                    <div class="form-body">
+                        <div class="form-group fg-statistics-wrap">
+                            <div class="radio-list">
+                                <label class="radio-inline ">
+                                    <input type="radio" name="radio_type" id="radio_type3" value="entire" onclick="getResults(this.id);">  
+                                    {%trans%}STATISTICS_ENTIRE_PERIOD{%endtrans%}          
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>     
+
+        <div class="row" id="ajax_content">
+
+        </div>
+    </div>
+<script type="text/template" id="statisticsSimplemail"> 
+    <div class="col-md-12 col-sm-12 col-xs-12">
+    <table class="table fg-import-table table-hover">
+    <thead>
+    <tr>
+    <th>&nbsp;</th>                           
+    <th> {{ 'STATISTICS_TOTAL'|trans }} </th>
+    <td>&nbsp;</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td> {{ 'STATISTICS_SENT_SIMPLE_MAILS'|trans }} </td>                           
+    <td id="data1"> <%= TOTAL_COUNT %> </td>
+    <td>&nbsp;</td>  
+    </tr>
+    <tr>
+    <td> {{ 'STATISTICS_RECIPIENTS'|trans }} </td>
+    <td id="data2"> <%= TOTAL_RECEPIENTS %> </td>
+    <td>&nbsp;</td>
+    </tr>
+    <tr>
+    <td> {{ 'STATISTICS_RECIPIENTS_PER_MAIL'|trans }} </td>                          
+    <td id="data3"> <%= TOTAL_RECEPIENT_PER_NEWSLETTER %> </td>
+    <td>&nbsp;</td>
+    </tr>
+    </tbody>
+    </table>
+    </div>
+</script>                                    
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        $(function () {           
+            $(document).ready(function(){
+                radio = "year"; 
+                currentLocation = $(location).attr('href');
+                $.ajax({
+                type: "POST",
+                        url: currentLocation + "/ajax",
+                        data: {filtertype: radio, year: {{ currentYear }} }
+                })
+                .done(function (data) {
+                    renderResults('statisticsSimplemail', 'ajax_content', data);
+                });
+            });
+            // $(".datemask").inputmask(FgLocaleSettingsData.jqueryDateFormat, 
+            //     { yearrange: { minyear: 1900, maxyear: 2015 }, showMaskOnFocus : true, showMaskOnHover : true });
+        });
+        
+        function renderResults(templateScriptId, parentDivId, data) {
+            var template = $('#' + templateScriptId).html();            
+            var result_data = _.template(template, data);
+            $('#' + parentDivId).html(result_data);
+        }
+        
+        function disableDatePicker() {
+            $("#select_dateto").parent().prop('disabled', true);
+            $("#select_datefrom").parent().prop('disabled', true);
+            $("#select_dateto").parent().datepicker("remove");    
+            $("#select_datefrom").parent().datepicker("remove");   
+            $('#select_dateto').attr("readonly","");
+            $('#select_datefrom').attr("readonly","");
+            $('#select_dateto').attr("disabled","");
+            $('#select_datefrom').attr("disabled","");
+            $('.input-group-btn').addClass("fg-disabled-icon");
+            $('#select_dateto').val("");
+            $('#select_datefrom').val("");
+        }
+        
+        function enableDatePicker() {
+            $("#select_dateto").parent().prop('disabled', false);
+            $("#select_datefrom").parent().prop('disabled', false);
+            $("#select_datefrom").parent().datepicker(FgApp.dateFormat);
+            $("#select_dateto").parent().datepicker(FgApp.dateFormat);  
+            $('#select_dateto').removeAttr("readonly");
+            $('#select_datefrom').removeAttr("readonly");
+            $('#select_dateto').removeAttr("disabled");
+            $('#select_datefrom').removeAttr("disabled");
+            $('.input-group-btn').removeClass("fg-disabled-icon");   
+        }
+        
+        function getResults(field) {            
+            $(".fg-error-hide").css({"display": "none"});
+            error = "";
+            $($('input:radio[name=radio_type]')).parent('span').removeClass('checked');     
+            if(field === "select_date") {
+                enableDatePicker();
+            } else if(field !== "select_datefrom" && field !== "select_dateto"){
+                disableDatePicker();
+            }
+            if (field === "select_datefrom" || field === "select_dateto" || field === "select_date") {                
+                $($("#radio_type2")).parent('span').addClass('checked');
+                radio = "datebetween";
+                start_time = $('#select_datefrom').val();
+                end_time = $('#select_dateto').val();
+                if(start_time != '' && end_time != ''){
+                    if(FgUtility.isGreaterDate(start_time, end_time) >= 1){
+                        error = "To date must be greater than From date";
+                    }
+                }
+            }
+            if (field === "select_year") {
+                radio = "year";
+                $($("#radio_type1")).parent('span').addClass('checked');
+            }
+            if (field === "radio_type3") {
+                radio = "entire";
+                $($("#radio_type3")).parent('span').addClass('checked');
+            }               
+            year = $('#select_year').val();
+            date_from = $('#select_datefrom').val();
+            date_to = $('#select_dateto').val();
+            currentLocation = $(location).attr('href');
+            if (error !== "") {
+                $(".fg-error-hide").css({"display":"block"});
+            } //else {
+            $.ajax({
+            type: "POST",
+                url: currentLocation + "/ajax",
+                data: {filtertype: radio, year: year, date_from: date_from, date_to: date_to}
+            })
+            .done(function (msg) {                      
+                renderResults('statisticsSimplemail', 'ajax_content', msg);
+            });         
+        }
+        /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                     title: true
+             });
+    </script>
+{% endblock %}        

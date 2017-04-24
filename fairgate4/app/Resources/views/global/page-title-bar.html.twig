@@ -1,0 +1,201 @@
+<!--
+    Global Actionmenu bar HTML
+-->
+<div class="fg-action-menu-wrapper">
+    <div class="fg-page-title-block-1">
+        <div class="fg-btn-first-block fg-action-menu  fg-dis-none">
+            <button class="btn tableaction fgContactdrop" data-toggle="dropdown" id="fgContactdrop">
+                <i class="fa fa-bars fa-2x"></i>
+            </button>
+            <ul class="dropdown-menu pull-left action-drop-menu">
+
+
+                <li ng-repeat="(key,menuList) in dataArray | orderBy:'menuList.sortOrder'"  class="{[{menuList.className}]}"  ng-class="{'disabled':menuList.isActive=='false','fg-divider':menuList.divider=='1','fg-action-menu-list':menuList.hrefLink==null,'fg-visible-always':menuList.isVisibleAlways=='true'}">
+                    <div></div>
+                    <a  href="{[{(menuList.hrefLink=='')?'#':menuList.hrefLink}]}" data-url="{[{menuList.dataUrl}]}" data-callback="{[{menuList.dataCallback}]}" data-local-storage="{[{menuList.localStorageName}]}" data-menu-key="{[{menuList.KeyName}]}" > {[{menuList.title}]}</a>
+
+                </li>
+            </ul>
+
+        </div>
+        <div class="fg-title-first-block fg-test-block  fg-action-title  fg-dis-none">
+            <h3 class="page-title "><span class="page-title-text">{{ pageTitle|raw }}</span>   
+                <span class="fg-action-counter fg-dis-none">
+                    <small><div class="fg-count-text"><span id="fcount" {% if counter is defined %}class ="" {% else %} class ="hide" {% endif %}>{% if counter is defined %} {{counter}} {%endif %}</span><small id="slash" class="hide"> <span id="fg-slash" >/</span> </small> <span id="tcount" ></span></div></small>
+                    <span class="fg-action-filter fg-dis-none">
+                        <i class="fa fa-filter "></i>
+                    </span>                    
+                </span>
+            </h3>
+        </div>   
+
+        <div class="fg-title-first-block fg-action-title-inline-edit fg-dis-none">
+            {% if clubLanguages is defined %}            
+                {% for lang in clubLanguages %}
+                    <input id="pageTitle-{{lang}}" name="pageTitle-{{lang}}" type="text" data-key="pageTitle.text.{{lang}}.title" data-lang="{{lang}}" class="pageTitles form-control input-md {%if(lang != clubDefaultLang)%}hide{% endif %}" required=""  >
+                {% endfor %}
+            {% endif %}
+            <div id="pageTitle-formgroup-error" class="fg-label-error hide">{{ 'FIELD_REQUIRED_MESSAGE'|trans }}</div>
+        </div>
+
+        <div class="fg-action-upload  fg-dis-none fg-btn-grey-icon">
+            <span>
+                <i class="fa fa-upload fa-2x"></i> Upload
+            </span>
+
+        </div>            
+        <div class="fg-action-select-all fg-btn-grey-icon  fg-dis-none">
+            <span>
+                <i class="fa fa-th fa-2x"></i> {{ 'SELECT_ALL'|trans }}
+            </span>
+
+        </div>
+        <div class="fg-tab-block  fg-action-tab fg-dis-none" id="fg_dev_internalTab">
+
+            {% set litagdata =''%}
+            {% set morelitagdata =''%}
+            {% set activeTabIndex = (activeTab is defined)?activeTab:1 %}
+            {% for key,tab in tabs %}
+                {% set litagdata = litagdata ~ '
+            <li id="fg_tab_'~ key ~'" name="fg-dev-team-'~ key ~'-tab" data-target="'~ loop.index ~'" class="'~ (loop.index == activeTabIndex ? 'active' : '') ~'">
+                <a  href="'~ ((hrefLink is defined) ? tab.url :"#") ~'" data_url="' ~url|replace({'dummyId' : key})~ '" data_id="'~ key ~ '" data_type="'~ type ~'" data-toggle="tab">'~ '<span class="fg-dev-tab-text">' ~ ((tab.text is defined) ? tab.text : tab ) ~ '</span>' ~ ((showNewBadge|default(false)) ? '<span id="' ~ newBadgeId ~ key ~'" class="badge fg-badge-blue fg-badge-new ' ~ ((tab.isNew is defined) ? '' : 'hide') ~ '"> ' ~ 'INTERNAL_TOP_NAV_NEW'|trans ~ ' </span>' : '' ) ~ ((showCountBadge|default(false)) ? '<span id="' ~ countBadgeId ~ key ~'" class="badge fg-badge-blue ' ~ ((tab.count is defined) ? '' : 'hide') ~ '" data-count="'~ ((tab.count is defined) ? tab.count : '0') ~ '">'~ ((tab.count is defined) ? tab.count : '0') ~ '</span>' : '' ) ~((tab.isAdmin is defined)?(tab.isAdmin == 1?((tab.isActive is defined)?(tab.isActive == 0?'<span class="fa fa-eye-slash"></span>':''):'' ):''):'')~ '</a>
+            </li>' %}
+
+                {% set morelitagdata = morelitagdata ~ '
+            <li id="fg_tab_'~ key ~'" name="fg-dev-team-'~ key ~'-tab" data-target="'~ loop.index ~'" class="'~ (loop.index == activeTabIndex ? 'active':'') ~'">
+                <a href="'~ ((hrefLink is defined) ? tab.url :"#") ~'" tabindex="-1" data_url="' ~ url|replace({'dummyId' : key})~ '" data_id="'~ key ~'" data_type="'~ type ~'" data-toggle="tab">'~ '<span class="fg-dev-tab-text">' ~ ((tab.text is defined) ? tab.text : tab ) ~ '</span>' ~ ((showNewBadge|default(false)) ? '<span id="' ~ newBadgeId ~ key ~'" class="badge fg-badge-blue fg-badge-new ' ~ ((tab.isNew is defined) ? '' : 'hide') ~ '"> ' ~ 'INTERNAL_TOP_NAV_NEW'|trans ~ ' </span>' : '' ) ~ ((showCountBadge|default(false)) ? '<span id="' ~ countBadgeId ~ key ~'" class="badge fg-badge-blue ' ~ ((tab.count is defined) ? '' : 'hide') ~ '">'~ ((tab.count is defined) ? tab.count : '0') ~ '</span>' : '' ) ~((tab.isAdmin is defined)?(tab.isAdmin == 1?((tab.isActive is defined)?(tab.isActive == 0?'<span class="fa fa-eye-slash"></span>':''):'' ):''):'')~ '</a>
+            </li>' %}
+
+            {% endfor %}
+
+            <div class="">
+                <div class="col-bottom fg-nav-tab-border">
+                    <ul id="paneltab" class="nav fg-nav-links data-more-tab fg-visibility-hidden">
+                        {{litagdata|raw}} 
+
+                        <li name="fg-dev-more-tab" class="datahideshow dropdown">
+                            <a href="#" class="dropdown-toggle"  data-toggle="dropdown">{{ 'MORE'|trans }} 
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                            <ul class="dropdown-menu fg-dropdown-more pull-right {{ moreClass|default('') }}">
+                                {{morelitagdata|raw}}
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="fg-search-last-block fg-action-search  fg-dis-none">
+            <div class="input-icon fg-input-icon fg-action-search-box">
+                <i class="fa fa-search"></i>
+                <input type="text" placeholder="{{'SEARCH_TABLE'|trans}}" class="form-control control2" id="fg_dev_member_search">
+            </div>
+            <div class="fg-filter-check-icon pull-left fg-dis-none fg-action-search-filter" data-toggle="tooltip">
+                <input type="checkbox" id="filterFlag" class="filterFlag" name="fg_filter">
+            </div>
+            <button class="btn tableactionright pull-left fg-col-settings" data-toggle="dropdown">
+                <i class="fa fa-table fa-2x"></i>
+            </button>
+            <ul class="dropdown-menu pull-right drpmenu-new dropdown-menu-form padinten">
+                {% if columnsUrl is defined%}
+                    <li><a href= "{% if columnsUrl is defined%} {{columnsUrl}} {% else %} # {% endif %}">{% trans%} COLUMN {% endtrans%}&hellip;</a> </li>
+                    {% endif %}
+                <li>
+                    <div id="fg_dev_memberlist_row_length"></div>
+                </li>
+
+                {#<li>
+                    <label>
+                        <input type="checkbox">
+            {% trans%} EDIT_MODE {% endtrans %}
+                        </label>
+                    </li>#}
+            </ul>
+        </div>
+
+        <div class="fg-action-calendar-switch  fg-dis-none">
+            <div class="switch-toggle switch-3  switch-fg">
+                <input id="week" name="view-a" type="radio" checked class="make-switch">
+                <label for="week" onClick="">{{'CREATE_CALENDAR_SWITCH_WEEK'|trans}}</label>
+                <input id="month" name="view-a" type="radio" class="make-switch">
+                <label for="month" onClick="">{{'CREATE_CALENDAR_SWITCH_MONTH'|trans}}</label>
+                <input id="list" name="view-a" type="radio" class="make-switch">
+                <label for="list" onClick="">{{'CREATE_CALENDAR_SWITCH_LIST'|trans}}</label>
+                <a class="btn btn-primary"></a>
+            </div>
+        </div>
+
+        <div class="fg-action-export  fg-dis-none fg-calendar-export-disable">
+            <i class="fa fa-download fa-2x"></i> 
+        </div> 
+
+        <div class="fg-action-thumb fg-btn-grey-icon fg-dis-none">
+            <span>
+                <i class="fa fa-image fa-2x"></i> 
+            </span>
+
+        </div>
+        <div class="fg-action-gallery-scope fg-dis-none  fg-btn-grey-icon">
+            <span>
+                <i class="fa fa-exchange fa-2x"></i>{{'SWITCH_SCOPE'|trans}}
+            </span>
+
+        </div>
+
+        <div class="fg-action-gallery-mode  fg-dis-none  fg-btn-grey-icon-1">
+            <span>
+                <i class="fa fa-sign-out fa-2x"></i>{{'LEAVE_ADMIN_MODE'|trans}}
+            </span>
+
+        </div>
+        {% if (clubLanguages is defined) %}              
+            <div class="fg-action-language-switch  fg-dis-none">
+                <div class="btn-toolbar fg-lang-tab ">
+                    <div class="btn-group">
+                        {% if (clubLanguages|length > 1) %}
+                            {% for clubLanguage in clubLanguages %}
+                                <button type="button" id="{{clubLanguage}}"  lang="{{clubLanguage}}" class="btn  btlang {% if(clubLanguage == clubDefaultLang) %} active {% endif %}" data-elem-function="switch_lang" data-selected-lang="{{clubLanguage}}">{{clubLanguage|upper}}</button>
+                            {% endfor %}
+                        {% endif %}
+                        {#<button type="button" id="sq" lang="sq" class="btn  btlang active" data-elem-function="switch_lang" data-selected-lang="sq">SQ</button>
+                        <button type="button" id="de" lang="de" class="btn  btlang " data-elem-function="switch_lang" data-selected-lang="de">DE</button>
+                        <button type="button" id="fr" lang="fr" class="btn  btlang error" data-elem-function="switch_lang" data-selected-lang="fr">FR</button>
+                   #}
+                    </div>
+                </div>
+            </div>  
+        {% endif %}    
+        {% if ((configId is defined)and (configId!=0))%}
+            <div class="fg-action-theme-preview  fg-btn-grey-icon-1 "> 
+                <a target="_blank" href="{{path('website_theme_preview_page', {'configId':configId})}}"><i class="fa fa-search fa-2x"></i>  {{'WEBSITE_THEME_PREVIEW'|trans}}</a>
+            </div>
+        {% endif %}
+        
+        {% if ((pageTitleStatus is defined) and (pageTitleStatus == 1 or pageTitleStatus == 0) ) %}
+        <div class="fg-action-pagetitle-switch fg-btn-grey-icon-1 fg-dis-none">
+            <div data-status="1" class="lock-pagetitle-status pagetitle-show {% if pageTitleStatus == 0 %}hide {% endif %}">
+                <i class="fa fa-eye fa-2x"></i> {{'PAGETITLE_SHOW'|trans}}                    
+            </div>
+            <div data-status="0" class="lock-pagetitle-status pagetitle-hide {% if pageTitleStatus == 1 %}hide {% endif %}">
+                <i class="fa fa-eye-slash fa-2x"></i> {{'PAGETITLE_HIDE'|trans}}                    
+            </div>
+        </div>
+        {% endif %}
+        <div class="fg-action-editTitle  fg-btn-grey-icon  fg-dis-none">
+            <i class="fa fa-pencil-square-o fa-2x"></i> {% if pageTitleConfig is defined %} {{'CMS_EDIT_CONFIG_PAGE_TITLE'|trans}} {% else %}{{'CMS_EDIT_PAGE_TITLE'|trans}} {% endif %}
+        </div>
+        <div class="fg-btn-grey-icon-1 fg-action-editForm  fg-btn-grey-icon  fg-dis-none">
+            <i class="fa fa-pencil-square-o fa-2x"></i>{{'CMS_EDIT_FORM'|trans}} 
+        </div>
+        <div class="fg-action-article-switch fg-btn-grey-icon fg-dis-none">
+            <div data-status="1" class="lock-article-status article-activate">
+                <i class="fa fa-eye fa-2x"></i> {{'ARTICLE_ACTIVATE'|trans}}                    
+            </div>
+            <div data-status="1" class="hide lock-article-status article-deactivate">
+                <i class="fa fa-eye-slash fa-2x"></i> {{'ARTICLE_DEACTIVATE'|trans}}                    
+            </div>
+        </div>
+
+    </div>      <div class="clearfix"></div>           
+    {#  ------------------ page title block for forum topic view handled individualy in InternalTeamBundle:Forum:topicViewPageTitleBar.html.twig -------------------- #}
+</div>

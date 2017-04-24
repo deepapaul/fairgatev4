@@ -1,0 +1,125 @@
+   
+Common\UtilityBundle\Entity\FgCmsContactTableColumns:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsContactTableColumnsRepository
+    type: entity
+    table: fg_cms_contact_table_columns
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        columnType:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: column_type
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        columnSubtype:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: column_subtype
+        functionIds:
+            type: string
+            length: 45
+            fixed: false
+            nullable: true
+            column: function_ids
+        showProfilePicture:
+            type: boolean
+            nullable: true
+            column: show_profile_picture
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sort_order
+        isDeleted:
+            type: boolean
+            nullable: false
+            column: is_deleted
+        fieldDisplayType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: field_display_type
+        lineBreakBefore:
+            type: integer
+            nullable: true
+            column: line_break_before
+        emptyValueDisplay:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: empty_value_display
+        separateListing:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: separate_listing
+        profileImage:
+            type: string
+            length: 250
+            fixed: false
+            nullable: true
+            column: profile_image
+    manyToOne:
+        role:
+            targetEntity: FgRmRole
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                role_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        roleCategory:
+            targetEntity: FgRmCategory
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                role_category_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        table:
+            targetEntity: FgCmsContactTable
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                table_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        attribute:
+            targetEntity: FgCmAttribute
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                attribute_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        column:
+            targetEntity: FgCmsPortraitContainerColumn
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                column_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }
+

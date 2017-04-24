@@ -1,0 +1,250 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = contactData['contactname'] %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+    {% set federationTerminology = fgtwig.getTerminolgyName('Federation',singular)%}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet-body fg-theme-yellow">
+                        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                        {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+                      
+                        {#{% include 'clubadmin/sponsor-panel-tabs.html.twig' with {'contactName':contactData['contactname'],'contactId':contactData['id'],'active':'loglisting', 'contactType':type} %}
+                        #}
+                        <div class="row">
+                        {% set page_settings = { 'pagetitle':'true','tabs':'true'}  %}
+                        {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': contactData['contactname'] , 'page_settings': page_settings, 'tabs': tabs, 'type':'overview', 'hrefLink' : true, 'url':"#",'contactType':type} %} 
+                        </div>
+                        <!-- END PAGE TITLE & BREADCRUMB-->
+                        <div class="row fg-common-top fg-contact-data">
+                            <div class="col-md-12">
+                                <div class="portlet-body">
+                                    <div class="tabbable-custom ">
+                                        <ul  class="nav nav-tabs data-more-tab" id="data-tabs">
+                                            {% for key,logTab in logTabs %}
+                                                {% set active = (key == activeTab) ? 'active': '' %}
+                                                <li id="data_li_{{ key }}" class="{{ active }}">
+                                                    <a class="commonLogClass" data-toggle="tab" data-datatableId="log_display_{{ contactData['id'] }}_{{ key }}" href="#log-table_{{ contactData['id'] }}_{{ key }}">{{ logTranslateFields[logTab]|trans|capitalize }}</a>
+                                                </li>
+                                            {% endfor %}
+                                            {#more tab#}
+                                            <li class="datahideshow dropdown" ><a href="#"  id="fg-contact-more-tab" class="dropdown-toggle" data-toggle="dropdown">{{ 'MORE'|trans }}<i class="fa fa-angle-down"></i></a>
+                                                <ul class="dropdown-menu">
+                                                    {% for key,logTab in logTabs %}
+                                                        {% set active = (key == activeTab) ? 'active': '' %}
+                                                        <li id="data_li_{{ key }}" class="{{ active }}">
+                                                            <a class="commonLogClass" data-toggle="tab" data-datatableId="log_display_{{ contactData['id'] }}_{{ key }}" href="#log-table_{{ contactData['id'] }}_{{ key }}">{{ logTranslateFields[logTab]|trans|capitalize }}</a>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </li>
+                                            {# more tab ends #}
+                                            <div class="col-xs-12 col-md-5 col-sm-6 fg-contact-log-filter-box fg-has-filter">
+                                                <div class="fg-filter-check-icon fg-has-no-search"><input type="checkbox" id="fg_contact_log_date_filter_flag" name="fg_contact_log_date_filter_flag"></div>
+                                                <div class="btn-group pull-right">                                                    
+                                                    <button class="btn tableactionright" data-toggle="dropdown"> <i class="fa fa-table fa-2x"></i> </button>
+                                                    <ul class="dropdown-menu pull-right fg-drpmenu-new dropdown-menu-form padinten hold-on-click">
+                                                        <li><div id="fg_contact_log_row_change" ></div></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </ul>
+                                        <div class="fg-clear"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="data-tabs-content" class="tab-content">
+                            {% for key,logTab in logTabs %}
+                                {% set active = (key == activeTab) ? 'active': '' %}
+                                <div class="portlet-body tab-pane new-table-height logTabs {{ active }}" id="log-table_{{ contactData['id'] }}_{{ key }}">
+                                    {% include 'ClubadminSponsorBundle:Log:logListing.html.twig' with { 'contactData': contactData, 'activeTab' : logTab, 'typeId' : key , 'languageList' : languageList, 'countryList' : countryList, 'countryAttrIds' : countryAttrIds, 'languageAttrIds' : languageAttrIds} %}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                    <!--  Custom pop over html -->
+                    <div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+                        <div class="modal-dialog modal-wide">
+                            <div class="modal-content fg-popup-wrap" id="popup_contents">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End area -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Connection Popup -->
+<div class="modal fade" id="popup" tabindex="-1" role="basic" aria-hidden="true">
+    <div class="modal-dialog modal-wide">
+        <div class="modal-content fg-popup-wrap" id="popup_contents">
+        </div>
+    </div>
+</div>
+{% include 'ClubadminContactBundle:Archive:mergeContact.html.twig' %}
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>
+    <script>
+        
+          $(document).ready(function() {
+            FgPageTitlebar.init({
+                title       : true,
+                tab       : true,
+                search     :false,
+                actionMenu  : false,
+                tabType  :'server'
+               
+            }); 
+       }); 
+        var logTranslateFields = {{logTranslateFields|json_encode()|raw}};
+        var languageAttrIds = {{languageAttrIds|json_encode()|raw}};
+        var countryAttrIds = {{countryAttrIds|json_encode()|raw }};
+        var sysAttrTransIds = {{sysAttrTransIds|json_encode()|raw }};
+        var countryList = {{countryList|json_encode()|raw}};
+        var languageList = {{languageList|json_encode()|raw}};
+        var logTab = {{logTabs|json_encode()|raw}};
+        var activeTab = {{activeTab}};
+        var contactId = '{{contactData['id']}}';
+        var columnDefs = [];
+        columnDefs['data'] = [{ "name": "date", "width" : "20%", "targets": 0, data:function(row, type, val, meta){
+                                return  row['dateOriginal'] == '' || row['dateOriginal'] == null ? '-':row;
+                                }, render:{"_": 'dateOriginal', "display": 'date', 'filter': 'date' }},
+                             { "name": "field", "width" : "20%", "targets": 1, data:function(row, type, val, meta){
+                                var colorFlag = (row['status'] != "none") ? row['status'] : '';
+                                var colorLabel = (colorFlag != '') ?  logTranslateFields[colorFlag]: '-';
+                                return  row['field'] == '' || row['field'] == null ? '-':row['field'] + ' <span class="label label-sm fg-color-' + colorFlag + '">' + colorLabel + '</span>';
+                             }},
+                            { "name": "value_before", "width" : "20%", "targets": 2, data:function(row, type, val, meta){
+                              if (row['value_before'] == '' || row['value_before'] == null) {
+                              return '-';
+                            } else{
+                                if(row['input_type'] == 'number'){
+                                    if (row['value_before'].length && row['value_before'] != '-'){
+                                         return FgClubSettings.formatNumber(row['value_before']);
+                                    } else {
+                                       return row['value_before'];
+                                    }
+                                }
+                            
+                              if (_.contains(countryAttrIds, parseInt(row['attribute_id']))){
+
+                                  if (row['value_before'].length && row['value_before'] != '-'){
+                                   return countryList[row['value_before']];
+                                  } else {
+                                     return row['value_before'];
+                                  }
+                            } else if (_.contains(languageAttrIds, parseInt(row['attribute_id']))){
+
+                                      if (row['value_before'].length && row['value_before'] != '-'){
+                                          return languageList[row['value_before']];
+                                      } else {
+                                          return row['value_before'];
+                                      }
+                            } else if (_.contains(sysAttrTransIds, parseInt(row['attribute_id']))){
+
+                                      if (row['value_before'].length && row['value_before'] != '-'){
+                                          return logTranslateFields[row['value_before']];
+                                      } else {
+                                          return row['value_before'];
+                                      }
+                            }
+                            else{
+
+                              if (row['value_before'].length > 50) {
+                                 return '<span data-original-title="" data-content="' +
+                                 row['value_before'] + '"data-container="body"  data-trigger="hover" class="popovers fg-dotted-br">' + row['value_before'].substring(0, 50) + '&hellip;</i> '  
+                             } else {
+                                return row['value_before'];
+                              }
+                             }
+                            }
+                           } },
+                            { "name": "value_after", "width" : "20%", "targets": 3, data:function(row, type, val, meta){
+                            if (row['value_after'] == '' || row['value_after'] == null) {
+                              return '-';
+                            } else{
+                                
+                            if(row['input_type'] == 'number'){
+                                if (row['value_after'].length && row['value_after'] != '-'){
+                                     return FgClubSettings.formatNumber(row['value_after']);
+                                } else {
+                                   return row['value_after'];
+                                }
+                            }
+                            
+                            if (_.contains(countryAttrIds, parseInt(row['attribute_id']))){
+
+                            if (row['value_after'].length && row['value_after'] != '-'){
+                            return countryList[row['value_after']];
+                            } else {
+                               return row['value_after'];
+                            }
+                            } else if (_.contains(languageAttrIds, parseInt(row['attribute_id']))){
+
+                            if (row['value_after'].length && row['value_after'] != '-'){
+                            return languageList[row['value_after']];
+                            } else {
+                              return row['value_after'];
+                            }
+                            } else if (_.contains(sysAttrTransIds, parseInt(row['attribute_id']))){
+
+                            if (row['value_after'].length && row['value_after'] != '-'){
+                            return logTranslateFields[row['value_after']];
+                            } else {
+                            return row['value_after'];
+                            }
+                            }
+                            else{
+                            if (row['value_after'].length > 50) {
+                            return '<span data-original-title="" data-content="' +
+                                row['value_after'] + '" data-container="body" data-trigger="hover" class="popovers fg-dotted-br">' + row['value_after'].substring(0, 50) + '&hellip;  </i> '
+
+                            } else {
+                            return row['value_after'];
+                            }
+                            }
+                            }
+                            } },
+                            { "name": "editedBy", "width" : "20%", "targets": 4, data:function(row, type, val, meta){
+                              return  row['editedBy'] == '' || row['editedBy'] == null ? '-':row['editedBy'];
+                            }}
+                            ];
+        columnDefs['services'] = [{ "name": "date", "width" : "20%", "targets": 0, data:function(row, type, val, meta){
+                                  return  row['dateOriginal'] == '' || row['dateOriginal'] == null ? '-':row;
+                                 }, render:{"_": 'dateOriginal', "display": 'date', 'filter': 'date' }},
+                                { "name": "action", "width" : "20%", "targets": 1, data:function(row, type, val, meta){    var colorFlag = (row['action'] != "none") ? row['action'] : '';
+                                        var colorLabel = (colorFlag != '') ?  logTranslateFields[colorFlag]: '-';
+                                        return  row['action'] == '' || row['action'] == null ? '-': '<span class="label label-sm fg-' + colorFlag + '-color">' + colorLabel + '</span>';
+                                }},
+                                { "name": "category", "width" : "20%", "targets": 2, data:function(row, type, val, meta){
+                                   return  row['category'] == '' || row['category'] == null ? '-':row['category'];
+                                }},
+                                { "name": "service", "width" : "20%", "targets": 3, data:function(row, type, val, meta){
+                                   return  row['service'] == '' || row['service'] == null ? '-':row['service'];
+                                }},
+                                { "name": "editedBy", "width" : "20%", "targets": 4, data:function(row, type, val, meta){
+                                  return  row['editedBy'] == '' || row['editedBy'] == null ? '-':row['editedBy'];
+                                }}
+
+                                ];        
+            
+    </script>
+    <script src="{{ asset('fgcustom/js/fg-sponsor-log.js') }}" type="text/javascript"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+            //handle  reactivate click 
+            reactivateOverviewPath = "{{path('get_all_contactids_reactivate')}}";
+            reactivateOverviewPopup = "{{path('get_reactivate_popup')}}";
+            reactivateSavePath = "{{ path('save_reactivate_contact')}}";
+            reactivateOerviewContactId = {{contactId}};
+      });
+    </script>
+{% endblock %}

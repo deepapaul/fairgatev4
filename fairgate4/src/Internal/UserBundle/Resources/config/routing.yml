@@ -1,0 +1,48 @@
+internal_user_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: InternalUserBundle:Default:index }
+  
+internal_user_login:
+    path:     /signin
+    defaults: { _controller: InternalUserBundle:Security:login }      
+    
+internal_user_security_check:
+    path:  /login_check
+    defaults: { _controller: InternalUserBundle:Security:check }   
+    
+internal_user_security_logout:
+    path:  /signout
+    defaults: { _controller: InternalUserBundle:Security:logout }   
+    
+internal_user_rest_password_request:
+    path:  /forgotpassword
+    defaults: { _controller: InternalUserBundle:Resetting:request }   
+
+internal_user_checkmail:
+    path:  /checkmail
+    defaults: { _controller: InternalUserBundle:Resetting:checkEmail }  
+    
+internal_user_sendmail:
+    path:  /sendmail
+    defaults: { _controller: InternalUserBundle:Resetting:sendEmail }
+    
+user_change_password:
+    path:  /changepassword
+    defaults: { _controller: InternalUserBundle:Resetting:changePassword }
+    
+user_update_password:
+    path:  /updatepassword
+    defaults: { _controller: InternalUserBundle:Resetting:updatePassword }
+    
+switch_user:
+    path:  /switchuser/{contactId}
+    defaults: { _controller: InternalUserBundle:Resetting:switchUser }
+
+internal_user_resetting_reset:
+    path:  /reset/{token}
+    defaults: { _controller: InternalUserBundle:Resetting:reset, applicationArea: internal }
+    
+internal_user_activate_account:
+    path:  /activateaccount
+    defaults: { _controller: InternalUserBundle:Resetting:activateaccount }    
+    

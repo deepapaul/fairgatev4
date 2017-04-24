@@ -1,0 +1,131 @@
+Common\UtilityBundle\Entity\FgCnSms:
+    type: entity
+    table: fg_cn_sms
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        content:
+            type: text
+            nullable: true
+        sendingArea:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: sending_area
+        sender:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        state:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        sendMode:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: send_mode
+        sendDate:
+            type: datetime
+            nullable: false
+            column: send_date
+        contactSelection:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: contact_selection
+        isMember:
+            type: boolean
+            nullable: true
+            column: is_member
+        isSponsor:
+            type: boolean
+            nullable: true
+            column: is_sponsor
+        isCompany:
+            type: boolean
+            nullable: true
+            column: is_company
+        sponsorType:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: sponsor_type
+        formerSponsorMonth:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: former_sponsor_month
+        phoneSelection:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: phone_selection
+        lastUpdated:
+            type: datetime
+            nullable: true
+            column: last_updated
+        updatedBy:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: updated_by
+        step:
+            type: boolean
+            nullable: false
+        languageSelection:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: language_selection
+        lastSpoolContactId:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: last_spool_contact_id
+        recepientCount:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: recepient_count
+        contactId:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: contact_id
+        clubId:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: club_id
+        teamId:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: team_id
+        isDeleted:
+            type: boolean
+            nullable: false
+            column: is_deleted
+        isVerification:
+            type: boolean
+            nullable: true
+            column: is_verification
+        oppositeSelection:
+            type: boolean
+            nullable: false
+            column: opposite_selection
+    lifecycleCallbacks: {  }

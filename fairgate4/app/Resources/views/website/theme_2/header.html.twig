@@ -1,0 +1,9 @@
+<!-- BEGIN HEADER -->
+{% set headerLabels = fgclub.get('publicConfig').header_options.header_label %}
+{% set logoClass = (headerLabels.TM_DEFAULT_LOGO is not defined ) ? 'no-logo' : 'has-logo' %}
+{% set backgroundClass = (headerLabels.TM_HEADER_LOGO is not defined ) ? 'no-background' : 'has-background' %} 
+{% set mobilelogoClass = (headerLabels.TM_DEFAULT_LOGO is not defined and headerLabels.TM_MOBILE_SCREEN_LOGO is defined) ? 'has-logo-xs' : '' %}
+<header class="container-fluid {% if(isHeader==true) %} fg-web-page-header {% endif %} {{ logoClass }} {{ backgroundClass }} {{ mobilelogoClass }}" id="webpagelayout-header">
+    <!-- HEADER UNDERSCORE TEMPLATE included here -->
+</header>
+<!-- END HEADER -->

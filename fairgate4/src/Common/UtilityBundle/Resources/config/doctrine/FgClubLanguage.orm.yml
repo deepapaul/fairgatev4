@@ -1,0 +1,63 @@
+Common\UtilityBundle\Entity\FgClubLanguage:
+    repositoryClass: Common\UtilityBundle\Repository\FgClubLanguageRepository
+    type: entity
+    table: fg_club_language
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        correspondanceLang:
+            type: string
+            length: 2
+            fixed: true
+            nullable: false
+            column: correspondance_lang
+        systemLang:
+            type: string
+            length: 2
+            fixed: true
+            nullable: false
+            column: system_lang
+        visibleForClub:
+            type: boolean
+            nullable: false
+            column: visible_for_club
+        dateFormat:
+            type: string
+            length: 45
+            fixed: false
+            nullable: false
+            column: date_format
+        timeFormat:
+            type: string
+            length: 45
+            fixed: false
+            nullable: false
+            column: time_format
+        thousandSeparator:
+            type: string
+            length: 45
+            fixed: false
+            nullable: false
+            column: thousand_separator
+        decimalMarker:
+            type: string
+            length: 45
+            fixed: false
+            nullable: false
+            column: decimal_marker
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

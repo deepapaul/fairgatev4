@@ -1,0 +1,115 @@
+Common\UtilityBundle\Entity\FgCmsPage:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPageRepository
+    type: entity
+    table: fg_cms_page
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        type:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        sidebarType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: sidebar_type
+        sidebarArea:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: sidebar_area
+        createdAt:
+            type: datetime
+            nullable: false
+            column: created_at
+        editedAt:
+            type: datetime
+            nullable: false
+            column: edited_at
+        contentUpdateTime:
+            type: datetime
+            nullable: false
+            column: content_update_time
+        isAllArea:
+            type: boolean
+            nullable: true
+            column: is_all_area
+        isAllCategory:
+            type: boolean
+            nullable: true
+            column: is_all_category
+        isAllGalleries:
+            type: boolean
+            nullable: true
+            column: is_all_galleries
+        sharedClub:
+            type: string
+            length: 50
+            fixed: false
+            nullable: true
+            column: shared_club
+        areaClub:
+            type: boolean
+            nullable: true
+            column: area_club
+        pageContentJson:
+            type: text
+            nullable: true
+            column: page_content_json
+        hideTitle:
+            type: boolean
+            nullable: false
+            column: hide_title
+        pageElement:
+            type: text
+            nullable: true
+            column: page_element
+        opengraphDetails:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: opengraph_details
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        editedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                edited_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

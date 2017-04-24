@@ -1,0 +1,34 @@
+<script type="text/template" id="templateArticleDetailHistory">
+ <section class="fg-clear col-md-12 dataTables_wrapper  ">
+<table class="table table-hover table-bordered">
+    <thead class="table-bordered">
+            <tr>
+                <th>{{'ARTICLE_HISTORY_EDITEDON'|trans}} </th>
+                <th>  {{'ARTICLE_HISTORY_EDITEDBY'|trans}} </th>
+                <th> {{'ARTICLE_HISTORY_PREVIEW'|trans}} </th>
+                <th>  {{'ARTICLE_HISTORY_RESTORE'|trans}}</th>
+            </tr>
+        </thead>
+        <tbody>
+   <% _.each(articleHistory, function(history, key){ %>    
+               <tr>
+                <td><%- history.lastEdited %></td>
+                <td><%- history.updatedBy %> </td>
+                <td>
+                <a href="#" data-teaser="<%- history.teaser %>"  data-content="<%- history.text %>" data-title="<%- history.articleTitle %>"  id="preview-history" ><i class="fa fa-lg fa-search" ></i></a></td>
+                <td><a href="#" id="update-history-revision" data-content="<%- history.id %>" data-article-id="<%- history.article %>" ><i class="fa fa-lg fa-chevron-circle-right"></i></a></td>
+            </tr>
+            <% }); %>
+           </tbody>
+    </table>
+    <div class="col-md-9 col-lg-7 fg-news-editorial-artcl-dtl-preview-wrapper hide" id="preview-article-version" >
+    <h2 class="page-subtitle-01 fg-marg-top-0 fg-marg-btm-15" > </h2>
+    <div class="row">
+        <div id="show-history-preview"  class="col-sm-6 middle-col col-xs-12"> 
+        </div>
+    </div>
+    </div>
+
+    </section>
+
+</script>

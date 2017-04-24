@@ -1,0 +1,14 @@
+{% set ogImageFlag = 0  %}
+{% for ogImgValue in pageOgJson %}
+    {% set ogImageFlag = 1  %}
+    <meta property="og:image" content="{{imagePath}}{{ogImgValue}}" imagename="{{ogImgValue}}"/>            
+{% endfor %}
+
+{% if ((ogImageFlag == 0)and(ogflag==1))%}
+
+    {% set fallbackimage = (fgclub.get('fallbackImage')is defined) ? fgclub.get('fallbackImage') : ''   %}
+    {% set fallbackImageName = (fgclub.get('fallbackImageName')is defined) ? fgclub.get('fallbackImageName') : ''   %}
+    {% if (fallbackImageName!='' and fallbackImageName != null) %}
+        <meta property="og:image" content="{{fallbackimage}}"  imagename="{{fallbackImageName}}" /> 
+    {% endif %}
+{% endif %}

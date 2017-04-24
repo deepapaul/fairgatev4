@@ -1,0 +1,149 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title"></h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="#" class="form-horizontal form-row-sepe" id="archivecontacts">
+                    <div class="form-body">
+                        
+                        <div id="block_0" class="fg-dev-archive-content">
+                            <p class="fg-dev-archive-status-txt">{{'PERMANENTLY_DELETE_DESC'|trans}}</p>
+                        </div>
+
+                    </div>
+                    
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer form-actions fg-modal-footer">
+    <button type="button" class="btn default" id="cancel" data-dismiss="modal" data-function="cancel">{{'CANCEL'|trans}}</button> 
+    <button type="button" class="btn green" id="save" data-function="save">{{'PERMANENT_DELETE_BUTTON'|trans}}</button>        
+</div> 
+
+
+<script type="text/javascript">
+    var clubId = '{{clubId}}';
+    var clubType = '{{clubType}}';
+    var actionType = '{{actionType}}';
+    var selActionType = '{{selActionType}}';
+    var selContIds = [];
+    var selOwnMembers = [];
+    var selNonOwnMembers = [];
+    var selNonFedMembers = [];
+    var selContNames = [];
+    var nonToArchiveFlag=0;
+    var allToArchiveFlag=0;
+    var nonItemsInArchiveFlag=0;
+
+    if ((selActionType == 'all') || (selActionType == 'single-select')) {
+        var allContactsData = $.parseJSON($('#selcontacthidden').val());
+        $.each(allContactsData, function(cdKey, contactData) {
+            var contactId = contactData.id;
+            if ($.inArray(contactId, selContIds) == -1) {
+                selContIds.push(contactId);
+                selContNames.push({'id': contactId, 'name': $(this).parents('tr').find('.fg-dev-contactname').text()});
+            }
+        });
+    } else {
+        var selectedIdsElement = ($(".dataTables_wrapper div").hasClass('DTFC_LeftBodyWrapper')) ? ".DTFC_LeftBodyWrapper input.dataClass:checked" : "input.dataClass:checked";
+        $(selectedIdsElement).each(function() {
+            var contactId = $(this).attr('id');
+            if ($.inArray(contactId, selContIds) == -1) {
+                selContIds.push(contactId);
+                selContNames.push({'id': contactId, 'name': $(this).parents('tr').find('.fg-dev-contactname').text()});
+            }
+        });
+    }
+
+    displayPopupHeading();
+
+    function displayPopupHeading() {
+        var singleDeleteTxt = '{{'PERMANENT_DELETE_WITH_CONTACTNAME'|trans}}' + ' ';
+        var multipleDeleteTxt = '{{'PERMANENT_DELETE_WITH_CONTACT_COUNT'|trans}}' + ' ';
+        
+
+        if (selContIds.length == 1) {
+            if ((actionType == 'delete') || (actionType == 'removearchivesponsor')) {
+                popupHeadText = singleDeleteTxt.replace('%contname%', selContNames[0].name);
+            }
+            $('h4.modal-title').html('<div class="fg-popup-text" id="popup_head_text"></div>');
+            $('div#popup_head_text').text(popupHeadText);
+        } else {
+            if ((actionType == 'delete') || (actionType == 'removearchivesponsor')) {
+                popupHeadText = multipleDeleteTxt.replace('%contcount%', selContIds.length);
+            }
+            if (selActionType == 'all') {
+                $('h4.modal-title').html('<div class="fg-popup-text" id="popup_head_text"></div>');
+                $('div#popup_head_text').text(popupHeadText);
+            } else {
+                var contNamesHtml = '';
+                var contactNameLinks = {};
+                var i = 0;
+                $.each(selContNames, function(ckey, selContName) {
+                    i++;
+                    if (i == 11) {
+                        contNamesHtml += '<li>&hellip;</li>';
+                        return false;
+                    } else {
+                        contactNameLinks[selContName.id] = selContName.name;
+                        contNamesHtml += '<li><a href="contact/overviewcontact/0/'+selContName.id+'" target="_blank" data-cont-id="'+selContName.id+'"></a></li>';
+                    }
+                });
+                $('h4.modal-title').html('<span class="fg-dev-contact-names"><a href="#" class="fg-plus-icon"></a><a href="#" class="fg-minus-icon"></a></span><div class="fg-popup-text" id="popup_head_text"></div>\n\
+                    <div class="fg-arrow-sh"><ul>' + contNamesHtml + '</ul></div>');
+                $('div#popup_head_text').text(popupHeadText);
+                displayContactNames(contactNameLinks);
+            }
+        }
+    }
+    function displayContactNames(contactNameLinks) {
+        $.each(contactNameLinks, function(selContId, selContName) {
+            $('a[data-cont-id='+selContId+']').text(selContName);
+        });
+    }
+    $(document).off('click', '.modal-title .fg-dev-contact-names');
+    $(document).on('click', '.modal-title .fg-dev-contact-names', function(e) {
+        $(this).parent().toggleClass('fg-arrowicon');
+    });
+    $(document).off('click', 'button[data-function=save], button[data-function=cancel]');
+    $(document).on('click', 'button[data-function=save], button[data-function=cancel]', function() {
+        var buttonId = this.id;
+        if (buttonId == 'save') {
+            permanentDeleteContatcs();
+        }
+    });
+    function permanentDeleteContatcs() {
+        var deleteData = JSON.stringify(selContIds);
+        $('#popup').modal('hide');
+        var passingData = {'deleteData':deleteData,'totalCount': selContIds.length, 'fromPage': 'archivelist', 'actionType': actionType};
+        FgXmlHttp.post('{{path("save_permanent_deleted_archive")}}', passingData, false, callBackFn);
+    }
+    function callBackFn(resultParms) {
+        if(resultParms.contactType == "archive"){
+          FgCountUpdate.updateTopNav('remove', 'contact', 'archive', resultParms.totalCount);
+        } else {
+            FgCountUpdate.updateTopNav('remove', 'sponsor', 'archived', resultParms.totalCount);
+        }     
+        if (!$.isEmptyObject(oTable)) {
+            oTable.api().draw();
+        } else {
+            FgTable.init();
+        }
+
+    }
+{#    
+    $(document).off('click', 'button[data-function=save], button[data-function=cancel]');
+    $(document).on('click', 'button[data-function=save], button[data-function=cancel]', function() {
+        var buttonId = this.id;
+        if (buttonId == 'save') {
+            saveAssignments();
+        }
+    });#}
+</script>

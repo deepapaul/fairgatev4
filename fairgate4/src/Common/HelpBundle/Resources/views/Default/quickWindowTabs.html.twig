@@ -1,0 +1,50 @@
+ {% if (tabs is defined) %}       
+            {% set litagdata =''%}
+            {% set morelitagdata =''%}   
+            {% for key,tab in tabs %}  
+                 
+                {% set litagdata = litagdata ~ '
+                <li id="fg_tab_'~loop.index~'" name="'~tab.name~'" data-target="'~ loop.index ~'" class="'~tab.activeClass~'" >
+                <a  href="'~ ((hrefLink is defined) ? tab.url :"#") ~'"  aria-controls="'~tab.id~'" data_id="'~ tab.name ~ '" data-toggle="tab"><span class="fg-dev-tab-text">'~ tab.text~ '</span></a>' ~           
+              '</li>' %}
+
+                {% set morelitagdata = morelitagdata ~ '
+                <li id="fg_tab_'~loop.index~'" name="'~tab.name~'" data-target="'~ loop.index ~'" class="'~tab.activeClass~'" >
+                <a  href="'~ ((hrefLink is defined) ? tab.url :"#") ~'"  aria-controls="'~tab.id~'" data_id="'~ tab.name ~ '" data-toggle="tab"><span class="fg-dev-tab-text">'~ tab.text~ '</span></a>'~            
+              '</li>' %}
+
+            {% endfor %}
+       
+            {% if tabClass is defined %}
+              {% set tabClass = "data-tabs" %}
+            {% else %}
+              {% set tabClass = "paneltab" %}
+            {% endif %}
+{% endif %} 
+<div class="fg-internal-data-tab">
+    <ul class="nav nav-tabs data-more-tab fg-clear" id="data-tabs-help">
+         {{litagdata|raw}} 
+         <li name="fg-dev-more-tab" class="datahideshow dropdown">
+            <a href="#" class="dropdown-toggle"  data-toggle="dropdown">{{ 'MORE'|trans }} 
+                <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu fg-dropdown-more pull-right {{ moreClass|default('') }}">
+                {{morelitagdata|raw}}
+            </ul>
+        </li>
+    </ul>
+    <div class="clearfix"></div>
+    <div class="tab-content fg-clear" id="data-tabs-content-help">
+        {% for overview in overviews %}
+            <div class="fg-help-main-wrapper  {{ overview.isVisible !=1?'hide':'' }}" id="{{ overview.name }}">
+                <div class="fg-help-content-wrapper-small hide">
+                    <div class="panel-group accordion fg-help-content-accordian-wrapper" id="accordion-{{ overview.name }}" role="tablist" aria-multiselectable="true">
+                    </div>
+                </div>
+                <div class="fg-help-content-wrapper fg-clear tab-pane active" data-parent="{{ overview.name }}" >
+                    {% include overview.twigPath %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

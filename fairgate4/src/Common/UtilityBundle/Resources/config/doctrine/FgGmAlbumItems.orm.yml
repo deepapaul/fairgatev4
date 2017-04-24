@@ -1,0 +1,41 @@
+Common\UtilityBundle\Entity\FgGmAlbumItems:
+    repositoryClass: Common\UtilityBundle\Repository\Gallery\FgGmAlbumItemsRepository
+    type: entity
+    table: fg_gm_album_items
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: sort_order
+        isCoverImage:
+            type: boolean
+            nullable: false
+            column: is_cover_image
+    manyToOne:
+        items:
+            targetEntity: FgGmItems
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                items_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        album:
+            targetEntity: FgGmAlbum
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                album_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

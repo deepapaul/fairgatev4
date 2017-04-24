@@ -1,0 +1,44 @@
+Common\UtilityBundle\Entity\FgClubAssignment:
+    repositoryClass: Common\UtilityBundle\Repository\FgClubAssignmentRepository
+    type: entity
+    table: fg_club_assignment
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        fromDate:
+            type: datetime
+            nullable: true
+            column: from_date
+        toDate:
+            type: datetime
+            nullable: true
+            column: to_date
+        isApproved:
+            type: boolean
+            nullable: false
+            column: is_approved
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        fedContact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                fed_contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

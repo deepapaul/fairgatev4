@@ -1,0 +1,399 @@
+/* ------------------------------------
+	* 01 - Overrides style within widget blocks
+			* 01-a Unitegallery overide
+	* 02 - Auto complete
+	* 03 - Google captcha
+	* 04 - uniform plugin
+	* 05 - time picker
+	* 06 - tooltip
+	* 07 - bootstrap select
+	* 08 - datepicker
+	* 09 - Datatable
+---------------------------------------*/
+
+/*---------------------------------------------
+* 01 - Overrides style within widget blocks
+-----------------------------------------------*/
+.fg-widget-block,.fg-gallery-wrapper,.fg-slider-wrapper{
+
+	// * 01-a Unitegallery overide
+	.ug-gallery-wrapper{
+		.ug-tiles-wrapper{
+
+			.ug-textpanel-bg{
+				display: none  !important;
+				opacity: 0 !important;
+			}
+		}
+		.ug-slider-wrapper{
+
+			.ug-videoplayer .ug-videoplayer-button-close{
+				width: 30px;
+				height: 30px;
+				left: auto !important;
+				right: 4px !important;
+				top: 4px !important;
+				background-size: 32px 60px;
+
+				&:hover{
+					background-position: 0 -30px;
+				}
+			}
+		}
+	}
+	.ug-slider-wrapper{
+		.ug-textpanel{
+			@include bxsz-cntnbx;
+		}
+		.ug-textpanel-bg{
+			@include bxsz-cntnbx;
+			padding: 5px 0;
+		}
+		.ug-textpanel-textwrapper{
+			@include bxsz-cntnbx;
+			padding: 5px 0;
+		}
+		.ug-textpanel-description{
+			@include bxsz-cntnbx;
+			padding: 5px 0;
+		}
+	} 
+	.ug-tile-icon.ug-button-play.ug-icon-zoom {
+		margin: auto !important;
+		top: 0 !important;
+		bottom: 0 !important;
+		left: 0 !important;
+		right: 0 !important;
+	}
+}
+.fg-gallery-wrapper{
+
+	.ug-tile{
+		.ug-textpanel-title{
+			font-weight: normal;
+			padding:  0;
+		}
+	} 
+}
+.ug-gallery-wrapper{
+	&.ug-theme-slider{
+		margin: auto;
+		float: none;
+	}
+	.ug-tiles-preloader{
+		background: none !important;
+		-webkit-animation: fa-spin 2s infinite linear;
+		animation: fa-spin 2s infinite linear;
+		font-family:FontAwesome;
+		font-size: 30px;
+		margin: auto !important;
+		top: 0px !important;
+		left: 0 !important;
+		right: 0 !important;
+		bottom: 0px !important;
+		height: 30px !important;
+		width: 30px !important;
+
+		&:after{
+			content: "\f1ce";  
+			display: block;
+			position: relative;
+			top: -6px;
+			width: 29px;
+			height: 29px;	
+		}
+	}
+}
+
+.fg-gallery-photos-wrapper{
+	.slider-wrapper{
+		&.item-1 {
+			max-width:200px !important;
+		}
+		&.item-2 {
+			max-width:500px !important;
+		}
+		&.item-3 {
+			max-width:650px !important;
+		}
+		&.item-4 {
+			max-width:800px !important;
+		}
+	}
+}
+.ug-thumb-wrapper{
+	&.ug-tile {
+		.ug-tile-icon{
+			&.ug-icon-play {
+
+				margin: auto !important;
+				top: 0 !important;
+				bottom: 0 !important;
+				left: 0 !important;
+				right: 0 !important;
+			}
+		}
+	}
+}
+/*---------------------------------------------
+* 02 - Auto complete
+-----------------------------------------------*/
+.ui-autocomplete {
+	background: none repeat scroll 0 0 #ffffff;
+	list-style: outside none none;
+	border: 1px solid #ddd;
+	width: 21.1%;
+	margin-left: -23px;
+	padding-left: 0;
+	z-index: 999999;
+
+	li{
+		a{
+
+			color: #333;
+			font-size: 14px;
+			padding: 5px 0;
+			display: block;
+			padding-left: 10px;
+			text-decoration: none;
+			cursor: default;
+		}
+
+		&:hover{
+			background-color: #eee;
+		}
+	}
+}
+.ui-helper-hidden-accessible{
+	opacity: 0;
+	visibility: hidden;
+}
+/*---------------------------------------------
+* 03 - Google captcha
+-----------------------------------------------*/
+
+.g-recaptcha{
+  @include bpMax('320px'){
+      width:auto;
+      @include transform(scale(0.86));
+      @include transform-orgin(left center);
+  }
+}
+
+/*---------------------------------------------
+* 04 - uniform plugin
+-----------------------------------------------*/
+.form-horizontal{
+	.checkbox, 
+	.checkbox-inline, 
+	.radio, 
+	.radio-inline {
+
+		padding-top: 0;
+	}
+	.checker{
+		margin-top:-3px;
+	}
+	.radio{
+		>span{
+			margin-top: 4px;
+			background-position: 0 -280px !important;
+			&.checked{
+				background-position: -72px -280px !important;
+			}
+		}
+	}
+} 
+/*---------------------------------------------
+* 05 - time picker
+-----------------------------------------------*/
+.bootstrap-timepicker{
+	.input-group-addon {
+		cursor: pointer;
+	}
+}
+.bootstrap-timepicker-widget{
+    min-width: 140px;
+    z-index: 10000;
+	@include border-radius(0);
+	table{
+		td{
+			color: #333 !important;
+			input{
+				border:none; 
+				min-width: 35px;   
+			}
+		}
+	}
+	a{
+		color: #333 !important;
+		@include border-radius(0 !important);
+	}
+	&.timepicker-orient-top{
+		&:before,&:after{
+			bottom: auto;
+			top:-6px;
+		}
+		&:after{
+			top:-5px;
+		}
+	}
+	&.timepicker-orient-bottom{
+		&:before,&:after{
+			bottom:-6px;
+			top: auto;
+		}
+		&:after{
+			bottom:-5px;
+		}
+	}
+}
+/*---------------------------------------------
+* 06 - tooltip
+-----------------------------------------------*/
+.custom-popup {
+	display: none;
+	margin-left: -35px;
+	margin-top: -15px;
+	position: absolute;
+	width: 150px;
+	z-index: 629;
+	height: 64px;
+
+	.popover{
+		position: static;
+		display: block;
+		background-color: #f5f5f5;
+		font-size: 13px;
+		font-weight: 400;
+		line-height: 20px;
+		@include border-radius(0);
+		@include box-shadow(0 1px 8px rgba(0, 0, 0, 0.2));
+		padding: 0;
+		margin: -1px 0 0 0;
+		&.bottom{
+			> .arrow:after {
+				border-bottom-color: #f5f5f5;
+			}
+		} 
+		.popover-content {
+			color: #666;
+		}
+	}
+}
+
+/*---------------------------------------------
+* 07 - bootstrap select
+-----------------------------------------------*/
+.bootstrap-select{
+	.dropdown-menu{
+		@include border-radius(0);
+		max-width: 100%;
+		max-height: 250px !important;
+	}
+	.dropdown-toggle{
+		@include box-shadow(none !important);
+	}
+
+	.selectpicker{
+		
+		&.btn{
+			outline: none !important;
+			>span {
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+		}
+		> li{
+			outline: none;
+			> a{
+				outline: none;
+				padding-right: 5px;
+				span.text{
+					margin-right: 10px !important;
+					max-width: calc(100% - 30px);
+					vertical-align: middle;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+				.check-mark{
+					display: none;
+				}
+			}
+
+			&.selected{
+
+				> a{
+					.check-mark{
+						vertical-align: middle;
+						display: inline-block;
+					}
+				}
+			}
+		}
+	}
+}   
+/*---------------------------------------------
+* 08 - datepicker
+-----------------------------------------------*/
+.datepicker{
+	padding: 10px;
+	max-width: 250px;
+	th{
+		cursor: pointer;
+		&:hover{
+			background: #eeeeee;
+		}
+	}
+	&.datepicker-orient-bottom{
+		&:before,&:after{
+			@include transform(rotate(180deg));
+			bottom: auto;
+			top:-7px;
+		}
+		&:after{
+			top:-6px;
+		}
+	}
+	&.datepicker-orient-top{
+		&:before,&:after{
+			@include transform(rotate(180deg));
+			bottom:-7px;
+			top: auto;
+		}
+		&:after{
+			bottom:-6px;
+		}
+	}
+	table{
+
+		tr{
+			td{
+				span {
+					display: block;
+					width: 23%;
+					height: 54px;
+					line-height: 54px;
+					float: left;
+					margin: 1%;
+					cursor: pointer;
+				}
+			} 
+		} 
+	} 
+}
+/*---------------------------------------------
+* 09 - Datatable
+-----------------------------------------------*/
+	
+table.dataTable{
+	thead{
+
+		.sorting,.sorting_asc,.sorting_desc{
+			&:after{
+				display: none;
+			}
+		}
+	} 
+} 

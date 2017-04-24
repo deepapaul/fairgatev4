@@ -1,0 +1,40 @@
+{% for paymentPlan in payments|default('') %}    
+<div class="row fg-border-line fg-custom-payments">
+        <div class="col-md-12 fg-col-hack fg-left-zero">
+            <div class="row">
+                <div dataerror-group class="col-lg-3 col-sm-12 col-xs-12 fg-spon-sm"> 
+                    <div class="fg-spon-content-area">{%trans%}SM_PAYMENT_ON{% endtrans %} <span class="fg-mandatory">*</span></div>
+                    <div class="input-group date datepicker form_datetime">
+                        <input data-error-container="#{{paymentPlan.paymentId}}_paymentOn_error" required value="{{paymentPlan.paymentDate|default('')|date(fgclub.get('phpdate')) }}" type="text" size="16" name="{{paymentPlan.paymentId}}_paymentOn" id="{{paymentPlan.paymentId}}_paymentOn" data-key="custom.{{paymentPlan.paymentId}}.date" class="form-control" data-paymentdate="">
+                        <span class="input-group-btn">
+                            <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                    </div>
+                    <span id="{{paymentPlan.paymentId}}_paymentOn_error" class="has-error"></span>
+                </div>
+                <div dataerror-group class="col-lg-4 col-sm-12 col-xs-12 fg-spon-sm">
+                    <div class="fg-spon-content-area">{%trans%}SM_WITH_VALUE_OF_CURR{% endtrans %} {{fgclub.get('clubCurrency')}} <span class="fg-mandatory">*</span></div>
+                    <input required data-amount data-discount-validate="{{paymentPlan.paymentId}}" value="{{paymentPlan.amount|default('') }}" type="text" name="{{paymentPlan.paymentId}}_amount" id="{{paymentPlan.paymentId}}_amount" data-key="custom.{{paymentPlan.paymentId}}.amount" class="form-control fg-validate-inp numbermask fg-spon-input-area">
+                </div>
+                <div dataerror-group class="col-lg-5 col-sm-12 col-xs-12 fg-spon-sm">
+                    <div class="fg-spon-content-area">{%trans%}SM_AND_WITH_DISCOUNT_OF{% endtrans %}</div> 
+                    <input data-notrequired="true" data-error-container="#{{paymentPlan.paymentId|default('') }}_discount_error" type="text" min="0" max="{{paymentPlan.discountType|default('')=='P' ? '100' :paymentPlan.amount|default('') }}" data-discount="{{paymentPlan.paymentId}}" data-discount-validate="{{paymentPlan.paymentId}}" value="{{paymentPlan.discount|default('') }}" name="{{paymentPlan.paymentId|default('') }}_discount_hidden" id="{{paymentPlan.paymentId|default('') }}_discount_hidden" data-key="custom.{{paymentPlan.paymentId}}.discount" class="hide fg-validate-inp">
+                    <input type="text" data-discount-shown="{{paymentPlan.paymentId}}" value="{{paymentPlan.discount|default('') }}" name="{{paymentPlan.paymentId|default('') }}_discount" id="{{paymentPlan.paymentId|default('') }}_discount"  class="form-control numbermask ignore fg-spon-input-area">
+                    <select data-discount-validate="{{paymentPlan.paymentId}}" class="bs-select form-control fg-spon-input-area" name="discount" data-key="custom.{{paymentPlan.paymentId}}.discount_type" aria-invalid="false">
+                        <option {{paymentPlan.discountType|default('')=='P' ? 'selected' :'' }} value="P">%</option>
+                        <option {{paymentPlan.discountType|default('')=='A' ? 'selected' :'' }} value="A">{{fgclub.get('clubCurrency')}}</option>
+                    </select>
+                    <span id="{{paymentPlan.paymentId|default('') }}_discount_error" class="has-error"></span>
+                </div>
+            </div>
+        </div>                        
+        <div class="fg-col-last-icon">
+            <div class="col-md-2 pull-right deletediv ">
+                <div class="closeico">
+                    <input name="{{paymentPlan.paymentId}}_isDeleted" id="{{paymentPlan.paymentId}}_isDeleted" data-key="custom.{{paymentPlan.paymentId}}.isDeleted" type="checkbox" class="make-switch">
+                    <label for="{{paymentPlan.paymentId}}_isDeleted"></label>
+                </div>
+            </div>
+        </div>                         
+    </div>
+{% endfor %}

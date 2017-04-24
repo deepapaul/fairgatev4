@@ -1,0 +1,52 @@
+<div class="fg-dev-dataTable-hide-wrapper" data-table-type="future" id="fg_dev_future">
+    <div class="row">
+        <div class="col-md-12 fg-common-top-btm">
+            <div class="panel-primary panel-bg"> 
+                    <div class="panel-heading fg-theme-head paneldisplay">
+                        <button class="btn tableaction fg-file-doc-button fgContactdrop" data-toggle="dropdown" data-type="future" data-menu-type="multiple"><i class="fa fa-bars fa-2x"></i></button>
+                        <ul class="dropdown-menu pull-left fg-doc-dropdown" id="fgdropmenu"></ul> 
+                        <h3 class="panel-title pull-left fg-doc-pannel-text">{{ 'SPONSOR_FUTURE'|trans }}</h3>
+        </div>
+    </div>
+        </div>
+    </div>    
+    <div class="row">
+        <div class="col-md-12">
+            <div style="display:none" class="fg-stat-and col-md-12" data-empty="future">{%trans%}NO_DATA_AVAILABLE{%endtrans%}</div>
+            <div class="portlet-body new-table-height" id="tableWrapper-future" data-type="future" style="display:none">
+                <div class="row fg-future-table-wrapper" data-service-list="future">
+                    <table data-contact-service="future"
+                           class="fg-dev-sponsor-overview-dataTable table  fg-icons-change 
+                           table-bordered
+                           table-hover
+                           table-condensed
+
+                           dataTable-ajax
+                           dataTable-rows
+                           dataTable-scroll-x
+                           dataTables_scrollBody
+                           lastcolumn_sort dataTable-initialSort data-count fg-dev-no-paging fg-dev-colums-planned"  id="fg-dev-dataTable-future" xWidth="100" yHeight="300" data-table-name="dataTables" data_row_change="fgrowchange"   dataTable-hover="true" data-sort="0#desc" data-storage="communication_receiverlist" data-columnstorage="communication_receiverlist_column" data-column-def="true" data_table_type="recipient" data-update-flag="true">
+                        <thead>
+                            <tr>
+                                <th><div class='fg-th-wrap'><i class='chk_cnt' ></i>&nbsp;<input type='checkbox' name='check_all_future' id='check_all_future' data-type= "future" class='dataTable_checkall fg-dev-avoidicon-behaviour'></div>&nbsp;</th>
+                                <th >{%trans%}SM_START_DATE{%endtrans%}</th>
+                                <th>{%trans%}SM_END_DATE{%endtrans%}</th>
+                                <th>{%trans%}SPONSOR_SERVICE{%endtrans%}</th>
+                                <th>{%trans%}SM_PAYMENT_PLAN{%endtrans%}</th>
+                                <th>{%trans%}SM_NEXT_PAYMENT{%endtrans%}</th>
+                                <th>{% trans %}SM_PAYMENTS{%endtrans%} {{fiscal.current.label}}</th>
+                                <th>{% trans %}SM_PAYMENTS{%endtrans%} {{fiscal.next.label}}</th>
+                                <th>{% trans %}SM_TOTAL_PAYMENT{%endtrans%}</th>
+                            </tr>
+                        </thead>
+                        <tfoot data-footer="future">
+                        <tr class="fg-datatable-footer-grey">
+                            <th></th><th>{% trans %}SM_TOTAL{% endtrans %}</th><th></th><th></th><th></th><th></th><th data-current-total="future">-</th><th data-next-total="future">-</th><th></th>
+                        </tr>
+                       </tfoot>
+                    </table>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>

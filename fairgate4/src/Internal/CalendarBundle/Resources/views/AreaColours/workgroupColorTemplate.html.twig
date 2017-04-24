@@ -1,0 +1,39 @@
+<li class="dd-item  row" data-id="5">
+    <div class="fg-nestable-row">
+        <div class="fg-active-IB">
+            <label class="fg-club-label">{{'AREA_COLORS_WORKGROUP_TEXT'|trans}}</label>
+        </div>
+        <div class="fg-active-IB pull-right">
+            <div class="">
+                <input type="text" name="category_{{workgroupId}}" data-key="category.{{workgroupId}}" id="position-top-right" class="form-control mini-color" data-position="top right" value="{{categoryColourCodes[workgroupId]['colorCode']|default(defaultColorCodeClub)}}">
+            </div>
+        </div>
+    </div>
+    <ol class="dd-list">
+
+        {% for wgId,workgroup in workgroups %}
+            <li class="dd-item  row" data-id="6">
+                <div class="fg-nestable-row">
+                    <div class="fg-active-IB">
+                        <label class="fg-club-label">{% if colorCode[wgId]['isExecutiveBoard'] == 1 %}{{fgtwig.getTerminolgyName('Executive Board',singular,'UCF')}} {% else %} {{workgroup}}{% endif %}</label>
+                    </div>
+
+                    <div id= "select_role_{{wgId}}" data-type-id="role_{{wgId}}" class="fg-active-IB pull-right choose-colour-div    {% if colorCode[wgId]['colorCode'] != '' %} hide{% endif %}">
+                        <div class="fg-active-IB">
+                            <a href="javascript:void(0)"  class="fg-choose-ind-color" data-id="role_{{wgId}}">{{'AREA_COLORS_CHOOSE_COLOR_TEXT'|trans}}</a>
+                        </div>
+                    </div>
+
+                    <div id= "remove_role_{{wgId}}" data-type-id="role_{{wgId}}" class="fg-active-IB pull-right remove-color-div {% if colorCode[wgId]['colorCode'] == '' %} hide{% endif %}">
+                        <div class="fg-active-IB fg-marg-right-10 fg-v-middle"><a href="javascript:void(0)" class="fg-remove-ind-color" data-id="role_{{wgId}}">{{'AREA_COLORS_REMOVE_COLOR_TEXT'|trans}}</a>   </div>
+                        <div class="fg-active-IB fg-v-middle">
+                            
+                            
+                            <input name="role_{{wgId}}" data-value="{{colorCode[wgId]['colorCode']|default(defaultColorCodeClub)}}" data-key="role.{{wgId}}" type="text" id="color_role_{{wgId}}" class="form-control mini-color" data-position="top right" value="{{colorCode[wgId]['colorCode']}}" data-notrequired="true">
+                        </div>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ol>
+</li>

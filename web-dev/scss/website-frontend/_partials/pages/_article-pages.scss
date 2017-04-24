@@ -1,0 +1,267 @@
+/* ------------------------------------
+* Article pages design styles
+* 01 - article detail wrapper
+* 02 - article comments wrapper
+* 03 - article-special-contents-wrapper
+--------------------------------------*/
+
+
+/* -------------------------------------------------------------------------
+* 01 - article detail wrapper
+-----------------------------------------------------------------------------*/
+.fg-article-detail-wrapper{
+	.fg-article-contents{
+		@extend %clearfix;
+		font-size: 17px;
+		.fg-article-thumb-wrapper{
+
+		}
+		&.fg-right-image-layout{
+			.col-sm-4{
+				padding-left: 30px;
+				padding-right:0;
+			}
+		}
+		&.fg-left-image-layout{
+				.col-sm-4{
+					padding-left: 0;
+					padding-right:30px;
+				}
+		}
+		@include bpMax('767px'){
+			&.fg-right-image-layout,
+			&.fg-left-image-layout{
+
+				.col-sm-4{
+					padding:0;
+				}
+			}
+		}
+	}
+	.fg-article-details-block{
+		border:1px solid ;
+		margin-bottom: 20px;
+		padding: 10px;
+		font-size: 14px;
+		.fg-comments-count{
+			margin:20px auto;
+		}
+		.fg-title{
+
+		}
+		.fg-cat-tags{
+			>span{
+				background: #ccc;	
+				padding: 2px 8px;
+				margin: 0 5px 5px 0;
+				display: inline-block;
+			}
+			.fg-club-tag{
+				color: #fff;
+			}
+			.fg-cat-tag{
+
+			}
+		}
+		.fg-attachments{
+			li{
+				>a{
+					margin-right: 5px;
+				}
+				>span{
+					display: inline-block;
+				}
+			}
+		}
+	}
+	.fg-gallery-wrapper{
+	}
+	#fg-article-gallery{
+		&.fg-slider-wrapper{			
+			width: 100% !important;
+		}
+	}
+}
+
+
+/* -------------------------------------------------------------------------
+* 02 - article comments wrapper
+-----------------------------------------------------------------------------*/
+
+
+.fg-web-article-comments-wrapper{
+	margin-top: 40px;
+	.fg-title{
+		margin-bottom: 30px;
+	}
+	.fg-web-article-comments-list  {
+		list-style-type: none;
+		padding: 0;
+	}
+	.fg-web-article-comment-block{
+		margin-bottom: 20px;
+		@extend %clearfix;
+		.fg-avatar{
+			width:50px;
+			height: 50px;
+			font-size: 55px;
+			float: left;
+			position: relative;
+			img{
+				@include border-radius(50%);
+			}
+			@include bpMax('767px'){
+				display: none;
+			}
+		}
+		.fg-content-wrapper{
+			float: left;
+			width: 80%;
+			width:calc(100% - 50px);
+			padding: 0 0 0 20px;
+
+			@include bpMax('767px'){
+				width:100%;
+				padding: 0;
+			}
+			.fg-comment-details{
+				.fg-author{
+					text-transform: uppercase;
+
+				}
+			}
+			.fg-comment  {
+					.fg-button{
+						margin-top:10px;
+						.btn{
+							//color: #fff;
+						}
+						
+					}
+			}
+		}
+	}
+}
+
+
+/* -------------------------------------------------------------------------
+* 03 - article-special-contents-wrapper
+-----------------------------------------------------------------------------*/
+
+
+.fg-article-special-contents-wrapper{
+	
+	.fg-article-content-block{
+
+		@extend %clearfix;
+		margin-bottom: 30px;		
+		cursor: pointer;
+		.fg-thumb{
+			figure{
+				img{
+					width: 100%;
+				}
+			}
+			@include bpMax('767px'){
+				margin-bottom: 10px;
+
+			}
+		}
+		.fg-title{
+
+		}
+		.fg-content{
+			.fg-read-more{
+				margin-left:10px;
+				i{
+					margin-right: 5px;
+				}
+			}
+		}
+		.fg-footer{
+			border: 1px solid;
+			padding: 5px 10px;
+			font-size: 14px;
+			margin: 15px auto 5px auto;
+			position: relative;
+			@extend %clearfix;
+			.fg-date{
+				margin-top: 2px;
+				margin-right: 5px;
+				@include bpMax('767px'){
+					float: none !important;
+					margin-bottom: 5px;
+					min-height: 15px;
+
+				}
+			}
+			.fg-comments-count{
+				margin-right: 10px;
+				margin-top: 2px;
+				@include bpMax('767px'){
+					@include position(absolute,4px,0,auto,auto);
+				}
+			}
+			.fg-block{
+				display: inline-block;
+			}
+			.fg-cat-tags{
+				margin-right: -5px;
+				@include bpMin('768px'){
+					max-width: calc(100% - 80px);
+					margin-bottom: -5px;
+				}
+				
+				@include bpMax('992px'){
+					float: none !important;
+				}
+				>span{
+					background: #ccc;
+					padding: 2px 8px;
+					margin: 0 5px 5px 0;
+					display: inline-block;
+					
+				}
+				.fg-club-tag{
+					color: #fff;
+				}
+				.fg-cat-tag{
+				}
+			}
+		}
+
+
+		&.fg-has-thumb{
+			.fg-footer{
+
+				.fg-date{
+					@include bpMax('992px'){
+						float: none !important;
+						margin-bottom: 5px;
+						min-height: 15px;
+
+					}
+				}
+				.fg-comments-count{
+					margin-right: 10px;
+					@include bpMax('992px'){
+						@include position(absolute,4px,0,auto,auto);
+					}
+				}
+			}
+		}
+
+
+			
+	}
+
+}
+
+@include bpMax('767px'){
+	.fg-article-content-block{
+		>[class^='col-sm-'], >[class*=' col-sm-']{
+			padding-left:0;
+			padding-right: 0;
+		}
+	}
+}

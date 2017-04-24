@@ -1,0 +1,86 @@
+{% if (sidebarSponsors|length > 0) %}
+    <td width="150" valign="top">
+        {% for key, sidebarSponsor in sidebarSponsors %}
+            {% if (sidebarSponsor.sponsors|length > 0) %}
+                <table width="150" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td height="22" colspan="2">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="138" bgcolor="#5a5a5a" style="color: #fff; text-align: center;font-size: 11px; font-family: Verdana, Arial, sans-serif;" rowspan="2"><font face="Verdana, Arial, sans-serif">{{ sidebarSponsor.title }}</font></td>
+                        <td width="12" align="bottom" height="19"><img style="vertical-align:bottom;" src="{{ (baseUrl~'/fgcustom/img/newsletter/rightbox_bg_top.png') }}" border="0" /></td>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#5a5a5a"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" width="150">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+                                <tr>
+                                    <td align="center" height="10"></td>
+                                </tr>
+                                {% if (sidebarSponsor.sponsors|length > 0) %}
+                                    {% for key1, sponsorAd in sidebarSponsor.sponsors %}
+                                        <tr>
+                                            <td align="center" valign="middle" width="150">
+                                                {% if (sponsorAd.isDefault == 1) %}           
+                                                    {% if (sponsorAd['contactDetails']['Iscompany'] == 1) %}                    
+                                                        {% if (sponsorAd['contactDetails']['companyLogo'] is empty) %}
+                                                            {% if sponsorAd['contactDetails']['website'] is not empty %}
+                                                                <a style="text-decoration:none" href="{{ sponsorAd['contactDetails']['website'] }}" target="_blank">
+                                                            {% endif %}       
+                                                            <div style="display:inline-block;background-color:#ddd;width:120px;min-height:60px;height:60px;vertical-align:middle;">  
+                                                                <div style="display:table;min-height:60px;height:60px;">  
+                                                                    <div style="display:table-cell;vertical-align:middle;text-align:center;">
+                                                                        <span style="color:#fff;font-size:14px;text-align:center;font-weight:600;">{{ sponsorAd['contactDetails']['contactname'] }}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {% if sponsorAd['contactDetails']['website'] is not empty %}
+                                                                </a>
+                                                            {% endif %}     
+                                                        {% else %}
+                                                            <img src="{{ (baseUrl~sponsorAd['contactDetails']['companyLogo']) }}" width="120" alt="" />
+                                                        {% endif %} 
+                                                    {% else %}
+                                                        {% if sponsorAd['contactDetails']['website'] is not empty %}
+                                                            <a style="text-decoration:none" href="{{ sponsorAd['contactDetails']['website'] }}" target="_blank">
+                                                        {% endif %} 
+                                                            <div style="display:inline-block;background-color:#ddd;width:120px;min-height:60px;height:60px;vertical-align:middle;">  
+                                                                <div style="display:table;min-height:60px;height:60px;">  
+                                                                    <div style="display:table-cell;vertical-align:middle;text-align:center;">
+                                                                        <span style="color:#fff;font-size:14px;text-align:center;font-weight:600;">{{ sponsorAd['contactDetails']['contactname'] }}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        {% if sponsorAd['contactDetails']['website'] is not empty %}
+                                                            </a>
+                                                        {% endif %}   
+                                                    {% endif %}                
+                                                {% else %}
+                                                    {% if sponsorAd.url is not empty %}
+                                                        <a target="_blank" href="{{ sponsorAd.url }}">
+                                                            <img border="0" src="{{ (baseUrl~sponsorAd.image) }}" alt="" width="120"/></a>
+                                                        {% else %}
+                                                        <img border="0" src="{{ (baseUrl~sponsorAd.image) }}" alt="" width="120"/>
+                                                    {% endif %}
+                                                {% endif %}    
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="10" align="center"></td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" width="150" valign="top" style="background: url({{ (baseUrl~'/fgcustom/img/newsletter/rightbox_bg.png') }}) no-repeat right top">&nbsp;</td>
+                    </tr>
+                </table>
+            {% endif %}           
+        {% endfor %}
+    </td>
+{% endif %}
+<td width="25">&nbsp;</td>

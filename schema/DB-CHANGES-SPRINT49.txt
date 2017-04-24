@@ -1,0 +1,29 @@
+system testing  (Save button is not active after deleting a link) - 
+========================================================================================================================================================================================================
+ALTER TABLE `fg_cms_page_content_media` DROP FOREIGN KEY `fg_cms_page_content_media_ibfk_4`; 
+ALTER TABLE `fg_cms_page_content_media` ADD CONSTRAINT`fg_cms_page_content_media_ibfk_4` FOREIGN KEY (`navigation_id`) REFERENCES `fg_cms_navigation`(`id`) ON DELETE SET NULL ON UPDATE NO ACTION;
+
+Db change for supplementary-element
+==================================================
+INSERT INTO `fg_cms_page_content_type` (`id`, `type`, `logo_name`, `label`, `table_name`, `sort_order`) VALUES (NULL,'supplementary-menu', 'fa-sitemap', 'CMS_SUPPLEMENTARY_MENU', NULL, '10');
+
+ALTER TABLE `fg_cms_article_comments` ADD `guest_user_name` VARCHAR(45) NULL DEFAULT NULL AFTER `updated_on`;
+ALTER TABLE `fg_cms_article_comments` CHANGE `contact_id` `contact_id` INT(11) NULL DEFAULT NULL;
+ALTER TABLE `fg_cms_article_comments` CHANGE `created_by` `created_by` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `fg_cms_page` ADD `hide_title` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'hide/show page title flag' AFTER `page_content_json`;
+
+
+UPDATE `fg_tm_theme_color_scheme` SET css_filename = '';
+UPDATE `fg_tm_theme_configuration` SET css_filename = '';
+
+Function_sublevelNavs
+Procedure_importShareContacts
+
+ALTER TABLE  `fg_cms_page` CHANGE  `page_content_json`  `page_content_json` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL ;
+
+ALTER TABLE  `sf_guard_user_page` ADD UNIQUE (
+`user_id` ,
+`group_id` ,
+`page_id`
+);

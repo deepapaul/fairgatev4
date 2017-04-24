@@ -1,0 +1,284 @@
+<script type="text/template" id="merge-multiple-popup-template">
+    <form class="fg-multi-contact-merge" >
+        <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close"></button>
+            <h4 class="modal-title fg-clear">{{'MULTI_CONTACT_MERGE_TITLE'|trans}} </h4>
+        </div>
+        <div class="modal-body">
+            <div class="portlet-body">
+                <p class="fg-marg-top-0 fg-marg-btm-20">{{'MULTI_CONTACT_MERGE_TEXT'|trans}}</p>
+                    <div data-merge-wrapper class="fg-membership-merge-table-wrapper">
+                        <%  _.each(mergableContacts, function(merge,contactId) { %>
+                        <% countMergeable = (merge['meargable']['mergeEmail'].length>0) ? 1:merge['meargable']['duplicates'].length; %>
+                        <% typeMer = (merge['meargable']['mergeEmail'].length>0) ? 'email':'fields'; %>
+                        <% duplicates = (merge['meargable']['mergeEmail'].length>0) ? merge['meargable']['mergeEmail']:merge['meargable']['duplicates']; %>
+                        <div class="table-responsive">
+                            <table class="table fg-marg-btm-0">
+                                <thead>
+                                    <tr>
+                                        <% widthCalc = Math.round(100/(countMergeable+2));%>
+                                        <th style="width:<%-widthCalc%>%"> {{'CM_FIELD'|trans}} </th>
+                                        <th style="width:<%-widthCalc%>%"> {{'CM_YOUR_CONTACT'|trans}}</th>
+                                        <% for(i=0;i<countMergeable;i++){ %>
+                                        <th style="width:<%-widthCalc%>%"> {{'CM_EXISTING_CONTACT'|trans}}</th>
+                                        <% } %>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <% if(merge.currentContactData['Iscompany']==1){ %>
+                                    <tr>
+                                        <td> {{'CONTACT_FIELD_COMPANY'|trans}} </td>
+                                        <td> <%- merge.currentContactData['contactName'] %> </td>
+                                        <% for(i=0;i<countMergeable;i++){ %>
+                                            <td> <%- duplicates[i]['contactName'] %> </td>
+                                        <% } %>
+                                    </tr>
+                                    <% if(typeMer=='email'){ %>
+                                        <tr>
+                                            <td> {{'CONTACT_FIELD_EMAIL'|trans}}  </td>
+                                            <td> <%- merge.currentContactData['3'] %>  </td>
+                                            <% for(i=0;i<countMergeable;i++){ %>
+                                                <td> <%- duplicates[i]['3'] %> </td>
+                                            <% } %>
+                                        </tr>
+                                    <% } %>
+                                <% } else { %>
+                                    <tr>
+                                        <td> {{'CONTACT_FIELD_FIRST_NAME'|trans}} </td>
+                                        <td> <%- merge.currentContactData['2'] %> </td>
+                                        <% for(i=0;i<countMergeable;i++){ %>
+                                            <td> <%- duplicates[i]['2'] %> </td>
+                                        <% } %>
+                                    </tr>
+                                    <tr>
+                                        <td> {{'CONTACT_FIELD_LAST_NAME'|trans}}  </td>
+                                        <td> <%- merge.currentContactData['23'] %>  </td>
+                                        <% for(i=0;i<countMergeable;i++){ %>
+                                            <td> <%- duplicates[i]['23'] %> </td>
+                                        <% } %>
+                                </tr>
+                                <% if(typeMer=='email'){ %>
+                                    <tr>
+                                        <td> {{'CONTACT_FIELD_EMAIL'|trans}}  </td>
+                                        <td> <%- merge.currentContactData['3'] %>  </td>
+                                        <% for(i=0;i<countMergeable;i++){ %>
+                                            <td> <%- duplicates[i]['3'] %> </td>
+                                        <% } %>
+                                    </tr>
+                                <% } %>
+                                <tr>
+                                    <td> {{'CONTACT_FIELD_GENDER'|trans}} </td>
+                                    <td> <%- merge.currentContactData['Gender'] %> </td>
+                                    <% for(i=0;i<countMergeable;i++){ %>
+                                        <td> <%- duplicates[i]['72'] %> </td>
+                                    <% } %>
+                                </tr>
+                                <tr>
+                                    <td> {{'CM_BIRTH_DATE'|trans}} </td>
+                                    <td> <% dobValue= (merge.currentContactData['4'] != '0000-00-00') ? FgLocaleSettings.formatDate(merge.currentContactData['4'],'date','YYYY-MM-DD'):''; %><%- dobValue %></td>
+                                    <% for(i=0;i<countMergeable;i++){ %>
+                                        <td> <% dobValue= (duplicates[i]['4']!= '0000-00-00') ? FgLocaleSettings.formatDate(duplicates[i]['4'],'date','YYYY-MM-DD'):''; %><%- dobValue %> </td>
+                                    <% } %>
+                                </tr>
+                                <% } %>
+                                <tr>
+                                    <td> {{'ADDRESS_POPOVER_LOCATION'|trans}}  </td>
+                                    <td> <%- merge.currentContactData['77'] %>  </td>
+                                    <% for(i=0;i<countMergeable;i++){ %>
+                                        <td> <%- duplicates[i]['77'] %> </td>
+                                    <% } %>
+                                </tr>
+                                <tr>
+                                    <td> {{fgtwig.getTerminolgyName('Club', plural)}}     </td>
+                                    <td> </td>
+                                    <% for(i=0;i<countMergeable;i++){ 
+                                        var myarr = duplicates[i]['clubs'].split(", ");
+                                        for(var loc = 0; loc < myarr.length; loc++){
+                                            if(myarr.length == 1){
+                                                myarr[loc] = myarr[loc].replace('#mainclub#','');
+                                            }else{
+                                                myarr[loc] = myarr[loc].replace('#mainclub#',' <i class="fa  fa-star text-yellow"></i>');
+                                            }
+                                        }
+                                        duplicates[i]['clubs'] = myarr.join(", ");
+                                    %>
+                                        <td> <%= duplicates[i]['clubs'] %></td>
+                                    <% } %>
+                                </tr>
+                                <tr>
+                                    <td> {{fgtwig.getTerminolgyName('Fed membership', singular,'UCF')}}    </td>
+                                    <td>   </td>
+                                    <% for(i=0;i<countMergeable;i++){ %>
+                                        <td><% fedCatId=duplicates[i]['fed_membership_cat_id'] %> <%- duplicates[i]['fedTitle'] %> </td>
+                                    <% } %>
+                                </tr>
+                                <tr>
+                                    <td>   </td>
+                                    <td> <% if(typeMer!='email'){ %><label class="fg-radio-wrapper" >
+                                                <span><input type="radio" value="fed_mem" class="radio-list fg-dev-newfield merge-value-radio" checked name="<%- contactId %>_apply_mer" data-key="<%- contactId %>.applymer" id="<%- contactId %>_apply_fed_mem">
+                                                <input type="text" value="<%- typeMer %>" class="fg-dev-newfield hide"  name="<%- contactId %>_typeMer" data-key="<%- contactId %>.typeMer" id="<%- contactId %>_typeMer"></span>
+                                                <span> {{'CM_APPLY_FOR_FED_MEM'|trans}}</span>
+                                        </label><% } %>
+                                    </td>
+                                    <% for(i=0;i<countMergeable;i++){ %>
+                                        <td><label class="fg-radio-wrapper" >
+                                                <span><input type="radio" <% if(typeMer=='email'){ %>checked<% } %> value="<%- duplicates[i]['fed_contact_id'] %>" class="radio-list fg-dev-newfield merge-value-radio" name="<%- contactId %>_apply_mer" data-key="<%- contactId %>.applymer" id="<%- contactId %>_apply_mer_<%- i %>">
+                                                <input type="text" value="<%- typeMer %>" class="hide fg-dev-newfield "  name="<%- contactId %>_typeMer" data-key="<%- contactId %>.typeMer" id="<%- contactId %>_typeMer"></span>
+                                               </span>
+                                                <span>{{'CM_APPLY_FOR_MER'|trans}}</span>
+                                            </label>
+                                        </td>
+                                    <% } %>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <% }); %>  
+                        <div class="modal-footer form-actions fg-modal-footer">
+                            <button id="cancel_merging" type="button" data-dismiss="modal" data-function="cancel" class="btn default">{{'CANCEL'|trans}}</button>
+                            <button id="save_merging" type="button" data-function="save" class="btn green">{{'SAVE'|trans}}</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </form>
+</script>
+<script type="text/template" id="merge-popup-template">
+        <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close"></button>
+            <h4 class="modal-title fg-clear"><% str='{{'CONTACT_MERGE_TITLE'|trans}}'; %><%- (yours.isCompany ==1)? str.replace('%contact%',yours.contactName) :str.replace('%contact%',yours.firstname+' '+yours.lastname) %> </h4>
+        </div>
+        <div class="modal-body">
+            <div class="portlet-body">
+                <p class="fg-marg-top-0 fg-marg-btm-20"><% if(typeMer=='email'){ %>{{'CONTACT_MERGE_EMAIL_TEXT'|trans}}<% } else { %>{{'CONTACT_MERGE_DUPLICATE_TEXT'|trans}}<% } %></p>
+                <div class="fg-membership-merge-table-wrapper">
+                    <div class="table-responsive">
+                        <table class="table fg-marg-btm-0">
+                            <thead>
+                                <tr>
+                                    <% widthCalc = Math.round(100/(countMergeable+2));%>
+                                    <th style="width:<%-widthCalc%>%"> {{'CM_FIELD'|trans}} </th>
+                                    <th style="width:<%-widthCalc%>%"> {{'CM_YOUR_CONTACT'|trans}}</th>
+                                    <% for(i=0;i<countMergeable;i++){ %>
+                                    <th style="width:<%-widthCalc%>%"> {{'CM_EXISTING_CONTACT'|trans}}</th>
+                                    <% } %>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if(yours.isCompany==1){ %>
+                                    <tr>
+                                        <td> {{'CONTACT_FIELD_COMPANY'|trans}} </td>
+                                        <td> <%- yours.contactName %> </td>
+                                        <% for(i=0;i<countMergeable;i++){ %>
+                                            <td> <%- duplicates[i]['contactName'] %> </td>
+                                        <% } %>
+                                    </tr>
+                                    <% if(typeMer=='email'){ %>
+                                        <tr>
+                                            <td> {{'CONTACT_FIELD_EMAIL'|trans}}  </td>
+                                            <td> <%- yours.email %> </td>
+                                            <% for(i=0;i<countMergeable;i++){ %>
+                                                <td> <%- duplicates[i]['3'] %> </td>
+                                            <% } %>
+                                        </tr>
+                                    <% } %>
+                                <% } else { %>
+                                <tr>
+                                    <td> {{'CONTACT_FIELD_FIRST_NAME'|trans}} </td>
+                                    <td> <%- yours.firstname %> </td>
+                                    <% for(i=0;i<countMergeable;i++){ %>
+                                        <td> <%- duplicates[i]['2'] %> </td>
+                                    <% } %>
+                                </tr>
+                                <tr>
+                                    <td> {{'CONTACT_FIELD_LAST_NAME'|trans}}  </td>
+                                    <td> <%- yours.lastname %>  </td>
+                                    <% for(i=0;i<countMergeable;i++){ %>
+                                        <td> <%- duplicates[i]['23'] %> </td>
+                                    <% } %>
+                            </tr>
+                            <% if(typeMer=='email'){ %>
+                                <tr>
+                                    <td> {{'CONTACT_FIELD_EMAIL'|trans}}  </td>
+                                    <td> <%- yours.email %> </td>
+                                    <% for(i=0;i<countMergeable;i++){ %>
+                                        <td> <%- duplicates[i]['3'] %> </td>
+                                    <% } %>
+                                </tr>
+                            <% } %>
+                            <tr>
+                                <td> {{'CONTACT_FIELD_GENDER'|trans}} </td>
+                                <td> <%- yours.gender %> </td>
+                                <% for(i=0;i<countMergeable;i++){ %>
+                                    <td> <%- duplicates[i]['72'] %> </td>
+                                <% } %>
+                            </tr>
+                            <tr>
+                                <td> {{'CM_BIRTH_DATE'|trans}} </td>
+                                <td> <% dobValue= (yours.dob != '0000-00-00') ? FgLocaleSettings.formatDate(yours.dob,'date','YYYY-MM-DD'):''; %><%- dobValue %></td>
+                                <% for(i=0;i<countMergeable;i++){ %>
+                                    <td> <% dobValue= (duplicates[i]['4']!= '0000-00-00') ? FgLocaleSettings.formatDate(duplicates[i]['4'],'date','YYYY-MM-DD'):''; %><%- dobValue %> </td>
+                                <% } %>
+                            </tr>
+                            <tr>
+                                <td> {{'ADDRESS_POPOVER_LOCATION'|trans}}  </td>
+                                <td> <%- yours.location %>  </td>
+                                <% for(i=0;i<countMergeable;i++){ %>
+                                    <td> <%- duplicates[i]['77'] %> </td>
+                                <% } %>
+                            </tr>
+                            <% } %>
+                            <tr>
+                                <td> {{fgtwig.getTerminolgyName('Club', plural)}}     </td>
+                                <td> </td>
+                                <% for(i=0;i<countMergeable;i++){ 
+                                    var myarr = duplicates[i]['clubs'].split(", ");
+                                    for(var loc = 0; loc < myarr.length; loc++){
+                                        if(myarr.length == 1){
+                                            myarr[loc] = myarr[loc].replace('#mainclub#','');
+                                        }else{
+                                            myarr[loc] = myarr[loc].replace('#mainclub#',' <i class="fa  fa-star text-yellow"></i>');
+                                        }
+                                    }
+                                    duplicates[i]['clubs'] = myarr.join(", "); 
+                                %>
+                                    <td> <%= duplicates[i]['clubs'] %></td>
+                                <% } %>
+                            </tr>
+                            <tr>
+                                <td> {{fgtwig.getTerminolgyName('Fed membership', singular,'UCF')}}    </td>
+                                <td>  <% if(typeMer=='email'){ %>
+                                <input type="radio"  value="<%- duplicates['0']['fed_contact_id'] %>" checked class="radio-list merge-value-radio hide" name="apply_mer" id="apply_mer_0">
+                            <% } %>  </td>
+                                <% for(i=0;i<countMergeable;i++){ %>
+                                    <td><% fedCatId=duplicates[i]['fed_membership_cat_id'] %> <%- duplicates[i]['fedTitle'] %> </td>
+                                <% } %>
+                            </tr>
+                            <% if(typeMer!='email'){ %>
+                            <tr>
+                                <td> </td>
+                                <td> <% if(typeMer!='email'){ %><label class="fg-radio-wrapper" >
+                                            <span><input type="radio" value="fed_mem" class="radio-list merge-value-radio" checked name="apply_mer" id="apply_fed_mem"></span>
+                                            <span>{{'CM_APPLY_FOR_FED_MEM'|trans}}</span>
+                                    </label><% } %>
+                                </td>
+                                <% for(i=0;i<countMergeable;i++){ %>
+                                    <td><label class="fg-radio-wrapper" >
+                                            <span><input type="radio" <% if(typeMer=='email' && i==0){ %>checked<% } %> value="<%- duplicates[i]['fed_contact_id'] %>" class="radio-list merge-value-radio" name="apply_mer" id="apply_mer_<%- i %>"></span>
+                                            <span>{{'CM_APPLY_FOR_MER'|trans}}</span>
+                                        </label>
+                                    </td>
+                                <% } %>
+                            </tr>
+                    <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer form-actions fg-modal-footer">
+                        <button id="cancel_merging" type="button" data-dismiss="modal" data-function="cancel" class="btn default">{{'CANCEL'|trans}}</button>
+                        <button id="save_merging" type="button" data-function="save" class="btn green"> <% if(countMergeable == 1 && typeMer=='email'){ %> {{'APPLY_FOR_MERGING'|trans}} <% } else { %>{{'SAVE'|trans}} <% } %></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+</script>

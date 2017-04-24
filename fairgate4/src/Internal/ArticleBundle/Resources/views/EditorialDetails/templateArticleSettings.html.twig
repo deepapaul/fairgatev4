@@ -1,0 +1,12 @@
+<script type="text/template" id="templateArticleSettings">
+    <form id="fg-article-settings-form" onsubmit="return false;" class="form form-horizontal">
+    <div id="failcallbackClientSide" class="alert alert-danger" style="display:none;">
+        <button class="close" data-close="alert"></button>
+        <span>{% trans %}FORM_ERROR_DISPLAY{% endtrans %}</span>
+    </div>
+    <section class="fg-clear ">
+        {% include 'InternalArticleBundle:Editorial:templateArticleCreateSettings.html.twig' %}
+    </section>
+    {% include 'internal/savebutton.html.twig' with {'noBackLinkFlag':true,'save_button_val':'SAVE_CHANGES'|trans,'discard_button_val':'DISCARD_CHANGES'|trans} %}    
+    </form>
+</script>

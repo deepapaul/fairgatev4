@@ -1,0 +1,76 @@
+{%if(imageData|length > 0) %}
+    {% if(imageData.0.image_element_display_type == 'column' or imageData.0.image_element_display_type == 'row') %}
+        {% set targetType = (imageData.0.image_element_display_type != 'slider' and imageData.0.image_element_click_type == 'link' ) ? '_'~((imageData.0.image_element_link_opentype !='')?imageData.0.image_element_link_opentype:'blank') : ''%}
+        <div id="{{(imageData.0.image_element_display_type == 'column') ? 'column-gallery-'~elementId : 'row-gallery-'~elementId}}" class="fg-cms-website-gallery" data-image_view_type ="{{imageData.0.image_element_click_type}}" style="display:none;" target="{{targetType}}">
+            {% for key, data in imageData %}
+                {% set imagePath = (data.type == 'VIDEO') ? data.video_thumb_url : data.filepath %}
+                {% if(data.type == 'IMAGE') %}
+                    {% set imageLink = '' %}
+                    {% if((data.image_element_click_type == 'link') and (data.image_element_link_type != ''))%}
+                        {% if (data.image_element_link_type == 'external' and data.image_element_external_link!='')%} 
+                            {% set imageLink = data.image_element_external_link %} 
+                        {%elseif (data.image_element_link_type == 'internal' and data.navigation_id!='') %}
+                            {% set imageLink = path('website_public_page_menus', {'menu':data.navigation_url}) %}
+                        {% endif %}
+                    {% endif %}
+                    {% if(imageLink != '') %}
+
+                    <a href="{{ imageLink }}"> 
+                    {% endif %}
+                        <img  alt="{{data.description|raw|default('')|escape|replace({"'": ""})}}"
+                              src="/uploads/{{club_id}}/gallery/{{imageWidth}}/{{imagePath}}"
+                              data-image="/uploads/{{club_id}}/gallery/width_1920/{{imagePath}}"
+                             {% if(data.image_element_click_type == 'detail') and (data.description is defined) %} data-description="{{data.description|default('')|escape|replace({"'": ""})}}"{% endif %}
+                              data-image-type ="{{data.type }}"
+                              style="display:none;">
+                    {% if(imageLink != '') %}
+                    </a>
+                    {% endif %}
+                {% else %}
+
+                    <img onload="cmspage.getCmsVideoDetails('{{data.filepath}}', this);"
+                         alt="{{data.description|default('')|escape|replace({"'": ""})}}"
+                         data-type="" 
+                         data-image-type ="{{data.type }}"
+                         src="/uploads/{{club_id}}/gallery/{{imageWidth}}/{{imagePath}}"
+                         data-image="/uploads/{{club_id}}/gallery/width_1920/{{imagePath}}"
+                         {% if(data.image_element_click_type == 'detail') and (data.description is defined) %}data-description="{{data.description|default('')|escape|replace({"'": ""})}}"{% endif %}
+                         data-videoid=""
+                         style="display:none;">
+
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% elseif(imageData.0.image_element_display_type == 'slider') %}
+        <div id="slider-gallery-{{elementId}}"  class="fg-cms-website-gallery" style="display:none;" data-slider-time="{{imageData.0.image_element_slider_time}}" data-image_view_type ="{{imageData.0.image_element_click_type}}" >
+            {% for key, data in imageData %}
+                {% set imagePath = (data.type == 'VIDEO') ? data.video_thumb_url : data.filepath %}
+                {% if(data.type == 'IMAGE') %}
+                        <img alt="{{data.description|default('')|escape|replace({"'": ""})}}"
+                             data-image-type ="{{data.type }}"
+                             src="/uploads/{{club_id}}/gallery/{{imageWidth}}/{{imagePath}}"
+                             data-image="/uploads/{{club_id}}/gallery/{{imageWidth}}/{{imagePath}}"
+                           {% if(data.image_element_click_type == 'detail') and (data.description is defined) %}  data-description="{{data.description|default('')|escape|replace({"'": ""})}}"{% endif %}
+                             style="display:none;">
+                {% else %}
+                    <img onload="cmspage.getCmsVideoDetails('{{data.filepath}}', this);"
+                         alt="{{data.description|default('')|escape|replace({"'": ""})}}"
+                         data-type="" 
+                         data-image-type ="{{data.type }}"
+                         src="/uploads/{{club_id}}/gallery/{{imageWidth}}/{{imagePath}}"
+                         data-image="/uploads/{{club_id}}/gallery/{{imageWidth}}/{{imagePath}}"
+                        {% if(data.image_element_click_type == 'detail') and (data.description is defined) %} data-description="{{data.description|default('')|escape|replace({"'": ""})}}"{% endif %}
+                         data-videoid=""
+                         style="display:none;">
+
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+    <input type="hidden" id="hideimage-{{ elementId }}"  value="image" />
+
+{% else %}
+    <div class="fg-cms-empty-box-wrapper">
+        <p class="text-center">{{'NO_IMAGE_MESSAGE'|trans}}</p>
+    </div>  
+{% endif %}

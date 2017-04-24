@@ -1,0 +1,35 @@
+Common\UtilityBundle\Entity\FgTmThemeHeaders:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgTmThemeHeadersRepository
+    type: entity
+    table: fg_tm_theme_headers
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        headerLabel:
+            type: string
+            length: 45
+            fixed: false
+            nullable: false
+            column: header_label
+        fileName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: file_name
+    manyToOne:
+        configuration:
+            targetEntity: FgTmThemeConfiguration
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                configuration_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

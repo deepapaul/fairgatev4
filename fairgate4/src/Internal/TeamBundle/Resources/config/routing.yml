@@ -1,0 +1,321 @@
+internal_team_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: InternalTeamBundle:Default:index }
+    
+team_overview:
+    path:     /teamoverview
+    defaults: { _controller: InternalTeamBundle:TeamOverview:teamoverview, module: team, level1: teamOverview }
+    
+team_detail_overview:
+    path:     /teamdetailoverview
+    defaults: { _controller: InternalTeamBundle:TeamOverview:teamdetailoverview, module: team, level1: teamMemberlist }
+    
+get_member_data :
+    path:     /memberdata/{memberId}/{memberCategory}
+    defaults: { _controller: InternalTeamBundle:TeamOverview:memberlistDetail, module: team, level1: teammember}
+    
+get_team_overview_content :
+    path:     /overviewcontent/{id}/{type}
+    defaults: { _controller: InternalTeamBundle:TeamOverview:getTeamOverviewContent, module: team }    
+    
+get_member_details:
+    path:     /role/memberdetails
+    defaults: { _controller: InternalTeamBundle:TeamOverview:getMemberDetails }    
+    
+workgroup_overview:
+    path:     /workgroupoverview
+    defaults: { _controller: InternalTeamBundle:WorkgroupOverview:workgroupOverview, module: workgroup, level1: workgroupOverview }
+    
+team_userrights:
+    path: /team/userrights/{role}
+    defaults: { _controller: InternalTeamBundle:TeamOverview:roleUserrights, module: team, level1: teammember, role:null}
+    
+workgroup_userrights:
+    path: /workgroup/userrights/{role}
+    defaults: { _controller: InternalTeamBundle:TeamOverview:roleUserrights, module: workgroup, level1: workgroupmember, role:null}
+    
+save_role_user_rights:
+    path: /role/userrights/save
+    defaults: { _controller: InternalTeamBundle:TeamOverview:saveRoleUserrights}
+contact_field_data:
+    path:  /contact/filter/data
+    defaults: { _controller: ClubadminContactBundle:Filter:getData }
+
+create_teammember:
+    path:  /createteammember/{type}/{roleId}
+    defaults: { _controller: InternalTeamBundle:TeamMember:updateMember, module: team, level1: teammember }
+edit_teammember:
+    path:  /editteammember/{type}/{roleId}/{contact}
+    defaults: { _controller: InternalTeamBundle:TeamMember:updateMember, module: team, level1: teammember }
+create_workgroupmember:
+    path:  /createworkgroupmember/{type}/{roleId}
+    defaults: { _controller: InternalTeamBundle:TeamMember:updateMember, module: workgroup, level1: workgroupmember }
+edit_workgroupmember:
+    path:  /editworkgroupmember/{type}/{roleId}/{contact}
+    defaults: { _controller: InternalTeamBundle:TeamMember:updateMember, module: workgroup, level1: workgroupmember }
+save_member:
+    path:  /savemember/{type}/{roleId}/{contact}
+    defaults: { _controller: InternalTeamBundle:TeamMember:saveMember }
+team_loginstatus:
+    path:     /team/loginstatus/{role}
+    defaults: { _controller: InternalTeamBundle:Default:loginstatus, module: team, level1: teammember , role:null } 
+team_loginstatus_ajax:
+    path:     /role/loginstatus/{role}
+    defaults: { _controller: InternalTeamBundle:Default:teamLoginStatus, role:null } 
+workgroup_loginstatus:
+    path:     /workgroup/loginstatus/{role}
+    defaults: { _controller: InternalTeamBundle:Default:loginstatus, module: workgroup, level1: workgroupmember , role:null } 
+mail_edit:
+    path:     /role/emailEditAjax
+    defaults: { _controller: InternalTeamBundle:Default:emailEditAjax, role:null }     
+send_reminder_mail:
+    path:     /role/send-reminder
+    defaults: { _controller: InternalTeamBundle:Default:sendReminder, role:null } 
+    
+contact_names_userrights:
+    path: /role/contactnames/{term}
+    defaults: { _controller: InternalTeamBundle:TeamOverview:contactNames }
+assign_role_internal:
+    path: /assignteam/{roleId}/{roleType}
+    defaults: { _controller: InternalTeamBundle:TeamActionmenu:addTeammember } 
+get_nonmember_club_contact:
+    path: /getnonmemberconatct/{roleId}
+    defaults: { _controller: InternalTeamBundle:TeamActionmenu:getNonmemberContact } 
+team_export:
+    path:     /team/export
+    defaults: { _controller: InternalTeamBundle:Export:export, role:null }
+get_team_member_columnsettings:
+    path:     /teammember/columnsettings
+    defaults: { _controller: InternalTeamBundle:ColumnSettings:index , module: team, level1:teammember}   
+
+get_workgroup_member_columnsettings:
+    path:     /workgroupmember/columnsettings
+    defaults: { _controller: InternalTeamBundle:ColumnSettings:index , module: workgroup, level1: workgroupmember}  
+    
+internal_table_settings:
+    path:  /internaltablesettings/{module}
+    defaults: { _controller: InternalTeamBundle:ColumnSettings:getAllinternaltablesetings }
+add_non_existing_contact:  
+    path:  /addnonexistingcontact
+    defaults: { _controller: InternalTeamBundle:TeamActionmenu:savenonexistingContact }
+workgroup_detail_overview:
+    path:     /workgroupdetailoverview
+    defaults: { _controller: InternalTeamBundle:WorkgroupOverview:workgroupdetailOverview,module: workgroup, level1: workgroupmember }
+export_settings:  
+    path:  /role/exportsettings
+    defaults: { _controller: InternalTeamBundle:Export:exportSettings }
+clubrole_export:
+    path:     /role/export
+    defaults: { _controller: InternalTeamBundle:Export:export, role:null } 
+    
+member_confirmation_popup:
+    path:     /teamdetailoverview/member/removeconfirmationpopup
+    defaults: { _controller: InternalTeamBundle:TeamOverview:removeconfirmationPopup }
+    
+team_member_delete:
+    path:     /teamdetailoverview/deletemember
+    defaults: { _controller: InternalTeamBundle:TeamOverview:deleteMember }
+    
+internal_team_document_upload_save:
+    path:     /team/document/save
+    defaults: { _controller: InternalTeamBundle:Documents:saveupload,doctype:"TEAM" }
+internal_workgroup_document_upload_save:
+    path:     /workgroup/document/save
+    defaults: { _controller: InternalTeamBundle:Documents:saveupload,doctype:"WORKGROUP" }
+internal_document_upload:
+    path:     /document/upload
+    defaults: { _controller: ClubadminDocumentsBundle:Default:uploadFile,type: "frontenddoc" }    
+internal_team_document_list:
+    path:     /documents/group/team
+    defaults: { _controller: InternalTeamBundle:Documents:documentsList, module: team, level1: document }
+internal_workgroup_document_list:
+    path:     /documents/group/workgroup
+    defaults: { _controller: InternalTeamBundle:Documents:documentsList, module: workgroup, level1: document } 
+internal_team_document_log:
+     path: /document/log/team/{documentId}
+     defaults: { _controller: InternalTeamBundle:DocumentLog:documentLog, module: team, level1: document }
+internal_workgroup_document_log:
+     path: /document/log/workgroup/{documentId}
+     defaults: { _controller: InternalTeamBundle:DocumentLog:documentLog, module: workgroup, level1: document }
+internal_document_log_data:
+    path: /document/getlogdata/{documentId}
+    defaults: { _controller: ClubadminDocumentsBundle:DocumentLog:getDocumentLogEntries}      
+get_document_sidebar:
+    path:     /personal/documents/sidebarcontents
+    defaults: { _controller: InternalTeamBundle:Documents:getDocumentsSidebar }   
+    
+get_team_document_sidebar:
+    path:     /team/documents/sidebarcontents
+    defaults: { _controller: InternalTeamBundle:Documents:getRoleDocumentsSidebar, type: "TEAM" }
+    
+get_workgroup_document_sidebar:
+    path:     /workgroup/documents/sidebarcontents
+    defaults: { _controller: InternalTeamBundle:Documents:getRoleDocumentsSidebar, type: "WORKGROUP" }    
+    
+document_update_sidebar_count:
+    path:     /personal/documents/sidebar/countupdate
+    defaults: { _controller: InternalTeamBundle:Documents:SidebarCounts }
+    
+documents_columnsettings_team:
+    path: /documents/columnsettings/team
+    defaults: { _controller: InternalTeamBundle:Documents:columnSettings,  module: team, level1: document } 
+
+get_documents_columnsettings_data:
+    path: /getdocColumnsettingsdata/{type}
+    defaults: { _controller: InternalTeamBundle:Documents:getDocumentsColumnDetails }
+       
+documents_columnsettings_workgroup:
+    path: /documents/columnsettings/workgroup
+    defaults: { _controller: InternalTeamBundle:Documents:columnSettings, module: workgroup, level1: document } 
+
+category_docs_dropdown:
+    path:   /document/category/{typeval}
+    defaults: { _controller: InternalTeamBundle:Documents:getDropdownValues }
+    
+edit_team_document:
+    path:     /team/editDocument/{documentId}
+    defaults: { _controller: InternalTeamBundle:Documents:editDocument, module: team, level1: document }    
+    
+get_document_versions:
+    path:     /getDocumentVersions/{documentId}
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:versionList }  
+documents_remove_popup:
+    path: /documents/remove/popup
+    defaults: { _controller: InternalTeamBundle:Documents:removeDocumentpopup } 
+   
+documents_remove:
+    path: /documents/remove
+    defaults: { _controller: InternalTeamBundle:Documents:removeDocument }   
+    
+internal_document_move_data:
+    path: /team/document/move
+    defaults: { _controller: ClubadminDocumentsBundle:Documents:updateDocumentAssign}    
+group_documents_read_all:
+    path: /documents/markallasread/{type}/{roleId}
+    defaults: { _controller: InternalTeamBundle:Documents:markAllasRead } 
+    
+update_document:
+    path: /document/update/{documentId}
+    defaults: { _controller: InternalTeamBundle:Documents:updateDocument }
+    
+edit_workgroup_document:
+    path:     /workgroup/editDocument/{documentId}
+    defaults: { _controller: InternalTeamBundle:Documents:editDocument, module: workgroup, level1: document } 
+    
+get_role_documents_count:
+    path:     /document/getRoleDocumentCounts/{type}
+    defaults: { _controller: InternalTeamBundle:Documents:getDocumentCountOfRoles }
+    
+create_team_forum_topic:
+    path:  /team/forum/{id}/topic/create
+    defaults: { _controller: InternalTeamBundle:Forum:createTopic, module: team, level1: forum}  
+    
+create_wg_forum_topic:
+    path:  /workgroup/forum/{id}/topic/create
+    defaults: { _controller: InternalTeamBundle:Forum:createTopic, module: workgroup, level1: forum }  
+    
+team_forum_views:
+    path: /team/forum
+    defaults: {_controller: InternalTeamBundle:Forum:forumListdetails, module: team, level1: forum }
+workgroup_forum_views:
+    path: /workgroup/forum
+    defaults: {_controller: InternalTeamBundle:Forum:forumListdetails, module: workgroup, level1: forum }    
+    
+save_forum_topic:
+    path:  /forum/saveforumtopic
+    defaults: { _controller: InternalTeamBundle:Forum:saveTopic }
+    
+forum_topic_list:
+    path: /forum/topiclist/{groupId}/{groupCategory}
+    defaults: { _controller: InternalTeamBundle:Forum:topiclist }
+
+forum_topic_pos_calc:
+    path: /{grp}/forum/{grpId}/topic/{topicId}/post/{id}
+    defaults: { _controller: InternalTeamBundle:Forum:getForumPostRedirection, param: lastread  }
+    
+forum_topic_page_calc:
+    path: /{grp}/forum/{grpId}/topic/{topicId}/magicid/{id}
+    defaults: { _controller: InternalTeamBundle:Forum:getForumPostRedirection, param: magicid  }
+    
+forum_topic_redirect:
+    path: /{grp}/forum/{grpId}/topic/{topicId}/page/{id}
+    defaults: { _controller: InternalTeamBundle:Forum:getForumPostRedirection , param: page}
+
+forum_topic_redirect_lastpost:
+    path: /{grp}/forum/{grpId}/topic/{topicId}/lastpost
+    defaults: { _controller: InternalTeamBundle:Forum:getForumPostRedirection , param: lastpost}
+
+team_forum_topic_view:
+    path:  /team/forum/{roleId}/topic/{topicId}/{page}
+    defaults: { _controller: InternalTeamBundle:Forum:topicView, module: team, level1: forum }
+    
+workgroup_forum_topic_view:
+    path:  /workgroup/forum/{roleId}/topic/{topicId}/{page}
+    defaults: { _controller: InternalTeamBundle:Forum:topicView, module: workgroup, level1: forum }
+    
+save_forum_topic_reply:
+    path:  /forum/saveforumtopicreply
+    defaults: { _controller: InternalTeamBundle:Forum:saveTopicReply }
+    
+get_topic_posts:
+    path:  /forum/topicPosts/{roleId}/{topicId}/{page}
+    defaults: { _controller: InternalTeamBundle:Forum:getTopicPosts }
+    
+team_forum_search_list:
+    path: /team/forum/{groupId}/search
+    defaults: { _controller: InternalTeamBundle:Forum:searchListing, module: team, level1: forum}
+    
+workgroup_forum_search_list:
+    path: /workgroup/forum/{groupId}/search
+    defaults: { _controller: InternalTeamBundle:Forum:searchListing, module: workgroup, level1: forum}
+    
+forum_search_result:
+    path: /{grp}/forum/{groupId}/search/{search}
+    defaults: { _controller: InternalTeamBundle:Forum:searchResult}
+    
+forum_activate:
+    path:  /forum/ativate
+    defaults: { _controller: InternalTeamBundle:Forum:activateForum }
+forum_follow:
+    path:  /forum/follow
+    defaults: { _controller: InternalTeamBundle:Forum:followForum }    
+       
+topic_content_delete_confirmation:
+    path:  /forum/topicContentDeleteConfirmation/{topicContentId}/{type}
+    defaults: { _controller: InternalTeamBundle:Forum:topicContentDeleteConfirmation }
+    
+topic_content_delete:
+    path:  /forum/topicContentDelete/{topicContentId}/{type}
+    defaults: { _controller: InternalTeamBundle:Forum:topicContentDelete }
+    
+edit_forum_topic_reply:
+    path:  /forum/editforumtopicreply
+    defaults: { _controller: InternalTeamBundle:Forum:editTopicReply }  
+    
+forum_setting:
+    path:  /forum/forumSetting/{topicId}/{checkedVal}/{chkType}
+    defaults: { _controller: InternalTeamBundle:Forum:forumSetting }
+    
+topic_update_follower:
+    path:  /forum/forumUpdateFollower/{roleType}/{roleId}/topic/{topicId}/{followVal}
+    defaults: { _controller: InternalTeamBundle:Forum:forumUpdateFollower }
+    
+replies_setting_change:
+    path:  /forum/forumRepliesEdit/{topicId}/{repliesData}
+    defaults: { _controller: InternalTeamBundle:Forum:forumRepliesEdit }
+    
+forum_view_team:
+    path: /team/forum/{roleId}
+    defaults: {_controller: InternalTeamBundle:Forum:forumListdetails, module: team, level1: forum }    
+    
+forum_view_workgroup:
+    path: /workgroup/forum/{roleId}
+    defaults: {_controller: InternalTeamBundle:Forum:forumListdetails, module: workgroup, level1: forum }    
+    
+topic_update_follower_from_mail:
+    path:  /forum/forumUpdateFollower/{roleType}/{roleId}/topic/{topicId}/{followVal}/{unfollow}
+    defaults: { _controller: InternalTeamBundle:Forum:forumUpdateFollower }  
+    
+forum_unfollow_from_mail:
+    path:  /forum/unfollow/{roleType}/{roleId}
+    defaults: { _controller: InternalTeamBundle:Forum:followForum }      

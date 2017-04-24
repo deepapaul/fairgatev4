@@ -1,0 +1,119 @@
+Common\UtilityBundle\Entity\SfGuardUser:
+    repositoryClass: Common\UtilityBundle\Repository\SfGuardUserRepository
+    type: entity
+    table: sf_guard_user
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        firstName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: first_name
+        lastName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: last_name
+        algorithm:
+            type: string
+            length: 128
+            fixed: false
+            nullable: false
+        isActive:
+            type: boolean
+            nullable: true
+            column: is_active
+        isSuperAdmin:
+            type: boolean
+            nullable: true
+            column: is_super_admin
+        createdAt:
+            type: datetime
+            nullable: true
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: true
+            column: updated_at
+        isSecurityAdmin:
+            type: boolean
+            nullable: false
+            column: is_security_admin
+        isReadonlyAdmin:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: is_readonly_admin
+        isTeamAdmin:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: is_team_admin
+        isTeamSectionAdmin:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: is_team_section_admin
+        lastReminder:
+            type: datetime
+            nullable: true
+            column: last_reminder
+        plainPassword:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: plain_password
+        hasFullPermission:
+            type: boolean
+            nullable: false
+            column: has_full_permission
+        authCode:
+            type: string
+            length: 255            
+            nullable: true
+            column: auth_code
+    manyToMany:
+        groups:
+            targetEntity: SfGuardGroup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: user
+            joinTable:
+                name: sf_guard_user_group
+                joinColumns:
+                    -
+                        name: user_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: group_id
+                        referencedColumnName: id
+            orderBy: null
+    manyToOne:
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

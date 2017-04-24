@@ -1,0 +1,68 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = clubName %}
+    {% block pagecontent %}
+        <!-- BEGIN CONTENT -->
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="portlet-body fg-theme-blue">
+                            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                            {% include 'clubadmin/breadcrumb.html.twig' with {'breadCrumb':{'back': path('club_homepage') }} %}
+                           {# {% include 'ClubadminClubBundle:ClubList:panel-tabs.html.twig' with {'clubName':clubName,'clubId':clubid,'active':'assignments', 'documentsCount':documentsCount,'asgmntsCount':asgmntsCount,'notesCount':notesCount} %}
+                            #}
+                           <div class="row">
+                            {% set page_settings = { 'pagetitle':'true','tabs':'true'}  %}
+                           {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': clubName ,'page_settings': page_settings, 'tabs': tabs, 'type':'overview', 'hrefLink' : true, 'url':"#"} %} 
+                          </div>
+                            <!-- END PAGE TITLE & BREADCRUMB-->
+                            <!-- ERROR MESSAGE-->
+                            <form id="clubassignmentForm" method="post" onsubmit="return false;" novalidate="novalidate">
+                                <div id="failcallback" class="alert alert-danger fg-clear" style="display:none;">
+                                    <button class="close" data-close="alert"></button>
+                                    <span>{{'FORM_ERROR_DISPLAY'|trans}}</span>
+                                </div>
+                                <div id="failcallbackServerSide" class="alert alert-danger" style="display:none;">
+                                    <button class="close" data-close="alert"></button>
+                                    <span>{{'FORM_ERROR_DISPLAY'|trans}}</span>
+                                </div>
+                                <div id="assignmentListingDiv" >
+                                    {% include 'ClubadminClubBundle:Assignment:listAllClubAssignments.html.twig' %}
+                                </div>
+                                {% include 'clubadmin/savebutton.html.twig' with {'backLink':path('club_homepage') }  %}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% include 'ClubadminClubBundle:Assignment:new-element-assignment.html.twig' %}
+        {% include 'ClubadminClubBundle:Assignment:new-element-assignment_dropdown.html.twig' %}
+    {% endblock %}
+    {% block javascripts %}
+        <script src="{{ asset('fgcustom/js/sidebarfilter.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/clubassignment.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/fg_more_menu.js')}}" type="text/javascript"></script>
+        <script>          
+         $(document).ready(function() {
+
+            FgPageTitlebar.init({
+                title       : true,
+                tab       : true,
+                search     :false,
+                actionMenu  : false,
+                tabType  :'server'
+
+            }); 
+       });
+            
+            var clubid = {{clubid}};
+            var offset = '{{ offset }}';
+            var assignmentDropDn = '{{path("get_all_club_assignment_dropdown")}}';
+            var listingAssignment = '{{path("list_all_club_assignments",{'clubid': clubid})}}';
+            var updateAssignment = '{{path("update_club_assignments")}}';
+            FgClubAssignment.init(assignmentDropDn);
+        </script>
+    {% endblock %}

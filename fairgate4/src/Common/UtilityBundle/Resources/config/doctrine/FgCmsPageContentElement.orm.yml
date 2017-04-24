@@ -1,0 +1,211 @@
+Common\UtilityBundle\Entity\FgCmsPageContentElement:
+    type: entity
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsPageContentElementRepository    
+    table: fg_cms_page_content_element
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sort_order
+        isDeleted:
+            type: boolean
+            nullable: false
+            column: is_deleted
+        deletedAt:
+            type: datetime
+            nullable: true
+            column: deleted_at
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        headerElementSize:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: header_element_size
+        imageElementDisplayType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: image_element_display_type
+        imageElementSliderTime:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: image_element_slider_time
+        imageElementClickType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: image_element_click_type
+        imageElementLinkOpentype:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: image_element_link_opentype
+        mapElementLatitude:
+            type: float
+            nullable: true
+            column: map_element_latitude
+        mapElementLongitude:
+            type: float
+            nullable: true
+            column: map_element_longitude
+        mapElementShowMarker:
+            type: boolean
+            nullable: true
+            column: map_element_show_marker
+        mapElementHeight:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: map_element_height
+        mapElementDisplayStyle:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: map_element_display_style
+        mapElementZoomValue:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: map_element_zoom_value
+        iframeElementCode:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: iframe_element_code
+        iframeElementUrl:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: iframe_element_url
+        iframeElementHeight:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: iframe_element_height
+        isAllCategory:
+            type: boolean
+            nullable: true
+            column: is_all_category
+        isAllArea:
+            type: boolean
+            nullable: true
+            column: is_all_area
+        sharedClub:
+            type: string
+            length: 50
+            fixed: false
+            nullable: true
+            column: shared_club
+        sponsorAdDisplayType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: sponsor_ad_display_type
+        sponsorAdDisplayTime:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: sponsor_ad_display_time
+        sponsorAdMaxWidth:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: sponsor_ad_max_width
+        twitterDefaultAccount:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: twitter_default_account
+        twitterContentHeight:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: twitter_content_height
+    manyToOne:
+        pageContentType:
+            targetEntity: FgCmsPageContentType
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                page_content_type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        box:
+            targetEntity: FgCmsPageContainerBox
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                box_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        areaClub:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                area_club:
+                    referencedColumnName: id
+            orphanRemoval: false
+        sponsorAdArea:
+            targetEntity: FgSmAdArea
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                sponsor_ad_area_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        form:
+            targetEntity: FgCmsForms
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                form_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        table:
+            targetEntity: FgCmsContactTable
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                table_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

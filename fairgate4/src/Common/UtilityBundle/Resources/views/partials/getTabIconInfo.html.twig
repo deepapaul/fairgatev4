@@ -1,0 +1,46 @@
+{% if(tabiconDetails.membershipType == 'fed' ) %}
+    {% set federationId = (fgclub.get('type') == 'federation')? fgclub.clubId : fgclub.federationId %}
+    {% set tooltipImage = '<img src="'~fedIconSrc~'" />' %} 
+{% else %} 
+    {% set tooltipImage = '' %} 
+{% endif %}
+<li class="pull-right overviewwidth">
+    <div class="fav-iconsnew">
+        <a href="#" class="fg-user-tooltip">
+            {% if(tabiconDetails.is_company==1) %} 
+                {% if(tabiconDetails.membership_cat_id != '') %} <i class="fa fa-building-o fg-building fg-dev-tabicon-right-Popovers {% if(tabiconDetails.membershipType == 'club' ) %} active {% else %} fed-member {% endif %} " data-content="{{ tabiconDetails.membershipTitle ~'  '~ tooltipImage }}"></i> {% else %} <i class="fa fa-building-o inactive fg-dev-tabicon-right-Popovers" data-content="{%trans%}ICONTAB_MEMBERSHIP_INACTIVE{%endtrans%}"></i> {% endif %}
+            {% else %} 
+                {% if(tabiconDetails.membership_cat_id != '' and tabiconDetails['72'] =='Male') %}
+                    <i class="fa fa-male fg-male {% if(tabiconDetails.membershipType == 'club' ) %} active {% else %} fed-member {% endif %}  fg-dev-tabicon-right-Popovers" data-content="{{ tabiconDetails.membershipTitle ~'  '~ tooltipImage }}"></i>
+                {% elseif(tabiconDetails.membership_cat_id == '' and tabiconDetails['72'] =='Male') %}
+                    <i class="fa fa-male fg-male inactive fg-dev-tabicon-right-Popovers" data-content="{%trans%}ICONTAB_MEMBERSHIP_INACTIVE{%endtrans%}"></i>
+                {% elseif(tabiconDetails.membership_cat_id != '' and tabiconDetails['72'] =='Female') %}
+                    <i class="fa fa-female fg-female {% if(tabiconDetails.membershipType == 'club' ) %} active {% else %} fed-member {% endif %} fg-dev-tabicon-right-Popovers" data-content="{{ tabiconDetails.membershipTitle ~'  '~ tooltipImage }}"></i>
+                {% elseif(tabiconDetails.membership_cat_id == '' and tabiconDetails['72'] =='Female') %}
+                    <i class="fa fa-female fg-female inactive fg-dev-tabicon-right-Popovers" data-content="{%trans%}ICONTAB_MEMBERSHIP_INACTIVE{%endtrans%}"></i>
+                {% endif %}
+            {% endif %}
+            
+        </a>        
+        {% if 'sponsor' in bookedModulesDet%}
+            <a href="#">{% if((tabiconDetails.is_sponsor != '') and (tabiconDetails.is_sponsor != 0)) %}<i class="fa fg-money fg-dev-tabicon-right-Popovers" data-content="{%trans%}ICONTAB_SPONSOR_ACTIVE{%endtrans%}"></i>{% else %}<i class="fa fg-money inactive fg-dev-tabicon-right-Popovers" data-content="{%trans%}ICONTAB_SPONSOR_INACTIVE{%endtrans%}"></i>{% endif %}</a>
+        {% endif %}
+        <a href="#">{% if((tabiconDetails.is_subscriber != 0) and (tabiconDetails.is_subscriber != '')) %}<i class="fa fg-envelope fg-dev-tabicon-right-Popovers" data-content="{%trans%}ICONTAB_NEWSLETTER_ACTIVE{%endtrans%}"></i>{% else %}<i class="fa fg-envelope inactive fg-dev-tabicon-right-Popovers" data-content="{%trans%}ICONTAB_NEWSLETTER_INACTIVE{%endtrans%}"></i>{% endif %}</a>        
+        {% if 'frontend2' in bookedModulesDet%}
+            <a href="#">{% if(tabiconDetails.intranet_access == '1') %}<i class="fa fg-sign-in fg-dev-tabicon-right-Popovers" data-content="{{ 'ICONTAB_INTRANET_ACCESS_ACTIVE'|trans}}"></i>{% else %}<i class="fa fg-sign-in inactive fg-dev-tabicon-right-Popovers" data-content="{{'ICONTAB_INTRANET_ACCESS_INACTIVE'|trans}}"></i>{% endif %}</a>
+        {% endif %}
+    </div>
+    {% if(tabiconDetails.is_company==1) %}
+        {% if(companyProfileTeamImages.companyLogo != '') %}
+            <div class="avatar-img">{% include 'clubadmin/profile-image.html.twig' with {'clubId':companyProfileTeamImages.ClubId,'filename':companyProfileTeamImages.companyLogo,'type':'tabimage'} %}</div>
+        {% endif %}
+    {% else %}
+        {% if(companyProfileTeamImages.profilePicture != '') %}
+            <div class="avatar-img">{% include 'clubadmin/profile-image.html.twig' with {'clubId':companyProfileTeamImages.ClubId,'filename':companyProfileTeamImages.profilePicture,'type':'tabimage'} %}</div>
+        {% elseif(companyProfileTeamImages.teamPicture != '') %}
+            {% if('frontend1' in bookedModulesDet) %}
+                <div class="avatar-img">{% include 'clubadmin/profile-image.html.twig' with {'clubId':companyProfileTeamImages.ClubId,'filename':companyProfileTeamImages.teamPicture,'type':'tabimage'} %}</div>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+</li>

@@ -1,0 +1,266 @@
+<script type="text/template" id="fg-community-profile-underscore"> 
+    
+    <% fieldDetailsArray=FgInternal.groupByMulti(fieldDetails, ['dummyId','catId','']);
+    var catFlag=0; 
+    var fedmemConfirmTootipMsg  ="{{'CONTACT_FED_MEMBER_TOOLTIP'|trans}}"
+    assignedTeamsArray = _(assignedTeams).filter(function (x) { return (x['is_team']==1);});
+    assignedWorkgroupsArray = _(assignedTeams).filter(function (x) { return (x['is_workgroup']==1);});
+    groupedTeamArray=FgInternal.groupByMulti(assignedTeamsArray, ['teamCatId','roleId','functionId']);
+    groupedWorkgroupArray=FgInternal.groupByMulti(assignedWorkgroupsArray, ['rmCatId','roleId','functionId']);
+    %>
+    <div class="row">
+        <div class="col-md-8"> 
+            <div class="row">
+                <div class="col-md-8">
+               <%  console.log(fieldDetailsArray); %>
+                    <% _.each(fieldDetailsArray,function(fieldArray,fieldArrayKey){ 
+                        catFlag=0; 
+                        _.each(fieldArray,function(fieldValue,fieldKey){ %>
+                            <div class="portlet box fg-portlet-ash-green fg-dev-communityprofilebox">
+                                <div class="portlet-title ">
+                                    <div class="caption">
+                                        <% _.each(fieldValue,function(catTitleVal,catTitleValKey){ 
+                                            if(catFlag==0) { %>
+                                                <% if(correspondenceAddressCategory == catTitleVal[0]['catId'])%>
+                                                    <%- addressTranslatorString %>
+                                                <% else %>
+                                                    <%- catTitleVal[0]['title'] %>
+                                                <% catFlag=1; 
+                                            }
+                                        }); %>
+                                    </div>
+                                </div>
+                                <div class="portlet-body fg-pad-top-10 fg-pad-btm-10">
+                                    <div class="row">
+                                        <div class="col-md-12">                    
+                                            <dl>
+                                                <% _.each(fieldValue,function(valueField,keyvalue){
+                                                    _.each(valueField,function(fieldVal,keyField){  %>
+                                                    <% var contactFieldIndex = "categoryset_CF_"+fieldVal.attrId; 
+                                                    
+                                                    if(fieldVal.showConfirmationData == '1')
+                                                    {
+                                                        var resultField = fieldVal.changedValue;
+                                                        var oldValue = resultArray[contactFieldIndex];
+                                                        var popoverContent = jstranslations.waitingForConfirmation;
+                                                        if (!_.isEmpty(oldValue)) {
+                                                            if(fieldVal.inputType == 'date' && oldValue != "0000-00-00"){
+                                                                oldValue = FgLocaleSettings.formatDate(oldValue, 'date', 'YYYY-MM-DD');
+                                                                popoverContent = popoverContent + ' ' + jstranslations.currentActiveValue.replace('%a%', oldValue);
+                                                            }
+                                                            else if(fieldVal.inputType != 'date'){
+                                                                popoverContent = popoverContent + ' ' + jstranslations.currentActiveValue.replace('%a%', oldValue);
+                                                            }
+                                                        }
+                                                        var iconHtml = "&nbsp;<i class='fg-dev-Popovers fa fa-clock-o' data-trigger='hover' data-placement='bottom' data-content='" + popoverContent + "' > </i>";
+                                                    }
+                                                    else
+                                                    {
+                                                        var resultField = resultArray[contactFieldIndex];
+                                                        var iconHtml = "";
+                                                    }
+                                                    
+                                                    var isContactFieldData = (_.isEmpty(resultField) || _.isUndefined(resultField) )?false:true;
+                                                    resultField= (!isContactFieldData)? '-' : resultField; 
+                                                    var resultFieldOutput = '-'; 
+                                                            %>
+                                                        <% switch(fieldVal.inputType) { 
+                                                                case 'login email':
+                                                                case 'email':
+                                                                        if (resultField !== '-') {
+                                                                            resultFieldOutput = '<a href="mailto:'+resultField+'" target="_blank">'+resultField+'</a>';
+                                                                        }
+                                                                        break;
+                                                                case 'url':
+                                                                        if (resultField !== '-') {
+                                                                            resultFieldOutput = '<a href="'+resultField+'" target="_blank">'+resultField+'</a>';
+                                                                        }
+                                                                        break;
+                                                                case 'checkbox':
+                                                                        resultFieldOutput = resultField.replace(/;/g, "; ");
+                                                                        break;
+                                                                case 'multiline':
+                                                                        resultFieldOutput = resultField.replace(new RegExp('\r?\n', 'g'), '<br />');
+                                                                        break;
+                                                                case 'date':
+                                                                        if (resultField != "0000-00-00"){
+                                                                            var reggie = /(\d{2}).(\d{2}).(\d{4})/;
+                                                                            var reggie1 = /(\d{4})-(\d{2})-(\d{2})/;
+                                                                            var dateArray = reggie.exec(resultField);
+                                                                            var dateArray1 = reggie1.exec(resultField);
+                                                                            if (_.size(dateArray) > 0) {
+                                                                                resultFieldOutput =  FgLocaleSettings.formatDate(resultField, 'date' , 'DD.MM.YYYY');
+                                                                            } else if (_.size(dateArray1) > 0) {
+                                                                                resultFieldOutput = FgLocaleSettings.formatDate(resultField, 'date' , 'YYYY-MM-DD');
+                                                                            }
+                                                                        }
+                                                                        break;
+                                                                    case 'fileupload':
+                                                                    case 'imageupload':
+                                                                            var filePath = fieldVal.path+'/'+resultField; 
+                                                                            resultFieldOutput = '<a href="'+filePath+'" target="_blank">'+resultField +'</a>';
+                                                                        break;
+                                                                default:
+
+                                                                    switch(fieldVal.attrId) {
+                                                                        case '76':
+                                                                        case '107':
+                                                                        case '106':
+                                                                        case '71877':
+                                                                                resultFieldOutput = countryList[resultField];
+                                                                                resultFieldOutput = (_.isEmpty(resultFieldOutput) || _.isUndefined(resultFieldOutput))?'-':resultFieldOutput;
+                                                                                break;
+                                                                        case '515':
+                                                                                resultFieldOutput = languages[resultField];
+                                                                                break;
+                                                                        case '72':
+                                                                                if(resultField == "Male"){
+                                                                                        resultFieldOutput = '{%trans%}CM_MALE{%endtrans%}';
+                                                                                }else if(resultField == "Female"){
+                                                                                        resultFieldOutput = '{%trans%}CM_FEMALE{%endtrans%}';
+                                                                                }
+                                                                                break;
+                                                                        case '1':
+                                                                                if(resultField == "Formal"){
+                                                                                        resultFieldOutput = '{%trans%}CM_FORMAL{%endtrans%}';
+                                                                                }else if(resultField == "Informal"){
+                                                                                        resultFieldOutput = '{%trans%}CM_INFORMAL{%endtrans%}';
+                                                                                }
+                                                                                break;
+                                                                        case 'created_at':
+                                                                        case 'last_updated':
+                                                                        case 'last_login':
+                                                                        case 'last_invoice_sending':
+                                                                            if (resultField != "0000-00-00 00:00:00"){
+                                                                                var reggie = /(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/;
+                                                                                var dateArray = reggie.exec(resultField);
+                                                                                if(dateArray != null) {
+                                                                                        resultFieldOutput = dateArray[3] + "." + dateArray[2] + "." + dateArray[1] + " " + dateArray[4] + ":" + dateArray[5];
+                                                                                }
+                                                                            }
+                                                                            break;
+                                                                        default:
+                                                                                resultFieldOutput = resultField;
+                                                                                break;
+                                                                    }
+                                                                    break;
+                                                        } %>
+                                                        <%if(resultFieldOutput!= '-' ) { %>      
+                                                            <dt><%- fieldVal['fieldname'] %></dt>        
+                                                            <dd><%=resultFieldOutput %> <%= iconHtml%></dd>
+                                                        <%}%>
+                                                    <% });
+                                                }); %>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    <% }); %>
+                </div>
+                <div class="col-md-3">
+                    <div class="fg-profile-blk">
+                        <% if( imagePath != '') { %>  
+                            <% if( isCompany != 1) { %>
+                                <div class="fg-profile-img-blk150 fg-round-img" style="background-image:url('<%- imagePath %>')">
+                                </div>
+                            <% } else { %>
+                                <div class="fg-profile-img-blk-C150 " >
+                                    <img src="<%- imagePath %>" alt="">
+                                </div>
+                            <% } %>
+                        <%} %>
+                        <div class="fg-proflie-title-blk fg-pad-top-10">
+                            <span><%- userEmail %></span>
+                            <% if ((fedmembershipCatId != '') && ((isFedMemberConfirmed == 0) || (oldFedMembershipId !='')))  { %>
+                            <% if (fedlogoPath != '') { %>
+                               <img src="<%- fedlogoPath %>" />
+                            <% }} %>
+                             <% if (fedmembershipTitle != '') { %>
+                                <span><%- fedmembershipTitle %></span>
+                            <% } %>
+                            
+                             <% if(isFedMemberConfirmed == 1) { %>
+                            <i class='fg-dev-Popovers fa fa-clock-o fg-PR' data-trigger='hover' data-placement='bottom' data-content="<%- fedmemConfirmTootipMsg %>" > </i>
+                        <% } %>
+                            <% if (clubmembershipTitle != '') { %>
+                                <span><%- clubmembershipTitle %></span>
+                            <% } %>
+                        </div>
+                        <div class="fg-profile-link-blk">
+                            <a href="{{path('internal_create_message_step1_contact',{'mr':contactId})}}"><i class="fa fa-arrow-circle-right"></i>{{'INTERNAL_COMMUNITY_PROFILE_SEND_MESSAGE'|trans}}</a>
+                        </div>
+                    </div>
+                    <% if (_.size(groupedTeamArray) > 0) { %>
+                        <div class="portlet box fg-portlet-ash-green">
+                            <div class="portlet-title ">
+                                <div class="caption">
+                                    {{ 'INTERNAL_COMMUNITY_PROFILE_BELONGS'|trans }} {{fgtwig.getTerminolgyName('Team',plural,'UCF')}}
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-12">  
+                                        <% _.each(groupedTeamArray,function(groupVal,groupKey){ 
+                                            _.each(groupVal,function(roleVal,roleKey){ var roleTitleFlag=0; %>
+                                                <div class="fg-profile-team-blk">
+                                                    <% _.each(roleVal,function(functionVal,functionKey){
+                                                        if(roleTitleFlag==0) { %>
+                                                            <%- functionVal[0]['roleTitle'] %>
+                                                            <% roleTitleFlag=1;
+                                                        }
+                                                    });
+                                                    var functionString='';
+                                                    _.each(roleVal,function(functionVal,functionKey){ 
+                                                        functionString = functionString+', '+functionVal[0]['functionTitle'];
+                                                    }); 
+                                                    functionString = functionString.replace(', ',''); %>
+                                                    <span> <%- functionString %></span>
+                                                </div>
+                                            <% }); %>
+                                        <% }); %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                    <% if (_.size(groupedWorkgroupArray) > 0) { %>
+                        <div class="portlet box fg-portlet-ash-green">
+                            <div class="portlet-title ">
+                                <div class="caption">
+                                    {{ 'INTERNAL_COMMUNITY_PROFILE_BELONGS_WORKGROUP'|trans }}
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-12">  
+                                        <% _.each(groupedWorkgroupArray,function(workgroupVal,workgroupKey){ 
+                                            _.each(workgroupVal,function(workgrouproleVal,workgrouproleKey){ var workgroupTitleFlag=0; %>
+                                                <div class="fg-profile-team-blk">
+                                                    <% _.each(workgrouproleVal,function(workgroupfunctionVal,workgroupfunctionKey){
+                                                        if(workgroupTitleFlag==0) { %>
+                                                            <%- workgroupfunctionVal[0]['roleTitle'] %>
+                                                            <% workgroupTitleFlag=1;
+                                                        }
+                                                    });
+                                                    var functionString='';
+                                                    _.each(workgrouproleVal,function(workgroupfunctionVal,workgroupfunctionKey){ 
+                                                        functionString = functionString+', '+workgroupfunctionVal[0]['functionTitle'];
+                                                    }); 
+                                                    functionString = functionString.replace(', ',''); %>
+                                                    <span> <%- functionString %></span>
+                                                </div>
+                                            <% }); %>
+                                        <% }); %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</script>

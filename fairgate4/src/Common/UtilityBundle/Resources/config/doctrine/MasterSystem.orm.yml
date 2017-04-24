@@ -1,0 +1,203 @@
+Common\UtilityBundle\Entity\MasterSystem:
+    repositoryClass: Common\UtilityBundle\Repository\MasterSystemRepository
+    type: entity
+    table: master_system
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        salutation:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`1`"
+        firstName:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`2`"
+        primaryEmail:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`3`"
+        dateOfBirth:
+            type: date
+            nullable: true
+            column: "`4`"
+        teamProfilePicture:
+            type: string
+            length: 200
+            fixed: false
+            nullable: true
+            column: "`5`"
+        companyName:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`9`"
+        clubProfilePicture:
+            type: string
+            length: 200
+            fixed: false
+            nullable: true
+            column: "`21`"
+        lastName:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`23`"
+        correspondanceStrasse:
+            type: text
+            nullable: true
+            column: "`47`"
+        companyLogo:
+            type: string
+            length: 200
+            fixed: false
+            nullable: true
+            column: "`68`"
+        title:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`70`"
+        gender:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`72`"
+        nationality1:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`76`"
+        correspondanceOrt:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`77`"
+        correspondanceKanton:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`78`"
+        correspondancePlz:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`79`"
+        mobile1:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`86`"
+        mobile2:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`87`"
+        parentEmail1:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`92`"
+        correspondanceLand:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`106`"
+        nationality2:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`107`"
+        parentEmail2:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`108`"
+        correspondanceLang:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`515`"
+        website:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`1002`"
+        correspondancePostfach:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`71785`"
+        invoiceStrasse:
+            type: text
+            nullable: true
+            column: "`71873`"
+        invoicePlz:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`71874`"
+        invoiceOrt:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`71875`"
+        invoiceKanton:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`71876`"
+        invoiceLand:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`71877`"
+        invoicePostfach:
+            type: string
+            length: 160
+            fixed: false
+            nullable: true
+            column: "`71878`"
+    manyToOne:
+        fedContact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                fed_contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

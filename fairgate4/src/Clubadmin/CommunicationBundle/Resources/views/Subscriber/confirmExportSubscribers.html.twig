@@ -1,0 +1,117 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title"></h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="{{path("save_export_subscribers")}}" class="form-horizontal form-row-sepe" id="subscriberexportform">
+                    <div class="form-body fg-csv-expt fg-exprt">
+                        
+            <div class="form-group ">
+                  <label class="control-label col-md-3">{%trans%}CSV TYPE{%endtrans%}</label>
+                  <div class="col-lg-4 col-md-4 col-sm-12  col-xs-12">
+                    <label class="fg-cursor fg-radio-export">
+                    <input type="radio" name="CSVtype" id="CSVtype_colonSep " value="colonSep" checked>
+                    <span class="fg-radio-export-txt">
+                          {%trans%}SEMICOLON SEPERATED{%endtrans%}
+                    </span>
+                    </label>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-12  col-xs-12">
+                    <label class="fg-cursor fg-radio-export">   
+                     <input type="radio" name="CSVtype" id="CSVtype_commaSep" value="commaSep" >     
+                     <span class="fg-radio-export-txt">
+                         {%trans%}COMMA SEPERATED{%endtrans%}
+                     </span>
+                    </label>
+                  </div>
+            </div>
+                    {#<div class="row">
+                          <div class="col-md-12">
+                             <label class="fg-cursor"> <input type="checkbox" name="check" value="checked">{%trans%}EXPORT CONTACT CHECKBOX TEXT{%endtrans%}</label>
+                          </div>
+                    </div>#}
+
+                    </div>
+                 <input type="hidden" name="selectedId" id="selectedId" value="" />
+                <input type="hidden" name="actionType" id="actionType" value="{{actionType}}" />   
+                <input type="hidden" name="csvType" id="csvType" value="" /> 
+                <input type="hidden" name="subscriberType" id="subscriberType" value="" />
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+                {% include 'clubadmin/savebuttonpopup.html.twig'  %}
+ 
+
+
+<script type="text/javascript">
+    var clubId = '{{clubId}}';
+    var clubType = '{{clubType}}';
+    var actionType = '{{actionType}}';
+    var selActionType = '{{selActionType}}';
+    var subscriberType= '{{subscriberType}}';
+    var selContIds = [];
+
+    if (selActionType == 'selected') {
+        $("input.dataClass:checked").each(function() {
+            var contactId = $(this).attr('id');
+            if ($.inArray(contactId, selContIds) == -1) {
+                selContIds.push(contactId);
+            }
+        });
+    }
+    FgFormTools.handleUniform();
+    displayTitle();
+    $(document).off('click', 'button[data-function=save], button[data-function=cancel]');
+    $(document).on('click', 'button[data-function=save], button[data-function=cancel]', function() {
+        var buttonId = this.id;
+        if (buttonId == 'save') {
+           var csvType= $('input[name=CSVtype]:checked').val();
+            $('#csvType').val(csvType);
+            exportSubscriberFun();
+        }
+    });
+    function exportSubscriberFun() {
+        var selectedId = JSON.stringify(selContIds);
+        $('#selectedId').val(selectedId);
+        $('#subscriberType').val(subscriberType);
+        $('#popup').modal('hide');
+        $("#subscriberexportform").submit();      
+        
+    }
+    function callBackFn(resultParms) {
+        if (!$.isEmptyObject(oTable)) {
+            oTable.draw();
+        } else {
+            FgTable.init();
+        }
+
+    }
+    
+    function displayTitle() {
+        if(subscriberType == "owncontactexport"){ 
+            var singleHeadTxt = '{{'EXPORT_ONE_OWN_CONTACT_SUBSCRIBER'|trans}}';
+            var multipleHeadTxt = '{{'EXPORT_%contactcount%_OWN_CONTACT_SUBSCRIBERS'|trans}}';
+            var HeadTxt = '{{'EXPORT_ALL_OWN_CONTACT_SUBSCRIBERS'|trans}}';
+        }else{
+            var singleHeadTxt = '{{'EXPORT_ONE_SUBSCRIBER'|trans}}';
+            var multipleHeadTxt = '{{'EXPORT_%contactcount%_SUBSCRIBERS'|trans}}';
+            var HeadTxt = '{{'EXPORT_ALL_SUBSCRIBERS'|trans}}';
+        }
+        $('h4.modal-title').html('<div class="fg-popup-text" id="popup_head_text"></div>');
+        if(selContIds.length>1){
+             $('div#popup_head_text').text(multipleHeadTxt.replace('%contactcount%',selContIds.length ));
+        }else if(selContIds.length == 1){
+            $('div#popup_head_text').text(singleHeadTxt);
+        }else{
+            $('div#popup_head_text').text(HeadTxt);
+        }
+    }
+
+</script>

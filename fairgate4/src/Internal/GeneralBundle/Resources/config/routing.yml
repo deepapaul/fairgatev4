@@ -1,0 +1,23 @@
+show_internal_dashboard:
+    path:     /
+    defaults: { _controller: InternalProfileBundle:Overview:index, module: profile, level1: overview }  
+    
+internal_header:
+    path:     /header
+    defaults: { _controller: InternalGeneralBundle:Navigation:internalHeader }
+    
+search_contacts:
+    path:     /contactSearch
+    defaults: { _controller: InternalGeneralBundle:Navigation:searchContacts }  
+    
+internal_homepage:
+    path:     /home
+    defaults: { _controller: InternalGeneralBundle:Dashboard:index}
+    
+country_list_internal:
+    path:  /country/list
+    defaults: { _controller: ClubadminContactBundle:ContactOverview:getCountryListArray }
+    
+common_internal_header:
+    path:     /header/topnav
+    defaults: { _controller: InternalGeneralBundle:Navigation:internalHeader }

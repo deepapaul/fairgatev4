@@ -1,0 +1,41 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_driver: pdo_mysql
+    database_host: 
+    database_port: 
+    database_name: 
+    database_user: 
+    database_password: 
+    mailer_transport: mail
+    mailer_encryption: ssl
+    locale: de
+    
+    ### Secret key ###
+    secret: 
+    
+    ### Service classes for fairgate ###
+    Club.service.class: Common\UtilityBundle\Routing\FgRoutingListener
+    Clubadmin.twig.service.class: Common\UtilityBundle\Extensions\FgTwig
+    Clubadmin.controller.service.class: Clubadmin\TerminologyBundle\Service\Terminology
+    Contact.service.class: Common\UtilityBundle\Listener\FgContactListener
+    Clubadmin.entity.user.class: Common\UtilityBundle\Entity\SfGuardUser
+    Clubadmin.entity.group.class: Common\UtilityBundle\Entity\SfGuardGroup
+    fg.logout_success_handler.class: Common\UtilityBundle\Listener\LogoutSuccessHandler
+    fg.login_success_handler.class: Common\UtilityBundle\Listener\LoginSuccessHandler
+    
+    ### FOSUser classes overriden ###
+    security.mailer.class: Internal\UserBundle\Mailer\Mailer
+    
+    ### Symfony classes overriden ###    
+    security.exception_listener.class: Common\UtilityBundle\Listener\SecurityExceptionListener
+    doctrine_cache.apc.class: Common\UtilityBundle\Cache\FgApcuCache
+    
+    ### Other variables ###
+    fg_backend_login_path: fos_user_security_login
+    fg_backend_default_target_path: dashboard
+    internal_default_target_path: internal_dashboard
+    internal_user_login_path: internal_user_login
+    internal_user_logout_path: internal_user_security_logout
+    security.userprovider.class: Internal\UserBundle\Security\UserProvider
+    fg.avatar.class: Common\UtilityBundle\Util\FgAvatar
+    

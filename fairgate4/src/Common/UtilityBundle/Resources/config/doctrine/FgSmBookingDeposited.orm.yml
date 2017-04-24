@@ -1,0 +1,41 @@
+Common\UtilityBundle\Entity\FgSmBookingDeposited:
+    repositoryClass: Common\UtilityBundle\Repository\FgSmBookingDepositedRepository
+    type: entity
+    table: fg_sm_booking_deposited
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        role:
+            targetEntity: FgRmRole
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                role_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        booking:
+            targetEntity: FgSmBookings
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                booking_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

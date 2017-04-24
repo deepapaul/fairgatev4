@@ -1,0 +1,175 @@
+ALTER TABLE `fg_cms_page` ADD `pagecontentjson` TEXT NOT NULL AFTER `area_club`;
+
+ALTER TABLE `fg_cms_page` CHANGE `pagecontentjson` `page_content_json` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;
+
+===========================================================================================================================================================
+
+CREATE TABLE `fg_cms_page_content_element_form_fields` (
+  `id` int(11) NOT NULL,
+  `element_id` int(11) NOT NULL,
+  `fieldname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `field_type` enum('multiline','singleline','checkbox','select','date','time','email','url','fileupload','radio','number','button','captcha','heading') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `predefined_value` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `placeholder_value` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `tooltip_value` varchar(160) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_required` tinyint(1) DEFAULT NULL,
+  `sort_order` int(3) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `number_min_value` decimal(11,0) DEFAULT NULL,
+  `number_max_value` decimal(11,0) DEFAULT NULL,
+  `number_step_value` decimal(4,0) DEFAULT NULL,
+  `date_min` date DEFAULT NULL,
+  `date_max` date DEFAULT NULL,
+  `show_selection_values_inline` tinyint(1) DEFAULT '1',
+  `is_multi_selectable` tinyint(1) DEFAULT '0',
+  `use_mail_for_notification` tinyint(1) DEFAULT NULL,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+ALTER TABLE `fg_cms_page_content_element_form_fields`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_fg_cms_page_content_element_form_fields_fg_cm_contact1_idx` (`created_by`),
+  ADD KEY `fk_fg_cms_page_content_element_form_fields_fg_cms_page_cont_idx` (`element_id`),
+  ADD KEY `fk_fg_cms_page_content_element_form_fields_fg_cm_contact2_idx` (`updated_by`);
+
+
+ALTER TABLE `fg_cms_page_content_element_form_fields`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `fg_cms_page_content_element_form_fields`
+  ADD CONSTRAINT `fk_fg_cms_page_content_element_form_fields_fg_cm_contact1` FOREIGN KEY (`created_by`) REFERENCES `fg_cm_contact` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_fg_cms_page_content_element_form_fields_fg_cm_contact2` FOREIGN KEY (`updated_by`) REFERENCES `fg_cm_contact` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_fg_cms_page_content_element_form_fields_fg_cms_page_conten1` FOREIGN KEY (`element_id`) REFERENCES `fg_cms_page_content_element` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+
+
+CREATE TABLE `fg_cms_page_content_element_form_fields_i18n` (
+  `id` int(11) NOT NULL,
+  `lang` char(2) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fieldname_lang` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `predefined_value_lang` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `placeholder_value_lang` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `tooltip_value_lang` varchar(160) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+ALTER TABLE `fg_cms_page_content_element_form_fields_i18n`
+  ADD PRIMARY KEY (`id`,`lang`),
+  ADD KEY `fk_fg_cms_page_content_element_form_fields_i18n_fg_cms_page_idx` (`id`);
+
+
+ALTER TABLE `fg_cms_page_content_element_form_fields_i18n`
+  ADD CONSTRAINT `fk_fg_cms_page_content_element_form_fields_i18n_fg_cms_page_c1` FOREIGN KEY (`id`) REFERENCES `fg_cms_page_content_element_form_fields` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+
+
+CREATE TABLE `fg_cms_form_element_options` (
+  `id` int(11) NOT NULL,
+  `element_id` int(11) NOT NULL,
+  `confirmation_email_sender` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
+  `confirmation_email_subject` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
+  `confirmation_email_content` text CHARACTER SET latin1,
+  `notification_email_recipients` text CHARACTER SET latin1,
+  `completion_prompt_success_message` varchar(255) CHARACTER SET latin1 DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+ALTER TABLE `fg_cms_form_element_options`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_fg_cms_form_element_inquiry_mail_fg_cms_page_content_ele_idx` (`element_id`);
+
+
+ALTER TABLE `fg_cms_form_element_options`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+  
+ALTER TABLE `fg_cms_form_element_options`
+  ADD CONSTRAINT `fk_fg_cms_form_element_inquiry_mail_fg_cms_page_content_eleme1` FOREIGN KEY (`element_id`) REFERENCES `fg_cms_page_content_element` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+
+
+CREATE TABLE `fg_cms_form_element_options_i18n` (
+  `id` int(11) NOT NULL,
+  `lang` char(2) CHARACTER SET latin1 NOT NULL,
+  `subject_lang` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
+  `mail_content_lang` text CHARACTER SET latin1,
+  `success_message_lang` varchar(255) CHARACTER SET latin1 DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+ALTER TABLE `fg_cms_form_element_options_i18n`
+  ADD PRIMARY KEY (`lang`,`id`),
+  ADD KEY `fk_fg_cms_page_content_element_form_field_options_i18n_fg_c_idx` (`id`);
+
+
+ALTER TABLE `fg_cms_form_element_options_i18n`
+  ADD CONSTRAINT `fk_fg_cms_page_content_element_form_field_options_i18n_fg_cms10` FOREIGN KEY (`id`) REFERENCES `fg_cms_form_element_options` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+
+CREATE TABLE `fg_cms_page_content_element_form_field_options` (
+  `id` int(11) NOT NULL,
+  `field_id` int(11) NOT NULL,
+  `is_active` tinyint(1) DEFAULT '1',
+  `selection_value_name` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
+  `sort_order` int(3) DEFAULT NULL,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+ALTER TABLE `fg_cms_page_content_element_form_field_options`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_fg_cms_page_content_element_form_field_options_fg_cms_pa_idx` (`field_id`);
+
+
+ALTER TABLE `fg_cms_page_content_element_form_field_options`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `fg_cms_page_content_element_form_field_options`
+  ADD CONSTRAINT `fk_fg_cms_page_content_element_form_field_options_fg_cms_page1` FOREIGN KEY (`field_id`) REFERENCES `fg_cms_page_content_element_form_fields` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+
+
+CREATE TABLE `fg_cms_page_content_element_form_field_options_i18n` (
+  `id` int(11) NOT NULL,
+  `lang` char(2) CHARACTER SET latin1 NOT NULL,
+  `selection_value_name_lang` varchar(255) CHARACTER SET latin1 DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+ALTER TABLE `fg_cms_page_content_element_form_field_options_i18n`
+  ADD PRIMARY KEY (`lang`,`id`),
+  ADD KEY `fk_fg_cms_page_content_element_form_field_options_i18n_fg_c_idx` (`id`);
+
+
+ALTER TABLE `fg_cms_page_content_element_form_field_options_i18n`
+  ADD CONSTRAINT `fk_fg_cms_page_content_element_form_field_options_i18n_fg_cms1` FOREIGN KEY (`id`) REFERENCES `fg_cms_page_content_element_form_field_options` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  
+
+===========================================================================================================================================================
+
+-- FROM Sneha --
+ALTER TABLE `fg_cms_page` ADD `page_content_json` TEXT NULL DEFAULT NULL AFTER `area_club`;
+-- FROM Sneha --
+
+ALTER TABLE `fg_tm_theme_color_scheme` ADD `css_filename` VARCHAR(50) NULL DEFAULT NULL AFTER `color_schemes`;
+
+ALTER TABLE `fg_tm_theme_configuration` ADD `css_filename` VARCHAR(50) NULL DEFAULT NULL AFTER `is_deleted`;
+
+ALTER TABLE `fg_tm_theme_bg_images` ADD INDEX(`gallery_item_id`);
+
+ALTER TABLE `fg_tm_theme_bg_images` ADD CONSTRAINT `fg_gallery_theme_id_fg_gm_items` FOREIGN KEY (`gallery_item_id`) REFERENCES `fg_gm_items`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+ALTER TABLE `fg_tm_theme_bg_images` CHANGE `bg_repeat` `bg_repeat` ENUM('none','horizontal','vertical', 'both') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALTER TABLE `fg_forum_followers` DROP FOREIGN KEY `fk_fg_forum_followers_fg_rm_role1`; 
+ALTER TABLE `fg_forum_followers` ADD CONSTRAINT`fk_fg_forum_followers_fg_rm_role1` FOREIGN KEY (`group_id`) REFERENCES `fg_rm_role`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ALTER TABLE `fg_cms_page_calendar_categories` DROP FOREIGN KEY `fk_fg_cms_page_calendar_categories_fg_em_calendar_category1`; ALTER TABLE `fg_cms_page_calendar_categories` ADD CONSTRAINT `fk_fg_cms_page_calendar_categories_fg_em_calendar_category1` FOREIGN KEY (`category_id`) REFERENCES `fairgate_migrate`.`fg_em_calendar_category`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION; ALTER TABLE `fg_cms_page_calendar_categories` DROP FOREIGN KEY `fk_fg_cms_special_page_categories_fg_cms_special_page10`; ALTER TABLE `fg_cms_page_calendar_categories` ADD CONSTRAINT `fk_fg_cms_special_page_categories_fg_cms_special_page10` FOREIGN KEY (`page_id`) REFERENCES `fairgate_migrate`.`fg_cms_page`(`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+ALTER TABLE `fg_tm_theme_bg_images` CHANGE `position_vertical` `position_vertical` ENUM('top','center','bottom') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;

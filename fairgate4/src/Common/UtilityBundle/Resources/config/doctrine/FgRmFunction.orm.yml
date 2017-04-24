@@ -1,0 +1,49 @@
+Common\UtilityBundle\Entity\FgRmFunction:
+    repositoryClass: Common\UtilityBundle\Repository\FgRmFunctionRepository
+    type: entity
+    table: fg_rm_function
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        isActive:
+            type: boolean
+            nullable: true
+            column: is_active
+        isVisible:
+            type: boolean
+            nullable: true
+            column: is_visible
+        sortOrder:
+            type: integer
+            unsigned: false
+            nullable: false
+            column: sort_order
+        isFederation:
+            type: boolean
+            nullable: false
+            column: is_federation
+        isRequiredAssignment:
+            type: boolean
+            nullable: false
+            column: is_required_assignment
+    manyToOne:
+        category:
+            targetEntity: FgRmCategory
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                category_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

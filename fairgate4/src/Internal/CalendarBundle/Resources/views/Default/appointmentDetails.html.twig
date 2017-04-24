@@ -1,0 +1,165 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+{% set pageTitle = eventData.title %}
+{% block pagecontent %}
+    <!-- BEGIN BREADCRUMB-->
+    <div class="row">
+        <div class="col-lg-12">
+            {% include 'internal/breadcrumb.html.twig' with breadCrumb %}
+        </div>
+    </div>
+     
+    <!-- END BREADCRUMB-->
+    <!-- PAGE TITLE -->
+    <div class="row">
+        <div class="fg-calendar-app-dtls-wrapper  col-lg-12">
+            <div class="fg-action-menu-wrapper">
+                <div class="fg-page-title-block-1 fg-active-IB">
+
+                    <div class="fg-title-first-block fg-test-block  fg-action-title fg-active-IB">
+                        <h3 class="page-title "><span class="page-title-text">{{eventData.title}}</span> </h3>
+                      {% if (clubDetails[eventData.clubId]['clubType']== 'federation' or clubDetails[eventData.clubId]['clubType']== 'sub_federation') %}  <img class="fa-envelope-o" src="{{clubDetails[eventData.clubId]['clubLogoPath']}}" /> {% endif %}
+                    </div>
+                    {% if hasEditRights == 1 %}
+                    <div class="fg-active-IB fg-btn-grey-icon fg-action-edit">
+                        <a class="fg-event-edit-link" href="#"> <span>
+                            <i class="fa fa-pencil-square-o fa-2x"></i> {{'APPOINTMENT_DETAILS_EDIT_LINK'|trans}}
+                        </span>
+                        </a>
+                    </div>
+                    <div class="fg-active-IB fg-btn-grey-icon fg-action-delete">
+                        <a class="fg-event-delete-link" href="#"> <span>
+                            <i class="fa fa-trash-o fa-2x"></i> {{'APPOINTMENT_DETAILS_DELETE_LINK'|trans}}
+                        </span>
+                        </a>
+                    </div>
+                    {% endif %}    
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="row fg-calendar-app-dtls-content">
+                <div class="col-sm-5 col-md-4">
+                    <ul class="fg-event-dtls">
+                        <li><i class="fa fa-calendar"></i> <span class="fg-subtitle"> {{dateDetails.startDate|default('')}}  {%if(dateDetails.endDate|default(''))%} - {% endif %} {{dateDetails.endDate|default('')}}</span></li>
+                        <li><i class="fa fa-folder-open"></i><span class="fg-subtitle">{% if (eventData.isClubAreaSelected >= 1) %}{{clubDetails[eventData.clubId]['title']}}{% endif %}{% if (eventData.clubId == currentClubId) %}{% if roleNames!='' and eventData.isClubAreaSelected == 1%}, {% endif %} {{roleNames}}{% endif %}</span></li>                  
+                       {% if(eventData.eventCategories) %} <li><i class="fa fa-tag"></i><span class="fg-subtitle">{{categoryNames}}</span></li>{% endif %}
+                       {% if eventAttachments %}
+                        <li><i class="fa fa-paperclip"></i>
+                            {% for attachments in eventAttachments %}
+                            <div class="fg-subtitle"><a class="fg-calender-attachment" data-clubId="{{eventData.clubId}}" data-encrypted="{{attachments.encryptedFilename}}" data-filename="{{attachments.filename}}" href="javascript:void(0)">{{attachments.filename}}</a> ({{fgclub.formatNumber((attachments.size/1024)|round)}} {{'CALENDAR_DETAILS_ATTACHMENT_SIZE'|trans}})</div>
+                            {% endfor %}
+                        </li>
+                       {% endif %}
+                       {% if (eventData.url) %}<li><i class="fa fa-globe"></i><span class="fg-subtitle"><a href="{{eventData.url}}" target="_blank">  {{eventData.url}}</a></span></li>{% endif %}
+                       {% if (eventData.location) %} <li><i class="fa fa-map-marker"></i><span class="fg-subtitle">{{eventData.location}}</span></li> {% endif %}
+                    </ul>
+                </div>
+                <div class="col-sm-7 col-md-8">
+                  {{description|raw}}
+                </div>
+            </div>
+                  <div class="fg-caledar-event-dtls-map-wrapper hide">
+                    <div id="googleMap" class="col-sm-12">
+                        
+                    </div>
+                </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+     <script src="{{ asset('fgassets/internal/js/FgFullCalendar.js') }}" type="text/javascript"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqoymXav-_Go1zYa9UOlPf5_UsC58Jmi0" type="text/javascript"></script>
+    <script>
+        var currentClubId = '{{currentClubId}}';
+        var contactId = '{{contactId}}';
+         var deleteAppPath = "{{ path('calendar_appointment_delete') }}";
+         var calendarPath = "{{path('internal_calendar_view')}}";
+         var calendarviewStoragename = 'calenderview-'+currentClubId+'-'+contactId;
+    $(document).ready(function(){
+       
+        var event_latitude = '{{eventData.location_latitude}}';
+        var event_longitude = '{{eventData.location_longitude}}';
+        var event_location =  '{{eventData.location}}';
+        var event_location_flag = '{{eventData.is_show_in_googlemap}}';
+        var mapZoomValue = 15;
+        var mapId = "googleMap";
+        var mapDisplay = "ROADMAP";
+        var showMarker = (event_location != '') ? 1 : 0;
+        if(event_latitude != '' && event_longitude!='' && event_location!='' && event_location_flag==1){
+           $(".fg-caledar-event-dtls-map-wrapper").removeClass('hide');  
+           FgMapSettings.mapShow(event_latitude, event_longitude,mapDisplay, mapZoomValue,showMarker, mapId, event_location);
+           $(window).resize(function(){
+               FgMapSettings.mapResize(event_latitude, event_longitude, event_location);
+               FgMapSettings.mapInfoWindowResize();
+           });  
+        }
+    }); 
+    
+    //Attach the local storage on clicking the back button
+    $(document).on('click', '.bckid', function() {
+        localStorage.setItem(FgLocalStorageNames.calendar.selectedDate,'{{dateDetailsForEditpage.startDate}}');
+    });
+     //Attach the local storage on clicking the breadcrumb
+    $(document).on('click', '.page-breadcrumb .fg-page-active a', function() {
+        localStorage.setItem(FgLocalStorageNames.calendar.selectedDate,'{{dateDetailsForEditpage.startDate}}');
+    });
+        
+    $(document).on('click','.fg-event-edit-link',function(e){
+          e.preventDefault();
+          var startDateEditPage = '{{dateDetailsForEditpage.startDate}}';
+          var startTimeEditPage = '{{dateDetailsForEditpage.startTime}}';
+          var endDateEditPage = '{{dateDetailsForEditpage.endDate}}';
+          var endTimeEditPage = '{{dateDetailsForEditpage.endTime}}';
+          var postPath = "{{path('calendar_appointment_edit',{'eventId':detailsId})}}";
+          $('#eventform').remove();
+          $form = $("<form id='eventform' method='post' action="+postPath+"></form>");
+          $form.append('<input type="hidden" id="startDate" name="startDate">');
+          $form.append('<input type="hidden" id="startTime" name="startTime">');
+          $form.append('<input type="hidden" id="endDate" name="endDate">');
+          $form.append('<input type="hidden" id="endTime" name="endTime">');
+          $('body').append($form);
+          $('#startDate').val(startDateEditPage); 
+          $('#startTime').val(startTimeEditPage); 
+          $('#endDate').val(endDateEditPage);
+          $('#endTime').val(endTimeEditPage);  
+          $form.submit();
+         });
+        
+   $(document).on('click','.fg-calender-attachment',function(e){
+       e.preventDefault();
+       var filename =  $(this).attr('data-filename');
+       var encryptedname =  $(this).attr('data-encrypted');
+       var eventclubId =  $(this).attr('data-clubid');
+       var downloadPath = "{{path('calendar_appointment_details_download_attachments')}}";
+       $('#calendarAttachmentForm').remove();
+       $form = $("<form id='calendarAttachmentForm' method='post' action="+downloadPath+"></form>");
+       $form.append('<input type="hidden" id="filename" name="filename">');
+       $form.append('<input type="hidden" id="encrypted" name="encrypted">');
+       $form.append('<input type="hidden" id="eventclubId" name="eventclubId">');
+       $('body').append($form);
+       $('#filename').val(filename); 
+       $('#encrypted').val(encryptedname); 
+       $('#eventclubId').val(eventclubId); 
+       $form.submit();
+       
+   });
+    var finalArray = {};
+    finalArray[0] = {{eventDetail|raw}};
+    
+    $(document).off('click', '.fg-event-delete-link');
+    $(document).on('click', '.fg-event-delete-link', function() {
+        var startDateEditPage = '{{dateDetailsForEditpage.startDate}}';
+        var startTimeEditPage = '{{dateDetailsForEditpage.startTime}}';
+        var endDateEditPage = '{{dateDetailsForEditpage.endDate}}';
+        var endTimeEditPage = '{{dateDetailsForEditpage.endTime}}';
+        finalArray[0]['startDate'] = startDateEditPage+" "+startTimeEditPage;
+        finalArray[0]['endDate'] = endDateEditPage+" "+endTimeEditPage;
+        $.post(deleteAppPath, { 'finalArray':JSON.stringify(finalArray),'from':'detailpage',jsonRowId : 	{"0":{"count":1}} }, function(data) {
+            $('.popover').popover('destroy'); //Hide the tootip on week/month view
+            FgModelbox.showPopup(data);
+        });
+    });  
+    
+ 
+    </script>
+    
+{% endblock %}

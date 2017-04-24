@@ -1,0 +1,75 @@
+<script type="text/template" id="newAssignmentRowInitial">
+    <div class="row roleTypeDpdn">
+        <div class="col-md-12 col-sm-12 col-xs-12 fg-dev-roles-wrap">
+            <div class="col-md-3 col-sm-12 col-xs-12 fg-left-zero">
+                <%  var fedOption="";
+                    var subfedOption="";
+                    var teamOption="";
+                    var roleOption="";
+                    var workgroupOption="";
+                    var federationSize=_.size(federation);
+                    var subfederationSize=_.size(subfederation);
+                    var normalRolesSize=_.size(normalRoles);
+                    var teamSize=_.size(team);
+                    var workgroupSize=_.size(workgroup);
+                    var fedId = {{federationId}};
+                    var SubfedId = {{subfederationId}};
+                    if(federationSize > 0) {
+                          var fedIcon = {{fgclub.get('federation_icon')|json_encode()|raw}};  
+                        fedOption='<option value="Federation" data-content="{{fgtwig.getTerminolgyName('Federation',singular,'UCF')}} {%trans%}ASSIGNMENT_ROLES{%endtrans%}'+" <img src="+fedIcon[fedId]+" />"+'" element-title="Federation Roles" element-type="Federation">{{fgtwig.getTerminolgyName('Federation',singular,'UCF')}} {%trans%}ASSIGNMENT_ROLES{%endtrans%}</option>';
+                    }
+                    if(subfederationSize > 0) {
+                         var fedIcon = {{fgclub.get('federation_icon')|json_encode()|raw}};  
+                        subfedOption='<option value="Subfederation" element-type="Subfederation" data-content="{{fgtwig.getTerminolgyName('Sub-federation',singular,'UCF')}} {%trans%}ASSIGNMENT_ROLES{%endtrans%}'+" <img src="+fedIcon[SubfedId]+" />"+'" element-title="Sub-Federation Roles">{{fgtwig.getTerminolgyName('Sub-federation',singular,'UCF')}} {%trans%}ASSIGNMENT_ROLES{%endtrans%}</option>';
+                    }
+                    if(normalRolesSize > 0) {
+                        roleOption='<option value="NormalRoles" element-title="Roles" data-content="{%trans%}ASSIGNMENT_ROLES{%endtrans%}" element-type="NormalRoles">{%trans%}ASSIGNMENT_ROLES{%endtrans%}</option>';
+                    }
+                    if(teamSize > 0) {
+                        teamOption='<option value="Team" element-type="Team" data-content="{{fgtwig.getTerminolgyName('Team',plural,'UCF')}}" element-title="Teams">{{fgtwig.getTerminolgyName('Team',plural,'UCF')}}</option>';
+                    }
+                    if(workgroupSize > 0) {
+                        workgroupOption='<option value="Workgroup" element-type="Workgroup"  data-content="{%trans%}ASSIGNMENT_WORKGROUPS{%endtrans%}" element-title="Workgroups">{%trans%}ASSIGNMENT_WORKGROUPS{%endtrans%}</option>';
+                    }
+                %>
+                <select insert-flag="0" class="bs-select form-control fg-select-font roleType fg-dev-right-spacer">
+                    <option option-text-category="1" value="">{%trans%}ASSIGNMENT_SELECT_DROPDOWN{%endtrans%}</option>
+                    <% if(clubType=='standard_club') { %>
+                        <%= roleOption %>
+                        <%= teamOption %>
+                        <%= workgroupOption %>
+                    <% } else if(clubType=='federation') { %>
+                        <%= roleOption %>
+                        <%= fedOption %>
+                        <%= teamOption %>
+                        <%= workgroupOption %>
+                    <% } else if(clubType=='federation_club') { %>
+                        <%= roleOption %>
+                        <%= fedOption %>
+                        <%= teamOption %>
+                        <%= workgroupOption %>
+                    <% } else if(clubType=='sub_federation') { %>
+                        <%= roleOption %>
+                        <%= fedOption %>
+                        <%= subfedOption %>
+                        <%= teamOption %>
+                        <%= workgroupOption %>
+                    <% } else if(clubType=='sub_federation_club') { %>
+                        <%= roleOption %>
+                        <%= fedOption %>
+                        <%= subfedOption %>
+                        <%= teamOption %>
+                        <%= workgroupOption %>
+                    <% } %>
+                </select>
+            </div>
+            <div class="fg-cls-element">
+                <div class="closeico new_assig_rmv">
+                    <input type="checkbox" class="make-switch" id="select">
+                    <label for="select"></label>
+                </div>                
+            </div>
+        </div>
+        <input type="hidden" data-type="key_element" />
+    </div>
+</script>

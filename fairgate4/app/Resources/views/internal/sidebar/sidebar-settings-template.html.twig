@@ -1,0 +1,55 @@
+<div class="btn-group pull-left btngrpdiv">
+    <button data-toggle="dropdown" class="btn"> <i class="fa fa-bars"></i> </button>
+    <ul class="dropdown-menu dropdown-menu-align-left pull-right drpmenu-new">
+        <%
+            var menuUrl ='';
+            var menuType = '';
+            var menuPlaceHolder = '';
+            var menuPlaceHolderFunction = '';
+            var menuHierarchy = '';
+            var menuTarget = '';
+            var menuContentType = '';
+            var categoryId = '';
+            var functionAssign = '';
+            var functionCount = '';
+        %>
+        <%  _.each(settings.items,function(row,key){
+                menuUrl = row.url;
+                if(typeof settings.menuId!== "undefined"){
+                    menuUrl = menuUrl.replace("|id|", settings.menuId);
+                }
+        %>
+            <%  if(row.type == 'newElement'){
+                    menuType = row.type;
+                    menuPlaceHolder = row.placeHolder;
+                    if(typeof row.placeHolderFunction!== "undefined"){
+                        menuPlaceHolderFunction = row.placeHolderFunction;
+                    }
+                    menuContentType = menuSubContentType = row.contentType;
+                    if(typeof row.subContentType!== "undefined"){
+                        menuSubContentType = row.subContentType;
+                    }
+                    if(typeof settings.functionAssign!== "undefined"){                    
+                        functionAssign = settings.functionAssign;
+                        functionCount = settings.functionCount;
+                    }
+                    if(typeof row.functionAssign!== "undefined"){
+                        functionAssign = row.functionAssign;
+                    }
+                    if(typeof settings.hierarchy!== "undefined"){
+                        menuHierarchy = settings.hierarchy;                    
+                        menuTarget = settings.target;
+                        categoryId = settings.categoryId;
+                    }else{
+                        menuHierarchy = row.hierarchy;                    
+                        menuTarget = row.target;                        
+                    }
+            %>
+                <li class="create_new_element" role_type="<%- menuSubContentType %>" element_type="<%- menuContentType %>" data-catid="<%- categoryId %>" data-target="<%- menuTarget %>" hierarchy="<%- menuHierarchy %>" data-fntype="<%- functionAssign %>" data-fncount="<%- functionCount %>" data-placeholder="<%- menuPlaceHolder %>" data-function-placeholder="<%- menuPlaceHolderFunction %>"> <a href="javascript:void(0)"><%- row.title %></a> </li>
+            <% } else { %>    
+                <li> <a href="<%- menuUrl %>" url="#"><%- row.title %>&hellip;</a> </li>
+            <% } %>    
+        <% });%>
+    </ul>
+</div>
+

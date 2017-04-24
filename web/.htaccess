@@ -1,0 +1,59 @@
+
+AddType audio/mp4 .m4a
+AddType video/mp4 .mp4
+AddType video/webm .webm
+AddType audio/ogg .ogg
+AddType application/json   json
+
+Options +FollowSymLinks +ExecCGI
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  #URL rewriting www.my.fairgate.ch/clubname to my.fairgate.ch/clubname
+  RewriteCond %{HTTP_HOST} ^mein\.fairgate\.ch [NC]
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L,QSA]
+
+  RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^(.*)$ http://%1/$1 [R=301,L] 
+  
+  RewriteCond %{HTTPS} on
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+  # uncomment the following line, if you are having trouble
+  # getting no_script_name to work
+  #RewriteBase /
+
+  # we skip all files with .something
+  #RewriteCond %{REQUEST_URI} \..+$
+  #RewriteCond %{REQUEST_URI} !\.html$
+  #RewriteRule .* - [L]
+    
+
+  # we check if the .html version is here (caching)
+  RewriteRule ^$ index.html [QSA]
+  RewriteRule ^([^.]+)$ $1.html [QSA]
+  RewriteCond %{REQUEST_FILENAME} !-f
+
+	
+
+  # no, so we redirect to our front web controller
+  RewriteRule ^(.*)$ index.php [QSA,L]
+    
+</IfModule>
+AddType text/x-component .htc
+
+    
+<FilesMatch "\.(ico|flv|jpg|jpeg|png|gif|js|css|swf)(\.gz)?$">
+    <IfModule mod_expires.c>
+        ExpiresActive On
+    </IfModule>
+    <IfModule mod_headers.c>
+        Header set Expires "Fri, 01 Dec 2015 00:00:00 GMT"
+        Header unset ETag
+    </IfModule>
+    FileETag None
+</FilesMatch>

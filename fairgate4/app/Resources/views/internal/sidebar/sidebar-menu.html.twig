@@ -1,0 +1,25 @@
+<script type="text/template" id="template_sidebar_menu">
+    <ul class="sub-menu bookmarkdown sub-page-clickable">
+        <%
+            var categoryId = '';
+            var bookMarkClass = '';
+            var itemBookmarkId = '';
+            var rowFilterCountUrl = '';
+            var menuItemId = '';
+            var subMenu = {};
+            if (typeof data.filterCountUrl!== "undefined"){
+                subMenu.filterCountUrl = data.filterCountUrl;
+            }
+            if (typeof data.filterCountUrl!== "undefined"){
+                subMenu.filterDataUrl = data.filterDataUrl;
+            }
+            var parentId = data.parent.id;
+            subMenu.menuType = data.menuType;
+            subMenu.showLoading = data.showLoading;
+            subMenu.input = data.items;
+            subMenu.heiarchy = 1;
+            subMenu.parentMenuId = data.parent.id;
+        %>
+        {{ include('::clubadmin/sidebar/sidebar-menu2level-level2-template.html.twig') }}
+    </ul>
+</script>

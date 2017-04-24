@@ -1,0 +1,29 @@
+<script type="text/template" id="contactListNewColumnPopup">
+    <div class="modal-header fg-modal-has-languagebar">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title fg-modal-title">{{'CONTACT_LIST_ADD_NEW_COLUMN_TITLE'|trans}}</h4>
+    </div>
+    <form id="fg-cms-contact-list-new-column">
+        <div class="modal-body fg-cms-contact-list-modal">
+            <div class="row">
+                <div class="col-sm-6 contact-column-type" data-name="fg-dev-contact-column-type-dp">
+                    <select name="contact-list-table-column-type" data-key="" class="selectpicker form-control contact-list-table-column-type">
+                        <option value="default">{{'CONTACT_LIST_COLUMN_TYPE_DP_DEFAULT_SELECT'|trans}}{{'CONTACT_LIST_COLUMN_TYPE_DP_DEFAULT'|trans}}</option>
+                        <% _.each(contactListColumnJson, function(columnType, columnKey) { 
+                            if(typeof columnType['fieldName'] == 'object') { %>
+                                <option value="<%- columnKey %>"><%- columnType['fieldName'][defaultLang] %></option>
+                            <% } else if(typeof columnType['fieldName'] == 'string') { %>
+                                <option value="<%- columnKey %>"><%- columnType['fieldName'] %></option>
+                            <% }
+                        }); %>
+                    </select>   
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn default" data-dismiss="modal" >{{ 'CANCEL'|trans }}</button>
+            <button type="button" class="btn green" id="saveContactListColumnPopup">{{ 'ADD'|trans }}</button>
+        </div>
+    </form>
+</script>
+

@@ -1,0 +1,130 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% block pagecontent %}
+    {% set pageTitle = 'CONTACT_APPLICATION_FORMS'|trans %}
+
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BREADCRUMB STARTS -->
+            {% include 'clubadmin/breadcrumb.html.twig' %}
+            <!-- BREADCRUMB ENDS -->
+        </div>
+    </div>
+    <div class="row">
+        <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+        {% set page_settings = { 'pagetitle':'true'  }  %}
+        {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'page_settings': page_settings, 'hrefLink':'true','url':'#'} %}
+        <!-- END PAGE TITLE AND PANEL TABS -->
+        <div class="col-md-12">
+            <!-- BEGIN CONTENT -->
+            <div class="fg-form-list-wrapper">
+
+                <form class="form-horizontal fg-marg-top-20 form" id="fg_contact_form_create" skipDirtyCheck>
+                    <fieldset>
+                        <div class="form-group required">
+                            <label for="textinput" class="col-md-4 control-label">{{'APPLICATION_FORM_NAME_LABEL'|trans}} </label>
+                            <div class="col-md-4" id="form-name-group">
+                                <input type="text" required="true" name="formname" id="formname" class="form-control" value="" maxlength="160">
+                                <span id="formname-error" class="help-block">This field is required</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group required">
+                            <label for="radios" class="col-md-4 control-label">{{'APPLICATION_FORM_CONTACT_TYPE_LABEL'|trans}}</label>
+                            <div class="col-md-4">
+                                <div class="radio-block">
+                                    <label for="radios-0">
+                                        <input type="radio" required="true" name="contact_form_type"  class="form-control" value="single_person" checked="checked" id="radios-0">     {{'APPLICATION_FORM_CONTACT_TYPE_LABEL1'|trans}}
+                                    </label>
+                                </div>
+                                <div class="radio-block">
+                                    <label for="radios-1">
+                                        <input type="radio" required="true" name="contact_form_type"  class="form-control" value="company_with_main_contact" id="radios-1">      {{'APPLICATION_FORM_CONTACT_TYPE_LABEL2'|trans}}
+                                    </label>
+                                </div>
+                                <div class="radio-block">
+                                    <label for="radios-2">
+                                        <input type="radio" required="true" name="contact_form_type"  class="form-control" value="company_without_main_contact" id="radios-2">     {{'APPLICATION_FORM_CONTACT_TYPE_LABEL3'|trans}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>      
+
+                    </fieldset>
+                    <div class="clearfix"></div>
+
+
+
+                    <div class="form-actions fg-big-buttons right">
+                        <div class="row">
+
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+
+
+                                <button type="button" class="btn green pull-right fg-marg-left-10" id="fg_form_save"  >{%trans%}CAF_CONTINUE{%endtrans%}<i class="fa fa-chevron-right fg-marg-left-10"></i></button>
+                                <button type="button" class="btn default-ash pull-right"  id="fg-cancel"><i class="fa fg-chevron-left fg-marg-right-5"></i>{%trans%}Cancel{%endtrans%}</button>
+
+                            </div>   
+
+                        </div>   
+                    </div> 
+
+                </form>                 
+
+            </div>  
+        </div>
+
+    </div> 
+
+
+
+
+{% endblock %}
+{% block javascripts %}
+    <script src="/fgassets/website/js/Fg-cms-contact-form-fields.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var valid = false;
+        function callBackFn(result) {
+            window.location = result.redirectUrl;
+            $("#form-name-group").removeClass('has-error');
+        }
+        function failCallback(result) {
+            $("#formname-error").show();
+            $("#form-name-group").addClass('has-error');
+            $("#formname-error").html(result.error)
+        }
+
+
+        $(document).ready(function () {
+            /*-------------- Page title bar configuration --------*/
+            FgPageTitlebar.init({
+                title: true
+
+
+            });
+            $("input[type=radio]:not(.toggle, .star, .make-switch)").uniform();
+            $("#formname-error").hide();
+
+            $('#fg_form_save').on('click', function () {
+                if ($.trim($("#formname").val()) == '') {
+                    $("#formname-error").show();
+                    $("#form-name-group").addClass('has-error');
+                    $("#formname-error").html("{{'FORM_NAME_NULL_VALIDATION'|trans}}")
+                    return false;
+                } else {
+                    $("#formname-error").hide();
+                    $("#form-name-group").removeClass('has-error');
+                    var data = {'formName': $("#formname").val(), 'formType': $("input[name='contact_form_type']:checked").val()};
+                    FgXmlHttp.post('{{path('contact_application_form_save')}}', data, false, callBackFn, failCallback, 2);
+                    return false;
+                }
+
+            })
+            //cancel button event bind
+            $("#fg-cancel").on("click", function () {
+                window.location = "{{path('contact_application_form_list')}}";
+            })
+
+        });
+    </script>
+{% endblock %}

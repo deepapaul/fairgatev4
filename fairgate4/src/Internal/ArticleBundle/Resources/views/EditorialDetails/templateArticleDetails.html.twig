@@ -1,0 +1,62 @@
+<script type="text/template" id="templateArticleDetails">  
+        <div class="col-md-8 col-md-offset-2  page-title-wrapper">
+            <h3 class="page-title ">
+                <span class="page-title-text">
+                 <% if(typeof (ArticleData.article.text[defaultClubLang]) != 'undefined') { %>
+            <%- (ArticleData.article.text[defaultClubLang].title) ? ArticleData.article.text[defaultClubLang].title : ArticleData.article.text.default.title %>    
+            <% } else { %>
+            <%- ArticleData.article.text.default.title %>
+            <% } %>
+                </span>   
+            </h3>
+        </div>
+        <div class="clearfix"></div>
+
+        <% var position = ArticleData.article.media.position;
+        if( position === 'left_column' ){ %>
+                    
+            <div class="col-md-7 col-lg-6 col-md-offset-2 col-sm-8 fg-news-contents">                
+                <% if($.trim(content.media).length > 0) { %>
+                <div class="col-sm-3 col-xs-12 left-col pull-left fg-pad-left-0 fg-marg-btm-10 fg-marg-right-10"><%= content.media %></div>
+                <% } %>
+                <% if(typeof (ArticleData.article.text[defaultClubLang]) != 'undefined') { %>
+               <%= (ArticleData.article.text[defaultClubLang].text) ? ArticleData.article.text[defaultClubLang].text : ArticleData.article.text.default.text %>
+        <% } else { %>
+            <%= ArticleData.article.text.default.text %>
+            <% } %>
+        {#       <%= content.text %>#}
+            </div>
+            <div class="col-md-3 col-sm-4"><%= content.link %></div>
+
+        <% } else if( position === 'right_column' ){ %>
+        
+                <div class="col-md-7 col-lg-6 col-md-offset-2 col-sm-8 fg-news-contents">
+                        <div class="row">
+                            <% if($.trim(content.media).length > 0) { %>
+                                <div class="col-md-9 col-xs-12 col-sm-8 left-col"><%= content.text %></div>
+                                <div class="col-md-3 col-xs-12 col-sm-4 fg-pad-right-0 fg-marg-btm-10"><%= content.media %></div>
+                            <% } else { %>
+                                <div class="col-md-12 left-col"><%= content.text %></div>
+                            <% } %>                    
+                        </div>
+                    </div>
+            <div class="col-md-3 col-sm-4"><%= content.link %></div>
+        
+        <% } else if( position === 'top_slider' ){ %>
+        
+            <div class="col-md-7 col-lg-6 col-md-offset-2 col-sm-8 fg-news-contents">
+                <%= content.slider %>
+                <%= content.text %>
+            </div>
+            <div class="col-md-3 col-sm-4"><%= content.link %></div>
+    
+        <% } else if( position === 'bottom_slider' ){ %>
+        
+            <div class="col-md-7 col-lg-6 col-md-offset-2 col-sm-8 fg-news-contents">
+                <%= content.text %>
+                <%= content.slider %>
+            </div>
+            <div class="col-md-3 col-sm-4"><%= content.link %></div>
+        
+        <% } %>
+</script>

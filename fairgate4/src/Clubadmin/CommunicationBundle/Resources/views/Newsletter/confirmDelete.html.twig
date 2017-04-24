@@ -1,0 +1,61 @@
+<div class="modal-header fg-modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">{{deleteTitle}}</h4>
+</div>
+<div class="modal-body fg-modal-text">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="#" class="form-horizontal form-row-sepe" id="archivecontacts">
+                    <div class="form-body">
+                        
+                        <div id="block_0" class="fg-dev-archive-content">
+                            <p class="fg-dev-archive-status-txt">{{deleteDesc}}</p>
+                        </div>
+
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer form-actions fg-modal-footer">
+    <button type="button" class="btn default" id="cancel" data-dismiss="modal" data-function="cancel">{{'CANCEL'|trans}}</button> 
+    <button type="button" class="btn green" id="save" data-function="save">{{'CONFIRM_DUPLICATE_BUTTON'|trans}}</button>        
+</div> 
+<script type="text/javascript">
+    var clubId = '{{clubId}}';
+    var actionType = '{{actionType}}';
+    var selActionType = '{{selActionType}}';
+    var newsletterId = '{{newsletterId}}';
+    var delClickedTr = '';    
+     
+    $(document).off('click', 'button[data-function=save], button[data-function=cancel]');
+    $(document).on('click', 'button[data-function=save], button[data-function=cancel]', function() {
+        var buttonId = this.id;
+        if (buttonId === 'save') {
+            deleteNewsletterDraftFun();
+        } 
+    });
+    
+    function deleteNewsletterDraftFun() {
+        var selectedId = JSON.stringify(newsletterId);
+        
+        $('#popup').modal('hide');
+        var passingData = {'selectedId':selectedId,'actionType': actionType,'fromPage': 'news_list'};
+        FgXmlHttp.post('{{path("confirm_delete_draft_newsletter")}}', passingData, false, callBackFn);
+    }
+    function callBackFn(resultParms) {                
+        if (!$.isEmptyObject(draftDataTableName)) {          
+            draftDataTableName.api().ajax.reload(ajaxcallback);
+        } 
+    } 
+    function ajaxcallback(){
+        var recordsTotal = draftDataTableName.api().page.info().recordsTotal;
+        if(recordsTotal == 0){
+           draftDataTableName.parents('.fg-dev-dataTable-hide-wrapper').hide();
+        }
+    }
+</script>

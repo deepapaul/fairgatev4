@@ -1,0 +1,60 @@
+<div class="modal fade" id="fg-cms-page-sidebar" tabindex="-1" role="basic" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header fg-modal-has-languagebar">
+                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title fg-modal-title">{{'CMS_INCLUDE_SIDECOLUMN'|trans}}</h4>
+                
+            </div>
+
+            <div class="modal-body fg-cms-create-modal">
+                <form id="cms_sidebar_page_form">
+                    
+                    <div class="form-group fg-clear">
+                        <label class="control-label text-right col-md-3">{{'CMS_SIDE_COLUMN'|trans}}</label>
+                        <ul class="col-md-9 fg-side-col-wrapper">
+                           
+                            <li class="fg-side-col-layout" data-sbType="small" data-sbArea="right">
+                                <div class="fg-side-col-layout-inner active">
+                                    <div class="fg-layout-2  fg-layout-box"></div>
+                                </div>  
+                                <label for="" class="fg-layout-title">{{'CMS_SMALL_SIDE_COLUMN_RIGHT'|trans({'%br%':'<br>'})|raw}}</label>   
+                            </li>
+                            <li class="fg-side-col-layout" data-sbType="small" data-sbArea="left">
+                                <div class="fg-side-col-layout-inner">
+                                    <div class="fg-layout-3 fg-layout-box" ></div>
+                                </div>  
+                                <label for="" class="fg-layout-title">{{'CMS_SMALL_SIDE_COLUMN_LEFT'|trans({'%br%':'<br>'})|raw}}</label>   
+                            </li>
+                            <li class="fg-side-col-layout" data-sbType="wide" data-sbArea="right">
+                                <div class="fg-side-col-layout-inner">
+                                    <div class="fg-layout-4  fg-layout-box"></div>
+                                </div>      
+                                <label for="" class="fg-layout-title">{{'CMS_SIDE_COLUMN_RIGHT'|trans({'%br%':'<br>'})|raw}}</label>
+                            </li>
+                            <li class="fg-side-col-layout" data-sbType="wide" data-sbArea="left">
+                                <div class="fg-side-col-layout-inner">
+                                    <div class="fg-layout-5  fg-layout-box"></div>
+                                </div>    
+                                <label for="" class="fg-layout-title">{{'CMS_SIDE_COLUMN_LEFT'|trans({'%br%':'<br>'})|raw}}</label>                                                    
+                            </li>
+                        </ul>
+                    </div>
+                    <input type="hidden" class="form-control input-md" name="cmsSidebarType" id="cmsSidebarType" value="small"/>
+                    <input type="hidden" class="form-control input-md" name="cmsSidebarArea" id="cmsSidebarArea" value="right" />
+                    <input type="hidden" class="form-control input-md" name="cmsPageId" id="cmsPageId" value="{{pagecontentData.page.id}}">
+                    <input type="hidden" class="form-control input-md" name="cmsPageSidebarType" id="cmsPageSidebarAction" >
+                 </form>   
+            </div> 
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">{{ 'CANCEL'|trans }}</button>
+                <button type="button" class="btn green" id="saveSidebarBtn">{{ 'SAVE'|trans }}</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+

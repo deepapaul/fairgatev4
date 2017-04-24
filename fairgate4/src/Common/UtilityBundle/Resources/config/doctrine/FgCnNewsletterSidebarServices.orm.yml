@@ -1,0 +1,32 @@
+Common\UtilityBundle\Entity\FgCnNewsletterSidebarServices:
+    repositoryClass: Common\UtilityBundle\Repository\FgCnNewsletterSidebarServicesRepository
+    type: entity
+    table: fg_cn_newsletter_sidebar_services
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        newsletterSidebar:
+            targetEntity: FgCnNewsletterSidebar
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                newsletter_sidebar_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        service:
+            targetEntity: FgSmServices
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                service_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

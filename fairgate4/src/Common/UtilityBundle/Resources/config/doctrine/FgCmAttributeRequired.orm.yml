@@ -1,0 +1,40 @@
+Common\UtilityBundle\Entity\FgCmAttributeRequired:
+    type: entity
+    table: fg_cm_attribute_required
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        attribute:
+            targetEntity: FgCmAttribute
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                attribute_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        membership:
+            targetEntity: FgCmMembership
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                membership_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

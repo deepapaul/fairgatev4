@@ -1,0 +1,118 @@
+clubadmin_general_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: ClubadminGeneralBundle:Default:index }
+    
+show_dashboard:
+    path:  /
+    defaults: { _controller: ClubadminGeneralBundle:Dashboard:index }
+    
+dashboard:
+    path: /dashboard
+    defaults: { _controller: ClubadminGeneralBundle:Dashboard:index }
+    
+rss_feed_fairgatev4:
+    path: /dashboard/rss
+    defaults: { _controller: ClubadminGeneralBundle:Dashboard:getFeed }
+    
+gender_percentile:
+    path: /dashboard/genderpercentile
+    defaults: { _controller: ClubadminGeneralBundle:Dashboard:getGenderPercentile}
+    
+membership_percentile:
+    path: /dashboard/membershippercentile
+    defaults: { _controller: ClubadminGeneralBundle:Dashboard:getMembershipPercentile}
+clubmembership_percentile:
+    path: /dashboard/clubmembershippercentile
+    defaults: { _controller: ClubadminGeneralBundle:Dashboard:getclubMembershipPercentile}
+origin_percentile:
+    path: /dashboard/originpercentile
+    defaults: { _controller: ClubadminGeneralBundle:Dashboard:getOriginPercentile}
+
+dashboard_newsletter:
+    path: /dashboard/newsletter
+    defaults: { _controller: ClubadminGeneralBundle:Dashboard:getNewsletterStackedChart }
+    
+dashboard_simplemail:
+    path: /dashboard/simplemail
+    defaults: { _controller: ClubadminGeneralBundle:Dashboard:getSimplemailStackedChart }    
+    
+dashboard_nextBirthdays:    
+    path: /dashboard/nextbirthdays
+    defaults: { _controller: ClubadminGeneralBundle:Dashboard:getNextBirthdays } 
+    
+dashboard_year_of_birth:
+    path: /dashboard/yearofbirth
+    defaults: { _controller: ClubadminGeneralBundle:Dashboard:getYearOfBirthPercentile}
+
+display_header:
+    path:  /header
+    defaults: { _controller: ClubadminGeneralBundle:Default:header }
+settings_language:
+    path:  /settings/language
+    defaults: { _controller: ClubadminGeneralBundle:Settings:index, module:settings, level1:settingstabs}
+settings_salutations:
+    path:  /settings/salutations
+    defaults: { _controller: ClubadminGeneralBundle:Settings:salutations, module:settings, level1:settingstabs }    
+settings_terminology:
+    path:  /settings/terminology
+    defaults: { _controller: TerminologyBundle:Terminology:index, module:settings, level1:settingstabs }    
+settings_agelimits:
+    path:  /settings/agelimits
+    defaults: { _controller: ClubadminGeneralBundle:Settings:agelimits, module:settings, level1:settingstabs }    
+settings_groups:
+    path:  /settings/groups
+    defaults: { _controller: ClubadminGeneralBundle:Settings:groups, module:settings, level1:settingstabs }    
+settings_misc:
+    path:  /settings/misc
+    defaults: { _controller: ClubadminGeneralBundle:Settings:misc, module:settings, level1:settingstabs} 
+settings_misc_save:
+    path:  /settings/savemisc
+    defaults: { _controller: ClubadminGeneralBundle:Settings:miscSave } 
+settings_agelimits_save:
+    path:  /settings/agelimitssave
+    defaults: { _controller: ClubadminGeneralBundle:Settings:updatecontactagelimits} 
+settings_language_getdata:
+    path:  /settings/getlanguages
+    defaults: { _controller: ClubadminGeneralBundle:Settings:getLanguage}
+settings_language_save:
+    path:  /settings/languagessave
+    defaults: { _controller: ClubadminGeneralBundle:Settings:languagesave}
+settings_salutations_save:
+    path:  /settings/salutationssave
+    defaults: { _controller: ClubadminGeneralBundle:Settings:salutationssave}
+settings_lang_check_corr:
+    path:  /settings/checkcorrlang
+    defaults: { _controller: ClubadminGeneralBundle:Settings:checkContactWithCorrLang}
+gallery_gallerydetails_ajax:
+    path: /gallery/gallerydetails
+    defaults: { _controller: InternalGalleryBundle:GalleryBrowser:getGalleryDetailsAjax } 
+gallery_browser:
+    path: /gallery/browser
+    defaults: { _controller: InternalGalleryBundle:GalleryBrowser:index } 
+clear_localstorage:
+    path:     /clearlocalstorage
+    defaults: { _controller: ClubadminGeneralBundle:Default:clearLocalstorage } 
+backend_tmp_upload_file:
+    path:  /profileimage/uploadfile/{type}
+    defaults: { _controller: ClubadminCommunicationBundle:NewsletterWizardContent:uploadFile} 
+settings_book_gc_api_service:
+    path:  /settings/bookgcapi
+    defaults: { _controller: ClubadminGeneralBundle:GotCourtsApi:bookGotCourtsApiService}    
+settings_generate_gc_api_token:
+    path:  /settings/generatetoken
+    defaults: { _controller: ClubadminGeneralBundle:GotCourtsApi:generateApiToken}    
+settings_cancel_gc_api_service:
+    path:  /settings/cancelgcapi
+    defaults: { _controller: ClubadminGeneralBundle:GotCourtsApi:cancelGotCourtsApiService}    
+api_response_log:
+    path:  /filemanager/apilog
+    defaults: { _controller: ClubadminGeneralBundle:ApiLog:accesslog, module : filemanager,level1 : files}  
+api_response_log_data:
+    path:  /apilog/data
+    defaults: { _controller: ClubadminGeneralBundle:ApiLog:getLogs}  
+settings_apiservice_log:
+    path:  /settings/apiServiceLog
+    defaults: { _controller: ClubadminGeneralBundle:Settings:apiServiceLog, module:settings, level1:settingstabs}     
+api_response_gc_log_data:
+    path:  /gotcourtsapi/logdata
+    defaults: { _controller: ClubadminGeneralBundle:Settings:getGotCourtsApiLog}  

@@ -1,0 +1,6 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout_login.html.twig' %}
+{% set pageTitle = 'RESET_PASSWORD_PAGE_TITLE_NEW'|trans %}
+{% form_theme form 'CommonUtilityBundle:Form:reset_page_login.html.twig' %}
+{% block logincontent %}
+    {% include "CommonUtilityBundle:Resetting:reset_content.html.twig" %}
+{% endblock %}

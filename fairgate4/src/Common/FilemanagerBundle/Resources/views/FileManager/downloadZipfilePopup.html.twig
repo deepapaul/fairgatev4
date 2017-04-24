@@ -1,0 +1,61 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">{{ title|raw }}</h4>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form id="filedownload" class="form-horizontal" method="post" onsubmit="return false;" novalidate="novalidate">
+                    <div class="alert alert-danger display-hide">
+                        <button class="close" data-close="alert"></button>
+                        {%trans%}FORM_ERROR_DISPLAY{%endtrans%}
+                    </div>
+                    <div class="form-group required">            
+                        <div class="col-md-12 fg-marg-top-15">
+                            <label class="col-lg-3 col-md-4 text-right fg-pad-0">
+                                {{ text|raw }}
+                            </label> 
+                            <div class="col-lg-9 col-md-8">
+                                <input type="text" class="form-control input-sm fg-input-area fg-dev-newfield fg-dev-valid" name="filename" id= "filename" value="archive.zip" required="true" />
+                                <div id="contactError" class="fg-label-error hide" ></div>   
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+     {% include 'internal/savebuttonPopup.html.twig' with {'button_val' : button_val}  %}
+</div>
+<script type="text/javascript">
+    var fieldIds = '{{ filearray|raw }}';
+    $(document).off('click', '#savePopup');
+    $(document).on('click', '#savePopup', function () {
+         $("#contactError").html('');
+
+        var zipfile = $('.fg-dev-valid').val();
+        if ($('.fg-dev-valid').val() == ''){
+            $('#contactError').removeClass('hide');
+            $('#filedownload .form-group').addClass('has-error');
+            $("#contactError").html("{{ 'FIELD_REQUIRED_MESSAGE'|trans }}");
+        }else{
+
+
+        var params = {'filename': zipfile, 'fieldIds': fieldIds};
+        $('#tempform').remove();
+        $form = $("<form id='tempform' method='post' action='{{ path('filemanager_zip_download') }}'></form>");
+        _.each(params, function(value, name){
+            $form.append('<input type="hidden" name="'+name+'" value="'+value+'">');
+        })
+        $('body').append($form);
+        $form.submit();
+        FgModelbox.hidePopup();
+        } 
+    });
+
+
+</script>    
+

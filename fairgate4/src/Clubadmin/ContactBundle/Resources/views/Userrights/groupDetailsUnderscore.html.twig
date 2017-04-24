@@ -1,0 +1,544 @@
+<script type="text/template" id="fg-dev-group_details-list">
+  <%
+        admin = _(groupDetails).filter(function (x) { return ((x['type']=='club' ||x['type']=='federation' ) && x['module_type']=='all');});
+        moduleAdmins = _(groupDetails).filter(function (x) { return (x['type']=='club' && x['module_type']!='all');});
+        cmsAdmins = _(groupDetails).filter(function (x) { return (x['type']=='club' && x['module_type']=='cms');});
+        teamAdmin = _(teamGroupsDetails).filter(function (x) { return (x['type']=='role' && x['module_type']=='all');});
+        pageAdmins = _(pageGroupDetails).filter(function (x) { return (x['type']=='page' && x['module_type']=='cms');});
+        selectedPageAdmins = _(pageGroupUserDetails).filter(function (x) { return (x['type']=='page' && x['module_type']=='cms');});
+        var groupedPgAdmins = FgUtility.groupByMulti(selectedPageAdmins, ['pageId']);
+        
+        //team admin exisiting list
+        selectedTeamAdmins = _(teamGroupUserDetails).filter(function (x) { return (x['type']=='role' && x['module_type']=='all' && x['roleType']=='T');});
+        var groupedTeamAdmins = FgUtility.groupByMulti(selectedTeamAdmins, ['role_id']); // grouping using team id
+        
+        //team admin exisiting list
+        selectedWgAdmins = _(teamGroupUserDetails).filter(function (x) { return (x['type']=='role' && x['module_type']=='all' && x['roleType']=='W');});
+        var groupedWgAdmins = FgUtility.groupByMulti(selectedWgAdmins, ['role_id']); // grouping using team id
+        //team section exisitng list
+        selectedTeamModuleAdmins = _(teamGroupUserDetails).filter(function (x) { return (x['type']=='role' && x['module_type']!='all' && x['roleType']=='T');});
+        var groupedTeamModuleAdmins = FgUtility.groupByMulti(selectedTeamModuleAdmins, ['role_id']); // grouping using team id
+       
+        //workgrp section existing list
+        selectedWgModuleAdmins = _(teamGroupUserDetails).filter(function (x) { return (x['type']=='role' && x['module_type']!='all' && x['roleType']=='W');});
+        var groupedWgModuleAdmins = FgUtility.groupByMulti(selectedWgModuleAdmins, ['role_id']); // grouping using team id
+        //list of teams
+        teamList = _(dropDownList).filter(function(list){ return (list['type']=='T');});
+        //list of workgrps
+        workgroupList = _(dropDownList).filter(function(list){ return (list['type']=='W');});
+        var internalAdmin = FgUtility.groupByMulti(internalAdmin, ['contact_id']); 
+    %>
+    <div class="row">
+        <div class="col-md-6"> 
+            <div class="row">
+                        <div class="col-md-12 fg-common-top"><div class="panel-heading fg-theme-head"><h3 class="fg-panel-title">{{'USER_RIGHTS_PAGE_ADMINISTRATION'|trans}}</h3></div> </div>
+                <div class="col-md-12 fg-user-div fg-common-top">
+                
+                    <% _.each(admin,function(groupDetailsVal,groupDetailsKey){ %>
+                        <div class="row fg-border-line sortables">
+                            <div class="col-md-8 col-sm-10 col-xs-12">
+                                <% if(groupDetailsVal.type=='club') { %>
+                                    {{'GROUP_DETAILS_ADMINISTRATOR'|trans ({'%terminologyparam%' : fgtwig.getTerminolgyName('Club',singular,'UCF')})}}  <a href="#" class="fg-user-tooltip"><i class="fa fa-info-circle" data-toggle="tooltip" data-tooltip="{{'GROUP_DETAILS_CLUB_ADMINISTRATOR_POPHOVER'|trans}}"></i></a>
+                                <% }else{ %>
+                                     {{'GROUP_DETAILS_ADMINISTRATOR'|trans ({'%terminologyparam%' : fgtwig.getTerminolgyName('Federation',singular,'UCF')})}}  <a href="#" class="fg-user-tooltip"><i class="fa fa-info-circle" data-toggle="tooltip" data-tooltip="{{'GROUP_DETAILS_FEDERATION_ADMINISTRATOR_POPHOVER'|trans}}"></i></a>
+                                 <% } %>
+                            </div>
+                
+                            <div class="col-md-3 col-sm-2 col-xs-12 pull-right">
+                            
+                                <% if(content.hasOwnProperty(groupDetailsVal['group_id'])) {//fg-switch-inactive 
+                                     if(contact==content[groupDetailsVal['group_id']]['contact_id']) { %>
+                                        <label onclick="" class="switch-light switch-light-sm switchhwd fg-switch-right <% if(loggedContactId == content[groupDetailsVal['group_id']]['contact_id']) { %> fg-switch-inactive <% } %>">
+                                        <input type="checkbox"  data-key="delete.group.<%- content[groupDetailsVal['group_id']]['group_id'] %>.user.<%- content[groupDetailsVal['group_id']]['user_id'] %>" id="delete_group_<%- content[groupDetailsVal['group_id']]['group_id'] %>_user_<%- content[groupDetailsVal['group_id']]['user_id'] %>" name="delete_group_<%- content[groupDetailsVal['group_id']]['group_id'] %>_user_<%- content[groupDetailsVal['group_id']]['user_id'] %>" class="make-switch" checked <% if(loggedContactId == content[groupDetailsVal['group_id']]['contact_id']) { %> disabled <% } %> >
+                                     <% } else { %>
+                                        <label onclick="" class="switch-light switch-light-sm switchhwd fg-switch-right">
+                                        <input type="checkbox"  data-key="new.group.<%- groupDetailsVal.group_id %>.contact.<%- contact %>" id="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" name="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" class="make-switch" >
+                                     <% } %>
+                                <% } else { %>
+                                    <label onclick="" class="<% if((hasFedAdminEligibility == 0 || c5 == 0) && groupDetailsVal.type == 'federation'){ %> fg-switch-inactive <% } %> switch-light switch-light-sm switchhwd fg-switch-right">
+                                    <input <% if((hasFedAdminEligibility == 0 || c5 == 0) && groupDetailsVal.type=='federation'){ %> disabled <% } %> type="checkbox"  data-key="new.group.<%- groupDetailsVal.group_id %>.contact.<%- contact %>" id="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" name="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" class="make-switch" >
+                                <% } %>
+                                    <span>                            
+                                        <span>{{'ON'|trans}}</span>
+                                        <span>{{'OFF'|trans}}</span>
+                                    </span>
+                                    <a class="btn btn-primary "></a>
+                                </label>
+                            </div>
+                        </div>
+                    <% }); %>
+                    <div class="row fg-border-line sortables">
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                             {{'USER_RIGHTS_ADMINISTRATION_SECTION'|trans}}
+                        </div>
+                        
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <div class="fg-adminstration-wrap">
+                                <div class="fg-adminstration-area"><i class="fa fa-plus-square-o"></i><i class="fa fa-minus-square-o"></i></div>
+                                <div class="fg-adminstration-area-icons">
+                                    <% _.each(moduleAdmins,function(groupDetailsVal,groupDetailsKey){
+                                        if(groupDetailsVal['module_type'] != 'contact' && groupDetailsVal['is_readonly'] != 1) {
+                                            if(typeof(bookedModuleDetails) != "undefined" && bookedModuleDetails !== null) {
+                                                if(bookedModuleDetails.hasOwnProperty(groupDetailsVal['module_type'])) {
+                                                    if(content.hasOwnProperty(groupDetailsVal['group_id'])) {
+                                                        if(contact==content[groupDetailsVal['group_id']]['contact_id']) { %>
+                                                            <a href="javascript:void(0)"><i class="fa fg-fa-<%- groupDetailsVal['module_type'] %>"  data-toggle="tooltip"></i></a>
+                                                        <% } else { %>
+                                                            <a href="javascript:void(0)"><i class="fa fg-fa-<%- groupDetailsVal['module_type'] %> red"  data-toggle="tooltip"></i></a>
+                                                        <% } %>
+                                                    <% } else { %>
+                                                        <a href="javascript:void(0)"><i class="fa fg-fa-<%- groupDetailsVal['module_type'] %> red"  data-toggle="tooltip"></i></a>
+                                                    <% } %>
+                                                <% }
+                                            } %>
+                                        <% } else if(groupDetailsVal['module_type'] == 'contact' && groupDetailsVal['is_readonly'] != 1) { %>
+                                            <% if(content.hasOwnProperty(groupDetailsVal['group_id'])) {
+                                                if(contact==content[groupDetailsVal['group_id']]['contact_id']) { %>
+                                                    <a href="javascript:void(0)"><i class="fa fg-fa-<%- groupDetailsVal['module_type'] %>"  data-toggle="tooltip"></i></a>
+                                                <% } else { %>
+                                                    <a href="javascript:void(0)"><i class="fa fg-fa-<%- groupDetailsVal['module_type'] %> red"  data-toggle="tooltip"></i></a>
+                                                <% } %>
+                                            <% } else { %>
+                                                <a href="javascript:void(0)"><i class="fa fg-fa-<%- groupDetailsVal['module_type'] %> red"  data-toggle="tooltip"></i></a>
+                                            <% }
+                                        }
+                                    }); %>
+                                </div>
+                            </div>                    
+                        </div>
+                        <div class="fg-adminstration-area-open ">
+                            <ul>
+                                <% _.each(moduleAdmins,function(groupDetailsVal,groupDetailsKey){
+                                    if(groupDetailsVal['module_type'] != 'contact' && groupDetailsVal['is_readonly'] != 1) {
+                                        if(typeof(bookedModuleDetails) != "undefined" && bookedModuleDetails !== null) {
+                                            if(bookedModuleDetails.hasOwnProperty(groupDetailsVal['module_type'])) {
+                                                if(content.hasOwnProperty(groupDetailsVal['group_id'])) { 
+                                                    if(contact==content[groupDetailsVal['group_id']]['contact_id']) { %>
+                                                        <li><input type="checkbox" data-key="delete.group.<%- content[groupDetailsVal['group_id']]['group_id'] %>.user.<%- content[groupDetailsVal['group_id']]['user_id'] %>" id="delete_group_<%- content[groupDetailsVal['group_id']]['group_id'] %>_user_<%- content[groupDetailsVal['group_id']]['user_id'] %>" name="delete_group_<%- content[groupDetailsVal['group_id']]['group_id'] %>_user_<%- content[groupDetailsVal['group_id']]['user_id'] %>" checked <% if(loggedContactId == content[groupDetailsVal['group_id']]['contact_id']) { %> disabled <% } %>  /> <%- transAdministration[groupDetailsVal['module_type']] %></li>
+                                                    <% } else { %>
+                                                        <li><input type="checkbox"  data-key="new.administrator.admin.group.<%- groupDetailsVal.group_id %>.contact.<%- contact %>" id="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" name="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" /><%- transAdministration[groupDetailsVal['module_type']] %></li>
+                                                    <% }
+                                                } else { %>
+                                                    <li><input type="checkbox"  data-key="new.administrator.admin.group.<%- groupDetailsVal.group_id %>.contact.<%- contact %>" id="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" name="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" /><%- transAdministration[groupDetailsVal['module_type']] %></li>
+                                                <% }
+                                            }
+                                        }
+                                    } else if(groupDetailsVal['module_type'] == 'contact' && groupDetailsVal['is_readonly'] != 1){
+                                        if(content.hasOwnProperty(groupDetailsVal['group_id'])) { 
+                                            if(contact==content[groupDetailsVal['group_id']]['contact_id']) { %>
+                                                <li><input type="checkbox" data-key="delete.group.<%- content[groupDetailsVal['group_id']]['group_id'] %>.user.<%- content[groupDetailsVal['group_id']]['user_id'] %>" id="delete_group_<%- content[groupDetailsVal['group_id']]['group_id'] %>_user_<%- content[groupDetailsVal['group_id']]['user_id'] %>" name="delete_group_<%- content[groupDetailsVal['group_id']]['group_id'] %>_user_<%- content[groupDetailsVal['group_id']]['user_id'] %>" checked <% if(loggedContactId == content[groupDetailsVal['group_id']]['contact_id']) { %> disabled <% } %>  /> <%- transAdministration[groupDetailsVal['module_type']] %></li>
+                                            <% } else { %>
+                                                <li><input type="checkbox"  data-key="new.administrator.admin.group.<%- groupDetailsVal.group_id %>.contact.<%- contact %>" id="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" name="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" /><%- transAdministration[groupDetailsVal['module_type']] %></li>
+                                            <% } %>
+                                        <% } else { %>
+                                            <li><input type="checkbox"  data-key="new.administrator.admin.group.<%- groupDetailsVal.group_id %>.contact.<%- contact %>" id="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" name="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" /><%- transAdministration[groupDetailsVal['module_type']] %></li>
+                                        <% }
+                                    }
+                                }); %>
+                            </ul>
+                        </div>
+                    </div> 
+            
+            
+                    <div class="row fg-border-line sortables">
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                {{'USER_RIGHTS_READONLY_SECTION'|trans}}
+                        </div>
+                        
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <div class="fg-adminstration-wrap">
+                                <div class="fg-adminstration-area"><i class="fa fa-plus-square-o"></i><i class="fa fa-minus-square-o"></i></div>
+                                <div class="fg-adminstration-area-icons">
+                                    <% _.each(moduleAdmins,function(groupDetailsVal,groupDetailsKey){
+                                        if(groupDetailsVal['module_type'] != 'contact' && groupDetailsVal['is_readonly'] == 1) {
+                                            if(typeof(bookedModuleDetails) != "undefined" && bookedModuleDetails !== null) {
+                                                if(bookedModuleDetails.hasOwnProperty(groupDetailsVal['module_type'])) {
+                                                    if(content.hasOwnProperty(groupDetailsVal['group_id'])) {
+                                                        if(contact==content[groupDetailsVal['group_id']]['contact_id']) { %>
+                                                            <a href="javascript:void(0)"><i class="fa fg-fa-<%- groupDetailsVal['module_type'] %>"  data-toggle="tooltip"></i></a>
+                                                        <% } else { %>
+                                                            <a href="javascript:void(0)"><i class="fa fg-fa-<%- groupDetailsVal['module_type'] %> red"  data-toggle="tooltip"></i></a>
+                                                        <% } %>
+                                                    <% } else { %>
+                                                        <a href="javascript:void(0)"><i class="fa fg-fa-<%- groupDetailsVal['module_type'] %> red"  data-toggle="tooltip"></i></a>
+                                                    <% } %>
+                                                <% }
+                                            } %>
+                                        <% } else if(groupDetailsVal['module_type'] == 'contact' && groupDetailsVal['is_readonly'] == 1) { %>
+                                            <% if(content.hasOwnProperty(groupDetailsVal['group_id'])) {
+                                                if(contact==content[groupDetailsVal['group_id']]['contact_id']) { %>
+                                                    <a href="javascript:void(0)"><i class="fa fg-fa-<%- groupDetailsVal['module_type'] %>"  data-toggle="tooltip"></i></a>
+                                                <% } else { %>
+                                                    <a href="javascript:void(0)"><i class="fa fg-fa-<%- groupDetailsVal['module_type'] %> red"  data-toggle="tooltip"></i></a>
+                                                <% } %>
+                                            <% } else { %>
+                                                <a href="javascript:void(0)"><i class="fa fg-fa-<%- groupDetailsVal['module_type'] %> red"  data-toggle="tooltip"></i></a>
+                                            <% }
+                                        }
+                                    }); %>
+                                </div>
+                            </div>                    
+                        </div>
+                        <div class="fg-adminstration-area-open ">
+                            <ul>
+                                <% _.each(moduleAdmins,function(groupDetailsVal,groupDetailsKey){
+                                    if(groupDetailsVal['module_type'] != 'contact' && groupDetailsVal['is_readonly'] == 1) {
+                                        if(typeof(bookedModuleDetails) != "undefined" && bookedModuleDetails !== null) {
+                                            if(bookedModuleDetails.hasOwnProperty(groupDetailsVal['module_type'])) {
+                                                if(content.hasOwnProperty(groupDetailsVal['group_id'])) { 
+                                                    if(contact==content[groupDetailsVal['group_id']]['contact_id']) { %>
+                                                        <li><input type="checkbox" data-key="delete.group.<%- content[groupDetailsVal['group_id']]['group_id'] %>.user.<%- content[groupDetailsVal['group_id']]['user_id'] %>" id="delete_group_<%- content[groupDetailsVal['group_id']]['group_id'] %>_user_<%- content[groupDetailsVal['group_id']]['user_id'] %>" name="delete_group_<%- content[groupDetailsVal['group_id']]['group_id'] %>_user_<%- content[groupDetailsVal['group_id']]['user_id'] %>" checked <% if(loggedContactId == content[groupDetailsVal['group_id']]['contact_id']) { %> disabled <% } %>  /> <%- transAdministration[groupDetailsVal['module_type']] %></li>
+                                                    <% } else { %>
+                                                        <li><input type="checkbox"  data-key="new.readonly.admin.group.<%- groupDetailsVal.group_id %>.contact.<%- contact %>" id="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" name="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" /><%- transAdministration[groupDetailsVal['module_type']] %></li>
+                                                    <% }
+                                                } else { %>
+                                                    <li><input type="checkbox"  data-key="new.readonly.admin.group.<%- groupDetailsVal.group_id %>.contact.<%- contact %>" id="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" name="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" /><%- transAdministration[groupDetailsVal['module_type']] %></li>
+                                                <% }
+                                            }
+                                        }
+                                    } else if(groupDetailsVal['module_type'] == 'contact' && groupDetailsVal['is_readonly'] == 1){
+                                        if(content.hasOwnProperty(groupDetailsVal['group_id'])) { 
+                                            if(contact==content[groupDetailsVal['group_id']]['contact_id']) { %>
+                                                <li><input type="checkbox" data-key="delete.group.<%- content[groupDetailsVal['group_id']]['group_id'] %>.user.<%- content[groupDetailsVal['group_id']]['user_id'] %>" id="delete_group_<%- content[groupDetailsVal['group_id']]['group_id'] %>_user_<%- content[groupDetailsVal['group_id']]['user_id'] %>" name="delete_group_<%- content[groupDetailsVal['group_id']]['group_id'] %>_user_<%- content[groupDetailsVal['group_id']]['user_id'] %>" checked <% if(loggedContactId == content[groupDetailsVal['group_id']]['contact_id']) { %> disabled <% } %>  /> <%- transAdministration[groupDetailsVal['module_type']] %></li>
+                                            <% } else { %>
+                                                <li><input type="checkbox"  data-key="new.readonly.admin.group.<%- groupDetailsVal.group_id %>.contact.<%- contact %>" id="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" name="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" /><%- transAdministration[groupDetailsVal['module_type']] %></li>
+                                            <% } %>
+                                        <% } else { %>
+                                            <li><input type="checkbox"  data-key="new.readonly.admin.group.<%- groupDetailsVal.group_id %>.contact.<%- contact %>" id="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" name="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" /><%- transAdministration[groupDetailsVal['module_type']] %></li>
+                                        <% }
+                                    }
+                                }); %>
+                            </ul>
+                        </div>
+                    </div>
+                </div> 
+            </div> 
+        </div> 
+                        
+                        
+                           
+        <%if('frontend1' in bookedModuleDetails) { %>
+        <div class="col-md-6">
+            <div class="row"> 
+            <div class="col-md-12 fg-common-top"><div class="panel-heading fg-theme-head"><h3 class="fg-panel-title">{{'USER_RIGHTS_PAGE_GROUP'|trans}}</h3></div> </div>
+                <div class="col-md-12 fg-user-div fg-common-top">
+                    <% _.each(teamAdmin,function(teamClubVal,teamClubKey){ %>
+                        <div class="row fg-border-line sortables fg-team-admin-div ">
+                            <div class="col-lg-5 col-md-5 col-xs-12">
+                                {{'USER_RIGHTS_TEAM_ADMIN'|trans}}
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-xs-12 ">
+                                <select name="team_admin" title="{{'SELECT_DEFAULT'|trans}}" data-key="teams.teamAdmin.9.module.<%- contact %>" id="teams_teamAdmin_9_module_<%- contact %>" name="teams_teamAdmin_9_module_<%- contact %>" multiple  class="selectpicker form-control show-tick">
+
+                                    <% _.each(teamsArray,function(teamVal,teamKey){ %>
+                                        <option value="<%- teamKey %>" class="multiple" <% if(_.isUndefined(groupedTeamAdmins[teamKey])) { %> <% } else { %> selected <% } %> ><%- teamVal %></option>
+                                        
+                                    <% }); %>
+
+
+                                </select>
+                            </div>
+                        </div>  
+                    <% }); %>
+                    <div class="row fg-border-line sortables fg-clear-white-btm ">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                             {{'USER_RIGHTS_TEAM_SECTION'|trans ({'%Team%' : fgtwig.getTerminolgyName('Team',singular,'UCF')})}}
+                        </div>
+                        
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="fg-adminstration-wrap">
+                                <div class="fg-adminstration-area-right">
+                                <i class="fa fa-plus-square-o"></i><i class="fa fa-minus-square-o"></i>
+                                 <% var teamss = _.size(groupedTeamModuleAdmins);%><%- teamss  %><% if(teamss==1){ %> {{fgtwig.getTerminolgyName('Team',singular,'LCF')}}<% } else { %> {{fgtwig.getTerminolgyName('Team',plural,'LCF')}}  <% } %>
+                                </div>
+                            </div>                    
+                        </div>
+                        <div class="fg-right-area-open ">
+                            <div class="fg-internal-blk">
+                                <div class="teamModuleRow">
+                                    <% _.each(groupedTeamModuleAdmins,function(groupedModuleVal,groupedModuleKey){ %>
+                                        <div class="fg-internal-blk-div" id="fg-clrChangeBlk_<%-groupedTeamModuleAdmins[groupedModuleKey][0]['contact_id']%>_<%- groupedModuleKey %>">
+                                        
+                                            <div class="fg-internal-blk-one col-md-5 col-sm-5 col-xs-8"> 
+                                                <select name="team_selection_admin" data-key="teams.teamSection.existing.<%- contact %>.teams" disabled class="selectpicker form-control show-tick">
+                                                    <% _.each(teamsArray,function(teamVal,teamKey){ %>
+                                                        <option value="<%- teamKey %>" class="single" <% if(teamKey == groupedModuleKey) { %> selected <% } %>  ><%- teamVal %></option>
+                                                    <% }); %>
+                                                </select>
+                                            </div>
+                                    
+                                            <div class="fg-internal-blk-two col-md-6 col-sm-6 col-xs-12"> 
+                                                <select name="team_group_selection" title="{{'SELECT_DEFAULT'|trans}}" data-key="teams.teamSection.existing.<%- contact %>.<%-groupedModuleKey %>.modules" multiple  class="selectpicker form-control show-tick">
+                                                    <% _.each(allTeamGroups,function(groupVal,groupKey){ 
+                                                        var gFlag=''; 
+                                                        _.each(groupedModuleVal,function(moduleVal,moduleKey){ 
+                                                            if(moduleVal['group_id']==groupVal.id) { 
+                                                                gFlag = groupVal.id
+                                                            } 
+                                                            var contact = moduleVal['contact_id'];  
+                                                        }); 
+                                                        if(gFlag==groupVal.id) { %>
+                                                            <option value="<%- groupVal.id %>" class="multiple" selected ><%- groupVal.transName %></option>
+                                                        <% } else { %>
+                                                            <option value="<%- groupVal.id %>" class="multiple" ><%- groupVal.transName %></option>
+                                                        <% }
+                                             
+                                                    }); %>
+                                                </select>
+                                        
+                                            </div>
+                                            <input id="include-team-admin-section" name="include-team-admin-section" type="text"  value="<%- contact  %>" class="form-control input-sm hide" data-key="teams.teamSection.existing.contact." />
+                                            <div class="fg-internal-blk-three">
+                                                <% if(contact != loggedContactId) { %>
+                                                <div class="closeico">
+                                                    <input type="checkbox" class="make-switch" id="teams_teamSection_existing_<%- contact %>_<%- groupedModuleKey %>_is_deleted" data-key="teams.teamSection.existing.<%- contact %>.<%- groupedModuleKey %>"  name="teams_teamSection_existing_<%- contact %>_<%- groupedModuleKey %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- contact %>_<%- groupedModuleKey %>">
+                                                    <label for="teams_teamSection_existing_<%- contact %>_<%- groupedModuleKey %>_is_deleted"></label>
+                                                </div>
+                                            <% } else { %>
+                                                <i class="fa fa-lock fa-2x ash"></i>
+                                            <% } %>
+                                            </div>
+                                        </div>
+                                    <% }); %>
+                                </div>
+                               <% if( (_.size(teamsArray)>0) && (_.size(groupedTeamModuleAdmins)!= _.size(teamsArray))) { %>
+                                <div class="fg-internal-add"><a class="fg-dev-add-team-module-admin" data-toggle="modal" href="#basic" id="pencil"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text">{{'ADD_USER_RIGHTS_TEAM'|trans ({'%Team%' : fgtwig.getTerminolgyName('Team',singular,'UCF')})}}</span></a></div>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>   
+                    <% _.each(teamAdmin,function(teamClubVal,teamClubKey){ %>
+                        <div class="row fg-border-line sortables fg-team-admin-div ">
+                            <div class="col-lg-5 col-md-5 col-xs-12">
+                                    {{'USER_RIGHTS_WORKGROUP_ADMINISTRATOR'|trans}}
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-xs-12 ">
+                            
+                                <select name="team_admin" data-key="teams.wgAdmin.9.module.<%- contact %>" title="{{'SELECT_DEFAULT'|trans}}" id="teams_wgAdmin_9_module_<%- contact %>" name="teams_wgAdmin_9_module_<%- contact %>" multiple  class="selectpicker form-control show-tick">
+
+                                    <%  _.each(workgroupList,function(wgVal,wgKey){ %>
+                                        <option value="<%- wgVal.roleId %>" class="multiple" <% if(_.isUndefined(groupedWgAdmins[wgVal.roleId])) { %> <% } else { %> selected <% } %> ><%- wgVal.rTitle  %></option>
+                                        
+                                    <% }); %>
+
+
+                                </select>
+                            </div>
+                        </div>  
+                    <% }); %>
+                    <div class="row fg-border-line sortables fg-clear-white-btm ">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{'USER_RIGHTS_WORKGROUP_SECTION'|trans}}
+                        </div>
+                        
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="fg-adminstration-wrap">
+                                <div class="fg-adminstration-area-right">
+                                <i class="fa fa-plus-square-o"></i><i class="fa fa-minus-square-o"></i>
+                                 <% var teamss = _.size(groupedWgModuleAdmins);%><%- teamss  %><% if(teamss==1){ %> {{'WORKGROUP'|trans}}<% } else { %> {{'WORKGROUPS'|trans}} <% } %>
+                                </div>
+                            </div>                    
+                        </div>
+                        <div class="fg-right-area-open ">
+                            <div class="fg-internal-blk">
+                                <div class="teamModuleRow">
+                                    <% _.each(groupedWgModuleAdmins,function(groupedModuleVal,groupedModuleKey){ %>
+                                        <div class="fg-internal-blk-div" id="fg-clrChangeBlk_<%-groupedWgModuleAdmins[groupedModuleKey][0]['contact_id']%>_<%- groupedModuleKey %>">
+                                        
+                                            <div class="fg-internal-blk-one col-md-5 col-sm-5 col-xs-8"> 
+                                                <select name="wg_selection_admin" title="{{'SELECT_DEFAULT'|trans}}" data-key="teams.wgSection.existing.<%- contact %>.teams" disabled class="selectpicker form-control show-tick">
+                                                    <% _.each(workgroupList,function(wgVal,wgKey){ %>
+                                                        <option value="<%- wgVal.roleId %>" class="single" <% if(wgVal.roleId == groupedModuleKey) { %> selected <% } %>  ><%- wgVal.rTitle %></option>
+                                                    <% }); %>
+                                                </select>
+                                            </div>
+                                    
+                                            <div class="fg-internal-blk-two col-md-6 col-sm-6 col-xs-12"> 
+                                                <select name="wg_group_selection" title="{{'SELECT_DEFAULT'|trans}}" data-key="teams.wgSection.existing.<%- contact %>.<%-groupedModuleKey %>.modules" multiple  class="selectpicker form-control show-tick">
+                                                    <% _.each(allTeamGroups,function(groupVal,groupKey){ 
+                                                        var gFlag=''; 
+                                                        _.each(groupedModuleVal,function(moduleVal,moduleKey){ 
+                                                            if(moduleVal['group_id'] == groupVal.id) { 
+                                                                gFlag = groupVal.id
+                                                            } 
+                                                            var contact = moduleVal['contact_id'];  
+                                                        }); 
+                                                        if(gFlag==groupVal.id) { %>
+                                                            <option value="<%- groupVal.id %>" class="multiple" selected ><%- groupVal.transName %></option>
+                                                        <% } else { %>
+                                                            <option value="<%- groupVal.id %>" class="multiple" ><%- groupVal.transName %></option>
+                                                        <% }
+                                             
+                                                    }); %>
+                                                </select>
+                                            </div>
+                                            <input id="include-wgadmin-section" name="include-wgadmin-section" type="text"  value="<%- contact  %>" class="form-control input-sm hide " data-key="teams.wgSection.existing.contact." />
+                                            <div class="fg-internal-blk-three">
+                                                <% if(contact != loggedContactId) { %>
+                                                <div class="closeico">
+                                                    <input type="checkbox" class="make-switch" id="teams_wgSection_existing_<%- contact %>_<%- groupedModuleKey %>_is_deleted" data-key="teams.wgSection.existing.<%- contact %>.<%- groupedModuleKey %>"  name="teams_wgSection_existing_<%- contact %>_<%- groupedModuleKey %>_is_deleted" data-inactiveblock="changecolor" data-parentid="fg-clrChangeBlk_<%- contact %>_<%- groupedModuleKey %>">
+                                                    <label for="teams_wgSection_existing_<%- contact %>_<%- groupedModuleKey %>_is_deleted"></label>
+                                                </div>
+                                            <% } else { %>
+                                                <i class="fa fa-lock fa-2x ash"></i>
+                                            <% } %>
+                                            </div>
+                                        </div>
+                                    <% }); %>
+                                </div>
+                                <% 
+                                if( (_.size(workgroupList)>0) && (_.size(groupedWgModuleAdmins)!= _.size(workgroupList))) { %>
+                                    <div class="fg-internal-add"><a class="fg-dev-add-wg-module-admin" data-toggle="modal" href="#basic" id="pencil"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text">{{'ADD_USER_RIGHTS_WORKGROUP'|trans }}</span></a></div>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>   
+                </div> 
+            </div>   
+        </div>
+    <div class="fg-clear"></div>   
+    <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12 fg-common-top"><div class="panel-heading fg-theme-head"><h3 class="fg-panel-title">{{'USER_RIGHTS_PAGE_FRONTEND'|trans}}</h3></div> </div>
+                <div class="col-md-12 fg-user-div fg-common-top">
+                    <div class="row fg-border-line sortables">
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            {{'USER_RIGHTS_ADMINISTRATION_SECTIONS'|trans}} 
+                        </div>
+                        
+                        <div class="col-md-6 col-sm-6 col-xs-6">
+                            <div class="fg-adminstration-wrap">
+                                <div class="fg-adminstration-area"><i class="fa fa-plus-square-o"></i><i class="fa fa-minus-square-o"></i></div>
+                                
+                                <div class="fg-adminstration-area-icons">
+
+                                        <% 
+                                        if(typeof internalAdmin[contact]  != "undefined") {
+                                        var rights = [];
+                                        _.each(internalAdmin[contact],function(allAdminsVal,allAdminsKey){ 
+                                            rights.push(allAdminsVal['module_type']);
+                                        }); %>
+                                         <% _.each(internalAdminList, function(list,key){ 
+                                            if(list['name'] == 'Article')  {
+                                                if(_.contains(rights,'article')){  %>
+                                                    <a href="javascript:void(0)"><i class="fa fa-newspaper-o text-green"  data-toggle="tooltip"></i></a>
+                                                <% }else{ %>
+                                                    <a href="javascript:void(0)"><i class="fa fa-newspaper-o text-red"  data-toggle="tooltip"></i></a>
+                                                <% }
+                                            } else if(list['name'] == 'Calendar') {
+                                                if(_.contains(rights,'calendar')){  %>
+                                                    <a href="javascript:void(0)"><i class="fa fa-calendar text-green"  data-toggle="tooltip"></i></a>
+                                                <% }else{ %>
+                                                    <a href="javascript:void(0)"><i class="fa fa-calendar text-red"  data-toggle="tooltip"></i></a>
+                                                <% }
+                                            } else if(list['name'] == 'Gallery')  {
+                                                if(_.contains(rights,'gallery')){  %>
+                                                    <a href="javascript:void(0)"><i class="fa fa-image text-green"  data-toggle="tooltip"></i></a>
+                                                <% }else{ %>
+                                                    <a href="javascript:void(0)"><i class="fa fa-image text-red"  data-toggle="tooltip"></i></a>
+                                                <% }
+                                            } 
+                                          });
+                                      }else{ %>  
+                                                  <a href="javascript:void(0)"><i class="fa fa-newspaper-o text-red"  data-toggle="tooltip"></i></a>
+                                                  <a href="javascript:void(0)"><i class="fa fa-calendar text-red"  data-toggle="tooltip"></i></a> 
+                                                  <a href="javascript:void(0)"><i class="fa fa-image text-red"  data-toggle="tooltip"></i></a>
+                                                  <% } %>
+                                    </div>
+                            </div>                    
+                        </div>
+                        <div class="fg-adminstration-area-open "> 
+                            <ul>
+                                 <% 
+                                 if(typeof internalAdmin[contact]  != "undefined") {
+                                    var rights = [];
+                                    var userid = internalAdmin[contact][0]['user_id']; var contact_id = internalAdmin[contact][0]['contact_id'];
+                                    _.each(internalAdmin[contact],function(allAdminsVal,allAdminsKey){ 
+                                        rights.push(allAdminsVal['module_type']);
+                                    }); %>
+                                    <% _.each(internalAdminList, function(list,key){
+                                        if(list['name'] == 'Article') {
+                                            if(_.contains(rights,'article')){  %>
+                                                <li><input type="checkbox" data-key="delete.group.<%- list['id'] %>.user.<%- userid %>" id="admin_delete_group_<%- list['id'] %>_user_<%- userid %>" name="admin_delete_group_<%- list['id'] %>_user_<%- userid %>" checked <% if(contact == loggedContactId ){ %> disabled <% } %>  /> {{'ARTICLE'|trans}}</li>
+                                            <% }else{ %>
+                                                 <li><input type="checkbox" data-key="new.group.<%- list['id'] %>.contact.<%- contact_id %>" id="admin_new_group_<%- list['id'] %>_contact_<%- contact_id %>" name="admin_new_group_<%- list['id'] %>_contact_<%- contact_id %>" <% if(contact == loggedContactId ){ %> disabled <% } %>  />  {{'ARTICLE'|trans}}</li> 
+                                            <% }
+                                        } else if(list['name'] == 'Calendar') {
+                                            if(_.contains(rights,'calendar')){  %>
+                                                <li><input type="checkbox" data-key="delete.group.<%- list['id'] %>.user.<%- userid %>" id="admin_delete_group_<%- list['id'] %>_user_<%- userid %>" name="admin_delete_group_<%- list['id'] %>_user_<%- userid %>" checked <% if(contact == loggedContactId ){ %> disabled <% } %>  /> {{'CALENDAR'|trans}}</li>
+                                            <% }else{ %>
+                                                 <li><input type="checkbox" data-key="new.group.<%- list['id'] %>.contact.<%- contact_id %>" id="admin_new_group_<%- list['id'] %>_contact_<%- contact_id %>" name="admin_new_group_<%- list['id'] %>_contact_<%- contact_id %>" <% if(contact == loggedContactId ){ %> disabled <% } %>  />  {{'CALENDAR'|trans}}</li> 
+                                            <% }
+                                        } else if(list['name'] == 'Gallery') {
+                                            if(_.contains(rights,'gallery')){  %>
+                                                  <li><input type="checkbox" data-key="delete.group.<%- list['id'] %>.user.<%- userid %>" id="admin_delete_group_<%- list['id'] %>_user_<%- userid %>" name="admin_delete_group_<%- list['id'] %>_user_<%- userid %>" checked <% if(contact == loggedContactId ){ %> disabled <% } %>  /> {{'GALLERY'|trans}}</li>
+                                            <% }else{ %>
+                                                  <li><input type="checkbox" data-key="new.group.<%- list['id'] %>.contact.<%- contact_id %>" id="admin_new_group_<%- list['id'] %>_contact_<%- contact_id %>" name="admin_new_group_<%- list['id'] %>_contact_<%- contact_id %>" <% if(contact == loggedContactId ){ %> disabled <% } %>  /> {{'GALLERY'|trans}}</li> 
+                                            <% }
+                                        }
+                                     }); 
+                                     } else{ %> 
+                                         <li><input type="checkbox" data-key="new.group.20.contact.<%- contact %>" id="admin_new_group_20_contact_<%- contact %>" name="admin_new_group_20_contact_<%- contact %>" <% if(contact == loggedContactId ){ %> disabled <% } %>  />  {{'ARTICLE'|trans}}</li>                                          
+                                         <li><input type="checkbox" data-key="new.group.14.contact.<%- contact %>" id="admin_new_group_14_contact_<%- contact %>" name="admin_new_group_14_contact_<%- contact %>" <% if(contact == loggedContactId ){ %> disabled <% } %>  />  {{'CALENDAR'|trans}}</li> 
+                                         <li><input type="checkbox" data-key="new.group.16.contact.<%- contact %>" id="admin_new_group_16_contact_<%- contact %>" name="admin_new_group_16_contact_<%- contact %>" <% if(contact == loggedContactId ){ %> disabled <% } %>  /> {{'GALLERY'|trans}}</li> 
+                                    <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div> 
+            </div> 
+        </div>                
+                        
+    <% } %>
+<%if('frontend2' in bookedModuleDetails) { %>
+        <div class="col-md-6"> 
+            <div class="row">
+                <div class="col-md-12 fg-common-top"><div class="panel-heading fg-theme-head"><h3 class="fg-panel-title">{{'USER_RIGHTS_PAGE_CMS_ADMINISTRATION'|trans}}</h3></div> </div>
+                <div class="col-md-12 fg-user-div fg-common-top">
+
+                    <% _.each(cmsAdmins,function(groupDetailsVal,groupDetailsKey){ %>
+                        <div class="row fg-border-line sortables">
+                            <div class="col-md-8 col-sm-10 col-xs-12">
+                               {{'GROUP_DETAILS_CMS_ADMINISTRATOR'|trans}} 
+                            </div>
+
+                            <div class="col-md-3 col-sm-2 col-xs-12 pull-right">
+
+                                <% if(content.hasOwnProperty(groupDetailsVal['group_id'])) {//fg-switch-inactive 
+                                     if(contact==content[groupDetailsVal['group_id']]['contact_id']) { %>
+                                        <label onclick="" class="switch-light switch-light-sm switchhwd fg-switch-right <% if(loggedContactId == content[groupDetailsVal['group_id']]['contact_id']) { %> fg-switch-inactive <% } %>">
+                                        <input type="checkbox"  data-key="delete.group.<%- content[groupDetailsVal['group_id']]['group_id'] %>.user.<%- content[groupDetailsVal['group_id']]['user_id'] %>" id="delete_group_<%- content[groupDetailsVal['group_id']]['group_id'] %>_user_<%- content[groupDetailsVal['group_id']]['user_id'] %>" name="delete_group_<%- content[groupDetailsVal['group_id']]['group_id'] %>_user_<%- content[groupDetailsVal['group_id']]['user_id'] %>" class="make-switch" checked <% if(loggedContactId == content[groupDetailsVal['group_id']]['contact_id']) { %> disabled <% } %> >
+                                     <% } 
+                                } else { %>
+                                        <label onclick="" class="switch-light switch-light-sm switchhwd fg-switch-right">
+                                        <input type="checkbox"  data-key="new.group.<%- groupDetailsVal.group_id %>.contact.<%- contact %>" id="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" name="new_group_<%- groupDetailsVal.group_id %>_contact_<%- contact %>" class="make-switch" >
+                                     <% }%>
+                                    <span>                            
+                                        <span>{{'ON'|trans}}</span>
+                                        <span>{{'OFF'|trans}}</span>
+                                    </span>
+                                    <a class="btn btn-primary "></a>
+                                </label>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% if(pageList.length >0 ) { %>
+                    <div class="row fg-border-line sortables fg-team-admin-div ">
+                            <div class="col-lg-5 col-md-5 col-xs-12">
+                              {{'GROUP_DETAILS_PAGE_ADMINISTRATOR'|trans}} 
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-xs-12 ">
+                                <select name="page_admin" data-key="cms.pgAdmin.21.module.<%- contact %>" title="{{'SELECT_DEFAULT'|trans}}" id="cms_pgAdmin_21_module_<%- contact %>" name="cms_pgAdmin_21_module_<%- contact %>" multiple  class="selectpicker form-control show-tick">
+                                    <%  _.each(pageList,function(wgVal,wgKey){ %>
+                                        <option value="<%- wgVal.roleId %>" class="multiple" <% if(_.isUndefined(groupedPgAdmins[wgVal.roleId])) { %> <% } else { %> selected <% } %> ><%- wgVal.rTitle  %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                    </div>  
+            <% } %>
+                </div>
+            </div>
+        </div>
+   <% } %>                                 
+    </div>
+</script>

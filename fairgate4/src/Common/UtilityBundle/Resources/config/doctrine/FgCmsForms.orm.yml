@@ -1,0 +1,146 @@
+Common\UtilityBundle\Entity\FgCmsForms:
+    repositoryClass: Common\UtilityBundle\Repository\Cms\FgCmsFormsRepository
+    type: entity
+    table: fg_cms_forms
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        formType:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: form_type
+        formStage:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+            column: form_stage
+        contactFormType:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: contact_form_type
+        confirmationEmailSender:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: confirmation_email_sender
+        confirmationEmailSubject:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: confirmation_email_subject
+        confirmationEmailContent:
+            type: text
+            nullable: true
+            column: confirmation_email_content
+        notificationEmailRecipients:
+            type: text
+            nullable: true
+            column: notification_email_recipients
+        acceptanceEmailSender:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: acceptance_email_sender
+        acceptanceEmailSubject:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: acceptance_email_subject
+        acceptanceEmailContent:
+            type: text
+            nullable: true
+            column: acceptance_email_content
+        isAcceptanceEmailActive:
+            type: boolean
+            nullable: false
+            column: is_acceptance_email_active
+        dismissalEmailSender:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: dismissal_email_sender
+        dismissalEmailSubject:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: dismissal_email_subject
+        dismissalEmailContent:
+            type: text
+            nullable: true
+            column: dismissal_email_content
+        isDismissalEmailActive:
+            type: boolean
+            nullable: false
+            column: is_dismissal_email_active
+        completionPromptSuccessMessage:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: completion_prompt_success_message
+        isActive:
+            type: boolean
+            nullable: false
+            column: is_active
+        isDeleted:
+            type: boolean
+            nullable: false
+            column: is_deleted
+        createdAt:
+            type: datetime
+            nullable: true
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: true
+            column: updated_at
+    manyToOne:
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        updatedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                updated_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

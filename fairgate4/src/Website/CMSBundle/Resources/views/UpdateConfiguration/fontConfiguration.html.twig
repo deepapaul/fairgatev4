@@ -1,0 +1,100 @@
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::internal/layout.html.twig' %}
+
+{% set pageTitle = pageTitle %}
+
+{% block pagecontent %}
+
+    <div class="clearfix"> </div>
+
+    <!-- BEGIN BREADCRUMB-->
+    <div class="row">
+        <div class="col-lg-12">
+            {% include 'internal/breadcrumb.html.twig' %}
+        </div>
+    </div>
+    <!-- END BREADCRUMB-->
+    <!-- BEGIN PAGE TITLE AND PANEL TABS -->
+    {% include 'global/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'pageTitleConfig': true,'configId':configId, 'contactId': '', 'tabs': tabs,'url':'','type':'','clubLanguages':'', 'clubDefaultLang': '','hrefLink':true} %}
+
+    <!-- BEGIN CONTAINER -->
+    <div class="clearfix"></div>
+
+    <div class="fg-theme-edit-fonts-wrapper fg-marg-btm-20">
+        <form class="form-horizontal fg-marg-top-20" id="themeFontConfigForm">
+            <fieldset>
+                <input type="hidden" id="CMS_FONT_CONFIG_ID" name="CMS_FONT_CONFIG_ID" value="{{ configId }}"/>
+                <input type="hidden" id="defaultConfigFlag" name="defaultConfigFlag" value="{{ defaultConfigFlag }}"/>
+                {% for key,value in themeConfigFonts %}
+                    <div class="form-group">
+                        <input type="hidden" name="{{ value.id }}_LABEL" value="{{ value.fontLabel }}"/>
+                        <input type="hidden" name="FONT_ID[]" value="{{ value.id }}"/>
+                        {% set labelText = 'CMS_'~value.fontLabel %}
+                        <label class="col-md-3 control-label" for="selectbasic">{{labelText|trans}}</label>
+                        <div class="col-md-9">
+                            <div class="fg-active-IB fg-v-middle fg-font-family">
+                                <input type='hidden' id='{{ loop.index }}_NAME_DEFAULT' value='{{ value.fontName }}'/>
+                                <select name="{{ value.id }}_NAME" class="form-control fg-font-select fg-select-common" id='{{ loop.index }}_NAME'></select>
+                            </div>
+                            <div class="fg-active-IB fg-v-middle fg-font-weight">
+                                <select id="{{ loop.index }}_STRENGTH" name="{{ value.id }}_STRENGTH" class="form-control fg-strength-select fg-select-common">
+                                    <option {% if value.fontStrength == 'lighter' %} selected {% endif %} value = 'lighter'>{{'CMS_TM_CONFIG_FONT_LIGHT'|trans}}</option>
+                                    <option {% if value.fontStrength == 'normal' %} selected {% endif %} value = 'normal'>{{'CMS_TM_CONFIG_FONT_REGULAR'|trans}}</option>
+                                    <option {% if value.fontStrength == 'bold' %} selected {% endif %} value = 'bold'>{{'CMS_TM_CONFIG_FONT_BOLD'|trans}}</option>
+                                </select>
+                            </div>
+                            <div class="fg-active-IB fg-v-middle  fg-font-style">
+                                <label class="checkbox-inline" for="{{ loop.index }}_ITALIC">
+                                    <input class="italicCheck" type="checkbox" id="{{ loop.index }}_ITALIC" name="{{ value.id }}_ITALIC" value="{{ value.isItalic }}" {% if value.isItalic == 1 %} checked {% endif %}>
+                                    {{'CMS_TM_CONFIG_FONT_ITALIC'|trans}}
+                                </label>
+                                <label class="checkbox-inline" for="{{ loop.index }}_UCASE">
+                                    <input class="ucaseCheck" type="checkbox" id="{{ loop.index }}_UCASE" name="{{ value.id }}_UCASE" value="{{ value.isUppercase }}" {% if value.isUppercase == 1 %} checked {% endif %}>
+                                    {{'CMS_TM_CONFIG_FONT_UCASE'|trans}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </fieldset>
+
+            {% include 'internal/savebutton.html.twig' with {'backLink' : path('website_theme_configuration_list') } %}
+
+        </form>
+    </div>
+
+    <div id="formHideDom" style="display:none"></div>
+
+    <!-- END CONTAINER -->
+    {% include 'WebsiteCMSBundle:UpdateConfiguration:configTitleChangePopup.html.twig' %}
+
+{% endblock %}
+
+{% block customstylesheets %}
+    <link href="{{ asset('fgassets/website/css/style-cms.css')}}" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/fgassets/website/js/fg-tm-configuration-font.js" type="text/javascript"></script>
+    <script>
+
+        var changePageTitlePath = '{{path('website_theme_configuration_title_edit')}}';
+
+        jQuery(document).ready(function () {
+            var script = document.createElement('script');
+            script.src = 'https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyAH8aNG-whPcbHlMXbeGYKswcBjTVwpLVk&callback=SetFonts';
+            document.body.appendChild(script);
+        });
+
+        function SetFonts(fontsList) {
+            var fgTmConfigCont = new FgConfigFont('{{'CMS_TM_FONTS_LOADER_MESSAGE'|trans}}', '{{ path('website_theme_font_save')}}');
+            fgTmConfigCont.generateSelectBox(fontsList.items, '{{ path('website_theme_font_save')}}');
+        }
+
+        $(window).load(function () {
+            Metronic.stopPageLoading();
+        });
+
+    </script>
+
+{% endblock %}
+

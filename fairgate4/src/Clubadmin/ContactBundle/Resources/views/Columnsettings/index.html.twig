@@ -1,0 +1,187 @@
+{# src/Clubadmin/ContactBundle/Resources/views/Columnsettings/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'CONTACTS_TABLE_COLUMNS'|trans %}
+
+{% block pagecontent %}
+{#{% set federationTerminology = fgtwig.getTerminolgyName('Federation',singular)%}#}
+    <!-- BEGIN CONTENT -->
+    <div class="fg-theme-panel fg-contact-table-settings-wrap">
+        <form id="tablesettings" action="tablesettings" onSubmit="return false;">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- PAGE TITLE & BREADCRUMB-->
+                    <!-- BREADCRUMB STARTS -->
+                    {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}
+                    <!-- BREADCRUMB ENDS -->
+                    {#<div class="row">
+                        <div class="col-md-12">
+                            <h3 class="page-title"> {{'CONTACTS_TABLE_COLUMNS'|trans}} </h3>
+                        </div>
+                    </div>#}
+                      <div class="row">
+                       {% set page_settings = { 'pagetitle':'true' }  %}
+                       {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'page_settings': page_settings } %}
+                      </div>
+                </div>
+            </div>
+
+            <!-- BEGIN COLUME AREA-->
+            <div class="row fg-contact-tables">
+                <div class="col-lg-8 col-md-7">
+                    <div class="portlet box blue">
+                        <div class="portlet-title">
+                            <div class="caption"> {{'ALL_COLUMNS'|trans}} </div>
+                        </div>
+                        <div class="portlet-body fg-portlet">
+                            <div class="row">
+                                <!-- CONTACT FIELDS -->
+                                <div class="col-lg-3 col-md-5 col-sm-5" id="displayContactFields"></div>
+                                <!-- FIXED FIELDS -->
+                                <div class="col-lg-3 col-md-5 col-sm-5 hide" id="displayStaticFields">
+                                  
+                                </div>
+                                <!-- ASSIGNMENT FIELDS -->
+                                <div class="col-md-12 col-lg-6 col-sm-12 fg-last-col-hack" id="displayAssignmentFields"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-5">
+                    <!-- Selected Columns box starts -->
+                    <div class="portlet box blue fg-columnsettings-ico">
+                        <div class="portlet-title">
+                            <div class="caption"> {{'SELECTED_COLUMNS'|trans}} </div>
+                            <div class="fg-clear-area"><a href="#" id="clearselected">{{'CONTACT_FILTER_CLEAR'|trans}} <i class="fa fa-times-circle fa-1x"></i></a></div>
+                        </div>
+                        <div class="portlet-body" id="displaySelectedColumns">
+                        </div>
+                    </div>
+                    <!-- Selected Columns box ends -->
+                    {% if (allTableSettings|length > 0) %}
+                        <!-- Saved Columns box starts -->
+                        <div class="portlet box blue">
+                            <div class="portlet-title">
+                                <div class="caption"> {{'SAVED_COLUMNS_SETTINGS'|trans}} </div>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="row">
+                                    <div class="col-md-5 col-sm-5">
+                                        <select class="bs-select form-control fg-select-font" id="saved_settings" autocomplete="off" >
+                                            <option value="" data-href="{{path('columnsettings', {'settings_id': '0','contacttype':contacttype})}}">{{'SELECT_DEFAULT'|trans}}</option>
+                                            {% set showIcons = false %}
+                                            {% for tableSettings in allTableSettings %}
+                                                {% if (tableSettings.id == selectedSettingId) %}
+                                                    {% set showIcons = true %}
+                                                {% endif %}
+                                                <option value="{{tableSettings.id}}" {% if (tableSettings.id == selectedSettingId) %} selected {% endif %} data-href="{{path('columnsettings', {'settings_id': tableSettings.id, 'contacttype':contacttype})}}">{{tableSettings.title}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    {% if (showIcons) %}
+                                        <div class="col-md-4 col-sm-3">
+                                            <a href="#" class="fg-refresh-link" id="savesettings" data-save-type="UPDATE"><i class="fa fa-refresh"></i>{{'UPDATE'|trans}}</a>
+                                        </div>
+                                        <div class="col-md-3 col-sm-3">
+                                            <a href="#" class="fg-delete-link" id="deletesettings"><i class="fa fa-times-circle"></i>{{'DELETE'|trans}}</a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div id="selectsetting_error" class="txt-red hide">{{'PLEASE_SELECT_A_SETTING'|trans}}</div>
+                            </div>
+                        </div>
+                        <!-- Saved Columns box ends -->
+                    {% endif %}
+                    <!-- Save Columns box starts -->
+                    <div class="portlet box blue">
+                        <div class="portlet-title">
+                            <div class="caption">{{'SAVE_COLUMNS_SETTINGS'|trans}}</div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="row">
+                                <div class="col-md-5 col-sm-5">
+                                    <input type="text" class="form-control input-sm" data-function="settings_name" />
+                                </div>
+                                <div class="col-md-6 col-sm-3">
+                                    <a href="#" class="fg-save-link" id="savesettings" data-save-type="SAVE"><i class="fa fa-check-circle"></i>{{'SAVE'|trans}}</a>
+                                </div>
+                            </div>
+                            <div id="savesetting_error" class="txt-red hide">{{'PLEASE_ENTER_A_SETTINGS_TITLE'|trans}}</div>
+                        </div>
+                    </div>
+                    <!-- Save Columns box ends -->
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-md-12">
+                {% include 'clubadmin/savebutton.html.twig' with {'reset_button_id':'cancelsettings','reset_button_val':'CANCEL'|trans,'save_button_val':'APPLY'|trans ,'save_button_id':'applysettings','button_attr_type':'data-save-type','button_attr_val':"APPLY" } %}
+            </div>
+        </div>
+    </div>
+    <!-- END PAGE CONTENT-->
+    <!-- ADD ROW TEMPLATES STARTS -->
+    <div id="divTemplates">
+        {# template for displaying contact fields #}
+        {% include 'ClubadminContactBundle:Columnsettings:displaycontactfields.html.twig' %}
+        {# template for displaying assignment categories #}
+        {% include 'ClubadminContactBundle:Columnsettings:displayassignmentfields.html.twig' %}
+        {# template for displaying selected columns #}
+        {% include 'ClubadminContactBundle:Columnsettings:displayselectedcolumns.html.twig' %}
+        {% include 'ClubadminContactBundle:Columnsettings:displaystaticfields.html.twig' %}
+        
+    </div>
+    <!-- ADD ROW TEMPLATES ENDS -->
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+    var clubId = {{clubData['clubId']}};
+    var currClubType  = '{{fgclub.get('type')}}';
+    var clubMembershipAvailable  = '{{fgclub.get('clubMembershipAvailable')}}';
+    var clubData =  '{{clubData['clubhierarchy']|json_encode|raw}}';
+    var contactId = {{clubData['contactId']|json_encode|raw}};
+    var contactType='{{contacttype}}';
+    var clubTeamId = {{clubData['clubTeamId']}};
+    var clubWorkgroupId = {{clubData['clubWorkgroupId']}};
+    var clubExecutiveBoardId = {{clubData['clubExecutiveBoardId']}};
+    var corrAddrCatId = {{clubData['corrAddrCatId']}};
+    var invAddrCatId = {{clubData['invAddrCatId']}};
+    var corrAddrFieldIds = [];
+    var invAddrFieldIds = [];
+    var settingsType = 'DATA';
+    var selectedSettingId = '{{selectedSettingId}}';
+    var getSettingsPath = "{{path('filter_contact_data')}}";
+    var deleteUrl = "{{path('delete_columnsettings')}}";
+    var selectedSettingsArray = '{{selectedSettings|json_encode|raw}}';
+    var defaultSettingsArray = '{{defaultSettings|json_encode|raw}}';
+    var federationTerminology = '{{fgtwig.getTerminolgyName('Federation',singular)}}';
+    switch (contactType) {
+        case 'contact':
+                        var clickPath='{{path('contact_index')}}';
+                        break;
+        case 'archive':
+                        var clickPath='{{path('archive_index')}}';
+                        break;
+        case 'formerfederationmember':    
+                         var clickPath='{{path('former_federation_member_index')}}';
+                         break;
+        
+    }
+
+    var transFunctions = '{{'FUNCTIONS'|trans}}';
+    var updatePath = '{{path('update_columnsettings')}}';
+    var none = "{{'NONE'|trans}}";
+    var all = "{{'ALL'|trans}}";
+    
+     /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                    
+                     title: true
+                    
+
+             });
+</script>
+<script src="{{ asset('fgcustom/js/fg-contact-columnsettings.js')}}" type="text/javascript"></script>
+    
+
+{% endblock %}

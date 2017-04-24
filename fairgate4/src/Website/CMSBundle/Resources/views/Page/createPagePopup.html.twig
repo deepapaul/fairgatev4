@@ -1,0 +1,89 @@
+<div class="modal fade" id="fg-cms-page-create" tabindex="-1" role="basic" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header fg-modal-has-languagebar">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title fg-modal-title">{{'CMS_CREATE_PAGE'|trans}}</h4>
+                <div class="fg-modal-language-switch">
+                    <div class="btn-toolbar fg-lang-tab ">
+                        <div class="btn-group">
+                            {% if (clubLanguages|length > 1) %}
+                                {% for clubLanguage in clubLanguages %}
+                                    <button type="button" id="{{clubLanguage}}"  lang="{{clubLanguage}}" class="btn  btlang {% if(clubLanguage == clubDefaultLang) %} active {% endif %}" data-elem-function="switch_lang" data-selected-lang="{{clubLanguage}}">{{clubLanguage|upper}}</button>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body fg-cms-create-modal">
+                <form id="cms_create_page_form">
+                    <div id="cms-pagename-formgroup" class="form-group fg-clear">
+                        <label class="control-label text-right fg-label-valign col-lg-3 col-md-3">{{'CMS_PAGE_NAME'|trans}}</label>
+                        <div class="col-md-6">
+                            {% for clubLanguage in clubLanguages %}
+                                <input type="text" class="form-control input-md {% if(clubDefaultLang!=clubLanguage) %} hide {% endif %} cms-page-title-input" name="cmsPageTitle[{{clubLanguage}}][]" id="cmsPageTitle_{{clubLanguage}}" data-lang="{{clubLanguage}}">
+                            {% endfor %}
+                            <div id="pagename-formgroup-error" class="fg-label-error fg-marg-btm-0 hide"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6 col-sm-offset-3 fg-marg-btm-15">
+                            <label class="control-label text-right "><input type="checkbox"  name="hideTitle" id="fg-hide-title" value="0" onclick="$(this).val(this.checked ? 1 : 0)">
+                         {{'PAGETITLE_HIDE'|trans}}</label>
+                        </div>
+                        
+                    </div>
+                    <div class="form-group fg-clear">
+                        <label class="control-label text-right col-md-3">{{'CMS_SIDE_COLUMN'|trans}}</label>
+                        <ul class="col-md-9 fg-side-col-wrapper">
+                            <li class="fg-side-col-layout" data-sbType="" data-sbArea="">
+                                <div class="fg-side-col-layout-inner active">                                                            
+                                    <div class="fg-layout-1 fg-layout-box"></div>
+                                </div>
+                                <label for="" class="fg-layout-title">{{'CMS_NO_SIDE_COLUMN'|trans}}</label>
+                            </li>
+                            <li class="fg-side-col-layout" data-sbType="small" data-sbArea="right">
+                                <div class="fg-side-col-layout-inner">
+                                    <div class="fg-layout-2  fg-layout-box"></div>
+                                </div>  
+                                <label for="" class="fg-layout-title">{{'CMS_SMALL_SIDE_COLUMN_RIGHT'|trans({'%br%':'<br>'})|raw}}</label>   
+                            </li>
+                            <li class="fg-side-col-layout" data-sbType="small" data-sbArea="left">
+                                <div class="fg-side-col-layout-inner">
+                                    <div class="fg-layout-3 fg-layout-box" ></div>
+                                </div>  
+                                <label for="" class="fg-layout-title">{{'CMS_SMALL_SIDE_COLUMN_LEFT'|trans({'%br%':'<br>'})|raw}}</label>   
+                            </li>
+                            <li class="fg-side-col-layout" data-sbType="wide" data-sbArea="right">
+                                <div class="fg-side-col-layout-inner">
+                                    <div class="fg-layout-4  fg-layout-box"></div>
+                                </div>      
+                                <label for="" class="fg-layout-title">{{'CMS_SIDE_COLUMN_RIGHT'|trans({'%br%':'<br>'})|raw}}</label>
+                            </li>
+                            <li class="fg-side-col-layout" data-sbType="wide" data-sbArea="left">
+                                <div class="fg-side-col-layout-inner">
+                                    <div class="fg-layout-5  fg-layout-box"></div>
+                                </div>    
+                                <label for="" class="fg-layout-title">{{'CMS_SIDE_COLUMN_LEFT'|trans({'%br%':'<br>'})|raw}}</label>                                                    
+                            </li>
+                        </ul>
+                    </div>
+                    <input type="hidden" class="form-control input-md" name="cmsSidebarType" id="cmsSidebarType">
+                    <input type="hidden" class="form-control input-md" name="cmsSidebarArea" id="cmsSidebarArea">
+                    <input type="hidden" class="form-control input-md" name="cmsNavigation" id="cmsNavigation">
+                </form>   
+            </div> 
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">{{ 'CANCEL'|trans }}</button>
+                <button type="button" class="btn green" id="createPageBtn">{{ 'CREATE'|trans }}</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+

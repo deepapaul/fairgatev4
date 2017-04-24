@@ -1,0 +1,26 @@
+<table class= "dataTable
+                table
+                table-bordered
+                table-hover
+                table-condensed
+                dataTable-rows
+                logDataTableClass
+                dataTable-scroll-x
+                dataTable-initialSort" xWidth="100" data-table-name="dataTables" id="log_display_{{subscriberId}}_{{typeId}}" data-sort="0#desc">
+    <thead>
+        <tr>
+            <th>{{ 'LOG_DATE'|trans }}</th>
+            <th>{{ 'COMMUNICATION_TYPE_LOG'|trans }}</th>
+            <th>{{ 'COMMUNICATION_LOG_SENDING'|trans }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for logEntry in logEntries %}
+            <tr>
+                <td data-sort="{{ logEntry.dateOriginal }}">{{ logEntry.date }}</td>
+                <td><a href="#">{{ logEntry.type }}</a></td>
+                <td>{{ logEntry.editedBy }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

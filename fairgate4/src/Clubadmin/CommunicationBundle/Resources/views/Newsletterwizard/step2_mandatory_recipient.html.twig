@@ -1,0 +1,243 @@
+{% extends 'ClubadminCommunicationBundle:Newsletterwizard:newsletterWizard.html.twig' %}
+{% block wizardstep2 %}
+<h3 class="block">{% trans %}NL_STEP2_NON_MANDATORY_TITLE{% endtrans %}</h3>
+<form name="nl_nonmandatory" id="form-tab2" action="" data-url="{{path('save_newsletter_step2')}}" skipDirtyCheck>
+    <dl>
+        <dt>{% trans %}NL_STEP2_NON_MANDATORY_FIELD1{% endtrans %}</dt>
+        <dd>
+            <input type="hidden" id="removedRecipient" value="" name="removedRecipient" />
+            <input type="hidden" id="newsletterId" value="{{newsletterId}}" name="newsletterId" />
+            <input type="hidden" id="newsletterType" value="{{newsletterType}}" name="newsletterType" />
+            <input type="hidden" id="activerecipientCount" value="0" name="activerecipientCount" />
+            <input type="hidden" id="mailType" value="{{savedMailtype}}" name="mailType" />
+            <input type="hidden" id="firstentry" value="0" name="firstentry" />
+            <div class="col-md-3 col-sm-3 col-xs-12 fg-left-zero fg-right-zero">
+            <select class="form-control select2" name="recipient" id="recipient" >
+               <option value="" mainemail="" subemail="" class="fg-dev-separator">{% trans %}NONE {% endtrans %}</option>
+                {% for recipient in recipientLists%}
+                     {% if recipientid == recipient.id%}
+                                              {% set selectedValue='selected=selected'%} 
+                                                  {% else %}
+                                              {% set selectedValue=''%}         
+                                                {% endif %}
+                    {% set recipientId=recipient.id %}
+                        <option value="{{recipient.id}}" {{selectedValue}} 
+                                mainemail="{% if emailFields.mainEmails[recipientId] is defined%}{{emailFields.mainEmails[recipientId]|trim}}{% endif %}"
+                                subemail="{% if emailFields.substituteEmails[recipientId] is defined%}{{emailFields.substituteEmails[recipientId]}}{% endif %}"
+                                >{% if (recipient.isAllActive) %}{{'ACTIVE_CONTACT_BOOKMARK'|trans|trim}}{% else %}{{recipient.name|trim}}{% endif %}
+                            </option>{% endfor %}</select>
+                            </div>
+                                <div class="col-md-4 col-sm-8 col-xs-12 fg-import-add"><a href="{{pageType=='simplemail' ? path('simplemail_recipents_list') :path('recipents_list')}}">{% trans %}NL_RECIPIENTS_LINK{% endtrans %}</a></div>
+                                
+                        <div class="fg-newsletter-inner-div">
+                            <dl>
+                                <dt> {% trans %}NL_MANDATORY_SELECTBOX_TITLE1 {% endtrans %}</dt>
+                                <dd>                                    
+                                    <select class="bs-select form-control input-sm" name="recipients-selected-email-fields" id="recipients-selected-email-fields" multiple disabled>
+                                        {% for emailField in allemailFields%}
+                                            {% if ((emailFields.mainEmails[recipientid] is defined) and (emailField.title|trim in emailFields.mainEmails[recipientid])) %}
+                                                {% set selectedValue='selected=selected'%} 
+                                            {% else %}
+                                                {% set selectedValue=''%}         
+                                            {% endif %}
+                                            <option value="{{emailField.title|trim}}" {{selectedValue}}  >{{emailField.title|trim}}</option>
+                                        {% endfor %}                                                 
+                                        <option value="{{'CONNECTED_PARENT_EMAIL'|trans|trim}}"  >{{'CONNECTED_PARENT_EMAIL'|trans|trim}}</option>
+                                    </select>
+                                </dd>
+                                <dt> {% trans %}NL_MANDATORY_SELECTBOX_TITLE2 {% endtrans %}</dt>
+                                <dd>
+                                    <select class="bs-select form-control input-sm" name="recipients-selected-subemail-fields" id="recipients-selected-subemail-fields" multiple disabled >
+                                        <option value="">{{'SELECT_DROPDOWN'|trans}} </option>
+                                        {% for emailField in allemailFields%}
+                                            {% if ((emailFields.substituteEmails[recipientid] is defined) and (emailField.title|trim in emailFields.substituteEmails[recipientid]|trim)) %}
+                                                {% set selectedValue='selected=selected'%} 
+                                            {% else %}
+                                                {% set selectedValue=''%}         
+                                            {% endif %}
+                                            <option value="{{emailField.title}}" {{selectedValue}}>{{emailField.title}}</option>
+                                        {% endfor %}                                                 
+                                        <option value="{% trans %}CONNECTED_PARENT_EMAIL {% endtrans %}" >{% trans %}CONNECTED_PARENT_EMAIL {% endtrans %}</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                        </div>             
+                                
+                    </dd>
+                    <dt>{% trans %}NL_STEP2_NON_MANDATORY_FIELD2 {% endtrans %}</dt>
+                    <dd>
+                        <div>  <input type="text" name="manualSelection" class="form-control" value="" id="manualSelection" placeholder="{{'NL_ADD_CONTACT'|trans}}"></div>
+                        <div class="fg-newsletter-inner-div">
+                            <dl>
+                                <dt> {% trans %}NL_MANDATORY_SELECTBOX_TITLE1 {% endtrans %}</dt>
+                                <dd>
+                                    <select class="form-control bs-select select2 fg-select-font selectpicker" name="selected-email-fields[]" id="selected-email-fields" multiple>
+                                        {% for emailField in allemailFields%}
+
+                                            {% if fgtwig.inArray(emailField.id , selectedEmailfields.main) %}
+                                                {%set selectedoption='selected'%}
+                                                    {% else %} 
+                                                        {%set selectedoption=''%}     
+                                                            {% endif %}                                                 
+
+                                                                <option value="{{emailField.id}}" {{selectedoption}}>{{emailField.title|trim}}</option>
+                                                                {% endfor %} 
+                                                                    {% if fgtwig.inArray('parent_email' , selectedEmailfields.main) %}
+                                                                        {%set selectedoption='selected'%}
+                                                                            {% else %} 
+                                                                                {%set selectedoption=''%}     
+                                                                                    {% endif %}
+                                                                                        <option value="parent_email" {{selectedoption}} >{{'CONNECTED_PARENT_EMAIL'|trans|trim}}</option>
+                                                                                    </select>
+                                                                                         
+                                                                                    
+                                                                                <div class="fg-error" id="mandatoryEmailError" style="display:none">{{"NL_MANDATORY_EMAIL_ERROR"|trans}}</div>
+                                </dd>
+                                                                                 
+                                                                                <dt> {% trans %}NL_MANDATORY_SELECTBOX_TITLE2 {% endtrans %}</dt>
+                                                                                <dd>
+                                                                                   
+                                                                                    <select class="form-control select2" name="selected-subemail-fields" id="selected-subemail-fields">
+                                                                                        <option value="">{{'SELECT_DROPDOWN'|trans}} </option>
+                                                                                        {% for emailField in allemailFields%}
+
+                                                                                            {% if emailField.id == selectedEmailfields.substitute %}
+                                                                                                {%set selectedoption='selected'%}
+                                                                                                    {% else %} 
+                                                                                                        {%set selectedoption=''%}     
+                                                                                                            {% endif %}                                                 
+
+                                                                                                                <option value="{{emailField.id}}" {{selectedoption}}>{{emailField.title}} </option>
+                                                                                                                {% endfor %} 
+                                                                                                                    {% if 'parent_email' == selectedEmailfields.substitute %}
+                                                                                                                        {%set selectedoption='selected'%}
+                                                                                                                            {% else %} 
+                                                                                                                                {%set selectedoption=''%}     
+                                                                                                                                    {% endif %}
+                                                                                                                                        <option value="parent_email" {{selectedoption}}>{% trans %}CONNECTED_PARENT_EMAIL {% endtrans %}</option>
+                                                                                                                                    </select>
+                                                                                                                                   
+                                                                                                                                </dd>
+                                                                                                                            </dl>
+                                                                                                                        </div>
+                                                                                                                                    
+                                                                                                                    </dd>
+
+
+                                                                                                                </dl>
+                                                                                                                <div class="alert alert-info">
+                                                                                                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
+                                                                                                                    <strong>{% trans %} NL_NOTE{% endtrans %}</strong>{% trans %} NL_STEP2_NON_MANDATORY_NOTE{% endtrans %}</div>
+                                                                                                            </form>
+                                                                                                            <div class="row">
+                                                                                                                <div class="col-md-12">
+
+                                                                                                                    <button class="btn green" type="button" id="preview">{% trans %}NL_STEP2_NON_MANDATORY_BUTTON {% endtrans %}</button>
+                                                                                                                    <!-- Table -->
+                                                                                                                    <div class="fg-table-wrap hidden-settings fg-common-top">
+                                                                                                                        <div class="row">
+                                                                                                                            <div class="col-md-7 col-sm-7 col-xs-12 fg-common-top-btm">
+                                                                                                                                <div class="fg-title-wrapper">
+                                                                                                                                    <h3 class="fg-mailings-head fg-left-zero">
+                                                                                                                                        <div class="page-title-sub">{% trans %}NL_STEP2_NON_MANDATORY_TAB_TITLE {% endtrans %}</div>
+                                                                                                                                    </h3>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                            <div class="col-md-5 col-sm-5 col-xs-12 fg-common-top-btm">
+                                                                                                                                <div class=" fg-search-div">
+                                                                                                                                    <div class="input-icon"> <i class="fa fa-search"></i>
+                                                                                                                                        <input type="text" placeholder="{{'SEARCH_TABLE'|trans}}" class="form-control control2" id="searchbox" >
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                                <div class="btn-group pull-right">
+                                                                                                                                    <button class="btn tableactionright" data-toggle="dropdown"> <i class="fa fa-table fa-2x"></i> </button>
+                                                                                                                                    <ul class="dropdown-menu pull-right fg-drpmenu-new dropdown-menu-form padinten hold-on-click">
+
+                                                                                                                                        <li>
+                                                                                                                                            <div id="fgrowchange" ></div>
+                                                                                                                                        </li>
+
+
+                                                                                                                                    </ul>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                        <div id="tabcontentarea" >
+
+
+
+                                                                                                                        </div>
+
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+
+
+{% endblock %}                                                                                                                                        
+{% block customstylesheets %}  
+   
+{% endblock %}
+
+{% block wizardscriptstart %}
+    <script type="text/javascript">
+        var none = "{{'NONE'|trans}}";
+        var all = "{{'ALL'|trans}}";
+        var activerecipientUrl = "{{path('active_mandatory_nl_recipients_tabs')}}";        
+    </script>  
+{% endblock %}    
+{% block wizardscriptinit %}
+        <script src="{{ asset('fgcustom/js/sidebar.js') }}" type="text/javascript"></script>    
+        <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script> 
+        <script src="{{ asset('fgcustom/js/page/fg_communication_dataTable.js')}}" type="text/javascript"></script> 
+        <script src="{{ asset('fgcustom/js/page/newsletterwizard_step2.js')}}" type="text/javascript"></script>
+        <script>                 
+            {% if manualselectedIds is empty %}
+                var manualSelected = '';
+            {% else %}
+                var manualSelected = JSON.stringify({{manualselectedIds|raw}});
+            {% endif %}   
+            var selectedId = '';
+            if (manualSelected != '') {
+                selectedId = $.parseJSON(manualSelected);
+            }
+            var removestring = "{{'NL_AUTOCOMPLETE_REMOVE'|trans}} %s";           
+            $('#manualSelection').fbautocomplete({
+                url: "{{path('nl_collect_contactname')}}", // which url will provide json!
+                removeButtonTitle: removestring,
+                params: {'isCompany': 2},       
+                selected: selectedId,
+                maxItems: 50,
+                useCache: false,
+                onItemSelected: function($obj, itemId, selected) {
+
+                },
+                onItemRemoved: function($obj, itemId) {
+
+                },
+                onAlreadySelected: function($obj) {
+
+                }
+            });
+            $(function() {
+                $("#recipient").change(function(){ 
+                    $("#recipients-selected-email-fields").find('option:selected').removeAttr("selected");
+                    $("#recipients-selected-subemail-fields").find('option:selected').removeAttr("selected");
+                    var element = $(this).find('option:selected'); 
+                    var mainemails = element.attr("mainemail"); 
+                    mainemailsArray = mainemails.split(",")                    
+                    for(i=0; i<mainemailsArray.length; i++) {
+                        if($.trim(mainemailsArray[i]))
+                        $('#recipients-selected-email-fields option[value="'+$.trim(mainemailsArray[i])+'"]').attr('selected', 'selected');
+                    }                    
+                    var mainemails = element.attr("subemail"); 
+                    subemailArray = mainemails.split(",")                    
+                    for(i=0; i<subemailArray.length; i++) {
+                        if($.trim(subemailArray[i]))
+                            $('#recipients-selected-subemail-fields option[value="'+$.trim(subemailArray[i])+'"]').attr('selected', 'selected');
+                    }
+                    $('select.bs-select').selectpicker('render');
+                }); 
+            })
+           
+        </script>      
+{% endblock %}                                                                                                            

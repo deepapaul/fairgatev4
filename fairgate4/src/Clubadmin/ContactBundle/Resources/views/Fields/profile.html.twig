@@ -1,0 +1,65 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::layout-ajax.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = 'CONTACT_FIELDS_INTERNAL'|trans %}
+{% block pagecontent %}
+    <!-- BEGIN CONTENT -->
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                        <!-- BREADCRUMB STARTS -->
+            {% include 'clubadmin/breadcrumb.html.twig' %}
+            <!-- BREADCRUMB ENDS -->
+        </div>
+   </div>
+    <!-- END PAGE HEADER-->
+    
+    <div class="row">                  
+       {# <div class="col-sm-12">
+            <h3 class="page-title pull-left fg-inner-title">{{'CONTACT_FIELDS_INTERNAL'|trans}}</h3>   
+        </div>  #}  
+       {% set page_settings = { 'pagetitle':'true' }  %}
+       {% include 'clubadmin/page-title-bar.html.twig' with {'pageTitle': pageTitle, 'page_settings': page_settings } %}
+    </div>
+    
+    <!-- BEGIN FORM-->
+    <form id="profile_contactfield" class="form-horizontal" method="post" onsubmit="return false;" autocomplete="off" action="{{ path('field_update') }}">    
+        <!-- BEGIN COLUME AREA-->  
+        <div class="alert alert-danger display-hide">
+                <button class="close" data-close="alert"></button>
+                {{'FORM_ERROR_DISPLAY'|trans}}
+        </div>
+        
+        <div class="fg-formarea-wrapper" id="contact_profile_option_wrapper">
+            
+            <div class="clearfix"></div>
+        </div>                      
+        <!-- END PAGE CONTENT-->            
+        {% include 'clubadmin/savebutton.html.twig' with {'settings':'settings' } %}
+        <!-- END FORM-->
+    </form> 
+    {% include 'ClubadminContactBundle:Fields:templateprofileoption.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('fgcustom/js/dirtyfields/jquery.dirtyFields.js') }}" type="text/javascript"></script>
+<script src="{{ asset('fgcustom/js/fg_dirtyfields.js') }}" type="text/javascript"></script>
+<script src="{{ asset('fgassets/backend/js/page/contactprofile.js') }}" type="text/javascript"></script>
+<script>
+    FgContactProfile.contactProfileData = {{ fieldDetails|json_encode()|raw }}
+    var checkedHtml = 'checked="checked"';
+    $( document ).ready(function(){
+        FgContactProfile.setContactFields();
+        $( "#save_changes" ).click(function() {
+            FgContactProfile.saveContactProfileFields();
+        });
+        
+    });
+    FgPageTitlebar.init({
+                    
+                     title: true
+                    
+
+             });
+</script>
+{% endblock %} 

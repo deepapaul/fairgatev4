@@ -1,0 +1,51 @@
+<script type="text/template" id="template-display-file-options">
+    <% //FILE Options
+if(!_.isNull(fileOptions)){
+    %>
+    <h4 class="fg-cols-fsz"> <%- fileOptions['title'] %></h4>
+    <% _.each(fileOptions.entry, function(fileOption) { %>
+        <div class="form-group">                
+            <div class="checkbox-list fg-full-width">       
+                <label class="fg-col-settings-label">
+                    <i class="fa fg-plus-circle fa-2x pull-left selectitem" id="<%- fileOption.id %>" type="FO" club_id="<%- clubId %>" >
+                    <span class="fg-label-inner" data-label-id="FO_<%- fileOption.id %>"><%- fileOption.title %></span></i>
+                </label>           
+            </div>
+    <% });
+} %>
+        </div>
+</script>
+<script type="text/template" id="template-display-date-options">
+ <% //FILE Options
+if(!_.isNull(DateOptions)){
+    %>
+    <h4 class="fg-cols-fsz"> <%- DateOptions['title'] %></h4>
+    <% _.each(DateOptions.entry, function(DateOption) { %>
+        <div class="form-group">                
+            <div class="checkbox-list fg-full-width">       
+                <label class="fg-col-settings-label">
+                    <i class="fa fg-plus-circle fa-2x pull-left selectitem" id="<%- DateOption.id %>" type="DO" club_id="<%- clubId %>" >
+                    <span class="fg-label-inner" data-label-id="DO_<%- DateOption.id %>"><%- DateOption.title %></span></i>
+                </label>           
+            </div>
+    <% });
+} %>
+        </div>
+</script>
+<script type="text/template" id="template-display-user-options">
+  <% //UserOptions 
+if(!_.isNull(UserOptions)){
+    %>
+    <h4 class="fg-cols-fsz"> <%- UserOptions['title'] %></h4>
+    <% _.each(UserOptions.entry, function(UserOption) { %>
+        <div class="form-group">                
+            <div class="checkbox-list fg-full-width">       
+                <label class="fg-col-settings-label">
+                    <i class="fa fg-plus-circle fa-2x pull-left selectitem" id="<%- UserOption.id %>" type="UO" club_id="<%- clubId %>" >
+                    <span class="fg-label-inner" data-label-id="UO_<%- UserOption.id %>"><%- UserOption.title %></span></i>
+                </label>           
+            </div>
+    <% });
+} %>
+        </div>
+</script> 

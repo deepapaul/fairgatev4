@@ -1,0 +1,67 @@
+Common\UtilityBundle\Entity\FgCmsArticleComments:
+    repositoryClass: Common\UtilityBundle\Repository\Article\FgCmsArticleCommentsRepository
+    type: entity
+    table: fg_cms_article_comments
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        comment:
+            type: text
+            nullable: true
+        createdOn:
+            type: datetime
+            nullable: true
+            column: created_on
+        updatedOn:
+            type: datetime
+            nullable: true
+            column: updated_on
+        guestUserName:
+            type: string
+            length: 45
+            fixed: false
+            nullable: true
+            column: guest_user_name
+    manyToOne:
+        contact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        updatedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                updated_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        article:
+            targetEntity: FgCmsArticle
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                article_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

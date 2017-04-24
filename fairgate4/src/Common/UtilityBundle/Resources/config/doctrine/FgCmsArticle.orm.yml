@@ -1,0 +1,106 @@
+Common\UtilityBundle\Entity\FgCmsArticle:
+    repositoryClass: Common\UtilityBundle\Repository\Article\FgCmsArticleRepository
+    type: entity
+    table: fg_cms_article
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        publicationDate:
+            type: datetime
+            nullable: true
+            column: publication_date
+        expiryDate:
+            type: datetime
+            nullable: true
+            column: expiry_date
+        author:
+            type: string
+            length: 45
+            fixed: false
+            nullable: true
+        scope:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        position:
+            type: string
+            length: null
+            fixed: false
+            nullable: false
+        isDraft:
+            type: smallint
+            nullable: true
+            column: is_draft
+        commentAllow:
+            type: smallint
+            nullable: true
+            column: comment_allow
+        createdOn:
+            type: datetime
+            nullable: true
+            column: created_on
+        updatedOn:
+            type: datetime
+            nullable: true
+            column: updated_on
+        isDeleted:
+            type: smallint
+            nullable: true
+            column: is_deleted
+        shareWithLower:
+            type: boolean
+            nullable: false
+            column: share_with_lower
+    manyToOne:
+        textversion:
+            targetEntity: FgCmsArticleText
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                textversion_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        updatedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                updated_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        archivedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                archived_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

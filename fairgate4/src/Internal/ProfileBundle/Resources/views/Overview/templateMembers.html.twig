@@ -1,0 +1,23 @@
+<script type="text/template" id="overviewMembersBox">
+        <div id='tooltip' class="tooltip"></div>
+        <div class="fg-member-block">
+            <div class="fg-member-block-graph-area">
+                <div class="fg-member-blk fg-piechart">
+                    <a href="{{ (type == 'team') ? path('team_detail_overview') : path('workgroup_detail_overview') }}" class="fg-text-area"><span><%- data.memberCount %></span></a>
+                </div>
+                <h4>{{ (type == 'team') ? 'TEAM_OVERVIEW_MEMBERS'|trans : 'WORKGROUP_MEMBERS'|trans }}</h4>
+            </div>
+        </div>
+        <div class="fg-member-block">
+            <div class="fg-member-block-graph-area">  
+                <div id="fg-dev-piechart-team-functions" class="fg-piechart"></div>
+                <h4>{{ 'TEAM_OVERVIEW_FUNCTIONS'|trans }}</h4>
+            </div>
+        </div>
+        <div class="fg-member-block">
+            <div class="fg-member-block-graph-area">  
+                <div id="fg-dev-piechart-residences" class="fg-piechart"></div>
+                <h4>{{ 'TEAM_OVERVIEW_RESIDENCES'|trans }}</h4>
+            </div>
+        </div>
+</script>

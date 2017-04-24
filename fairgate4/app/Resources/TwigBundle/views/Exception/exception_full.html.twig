@@ -1,0 +1,17 @@
+{% extends 'TwigBundle::layout.html.twig' %}
+
+{% block title %}
+    {{ pageTitle }} | {{clubTitle}} | {%trans%}GN_FAIRGATE_ADMINISTRATION{%endtrans%}
+{% endblock %}
+
+{% block body %}
+    
+        {% if(status_code == '500') %}
+            {% include 'TwigBundle:Exception:exception_custom_500.html.twig'  with {'status_code': status_code} %}
+        {% elseif(status_code == '404') %}
+            {% include 'TwigBundle:Exception:exception_custom_404.html.twig'  with {'status_code': status_code} %}
+        {% elseif(status_code == '403') %}
+            {% include 'TwigBundle:Exception:exception_custom_403.html.twig'  with {'status_code': status_code} %}
+        {% endif %}
+    
+{% endblock %}

@@ -1,0 +1,165 @@
+{% extends 'ClubadminCommunicationBundle:Newsletterwizard:newsletterWizard.html.twig' %}
+{% block wizardstep2 %}
+    <div id="data-tabs-content">
+        <!-- END PAGE HEADER-->
+        <div id="sudscriber-tab" class="tab-pane fg-newsletter-list">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                    <h3 class="block">{% trans %}NL_STEP2_NON_MANDATORY_TITLE{% endtrans %}</h3>
+                    <form name="nl_nonmandatory" id="form-tab2" action="" data-url="{{path('save_newsletter_step2')}}" skipDirtyCheck>
+                        <dl>
+                            <dt>{% trans %}NL_STEP2_NON_MANDATORY_FIELD1{% endtrans %}</dt>
+                            <dd>
+                                <div class="col-md-4 col-sm-4 col-xs-12 fg-left-zero fg-right-zero">
+                                    <select class="form-control select2" name="recipient">
+                                        <option value="" class="fg-dev-separator">{% trans %}NONE {% endtrans %}</option>
+                                        {% for recipient in recipientLists%}
+                                            {% if recipientid == recipient.id%}
+                                                {% set selectedValue='selected=selected'%} 
+                                            {% else %}
+                                                {% set selectedValue=''%}         
+                                            {% endif %}
+                                            {% set recipientId=recipient.id %}
+                                            <option value="{{recipient.id}}" {{selectedValue}}>{% if (recipient.isAllActive) %}{{'ACTIVE_CONTACT_BOOKMARK'|trans}}{% else %}{{recipient.name}}{% endif %}</option>{% endfor %}</select>
+                                    </div>
+                                    <div class="col-md-4 col-sm-8 col-xs-12 fg-import-add"><a href="{{pageType=='simplemail' ? path('simplemail_recipents_list') :path('recipents_list')}}">{% trans %}NL_RECIPIENTS_LINK{% endtrans %}</a></div>
+
+                                </dd>
+                                <dt>{% trans %}NL_STEP2_NON_MANDATORY_FIELD2 {% endtrans %}</dt>
+                                <dd>
+                                    <div>  <input type="text" name="manualSelection" class="form-control" value="" id="manualSelection" placeholder="{{'NL_ADD_CONTACT'|trans}}"></div>
+
+                                </dd>
+                                <dt>{% trans %} NL_STEP2_NON_MANDATORY_FIELD3{% endtrans %}</dt>
+                                <dd>
+                                    <input type="checkbox" name="additional_subscriber_flag" value="1" {{ additionalSubFlag =='1' ? 'checked':'' }}> <span>{% trans %}NL_STEP2_NON_MANDATORY_CHECKBOX1 {% endtrans %}</span>
+                                </dd>
+                                {% if clubType =='federation' %} 
+                                    <dt> {% trans %}NL_STEP2_NON_MANDATORY_FIELD4 {% endtrans %}</dt>
+                                    <dd>
+                                        <input type="checkbox" name="formermember_flag" value="1" {{ feddisplayFlag =='1' ? 'checked':'' }}> <span>{% trans %}NL_STEP2_NON_MANDATORY_CHECKBOX2 {% endtrans %} </span>
+                                    </dd>
+                                {% endif %}
+                            </dl>
+                            <input type="hidden" id="removedRecipient" value="" name="removedRecipient" />
+                            <input type="hidden" id="newsletterId" value="{{newsletterId}}" name="newsletterId" />
+                            <input type="hidden" id="newsletterType" value="{{newsletterType}}" name="newsletterType" />
+                            <input type="hidden" id="activerecipientCount" value="0" name="activerecipientCount" />
+                            <input type="hidden" id="mailType" value="{{savedMailtype}}" name="mailType" />
+                            <input type="hidden" id="salutaionDetail" value="{{salutationarray}}" name="salutaionDetail" />
+
+
+                        </form>
+                        <!-- UNDERSCORE TEMPLATES -->
+                        {#{% include 'ClubadminCommunicationBundle:Newsletterwizard:RecipientnonmandatoryTemplate.html.twig' %}#}
+
+                        <div class="alert alert-info">
+                            <button aria-hidden="true" data-dismiss="alert" class="close" type="button"></button>
+                            <strong>{% trans %} NL_NOTE{% endtrans %}</strong>{% trans %} NL_STEP2_NON_MANDATORY_NOTE{% endtrans %} </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button class="btn green preview" type="button">{% trans %}NL_STEP2_NON_MANDATORY_BUTTON {% endtrans %}</button>
+                                <div class="fg-table-wrap hidden-settings fg-common-top">
+                                    <div class="row">
+                                        <div class="col-md-7 col-sm-7 col-xs-12 fg-common-top">
+                                            <div class="fg-title-wrapper">
+                                                <h3 class="fg-mailings-head fg-left-zero">
+                                                    <div class="page-title-sub">{% trans %}NL_STEP2_NON_MANDATORY_TAB_TITLE {% endtrans %}</div>
+                                                </h3>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5 col-sm-5 col-xs-12 fg-common-top">
+                                            <div class=" fg-search-div">
+                                                <div class="input-icon"> <i class="fa fa-search"></i>
+
+                                                    <input type="text" placeholder="{{'SEARCH_TABLE'|trans}}" class="form-control control2" id="searchbox1" style="display:none">
+                                                    <input type="text" placeholder="{{'SEARCH_TABLE'|trans}}" class="form-control control2" id="searchbox" style="display:none">
+                                                    <input type="text" placeholder="{{'SEARCH_TABLE'|trans}}" class="form-control control2" id="searchbox2" style="display:none">
+                                                </div>
+                                            </div>
+                                            <div class="btn-group pull-right">
+                                                <button class="btn tableactionright" data-toggle="dropdown"> <i class="fa fa-table fa-2x"></i> </button>
+                                                <ul class="dropdown-menu pull-right fg-drpmenu-new dropdown-menu-form padinten hold-on-click" >
+
+
+                                                    <li>                                                    <div id="fgrowchange1" ></div>
+
+                                                    </li>
+                                                    <li>
+
+                                                        <div id="fgrowchange" > </div>
+
+                                                    </li>
+                                                    <li>                                                 
+
+                                                        <div id="fgrowchange2" ></div>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {# Tab display area#}
+                                    <div id="tabcontentarea" >
+
+
+
+                                    </div>
+
+
+                                    {#Tab display end area#}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END EXAMPLE TABLE PORTLET-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END PAGE CONTENT-->
+        {% endblock %} 
+            {% block customstylesheets %}   
+            {% endblock %}    
+            {% block wizardscriptstart %}
+                <script>
+                    var tabshowUrl = "{{path('active_nonmandatory_nl_recipients_tabs')}}";
+                    var subscriberUrl = "{{ path('nl_subscriber_preview_list', {'newsletterId': newsletterId }) }}";
+                    var activerecipientUrl = "{{path('nl_nonmandatory_recipients_list')}}";
+                    var formerfedmemberUrl = "{{path('nl_federation_list_tab')}}";
+                    var fedmemUrl = '';
+                </script>    
+            {% endblock %}
+            {% block wizardscriptinit %}
+                <script src="{{ asset('fgcustom/js/sidebar.js') }}" type="text/javascript"></script>    
+                <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script> 
+                <script src="{{ asset('fgcustom/js/page/fg_communication_dataTable.js')}}" type="text/javascript"></script> 
+                <script src="{{ asset('fgcustom/js/page/newsletterwizard_step2.js')}}" type="text/javascript"></script> 
+                <script>
+                    var manualSelected = JSON.stringify({{manualselectedIds|raw}});
+                    var selectedId = '';
+                    if (manualSelected != '') {
+                        selectedId = $.parseJSON(manualSelected);
+                    }
+                    var removestring = "{{'NL_AUTOCOMPLETE_REMOVE'|trans}} %s";
+                    $('#manualSelection').fbautocomplete({
+                        url: "{{path('nl_collect_contactname')}}", // which url will provide json!
+                        removeButtonTitle: removestring,
+                        params: {'isCompany': 2},
+                        selected: selectedId,
+                        maxItems: 50,
+                        useCache: false,
+                        onItemSelected: function ($obj, itemId, selected) {
+
+                        },
+                        onItemRemoved: function ($obj, itemId) {
+
+                        },
+                        onAlreadySelected: function ($obj) {
+
+                        }
+                    });
+
+                </script>      
+            {% endblock %}

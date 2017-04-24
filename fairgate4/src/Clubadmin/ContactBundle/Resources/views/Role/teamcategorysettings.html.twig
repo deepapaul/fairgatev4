@@ -1,0 +1,158 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/index.html.twig #}
+{% extends app.request.xmlHttpRequest ? '::ajax-layout.html.twig' : '::clubadmin/layout.html.twig' %}
+{% set pageTitle = teamtitle  %}
+    {% block pagecontent %}
+        <!-- BREADCRUMB STARTS -->
+        {% include 'clubadmin/breadcrumb.html.twig' with breadCrumb %}   
+        <!-- BREADCRUMB ENDS -->
+
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="fg-theme-blue fg-theme-panel">            
+            <form id="teamcategorysettings" class="form-horizontal fg-teamcategorysettings-frm" action="teamcategorysettings" skipDirtyCheck onSubmit="return false;">
+                <!-- CATEGORY DATA SECTION STARTS -->               
+                <div class="row">
+                    <div class="col-md-12" id="team_lang">
+                  <div class="row">
+                    {% set page_settings = { 'input_field':'true','languageswitch':'true' }  %}
+                    {% include 'clubadmin/page-title-bar.html.twig' with { 'page_settings': page_settings,'clubLanguages': clubLanguages,'catId':catId,'result_data':result_data[catId],'title':result_data[catId]['title'],'clubDefaultLang':clubDefaultLang } %}    
+                 </div>
+                    </div>
+                </div>
+                <div class="alert alert-danger display-hide">
+                    <button class="close" data-close="alert"></button>
+                    <span>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+                </div>
+                <!-- CATEGORY DATA SECTION ENDS -->
+                <!-- BEGIN COLUME AREA-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-primary fg-bordernon panel-bg fg-mrgn-btm-area-none">
+                            <div class="panel-heading fg-theme-head panel">
+                                <h3 class="panel-title">{{fgtwig.getTerminolgyName('Team', plural,'UCF')}}</h3>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="admin-fontsize dragndrop team-list hide excludejs" id="sortrole">
+                                        <!-- TEAM,CATEGORY,DESCRIPTION LISTING -->
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-5 fg-common-top fg-common-btm pull-left"><a id="addteam" href="#basic" data-toggle="modal" data-parentdiv-id="sortrole" data-add-type="team"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i>  <span class="fg-add-text">{%trans with {'%team%': fgtwig.getTerminolgyName('Team', singular)}%}ADD_%team%{%endtrans%} </span></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-primary fg-bordernon panel-bg fg-mrgn-btm-area-none">
+                            <div class="panel-heading fg-theme-head panel">
+                                <h3 class="panel-title">{%trans with {'%teams%': fgtwig.getTerminolgyName('Team', plural)}%}TEAM_FUNCTION_TEAMS{%endtrans%}</h3>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="admin-fontsize dragndrop funct-list hide excludejs" id="child_sortrole">
+                                        <!-- TEAM FUNCTION LISTING -->
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row addandsave">
+                    <div class="col-md-5 fg-common-top fg-common-btm pull-left"><a id="addteam" href="#basic" data-toggle="modal" data-parentdiv-id="child_sortrole" data-add-type="function"><i class="fa fg-plus-circle fg-add-link fa-2x pull-left"></i> <span class="fg-add-text"> {%trans%}ADD_FUNCTION{%endtrans%}</span></a></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!--  Partial twig for savebutton-->
+                        {% include 'clubadmin/savebutton.html.twig' %}
+
+                    </div>
+                </div>
+
+                <!-- END COLUMN AREA-->
+                <!-- ADD ROW TEMPLATES STARTS -->
+                <div id="divTemplates">
+                    {# template for adding new team #}
+                    {% include 'ClubadminContactBundle:Role:addteam.html.twig' %}
+                    {# template for language switching #}
+       
+                     {# {% include 'ClubadminContactBundle:Role:langSwitch.html.twig' %}#}
+                    {# template for adding new team #}
+                    {% include 'ClubadminContactBundle:Role:addteamfunction.html.twig' %}
+                    {# template for listing the log for team and function #}
+                    {% include 'ClubadminContactBundle:Role:logdisplay.html.twig' %}
+                    {% include 'ClubadminContactBundle:Role:sponsoredBy.html.twig' %}
+                  {#  {% include 'ClubadminContactBundle:Role:viewTemplate.html.twig' %}#}
+                  {% include 'ClubadminContactBundle:Role:userrightsExistingUnderscore.html.twig' %}
+                  {% include 'ClubadminContactBundle:Role:new-userrights.html.twig' %}
+                </div>
+                <!-- ADD ROW TEMPLATES ENDS -->
+            </form>
+        </div>
+        <!-- END PAGE CONTENT-->
+    {% endblock %}
+    {% block javascripts %}
+        {% if not (app.request.xmlHttpRequest) %}
+            <script src="{{ asset('fgcustom/js/fg_more_menu.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('fgcustom/js/page/fg_userrights.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('fgcustom/js/dirtyfields/jquery.dirtyFields.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('fgcustom/js/fg_dirtyfields.js') }}" type="text/javascript"></script>
+        {% endif %}
+        <script type="text/javascript">
+             /*-------------- Page title bar configuration --------*/ 
+            FgPageTitlebar.init({
+                     title: true,
+                     languageSettings: true
+             }); 
+            var filterStorage = 'documentfilter_TEAM-{{fgclub.clubId}}-{{contactId}}';
+            var ActiveMenuDetVar = 'document_active_menu_det_TEAM-{{fgclub.clubId}}-{{contactId}}';
+            var ActiveMenuVar = 'activeMenu_TEAM-{{fgclub.clubId}}-{{contactId}}';
+            var ActiveSubMenuVar = 'activeSubMenu-TEAM-{{fgclub.clubId}}-{{contactId}}';
+            var defaultLang = '{{clubDefaultLang}}';
+            var rowFunctionVariables = {
+                logDataPath: '{{path('log_data',{})}}'
+            };
+            var pageVars = {
+                contactNameUrl:'{{contactNameUrl}}',
+                catid: {{catId}},
+                teamCatId: '{{teamCatId}}',
+                selectedLang: '{{clubDefaultLang}}',
+                clubLanguages: {{clubLanguages|json_encode|raw}},
+                frontendBooked: '{{frontendBooked}}',
+                new_functions: {{all_functions|json_encode|raw}},
+                formerror: '{{'FORM_ERROR_DISPLAY'|trans}}',
+                nofunctionerror: '{{'NO_FUNCTION_ERROR'|trans}}',
+                result_data: {{result_data|json_encode|raw}},
+                teamFunctionPath: '{{path('team_function_data',{'club_id':clubIdentifier})}}',
+                userrightsCountPath: '{{path('role_userrights_count',{})}}',
+                catSettingDefaultDesc: '{{'TEAMCATEGORY_SETTINGS_DESCRIPTION'|trans}}...',
+                teamSponsorListPath: '{{path('team_sponsors_listing',{})}}',
+                userrightsPath: '{{path('role_userrights',{})}}',
+                contactOverviewPath: '{{path('render_contact_overview',{'offset':0,'contact': 'dummyContactId'})}}',
+                clubUrlIdentifier: '{{ fgclub.clubUrlIdentifier }}',
+                saveUserrightsPath: "{{path('save_role_user_rights')}}",
+                updatePath: "{{path('update_role_function')}}",
+                initialHtml: ''
+            };
+            FgUtility.showTranslation(pageVars.selectedLang);
+            FgUtility.changeColorOnDelete();
+            pageVars.categories = FgUtility.groupByMulti(pageVars.result_data, ['sortOrd-``er']);
+            var extraBreadcrumbTitle = {text:'{{'BREADCRUMB_TITLE_TEAMCATEGORY'|trans({'%Team%' : fgtwig.getTerminolgyName('Team', singular)})}}', link:'{{path('edit_role_category', {'cat_type': 'team'})}}'};
+        </script>
+        <script src="{{ asset('fgassets/backend/js/page/row-functions.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/backend/js/page/teamcategorysettings.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/tokenfield/js/bootstrap-tokenfield.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/sidebarfilter.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgcustom/js/sidebar.js')}}" type="text/javascript"></script>
+        <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js')}}" type="text/javascript"></script>
+        <script>
+            var cancelTrans = '{{'CANCEL'|trans}}';
+            var confirmTrans = '{{'CONFIRM'|trans}}';
+            var confirmNote = '{{'TEAM_DELETE_CONFIRM_NOTE'|trans}}';
+        </script>
+    {% endblock %}

@@ -1,0 +1,34 @@
+Common\UtilityBundle\Entity\FgCnNewsletterArticle:
+    type: entity
+    table: fg_cn_newsletter_article
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        teaserText:
+            type: text
+            nullable: true
+            column: teaser_text
+        content:
+            type: text
+            nullable: true
+    manyToOne:
+        content2:
+            targetEntity: FgCnNewsletterContent
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                content_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

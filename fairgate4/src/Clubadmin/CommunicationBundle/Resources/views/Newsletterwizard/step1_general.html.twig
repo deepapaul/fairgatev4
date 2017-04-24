@@ -1,0 +1,228 @@
+{% extends 'ClubadminCommunicationBundle:Newsletterwizard:newsletterWizard.html.twig' %}
+{% block wizardstep1 %}
+<form id="form-tab1" method="post" data-url="{{ path('nl_generalsave')}}" skipDirtyCheck data-validation="true" onsubmit="return false;" autocomplete="off" novalidate="novalidate" class="form-horizontal">
+     <div class="alert alert-danger display-none">
+      <button class="close" data-dismiss="alert"></button>
+      <span data-error>{%trans%}FORM_ERROR_DISPLAY{%endtrans%}</span>
+    </div>
+  <div class="fg-tab-list fg-nl-lang-drop">
+   {%if(dataArray.type == 'GENERAL')%}
+    <h3 class="block">{{'NL_GENERAL_HEADER'|trans}}</h3>
+    {% else %}
+    <h3 class="block">{{'SIMPLEMAIL_GENERAL_HEADER'|trans}}</h3>
+    {% endif %}
+    <dl>
+       {% if dataArray.type == "GENERAL" %}
+        <div dataerror-group>
+        <dt class="control-label">{{'DESIGN_TEMPLATE'|trans}} <span class="required" aria-required="true"> * </span></dt>
+        <dd>
+        <select class="form-control bs-select fg-select-font fg-newsleter-input-width" id="template_dropdown" name="templateId" required="required">
+           <option value = "">{{'SELECT_DEFAULT'|trans}}</option> 
+           {% for templateList in dataArray.templateList %}
+            <option value="{{templateList.id}}"   {% if (templateList.id == editData.templateId|default('')) %} selected ="selected" {% endif %} >{{templateList.title}} </option>  
+          {% endfor %}
+        </select>
+         <span  for="template_dropdown" class="help-block"></span>
+        </dd>
+        </div>  
+       {% endif %}
+        <div dataerror-group>
+         <dt class="control-label">{{'NL_SUBJECT'|trans}} <span class="required" aria-required="true"> * </span></dt>
+         <dd>
+            <input type="text" required name="subject" id= "subject" class="form-control" value="{{editData.subject|default('')}}">
+         </dd>
+        </div>
+        <dt>{{'NL_SENDERNAME'|trans}}</dt>
+        <dd>
+            <input type="text" name="username" id="username" class="form-control" value= "{{dataArray.contactname}}">
+            <input type="hidden" name="type" value="{{dataArray.type}}">
+            <input type="hidden" name="langCount" value="{{dataArray.totallanguageCount}}">
+            <input type="hidden" name="singleLang" value="{{dataArray.singleLang}}">
+        </dd>
+        <div dataerror-group>
+        <dt class="control-label">{{'NL_SENDER_EMAIL'|trans}}<span class="required" aria-required="true"> * </span></dt>
+        <dd>
+            <input type="text" name="email" id="senderEmail" class="form-control" value="{{editData.senderEmail|default(dataArray.Email)}}">
+            <span class = "fg-senderemail-nl">{{'NL_SENDER_NOTE'|trans}}</span>
+        </dd>
+        </div>
+        <dt>{{'NL_SALUTATION'|trans}}<span class="required" aria-required="true"> * </span></dt>
+        <dd>
+            <div class="radio-list">
+                <div class="fg-news-radio radio-inline">
+                      <label class="radio-inline">
+                    <input type="radio" name="salutationType" id="optionsRadios25" class="salutation-type-input" data-val="personal" value="INDIVIDUAL" {% if newsletterId != 0%} {%if editData.salutationType == 'INDIVIDUAL'%} checked {% endif %}{% elseif(newsletterId == 0) %}checked {% endif %}>
+                    {{'NL_SALUTATION_PERSONAL'|trans}}</label>
+                    </div>
+                <div class="fg-news-radio" id="generalsalut">
+                     <label class="radio-inline">
+                    <input type="radio" name="salutationType" id="general-radio" value="SAME" {% if newsletterId != 0%} {% if editData.salutationType == 'SAME'%} checked {% endif %} {% endif %}>
+                    {{'NL_SALUTATION_GENERAL'|trans}}</label>
+                  
+                        <span>
+                         <div dataerror-group id="salutation-block">
+                             <input  type="text" id="salutation-general-input" name="salutation"  class="form-control" value="{{editData.salutation|default('')}}"  {% if newsletterId != 0%} {% if editData.salutationType != 'SAME'%} disabled{% endif %}{% elseif(newsletterId == 0) %}disabled{% endif %}>
+                         <span id="general-input-span" for="salutation-general-input" class="help-block"></span>
+                         </div>
+                        </span>
+                        
+                 
+                    </div>
+                <div class="fg-news-radio">
+                       <label class="radio-inline">
+                    <input type="radio" name="salutationType" id="optionsRadios25" class="salutation-type-input" value="NONE" {% if newsletterId != 0 %}{%if editData.salutationType == 'NONE'%} checked {% endif %} {% endif %}>
+                    {{'NL_SALUTATION_NONE'|trans}}</label></div>
+            </div>
+        </dd>        
+        {% if dataArray.type == "GENERAL" %}
+        <dt>{{'NL_TYPE'|trans}}<span class="required" aria-required="true"> * </span></dt>
+        <dd>
+            <div class="radio-list">
+                <div class="fg-news-radio">
+                         <label class="radio-inline">
+                    <input type="radio" name="publishType" id="optionsRadios26" value="SUBSCRIPTION"  {% if newsletterId != 0 %}{% if editData.publishType == 'SUBSCRIPTION'%} checked {% endif%} {% elseif(newsletterId == 0)%} checked {% endif %}>
+                    {{'NL_NONMANDATORY'|trans}}</label></div>
+                <div class="fg-news-radio">
+                      <label class="radio-inline">
+                    <input type="radio" name="publishType" id="optionsRadios26" value="MANDATORY" {% if newsletterId != 0%} {% if editData.publishType == 'MANDATORY'%} checked {% endif %}{% endif %}>
+                    {{'NL_MANDATORY'|trans}}</label></div>                
+            </div>
+        </dd>
+        {% endif %}
+        {% if dataArray.totallanguageCount > 1 %}
+        <div class="fg-lang-select" dataerror-group>
+        <dt class="control-label">{{'NL_LANGUAGE'|trans}}<span class="required" aria-required="true"> * </span></dt>
+        <dd>
+            <select class="form-control bs-select fg-select-font selectpicker" multiple name="language[]" required="required">
+               {% if dataArray.totallanguageCount ==  editData.selectedlanguageCount|default(0) %}
+               {%set allselectedoption='selected'%}
+               {% else %} 
+                {%set allselectedoption=''%}     
+                {% endif %}    
+               <option value= "selectall"{{allselectedoption}} class="selectall fg-arrow-all">{{'SELECT_ALL'|trans}}</option>
+               {% for  key,value in dataArray.languages %}
+                {% if fgtwig.inArray(key, editData.language|default('')) %}
+                   {%set selectedoption='selected'%}
+                 {% else %} 
+                   {%set selectedoption=''%}     
+                  {% endif %}            
+                <option value= "{{key}}" {{selectedoption}} class="opt multiple">{{value}}</option>              
+              {% endfor %}
+            </select>
+            <span  for="language[]" class="help-block"></span>
+        </dd>
+        </div>
+        {% endif %}
+    </dl>
+    </div>
+</form>
+{% endblock %}
+{% block wizardscriptstart %}
+    <script type="text/javascript">
+        var none = "{{'SELECT_DEFAULT'|trans}}";
+        var all = "{{'ALL'|trans}}";
+        var generalval = $("#salutation-general-input").val();
+        var confirmNote= "{{'CONFIRMATION_NL_DOMAIN'|trans}}";
+        var change = "{{'CONFIRM_CHANGE'|trans}}";
+        var continuee = "{{'CONFIRM_CONTINUE'|trans}}";
+        var continueButtonText = "{{'NEWSLETTER_FIRSTSTEP_TEMPLATE_CHANGE_CONFIRMATION_BUTTON_TEXT'|trans}}";
+        var type = '{{dataArray.type}}';
+        var editStep = '{{editData.step|default(0)}}';
+        var editStepFinal = (type == 'GENERAL') ? editStep : 0;
+        var oldTemplateId = {{ (editData|length > 0) ?  editData.templateId|default(0) : 0 }};
+        var templateConfirmNote = "{{'NEWSLETTER_FIRSTSTEP_TEMPLATE_CHANGE_CONFIRMATION_TEXT' |trans}}";
+    </script>
+    <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js')}}" type="text/javascript"></script>    
+{% endblock %}    
+{% block wizardscriptend %}
+  <script type="text/javascript"> 
+    var templateDetailsPath = '{{path('get_newsletter_template_details',{'templateId':'dummyId'})}}';
+    $(document).ready(function(){
+        var selectedli = $('.fg-lang-select').find('li.selected').length,
+        totalli = $('.fg-lang-select').find('li').length;
+            if (totalli == selectedli) {
+                $('.fg-lang-select .filter-option').html(all);
+            }
+            if (selectedli == 0) {
+                $('.fg-lang-select .filter-option').html(none);
+            }    
+    });
+    
+    $(document).on('click', '#general-radio', function() { 
+        $("#salutation-general-input").val(generalval);
+        $("#salutation-general-input").removeAttr("disabled");
+        $("#salutation-general-input").attr("required", "required");
+    });
+    
+    $(document).on('click', '.salutation-type-input', function() {
+        $("#salutation-general-input").val("");
+        $("#salutation-general-input").attr("disabled", "true");
+        $("#salutation-block").removeClass("has-error");
+        $("#general-input-span").hide();
+        $("#salutation-general-input").removeAttr("required");
+        
+        if ($("#form-tab1 .alert-danger").is(":visible")) 
+        {
+            $("#salutation-block").removeClass("has-error");
+            $('.alert-danger').hide();
+            $("#form-tab1").valid();
+        }
+    });
+    
+    $('body').on('change', '#template_dropdown', function() {
+        var templateDetailsAjaxPath;
+        var templateId = $(this).val();
+        var defaultEmail = '{{dataArray.Email}}';
+        var defaultName = '{{dataArray.contactname}}';
+        var  totalLangCount = '{{dataArray.totallanguageCount}}';
+        templateId = (templateId == '')? 0 : templateId;
+        templateDetailsAjaxPath = templateDetailsPath.replace("dummyId", templateId);
+   
+        FgUtility.startPageLoading();
+        
+        $.ajax({url: templateDetailsAjaxPath,
+             type: 'POST',
+             success: function(data) {
+                 
+                    FgUtility.stopPageLoading();
+                    $("#username").val(data.senderName);
+                    $("#senderEmail").val(data.senderEmail);   
+                    $('input:radio[name="salutationType"]').prop('checked',false)
+                    $('input:radio[value="'+data.salutationType+'"]').prop('checked',true)
+                    
+                    if(data.selectedlanguageCount == totalLangCount){
+                       data.language.push('selectall');
+                    }
+                    
+                    $('select[name="language[]"]').find('option').removeAttr('selected');
+                    $('select[name="language[]"]').val(data.language);
+                    //$('select[name="language[]"]').selectpicker('val', data.language);
+                    $('select[name="language[]"]').selectpicker('render');
+                    
+                    if(data.selectedlanguageCount == totalLangCount){
+                       $('.fg-lang-select .filter-option').html(all);
+                    }
+                    
+                    $.uniform.update('input:radio[name="salutationType"]');
+                     if( data.salutationType == "SAME" ){
+                          $("#salutation-general-input").val(data.salutation); 
+                          $("#salutation-general-input").removeAttr("disabled");
+                     }else {
+                         $("#salutation-general-input").attr("disabled", "true");
+                         $("#salutation-general-input").val('');
+                     }
+
+                     if(templateId == 0){
+                       $("#username").val(defaultName);
+                       $("#senderEmail").val(defaultEmail); 
+                       $("#subject").val('');
+                       $('input:radio[data-val="personal"]').prop('checked',true)
+                       $.uniform.update('input:radio[data-val="personal"]');
+                       $('.fg-lang-select .filter-option').html(none);
+                     }
+             }
+         })      
+ }); 
+       
+  </script>    
+{% endblock %}     
