@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnNewsletterManualContacts
  */
@@ -28,7 +26,7 @@ class FgCnNewsletterManualContacts
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +37,20 @@ class FgCnNewsletterManualContacts
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgCnNewsletterManualContacts
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
     {
         $this->contact = $contact;
-    
+
         return $this;
     }
 
     /**
      * Get contact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getContact()
     {
@@ -62,22 +61,24 @@ class FgCnNewsletterManualContacts
      * Set newsletter
      *
      * @param \Common\UtilityBundle\Entity\FgCnNewsletter $newsletter
+     *
      * @return FgCnNewsletterManualContacts
      */
     public function setNewsletter(\Common\UtilityBundle\Entity\FgCnNewsletter $newsletter = null)
     {
         $this->newsletter = $newsletter;
-    
+
         return $this;
     }
 
     /**
      * Get newsletter
      *
-     * @return \Common\UtilityBundle\Entity\FgCnNewsletter 
+     * @return \Common\UtilityBundle\Entity\FgCnNewsletter
      */
     public function getNewsletter()
     {
         return $this->newsletter;
     }
 }
+

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmOverviewSettings
  */
@@ -18,6 +16,11 @@ class FgCmOverviewSettings
      * @var string
      */
     private $settings;
+
+    /**
+     * @var string
+     */
+    private $type;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgClub
@@ -39,6 +42,7 @@ class FgCmOverviewSettings
      * Set settings
      *
      * @param string $settings
+     *
      * @return FgCmOverviewSettings
      */
     public function setSettings($settings)
@@ -59,9 +63,34 @@ class FgCmOverviewSettings
     }
 
     /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return FgCmOverviewSettings
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmOverviewSettings
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
@@ -80,32 +109,5 @@ class FgCmOverviewSettings
     {
         return $this->club;
     }
-    /**
-     * @var string
-     */
-    private $type;
-
-
-    /**
-     * Set type
-     *
-     * @param string $type
-     * @return FgCmOverviewSettings
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string 
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
 }
+

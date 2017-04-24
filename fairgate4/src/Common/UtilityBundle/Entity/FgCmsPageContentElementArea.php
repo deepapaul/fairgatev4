@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPageContentElementArea
  */
@@ -28,7 +26,7 @@ class FgCmsPageContentElementArea
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +37,20 @@ class FgCmsPageContentElementArea
      * Set element
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPageContentElement $element
+     *
      * @return FgCmsPageContentElementArea
      */
     public function setElement(\Common\UtilityBundle\Entity\FgCmsPageContentElement $element = null)
     {
         $this->element = $element;
-    
+
         return $this;
     }
 
     /**
      * Get element
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPageContentElement 
+     * @return \Common\UtilityBundle\Entity\FgCmsPageContentElement
      */
     public function getElement()
     {
@@ -62,22 +61,24 @@ class FgCmsPageContentElementArea
      * Set role
      *
      * @param \Common\UtilityBundle\Entity\FgRmRole $role
+     *
      * @return FgCmsPageContentElementArea
      */
     public function setRole(\Common\UtilityBundle\Entity\FgRmRole $role = null)
     {
         $this->role = $role;
-    
+
         return $this;
     }
 
     /**
      * Get role
      *
-     * @return \Common\UtilityBundle\Entity\FgRmRole 
+     * @return \Common\UtilityBundle\Entity\FgRmRole
      */
     public function getRole()
     {
         return $this->role;
     }
 }
+

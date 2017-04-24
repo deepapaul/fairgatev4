@@ -13,6 +13,7 @@ $domainArray = array(
     'apitest.fairgate.ch.fairgatev4x02.nine.ch',
     'api.fairgate.ch.fairgatev4x02.nine.ch',
     'fgv4.fairgate.ch.fairgatev4x02.nine.ch',
-    'fgv4deb.fairgate.ch.fairgatev4x02.nine.ch'
+    'fgv4deb.fairgate.ch.fairgatev4x02.nine.ch',
+    'fairgate.development_s3_new.localhost'
 );
 

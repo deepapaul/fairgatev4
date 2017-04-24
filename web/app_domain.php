@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @var Composer\Autoload\ClassLoader
  */
 $loader = require __DIR__.'/../fairgate4/app/autoload.php';
-include_once __DIR__.'/../fairgate4/app/bootstrap.php.cache';
+include_once __DIR__.'/../fairgate4/var/bootstrap.php.cache';
 
 // Enable APC for autoloading to improve performance.
 // You should change the ApcClassLoader first argument to a unique prefix

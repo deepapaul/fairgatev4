@@ -56,6 +56,7 @@ class ContactTableController extends Controller
         $contactlistData->includedIds = $request->get('includedIds', '');
         $contactlistData->excludedIds = $request->get('excludedIds', '');
         $contactlistData->specialFilter = $request->get('specialFilter', '');
+        $contactlistData->groupByColumn = 'fg_cm_contact.id';
         //For get the contact list array
         $contactData = $contactlistData->getContactData();
         //collect total number of records

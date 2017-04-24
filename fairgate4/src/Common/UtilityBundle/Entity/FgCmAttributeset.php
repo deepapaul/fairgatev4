@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmAttributeset
  */
@@ -54,6 +52,7 @@ class FgCmAttributeset
      * Set title
      *
      * @param string $title
+     *
      * @return FgCmAttributeset
      */
     public function setTitle($title)
@@ -77,6 +76,7 @@ class FgCmAttributeset
      * Set isSystem
      *
      * @param boolean $isSystem
+     *
      * @return FgCmAttributeset
      */
     public function setIsSystem($isSystem)
@@ -100,6 +100,7 @@ class FgCmAttributeset
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgCmAttributeset
      */
     public function setSortOrder($sortOrder)
@@ -123,6 +124,7 @@ class FgCmAttributeset
      * Set isFairgate
      *
      * @param boolean $isFairgate
+     *
      * @return FgCmAttributeset
      */
     public function setIsFairgate($isFairgate)
@@ -146,6 +148,7 @@ class FgCmAttributeset
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmAttributeset
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
@@ -165,3 +168,4 @@ class FgCmAttributeset
         return $this->club;
     }
 }
+

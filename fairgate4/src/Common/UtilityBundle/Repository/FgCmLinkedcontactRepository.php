@@ -62,18 +62,22 @@ class FgCmLinkedcontactRepository extends EntityRepository
      *
      * @return array
      */
-    public function getLinkedDefaultContacts($contactId, $clubType = '', $clubId)
-    {
-        //get contact id from corresponding table(if club type is federation the table field name is fed_contact_id else contact_id)
-        $contactFrom = ($clubType == 'federation') ? "fed_contact_id" : "contact_id";
-        $activeC = "AND (N.main_club_id=N.club_id OR (N.fed_membership_cat_id IS NOT NULL AND (N.old_fed_membership_id IS NOT NULL OR N.is_fed_membership_confirmed='0')))";
-        $conn = $this->getEntityManager()->getConnection();
-        $sql = "SELECT ContactNameNoSort(C.id, 0) AS contactName, MS.9 AS companyName, (SELECT N.id FROM fg_cm_contact N WHERE N.fed_contact_id=C.fed_contact_id AND N.club_id='$clubId' $activeC LIMIT 1) AS mainContactClub,C.*,MS.68 AS profilbild,C.club_id AS clubId
-                FROM `fg_cm_contact` C
-                LEFT JOIN master_system MS ON C.fed_contact_id = MS.fed_contact_id
-                WHERE C.comp_def_contact IN (SELECT fed_contact_id FROM fg_cm_contact WHERE id='$contactId') AND C.has_main_contact=1 AND C.is_permanent_delete = 0
-                GROUP BY C.fed_contact_id ORDER BY companyName ASC";
 
+    public function getLinkedDefaultContacts($contactId,$clubId)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $activeC = "AND (N.main_club_id=N.club_id OR (N.fed_membership_cat_id IS NOT NULL AND (N.old_fed_membership_id IS NOT NULL OR N.is_fed_membership_confirmed='0')))";
+        
+        $sql = "SELECT C.fed_contact_id, C.is_company, ContactNameNoSort(C.id, 0) AS contactName, C.id, C.comp_def_contact_fun, MS.9 AS companyName, MS.68 AS profilbild, C.club_id AS clubId,
+                (SELECT N.id FROM fg_cm_contact N WHERE N.fed_contact_id = C.fed_contact_id AND N.club_id='.$clubId.' $activeC LIMIT 1) AS mainContactClub
+                FROM `fg_cm_contact` C
+                INNER JOIN master_system MS ON C.fed_contact_id = MS.fed_contact_id
+                WHERE C.comp_def_contact IN (SELECT fed_contact_id FROM fg_cm_contact WHERE id='$contactId') AND 
+                    C.has_main_contact=1 AND 
+                    C.is_permanent_delete = 0 AND
+                    C.club_id = $clubId
+                ORDER BY companyName ASC";
+        
         return $conn->fetchAll($sql);
     }
 
@@ -538,8 +542,7 @@ class FgCmLinkedcontactRepository extends EntityRepository
         }
         if (count($updateFedCntsChangeDate)) {
             //set last_updated of contacts for main contact
-            $updateFedCntsChangeDateCntIds = implode(',', $updateFedCntsChangeDate);
-            $this->_em->getRepository('CommonUtilityBundle:FgCmContact')->updateLastUpdated($updateFedCntsChangeDateCntIds, 'fedContact');
+            $this->_em->getRepository('CommonUtilityBundle:FgCmContact')->updateLastUpdated($updateFedCntsChangeDate, 'fedContact');
         }
         if (count($connLogArray)) {
             //contact log entry--get names of all relations

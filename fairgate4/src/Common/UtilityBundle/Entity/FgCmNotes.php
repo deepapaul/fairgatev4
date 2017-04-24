@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmNotes
  */
@@ -20,9 +18,19 @@ class FgCmNotes
     private $date;
 
     /**
+     * @var \DateTime
+     */
+    private $editedOn;
+
+    /**
      * @var string
      */
     private $note;
+
+    /**
+     * @var integer
+     */
+    private $editedBy;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgCmContact
@@ -33,6 +41,11 @@ class FgCmNotes
      * @var \Common\UtilityBundle\Entity\FgCmContact
      */
     private $createdBy;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgClub
+     */
+    private $club;
 
 
     /**
@@ -49,6 +62,7 @@ class FgCmNotes
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return FgCmNotes
      */
     public function setDate($date)
@@ -69,9 +83,34 @@ class FgCmNotes
     }
 
     /**
+     * Set editedOn
+     *
+     * @param \DateTime $editedOn
+     *
+     * @return FgCmNotes
+     */
+    public function setEditedOn($editedOn)
+    {
+        $this->editedOn = $editedOn;
+
+        return $this;
+    }
+
+    /**
+     * Get editedOn
+     *
+     * @return \DateTime
+     */
+    public function getEditedOn()
+    {
+        return $this->editedOn;
+    }
+
+    /**
      * Set note
      *
      * @param string $note
+     *
      * @return FgCmNotes
      */
     public function setNote($note)
@@ -92,9 +131,34 @@ class FgCmNotes
     }
 
     /**
+     * Set editedBy
+     *
+     * @param integer $editedBy
+     *
+     * @return FgCmNotes
+     */
+    public function setEditedBy($editedBy)
+    {
+        $this->editedBy = $editedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get editedBy
+     *
+     * @return integer
+     */
+    public function getEditedBy()
+    {
+        return $this->editedBy;
+    }
+
+    /**
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgCmNotes
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
@@ -118,6 +182,7 @@ class FgCmNotes
      * Set createdBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $createdBy
+     *
      * @return FgCmNotes
      */
     public function setCreatedBy(\Common\UtilityBundle\Entity\FgCmContact $createdBy = null)
@@ -136,72 +201,12 @@ class FgCmNotes
     {
         return $this->createdBy;
     }
-    /**
-     * @var \DateTime
-     */
-    private $editedOn;
-
-    /**
-     * @var integer
-     */
-    private $editedBy;
-
-
-    /**
-     * Set editedOn
-     *
-     * @param \DateTime $editedOn
-     * @return FgCmNotes
-     */
-    public function setEditedOn($editedOn)
-    {
-        $this->editedOn = $editedOn;
-
-        return $this;
-    }
-
-    /**
-     * Get editedOn
-     *
-     * @return \DateTime
-     */
-    public function getEditedOn()
-    {
-        return $this->editedOn;
-    }
-
-    /**
-     * Set editedBy
-     *
-     * @param integer $editedBy
-     * @return FgCmNotes
-     */
-    public function setEditedBy($editedBy)
-    {
-        $this->editedBy = $editedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get editedBy
-     *
-     * @return integer
-     */
-    public function getEditedBy()
-    {
-        return $this->editedBy;
-    }
-    /**
-     * @var \Common\UtilityBundle\Entity\FgClub
-     */
-    private $club;
-
 
     /**
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmNotes
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
@@ -221,3 +226,4 @@ class FgCmNotes
         return $this->club;
     }
 }
+

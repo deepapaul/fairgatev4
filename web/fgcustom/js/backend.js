@@ -21,8 +21,8 @@ FgApp = {
         $.fn.select2.defaults = $.extend($.fn.select2.defaults, {
             minimumResultsForSearch: -1 // Removes search when there are 15 or fewer options
         });
-        
-        $.extend( true, $.fn.dataTable.defaults, {
+
+        $.extend(true, $.fn.dataTable.defaults, {
             oLanguage: {
                 sThousands: FgLocaleSettingsData.thousendSeperator,
             },
@@ -30,7 +30,7 @@ FgApp = {
                 thousands: FgLocaleSettingsData.thousendSeperator,
             }
         });
-        
+
         FgDirtyForm.init();
         FgDirtyForm.disableButtons();
         FgInputTextValidation.init();
@@ -72,9 +72,9 @@ FgApp = {
         }
     },
     clearAllStorage: function () {
-       var FgCurrentSprint = Sprint.currentSprint;
-       var currentSprint = localStorage.getItem('fgcurrentSprint');
-       //first time entry
+        var FgCurrentSprint = Sprint.currentSprint;
+        var currentSprint = localStorage.getItem('fgcurrentSprint');
+        //first time entry
         if (typeof currentSprint === 'undefined' || currentSprint === null || currentSprint == '') {
             localStorage.clear();
             localStorage.setItem('fgcurrentSprint', FgCurrentSprint);
@@ -84,37 +84,36 @@ FgApp = {
         }
 
     },
-  
-/*
- * Handle Contact swipe function for 
- * handling swipe functionality in contact overview tabs
- * loading next/previous contacts when do swipe in touchscreen
- */  
-    handleSwipeLeftRight :function(){
-        var swipe,swipeLeft,swipeRight;
+    /*
+     * Handle Contact swipe function for 
+     * handling swipe functionality in contact overview tabs
+     * loading next/previous contacts when do swipe in touchscreen
+     */
+    handleSwipeLeftRight: function () {
+        var swipe, swipeLeft, swipeRight;
         swipe = swipeLeft = swipeRight = false;
         var isTouchDevice = 'ontouchstart' in document.documentElement;
         $('body').addClass('touch-enabled');
-        if(isTouchDevice)
+        if (isTouchDevice)
             $('body').addClass('touch-enabled');
-        else{ //exit if it is not a touchscreen device
+        else { //exit if it is not a touchscreen device
             $('body').removeClass('touch-enabled');
             return;
         }
-        
-        $('body.touch-enabled').on('touchstart touchend touchup','table', function(event) {
+
+        $('body.touch-enabled').on('touchstart touchend touchup', 'table', function (event) {
             event.stopPropagation();
         });
 //       Following conditions for preventing unwaned swipe trigger in similar layout
-        if($('.fg-swipe-next-right a.fg-next').length>0){
+        if ($('.fg-swipe-next-right a.fg-next').length > 0) {
             swipeLeft = swipe = true;
-        } 
-        if ($('.fg-swipe-next-right a.fg-prev').length>0){
-            swipeRight = swipe = true; 
+        }
+        if ($('.fg-swipe-next-right a.fg-prev').length > 0) {
+            swipeRight = swipe = true;
         }
         if (swipe) {
             $('body').hammer().on("swipeleft swiperight", function (event) {
-                
+
                 var redirectURL = '';
                 if (event.type === 'swipeleft' && swipeLeft) {
                     FgUtility.startPageLoading();
@@ -447,160 +446,158 @@ var loadHtmlContent = function (selector, placeholder) {
     });
 }
 FgMultipleMergePopup = {
-    handleMergerablePopup : function (response) {
-        var htmlFinal = _.template($('#merge-multiple-popup-template').html(),{'mergableContacts': response.mergableContacts});
+    handleMergerablePopup: function (response) {
+        var htmlFinal = _.template($('#merge-multiple-popup-template').html(), {'mergableContacts': response.mergableContacts});
         $('#popup_contents').html(htmlFinal);
         FgMultipleMergePopup.disableDuplicateMerging();
         FgFormTools.handleUniform();
         pageType = (response.pageTpe) ? response.pageTpe : '';
-        response.alreadyActivatedCnt = (response.alreadyActivatedCnt)?response.alreadyActivatedCnt:0;
-        response.totalCnt = (response.totalCnt)?response.totalCnt:0;
+        response.alreadyActivatedCnt = (response.alreadyActivatedCnt) ? response.alreadyActivatedCnt : 0;
+        response.totalCnt = (response.totalCnt) ? response.totalCnt : 0;
         $('#popup').addClass('fg-membership-merge-modal');
         FgMultipleMergePopup.mergePopupSubmitHandling(response);
         $('#popup').modal('show');
-      
+
     },
-    mergePopupSubmitHandling:function(responses){
-        
-        $('#cancel_merging').one('click', function() {
+    mergePopupSubmitHandling: function (responses) {
+
+        $('#cancel_merging').one('click', function () {
             FgUtility.stopPageLoading();
             if (contactType == "draft") {
                 $('#popup').removeClass('fg-membership-merge-modal');
                 $('#popup').modal('hide');
                 FgUtility.showToastr(failureFlash, 'warning');
-            }else if(contactType == "external"){ 
+            } else if (contactType == "external") {
                 $('#popup').removeClass('fg-membership-merge-modal');
                 $('#popup').modal('hide');
                 FgMultipleMergePopup.cancelMerging(responses);
-            }else {
+            } else {
                 FgMultipleMergePopup.cancelMerging(responses);
             }
         });
-         $('#save_merging').one('click', function() {
-           FgUtility.startPageLoading();
+        $('#save_merging').one('click', function () {
+            FgUtility.startPageLoading();
             var mergerValue = FgParseFormField.fieldParse();
-            var creationArray = (responses.page == 'creations') ? {'contactDetails':responses.contactDetails,'nonMergeableContacts':responses.nonMergeableContacts,'selectedMembership':responses.selectedMembership,'selectedIds':responses.selectedIds,'totCount':responses.totCount} : '';
-            extraData={'merging':'save','mergeTo':mergerValue,'mergeType':'multiple','contactData':responses.mergableContacts,'creationArray':creationArray,'totalCnt':responses.totalCnt,'alreadyActivated':responses.alreadyActivatedCnt,'selectedMembership':responses.selectedMembership,'totCount':responses.totCount};
+            var creationArray = (responses.page == 'creations') ? {'contactDetails': responses.contactDetails, 'nonMergeableContacts': responses.nonMergeableContacts, 'selectedMembership': responses.selectedMembership, 'selectedIds': responses.selectedIds, 'totCount': responses.totCount} : '';
+            extraData = {'merging': 'save', 'mergeTo': mergerValue, 'mergeType': 'multiple', 'contactData': responses.mergableContacts, 'creationArray': creationArray, 'totalCnt': responses.totalCnt, 'alreadyActivated': responses.alreadyActivatedCnt, 'selectedMembership': responses.selectedMembership, 'totCount': responses.totCount};
             if (contactType == "draft") {
                 $('#popup').modal('hide');
                 FgXmlHttp.post(reactivateSavePath, extraData, '', function (response) {
                     confirmationCallback.confirmOrDiscardCallback(response.totalCount, 'creations');
                 });
-            }
-             else {
-                 FgXmlHttp.post(reactivateSavePath, extraData, '',function (response) {
-                    
+            } else {
+                FgXmlHttp.post(reactivateSavePath, extraData, '', function (response) {
+
                     $('#popup').modal('hide');
                     $('#popup').removeClass('fg-membership-merge-modal');
                     if (contactType == "archivedsponsor") {
                         sponsorTable.api().draw();
                     } else {
-                        if(contactType == "external"){ 
-                           $('#popup').modal('hide');
-                           $('#popup').removeClass('fg-membership-merge-modal');
-                           document.location = document.location.href;
-                          }else{
+                        if (contactType == "external") {
+                            $('#popup').modal('hide');
+                            $('#popup').removeClass('fg-membership-merge-modal');
+                            document.location = document.location.href;
+                        } else {
                             oTable.api().draw();
                         }
-                        
+
                     }
                     if (response.status == 'FAILURE') {
                         FgUtility.stopPageLoading();
                         FgUtility.showToastr(response.flash, 'warning');
                     } else {
                         FgUtility.stopPageLoading();
-                        FgCountUpdate.updateTopNav('add', 'contact', 'active',  parseInt(response.totalCount));
+                        FgCountUpdate.updateTopNav('add', 'contact', 'active', parseInt(response.totalCount));
                         if (contactType == "archivedsponsor") {
                             FgCountUpdate.updateTopNav('remove', 'sponsor', 'archived', parseInt(response.totalCount));
                             FgCountUpdate.updateTopNav('add', 'sponsor', 'active', parseInt(response.totalCount));
                         } else {
-                            FgCountUpdate.updateTopNav('remove', 'contact', 'archive', parseInt(response.totalCount)+responses.alreadyActivatedCnt);
+                            FgCountUpdate.updateTopNav('remove', 'contact', 'archive', parseInt(response.totalCount) + responses.alreadyActivatedCnt);
                         }
                     }
                 });
             }
         });
     },
-    cancelMerging:function(responses){
+    cancelMerging: function (responses) {
         $('#popup').removeClass('fg-membership-merge-modal');
         var mergerValue = FgParseFormField.fieldParse();
-        var creationArray = (responses.page == 'creations') ? {'contactDetails':responses.contactDetails,'nonMergeableContacts':responses.nonMergeableContacts,'selectedMembership':responses.selectedMembership,'selectedIds':responses.selectedIds,'totCount':responses.totCount} : '';
-        extraData={'merging':'cancel','mergeTo':mergerValue,'mergeType':'multiple','contactData':responses.mergableContacts,'creationArray':creationArray,'totalCnt':responses.totalCount,'alreadyActivated':responses.alreadyActivatedCnt};
-      
-      if (contactType == "external") {
-          //totalCnt
-           responses.totalCount = (responses.totalCount)?responses.totalCount:responses.totalCnt;
-          extraData={'merging':'cancel','mergeTo':mergerValue,'mergeType':'multiple','contactData':responses.mergableContacts,'creationArray':creationArray,'totalCnt':responses.totalCount,'alreadyActivated':responses.alreadyActivatedCnt};
-          document.location = document.location.href;
-      }
+        var creationArray = (responses.page == 'creations') ? {'contactDetails': responses.contactDetails, 'nonMergeableContacts': responses.nonMergeableContacts, 'selectedMembership': responses.selectedMembership, 'selectedIds': responses.selectedIds, 'totCount': responses.totCount} : '';
+        extraData = {'merging': 'cancel', 'mergeTo': mergerValue, 'mergeType': 'multiple', 'contactData': responses.mergableContacts, 'creationArray': creationArray, 'totalCnt': responses.totalCount, 'alreadyActivated': responses.alreadyActivatedCnt};
+
+        if (contactType == "external") {
+            //totalCnt
+            responses.totalCount = (responses.totalCount) ? responses.totalCount : responses.totalCnt;
+            extraData = {'merging': 'cancel', 'mergeTo': mergerValue, 'mergeType': 'multiple', 'contactData': responses.mergableContacts, 'creationArray': creationArray, 'totalCnt': responses.totalCount, 'alreadyActivated': responses.alreadyActivatedCnt};
+            document.location = document.location.href;
+        }
         if (contactType == "draft") {
-            FgXmlHttp.post(reactivateSavePath, extraData, '', function (response) {console.log(response);
+            FgXmlHttp.post(reactivateSavePath, extraData, '', function (response) {
+                console.log(response);
                 confirmationCallback.confirmOrDiscardCallback(response.totalCount, 'creations');
             });
-        }
-        else {
-                 FgXmlHttp.post(reactivateSavePath, extraData, '',function (response) {
-                    $('#popup').modal('hide');
-                    $('#popup').removeClass('fg-membership-merge-modal');
-                    if (contactType == "archivedsponsor") {
-                        sponsorTable.api().draw();
-                    } 
-                    else {
-                        if(contactType == "external"){
-                          document.location = document.location.href;
-                        }else
+        } else {
+            FgXmlHttp.post(reactivateSavePath, extraData, '', function (response) {
+                $('#popup').modal('hide');
+                $('#popup').removeClass('fg-membership-merge-modal');
+                if (contactType == "archivedsponsor") {
+                    sponsorTable.api().draw();
+                } else {
+                    if (contactType == "external") {
+                        document.location = document.location.href;
+                    } else
                         oTable.api().draw();
-                    }
-                    if (response.status == 'FAILURE') {
-                        FgUtility.stopPageLoading();
-                        FgUtility.showToastr(response.flash, 'warning');
+                }
+                if (response.status == 'FAILURE') {
+                    FgUtility.stopPageLoading();
+                    FgUtility.showToastr(response.flash, 'warning');
+                } else {
+                    FgUtility.stopPageLoading();
+                    FgCountUpdate.updateTopNav('add', 'contact', 'active', parseInt(response.totalCount));
+                    if (contactType == "archivedsponsor") {
+                        FgCountUpdate.updateTopNav('remove', 'sponsor', 'archived', parseInt(response.totalCount));
+                        FgCountUpdate.updateTopNav('add', 'sponsor', 'active', parseInt(response.totalCount));
                     } else {
-                        FgUtility.stopPageLoading();
-                        FgCountUpdate.updateTopNav('add', 'contact', 'active',  parseInt(response.totalCount));
-                        if (contactType == "archivedsponsor") {
-                            FgCountUpdate.updateTopNav('remove', 'sponsor', 'archived',  parseInt(response.totalCount));
-                            FgCountUpdate.updateTopNav('add', 'sponsor', 'active',  parseInt(response.totalCount));
-                        } else {
-                            FgCountUpdate.updateTopNav('remove', 'contact', 'archive',  parseInt(response.totalCount)+responses.alreadyActivatedCnt);
-                        }
+                        FgCountUpdate.updateTopNav('remove', 'contact', 'archive', parseInt(response.totalCount) + responses.alreadyActivatedCnt);
                     }
-                });
-            }
+                }
+            });
+        }
     },
-    disableDuplicateMerging:function(){
-        $('div[data-merge-wrapper] input[type=radio]:checked').each(function(){
-            if($(this).val() !== 'fed_mem'){
-                $('div[data-merge-wrapper] input[type=radio][value='+$(this).val()+']:not(:checked)').prop("disabled", true);
+    disableDuplicateMerging: function () {
+        $('div[data-merge-wrapper] input[type=radio]:checked').each(function () {
+            if ($(this).val() !== 'fed_mem') {
+                $('div[data-merge-wrapper] input[type=radio][value=' + $(this).val() + ']:not(:checked)').prop("disabled", true);
             }
         });
     }
 };
 FgMergePopup = {
-    handleMergerablePopup : function (response) {
-        fedMem={};
-        
-        var duplicates = (response['mergeEmail'].length>0) ? response.mergeEmail:response.duplicates;
-        var typeMer= (response['mergeEmail'].length>0) ? 'email':'fields';
-        var countMergeable = (response['mergeEmail'].length>0) ? 1:duplicates.length;
+    handleMergerablePopup: function (response) {
+        fedMem = {};
+
+        var duplicates = (response['mergeEmail'].length > 0) ? response.mergeEmail : response.duplicates;
+        var typeMer = (response['mergeEmail'].length > 0) ? 'email' : 'fields';
+        var countMergeable = (response['mergeEmail'].length > 0) ? 1 : duplicates.length;
         var currentContactData = response['currentContactData'];
-        var creationArray = (response['page'] == 'creations') ? {'contactDetails':response['contactDetails'],'selectedMembership':response['selectedMembership'],'selectedIds':response['selectedIds']} : '';
+        var creationArray = (response['page'] == 'creations') ? {'contactDetails': response['contactDetails'], 'selectedMembership': response['selectedMembership'], 'selectedIds': response['selectedIds']} : '';
         if (contactType == "external") {
 
-           var creationArray = {'contactDetails':response['contactDetails'],'selectedMembership':response['selectedMembership'],'selectedIds':response['selectedIds'],'alreadyActivatedCnt':response['alreadyActivatedCnt'],'totalCnt':response['totalCnt']} ;
-         }
+            var creationArray = {'contactDetails': response['contactDetails'], 'selectedMembership': response['selectedMembership'], 'selectedIds': response['selectedIds'], 'alreadyActivatedCnt': response['alreadyActivatedCnt'], 'totalCnt': response['totalCnt']};
+        }
         pageType = (response.pageTpe) ? response.pageTpe : '';
-        yours={'firstname':currentContactData['2']};
-        yours['lastname']=currentContactData['23'];
-        yours['gender']=currentContactData['Gender'];
-        yours['dob']=currentContactData['4'];
-        yours['location']=currentContactData['77'];
-        yours['email']=currentContactData['3'];
-        yours['isCompany']=currentContactData['Iscompany'];
-        yours['contactName']=currentContactData['contactName'];
+        yours = {'firstname': currentContactData['2']};
+        yours['lastname'] = currentContactData['23'];
+        yours['gender'] = currentContactData['Gender'];
+        yours['dob'] = currentContactData['4'];
+        yours['location'] = currentContactData['77'];
+        yours['email'] = currentContactData['3'];
+        yours['isCompany'] = currentContactData['Iscompany'];
+        yours['contactName'] = currentContactData['contactName'];
 
-        fedMem[response['currentContactData']['fedMembershipId']]=response['currentContactData']['fedMembershipTitle'];
+        fedMem[response['currentContactData']['fedMembershipId']] = response['currentContactData']['fedMembershipTitle'];
 
-        var htmlFinal = _.template($('#merge-popup-template').html(),{'duplicates': duplicates,'fedMem':fedMem,'typeMer':typeMer,'countMergeable':countMergeable,'yours':yours});
+        var htmlFinal = _.template($('#merge-popup-template').html(), {'duplicates': duplicates, 'fedMem': fedMem, 'typeMer': typeMer, 'countMergeable': countMergeable, 'yours': yours});
 
         $('#popup_contents').html(htmlFinal);
         $('#popup').addClass('fg-membership-merge-modal');
@@ -608,31 +605,30 @@ FgMergePopup = {
         $('#popup').modal('show');
         FgMergePopup.mergePopupHandling(typeMer, currentContactData, creationArray);
     },
-    mergePopupHandling:function(typeMer, currentContactData, creationArray){
-        $('#cancel_merging').one('click', function() {
+    mergePopupHandling: function (typeMer, currentContactData, creationArray) {
+        $('#cancel_merging').one('click', function () {
             if (contactType == "draft") {
                 $('#popup').removeClass('fg-membership-merge-modal');
                 $('#popup').modal('hide');
                 FgUtility.showToastr(failureFlash, 'warning');
-            } else if(contactType == "external"){
-                 $('#popup').removeClass('fg-membership-merge-modal');
+            } else if (contactType == "external") {
+                $('#popup').removeClass('fg-membership-merge-modal');
                 $('#popup').modal('hide');
                 FgUtility.startPageLoading();
-               FgMergePopup.cancelMerging(typeMer, currentContactData, creationArray);
-            }
-            else {
+                FgMergePopup.cancelMerging(typeMer, currentContactData, creationArray);
+            } else {
                 FgUtility.startPageLoading();
                 FgMergePopup.cancelMerging(typeMer, currentContactData, creationArray);
             }
         });
-         $('#save_merging').one('click', function() {
-             FgUtility.startPageLoading();
-            var mergerValue=$('.merge-value-radio:checked').val();
-            extraData={'merging':'save','mergeTo':mergerValue,'typeMer':typeMer, 'contactData' : currentContactData, 'creationArray' : creationArray};
-             if (contactType == "external") {
-                 
-                    extraData={'merging':'save','mergeTo':mergerValue,'typeMer':typeMer, 'contactData' : currentContactData, 'creationArray' : creationArray,'selectedMembership':creationArray['selectedMembership'],'contactDetails':creationArray['contactDetails'],'selectedIds':creationArray['selectedIds'],'totCount':creationArray['totCount']};
-             }
+        $('#save_merging').one('click', function () {
+            FgUtility.startPageLoading();
+            var mergerValue = $('.merge-value-radio:checked').val();
+            extraData = {'merging': 'save', 'mergeTo': mergerValue, 'typeMer': typeMer, 'contactData': currentContactData, 'creationArray': creationArray};
+            if (contactType == "external") {
+
+                extraData = {'merging': 'save', 'mergeTo': mergerValue, 'typeMer': typeMer, 'contactData': currentContactData, 'creationArray': creationArray, 'selectedMembership': creationArray['selectedMembership'], 'contactDetails': creationArray['contactDetails'], 'selectedIds': creationArray['selectedIds'], 'totCount': creationArray['totCount']};
+            }
             if (contactType == "draft") {
                 $('#popup').modal('hide');
                 FgXmlHttp.post(reactivateSavePath, extraData, '', function (response) {
@@ -642,25 +638,25 @@ FgMergePopup = {
                 $.get(reactivateSavePath, extraData, function (response) {
                     $('#popup').modal('hide');
                     $('#popup').removeClass('fg-membership-merge-modal');
-                    if(pageType == 'overview') {
+                    if (pageType == 'overview') {
                         $('#fg-dev-reactivate').hide();
-                        FgUtility.showToastr(response.flash, 'success');   
+                        FgUtility.showToastr(response.flash, 'success');
                         document.location = document.location.href;
                     } else {
                         if (contactType == "archivedsponsor") {
                             sponsorTable.api().draw();
                         } else {
-                            
-                            if(contactType == "external"){
-                                    $('#popup').modal('hide');
-                                    $('#popup').removeClass('fg-membership-merge-modal');
-                                    //console.log(648);
-                                   // FgUtility.showToastr(response.flash, 'success');   
-                                   document.location = document.location.href;
-                            }else{
+
+                            if (contactType == "external") {
+                                $('#popup').modal('hide');
+                                $('#popup').removeClass('fg-membership-merge-modal');
+                                //console.log(648);
+                                // FgUtility.showToastr(response.flash, 'success');   
+                                document.location = document.location.href;
+                            } else {
                                 oTable.api().draw();
                             }
-                            
+
                         }
                         if (response.status == 'FAILURE') {
                             FgUtility.stopPageLoading();
@@ -681,38 +677,35 @@ FgMergePopup = {
             }
         });
     },
-    cancelMerging:function(typeMer, currentContactData, creationArray){
-       
-        var mergerValue=$('.merge-value-radio:checked').val();
-        extraData={'merging':'cancel','mergeTo':mergerValue,'typeMer':typeMer, 'contactData' : currentContactData, 'creationArray' : creationArray};
+    cancelMerging: function (typeMer, currentContactData, creationArray) {
+
+        var mergerValue = $('.merge-value-radio:checked').val();
+        extraData = {'merging': 'cancel', 'mergeTo': mergerValue, 'typeMer': typeMer, 'contactData': currentContactData, 'creationArray': creationArray};
         if (contactType == "draft") {
             $('#popup').modal('hide');
             FgXmlHttp.post(reactivateSavePath, extraData, '', function (response) {
                 confirmationCallback.confirmOrDiscardCallback(response.totalCount, 'creations');
             });
-        } 
-        
-        else {
-           
+        } else {
+
             $.get(reactivateSavePath, extraData, function (response) {
                 $('#popup').modal('hide');
                 $('#popup').removeClass('fg-membership-merge-modal');
-                if(pageType == 'overview') {
+                if (pageType == 'overview') {
                     $('#fg-dev-reactivate').hide();
                     FgUtility.stopPageLoading();
-                   // FgUtility.showToastr(response.flash, 'success');   
+                    // FgUtility.showToastr(response.flash, 'success');   
                 } else {
                     if (contactType == "archivedsponsor") {
                         sponsorTable.api().draw();
                     } else {
-                       if(contactType == "external"){
-                           $('#popup').modal('hide');
+                        if (contactType == "external") {
+                            $('#popup').modal('hide');
                             $('#popup').removeClass('fg-membership-merge-modal');
-                         FgUtility.stopPageLoading();
-                          document.location = document.location.href;
-                        }
-                        else
-                        oTable.api().draw();
+                            FgUtility.stopPageLoading();
+                            document.location = document.location.href;
+                        } else
+                            oTable.api().draw();
                     }
                     if (response.status == 'FAILURE') {
                         FgUtility.stopPageLoading();
@@ -727,36 +720,36 @@ FgMergePopup = {
                         } else {
                             FgCountUpdate.updateTopNav('remove', 'contact', 'archive', response.totalCount);
                         }
-                    } 
+                    }
                 }
-            }); 
+            });
         }
     }
 }
 
 confirmationCallback = {
-    confirmOrDiscardCallback:function(updatedCount, page) {
+    confirmOrDiscardCallback: function (updatedCount, page) {
         FgMoreMenu.initServerSide('paneltab');
-        var actionMenuText = {'active' : {'none': actionMenuNoneSelectedText, 'single': actionMenuSingleSelectedText, 'multiple': actionMenuMultipleSelectedText}};
+        var actionMenuText = {'active': {'none': actionMenuNoneSelectedText, 'single': actionMenuSingleSelectedText, 'multiple': actionMenuMultipleSelectedText}};
         FgSidebar.dynamicMenus.push({actionmenu: actionMenuText});
         Breadcrumb.load([]);
-        if(page == 'creationsappform'){
-            var navigationBadgeId = '#fg-dev-confirm'+page+'-count';
+        if (page == 'creationsappform') {
+            var navigationBadgeId = '#fg-dev-confirm' + page + '-count';
             var navBadgeCount = $(navigationBadgeId).html();
             navBadgeCount = ((navBadgeCount - updatedCount) < 0) ? 0 : (navBadgeCount - updatedCount);
             $(navigationBadgeId).html(navBadgeCount);
-        }else{
-            var tabCount =  $('#fg-'+page+'-count').html();
+        } else {
+            var tabCount = $('#fg-' + page + '-count').html();
             tabCount = ((tabCount - updatedCount) < 0) ? 0 : (tabCount - updatedCount);
-            $('#fg-'+page+'-mutations-count').html(tabCount);
-            var navigationBadgeId = '#fg-dev-confirm'+page+'-count';
+            $('#fg-' + page + '-mutations-count').html(tabCount);
+            var navigationBadgeId = '#fg-dev-confirm' + page + '-count';
             var navBadgeCount = $(navigationBadgeId).html();
             navBadgeCount = ((navBadgeCount - updatedCount) < 0) ? 0 : (navBadgeCount - updatedCount);
             $(navigationBadgeId).html(navBadgeCount);
         }
-        var totalConfirmationCount = (parseInt($('#fg-dev-confirmchanges-count').html()) + parseInt($('#fg-dev-confirmmutations-count').html()) + parseInt($('#fg-dev-confirmcreations-count').html())+ parseInt($('#fg-dev-confirmcreationsappform-count').html()));
-        if(totalConfirmationCount == 0){
-           $('.fg-confirmations-warning').hide();
+        var totalConfirmationCount = (parseInt($('#fg-dev-confirmchanges-count').html()) + parseInt($('#fg-dev-confirmmutations-count').html()) + parseInt($('#fg-dev-confirmcreations-count').html()) + parseInt($('#fg-dev-confirmcreationsappform-count').html()));
+        if (totalConfirmationCount == 0) {
+            $('.fg-confirmations-warning').hide();
         }
         FgPageTitlebar.setMoreTab();
         FgFormTools.handleUniform();
@@ -769,8 +762,14 @@ confirmationCallback = {
  *
  */
 FgXmlHttp = {
+    isRequestRunning: false,
     //wrapper function $.post()
     post: function (url, data, replacediv, successCallback, failCallback, isReplaceContent) {
+        if (FgXmlHttp.isRequestRunning) {
+            return;
+        }
+        FgXmlHttp.isRequestRunning = true;
+
         if (!isReplaceContent)
             isReplaceContent = 1;
         var rand = Math.random();
@@ -793,14 +792,17 @@ FgXmlHttp = {
                             FgUtility.showToastr(result.flash);
                         }
                         if (successCallback && !result.errorArray) {
+                            FgXmlHttp.isRequestRunning = false;
                             successCallback.call({}, result);
                         }
                         if (failCallback) {
+                            FgXmlHttp.isRequestRunning = false;
                             failCallback.call({}, result);
                         }
                     } else {
                         FgXmlHttp.replaceContentFromUrl(document.location.href, result.flash, successCallback, result);
                     }
+                    FgXmlHttp.isRequestRunning = false;
                 }
 
             } else {
@@ -812,14 +814,17 @@ FgXmlHttp = {
                     }
                 }
                 if (successCallback && !result.errorArray) {
+                    FgXmlHttp.isRequestRunning = false;
                     successCallback.call({}, result);
                 }
                 if (failCallback) {
+                    FgXmlHttp.isRequestRunning = false;
                     failCallback.call({}, result);
                 }
 //                scroll to top common form error alert on failing validation
                 FgXmlHttp.scrollToErrorDiv();
                 FgUtility.stopPageLoading();
+                FgXmlHttp.isRequestRunning = false;
             }
         });
         // return false;
@@ -827,6 +832,10 @@ FgXmlHttp = {
     //wrapper function $.post() with file upload
     iframepost: function (url, form, extradata, replacediv, sucessCallback, failCallback) {
         FgUtility.startPageLoading();
+        if (FgXmlHttp.isRequestRunning) {
+            return;
+        }
+        FgXmlHttp.isRequestRunning = true;
         if (extradata)
             extradata.layout = false;
         else
@@ -846,8 +855,7 @@ FgXmlHttp = {
                         flag = true;
                     }
 
-                }
-                catch (e) {
+                } catch (e) {
                     //add exception here
                 }
                 if (flag) {
@@ -861,14 +869,16 @@ FgXmlHttp = {
                             FgXmlHttp.replaceContentFromUrl(obj.redirect, obj.flash, sucessCallback, false, obj);
                         }
 
-                    }  else if (obj.noparentload) {
+                    } else if (obj.noparentload) {
                         FgUtility.stopPageLoading();
                         if (obj.flash) {
                             FgUtility.showToastr(obj.flash);
                         }
                         if (sucessCallback) {
+                            FgXmlHttp.isRequestRunning = false;
                             sucessCallback.call({}, responseText);
                         }
+                        FgXmlHttp.isRequestRunning = false;
                     } else {
                         FgXmlHttp.replaceContentFromUrl(document.location.href, obj.flash, sucessCallback, false, obj);
                     }
@@ -877,10 +887,16 @@ FgXmlHttp = {
                         $(replacediv).html(responseText);
                     else
                         $('#fg-wrapper').html(responseText);
-                    if (sucessCallback)
+                    if (sucessCallback) {
+                        FgXmlHttp.isRequestRunning = false;
                         sucessCallback.call({}, responseText);
-                    if (failCallback)
+                    }
+
+                    if (failCallback) {
+                        FgXmlHttp.isRequestRunning = false;
                         failCallback.call({}, responseText);
+                    }
+
                     if (form.attr('data-scrollToFirstError')) {
 //                      scroll to first form error on failing validation (currently implemented only for create/edit contact by passing form attribute)
                         FgXmlHttp.scrollToErrorDiv('.has-error:eq(0):visible');
@@ -888,6 +904,7 @@ FgXmlHttp = {
 //                      scroll to top common form error alert on failing validation
                         FgXmlHttp.scrollToErrorDiv();
                     }
+                    FgXmlHttp.isRequestRunning = false;
                 }
             },
             url: url,
@@ -901,6 +918,10 @@ FgXmlHttp = {
     formPost: function (paramObj) {
         if (paramObj.form && paramObj.url) {
             FgUtility.startPageLoading();
+            if (FgXmlHttp.isRequestRunning) {
+                return;
+            }
+            FgXmlHttp.isRequestRunning = true;
             if (paramObj.extradata) {
                 paramObj.extradata.layout = false;
             } else {
@@ -922,8 +943,7 @@ FgXmlHttp = {
                             flag = true;
                         }
 
-                    }
-                    catch (e) {
+                    } catch (e) {
                         //add exception here
                     }
                     if (flag == true) {
@@ -936,12 +956,11 @@ FgXmlHttp = {
                                 FgXmlHttp.replaceContentFromUrl(obj.redirect, obj.flash, paramObj.sucessCallback, false, obj);
                             }
 
-                        }
-                        else if (obj.noreload) {
+                        } else if (obj.noreload) {
+                            FgXmlHttp.isRequestRunning = false;
                             if (obj.flash)
                                 FgUtility.showToastr(obj.flash);
-                        }
-                        else if (obj.status !== 'ERROR') {
+                        } else if (obj.status !== 'ERROR') {
                             FgXmlHttp.replaceContentFromUrl(document.location.href, obj.flash, paramObj.sucessCallback, false, obj);
                         }
                     } else {
@@ -952,24 +971,29 @@ FgXmlHttp = {
                         }
 //                        scroll to top common form error alert on failing validation
                         FgXmlHttp.scrollToErrorDiv();
+                        FgXmlHttp.isRequestRunning = false;
                     }
                     if (paramObj.successCallback) {
                         if (paramObj.successParam) {
+                            FgXmlHttp.isRequestRunning = false;
                             paramObj.successParam.responseText = responseText;
-                        }
-                        else {
+                        } else {
                             paramObj.successParam = {'responseText': responseText};
                         }
                         paramObj.successCallback.call(this, paramObj.successParam);
                     }
                     if (paramObj.failCallback) {
+                        FgXmlHttp.isRequestRunning = false;
                         paramObj.failCallback.call({}, paramObj.responseText);
                     }
                     FgUtility.stopPageLoading();
+                    FgXmlHttp.isRequestRunning = false;
                 },
                 error: function (data) {
                     if (paramObj.failCallback) {
+                        FgXmlHttp.isRequestRunning = false;
                         paramObj.failCallback.call({}, responseText);
+
                     }
                 }
             });
@@ -983,6 +1007,7 @@ FgXmlHttp = {
             }, /* FiX - to avoid reloading flash message from url*/
             success: function (data) {
                 FgUtility.stopPageLoading();
+                FgXmlHttp.isRequestRunning = false;
                 $('#fg-wrapper').html(data);
                 //FgApp.init();
                 if (flashmsg)
@@ -1032,7 +1057,7 @@ FgUtility = {
         toastr[toastrType](msg, title);
         FgStickySaveBar.init(0);
     },
-    dateFilter: function(rowDate, startdate, enddate){
+    dateFilter: function (rowDate, startdate, enddate) {
         if (startdate != '')
             var startdateTimestamp = moment(startdate, FgLocaleSettingsData.momentDateFormat).format('x')
         else
@@ -1048,16 +1073,14 @@ FgUtility = {
         if (startdateTimestamp > 0 && enddateTimestamp > 0) {
             if (currentRowTimestamp >= startdateTimestamp && currentRowTimestamp <= enddateTimestamp)
                 show = true;
-        }
-        else if (startdateTimestamp > 0) {
+        } else if (startdateTimestamp > 0) {
             if (currentRowTimestamp >= startdateTimestamp)
                 show = true;
-        }
-        else if (enddateTimestamp > 0) {
+        } else if (enddateTimestamp > 0) {
             if (currentRowTimestamp <= enddateTimestamp)
                 show = true;
         }
-        if (show){
+        if (show) {
             return true;
         } else {
             return false;
@@ -1068,10 +1091,10 @@ FgUtility = {
 
         $('body').on('mouseover click', '.fg-custom-popovers', function (e) {
             var _this = $(this);
-            if(_this.attr('data-popover-content')) {
-                thisContent = _this.find('.popover-content').html();                 
+            if (_this.attr('data-popover-content')) {
+                thisContent = _this.find('.popover-content').html();
             } else {
-                thisContent =  _this.data('content');
+                thisContent = _this.data('content');
             }
             posLeft = function () {
                 var left = ($('.fg-round-img').hasClass('fg-img-popover')) ? _this.offset().left - 18 : _this.offset().left;
@@ -1282,7 +1305,7 @@ FgUtility = {
                 $('#' + placeHolderDivId).hide(); //Added code for transistion effect
                 $('#' + placeHolderDivId).removeClass('hide');
                 $('#' + placeHolderDivId).slideDown(600); //Added code for transistion effect
-                $('#' + placeHolderDivId+ ' + .row div[name="fg-dev-add-function"]').slideDown(); //add transition for add function link
+                $('#' + placeHolderDivId + ' + .row div[name="fg-dev-add-function"]').slideDown(); //add transition for add function link
 
                 if ($(this)[0].hasAttribute('data-showfunction')) {
 
@@ -1316,13 +1339,13 @@ FgUtility = {
                 /*Commented for transistion effect*/
                 //$('#' + placeHolderDivId).addClass('hide');
                 //Added code for transistion effect
-                
+
                 $('#' + placeHolderDivId).slideUp("600", function () {
-                    
+
                     $('#displaydetails_' + parentElementId).addClass('hide');
 
                 });
-                $('#' + placeHolderDivId+ ' + .row div[name="fg-dev-add-function"]').slideUp(); //add transition for add function link
+                $('#' + placeHolderDivId + ' + .row div[name="fg-dev-add-function"]').slideUp(); //add transition for add function link
 
             }
 
@@ -1437,8 +1460,7 @@ FgUtility = {
             error_flag = true;
             $('#' + divid).css('display', 'block');
             $('#' + divid).html(datatabletranslations['Log_date_filter_err_msg2'] + '.');
-        }
-        else if (isStartDateFuture || isEndDateFuture) {
+        } else if (isStartDateFuture || isEndDateFuture) {
             if (isStartDateFuture) {
                 error_flag = true;
                 $('#' + divid).css('display', 'block');
@@ -1542,12 +1564,12 @@ FgUtility = {
                 ajax: {data: urlParams, method: 'post'},
                 filter: function (contacts) {
                     dataset = [];
-                     var val = $(addDataField).val();
-                     var existingArr = val.split(',');
+                    var val = $(addDataField).val();
+                    var existingArr = val.split(',');
                     $.map(contacts, function (contact) {
                         var exists = false;
                         for (i = 0; i < existingArr.length; i++) {
-                            if (contact.id == existingArr[i] ) {
+                            if (contact.id == existingArr[i]) {
                                 exists = true;
                             }
                         }
@@ -1576,9 +1598,9 @@ FgUtility = {
             ]
         }).on('tokenfield:createtoken', function (e) {
             var val = $(addDataField).val();
-            if(typeof e.attrs.id == "undefined"){
+            if (typeof e.attrs.id == "undefined") {
                 e.preventDefault();
-            }else{
+            } else {
                 var newval = '';
                 if (val == '') {
                     newval = e.attrs.id;
@@ -1590,7 +1612,8 @@ FgUtility = {
             }
 
         }).on('tokenfield:removetoken', function (e) {
-            var deletedId = e.attrs.id;console.log(deletedId);
+            var deletedId = e.attrs.id;
+            console.log(deletedId);
             var toremoveVal = e.attrs.value;
             var existing = $(existingDataField).val();
             if (existing) {
@@ -1672,7 +1695,7 @@ var FgResetChanges = {
             _thisObj.checkboxReset();
             setTimeout(function () {
                 FgTooltip.init()
-            },100);
+            }, 100);
         });
     },
     checkboxReset: function () {
@@ -1976,8 +1999,7 @@ FgPopOver = {
                         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
                         {
                             return 'auto';
-                        }
-                        else
+                        } else
                         {
                             var width = $(window).width() - 300;
                             var xPos = this.getPosition().left;
@@ -2006,7 +2028,7 @@ FgPopOver = {
             $('body').popover({
                 selector: selector,
                 trigger: 'hover',
-                html: htmlflag,        
+                html: htmlflag,
                 delay: {show: 100, hide: 800}
             });
         }
@@ -2114,12 +2136,12 @@ FgActionDropDownClick = {
                             $("#selcontacthidden").val(JSON.stringify(contactIdsArr));
                             assignmentJsonArr = {'dragMenuId': activeMenuRole_id, 'dragMenuTitle': activeMenuTitle, 'dragCategoryId': activeMenuCategory_id, 'dragCatType': activeMenusidebarType, 'selItemIds': itemids, 'filterData': filterData, 'searchVal': searchvalue};
                             showPopup('assignment', {assignmentData: assignmentJsonArr, 'actionType': actionType, 'selActionType': dataType});
-                        });                        
+                        });
                     } else {
                         itemids = contactids;
                         assignmentJsonArr = {'dragMenuId': activeMenuRole_id, 'dragMenuTitle': activeMenuTitle, 'dragCategoryId': activeMenuCategory_id, 'dragCatType': activeMenusidebarType, 'selItemIds': itemids, 'filterData': filterData, 'searchVal': searchvalue};
                         showPopup('assignment', {assignmentData: assignmentJsonArr, 'actionType': actionType, 'selActionType': dataType});
-                    }                    
+                    }
                     break;
                 case 'archive':
                     if ($(".searchbox:visible").val().length > 0) {
@@ -2190,7 +2212,8 @@ FgActionDropDownClick = {
                     break;
                 case 'confirmConfirmations':
                 case 'discardConfirmations':
-                    showPopup(actionType, {'actionType': actionType, 'selActionType': dataType, 'urlpath': redirectPath});
+                    var selectedCount = $(".chk_cnt").html();
+                    showPopup(actionType, {'actionType': actionType, 'selActionType': dataType, 'urlpath': redirectPath,'count':selectedCount});
                     break;
                 case 'skipAssignment':
                     if (contactids == '') {
@@ -2284,10 +2307,10 @@ FgActionDropDownClick = {
                     $.get(htmlgetPath, {'selcontactIds': contactids}, function (data) {
                         $('#popup_contents').html(data);
                         $('#popup').modal('show');
-                        
+
                         $("#reactivate").on('click', function () {
                             var fedMembershipVal = 0;
-                            if($('#fedmembership').length > 0) {
+                            if ($('#fedmembership').length > 0) {
                                 fedMembershipVal = $('#fedmembership').val();
                             }
                             $('form#archivecontacts .help-block').remove();
@@ -2320,9 +2343,9 @@ FgActionDropDownClick = {
                                         }
                                     }
                                 } else {
-                                    if(response.mergeable){
-                                        if(contactids.split(",").length > 1)
-                                           FgMultipleMergePopup.handleMergerablePopup(response);
+                                    if (response.mergeable) {
+                                        if (contactids.split(",").length > 1)
+                                            FgMultipleMergePopup.handleMergerablePopup(response);
                                         else
                                             FgMergePopup.handleMergerablePopup(response);
                                     }
@@ -2629,19 +2652,19 @@ FgActionDropDownClick = {
                     $("#assignment_exportpdf").submit();
                     break;
                 case 'addexistingfedmember':
-                    showPopup('addexistingfedmember', {path:redirectPath });
+                    showPopup('addexistingfedmember', {path: redirectPath});
                     break;
                 case 'assign_membership':
-                    showPopup(actionType, {path:redirectPath,assignmentData:{actionType:'assign',dropCatType:'membership'}});
+                    showPopup(actionType, {path: redirectPath, assignmentData: {actionType: 'assign', dropCatType: 'membership'}});
                     break;
                 case 'assign_fedmembership':
-                    showPopup(actionType, {path:redirectPath,assignmentData:{actionType:'assign',dropCatType:'fed_membership'}});
+                    showPopup(actionType, {path: redirectPath, assignmentData: {actionType: 'assign', dropCatType: 'fed_membership'}});
                     break;
                 case 'quit_membership':
-                    showPopup(actionType, {path:redirectPath,actionType:actionType});
+                    showPopup(actionType, {path: redirectPath, actionType: actionType});
                     break;
                 case 'quit_fed_membership':
-                    showPopup(actionType, {path:redirectPath,actionType:actionType});
+                    showPopup(actionType, {path: redirectPath, actionType: actionType});
                     break;
                 default:
                     if ($(".searchbox:visible").length) {
@@ -2923,8 +2946,7 @@ FgSponsor = {
         localStorage.removeItem(fgLocalStorageNames.sponsor.active.sidebarActiveSubMenu);
         if (source == 'bookmark') {
             localStorage.setItem(fgLocalStorageNames.sponsor.active.sidebarActiveMenu, parentli);
-        }
-        else {
+        } else {
             localStorage.setItem(fgLocalStorageNames.sponsor.active.sidebarActiveMenu, parentli + ',' + subparentli);
         }
         localStorage.setItem(fgLocalStorageNames.sponsor.active.sidebarActiveSubMenu, submenuli);
@@ -3083,16 +3105,14 @@ FgStickySaveBar = {
                     {
                         $('.backend-sticy-area').addClass('fg-sticky-block');
                         $('body').addClass('fg-sticky-save-area');
-                    }
-                    else
+                    } else
                     {
                         $('.backend-sticy-area').removeClass('fg-sticky-block');
                         $('body').removeClass('fg-sticky-save-area');
                     }
                     $(".page-content").attr('style', page_content_style);
                 });
-            }
-            else
+            } else
             {
                 var contentHeight = (tabPage == 2) ? $('#fg_field_category_137').height() + $('#fg_field_category_' + tabPage).height() : $('#fg_field_category_' + tabPage).height();
                 contentHeight = contentHeight + 300;
@@ -3101,8 +3121,7 @@ FgStickySaveBar = {
                 {
                     $('.backend-sticy-area').addClass('fg-sticky-block');
                     $('body').addClass('fg-sticky-save-area');
-                }
-                else
+                } else
                 {
                     $('.backend-sticy-area').removeClass('fg-sticky-block');
                     $('body').removeClass('fg-sticky-save-area');
@@ -3115,7 +3134,7 @@ FgStickySaveBar = {
 $.fn.dataTable.ext.errMode = 'none';
 /* Redirect to login page if session is expired */
 FgAjaxError = {
-    init: function() {
+    init: function () {
         $(document).ajaxError(function (event, jqXHR) {
             if (jqXHR.status === 403) {
                 window.location.reload();
@@ -3126,15 +3145,15 @@ FgAjaxError = {
 // This function is used to handle reactivate a contact from overview pages. 
 // It also handles the merging functionalities
 $("body").on('click', "#fg-dev-reactivate", function () {
-    $.get(reactivateOverviewPopup, {'selcontactIds': reactivateOerviewContactId }, function (data) {
+    $.get(reactivateOverviewPopup, {'selcontactIds': reactivateOerviewContactId}, function (data) {
         $('#popup_contents').html(data);
         $('#popup').modal('show');
         $("#reactivate").on('click', function () {
             $('form#archivecontacts .help-block').remove();
             $('form#archivecontacts .has-error').removeClass('has-error');
-            if($('#fedmembership').length > 0) {
+            if ($('#fedmembership').length > 0) {
                 fedMembershipVal = $('#fedmembership').val();
-                if(fedMembershipVal == ''){
+                if (fedMembershipVal == '') {
                     $('form#archivecontacts select#fedmembership').parent().addClass('has-error');
                     $('<span class="help-block fg-marg-top-5">required</span>').insertAfter($('form#archivecontacts select#fedmembership + .btn-group.bootstrap-select'));
                     return false;
@@ -3148,11 +3167,11 @@ $("body").on('click', "#fg-dev-reactivate", function () {
             $.get(reactivateOverviewPath, {'archivedData': assignmentJsonAr}, function (response) {
                 if (response.status != 'MERGE') {
                     $('#fg-dev-reactivate').hide();
-                    FgUtility.showToastr(response.flash, 'success');   
+                    FgUtility.showToastr(response.flash, 'success');
                     document.location = document.location.href;
                 } else {
-                     if(response.mergeable){
-                        response.pageTpe ='overview';
+                    if (response.mergeable) {
+                        response.pageTpe = 'overview';
                         FgMergePopup.handleMergerablePopup(response);
                     }
                 }
@@ -3163,8 +3182,8 @@ $("body").on('click', "#fg-dev-reactivate", function () {
 //handle modal pop up over lay disappear issue on click ( outer area or close button )
 
 
-$(document).on('hide.bs.modal','.fg-membership-merge-modal', function () {
-  $('.modal-backdrop').remove();
+$(document).on('hide.bs.modal', '.fg-membership-merge-modal', function () {
+    $('.modal-backdrop').remove();
 });
 
 
@@ -3184,145 +3203,144 @@ $(document).on('hide.bs.modal','.fg-membership-merge-modal', function () {
  * */
 
 FgClearInvalidLocalStorageDataOnDelete = {
-    clear: function (response){
+    clear: function (response) {
         filterStorage = JSON.parse(localStorage.getItem(fgLocalStorageNames.contact.active.filterStorage));
-        if(filterStorage == null)
+        if (filterStorage == null)
             return;
 
         var type = response.result.type;
-        var catId = response.result.catid;   
-        var deletedRoleIds = (response.result.deleledIds != null)?response.result.deleledIds.role:'';
-        var deletedFunctionIds = (response.result.deleledIds != null)?response.result.deleledIds.function:'';
-        var deletedCategoryIds = (response.result.deleledIds != null)?response.result.deleledIds.category:'';
+        var catId = response.result.catid;
+        var deletedRoleIds = (response.result.deleledIds != null) ? response.result.deleledIds.role : '';
+        var deletedFunctionIds = (response.result.deleledIds != null) ? response.result.deleledIds.function : '';
+        var deletedCategoryIds = (response.result.deleledIds != null) ? response.result.deleledIds.category : '';
         var clubId = fgLocalStorageNames.club.id;
 
-        switch(type){
+        switch (type) {
             case 'executiveboard':
-                if(typeof deletedFunctionIds == 'object'){
-                    _.each(deletedFunctionIds, function(id){ 
-                        var result = FgClearInvalidLocalStorageDataOnDelete.deleteKeyForSettings(filterStorage.contact_filter, ['FI'], 'ceb_function',id, '');
-                        if(result.found == true){
-                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('FI', id, 'FI_li', 'FI_li_'+id);
+                if (typeof deletedFunctionIds == 'object') {
+                    _.each(deletedFunctionIds, function (id) {
+                        var result = FgClearInvalidLocalStorageDataOnDelete.deleteKeyForSettings(filterStorage.contact_filter, ['FI'], 'ceb_function', id, '');
+                        if (result.found == true) {
+                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('FI', id, 'FI_li', 'FI_li_' + id);
                         }
                     });
                 }
                 break;
             case 'team':
-                if(typeof deletedRoleIds == 'object'){
-                    _.each(deletedRoleIds, function(id){ 
+                if (typeof deletedRoleIds == 'object') {
+                    _.each(deletedRoleIds, function (id) {
                         var result = FgClearInvalidLocalStorageDataOnDelete.deleteKeyForSettings(filterStorage.contact_filter, ['TEAM'], catId, id, '');
-                        if(result.found == true){
-                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('TEAM', id, 'TEAM_li_'+catId, 'TEAM_li_'+catId+'_'+id);
+                        if (result.found == true) {
+                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('TEAM', id, 'TEAM_li_' + catId, 'TEAM_li_' + catId + '_' + id);
                         }
                     });
                 }
                 break;
             case 'workgroup':
-                if(typeof deletedRoleIds == 'object'){
-                    _.each(deletedRoleIds, function(id){ 
+                if (typeof deletedRoleIds == 'object') {
+                    _.each(deletedRoleIds, function (id) {
                         var result = FgClearInvalidLocalStorageDataOnDelete.deleteKeyForSettings(filterStorage.contact_filter, ['WORKGROUP'], catId, id, '');
-                        if(result.found == true){
-                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('WORKGROUP', id, 'WORKGROUP_li_'+catId, 'WORKGROUP_li_'+catId+'_'+id);
+                        if (result.found == true) {
+                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('WORKGROUP', id, 'WORKGROUP_li_' + catId, 'WORKGROUP_li_' + catId + '_' + id);
                         }
                     });
                 }
                 break;
             case 'role':
-                if(typeof deletedRoleIds == 'object'){
-                    _.each(deletedRoleIds, function(id){ 
-                        var result = FgClearInvalidLocalStorageDataOnDelete.deleteKeyForSettings(filterStorage.contact_filter, ['ROLES-'+clubId, 'FROLES-'+clubId], catId, id, '');
-                        if(result.found == true){
-                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('ROLES-'+clubId, id, 'ROLES-'+clubId+'_li_'+catId+','+'ROLES-'+clubId+'_li', 'ROLES-'+clubId+'_li_'+catId+'_'+id);
+                if (typeof deletedRoleIds == 'object') {
+                    _.each(deletedRoleIds, function (id) {
+                        var result = FgClearInvalidLocalStorageDataOnDelete.deleteKeyForSettings(filterStorage.contact_filter, ['ROLES-' + clubId, 'FROLES-' + clubId], catId, id, '');
+                        if (result.found == true) {
+                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('ROLES-' + clubId, id, 'ROLES-' + clubId + '_li_' + catId + ',' + 'ROLES-' + clubId + '_li', 'ROLES-' + clubId + '_li_' + catId + '_' + id);
 
                             //since we dont know whether federation role is deleted, so we delete the federation too in both cases
-                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('FROLES-'+clubId, id, 'FROLES-'+clubId+'_li_'+catId+','+'FROLES-'+clubId+'_li', 'FROLES-'+clubId+'_li_'+catId+'_'+id);
+                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('FROLES-' + clubId, id, 'FROLES-' + clubId + '_li_' + catId + ',' + 'FROLES-' + clubId + '_li', 'FROLES-' + clubId + '_li_' + catId + '_' + id);
                         }
                     });
                 }
 
-                if(typeof deletedFunctionIds == 'object'){
-                    _.each(deletedFunctionIds, function(id){ 
-                        var result = FgClearInvalidLocalStorageDataOnDelete.deleteKeyForSettings(filterStorage.contact_filter, ['ROLES-'+clubId, 'FROLES-'+clubId], catId, '', id);
-                        if(result.found == true){
-                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('ROLES-'+clubId, id, 'ROLES-'+clubId+'_li_'+catId+','+'ROLES-'+clubId+'_li', 'ROLES-'+clubId+'_li_'+catId+'_'+id);
+                if (typeof deletedFunctionIds == 'object') {
+                    _.each(deletedFunctionIds, function (id) {
+                        var result = FgClearInvalidLocalStorageDataOnDelete.deleteKeyForSettings(filterStorage.contact_filter, ['ROLES-' + clubId, 'FROLES-' + clubId], catId, '', id);
+                        if (result.found == true) {
+                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('ROLES-' + clubId, id, 'ROLES-' + clubId + '_li_' + catId + ',' + 'ROLES-' + clubId + '_li', 'ROLES-' + clubId + '_li_' + catId + '_' + id);
 
                             //since we dont know whether federation role is deleted, so we delete the federation too in both cases
-                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('FROLES-'+clubId, id, 'FROLES-'+clubId+'_li_'+catId+','+'FROLES-'+clubId+'_li', 'FROLES-'+clubId+'_li_'+catId+'_'+id);
+                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('FROLES-' + clubId, id, 'FROLES-' + clubId + '_li_' + catId + ',' + 'FROLES-' + clubId + '_li', 'FROLES-' + clubId + '_li_' + catId + '_' + id);
                         }
                     });
                 }
-                break;   
+                break;
             case 'membership':
-                if(typeof deletedCategoryIds == 'object'){
-                    _.each(deletedCategoryIds, function(id){ 
+                if (typeof deletedCategoryIds == 'object') {
+                    _.each(deletedCategoryIds, function (id) {
                         var result = FgClearInvalidLocalStorageDataOnDelete.deleteKeyForCategory(filterStorage.contact_filter, ['FM'], 'fed_membership', id, '');
-                        if(result.found == true){
-                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('ROLES', id, 'CONTACT_li_fed_membership,CONTACT_li', 'CONTACT_li_fed_membership_'+id);
+                        if (result.found == true) {
+                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('ROLES', id, 'CONTACT_li_fed_membership,CONTACT_li', 'CONTACT_li_fed_membership_' + id);
                         }
-                        
+
                         var result = FgClearInvalidLocalStorageDataOnDelete.deleteKeyForCategory(filterStorage.contact_filter, ['CM'], 'membership', id, '');
-                        if(result.found == true){
-                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('ROLES', id, 'CONTACT_li_membership,CONTACT_li', 'CONTACT_li_membership_'+id);
+                        if (result.found == true) {
+                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('ROLES', id, 'CONTACT_li_membership,CONTACT_li', 'CONTACT_li_membership_' + id);
                         }
                     });
                 }
-                break;  
+                break;
             case 'category-club':
-                if(typeof deletedCategoryIds == 'object'){
-                    _.each(deletedCategoryIds, function(id){ 
-                        var result = FgClearInvalidLocalStorageDataOnDelete.deleteKeyForCategory(filterStorage.contact_filter, ['ROLES-'+clubId], id, '', '');
-                        if(result.found == true){
-                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('ROLES-'+clubId, id, 'ROLES-'+clubId+'_li_'+id+',ROLES-'+clubId+'_li', '');
+                if (typeof deletedCategoryIds == 'object') {
+                    _.each(deletedCategoryIds, function (id) {
+                        var result = FgClearInvalidLocalStorageDataOnDelete.deleteKeyForCategory(filterStorage.contact_filter, ['ROLES-' + clubId], id, '', '');
+                        if (result.found == true) {
+                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('ROLES-' + clubId, id, 'ROLES-' + clubId + '_li_' + id + ',ROLES-' + clubId + '_li', '');
                         }
                     });
                 }
                 break;
             case 'category-fed_cat':
-                if(typeof deletedCategoryIds == 'object'){
-                    _.each(deletedCategoryIds, function(id){ 
-                        var result = FgClearInvalidLocalStorageDataOnDelete.deleteKeyForCategory(filterStorage.contact_filter, ['FROLES-'+clubId], id, '', '');
-                        if(result.found == true){
-                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('FROLES-'+clubId, id, 'FROLES-'+clubId+'_li_'+id+',FROLES-'+clubId+'_li', '');
-                        }
-                    });
-                }
-                break; 
-            case 'filterrole':
-                if(typeof deletedRoleIds == 'object'){
-                    _.each(deletedRoleIds, function(id){ 
-                        var result = FgClearInvalidLocalStorageDataOnDelete.deleteKeyForSettings(filterStorage.contact_filter, ['FILTERROLES-'+clubId], catId, id, '');
-                        if(result.found == true){
-                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('FILTERROLES-'+clubId, id, 'FILTERROLES-'+clubId+'_li_'+catId+',FILTERROLES-'+clubId+'_li', 'FILTERROLES-'+clubId+'_li_'+catId+'_'+id+'');
+                if (typeof deletedCategoryIds == 'object') {
+                    _.each(deletedCategoryIds, function (id) {
+                        var result = FgClearInvalidLocalStorageDataOnDelete.deleteKeyForCategory(filterStorage.contact_filter, ['FROLES-' + clubId], id, '', '');
+                        if (result.found == true) {
+                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('FROLES-' + clubId, id, 'FROLES-' + clubId + '_li_' + id + ',FROLES-' + clubId + '_li', '');
                         }
                     });
                 }
                 break;
-             case 'category-filter_role':
-                if(typeof deletedCategoryIds == 'object'){
-                    _.each(deletedCategoryIds, function(id){ 
-                        var result = FgClearInvalidLocalStorageDataOnDelete.deleteKeyForCategory(filterStorage.contact_filter, ['FILTERROLES-'+clubId], id, '', '');
-                        if(result.found == true){
-                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('FILTERROLES-'+clubId, id, 'FILTERROLES-'+clubId+'_li_'+id+',FILTERROLES-'+clubId+'_li','');
+            case 'filterrole':
+                if (typeof deletedRoleIds == 'object') {
+                    _.each(deletedRoleIds, function (id) {
+                        var result = FgClearInvalidLocalStorageDataOnDelete.deleteKeyForSettings(filterStorage.contact_filter, ['FILTERROLES-' + clubId], catId, id, '');
+                        if (result.found == true) {
+                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('FILTERROLES-' + clubId, id, 'FILTERROLES-' + clubId + '_li_' + catId + ',FILTERROLES-' + clubId + '_li', 'FILTERROLES-' + clubId + '_li_' + catId + '_' + id + '');
                         }
                     });
                 }
-                break;    
+                break;
+            case 'category-filter_role':
+                if (typeof deletedCategoryIds == 'object') {
+                    _.each(deletedCategoryIds, function (id) {
+                        var result = FgClearInvalidLocalStorageDataOnDelete.deleteKeyForCategory(filterStorage.contact_filter, ['FILTERROLES-' + clubId], id, '', '');
+                        if (result.found == true) {
+                            FgClearInvalidLocalStorageDataOnDelete.clearActiveMenu('FILTERROLES-' + clubId, id, 'FILTERROLES-' + clubId + '_li_' + id + ',FILTERROLES-' + clubId + '_li', '');
+                        }
+                    });
+                }
+                break;
         }
     },
-
     /*
      * This function is used to clear the contact filter localstorage
      * This function is similar to deleteKeyForCategory(), with the only change that this function will check the 'input1' field too
      * The selection between these two fucntion is entirely depending on the structure of local storage
      */
-    deleteKeyForSettings: function(contactFilterData, indexList, entry, input1, input2){
+    deleteKeyForSettings: function (contactFilterData, indexList, entry, input1, input2) {
         var returnArray = {};
         returnArray.found = false;
-        _.find(contactFilterData, function(obj, key){
-            if( ($.inArray(obj.type, indexList) > -1) && obj.entry == entry){
-                if( (input1 != '' && obj.input1 == input1) || (input2 != '' && obj.input2 == input2) ) {
+        _.find(contactFilterData, function (obj, key) {
+            if (($.inArray(obj.type, indexList) > -1) && obj.entry == entry) {
+                if ((input1 != '' && obj.input1 == input1) || (input2 != '' && obj.input2 == input2)) {
                     returnArray.found = true;
-                    
+
                     //remove the contact filter local storage
                     localStorage.removeItem(fgLocalStorageNames.contact.active.filterStorage)
                 }
@@ -3332,20 +3350,19 @@ FgClearInvalidLocalStorageDataOnDelete = {
         returnArray.contactFilterData = contactFilterData;
         return returnArray;
     },
-
-     /*
+    /*
      * This function is used to clear the contact filter localstorage
      * This function is similar to deleteKeyForSettings(), with the only change that the former will check the 'input1' field too
      * The selection between these two fucntion is entirely depending on the structure of local storage
      */
-    deleteKeyForCategory: function(contactFilterData, indexList, entry, input1, input2){
+    deleteKeyForCategory: function (contactFilterData, indexList, entry, input1, input2) {
         var returnArray = {};
         returnArray.found = false;
-        _.find(contactFilterData, function(obj, key){
-            if( ($.inArray(obj.type, indexList) > -1) && obj.entry == entry){
+        _.find(contactFilterData, function (obj, key) {
+            if (($.inArray(obj.type, indexList) > -1) && obj.entry == entry) {
                 returnArray.found = true;
                 returnArray.input1 = obj.input1;
-                
+
                 //remove the contact filter local storage
                 localStorage.removeItem(fgLocalStorageNames.contact.active.filterStorage)
             }
@@ -3353,81 +3370,93 @@ FgClearInvalidLocalStorageDataOnDelete = {
         });
         return returnArray;
     },
-
     /*
      * This function will clear the active menu details from the localstorage for both category and settings
      * The parameters is the value in the localstorages of   (sidebarActiveMenu,sidebarActiveSubMenu,ActiveMenuDetVar)
      */
-    clearActiveMenu: function(type, id, activeMenuId, activeSubmenuId){
+    clearActiveMenu: function (type, id, activeMenuId, activeSubmenuId) {
         sidebarActiveMenu = localStorage.getItem(fgLocalStorageNames.contact.active.sidebarActiveMenu);
         sidebarActiveSubMenu = localStorage.getItem(fgLocalStorageNames.contact.active.sidebarActiveSubMenu);
         ActiveMenuDetVar = JSON.parse(localStorage.getItem(fgLocalStorageNames.contact.active.ActiveMenuDetVar));
 
-        if(ActiveMenuDetVar.type == type && ActiveMenuDetVar.id == id){
-            ActiveMenuDetVar = {"type":"allActive"};
+        if (ActiveMenuDetVar.type == type && ActiveMenuDetVar.id == id) {
+            ActiveMenuDetVar = {"type": "allActive"};
         }
 
-        if(sidebarActiveMenu == activeMenuId || sidebarActiveSubMenu == activeSubmenuId){
+        if (sidebarActiveMenu == activeMenuId || sidebarActiveSubMenu == activeSubmenuId) {
             sidebarActiveMenu = 'bookmark_li';
             sidebarActiveSubMenu = 'allActive';
-            ActiveMenuDetVar = {"type":"allActive"};
-        } 
+            ActiveMenuDetVar = {"type": "allActive"};
+        }
 
         localStorage.setItem(fgLocalStorageNames.contact.active.sidebarActiveMenu, sidebarActiveMenu);
-        localStorage.setItem(fgLocalStorageNames.contact.active.sidebarActiveSubMenu, sidebarActiveSubMenu); 
+        localStorage.setItem(fgLocalStorageNames.contact.active.sidebarActiveSubMenu, sidebarActiveSubMenu);
         localStorage.setItem(fgLocalStorageNames.contact.active.ActiveMenuDetVar, JSON.stringify(ActiveMenuDetVar));
     },
-
     /*
      * This function will clear the active menu details from the localstorage for saved filters
      * The parameters id is the id of the saved filter
      * This function is directly called from the page
      */
-    clearActiveMenuForSavedFilters: function(id){
+    clearActiveMenuForSavedFilters: function (id) {
         sidebarActiveMenu = localStorage.getItem(fgLocalStorageNames.contact.active.sidebarActiveMenu);
         sidebarActiveSubMenu = localStorage.getItem(fgLocalStorageNames.contact.active.sidebarActiveSubMenu);
         ActiveMenuDetVar = JSON.parse(localStorage.getItem(fgLocalStorageNames.contact.active.ActiveMenuDetVar));
 
-        if(sidebarActiveSubMenu == 'filter_li_'+id){
+        if (sidebarActiveSubMenu == 'filter_li_' + id) {
             sidebarActiveMenu = 'bookmark_li';
             sidebarActiveSubMenu = 'allActive';
-            ActiveMenuDetVar = {"type":"allActive"};
-            
+            ActiveMenuDetVar = {"type": "allActive"};
+
             //remove the contact filter local storage
             localStorage.removeItem(fgLocalStorageNames.contact.active.filterStorage)
         }
 
         localStorage.setItem(fgLocalStorageNames.contact.active.sidebarActiveMenu, sidebarActiveMenu);
-        localStorage.setItem(fgLocalStorageNames.contact.active.sidebarActiveSubMenu, sidebarActiveSubMenu); 
+        localStorage.setItem(fgLocalStorageNames.contact.active.sidebarActiveSubMenu, sidebarActiveSubMenu);
         localStorage.setItem(fgLocalStorageNames.contact.active.ActiveMenuDetVar, JSON.stringify(ActiveMenuDetVar));
     }
 };
 
- function confirmOrDiscardCallbackApplication(updatedCount) {
-        FgPageTitlebar.setMoreTab();
-        var actionMenuText = {'active' : {'none': actionMenuNoneSelectedText, 'single': actionMenuSingleSelectedText, 'multiple': actionMenuMultipleSelectedText}};
-        FgSidebar.dynamicMenus.push({actionmenu: actionMenuText});
-        Breadcrumb.load([]);
-        $('#fg_tab_0 a span.badge').html(updatedCount);
-        var navigationBadgeId = '#fg-dev-topnav-confirmfedmemberships-count';
-        var navBadgeCount = $(navigationBadgeId).html();
-        navBadgeCount = ((navBadgeCount - updatedCount) < 0) ? 0 : (navBadgeCount - updatedCount);
-        $(navigationBadgeId).html(navBadgeCount); 
-        var fedmembershipTopNavCount = $('#fg-dev-topnav-confirmclubassignment-count').html();
-        var totalConfirmCount = (parseInt(navBadgeCount) + parseInt(fedmembershipTopNavCount));
-        if(totalConfirmCount == 0){
-            $('.fg-dev-application-warning').hide();
-        }
-
+function confirmOrDiscardCallbackApplication(updatedCount) {
+    FgPageTitlebar.setMoreTab();
+    var actionMenuText = {'active': {'none': actionMenuNoneSelectedText, 'single': actionMenuSingleSelectedText, 'multiple': actionMenuMultipleSelectedText}};
+    FgSidebar.dynamicMenus.push({actionmenu: actionMenuText});
+    Breadcrumb.load([]);
+    $('#fg_tab_0 a span.badge').html(updatedCount);
+    var navigationBadgeId = '#fg-dev-topnav-confirmfedmemberships-count';
+    var navBadgeCount = $(navigationBadgeId).html();
+    navBadgeCount = ((navBadgeCount - updatedCount) < 0) ? 0 : (navBadgeCount - updatedCount);
+    $(navigationBadgeId).html(navBadgeCount);
+    var fedmembershipTopNavCount = $('#fg-dev-topnav-confirmclubassignment-count').html();
+    var totalConfirmCount = (parseInt(navBadgeCount) + parseInt(fedmembershipTopNavCount));
+    if (totalConfirmCount == 0) {
+        $('.fg-dev-application-warning').hide();
     }
-    /**
-     * To set delay for a function.
-     * Cretad for table search optimaization #FAIR-2199
-     */
-    var setDelay = (function(){
-        var timer = 0;
-        return function(callback, ms){
-        clearTimeout (timer);
+
+}
+/**
+ * To set delay for a function.
+ * Cretad for table search optimaization #FAIR-2199
+ */
+var setDelay = (function () {
+    var timer = 0;
+    return function (callback, ms) {
+        clearTimeout(timer);
         timer = setTimeout(callback, ms);
-        };
-      })();
+    };
+})();
+
+/**
+ *
+ *Hide contact limit exceed pop up
+ */
+function closeWarningPopup(that) {
+    if ($('#'+that).attr('redirect_path') != '') {
+        window.location = $('#'+that).attr('redirect_path');
+    } else {
+        $('#merge-popup').modal('hide');
+        $('#'+that).parents().eq(3).find(".close").trigger('click');
+    }
+
+}

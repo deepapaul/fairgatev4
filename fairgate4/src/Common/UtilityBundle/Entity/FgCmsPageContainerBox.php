@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPageContainerBox
  */
@@ -28,7 +26,7 @@ class FgCmsPageContainerBox
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +37,20 @@ class FgCmsPageContainerBox
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgCmsPageContainerBox
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -62,22 +61,24 @@ class FgCmsPageContainerBox
      * Set column
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPageContainerColumn $column
+     *
      * @return FgCmsPageContainerBox
      */
     public function setColumn(\Common\UtilityBundle\Entity\FgCmsPageContainerColumn $column = null)
     {
         $this->column = $column;
-    
+
         return $this;
     }
 
     /**
      * Get column
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPageContainerColumn 
+     * @return \Common\UtilityBundle\Entity\FgCmsPageContainerColumn
      */
     public function getColumn()
     {
         return $this->column;
     }
 }
+

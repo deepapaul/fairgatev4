@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsForms
  */
@@ -115,30 +113,30 @@ class FgCmsForms
     private $createdAt;
 
     /**
-     * @var integer
-     */
-    private $createdBy;
-
-    /**
      * @var \DateTime
      */
     private $updatedAt;
-
-    /**
-     * @var integer
-     */
-    private $updatedBy;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgClub
      */
     private $club;
 
+    /**
+     * @var \Common\UtilityBundle\Entity\FgCmContact
+     */
+    private $createdBy;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgCmContact
+     */
+    private $updatedBy;
+
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -149,19 +147,20 @@ class FgCmsForms
      * Set title
      *
      * @param string $title
+     *
      * @return FgCmsForms
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -172,19 +171,20 @@ class FgCmsForms
      * Set formType
      *
      * @param string $formType
+     *
      * @return FgCmsForms
      */
     public function setFormType($formType)
     {
         $this->formType = $formType;
-    
+
         return $this;
     }
 
     /**
      * Get formType
      *
-     * @return string 
+     * @return string
      */
     public function getFormType()
     {
@@ -195,19 +195,20 @@ class FgCmsForms
      * Set formStage
      *
      * @param string $formStage
+     *
      * @return FgCmsForms
      */
     public function setFormStage($formStage)
     {
         $this->formStage = $formStage;
-    
+
         return $this;
     }
 
     /**
      * Get formStage
      *
-     * @return string 
+     * @return string
      */
     public function getFormStage()
     {
@@ -218,19 +219,20 @@ class FgCmsForms
      * Set contactFormType
      *
      * @param string $contactFormType
+     *
      * @return FgCmsForms
      */
     public function setContactFormType($contactFormType)
     {
         $this->contactFormType = $contactFormType;
-    
+
         return $this;
     }
 
     /**
      * Get contactFormType
      *
-     * @return string 
+     * @return string
      */
     public function getContactFormType()
     {
@@ -241,19 +243,20 @@ class FgCmsForms
      * Set confirmationEmailSender
      *
      * @param string $confirmationEmailSender
+     *
      * @return FgCmsForms
      */
     public function setConfirmationEmailSender($confirmationEmailSender)
     {
         $this->confirmationEmailSender = $confirmationEmailSender;
-    
+
         return $this;
     }
 
     /**
      * Get confirmationEmailSender
      *
-     * @return string 
+     * @return string
      */
     public function getConfirmationEmailSender()
     {
@@ -264,19 +267,20 @@ class FgCmsForms
      * Set confirmationEmailSubject
      *
      * @param string $confirmationEmailSubject
+     *
      * @return FgCmsForms
      */
     public function setConfirmationEmailSubject($confirmationEmailSubject)
     {
         $this->confirmationEmailSubject = $confirmationEmailSubject;
-    
+
         return $this;
     }
 
     /**
      * Get confirmationEmailSubject
      *
-     * @return string 
+     * @return string
      */
     public function getConfirmationEmailSubject()
     {
@@ -287,19 +291,20 @@ class FgCmsForms
      * Set confirmationEmailContent
      *
      * @param string $confirmationEmailContent
+     *
      * @return FgCmsForms
      */
     public function setConfirmationEmailContent($confirmationEmailContent)
     {
         $this->confirmationEmailContent = $confirmationEmailContent;
-    
+
         return $this;
     }
 
     /**
      * Get confirmationEmailContent
      *
-     * @return string 
+     * @return string
      */
     public function getConfirmationEmailContent()
     {
@@ -310,19 +315,20 @@ class FgCmsForms
      * Set notificationEmailRecipients
      *
      * @param string $notificationEmailRecipients
+     *
      * @return FgCmsForms
      */
     public function setNotificationEmailRecipients($notificationEmailRecipients)
     {
         $this->notificationEmailRecipients = $notificationEmailRecipients;
-    
+
         return $this;
     }
 
     /**
      * Get notificationEmailRecipients
      *
-     * @return string 
+     * @return string
      */
     public function getNotificationEmailRecipients()
     {
@@ -333,19 +339,20 @@ class FgCmsForms
      * Set acceptanceEmailSender
      *
      * @param string $acceptanceEmailSender
+     *
      * @return FgCmsForms
      */
     public function setAcceptanceEmailSender($acceptanceEmailSender)
     {
         $this->acceptanceEmailSender = $acceptanceEmailSender;
-    
+
         return $this;
     }
 
     /**
      * Get acceptanceEmailSender
      *
-     * @return string 
+     * @return string
      */
     public function getAcceptanceEmailSender()
     {
@@ -356,19 +363,20 @@ class FgCmsForms
      * Set acceptanceEmailSubject
      *
      * @param string $acceptanceEmailSubject
+     *
      * @return FgCmsForms
      */
     public function setAcceptanceEmailSubject($acceptanceEmailSubject)
     {
         $this->acceptanceEmailSubject = $acceptanceEmailSubject;
-    
+
         return $this;
     }
 
     /**
      * Get acceptanceEmailSubject
      *
-     * @return string 
+     * @return string
      */
     public function getAcceptanceEmailSubject()
     {
@@ -379,19 +387,20 @@ class FgCmsForms
      * Set acceptanceEmailContent
      *
      * @param string $acceptanceEmailContent
+     *
      * @return FgCmsForms
      */
     public function setAcceptanceEmailContent($acceptanceEmailContent)
     {
         $this->acceptanceEmailContent = $acceptanceEmailContent;
-    
+
         return $this;
     }
 
     /**
      * Get acceptanceEmailContent
      *
-     * @return string 
+     * @return string
      */
     public function getAcceptanceEmailContent()
     {
@@ -402,19 +411,20 @@ class FgCmsForms
      * Set isAcceptanceEmailActive
      *
      * @param boolean $isAcceptanceEmailActive
+     *
      * @return FgCmsForms
      */
     public function setIsAcceptanceEmailActive($isAcceptanceEmailActive)
     {
         $this->isAcceptanceEmailActive = $isAcceptanceEmailActive;
-    
+
         return $this;
     }
 
     /**
      * Get isAcceptanceEmailActive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsAcceptanceEmailActive()
     {
@@ -425,19 +435,20 @@ class FgCmsForms
      * Set dismissalEmailSender
      *
      * @param string $dismissalEmailSender
+     *
      * @return FgCmsForms
      */
     public function setDismissalEmailSender($dismissalEmailSender)
     {
         $this->dismissalEmailSender = $dismissalEmailSender;
-    
+
         return $this;
     }
 
     /**
      * Get dismissalEmailSender
      *
-     * @return string 
+     * @return string
      */
     public function getDismissalEmailSender()
     {
@@ -448,19 +459,20 @@ class FgCmsForms
      * Set dismissalEmailSubject
      *
      * @param string $dismissalEmailSubject
+     *
      * @return FgCmsForms
      */
     public function setDismissalEmailSubject($dismissalEmailSubject)
     {
         $this->dismissalEmailSubject = $dismissalEmailSubject;
-    
+
         return $this;
     }
 
     /**
      * Get dismissalEmailSubject
      *
-     * @return string 
+     * @return string
      */
     public function getDismissalEmailSubject()
     {
@@ -471,19 +483,20 @@ class FgCmsForms
      * Set dismissalEmailContent
      *
      * @param string $dismissalEmailContent
+     *
      * @return FgCmsForms
      */
     public function setDismissalEmailContent($dismissalEmailContent)
     {
         $this->dismissalEmailContent = $dismissalEmailContent;
-    
+
         return $this;
     }
 
     /**
      * Get dismissalEmailContent
      *
-     * @return string 
+     * @return string
      */
     public function getDismissalEmailContent()
     {
@@ -494,19 +507,20 @@ class FgCmsForms
      * Set isDismissalEmailActive
      *
      * @param boolean $isDismissalEmailActive
+     *
      * @return FgCmsForms
      */
     public function setIsDismissalEmailActive($isDismissalEmailActive)
     {
         $this->isDismissalEmailActive = $isDismissalEmailActive;
-    
+
         return $this;
     }
 
     /**
-     * Get isDismissalMailActive
+     * Get isDismissalEmailActive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsDismissalEmailActive()
     {
@@ -517,19 +531,20 @@ class FgCmsForms
      * Set completionPromptSuccessMessage
      *
      * @param string $completionPromptSuccessMessage
+     *
      * @return FgCmsForms
      */
     public function setCompletionPromptSuccessMessage($completionPromptSuccessMessage)
     {
         $this->completionPromptSuccessMessage = $completionPromptSuccessMessage;
-    
+
         return $this;
     }
 
     /**
      * Get completionPromptSuccessMessage
      *
-     * @return string 
+     * @return string
      */
     public function getCompletionPromptSuccessMessage()
     {
@@ -540,19 +555,20 @@ class FgCmsForms
      * Set isActive
      *
      * @param boolean $isActive
+     *
      * @return FgCmsForms
      */
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
-    
+
         return $this;
     }
 
     /**
      * Get isActive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsActive()
     {
@@ -563,19 +579,20 @@ class FgCmsForms
      * Set isDeleted
      *
      * @param boolean $isDeleted
+     *
      * @return FgCmsForms
      */
     public function setIsDeleted($isDeleted)
     {
         $this->isDeleted = $isDeleted;
-    
+
         return $this;
     }
 
     /**
      * Get isDeleted
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsDeleted()
     {
@@ -586,19 +603,20 @@ class FgCmsForms
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return FgCmsForms
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -606,45 +624,23 @@ class FgCmsForms
     }
 
     /**
-     * Set createdBy
-     *
-     * @param integer $createdBy
-     * @return FgCmsForms
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-    
-        return $this;
-    }
-
-    /**
-     * Get createdBy
-     *
-     * @return integer 
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
+     *
      * @return FgCmsForms
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
-    
+
         return $this;
     }
 
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -652,48 +648,75 @@ class FgCmsForms
     }
 
     /**
-     * Set updatedBy
-     *
-     * @param integer $updatedBy
-     * @return FgCmsForms
-     */
-    public function setUpdatedBy($updatedBy)
-    {
-        $this->updatedBy = $updatedBy;
-    
-        return $this;
-    }
-
-    /**
-     * Get updatedBy
-     *
-     * @return integer 
-     */
-    public function getUpdatedBy()
-    {
-        return $this->updatedBy;
-    }
-
-    /**
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmsForms
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
         return $this->club;
     }
+
+    /**
+     * Set createdBy
+     *
+     * @param \Common\UtilityBundle\Entity\FgCmContact $createdBy
+     *
+     * @return FgCmsForms
+     */
+    public function setCreatedBy(\Common\UtilityBundle\Entity\FgCmContact $createdBy = null)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get createdBy
+     *
+     * @return \Common\UtilityBundle\Entity\FgCmContact
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set updatedBy
+     *
+     * @param \Common\UtilityBundle\Entity\FgCmContact $updatedBy
+     *
+     * @return FgCmsForms
+     */
+    public function setUpdatedBy(\Common\UtilityBundle\Entity\FgCmContact $updatedBy = null)
+    {
+        $this->updatedBy = $updatedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedBy
+     *
+     * @return \Common\UtilityBundle\Entity\FgCmContact
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updatedBy;
+    }
 }
+

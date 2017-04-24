@@ -352,8 +352,8 @@ BEGIN
                 
                 DELETE FROM `fg_cm_bookmarks` WHERE `contact_id` IN(fedContactId, subFedContactId,contact_ids_cursor_contact_id);
                 DELETE FROM `fg_table_settings` WHERE `contact_id` IN(fedContactId, subFedContactId,contact_ids_cursor_contact_id);
-                DELETE FROM `fg_club_bookmarks` WHERE `contact_id` IN(fedContactId, subFedContactId,contact_ids_cursor_contact_id);
-                DELETE FROM `fg_club_table_settings` WHERE `contact_id` IN(fedContactId, subFedContactId,contact_ids_cursor_contact_id);
+--                 DELETE FROM `fg_club_bookmarks` WHERE `contact_id` IN(fedContactId, subFedContactId,contact_ids_cursor_contact_id);
+--                 DELETE FROM `fg_club_table_settings` WHERE `contact_id` IN(fedContactId, subFedContactId,contact_ids_cursor_contact_id);
                 DELETE FROM `fg_rm_role_manual_contacts` WHERE `contact_id` IN(fedContactId, subFedContactId,contact_ids_cursor_contact_id);
                 DELETE FROM `fg_cn_recepients_mandatory` WHERE `contact_id` IN(fedContactId, subFedContactId,contact_ids_cursor_contact_id); 
                 DELETE FROM `fg_cn_recepients_exception` WHERE `contact_id` IN(fedContactId, subFedContactId,contact_ids_cursor_contact_id);

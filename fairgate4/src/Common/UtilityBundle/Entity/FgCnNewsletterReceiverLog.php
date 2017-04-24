@@ -2,10 +2,8 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
- * @ORM\Entity(repositoryClass="Common\UtilityBundle\Repository\FgCnNewsletterReceiverLogRepository")
+ * FgCnNewsletterReceiverLog
  */
 class FgCnNewsletterReceiverLog
 {
@@ -23,11 +21,6 @@ class FgCnNewsletterReceiverLog
      * @var \DateTime
      */
     private $sendDate;
-
-    /**
-     * @var integer
-     */
-    private $clubId;
 
     /**
      * @var string
@@ -85,9 +78,24 @@ class FgCnNewsletterReceiverLog
     private $linkedContactIds;
 
     /**
+     * @var boolean
+     */
+    private $isEmailChanged;
+
+    /**
+     * @var string
+     */
+    private $systemLanguage;
+
+    /**
      * @var \Common\UtilityBundle\Entity\FgCnNewsletter
      */
     private $newsletter;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgClub
+     */
+    private $club;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgCnSubscriber
@@ -96,14 +104,9 @@ class FgCnNewsletterReceiverLog
 
 
     /**
-     * @var string
-     */
-    private $systemLanguage;
-
-    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -114,19 +117,20 @@ class FgCnNewsletterReceiverLog
      * Set corresLang
      *
      * @param string $corresLang
+     *
      * @return FgCnNewsletterReceiverLog
      */
     public function setCorresLang($corresLang)
     {
         $this->corresLang = $corresLang;
-    
+
         return $this;
     }
 
     /**
      * Get corresLang
      *
-     * @return string 
+     * @return string
      */
     public function getCorresLang()
     {
@@ -137,19 +141,20 @@ class FgCnNewsletterReceiverLog
      * Set sendDate
      *
      * @param \DateTime $sendDate
+     *
      * @return FgCnNewsletterReceiverLog
      */
     public function setSendDate($sendDate)
     {
         $this->sendDate = $sendDate;
-    
+
         return $this;
     }
 
     /**
      * Get sendDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getSendDate()
     {
@@ -157,45 +162,23 @@ class FgCnNewsletterReceiverLog
     }
 
     /**
-     * Set clubId
-     *
-     * @param integer $clubId
-     * @return FgCnNewsletterReceiverLog
-     */
-    public function setClubId($clubId)
-    {
-        $this->clubId = $clubId;
-    
-        return $this;
-    }
-
-    /**
-     * Get clubId
-     *
-     * @return integer 
-     */
-    public function getClubId()
-    {
-        return $this->clubId;
-    }
-
-    /**
      * Set contactId
      *
      * @param string $contactId
+     *
      * @return FgCnNewsletterReceiverLog
      */
     public function setContactId($contactId)
     {
         $this->contactId = $contactId;
-    
+
         return $this;
     }
 
     /**
      * Get contactId
      *
-     * @return string 
+     * @return string
      */
     public function getContactId()
     {
@@ -206,19 +189,20 @@ class FgCnNewsletterReceiverLog
      * Set email
      *
      * @param string $email
+     *
      * @return FgCnNewsletterReceiverLog
      */
     public function setEmail($email)
     {
         $this->email = $email;
-    
+
         return $this;
     }
 
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -229,19 +213,20 @@ class FgCnNewsletterReceiverLog
      * Set isSent
      *
      * @param boolean $isSent
+     *
      * @return FgCnNewsletterReceiverLog
      */
     public function setIsSent($isSent)
     {
         $this->isSent = $isSent;
-    
+
         return $this;
     }
 
     /**
      * Get isSent
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsSent()
     {
@@ -252,19 +237,20 @@ class FgCnNewsletterReceiverLog
      * Set openedAt
      *
      * @param \DateTime $openedAt
+     *
      * @return FgCnNewsletterReceiverLog
      */
     public function setOpenedAt($openedAt)
     {
         $this->openedAt = $openedAt;
-    
+
         return $this;
     }
 
     /**
      * Get openedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getOpenedAt()
     {
@@ -275,19 +261,20 @@ class FgCnNewsletterReceiverLog
      * Set isBounced
      *
      * @param boolean $isBounced
+     *
      * @return FgCnNewsletterReceiverLog
      */
     public function setIsBounced($isBounced)
     {
         $this->isBounced = $isBounced;
-    
+
         return $this;
     }
 
     /**
      * Get isBounced
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsBounced()
     {
@@ -298,19 +285,20 @@ class FgCnNewsletterReceiverLog
      * Set bounceMessage
      *
      * @param string $bounceMessage
+     *
      * @return FgCnNewsletterReceiverLog
      */
     public function setBounceMessage($bounceMessage)
     {
         $this->bounceMessage = $bounceMessage;
-    
+
         return $this;
     }
 
     /**
      * Get bounceMessage
      *
-     * @return string 
+     * @return string
      */
     public function getBounceMessage()
     {
@@ -321,19 +309,20 @@ class FgCnNewsletterReceiverLog
      * Set resentEmail
      *
      * @param string $resentEmail
+     *
      * @return FgCnNewsletterReceiverLog
      */
     public function setResentEmail($resentEmail)
     {
         $this->resentEmail = $resentEmail;
-    
+
         return $this;
     }
 
     /**
      * Get resentEmail
      *
-     * @return string 
+     * @return string
      */
     public function getResentEmail()
     {
@@ -344,19 +333,20 @@ class FgCnNewsletterReceiverLog
      * Set salutation
      *
      * @param string $salutation
+     *
      * @return FgCnNewsletterReceiverLog
      */
     public function setSalutation($salutation)
     {
         $this->salutation = $salutation;
-    
+
         return $this;
     }
 
     /**
      * Get salutation
      *
-     * @return string 
+     * @return string
      */
     public function getSalutation()
     {
@@ -367,19 +357,20 @@ class FgCnNewsletterReceiverLog
      * Set bounceCount
      *
      * @param integer $bounceCount
+     *
      * @return FgCnNewsletterReceiverLog
      */
     public function setBounceCount($bounceCount)
     {
         $this->bounceCount = $bounceCount;
-    
+
         return $this;
     }
 
     /**
      * Get bounceCount
      *
-     * @return integer 
+     * @return integer
      */
     public function getBounceCount()
     {
@@ -390,19 +381,20 @@ class FgCnNewsletterReceiverLog
      * Set emailFieldIds
      *
      * @param string $emailFieldIds
+     *
      * @return FgCnNewsletterReceiverLog
      */
     public function setEmailFieldIds($emailFieldIds)
     {
         $this->emailFieldIds = $emailFieldIds;
-    
+
         return $this;
     }
 
     /**
      * Get emailFieldIds
      *
-     * @return string 
+     * @return string
      */
     public function getEmailFieldIds()
     {
@@ -413,19 +405,20 @@ class FgCnNewsletterReceiverLog
      * Set linkedContactIds
      *
      * @param string $linkedContactIds
+     *
      * @return FgCnNewsletterReceiverLog
      */
     public function setLinkedContactIds($linkedContactIds)
     {
         $this->linkedContactIds = $linkedContactIds;
-    
+
         return $this;
     }
 
     /**
      * Get linkedContactIds
      *
-     * @return string 
+     * @return string
      */
     public function getLinkedContactIds()
     {
@@ -433,22 +426,71 @@ class FgCnNewsletterReceiverLog
     }
 
     /**
+     * Set isEmailChanged
+     *
+     * @param boolean $isEmailChanged
+     *
+     * @return FgCnNewsletterReceiverLog
+     */
+    public function setIsEmailChanged($isEmailChanged)
+    {
+        $this->isEmailChanged = $isEmailChanged;
+
+        return $this;
+    }
+
+    /**
+     * Get isEmailChanged
+     *
+     * @return boolean
+     */
+    public function getIsEmailChanged()
+    {
+        return $this->isEmailChanged;
+    }
+
+    /**
+     * Set systemLanguage
+     *
+     * @param string $systemLanguage
+     *
+     * @return FgCnNewsletterReceiverLog
+     */
+    public function setSystemLanguage($systemLanguage)
+    {
+        $this->systemLanguage = $systemLanguage;
+
+        return $this;
+    }
+
+    /**
+     * Get systemLanguage
+     *
+     * @return string
+     */
+    public function getSystemLanguage()
+    {
+        return $this->systemLanguage;
+    }
+
+    /**
      * Set newsletter
      *
      * @param \Common\UtilityBundle\Entity\FgCnNewsletter $newsletter
+     *
      * @return FgCnNewsletterReceiverLog
      */
     public function setNewsletter(\Common\UtilityBundle\Entity\FgCnNewsletter $newsletter = null)
     {
         $this->newsletter = $newsletter;
-    
+
         return $this;
     }
 
     /**
      * Get newsletter
      *
-     * @return \Common\UtilityBundle\Entity\FgCnNewsletter 
+     * @return \Common\UtilityBundle\Entity\FgCnNewsletter
      */
     public function getNewsletter()
     {
@@ -456,78 +498,23 @@ class FgCnNewsletterReceiverLog
     }
 
     /**
-     * Set subscriber
-     *
-     * @param \Common\UtilityBundle\Entity\FgCnSubscriber $subscriber
-     * @return FgCnNewsletterReceiverLog
-     */
-    public function setSubscriber(\Common\UtilityBundle\Entity\FgCnSubscriber $subscriber = null)
-    {
-        $this->subscriber = $subscriber;
-    
-        return $this;
-    }
-
-    /**
-     * Get subscriber
-     *
-     * @return \Common\UtilityBundle\Entity\FgCnSubscriber 
-     */
-    public function getSubscriber()
-    {
-        return $this->subscriber;
-    }
-    /**
-     * @var boolean
-     */
-    private $isEmailChanged;
-
-
-    /**
-     * Set isEmailChanged
-     *
-     * @param boolean $isEmailChanged
-     * @return FgCnNewsletterReceiverLog
-     */
-    public function setIsEmailChanged($isEmailChanged)
-    {
-        $this->isEmailChanged = $isEmailChanged;
-    
-        return $this;
-    }
-
-    /**
-     * Get isEmailChanged
-     *
-     * @return boolean 
-     */
-    public function getIsEmailChanged()
-    {
-        return $this->isEmailChanged;
-    }
-    /**
-     * @var \Common\UtilityBundle\Entity\FgClub
-     */
-    private $club;
-
-
-    /**
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCnNewsletterReceiverLog
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -535,25 +522,27 @@ class FgCnNewsletterReceiverLog
     }
 
     /**
-     * Set systemLanguage
+     * Set subscriber
      *
-     * @param string $systemLanguage
+     * @param \Common\UtilityBundle\Entity\FgCnSubscriber $subscriber
+     *
      * @return FgCnNewsletterReceiverLog
      */
-    public function setSystemLanguage($systemLanguage)
+    public function setSubscriber(\Common\UtilityBundle\Entity\FgCnSubscriber $subscriber = null)
     {
-        $this->systemLanguage = $systemLanguage;
-    
+        $this->subscriber = $subscriber;
+
         return $this;
     }
 
     /**
-     * Get systemLanguage
+     * Get subscriber
      *
-     * @return string 
+     * @return \Common\UtilityBundle\Entity\FgCnSubscriber
      */
-    public function getSystemLanguage()
+    public function getSubscriber()
     {
-        return $this->systemLanguage;
+        return $this->subscriber;
     }
 }
+

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPageContentElementArticleCategory
  */
@@ -28,7 +26,7 @@ class FgCmsPageContentElementArticleCategory
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +37,20 @@ class FgCmsPageContentElementArticleCategory
      * Set element
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPageContentElement $element
+     *
      * @return FgCmsPageContentElementArticleCategory
      */
     public function setElement(\Common\UtilityBundle\Entity\FgCmsPageContentElement $element = null)
     {
         $this->element = $element;
-    
+
         return $this;
     }
 
     /**
      * Get element
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPageContentElement 
+     * @return \Common\UtilityBundle\Entity\FgCmsPageContentElement
      */
     public function getElement()
     {
@@ -62,22 +61,24 @@ class FgCmsPageContentElementArticleCategory
      * Set category
      *
      * @param \Common\UtilityBundle\Entity\FgCmsArticleCategory $category
+     *
      * @return FgCmsPageContentElementArticleCategory
      */
     public function setCategory(\Common\UtilityBundle\Entity\FgCmsArticleCategory $category = null)
     {
         $this->category = $category;
-    
+
         return $this;
     }
 
     /**
      * Get category
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsArticleCategory 
+     * @return \Common\UtilityBundle\Entity\FgCmsArticleCategory
      */
     public function getCategory()
     {
         return $this->category;
     }
 }
+

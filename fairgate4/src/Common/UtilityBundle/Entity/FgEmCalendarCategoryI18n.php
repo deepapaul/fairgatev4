@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgEmCalendarCategoryI18n
  */
@@ -29,19 +27,20 @@ class FgEmCalendarCategoryI18n
      * Set lang
      *
      * @param string $lang
+     *
      * @return FgEmCalendarCategoryI18n
      */
     public function setLang($lang)
     {
         $this->lang = $lang;
-    
+
         return $this;
     }
 
     /**
      * Get lang
      *
-     * @return string 
+     * @return string
      */
     public function getLang()
     {
@@ -52,19 +51,20 @@ class FgEmCalendarCategoryI18n
      * Set titleLang
      *
      * @param string $titleLang
+     *
      * @return FgEmCalendarCategoryI18n
      */
     public function setTitleLang($titleLang)
     {
         $this->titleLang = $titleLang;
-    
+
         return $this;
     }
 
     /**
      * Get titleLang
      *
-     * @return string 
+     * @return string
      */
     public function getTitleLang()
     {
@@ -75,22 +75,24 @@ class FgEmCalendarCategoryI18n
      * Set id
      *
      * @param \Common\UtilityBundle\Entity\FgEmCalendarCategory $id
+     *
      * @return FgEmCalendarCategoryI18n
      */
     public function setId(\Common\UtilityBundle\Entity\FgEmCalendarCategory $id = null)
     {
         $this->id = $id;
-    
+
         return $this;
     }
 
     /**
      * Get id
      *
-     * @return \Common\UtilityBundle\Entity\FgEmCalendarCategory 
+     * @return \Common\UtilityBundle\Entity\FgEmCalendarCategory
      */
     public function getId()
     {
         return $this->id;
     }
 }
+

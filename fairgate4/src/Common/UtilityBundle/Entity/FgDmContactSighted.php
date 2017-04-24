@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgDmContactSighted
  */
@@ -28,7 +26,7 @@ class FgDmContactSighted
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +37,20 @@ class FgDmContactSighted
      * Set document
      *
      * @param \Common\UtilityBundle\Entity\FgDmDocuments $document
+     *
      * @return FgDmContactSighted
      */
     public function setDocument(\Common\UtilityBundle\Entity\FgDmDocuments $document = null)
     {
         $this->document = $document;
-    
+
         return $this;
     }
 
     /**
      * Get document
      *
-     * @return \Common\UtilityBundle\Entity\FgDmDocuments 
+     * @return \Common\UtilityBundle\Entity\FgDmDocuments
      */
     public function getDocument()
     {
@@ -62,22 +61,24 @@ class FgDmContactSighted
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgDmContactSighted
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
     {
         $this->contact = $contact;
-    
+
         return $this;
     }
 
     /**
      * Get contact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getContact()
     {
         return $this->contact;
     }
 }
+

@@ -30,7 +30,10 @@ $(function () {
 var CalendarEdit = {
     init: function(){
         FgFormTools.handleUniform();
-        FgFormTools.handleDatepicker();
+        var extraSettings = {
+            orientation: "bottom auto"
+        };
+        FgFormTools.handleDatepicker(extraSettings);
         if(isAllday == 1){
             var fromDate = $('#from-date').val();
             var toDate = $('#to-date').val();

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsArticleComments
  */
@@ -30,6 +28,11 @@ class FgCmsArticleComments
     private $updatedOn;
 
     /**
+     * @var string
+     */
+    private $guestUserName;
+
+    /**
      * @var \Common\UtilityBundle\Entity\FgCmContact
      */
     private $contact;
@@ -53,7 +56,7 @@ class FgCmsArticleComments
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -64,19 +67,20 @@ class FgCmsArticleComments
      * Set comment
      *
      * @param string $comment
+     *
      * @return FgCmsArticleComments
      */
     public function setComment($comment)
     {
         $this->comment = $comment;
-    
+
         return $this;
     }
 
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -87,19 +91,20 @@ class FgCmsArticleComments
      * Set createdOn
      *
      * @param \DateTime $createdOn
+     *
      * @return FgCmsArticleComments
      */
     public function setCreatedOn($createdOn)
     {
         $this->createdOn = $createdOn;
-    
+
         return $this;
     }
 
     /**
      * Get createdOn
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedOn()
     {
@@ -110,19 +115,20 @@ class FgCmsArticleComments
      * Set updatedOn
      *
      * @param \DateTime $updatedOn
+     *
      * @return FgCmsArticleComments
      */
     public function setUpdatedOn($updatedOn)
     {
         $this->updatedOn = $updatedOn;
-    
+
         return $this;
     }
 
     /**
      * Get updatedOn
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedOn()
     {
@@ -130,22 +136,47 @@ class FgCmsArticleComments
     }
 
     /**
+     * Set guestUserName
+     *
+     * @param string $guestUserName
+     *
+     * @return FgCmsArticleComments
+     */
+    public function setGuestUserName($guestUserName)
+    {
+        $this->guestUserName = $guestUserName;
+
+        return $this;
+    }
+
+    /**
+     * Get guestUserName
+     *
+     * @return string
+     */
+    public function getGuestUserName()
+    {
+        return $this->guestUserName;
+    }
+
+    /**
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgCmsArticleComments
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
     {
         $this->contact = $contact;
-    
+
         return $this;
     }
 
     /**
      * Get contact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getContact()
     {
@@ -156,19 +187,20 @@ class FgCmsArticleComments
      * Set updatedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $updatedBy
+     *
      * @return FgCmsArticleComments
      */
     public function setUpdatedBy(\Common\UtilityBundle\Entity\FgCmContact $updatedBy = null)
     {
         $this->updatedBy = $updatedBy;
-    
+
         return $this;
     }
 
     /**
      * Get updatedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getUpdatedBy()
     {
@@ -179,19 +211,20 @@ class FgCmsArticleComments
      * Set createdBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $createdBy
+     *
      * @return FgCmsArticleComments
      */
     public function setCreatedBy(\Common\UtilityBundle\Entity\FgCmContact $createdBy = null)
     {
         $this->createdBy = $createdBy;
-    
+
         return $this;
     }
 
     /**
      * Get createdBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getCreatedBy()
     {
@@ -202,50 +235,24 @@ class FgCmsArticleComments
      * Set article
      *
      * @param \Common\UtilityBundle\Entity\FgCmsArticle $article
+     *
      * @return FgCmsArticleComments
      */
     public function setArticle(\Common\UtilityBundle\Entity\FgCmsArticle $article = null)
     {
         $this->article = $article;
-    
+
         return $this;
     }
 
     /**
      * Get article
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsArticle 
+     * @return \Common\UtilityBundle\Entity\FgCmsArticle
      */
     public function getArticle()
     {
         return $this->article;
     }
-    /**
-     * @var string
-     */
-    private $guestUserName;
-
-
-    /**
-     * Set guestUserName
-     *
-     * @param string $guestUserName
-     * @return FgCmsArticleComments
-     */
-    public function setGuestUserName($guestUserName)
-    {
-        $this->guestUserName = $guestUserName;
-    
-        return $this;
 }
 
-    /**
-     * Get guestUserName
-     *
-     * @return string 
-     */
-    public function getGuestUserName()
-    {
-        return $this->guestUserName;
-    }
-}

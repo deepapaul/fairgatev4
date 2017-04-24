@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgClubNotes
  */
@@ -69,6 +67,7 @@ class FgClubNotes
      * Set editedOn
      *
      * @param \DateTime $editedOn
+     *
      * @return FgClubNotes
      */
     public function setEditedOn($editedOn)
@@ -92,6 +91,7 @@ class FgClubNotes
      * Set note
      *
      * @param string $note
+     *
      * @return FgClubNotes
      */
     public function setNote($note)
@@ -115,6 +115,7 @@ class FgClubNotes
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return FgClubNotes
      */
     public function setDate($date)
@@ -138,6 +139,7 @@ class FgClubNotes
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgClubNotes
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
@@ -161,6 +163,7 @@ class FgClubNotes
      * Set createdByContact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $createdByContact
+     *
      * @return FgClubNotes
      */
     public function setCreatedByContact(\Common\UtilityBundle\Entity\FgCmContact $createdByContact = null)
@@ -184,6 +187,7 @@ class FgClubNotes
      * Set createdByClub
      *
      * @param \Common\UtilityBundle\Entity\FgClub $createdByClub
+     *
      * @return FgClubNotes
      */
     public function setCreatedByClub(\Common\UtilityBundle\Entity\FgClub $createdByClub = null)
@@ -207,6 +211,7 @@ class FgClubNotes
      * Set editedByClub
      *
      * @param \Common\UtilityBundle\Entity\FgClub $editedByClub
+     *
      * @return FgClubNotes
      */
     public function setEditedByClub(\Common\UtilityBundle\Entity\FgClub $editedByClub = null)
@@ -230,6 +235,7 @@ class FgClubNotes
      * Set editedByContact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $editedByContact
+     *
      * @return FgClubNotes
      */
     public function setEditedByContact(\Common\UtilityBundle\Entity\FgCmContact $editedByContact = null)
@@ -249,3 +255,4 @@ class FgClubNotes
         return $this->editedByContact;
     }
 }
+

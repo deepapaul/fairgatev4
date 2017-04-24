@@ -1,6 +1,4 @@
-<?php
-
-namespace Common\UtilityBundle\Repository;
+<?php namespace Common\UtilityBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Clubadmin\Util\Contactlist;
@@ -144,9 +142,10 @@ class FgCmContactRepository extends EntityRepository
         }
         $sql = "SELECT c.comp_def_contact_fun as functionName,$select
                  FROM fg_cm_contact c
-                 WHERE $where GROUP BY fedContactId";
+                 WHERE $where AND
+                 c.club_id =:clubId ";
 
-        return $conn->fetchAll($sql, array('contactId' => $contactId));
+        return $conn->fetchAll($sql, array('contactId' => $contactId,'clubId' => $clubId));
     }
     /**
      * Function to check fedeation member.
@@ -307,6 +306,15 @@ class FgCmContactRepository extends EntityRepository
 //        echo "call archiveContactsV4('$tableName','$currentuser','$clubId','$systemFirstname','$systemLastname','$systemCompanyname','$systemDob','$teamTerminology','$dateStr','$strTodate','$simpleDate','$currTimestamp','$dateStr','$clubHeirarchy','$clubType','$systemPrimaryEmail','$systemSalutation','$systemGender','$systemCorresLang','$leavingDate')";exit;
         $result = $conn->executeQuery("call archiveContactsV4('$tableName','$currentuser','$clubId','$systemFirstname','$systemLastname','$systemCompanyname','$systemDob','$teamTerminology','$dateStr','$strTodate','$simpleDate','$currTimestamp','$dateStr','$clubHeirarchy','$clubType','$systemPrimaryEmail','$systemSalutation','$systemGender','$systemCorresLang','$leavingDate')");
         $conn->close();
+        $contactIds = '';
+        if ($contacts && count($contacts) > 1) {
+            $contactIds = implode(' ', $contacts);
+            $process = new Process("php ../fairgate4/bin/console archivedcontact:remove $contactIds");
+            $process->start();
+        } else if ($contacts) {
+            $process = new Process("php ../fairgate4/bin/console archivedcontact:remove $contacts");
+            $process->start();
+        }
     }
 
     /**
@@ -318,7 +326,7 @@ class FgCmContactRepository extends EntityRepository
      * @param string $clubName         Club name
      * @param int    $hasFedMembership Is the contact having federation membership
      */
-    public function activateContact($contactIds, $currentContactId, $subscriberIds, $clubId, $hasFedMembership)
+    public function activateContact($contactIds, $currentContactId, $subscriberIds, $clubId, $hasFedMembership, $container)
     {
         $currentDate = date('Y-m-d H:i:s');
         $contactIdArray = explode(',', $contactIds);
@@ -341,7 +349,7 @@ class FgCmContactRepository extends EntityRepository
         $conn = $this->getEntityManager()->getConnection();
         $contactSql = "update fg_cm_contact set is_deleted=0 WHERE id IN ($newIdsStr)";
         $conn->executeQuery($contactSql);
-        $clubObj = $this->getEntityManager()->getRepository('CommonUtilityBundle:FgClub')->find($clubId);
+        $clubObj = $container->get('fg.admin.connection')->getAdminEntityManager()->getRepository('AdminUtilityBundle:FgClub')->find($clubId);        
         $c2WithApp = $clubObj->getAssignFedmembershipWithApplication();
 
         $fedContactIdArray = array();
@@ -1062,6 +1070,7 @@ class FgCmContactRepository extends EntityRepository
     public function callImportContacts($tableName, $clubId, $contactId, $contactType, $ownTable, $clubType, $subFedId, $fedId, $fedMemWApp)
     {
         $conn = $this->getEntityManager()->getConnection();
+       
         $sql = "CALL importContacts('" . $tableName . "','import_maping','" . $clubId . "','" . $contactId . "','" . $contactType . "','" . $ownTable . "','" . $clubType . "','" . $subFedId . "','" . $fedId . "','$fedMemWApp ' )";
         $conn->executeQuery($sql);
 
@@ -2030,7 +2039,7 @@ class FgCmContactRepository extends EntityRepository
             ->leftJoin('CommonUtilityBundle:FgClubI18n', 'ci18n', 'WITH', "ci18n.id = c.id AND ci18n.lang='{$club->get('default_lang')}'")
             ->leftJoin('cc.mainClub', 'mc')
             ->where('cc.id=:contactId')
-            ->setParameter('contactId',$contactId);
+            ->setParameter('contactId', $contactId);
 
         $result = $moduleQuery->getQuery()->getResult();
         if ($result[0]['clubAssignmentId'] != '') {
@@ -2084,7 +2093,7 @@ class FgCmContactRepository extends EntityRepository
             ->setParameter('contactId', $contactObj->getFedContact()->getId());
 
         $result = $moduleQuery->getQuery()->getResult();
-        
+
         return $result;
     }
 
@@ -2219,7 +2228,7 @@ class FgCmContactRepository extends EntityRepository
      * @return array
      */
     public function getFedContactAssignedClubs($fedContactId, $defaultLang)
-    {       
+    {
         $conn = $this->getEntityManager()->getConnection();
         $sql = 'SELECT DISTINCT CL.id AS Club_id, CL.is_federation AS is_federation, '
             . "COALESCE(NULLIF(ci18n.title_lang,''), CL.title) as title, "
@@ -2272,7 +2281,8 @@ class FgCmContactRepository extends EntityRepository
      *
      * @return array
      */
-    public function getConfirmApplicationCount($fedClubId, $clubType, $currentClub, $defaultLang, $countFlag = false) {
+    public function getConfirmApplicationCount($fedClubId, $clubType, $currentClub, $defaultLang, $countFlag = false)
+    {
         // Configuring UDF.
         $doctrineConfig = $this->getEntityManager()->getConfiguration();
         $doctrineConfig->addCustomStringFunction('contactName', 'Common\UtilityBundle\Extensions\FetchContactName');
@@ -2286,36 +2296,36 @@ class FgCmContactRepository extends EntityRepository
         $existingClubQuery = $existingClubQuery->select("GROUP_CONCAT(fgc.id SEPARATOR ', ')")
                 ->from('CommonUtilityBundle:FgClub', 'fgc')
                 ->where('FIND_IN_SET(fgc.id, cl.existingClubIds) != 0')->andWhere('fgc.clubType NOT IN (:clubTypes)');
-        
+
         $moduleQuery = $this->getEntityManager()->createQueryBuilder();
         $moduleQuery->select("cl.id as confirmId,fm.id as fedCategoryId,IDENTITY(cc.clubMembershipCat) as clubMembershipCat, cc.isCompany, fm.id as valueAfterId, MS.gender, fmb.id as valueBeforeId, fm.title as valueAfter, fmb.title as valueBefore, (DATE_FORMAT(cl.modifiedDate, '$dateFormatMysql')) as modifiedDate1,(DATE_FORMAT(cl.modifiedDate, '%Y-%m-%d %H:%i:%s')) as modifiedDate, c.id, COALESCE(NULLIF(ci18n.titleLang, ''), c.title)  as createdClubName, contactName(m.id) as modifiedBy,m.id as modifiedById, contactName(cc.id) as contactName, cc.id as contactId, checkActiveContact(cc.id, $currentClub) as isActiveContact, checkActiveContact(m.id, $currentClub) as isActiveModifiedContact")
-                ->addSelect('(' . $existingClubQuery->getDQL() . ') as existingClubs');
+            ->addSelect('(' . $existingClubQuery->getDQL() . ') as existingClubs');
         $moduleQuery->addSelect("(select  COALESCE(NULLIF(fgcci18n.titleLang, ''), fgcc.title)   from CommonUtilityBundle:FgClub fgcc inner join CommonUtilityBundle:FgClubI18n fgcci18n WITH   fgcc.id = fgcci18n.id AND fgcci18n.lang =:defaultLang where fgcc.id = cc.mainClub ) as mainClub");
         $moduleQuery->addSelect('(' . $clubDql->getDQL() . ') AS clubChangedBy ')
-                ->from('CommonUtilityBundle:FgCmFedmembershipConfirmationLog', 'cl')
-                ->innerJoin('CommonUtilityBundle:MasterSystem', 'MS', 'WITH', 'MS.fedContact = cl.contact')
-                ->leftJoin('cl.club', 'c')
-                ->leftJoin('CommonUtilityBundle:FgClubI18n', 'ci18n', 'WITH', 'c.id = ci18n.id AND ci18n.lang =:defaultLang')
-                ->leftJoin('cl.contact', 'cc')
-                ->leftJoin('cl.fedmembershipValueAfter', 'fm')
-                ->leftJoin('cl.fedmembershipValueBefore', 'fmb')
-                ->leftJoin('cl.modifiedBy', 'm')
-                ->Where('cl.federationClub=:clubId')
-                ->andWhere('cl.isMerging=0')
-                ->andWhere('cc.isDeleted=0')
-                ->andWhere("cc.isFedMembershipConfirmed='1'")
-                ->andWhere("cl.status='PENDING'")
-                ->setParameter('defaultLang', $defaultLang);
-        
+            ->from('CommonUtilityBundle:FgCmFedmembershipConfirmationLog', 'cl')
+            ->innerJoin('CommonUtilityBundle:MasterSystem', 'MS', 'WITH', 'MS.fedContact = cl.contact')
+            ->leftJoin('cl.club', 'c')
+            ->leftJoin('CommonUtilityBundle:FgClubI18n', 'ci18n', 'WITH', 'c.id = ci18n.id AND ci18n.lang =:defaultLang')
+            ->leftJoin('cl.contact', 'cc')
+            ->leftJoin('cl.fedmembershipValueAfter', 'fm')
+            ->leftJoin('cl.fedmembershipValueBefore', 'fmb')
+            ->leftJoin('cl.modifiedBy', 'm')
+            ->Where('cl.federationClub=:clubId')
+            ->andWhere('cl.isMerging=0')
+            ->andWhere('cc.isDeleted=0')
+            ->andWhere("cc.isFedMembershipConfirmed='1'")
+            ->andWhere("cl.status='PENDING'")
+            ->setParameter('defaultLang', $defaultLang);
+
         if ($clubType != 'federation') {
             $moduleQuery->andWhere('cl.club=:currentClub')
-                    ->setParameter('currentClub', $currentClub);
+                ->setParameter('currentClub', $currentClub);
         }
         $moduleQuery->setParameter('clubId', $fedClubId);
         $moduleQuery->setParameter('clubTypes', array('federation', 'sub_federation'));
 
         $result = $moduleQuery->getQuery()->getResult();
-        
+
         if ($countFlag) {
             return count($result);
         } else {
@@ -2333,7 +2343,7 @@ class FgCmContactRepository extends EntityRepository
      * 
      * @return array $result Application list details
      */
-    public function getMergeApplications($fedClubId, $clubType, $currentClub , $defaultLang)
+    public function getMergeApplications($fedClubId, $clubType, $currentClub, $defaultLang)
     {
         // Configuring UDF.
         $doctrineConfig = $this->getEntityManager()->getConfiguration();
@@ -2345,42 +2355,42 @@ class FgCmContactRepository extends EntityRepository
         $clubDql = $this->getClubNameDQL();
 
         $existingClubQuery = $this->getEntityManager()->createQueryBuilder();
-       
+
         $existingClubQuery = $existingClubQuery->select("GROUP_CONCAT(CL1.id, '#---#',  COALESCE(NULLIF(CL18n.titleLang, ''), CL1.title) SEPARATOR ', ')")
-                ->from('CommonUtilityBundle:FgCmContact', 'C2')
-                ->innerJoin('CommonUtilityBundle:FgClub', 'CL1', 'WITH', 'CL1.id = C2.club ')
-                ->innerJoin('CommonUtilityBundle:FgClubI18n', 'CL18n', 'WITH', 'CL1.id = CL18n.id AND CL18n.lang =:defaultLang ')
-                ->where('C2.fedContact = cc.mergeToContact')
-                ->andWhere('CL1.clubType NOT IN (:clubTypes)');
+            ->from('CommonUtilityBundle:FgCmContact', 'C2')
+            ->innerJoin('CommonUtilityBundle:FgClub', 'CL1', 'WITH', 'CL1.id = C2.club ')
+            ->innerJoin('CommonUtilityBundle:FgClubI18n', 'CL18n', 'WITH', 'CL1.id = CL18n.id AND CL18n.lang =:defaultLang ')
+            ->where('C2.fedContact = cc.mergeToContact')
+            ->andWhere('CL1.clubType NOT IN (:clubTypes)');
 
         $moduleQuery = $this->getEntityManager()->createQueryBuilder();
         $moduleQuery->select("IDENTITY(cl.federationClub), IDENTITY(cc.mergeToContact) as fff, cl.isMerging, cl.id as confirmId, IDENTITY(cc.clubMembershipCat) as clubMembership, cc.isCompany, MS.gender, (DATE_FORMAT(cl.modifiedDate, '$dateFormatMysql')) as modifiedDate1,(DATE_FORMAT(cl.modifiedDate, '%Y-%m-%d %H:%i:%s')) as modifiedDate, c.id as clubId, COALESCE(NULLIF(ci18n.titleLang, ''), c.title)  as currentClub, contactName(m.id) as modifiedBy, m.id as modifiedById, contactName(cc.id) as contactName, cc.id as contactId, checkActiveContact(cc.id, $currentClub) as isActiveContact, checkActiveContact(m.id, $currentClub) as isActiveModifiedContact")
-                ->addSelect("C1.id as ECContactId, IDENTITY(C1.mainClub) as ECMainClub, C1.isCompany as EcIsCompany, MS1. gender as ECGender, IDENTITY(C1.clubMembershipCat) as ECClubMembership, contactname(C1.id) as ECContactName, checkActiveContact(C1.id, $currentClub) as ECIsActive")
-                ->addSelect('(' . $clubDql->getDQL() . ') AS clubChangedBy ')
-                ->addSelect('(' . $existingClubQuery->getDQL() . ') as ECExistingClubs')
-                ->from('CommonUtilityBundle:FgCmFedmembershipConfirmationLog', 'cl')
-                ->innerJoin('CommonUtilityBundle:MasterSystem', 'MS', 'WITH', 'MS.fedContact = cl.contact')
-                ->innerJoin('cl.club', 'c')
-                ->leftJoin('CommonUtilityBundle:FgClubI18n', 'ci18n', 'WITH', 'c.id = ci18n.id AND ci18n.lang =:defaultLang')
-                ->innerJoin('CommonUtilityBundle:FgCmContact', 'cc', 'WITH', 'cc.fedContact = cl.contact AND cc.club = cl.club')
-                ->innerJoin('CommonUtilityBundle:FgCmContact', 'C1', 'WITH', 'C1.id = cc.mergeToContact')
-                ->innerJoin('CommonUtilityBundle:MasterSystem', 'MS1', 'WITH', 'MS1.fedContact = cc.mergeToContact')
-                ->leftJoin('cl.modifiedBy', 'm')
-                ->Where('cl.federationClub=:clubId')
-                ->andWhere('cl.isMerging=1')
-                ->andWhere('cc.isDeleted=0')
-                ->andWhere("cc.isFedMembershipConfirmed='1'")
-                ->andWhere("cl.status='PENDING'")
-                ->setParameter('defaultLang', $defaultLang);
+            ->addSelect("C1.id as ECContactId, IDENTITY(C1.mainClub) as ECMainClub, C1.isCompany as EcIsCompany, MS1. gender as ECGender, IDENTITY(C1.clubMembershipCat) as ECClubMembership, contactname(C1.id) as ECContactName, checkActiveContact(C1.id, $currentClub) as ECIsActive")
+            ->addSelect('(' . $clubDql->getDQL() . ') AS clubChangedBy ')
+            ->addSelect('(' . $existingClubQuery->getDQL() . ') as ECExistingClubs')
+            ->from('CommonUtilityBundle:FgCmFedmembershipConfirmationLog', 'cl')
+            ->innerJoin('CommonUtilityBundle:MasterSystem', 'MS', 'WITH', 'MS.fedContact = cl.contact')
+            ->innerJoin('cl.club', 'c')
+            ->leftJoin('CommonUtilityBundle:FgClubI18n', 'ci18n', 'WITH', 'c.id = ci18n.id AND ci18n.lang =:defaultLang')
+            ->innerJoin('CommonUtilityBundle:FgCmContact', 'cc', 'WITH', 'cc.fedContact = cl.contact AND cc.club = cl.club')
+            ->innerJoin('CommonUtilityBundle:FgCmContact', 'C1', 'WITH', 'C1.id = cc.mergeToContact')
+            ->innerJoin('CommonUtilityBundle:MasterSystem', 'MS1', 'WITH', 'MS1.fedContact = cc.mergeToContact')
+            ->leftJoin('cl.modifiedBy', 'm')
+            ->Where('cl.federationClub=:clubId')
+            ->andWhere('cl.isMerging=1')
+            ->andWhere('cc.isDeleted=0')
+            ->andWhere("cc.isFedMembershipConfirmed='1'")
+            ->andWhere("cl.status='PENDING'")
+            ->setParameter('defaultLang', $defaultLang);
         ;
         if ($clubType != 'federation') {
             $moduleQuery->andWhere('cl.club=:currentClub')
-                    ->setParameter('currentClub', $currentClub);
+                ->setParameter('currentClub', $currentClub);
         }
         $moduleQuery->setParameter('clubId', $fedClubId);
         $moduleQuery->setParameter('clubTypes', array('federation', 'sub_federation'));
         $result = $moduleQuery->getQuery()->getResult();
-        
+
         return $result;
     }
 
@@ -2423,10 +2433,10 @@ class FgCmContactRepository extends EntityRepository
     {
         $moduleQuery = $this->getEntityManager()->createQueryBuilder();
         $moduleQuery->select("COALESCE(NULLIF(fci18n.titleLang, ''), fc.title)")
-                ->from('CommonUtilityBundle:FgCmContact', 'ct')
-                ->innerJoin('CommonUtilityBundle:FgClub', 'fc', 'WITH', 'ct.mainClub = fc.id')
-                ->innerJoin('CommonUtilityBundle:FgClubI18n', 'fci18n', 'WITH', 'fc.id = fci18n.id AND fci18n.lang =:defaultLang')
-                ->where('ct.id = m.id');
+            ->from('CommonUtilityBundle:FgCmContact', 'ct')
+            ->innerJoin('CommonUtilityBundle:FgClub', 'fc', 'WITH', 'ct.mainClub = fc.id')
+            ->innerJoin('CommonUtilityBundle:FgClubI18n', 'fci18n', 'WITH', 'fc.id = fci18n.id AND fci18n.lang =:defaultLang')
+            ->where('ct.id = m.id');
 
         return $moduleQuery;
     }
@@ -3488,4 +3498,5 @@ class FgCmContactRepository extends EntityRepository
 
         return $subscribedContacts;
     }
+
 }

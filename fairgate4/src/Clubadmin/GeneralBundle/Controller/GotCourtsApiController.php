@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FairgateApiBundle\Util\GotCourtsApiDetails;
 use Common\UtilityBundle\Util\FgUtility;
-use Common\UtilityBundle\Repository\Pdo\ClubPdo;
+use Admin\UtilityBundle\Repository\Pdo\ClubPdo;
 use Common\UtilityBundle\Repository\Pdo\ApiPdo;
 use Symfony\Component\Intl\Intl;
 

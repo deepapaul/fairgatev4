@@ -96,7 +96,7 @@
         var invalidUrl = '{{'INVALID_URL'|trans}}';
         var pathTemplateArticleJson = '{{ path('internal_article_editorial_create_json',{'pagetype':'editorial'}) }}';
         var pathArticleSave = "{{ path('internal_article_editorial_save_detail', {'articleId': articleId, 'fromPage':'detail'} ) }}";
-        var browseServerPath = '{{path('filemanager_view',{'type':'document','module':'article'})}}';
+        var browseServerPath = '{{path('filemanager_browse',{'type':'document','module':'article'})}}';
         var articleCategorySave = '{{ path('internal_article_category_save_popup') }}';  
         var articleFilemanagerPath = '{{ path('filemanager_download',{'file':'__FILEID__'}) }}';  
         var articleStatusUpdatePath = '{{ path('internal_article_editorial_status_update')}}';  
@@ -120,6 +120,8 @@
             fileListTemplatePlacement: 'append',
             validationErrorTemplateId:'fileUploadError',
             onFileUploadError:'AttachmentsUploader.setUploadErrorMessage', 
+            saveButtonId:'save_changes',
+            saveButtonDisableOnUploading:true,
             validations: {
                 forbiddenFiletypes: globalForbiddenfiles,
             }
@@ -140,6 +142,8 @@
             errorListTemplate: 'attachments-uploader-errorlist-template',
             fileListTemplatePlacement: 'append',
             validationErrorTemplateId:'fileUploadError',
+            saveButtonId:'save_changes',
+            saveButtonDisableOnUploading:true,
              validations: {
                 fileType: 'image',
                 forbiddenFiletypes: globalForbiddenfiles,

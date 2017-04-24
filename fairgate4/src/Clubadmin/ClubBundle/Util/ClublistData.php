@@ -136,7 +136,8 @@ class ClublistData
         if ($nextPreFlag != 1) {
             //call query for collect the data
             $totallistquery = $clublistClass->getResult();
-            $totalcontactlistDatas = $this->em->getRepository('CommonUtilityBundle:FgCmMembership')->getContactList($totallistquery);
+            $totalcontactlistDatas = $this->container->get('fg.admin.connection')->executeQuery($totallistquery);
+            
             if ($this->startValue != '') {
                 $clublistClass->setLimit($this->startValue);
                 $clublistClass->setOffset($this->displayLength);
@@ -178,7 +179,7 @@ class ClublistData
             return $listquery;
         }
         $results = array("totalcount" => 0, 'data' => '');
-        $results["data"] = $this->em->getRepository('CommonUtilityBundle:FgCmMembership')->getContactList($listquery);
+        $results["data"] = $this->container->get('fg.admin.connection')->executeQuery($listquery);
         if (is_array($totalcontactlistDatas) && count($totalcontactlistDatas) > 0) {
             $results["totalcount"] = $totalcontactlistDatas[0]['count'];
         }
@@ -387,5 +388,14 @@ class ClublistData
             }
         }
         return ($flag == 1) ? $sortColumn : 'clubname';
+    }
+    private function checkfun($query) {
+        
+        $connection = $this->adminEm->getConnection();
+        $statement = $connection->prepare($query);
+        
+        $statement->execute();
+        $results = $statement->fetchAll();
+        return $results;
     }
 }

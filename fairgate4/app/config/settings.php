@@ -247,13 +247,13 @@ $feed_url = "http://v4blog.fairgate.ch/?feed=rss2";
 $news_blog_url = "http://v4blog.fairgate.ch";
 $container->setParameter('fgV4_news_rss_feed_url', $feed_url);
 $container->setParameter('fgV4_blog_url', $news_blog_url);
-$actualHost = 'https://mein.fairgate.ch'; //'http://fgv4.fairgate.ch';  for testing
+$actualHost = 'http://fgv4.fairgate.ch'; //'http://fgv4.fairgate.ch';  for testing
 $container->setParameter('hostName', $actualHost);
-$container->setParameter('mailer_bounce_email', 'bounce@fairgate.ch');
-$baseUrl = 'https://mein.fairgate.ch';
+$container->setParameter('mailer_bounce_email', 'fgpitsbounce@gmail.com');
+$baseUrl = 'http://fgv4.fairgate.ch';
 $container->setParameter('base_url', $baseUrl);
-$container->setParameter('mailer_bounce_email_password', 'Hofa95211');
-$container->setParameter('mailer_bounce_server', 'outlook.office365.com');
+$container->setParameter('mailer_bounce_email_password', 'pitsbounce123');
+$container->setParameter('mailer_bounce_server', 'imap.gmail.com');
 $container->setParameter('mailer_bounce_server_port', '993');
 $defaultSponsorTableSettings = array(
     '1' => array('id' => "$correspondaceStrasse", 'type' => 'CF', 'club_id' => '1', 'name' => "CF_" . $correspondaceStrasse),
@@ -316,6 +316,7 @@ $container->setParameter('start_offset', '0');
 //Forum
 $container->setParameter('forumPostsPerPage', '20');
 $container->setParameter('noreplyEmail', 'noreply@fairgate.ch');
+$container->setParameter('sailsNotificationEmail', 'modulbuchung@fairgate.ch');
 $staticBoxClubIds = array(0 => 151, 1 => 205, 2 => 206, 3 => 154, 4 => 207, 5 => 208, 6 => 209, 7 => 210, 8 => 211, 9 => 155);
 $container->setParameter('staticBoxClubIds', $staticBoxClubIds);
 $container->setParameter('defaultColorClubOrRole', '#428BCA');
@@ -336,11 +337,11 @@ $container->setParameter('calendarGlobalTimeZone', 'Europe/Zurich');
 $container->setParameter('club_total_space', '1000');
 
 $container->setParameter('root_server_avast_phpfile', 'http://5.148.186.139/virus_scan.php');
-$container->setParameter('avast_scan', 1);
+$container->setParameter('avast_scan', 0);
 $container->setParameter('avast_scan_upload_folder', '/home/nfs_share/');
 
 //SET THE CURRENT SPRINT
-$container->setParameter('currentSprint', 'release_4_6_4_1');
+$container->setParameter('currentSprint', 'Sprint_54');
 
 /* userrights */
 $container->setParameter('club_calendar_admin', 14);
@@ -365,7 +366,7 @@ $externalApplSenderMail = 'noreply@fairgate.ch';
 $externalApplSenderName = 'Fairgate AG';
 $externalApplicationSystemFields = array('firstName' => $firstName, 'lastName' => $lastName, 'gender' => $gender, 'dob' => $dob, 'email' => $primaryEmail, 'street' => $correspondaceStrasse, 'location' => $correspondaceOrt, 'zipcode' => $correspondacePlz, 'mobile' => $mobile1, 'telg' => $externaltelG, 'employer' => $externalEmployer, 'personalNumber' => $personalNumber);
 $container->setParameter('external_application_system_fields', $externalApplicationSystemFields);
-$externalApplicationClubIds = array(157);
+$externalApplicationClubIds = array(8780);
 $container->setParameter('external_application_clubids', $externalApplicationClubIds);
 $container->setParameter('external_application_mail_sender_name', $externalApplSenderName);
 $container->setParameter('external_application_sender_email', $externalApplSenderMail);
@@ -400,6 +401,10 @@ $apiDomains = array(
     
 );
 $container->setParameter('apiDomains', $apiDomains);
-$container->setParameter('fairgateAnalyticKey', 'UA-34074203-41');
+$container->setParameter('fairgateAnalyticKey', 'UA-89534484-1');
 $container->setParameter('fairgateAnalyticScreenNameArray', array('contact' => 'contacts-fairgate', 'website' => 'cms-fairgate', 'internal' => 'internal-fairgate', 'document' => 'documents-fairgate', 'communication' => 'communications-fairgate', 'sponsor' => 'sponsors-fairgate', 'invoice' => 'invoices-fairgate', 'backend' => 'backend-fairgate', 'settings' => 'settings-fairgate',
     'filemanager' => 'settings-fairgate'));
+$container->setParameter('clubcontactCount', '10000');
+$container->setParameter('organisationDetailPagePath', '192.168.0.40:13016/salescrm/organization/listing');
+$container->setParameter('modulesForTesingPeriod', array(1,2,3,4,5,6,7,8));
+

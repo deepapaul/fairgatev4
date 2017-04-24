@@ -4,12 +4,12 @@
             {% for key,tab in tabs %}  
                  
                 {% set litagdata = litagdata ~ '
-                <li id="fg_tab_'~loop.index~'" name="'~tab.name~'" data-target="'~ loop.index ~'" class="'~tab.activeClass~'" >
+                <li id="fg_tab_'~loop.index~'" name="'~tab.name~'" data-target="'~ loop.index ~'" class="'~tab.activeClass~' fg-dev-help-tabs " >
                 <a  href="'~ ((hrefLink is defined) ? tab.url :"#") ~'"  aria-controls="'~tab.id~'" data_id="'~ tab.name ~ '" data-toggle="tab"><span class="fg-dev-tab-text">'~ tab.text~ '</span></a>' ~           
               '</li>' %}
 
                 {% set morelitagdata = morelitagdata ~ '
-                <li id="fg_tab_'~loop.index~'" name="'~tab.name~'" data-target="'~ loop.index ~'" class="'~tab.activeClass~'" >
+                <li id="fg_tab_'~loop.index~'" name="'~tab.name~'" data-target="'~ loop.index ~'" class="'~tab.activeClass~' fg-dev-help-tabs " >
                 <a  href="'~ ((hrefLink is defined) ? tab.url :"#") ~'"  aria-controls="'~tab.id~'" data_id="'~ tab.name ~ '" data-toggle="tab"><span class="fg-dev-tab-text">'~ tab.text~ '</span></a>'~            
               '</li>' %}
 
@@ -42,7 +42,7 @@
                     </div>
                 </div>
                 <div class="fg-help-content-wrapper fg-clear tab-pane active" data-parent="{{ overview.name }}" >
-                    {% include overview.twigPath %}
+                    {% include overview.twigPath with {'datas': overview.datas} %}
                 </div>
             </div>
         {% endfor %}

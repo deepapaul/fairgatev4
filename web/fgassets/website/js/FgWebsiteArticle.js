@@ -68,7 +68,7 @@ var FgWebsiteArticle = (function () {
                     $('#fg-article-container').html('<div class="col-md-12"><p>' + articleEmptyMessage + '</p></div>');
                 }
                 if (response.articleData.length == _this.paginationCount) {
-                    $('#fg-article-container article:last').after('<span id="fg-dev-article-loader"></span>');
+                    $('#fg-article-container .fg-dev-article-list:last').after('<span id="fg-dev-article-loader"></span>');
                 }
             },
             dataType: 'json'

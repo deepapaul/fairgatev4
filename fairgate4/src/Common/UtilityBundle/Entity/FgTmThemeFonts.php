@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgTmThemeFonts
  */
@@ -48,7 +46,7 @@ class FgTmThemeFonts
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -59,19 +57,20 @@ class FgTmThemeFonts
      * Set fontLabel
      *
      * @param string $fontLabel
+     *
      * @return FgTmThemeFonts
      */
     public function setFontLabel($fontLabel)
     {
         $this->fontLabel = $fontLabel;
-    
+
         return $this;
     }
 
     /**
      * Get fontLabel
      *
-     * @return string 
+     * @return string
      */
     public function getFontLabel()
     {
@@ -82,19 +81,20 @@ class FgTmThemeFonts
      * Set fontName
      *
      * @param string $fontName
+     *
      * @return FgTmThemeFonts
      */
     public function setFontName($fontName)
     {
         $this->fontName = $fontName;
-    
+
         return $this;
     }
 
     /**
      * Get fontName
      *
-     * @return string 
+     * @return string
      */
     public function getFontName()
     {
@@ -105,19 +105,20 @@ class FgTmThemeFonts
      * Set fontStrength
      *
      * @param string $fontStrength
+     *
      * @return FgTmThemeFonts
      */
     public function setFontStrength($fontStrength)
     {
         $this->fontStrength = $fontStrength;
-    
+
         return $this;
     }
 
     /**
      * Get fontStrength
      *
-     * @return string 
+     * @return string
      */
     public function getFontStrength()
     {
@@ -128,19 +129,20 @@ class FgTmThemeFonts
      * Set isItalic
      *
      * @param boolean $isItalic
+     *
      * @return FgTmThemeFonts
      */
     public function setIsItalic($isItalic)
     {
         $this->isItalic = $isItalic;
-    
+
         return $this;
     }
 
     /**
      * Get isItalic
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsItalic()
     {
@@ -151,19 +153,20 @@ class FgTmThemeFonts
      * Set isUppercase
      *
      * @param boolean $isUppercase
+     *
      * @return FgTmThemeFonts
      */
     public function setIsUppercase($isUppercase)
     {
         $this->isUppercase = $isUppercase;
-    
+
         return $this;
     }
 
     /**
      * Get isUppercase
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsUppercase()
     {
@@ -174,22 +177,24 @@ class FgTmThemeFonts
      * Set configuration
      *
      * @param \Common\UtilityBundle\Entity\FgTmThemeConfiguration $configuration
+     *
      * @return FgTmThemeFonts
      */
     public function setConfiguration(\Common\UtilityBundle\Entity\FgTmThemeConfiguration $configuration = null)
     {
         $this->configuration = $configuration;
-    
+
         return $this;
     }
 
     /**
      * Get configuration
      *
-     * @return \Common\UtilityBundle\Entity\FgTmThemeConfiguration 
+     * @return \Common\UtilityBundle\Entity\FgTmThemeConfiguration
      */
     public function getConfiguration()
     {
         return $this->configuration;
     }
 }
+

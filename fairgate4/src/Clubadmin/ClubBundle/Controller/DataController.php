@@ -12,7 +12,7 @@ use Clubadmin\ClubBundle\Util\NextpreviousClub;
 use Common\UtilityBundle\Util\FgUtility;
 use Common\FilemanagerBundle\Util\FileChecking;
 use Symfony\Component\HttpFoundation\Request;
-use Common\UtilityBundle\Repository\Pdo\ClubPdo;
+use Admin\UtilityBundle\Repository\Pdo\ClubPdo;
 
 /**
  * DataController used for managing club details
@@ -121,6 +121,12 @@ class DataController extends FgController
                     //Set the dummy data from the post data to the $formValues to mimick the old club data save implementtation
                     $formValues['system']['title'] = $formValues['system']["title_$clubDefaultLanguage"];
                     $formValues['Notification']['signature'] = $formValues['Notification']["signature_$clubDefaultLanguage"];
+                    /********************************************************************
+                    * FAIRDEV-336- Restrict club's changing of currency in club settings. 
+                    ********************************************************************/
+                    if($editData['sp_country']){
+                        $formValues['Correspondence']['sp_country'] = $editData['sp_country'];
+                    }
                     $clubPdo->saveClubData($formValues, $editData, $this->contactId, $fieldTitles, $domainCacheKey, $this->container);
 
                     //save club i18n values
@@ -136,7 +142,7 @@ class DataController extends FgController
         $result['editData'] = $editData;
         $result['form'] = $form1->createView();
         $result['documentsCount'] = $this->em->getRepository('CommonUtilityBundle:FgDmDocuments')->getCountOfAssignedClubDocuments('CLUB', $this->clubId, $clubid, $this->container);
-        $assignmentCount = $this->em->getRepository('CommonUtilityBundle:FgClubClassAssignment')->assignmentCount($this->clubType, $this->conn, $clubid);
+        $assignmentCount = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubClassAssignment')->assignmentCount($this->clubType, $this->conn, $clubid);
         $result['asgmntsCount'] = $assignmentCount;
         $result['notesCount'] = $this->em->getRepository('CommonUtilityBundle:FgClubNotes')->getNotesCount($clubid, $this->clubId);
         if (in_array('document', $club->get('bookedModulesDet'))) {

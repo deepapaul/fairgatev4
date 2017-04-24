@@ -185,4 +185,31 @@ class FgCmsPageContainerColumnRepository extends EntityRepository
 
         return $portraitDetails;
     }
+
+    /**
+     * This function is used to get the details of article elements inside a page container
+     * 
+     * @param int $clubId      the club id
+     * @param int $containerId The page container id
+     * 
+     * @return array $articleDetails The article details
+     */
+    public function getArticleElementsInAContainer($clubId, $containerId)
+    {
+        $qb = $this->createQueryBuilder('PCC')
+            ->select('PCC.widthValue as pageContainerSize, PCE.id AS elementId, PCE.articlePerRow AS articlesPerRow')
+            ->innerJoin("CommonUtilityBundle:FgCmsPageContainerBox", "PCB", "WITH", "PCB.column = PCC.id ")
+            ->innerJoin("CommonUtilityBundle:FgCmsPageContentElement", "PCE", "WITH", "PCE.box = PCB.id ")
+            ->innerJoin("CommonUtilityBundle:FgCmsPageContentType", "PCT", "WITH", "PCT.type = 'articles' ")
+            ->where('PCC.container=:containerId')
+            ->andWhere('PCE.club=:clubId')
+            ->andWhere('PCE.isDeleted=0')
+            ->orderBy('PCC.sortOrder', 'ASC')
+            ->addOrderBy('PCB.sortOrder', 'ASC')
+            ->addOrderBy('PCE.sortOrder', 'ASC')
+            ->setParameters(array('containerId' => $containerId, 'clubId' => $clubId));
+        $articleDetails = $qb->getQuery()->getArrayResult();
+
+        return $articleDetails;
+    }
 }

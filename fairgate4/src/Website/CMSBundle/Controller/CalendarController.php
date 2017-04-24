@@ -138,9 +138,8 @@ class CalendarController extends Controller
         $isPublic = ($contactId == '' || $contactId == 'NULL') ? 1 : 0;
         $this->calendarType ='element'; 
         $areasAndcategories = $this->getSelectedAreasAndCategoriesForCalendar($elementId, 'element');
-        $startDateTime = date('Y-m-d H:i:s');
-        $eventDetailsWithRecurrence = $this->getCalendarFilterData($areasAndcategories, '', '', $startDateTime);
-        $finalData = $this->getOptimizedCalendarData($eventDetailsWithRecurrence, 5);
+        $eventDetailsWithRecurrence = $this->getCalendarFilter($areasAndcategories, $isPublic);
+        $finalData = $this->getOptimizedCalendarData($eventDetailsWithRecurrence,5);
         $returnArray['calendarData'] = $finalData;
         $returnArray['elementId'] = $elementId;
         $returnArray['pageId'] = $pageId;
@@ -177,6 +176,43 @@ class CalendarController extends Controller
         
         return $pageElementObj->getAllcategoriesAndAreasForCalendar($selectedAreasandCategories);
     }
+    
+     /**
+     * Function to get calendar events data
+     *
+     * @param array   $areasAndcategories   The filter array that will be used to set the events that needs to be displayed
+     * @param boolean  $isPublic             whether is public
+     *
+     * @return array $eventDetails Event details
+     */
+    private function getCalendarFilter($areasAndcategories, $isPublic)
+    {
+        $startDate = date('Y-m-d H:i:s');
+        $filterClass = new Calenderfilter($this->container);
+        $filterClass->filterArray = $areasAndcategories;
+        $filterCondition = $filterClass->generateFilter();
+        $eventDetails = array();
+        //initialize the calendar events class and get the qry.
+        $calenderEventsObj = new CalenderEvents($this->container, '', '', $startDate, $isPublic);
+        $calenderEventsObj->setColumns();
+        $calenderEventsObj->setFrom();
+        $calenderEventsObj->setCondition();
+        $where = '1';
+        if (count($filterCondition) > 0) {
+            $where = implode(' AND ', $filterCondition);
+        }
+        $calenderEventsObj->addCondition($where);
+        $calenderEventsObj->setGroupBy('CD.id');
+        $calenderEventsObj->addOrderBy('eventSortField ASC');
+        $qry = $calenderEventsObj->getResult();
+        file_put_contents('query.txt', $qry);
+        //execute the qry and get the results
+        $calendarPdo = new CalendarPdo($this->container);
+        $eventDetails = $calendarPdo->executeQuery($qry);
+        //loop the results through recurr class to get all dates of repeating + non repeating events
+        return $this->getRecurrenceDetails($eventDetails);
+    }
+
 
     /**
      * Function to get calendar events data
@@ -233,12 +269,11 @@ class CalendarController extends Controller
      */
     private function getRecurrenceDetails($eventDetails)
     {
-        $result = array();
-        
+         $result = array();
+        $calendarObj = new CalendarRecurrence();
         foreach ($eventDetails as $eventDetail) {
             /* Deleted items ($eventDetail['eventDetailType'] == '2' ) are excluded from list */
             if ($eventDetail['eventDetailType'] == "0") { //repeating events
-                $calendarObj = new CalendarRecurrence();
                 $calendarObj->recurrenceRule = $eventDetail['eventRules'];
                 $calendarObj->setStartDate($eventDetail['startDate']);
                 if ($eventDetail['endDate']) {
@@ -247,25 +282,20 @@ class CalendarController extends Controller
                 if ($eventDetail['eventDetailUntillDate']) {
                     $calendarObj->setUntilDate($eventDetail['eventDetailUntillDate']);
                 } else { //case until date is null
-//                    $calendarObj->setUntilDate($eventDetail['intervalEndDate']);
-                } 
-                if($this->calendarType =='element'){
-                    $recurrences = $calendarObj->getRecurrenceAfter($eventDetail['intervalStartDate'], $eventDetail['intervalEndDate']);
-                }else{
-                    $recurrences = $calendarObj->getRecurrenceBetween($eventDetail['intervalStartDate'], $eventDetail['intervalEndDate'], $eventDetail['eventRepeatUntillDate']);
-
                 }
-                
-              // $recurrences = $calendarObj->getRecurrenceAfter($eventDetail['intervalStartDate'], $eventDetail['intervalEndDate']);
+                $recurrences = $calendarObj->getRecurrenceAfter($eventDetail['intervalStartDate'], $eventDetail['eventRepeatUntillDate']);
                 foreach ($recurrences as $recurrence) {
                     $eventDetail['startDate'] = $recurrence['recurrenceStartDate'];
                     $eventDetail['endDate'] = $recurrence['recurrenceEndDate'];
                     $result[] = $eventDetail;
                 }
-            } else if ($eventDetail['eventDetailType'] == "1") { //non-repeating events
+            } elseif ($eventDetail['eventDetailType'] == "1") { //non-repeating events
                 $result[] = $eventDetail;
+            } else {
+
             }
         }
+
         return $result;
     }
 

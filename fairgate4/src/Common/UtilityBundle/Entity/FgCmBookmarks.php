@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmBookmarks
  */
@@ -25,14 +23,19 @@ class FgCmBookmarks
     private $sortOrder;
 
     /**
-     * @var \Common\UtilityBundle\Entity\FgCmContact
+     * @var \Common\UtilityBundle\Entity\FgCmMembership
      */
-    private $contact;
+    private $membership;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgClub
      */
     private $club;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgCmContact
+     */
+    private $contact;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgRmRole
@@ -43,11 +46,6 @@ class FgCmBookmarks
      * @var \Common\UtilityBundle\Entity\FgFilter
      */
     private $filter;
-
-    /**
-     * @var \Common\UtilityBundle\Entity\FgCmMembership
-     */
-    private $membership;
 
 
     /**
@@ -64,6 +62,7 @@ class FgCmBookmarks
      * Set type
      *
      * @param string $type
+     *
      * @return FgCmBookmarks
      */
     public function setType($type)
@@ -87,6 +86,7 @@ class FgCmBookmarks
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgCmBookmarks
      */
     public function setSortOrder($sortOrder)
@@ -107,32 +107,34 @@ class FgCmBookmarks
     }
 
     /**
-     * Set contact
+     * Set membership
      *
-     * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     * @param \Common\UtilityBundle\Entity\FgCmMembership $membership
+     *
      * @return FgCmBookmarks
      */
-    public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
+    public function setMembership(\Common\UtilityBundle\Entity\FgCmMembership $membership = null)
     {
-        $this->contact = $contact;
+        $this->membership = $membership;
 
         return $this;
     }
 
     /**
-     * Get contact
+     * Get membership
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact
+     * @return \Common\UtilityBundle\Entity\FgCmMembership
      */
-    public function getContact()
+    public function getMembership()
     {
-        return $this->contact;
+        return $this->membership;
     }
 
     /**
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmBookmarks
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
@@ -153,9 +155,34 @@ class FgCmBookmarks
     }
 
     /**
+     * Set contact
+     *
+     * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
+     * @return FgCmBookmarks
+     */
+    public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
+    {
+        $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return \Common\UtilityBundle\Entity\FgCmContact
+     */
+    public function getContact()
+    {
+        return $this->contact;
+    }
+
+    /**
      * Set role
      *
      * @param \Common\UtilityBundle\Entity\FgRmRole $role
+     *
      * @return FgCmBookmarks
      */
     public function setRole(\Common\UtilityBundle\Entity\FgRmRole $role = null)
@@ -179,6 +206,7 @@ class FgCmBookmarks
      * Set filter
      *
      * @param \Common\UtilityBundle\Entity\FgFilter $filter
+     *
      * @return FgCmBookmarks
      */
     public function setFilter(\Common\UtilityBundle\Entity\FgFilter $filter = null)
@@ -197,27 +225,5 @@ class FgCmBookmarks
     {
         return $this->filter;
     }
-
-    /**
-     * Set membership
-     *
-     * @param \Common\UtilityBundle\Entity\FgCmMembership $membership
-     * @return FgCmBookmarks
-     */
-    public function setMembership(\Common\UtilityBundle\Entity\FgCmMembership $membership = null)
-    {
-        $this->membership = $membership;
-
-        return $this;
-    }
-
-    /**
-     * Get membership
-     *
-     * @return \Common\UtilityBundle\Entity\FgCmMembership
-     */
-    public function getMembership()
-    {
-        return $this->membership;
-    }
 }
+

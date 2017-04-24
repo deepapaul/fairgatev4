@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgRmRoleLog
  */
@@ -60,6 +58,16 @@ class FgRmRoleLog
     private $bookingId;
 
     /**
+     * @var string
+     */
+    private $importTable;
+
+    /**
+     * @var integer
+     */
+    private $importContact;
+
+    /**
      * @var \Common\UtilityBundle\Entity\FgRmRole
      */
     private $role;
@@ -78,7 +86,7 @@ class FgRmRoleLog
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -89,19 +97,20 @@ class FgRmRoleLog
      * Set clubId
      *
      * @param integer $clubId
+     *
      * @return FgRmRoleLog
      */
     public function setClubId($clubId)
     {
         $this->clubId = $clubId;
-    
+
         return $this;
     }
 
     /**
      * Get clubId
      *
-     * @return integer 
+     * @return integer
      */
     public function getClubId()
     {
@@ -112,19 +121,20 @@ class FgRmRoleLog
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return FgRmRoleLog
      */
     public function setDate($date)
     {
         $this->date = $date;
-    
+
         return $this;
     }
 
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -135,19 +145,20 @@ class FgRmRoleLog
      * Set kind
      *
      * @param string $kind
+     *
      * @return FgRmRoleLog
      */
     public function setKind($kind)
     {
         $this->kind = $kind;
-    
+
         return $this;
     }
 
     /**
      * Get kind
      *
-     * @return string 
+     * @return string
      */
     public function getKind()
     {
@@ -158,19 +169,20 @@ class FgRmRoleLog
      * Set field
      *
      * @param string $field
+     *
      * @return FgRmRoleLog
      */
     public function setField($field)
     {
         $this->field = $field;
-    
+
         return $this;
     }
 
     /**
      * Get field
      *
-     * @return string 
+     * @return string
      */
     public function getField()
     {
@@ -181,19 +193,20 @@ class FgRmRoleLog
      * Set valueBefore
      *
      * @param string $valueBefore
+     *
      * @return FgRmRoleLog
      */
     public function setValueBefore($valueBefore)
     {
         $this->valueBefore = $valueBefore;
-    
+
         return $this;
     }
 
     /**
      * Get valueBefore
      *
-     * @return string 
+     * @return string
      */
     public function getValueBefore()
     {
@@ -204,19 +217,20 @@ class FgRmRoleLog
      * Set valueAfter
      *
      * @param string $valueAfter
+     *
      * @return FgRmRoleLog
      */
     public function setValueAfter($valueAfter)
     {
         $this->valueAfter = $valueAfter;
-    
+
         return $this;
     }
 
     /**
      * Get valueAfter
      *
-     * @return string 
+     * @return string
      */
     public function getValueAfter()
     {
@@ -227,19 +241,20 @@ class FgRmRoleLog
      * Set historicalId
      *
      * @param integer $historicalId
+     *
      * @return FgRmRoleLog
      */
     public function setHistoricalId($historicalId)
     {
         $this->historicalId = $historicalId;
-    
+
         return $this;
     }
 
     /**
      * Get historicalId
      *
-     * @return integer 
+     * @return integer
      */
     public function getHistoricalId()
     {
@@ -250,19 +265,20 @@ class FgRmRoleLog
      * Set isHistorical
      *
      * @param boolean $isHistorical
+     *
      * @return FgRmRoleLog
      */
     public function setIsHistorical($isHistorical)
     {
         $this->isHistorical = $isHistorical;
-    
+
         return $this;
     }
 
     /**
      * Get isHistorical
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsHistorical()
     {
@@ -273,19 +289,20 @@ class FgRmRoleLog
      * Set bookingId
      *
      * @param integer $bookingId
+     *
      * @return FgRmRoleLog
      */
     public function setBookingId($bookingId)
     {
         $this->bookingId = $bookingId;
-    
+
         return $this;
     }
 
     /**
      * Get bookingId
      *
-     * @return integer 
+     * @return integer
      */
     public function getBookingId()
     {
@@ -293,101 +310,23 @@ class FgRmRoleLog
     }
 
     /**
-     * Set role
-     *
-     * @param \Common\UtilityBundle\Entity\FgRmRole $role
-     * @return FgRmRoleLog
-     */
-    public function setRole(\Common\UtilityBundle\Entity\FgRmRole $role = null)
-    {
-        $this->role = $role;
-    
-        return $this;
-    }
-
-    /**
-     * Get role
-     *
-     * @return \Common\UtilityBundle\Entity\FgRmRole 
-     */
-    public function getRole()
-    {
-        return $this->role;
-    }
-
-    /**
-     * Set changedBy
-     *
-     * @param \Common\UtilityBundle\Entity\FgCmContact $changedBy
-     * @return FgRmRoleLog
-     */
-    public function setChangedBy(\Common\UtilityBundle\Entity\FgCmContact $changedBy = null)
-    {
-        $this->changedBy = $changedBy;
-    
-        return $this;
-    }
-
-    /**
-     * Get changedBy
-     *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
-     */
-    public function getChangedBy()
-    {
-        return $this->changedBy;
-    }
-
-    /**
-     * Set contactlog
-     *
-     * @param \Common\UtilityBundle\Entity\FgCmChangeLog $contactlog
-     * @return FgRmRoleLog
-     */
-    public function setContactlog(\Common\UtilityBundle\Entity\FgCmChangeLog $contactlog = null)
-    {
-        $this->contactlog = $contactlog;
-    
-        return $this;
-    }
-
-    /**
-     * Get contactlog
-     *
-     * @return \Common\UtilityBundle\Entity\FgCmChangeLog 
-     */
-    public function getContactlog()
-    {
-        return $this->contactlog;
-    }
-    /**
-     * @var string
-     */
-    private $importTable;
-
-    /**
-     * @var integer
-     */
-    private $importContact;
-
-
-    /**
      * Set importTable
      *
      * @param string $importTable
+     *
      * @return FgRmRoleLog
      */
     public function setImportTable($importTable)
     {
         $this->importTable = $importTable;
-    
+
         return $this;
     }
 
     /**
      * Get importTable
      *
-     * @return string 
+     * @return string
      */
     public function getImportTable()
     {
@@ -398,22 +337,96 @@ class FgRmRoleLog
      * Set importContact
      *
      * @param integer $importContact
+     *
      * @return FgRmRoleLog
      */
     public function setImportContact($importContact)
     {
         $this->importContact = $importContact;
-    
+
         return $this;
     }
 
     /**
      * Get importContact
      *
-     * @return integer 
+     * @return integer
      */
     public function getImportContact()
     {
         return $this->importContact;
     }
+
+    /**
+     * Set role
+     *
+     * @param \Common\UtilityBundle\Entity\FgRmRole $role
+     *
+     * @return FgRmRoleLog
+     */
+    public function setRole(\Common\UtilityBundle\Entity\FgRmRole $role = null)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * Get role
+     *
+     * @return \Common\UtilityBundle\Entity\FgRmRole
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * Set changedBy
+     *
+     * @param \Common\UtilityBundle\Entity\FgCmContact $changedBy
+     *
+     * @return FgRmRoleLog
+     */
+    public function setChangedBy(\Common\UtilityBundle\Entity\FgCmContact $changedBy = null)
+    {
+        $this->changedBy = $changedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get changedBy
+     *
+     * @return \Common\UtilityBundle\Entity\FgCmContact
+     */
+    public function getChangedBy()
+    {
+        return $this->changedBy;
+    }
+
+    /**
+     * Set contactlog
+     *
+     * @param \Common\UtilityBundle\Entity\FgCmChangeLog $contactlog
+     *
+     * @return FgRmRoleLog
+     */
+    public function setContactlog(\Common\UtilityBundle\Entity\FgCmChangeLog $contactlog = null)
+    {
+        $this->contactlog = $contactlog;
+
+        return $this;
+    }
+
+    /**
+     * Get contactlog
+     *
+     * @return \Common\UtilityBundle\Entity\FgCmChangeLog
+     */
+    public function getContactlog()
+    {
+        return $this->contactlog;
+    }
 }
+

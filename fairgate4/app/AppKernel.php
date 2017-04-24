@@ -34,7 +34,7 @@ class AppKernel extends Kernel
             new Internal\TeamBundle\InternalTeamBundle(),
             new Internal\CalendarBundle\InternalCalendarBundle(),
             new Internal\GalleryBundle\InternalGalleryBundle(),
-            new Igorw\FileServeBundle\IgorwFileServeBundle(),
+            new Common\FileServeBundle\CommonFileServeBundle(),
             new Common\FilemanagerBundle\CommonFilemanagerBundle(),
             new Common\HelpBundle\CommonHelpBundle(),
             new Internal\ArticleBundle\InternalArticleBundle(),
@@ -43,6 +43,7 @@ class AppKernel extends Kernel
             new FOS\RestBundle\FOSRestBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             new FairgateApiBundle\FairgateApiBundle(),
+            new Admin\UtilityBundle\AdminUtilityBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -16,7 +16,11 @@ filemanager_log:
     
 filemanager_view: 
     path:     /filemanager/view/{type}/{module}
-    defaults: { _controller: CommonFilemanagerBundle:FileManager:fileManagerView }  
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:fileManagerView, openTab: ckeditor } 
+    
+filemanager_browse: 
+    path:     /filemanager/browse/{type}/{module}
+    defaults: { _controller: CommonFilemanagerBundle:FileManager:fileManagerView }    
 
 filemanager_upload_save:
     path:     /filemanager/upload

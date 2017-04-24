@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgDmMediaManager
  */
@@ -63,7 +61,7 @@ class FgDmMediaManager
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -74,19 +72,20 @@ class FgDmMediaManager
      * Set directory
      *
      * @param string $directory
+     *
      * @return FgDmMediaManager
      */
     public function setDirectory($directory)
     {
         $this->directory = $directory;
-    
+
         return $this;
     }
 
     /**
      * Get directory
      *
-     * @return string 
+     * @return string
      */
     public function getDirectory()
     {
@@ -97,19 +96,20 @@ class FgDmMediaManager
      * Set subDirectory
      *
      * @param string $subDirectory
+     *
      * @return FgDmMediaManager
      */
     public function setSubDirectory($subDirectory)
     {
         $this->subDirectory = $subDirectory;
-    
+
         return $this;
     }
 
     /**
      * Get subDirectory
      *
-     * @return string 
+     * @return string
      */
     public function getSubDirectory()
     {
@@ -120,19 +120,20 @@ class FgDmMediaManager
      * Set name
      *
      * @param string $name
+     *
      * @return FgDmMediaManager
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -143,19 +144,20 @@ class FgDmMediaManager
      * Set fileName
      *
      * @param string $fileName
+     *
      * @return FgDmMediaManager
      */
     public function setFileName($fileName)
     {
         $this->fileName = $fileName;
-    
+
         return $this;
     }
 
     /**
      * Get fileName
      *
-     * @return string 
+     * @return string
      */
     public function getFileName()
     {
@@ -166,19 +168,20 @@ class FgDmMediaManager
      * Set size
      *
      * @param integer $size
+     *
      * @return FgDmMediaManager
      */
     public function setSize($size)
     {
         $this->size = $size;
-    
+
         return $this;
     }
 
     /**
      * Get size
      *
-     * @return integer 
+     * @return integer
      */
     public function getSize()
     {
@@ -189,19 +192,20 @@ class FgDmMediaManager
      * Set type
      *
      * @param string $type
+     *
      * @return FgDmMediaManager
      */
     public function setType($type)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -212,19 +216,20 @@ class FgDmMediaManager
      * Set lastUpdated
      *
      * @param \DateTime $lastUpdated
+     *
      * @return FgDmMediaManager
      */
     public function setLastUpdated($lastUpdated)
     {
         $this->lastUpdated = $lastUpdated;
-    
+
         return $this;
     }
 
     /**
      * Get lastUpdated
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLastUpdated()
     {
@@ -235,19 +240,20 @@ class FgDmMediaManager
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgDmMediaManager
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -258,22 +264,24 @@ class FgDmMediaManager
      * Set author
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $author
+     *
      * @return FgDmMediaManager
      */
     public function setAuthor(\Common\UtilityBundle\Entity\FgCmContact $author = null)
     {
         $this->author = $author;
-    
+
         return $this;
     }
 
     /**
      * Get author
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getAuthor()
     {
         return $this->author;
     }
 }
+

@@ -27,6 +27,7 @@ use Common\UtilityBundle\Util\FgUtility;
 use Common\UtilityBundle\Util\FgPermissions;
 use Symfony\Component\HttpFoundation\Request;
 use Common\UtilityBundle\Repository\Pdo\ClubPdo;
+use Admin\UtilityBundle\Classes\SyncFgadmin;
 
 /**
  * DefaultController used for managing contact and club  notes
@@ -163,7 +164,7 @@ class DefaultController extends ParentController
             }
         $breadCrumb = array('back' => $this->generateUrl('club_homepage'));
         //For handling  pagination
-        $assignmentCount = $this->em->getRepository('CommonUtilityBundle:FgClubClassAssignment')->assignmentCount($this->clubType, $this->conn, $clubid);
+        $assignmentCount = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubClassAssignment')->assignmentCount($this->clubType, $this->conn, $clubid);
 
         $limit = $this->container->getParameter('pagelimit');
         $notestotalCount = $this->em->getRepository('CommonUtilityBundle:FgClubNotes')->getNotesCount($clubid, $this->clubId);
@@ -177,7 +178,7 @@ class DefaultController extends ParentController
             $view = 'clubnote.html.twig';
         }
         $club = $this->get('club');
-        $clubname = $this->em->getRepository('CommonUtilityBundle:FgClub')->getClubname($clubid, $club->get('default_lang'));
+        $clubname = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClub')->getClubname($clubid, $club->get('default_lang'));
         $clubName = $clubname[0]['title'];
         $notesDetails = $this->em->getRepository('CommonUtilityBundle:FgClubNotes')->getNotesDetails($noteOffset, $limit, $clubid, $this->clubId);
         
@@ -252,6 +253,8 @@ class DefaultController extends ParentController
             }
 
             $this->em->flush();
+            $SyncFgadmin = new SyncFgadmin($this->container);
+            $SyncFgadmin->syncClubNoteCount($clubid,$this->clubId);
             $this->em->getRepository('CommonUtilityBundle:FgClubNotes')->logEntry($log, 'club', $this->container);
 
             return new JsonResponse(array('status' => 'SUCCESS', 'flash' => $this->get('translator')->trans('CLUB_NOTE_SETTINGS_SAVED')));

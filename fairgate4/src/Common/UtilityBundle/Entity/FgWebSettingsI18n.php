@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgWebSettingsI18n
  */
@@ -33,7 +31,7 @@ class FgWebSettingsI18n
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -44,19 +42,20 @@ class FgWebSettingsI18n
      * Set descriptionLang
      *
      * @param string $descriptionLang
+     *
      * @return FgWebSettingsI18n
      */
     public function setDescriptionLang($descriptionLang)
     {
         $this->descriptionLang = $descriptionLang;
-    
+
         return $this;
     }
 
     /**
      * Get descriptionLang
      *
-     * @return string 
+     * @return string
      */
     public function getDescriptionLang()
     {
@@ -64,22 +63,23 @@ class FgWebSettingsI18n
     }
 
     /**
-     * Set remove
+     * Set lang
      *
-     * @param integer $remove
+     * @param string $lang
+     *
      * @return FgWebSettingsI18n
      */
     public function setLang($lang)
     {
         $this->lang = $lang;
-    
+
         return $this;
     }
 
     /**
-     * Get remove
+     * Get lang
      *
-     * @return integer 
+     * @return string
      */
     public function getLang()
     {
@@ -90,22 +90,24 @@ class FgWebSettingsI18n
      * Set settings
      *
      * @param \Common\UtilityBundle\Entity\FgWebSettings $settings
+     *
      * @return FgWebSettingsI18n
      */
     public function setSettings(\Common\UtilityBundle\Entity\FgWebSettings $settings = null)
     {
         $this->settings = $settings;
-    
+
         return $this;
     }
 
     /**
      * Get settings
      *
-     * @return \Common\UtilityBundle\Entity\FgWebSettings 
+     * @return \Common\UtilityBundle\Entity\FgWebSettings
      */
     public function getSettings()
     {
         return $this->settings;
     }
 }
+

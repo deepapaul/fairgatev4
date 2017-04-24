@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgRmRoleFunction
  */
@@ -33,7 +31,6 @@ class FgRmRoleFunction
     public function getId()
     {
         return $this->id;
-
     }
 
     /**
@@ -48,9 +45,7 @@ class FgRmRoleFunction
         $this->function = $function;
 
         return $this;
-
     }
-
 
     /**
      * Get function
@@ -60,9 +55,7 @@ class FgRmRoleFunction
     public function getFunction()
     {
         return $this->function;
-
     }
-
 
     /**
      * Set role
@@ -76,9 +69,7 @@ class FgRmRoleFunction
         $this->role = $role;
 
         return $this;
-
     }
-
 
     /**
      * Get role
@@ -88,8 +79,6 @@ class FgRmRoleFunction
     public function getRole()
     {
         return $this->role;
-
     }
-
-
 }
+

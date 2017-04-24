@@ -16,6 +16,7 @@ use Common\UtilityBundle\Controller\FgController as ParentController;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Common\UtilityBundle\Util\FgUtility;
 use Symfony\Component\HttpFoundation\Request;
+use Common\UtilityBundle\Util\FgClubSyncDataToAdmin;
 
 class SubscriberimportController extends ParentController
 {
@@ -478,6 +479,9 @@ class SubscriberimportController extends ParentController
             $ownTable = ($this->clubType == 'federation' || $this->clubType == 'sub_federation') ? 'master_federation_' . $this->clubId : 'master_club_' . $this->clubId;
             $this->conn->executeQuery("CALL importSubscribers('" . $importDetails['tableName'] . "','import_maping','" . $this->clubId . "','" . $this->contactId . "','" . "$ownTable')");
             
+            $subscriberSyncObject = new FgClubSyncDataToAdmin($this->container);
+            $subscriberSyncObject->updateSubscriberCount($this->clubId);
+
             return new JsonResponse(array('status' => 'SUCCESS', 'sync' => 1, 'redirect' => $this->generateUrl('subscriber_list'), 'flash' => $this->get('translator')->trans('SUBSCRIBERS_IMPORTED_SUCCESSFULLY')));
         }
         throw $this->createNotFoundException($this->clubTitle . ' have no access to this page');

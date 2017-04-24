@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPageAreas
  */
@@ -15,20 +13,20 @@ class FgCmsPageAreas
     private $id;
 
     /**
-     * @var \Common\UtilityBundle\Entity\FgRmRole
-     */
-    private $role;
-
-    /**
      * @var \Common\UtilityBundle\Entity\FgCmsPage
      */
     private $page;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgRmRole
+     */
+    private $role;
 
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -36,48 +34,51 @@ class FgCmsPageAreas
     }
 
     /**
-     * Set roleId
-     *
-     * @param integer $roleId
-     * @return FgCmsPageAreas
-     */
-    public function setRole(\Common\UtilityBundle\Entity\FgRmRole $role = null)
-    {
-        $this->role = $role;
-    
-        return $this;
-    }
-
-    /**
-     * Get roleId
-     *
-     * @return integer 
-     */
-    public function getRole()
-    {
-        return $this->roleId;
-    }
-
-    /**
      * Set page
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPage $page
+     *
      * @return FgCmsPageAreas
      */
     public function setPage(\Common\UtilityBundle\Entity\FgCmsPage $page = null)
     {
         $this->page = $page;
-    
+
         return $this;
     }
 
     /**
      * Get page
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPage 
+     * @return \Common\UtilityBundle\Entity\FgCmsPage
      */
     public function getPage()
     {
         return $this->page;
     }
+
+    /**
+     * Set role
+     *
+     * @param \Common\UtilityBundle\Entity\FgRmRole $role
+     *
+     * @return FgCmsPageAreas
+     */
+    public function setRole(\Common\UtilityBundle\Entity\FgRmRole $role = null)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * Get role
+     *
+     * @return \Common\UtilityBundle\Entity\FgRmRole
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
 }
+

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgSmSponsorAds
  */
@@ -40,9 +38,9 @@ class FgSmSponsorAds
     private $isDefault;
 
     /**
-     * @var \Common\UtilityBundle\Entity\FgSmAdArea
+     * @var integer
      */
-    private $adArea;
+    private $sortOrder;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgClub
@@ -54,11 +52,16 @@ class FgSmSponsorAds
      */
     private $contact;
 
+    /**
+     * @var \Common\UtilityBundle\Entity\FgSmAdArea
+     */
+    private $adArea;
+
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -69,19 +72,20 @@ class FgSmSponsorAds
      * Set description
      *
      * @param string $description
+     *
      * @return FgSmSponsorAds
      */
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -92,19 +96,20 @@ class FgSmSponsorAds
      * Set image
      *
      * @param string $image
+     *
      * @return FgSmSponsorAds
      */
     public function setImage($image)
     {
         $this->image = $image;
-    
+
         return $this;
     }
 
     /**
      * Get image
      *
-     * @return string 
+     * @return string
      */
     public function getImage()
     {
@@ -115,19 +120,20 @@ class FgSmSponsorAds
      * Set url
      *
      * @param string $url
+     *
      * @return FgSmSponsorAds
      */
     public function setUrl($url)
     {
         $this->url = $url;
-    
+
         return $this;
     }
 
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
@@ -138,19 +144,20 @@ class FgSmSponsorAds
      * Set imageSize
      *
      * @param integer $imageSize
+     *
      * @return FgSmSponsorAds
      */
     public function setImageSize($imageSize)
     {
         $this->imageSize = $imageSize;
-    
+
         return $this;
     }
 
     /**
      * Get imageSize
      *
-     * @return integer 
+     * @return integer
      */
     public function getImageSize()
     {
@@ -161,19 +168,20 @@ class FgSmSponsorAds
      * Set isDefault
      *
      * @param boolean $isDefault
+     *
      * @return FgSmSponsorAds
      */
     public function setIsDefault($isDefault)
     {
         $this->isDefault = $isDefault;
-    
+
         return $this;
     }
 
     /**
      * Get isDefault
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsDefault()
     {
@@ -181,45 +189,47 @@ class FgSmSponsorAds
     }
 
     /**
-     * Set adArea
+     * Set sortOrder
      *
-     * @param \Common\UtilityBundle\Entity\FgSmAdArea $adArea
+     * @param integer $sortOrder
+     *
      * @return FgSmSponsorAds
      */
-    public function setAdArea(\Common\UtilityBundle\Entity\FgSmAdArea $adArea = null)
+    public function setSortOrder($sortOrder)
     {
-        $this->adArea = $adArea;
-    
+        $this->sortOrder = $sortOrder;
+
         return $this;
     }
 
     /**
-     * Get adArea
+     * Get sortOrder
      *
-     * @return \Common\UtilityBundle\Entity\FgSmAdArea 
+     * @return integer
      */
-    public function getAdArea()
+    public function getSortOrder()
     {
-        return $this->adArea;
+        return $this->sortOrder;
     }
 
     /**
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgSmSponsorAds
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -230,50 +240,48 @@ class FgSmSponsorAds
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgSmSponsorAds
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
     {
         $this->contact = $contact;
-    
+
         return $this;
     }
 
     /**
      * Get contact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getContact()
     {
         return $this->contact;
     }
-    /**
-     * @var integer
-     */
-    private $sortOrder;
-
 
     /**
-     * Set sortOrder
+     * Set adArea
      *
-     * @param integer $sortOrder
+     * @param \Common\UtilityBundle\Entity\FgSmAdArea $adArea
+     *
      * @return FgSmSponsorAds
      */
-    public function setSortOrder($sortOrder)
+    public function setAdArea(\Common\UtilityBundle\Entity\FgSmAdArea $adArea = null)
     {
-        $this->sortOrder = $sortOrder;
-    
+        $this->adArea = $adArea;
+
         return $this;
     }
 
     /**
-     * Get sortOrder
+     * Get adArea
      *
-     * @return integer 
+     * @return \Common\UtilityBundle\Entity\FgSmAdArea
      */
-    public function getSortOrder()
+    public function getAdArea()
     {
-        return $this->sortOrder;
+        return $this->adArea;
     }
 }
+

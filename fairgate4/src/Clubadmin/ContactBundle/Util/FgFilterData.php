@@ -976,7 +976,7 @@ class FgFilterData
         $bookedModulesDet = $this->club->get('bookedModulesDet');
         /* Federation or sub federation roles data */
 
-        $clubPdo = new \Common\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
+        $clubPdo = new \Admin\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
         $rowClubsArray = $clubPdo->getAllSubLevelData($this->clubId);
         $subClubsArray = $this->iterateClubs($rowClubsArray);
         /* Club executive board data */

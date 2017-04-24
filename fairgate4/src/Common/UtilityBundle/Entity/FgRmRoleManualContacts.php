@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgRmRoleManualContacts
  */
@@ -38,9 +36,7 @@ class FgRmRoleManualContacts
     public function getId()
     {
         return $this->id;
-
     }
-
 
     /**
      * Set type
@@ -54,9 +50,7 @@ class FgRmRoleManualContacts
         $this->type = $type;
 
         return $this;
-
     }
-
 
     /**
      * Get type
@@ -66,9 +60,7 @@ class FgRmRoleManualContacts
     public function getType()
     {
         return $this->type;
-
     }
-
 
     /**
      * Set role
@@ -82,9 +74,7 @@ class FgRmRoleManualContacts
         $this->role = $role;
 
         return $this;
-
     }
-
 
     /**
      * Get role
@@ -94,9 +84,7 @@ class FgRmRoleManualContacts
     public function getRole()
     {
         return $this->role;
-
     }
-
 
     /**
      * Set contact
@@ -110,9 +98,7 @@ class FgRmRoleManualContacts
         $this->contact = $contact;
 
         return $this;
-
     }
-
 
     /**
      * Get contact
@@ -122,8 +108,6 @@ class FgRmRoleManualContacts
     public function getContact()
     {
         return $this->contact;
-
     }
-
-
 }
+

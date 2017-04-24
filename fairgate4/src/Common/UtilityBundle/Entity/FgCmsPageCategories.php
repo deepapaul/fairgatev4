@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPageCategories
  */
@@ -28,7 +26,7 @@ class FgCmsPageCategories
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +37,20 @@ class FgCmsPageCategories
      * Set categoryId
      *
      * @param integer $categoryId
+     *
      * @return FgCmsPageCategories
      */
     public function setCategoryId($categoryId)
     {
         $this->categoryId = $categoryId;
-    
+
         return $this;
     }
 
     /**
      * Get categoryId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCategoryId()
     {
@@ -62,22 +61,24 @@ class FgCmsPageCategories
      * Set page
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPage $page
+     *
      * @return FgCmsPageCategories
      */
     public function setPage(\Common\UtilityBundle\Entity\FgCmsPage $page = null)
     {
         $this->page = $page;
-    
+
         return $this;
     }
 
     /**
      * Get page
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPage 
+     * @return \Common\UtilityBundle\Entity\FgCmsPage
      */
     public function getPage()
     {
         return $this->page;
     }
 }
+

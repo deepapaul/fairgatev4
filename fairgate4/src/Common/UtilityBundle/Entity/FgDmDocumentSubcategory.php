@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgDmDocumentSubcategory
  */
@@ -43,7 +41,7 @@ class FgDmDocumentSubcategory
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -54,19 +52,20 @@ class FgDmDocumentSubcategory
      * Set title
      *
      * @param string $title
+     *
      * @return FgDmDocumentSubcategory
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -77,19 +76,20 @@ class FgDmDocumentSubcategory
      * Set documentType
      *
      * @param string $documentType
+     *
      * @return FgDmDocumentSubcategory
      */
     public function setDocumentType($documentType)
     {
         $this->documentType = $documentType;
-    
+
         return $this;
     }
 
     /**
      * Get documentType
      *
-     * @return string 
+     * @return string
      */
     public function getDocumentType()
     {
@@ -100,19 +100,20 @@ class FgDmDocumentSubcategory
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgDmDocumentSubcategory
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -123,19 +124,20 @@ class FgDmDocumentSubcategory
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgDmDocumentSubcategory
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -146,22 +148,24 @@ class FgDmDocumentSubcategory
      * Set category
      *
      * @param \Common\UtilityBundle\Entity\FgDmDocumentCategory $category
+     *
      * @return FgDmDocumentSubcategory
      */
     public function setCategory(\Common\UtilityBundle\Entity\FgDmDocumentCategory $category = null)
     {
         $this->category = $category;
-    
+
         return $this;
     }
 
     /**
      * Get category
      *
-     * @return \Common\UtilityBundle\Entity\FgDmDocumentCategory 
+     * @return \Common\UtilityBundle\Entity\FgDmDocumentCategory
      */
     public function getCategory()
     {
         return $this->category;
     }
 }
+

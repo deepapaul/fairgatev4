@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsFormsI18n
  */
@@ -59,19 +57,20 @@ class FgCmsFormsI18n
      * Set lang
      *
      * @param string $lang
+     *
      * @return FgCmsFormsI18n
      */
     public function setLang($lang)
     {
         $this->lang = $lang;
-    
+
         return $this;
     }
 
     /**
      * Get lang
      *
-     * @return string 
+     * @return string
      */
     public function getLang()
     {
@@ -82,19 +81,20 @@ class FgCmsFormsI18n
      * Set confirmationEmailSubjectLang
      *
      * @param string $confirmationEmailSubjectLang
+     *
      * @return FgCmsFormsI18n
      */
     public function setConfirmationEmailSubjectLang($confirmationEmailSubjectLang)
     {
         $this->confirmationEmailSubjectLang = $confirmationEmailSubjectLang;
-    
+
         return $this;
     }
 
     /**
      * Get confirmationEmailSubjectLang
      *
-     * @return string 
+     * @return string
      */
     public function getConfirmationEmailSubjectLang()
     {
@@ -105,19 +105,20 @@ class FgCmsFormsI18n
      * Set confirmationEmailContentLang
      *
      * @param string $confirmationEmailContentLang
+     *
      * @return FgCmsFormsI18n
      */
     public function setConfirmationEmailContentLang($confirmationEmailContentLang)
     {
         $this->confirmationEmailContentLang = $confirmationEmailContentLang;
-    
+
         return $this;
     }
 
     /**
      * Get confirmationEmailContentLang
      *
-     * @return string 
+     * @return string
      */
     public function getConfirmationEmailContentLang()
     {
@@ -128,19 +129,20 @@ class FgCmsFormsI18n
      * Set acceptanceEmailSubjectLang
      *
      * @param string $acceptanceEmailSubjectLang
+     *
      * @return FgCmsFormsI18n
      */
     public function setAcceptanceEmailSubjectLang($acceptanceEmailSubjectLang)
     {
         $this->acceptanceEmailSubjectLang = $acceptanceEmailSubjectLang;
-    
+
         return $this;
     }
 
     /**
      * Get acceptanceEmailSubjectLang
      *
-     * @return string 
+     * @return string
      */
     public function getAcceptanceEmailSubjectLang()
     {
@@ -151,19 +153,20 @@ class FgCmsFormsI18n
      * Set acceptanceEmailContentLang
      *
      * @param string $acceptanceEmailContentLang
+     *
      * @return FgCmsFormsI18n
      */
     public function setAcceptanceEmailContentLang($acceptanceEmailContentLang)
     {
         $this->acceptanceEmailContentLang = $acceptanceEmailContentLang;
-    
+
         return $this;
     }
 
     /**
      * Get acceptanceEmailContentLang
      *
-     * @return string 
+     * @return string
      */
     public function getAcceptanceEmailContentLang()
     {
@@ -174,19 +177,20 @@ class FgCmsFormsI18n
      * Set dismissalEmailSubjectLang
      *
      * @param string $dismissalEmailSubjectLang
+     *
      * @return FgCmsFormsI18n
      */
     public function setDismissalEmailSubjectLang($dismissalEmailSubjectLang)
     {
         $this->dismissalEmailSubjectLang = $dismissalEmailSubjectLang;
-    
+
         return $this;
     }
 
     /**
      * Get dismissalEmailSubjectLang
      *
-     * @return string 
+     * @return string
      */
     public function getDismissalEmailSubjectLang()
     {
@@ -197,19 +201,20 @@ class FgCmsFormsI18n
      * Set dismissalEmailContentLang
      *
      * @param string $dismissalEmailContentLang
+     *
      * @return FgCmsFormsI18n
      */
     public function setDismissalEmailContentLang($dismissalEmailContentLang)
     {
         $this->dismissalEmailContentLang = $dismissalEmailContentLang;
-    
+
         return $this;
     }
 
     /**
      * Get dismissalEmailContentLang
      *
-     * @return string 
+     * @return string
      */
     public function getDismissalEmailContentLang()
     {
@@ -220,19 +225,20 @@ class FgCmsFormsI18n
      * Set successMessageLang
      *
      * @param string $successMessageLang
+     *
      * @return FgCmsFormsI18n
      */
     public function setSuccessMessageLang($successMessageLang)
     {
         $this->successMessageLang = $successMessageLang;
-    
+
         return $this;
     }
 
     /**
      * Get successMessageLang
      *
-     * @return string 
+     * @return string
      */
     public function getSuccessMessageLang()
     {
@@ -243,22 +249,24 @@ class FgCmsFormsI18n
      * Set id
      *
      * @param \Common\UtilityBundle\Entity\FgCmsForms $id
+     *
      * @return FgCmsFormsI18n
      */
     public function setId(\Common\UtilityBundle\Entity\FgCmsForms $id = null)
     {
         $this->id = $id;
-    
+
         return $this;
     }
 
     /**
      * Get id
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsForms 
+     * @return \Common\UtilityBundle\Entity\FgCmsForms
      */
     public function getId()
     {
         return $this->id;
     }
 }
+

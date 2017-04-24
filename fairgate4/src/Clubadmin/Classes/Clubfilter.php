@@ -160,7 +160,8 @@ class Clubfilter
 
                     $clubId = $this->club->get("federation_id");
                 }
-                $filters['entry'] = "(SELECT COUNT(fg_cm_contact.id) FROM fg_cm_contact WHERE fg_cm_contact.club_id=fc.id AND fg_cm_contact.membership_cat_id IN( SELECT id FROM fg_cm_membership WHERE fg_cm_membership.club_id={$clubId} AND fg_cm_membership.is_fed_category=1) )";
+                //$filters['entry'] = "(SELECT COUNT(fg_cm_contact.id) FROM fg_cm_contact WHERE fg_cm_contact.club_id=fc.id AND fg_cm_contact.membership_cat_id IN( SELECT id FROM fg_cm_membership WHERE fg_cm_membership.club_id={$clubId} AND fg_cm_membership.is_fed_category=1) )";
+                $filters['entry'] = "10";
             } elseif ($filters['entry'] == 'LAST_CONTACT_EDIT') {
                 $betweenDate = " STR_TO_DATE('" . FgUtility::getSecuredData($filters['input1'], $this->conn) . "','" . $this->mysqlDateFormat . "') AND STR_TO_DATE('" . FgUtility::getSecuredData($filters['input2'], $this->conn) . "','" . $this->mysqlDateFormat . "')";
                 if ($filters['input1'] != '') {
@@ -170,7 +171,8 @@ class Clubfilter
                 }
 
                 $dateSelect = ($filters['condition'] == 'is' || $filters['condition'] == 'is not') ? 'date(fg_cm_change_log.date)' : 'date(fg_cm_change_log.date)';
-                $filters['entry'] = "(SELECT $dateSelect  FROM fg_club INNER JOIN fg_cm_contact ON fg_club.id=fg_cm_contact.club_id INNER JOIN fg_cm_change_log ON fg_cm_change_log.contact_id=fg_cm_contact.id WHERE fc.id=fg_cm_contact.club_id AND fg_cm_change_log.is_confirmed != 0 ORDER BY fg_cm_change_log.id desc LIMIT 0,1)";
+                //$filters['entry'] = "(SELECT $dateSelect  FROM fg_club INNER JOIN fg_cm_contact ON fg_club.id=fg_cm_contact.club_id INNER JOIN fg_cm_change_log ON fg_cm_change_log.contact_id=fg_cm_contact.id WHERE fc.id=fg_cm_contact.club_id AND fg_cm_change_log.is_confirmed != 0 ORDER BY fg_cm_change_log.id desc LIMIT 0,1)";
+                $filters['entry'] = "date('2017-07-07 08:10:20')";
             } elseif ($filters['entry'] == 'LAST_ADMIN_LOGIN') {
 
                 $filters['condition'] = '';

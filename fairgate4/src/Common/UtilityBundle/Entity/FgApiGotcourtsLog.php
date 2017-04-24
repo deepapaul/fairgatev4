@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgApiGotcourtsLog
  */
@@ -53,7 +51,7 @@ class FgApiGotcourtsLog
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -64,19 +62,20 @@ class FgApiGotcourtsLog
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return FgApiGotcourtsLog
      */
     public function setDate($date)
     {
         $this->date = $date;
-    
+
         return $this;
     }
 
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -87,19 +86,20 @@ class FgApiGotcourtsLog
      * Set field
      *
      * @param string $field
+     *
      * @return FgApiGotcourtsLog
      */
     public function setField($field)
     {
         $this->field = $field;
-    
+
         return $this;
     }
 
     /**
      * Get field
      *
-     * @return string 
+     * @return string
      */
     public function getField()
     {
@@ -110,19 +110,20 @@ class FgApiGotcourtsLog
      * Set valueAfter
      *
      * @param string $valueAfter
+     *
      * @return FgApiGotcourtsLog
      */
     public function setValueAfter($valueAfter)
     {
         $this->valueAfter = $valueAfter;
-    
+
         return $this;
     }
 
     /**
      * Get valueAfter
      *
-     * @return string 
+     * @return string
      */
     public function getValueAfter()
     {
@@ -133,19 +134,20 @@ class FgApiGotcourtsLog
      * Set valueBefore
      *
      * @param string $valueBefore
+     *
      * @return FgApiGotcourtsLog
      */
     public function setValueBefore($valueBefore)
     {
         $this->valueBefore = $valueBefore;
-    
+
         return $this;
     }
 
     /**
      * Get valueBefore
      *
-     * @return string 
+     * @return string
      */
     public function getValueBefore()
     {
@@ -156,19 +158,20 @@ class FgApiGotcourtsLog
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgApiGotcourtsLog
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -179,19 +182,20 @@ class FgApiGotcourtsLog
      * Set gotcourt
      *
      * @param \Common\UtilityBundle\Entity\FgApiGotcourts $gotcourt
+     *
      * @return FgApiGotcourtsLog
      */
     public function setGotcourt(\Common\UtilityBundle\Entity\FgApiGotcourts $gotcourt = null)
     {
         $this->gotcourt = $gotcourt;
-    
+
         return $this;
     }
 
     /**
      * Get gotcourt
      *
-     * @return \Common\UtilityBundle\Entity\FgApiGotcourts 
+     * @return \Common\UtilityBundle\Entity\FgApiGotcourts
      */
     public function getGotcourt()
     {
@@ -202,22 +206,24 @@ class FgApiGotcourtsLog
      * Set changedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $changedBy
+     *
      * @return FgApiGotcourtsLog
      */
     public function setChangedBy(\Common\UtilityBundle\Entity\FgCmContact $changedBy = null)
     {
         $this->changedBy = $changedBy;
-    
+
         return $this;
     }
 
     /**
      * Get changedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getChangedBy()
     {
         return $this->changedBy;
     }
 }
+

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgEmCalendarCategory
  */
@@ -33,7 +31,7 @@ class FgEmCalendarCategory
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -44,19 +42,20 @@ class FgEmCalendarCategory
      * Set title
      *
      * @param string $title
+     *
      * @return FgEmCalendarCategory
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -67,19 +66,20 @@ class FgEmCalendarCategory
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgEmCalendarCategory
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -90,22 +90,24 @@ class FgEmCalendarCategory
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgEmCalendarCategory
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
         return $this->club;
     }
 }
+

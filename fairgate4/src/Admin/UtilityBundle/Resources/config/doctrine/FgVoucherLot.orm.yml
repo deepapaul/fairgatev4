@@ -1,0 +1,71 @@
+Admin\UtilityBundle\Entity\FgVoucherLot:
+    type: entity
+    table: fg_voucher_lot
+    indexes:
+        IDX_4E3C829561190A32:
+            columns:
+                - club_id
+        IDX_4E3C8295DE12AB56:
+            columns:
+                - created_by
+        IDX_4E3C829516FE72E1:
+            columns:
+                - updated_by
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        validFrom:
+            type: datetime
+            nullable: true
+            column: valid_from
+        validTo:
+            type: datetime
+            nullable: true
+            column: valid_to
+        createdDate:
+            type: datetime
+            nullable: true
+            column: created_date
+        updatedDate:
+            type: datetime
+            nullable: true
+            column: updated_date
+    manyToOne:
+        updatedBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                updated_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        club:
+            targetEntity: FgClub
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                club_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

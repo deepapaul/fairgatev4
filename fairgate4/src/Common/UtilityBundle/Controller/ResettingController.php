@@ -19,7 +19,7 @@ use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Common\UtilityBundle\Util\FgUtility;
-
+use Common\UtilityBundle\Util\FgContactSyncDataToAdmin;
 /**
  * Controller managing the resetting of the password
  * Overridden from FOSUserBundle
@@ -238,6 +238,12 @@ class ResettingController extends Controller
                 $qryResult = $this->em->getRepository('CommonUtilityBundle:FgCmChangeLog')->passwordLogEntry($this->container, $club->get('id'), $contactId, $dateToday, 'Requested');
             } else {
                 $qryResult = $this->em->getRepository('CommonUtilityBundle:FgCmChangeLog')->passwordLogEntry($this->container, $club->get('id'), $contactId, $dateToday, 'Changed');
+            }
+            $currentRoles = $user->getRoles();
+            $adminArray = array_intersect(array('ROLE_USERS'), $currentRoles); 
+            if(count($adminArray) > 0){
+                $syncData = new FgContactSyncDataToAdmin($this->container);
+                $syncData->updateLastAdminLogged($club->get('id'),$dateToday)->executeQuery();
             }
             $this->em->getRepository('CommonUtilityBundle:FgCmContact')->updateLoginCount($contactId);
             $this->em->getRepository('CommonUtilityBundle:FgCmChangeLog')->changeLogLogin($this->container, $club->get('id'), $contactId, $dateToday);

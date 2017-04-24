@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgRmRoleContact
  */
@@ -15,6 +13,26 @@ class FgRmRoleContact
     private $id;
 
     /**
+     * @var string
+     */
+    private $updateType;
+
+    /**
+     * @var integer
+     */
+    private $updateCount;
+
+    /**
+     * @var \DateTime
+     */
+    private $updateTime;
+
+    /**
+     * @var boolean
+     */
+    private $isRemoved;
+
+    /**
      * @var \Common\UtilityBundle\Entity\FgRmCategoryRoleFunction
      */
     private $fgRmCrf;
@@ -23,6 +41,16 @@ class FgRmRoleContact
      * @var \Common\UtilityBundle\Entity\FgCmContact
      */
     private $contact;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgClub
+     */
+    private $assinedClub;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgClub
+     */
+    private $contactClub;
 
 
     /**
@@ -33,139 +61,7 @@ class FgRmRoleContact
     public function getId()
     {
         return $this->id;
-
     }
-
-
-    /**
-     * Set fgRmCrf
-     *
-     * @param \Common\UtilityBundle\Entity\FgRmCategoryRoleFunction $fgRmCrf
-     *
-     * @return FgRmRoleContact
-     */
-    public function setFgRmCrf(\Common\UtilityBundle\Entity\FgRmCategoryRoleFunction $fgRmCrf = null)
-    {
-        $this->fgRmCrf = $fgRmCrf;
-
-        return $this;
-
-    }
-
-
-    /**
-     * Get fgRmCrf
-     *
-     * @return \Common\UtilityBundle\Entity\FgRmCategoryRoleFunction
-     */
-    public function getFgRmCrf()
-    {
-        return $this->fgRmCrf;
-
-    }
-
-
-    /**
-     * Set contact
-     *
-     * @param \Common\UtilityBundle\Entity\FgCmContact $contact
-     *
-     * @return FgRmRoleContact
-     */
-    public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
-    {
-        $this->contact = $contact;
-
-        return $this;
-
-    }
-
-
-    /**
-     * Get contact
-     *
-     * @return \Common\UtilityBundle\Entity\FgCmContact
-     */
-    public function getContact()
-    {
-        return $this->contact;
-
-    }
-    /**
-     * @var \Common\UtilityBundle\Entity\FgClub
-     */
-    private $contactClub;
-
-    /**
-     * @var \Common\UtilityBundle\Entity\FgClub
-     */
-    private $assinedClub;
-
-
-    /**
-     * Set contactClub
-     *
-     * @param \Common\UtilityBundle\Entity\FgClub $contactClub
-     *
-     * @return FgRmRoleContact
-     */
-    public function setContactClub(\Common\UtilityBundle\Entity\FgClub $contactClub = null)
-    {
-        $this->contactClub = $contactClub;
-
-        return $this;
-
-    }
-
-
-    /**
-     * Get contactClub
-     *
-     * @return \Common\UtilityBundle\Entity\FgClub
-     */
-    public function getContactClub()
-    {
-        return $this->contactClub;
-
-    }
-
-
-    /**
-     * Set assinedClub
-     *
-     * @param \Common\UtilityBundle\Entity\FgClub $assinedClub
-     *
-     * @return FgRmRoleContact
-     */
-    public function setAssinedClub(\Common\UtilityBundle\Entity\FgClub $assinedClub = null)
-    {
-        $this->assinedClub = $assinedClub;
-
-        return $this;
-
-    }
-
-
-    /**
-     * Get assinedClub
-     *
-     * @return \Common\UtilityBundle\Entity\FgClub
-     */
-    public function getAssinedClub()
-    {
-        return $this->assinedClub;
-
-    }
-    /**
-     * @var string
-     */
-    private $updateType;
-
-    /**
-     * @var integer
-     */
-    private $updateCount;
-
 
     /**
      * Set updateType
@@ -179,9 +75,7 @@ class FgRmRoleContact
         $this->updateType = $updateType;
 
         return $this;
-
     }
-
 
     /**
      * Get updateType
@@ -191,9 +85,7 @@ class FgRmRoleContact
     public function getUpdateType()
     {
         return $this->updateType;
-
     }
-
 
     /**
      * Set updateCount
@@ -207,9 +99,7 @@ class FgRmRoleContact
         $this->updateCount = $updateCount;
 
         return $this;
-
     }
-
 
     /**
      * Get updateCount
@@ -219,15 +109,7 @@ class FgRmRoleContact
     public function getUpdateCount()
     {
         return $this->updateCount;
-
     }
-
-
-    /**
-     *
-     * @var \DateTime
-     */
-    private $updateTime;
 
     /**
      * Set updateTime
@@ -241,9 +123,7 @@ class FgRmRoleContact
         $this->updateTime = $updateTime;
 
         return $this;
-
     }
-
 
     /**
      * Get updateTime
@@ -253,36 +133,126 @@ class FgRmRoleContact
     public function getUpdateTime()
     {
         return $this->updateTime;
-
     }
-
-
-    /**
-     * @var boolean
-     */
-    private $isRemoved;
-
 
     /**
      * Set isRemoved
      *
      * @param boolean $isRemoved
+     *
      * @return FgRmRoleContact
      */
     public function setIsRemoved($isRemoved)
     {
         $this->isRemoved = $isRemoved;
-    
+
         return $this;
     }
 
     /**
      * Get isRemoved
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsRemoved()
     {
         return $this->isRemoved;
     }
+
+    /**
+     * Set fgRmCrf
+     *
+     * @param \Common\UtilityBundle\Entity\FgRmCategoryRoleFunction $fgRmCrf
+     *
+     * @return FgRmRoleContact
+     */
+    public function setFgRmCrf(\Common\UtilityBundle\Entity\FgRmCategoryRoleFunction $fgRmCrf = null)
+    {
+        $this->fgRmCrf = $fgRmCrf;
+
+        return $this;
+    }
+
+    /**
+     * Get fgRmCrf
+     *
+     * @return \Common\UtilityBundle\Entity\FgRmCategoryRoleFunction
+     */
+    public function getFgRmCrf()
+    {
+        return $this->fgRmCrf;
+    }
+
+    /**
+     * Set contact
+     *
+     * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
+     * @return FgRmRoleContact
+     */
+    public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
+    {
+        $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return \Common\UtilityBundle\Entity\FgCmContact
+     */
+    public function getContact()
+    {
+        return $this->contact;
+    }
+
+    /**
+     * Set assinedClub
+     *
+     * @param \Common\UtilityBundle\Entity\FgClub $assinedClub
+     *
+     * @return FgRmRoleContact
+     */
+    public function setAssinedClub(\Common\UtilityBundle\Entity\FgClub $assinedClub = null)
+    {
+        $this->assinedClub = $assinedClub;
+
+        return $this;
+    }
+
+    /**
+     * Get assinedClub
+     *
+     * @return \Common\UtilityBundle\Entity\FgClub
+     */
+    public function getAssinedClub()
+    {
+        return $this->assinedClub;
+    }
+
+    /**
+     * Set contactClub
+     *
+     * @param \Common\UtilityBundle\Entity\FgClub $contactClub
+     *
+     * @return FgRmRoleContact
+     */
+    public function setContactClub(\Common\UtilityBundle\Entity\FgClub $contactClub = null)
+    {
+        $this->contactClub = $contactClub;
+
+        return $this;
+    }
+
+    /**
+     * Get contactClub
+     *
+     * @return \Common\UtilityBundle\Entity\FgClub
+     */
+    public function getContactClub()
+    {
+        return $this->contactClub;
+    }
 }
+

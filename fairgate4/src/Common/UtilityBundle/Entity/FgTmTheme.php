@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgTmTheme
  */
@@ -28,8 +26,8 @@ class FgTmTheme
      * @var string
      */
     private $themeOptions;
-    
-     /**
+
+    /**
      * @var boolean
      */
     private $isActive;
@@ -38,7 +36,7 @@ class FgTmTheme
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -49,19 +47,20 @@ class FgTmTheme
      * Set title
      *
      * @param string $title
+     *
      * @return FgTmTheme
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -72,19 +71,20 @@ class FgTmTheme
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgTmTheme
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -95,45 +95,48 @@ class FgTmTheme
      * Set themeOptions
      *
      * @param string $themeOptions
+     *
      * @return FgTmTheme
      */
     public function setThemeOptions($themeOptions)
     {
         $this->themeOptions = $themeOptions;
-    
+
         return $this;
     }
 
     /**
      * Get themeOptions
      *
-     * @return string 
+     * @return string
      */
     public function getThemeOptions()
     {
         return $this->themeOptions;
     }
-    
+
     /**
      * Set isActive
      *
      * @param boolean $isActive
-     * @return FgCmsPage
+     *
+     * @return FgTmTheme
      */
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
-    
+
         return $this;
     }
 
     /**
-     * Get hideTitle
+     * Get isActive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsActive()
     {
         return $this->isActive;
     }
 }
+

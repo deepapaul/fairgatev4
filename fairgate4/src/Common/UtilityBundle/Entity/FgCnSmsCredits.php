@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnSmsCredits
  */
@@ -69,6 +67,7 @@ class FgCnSmsCredits
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return FgCnSmsCredits
      */
     public function setDate($date)
@@ -92,6 +91,7 @@ class FgCnSmsCredits
      * Set credits
      *
      * @param integer $credits
+     *
      * @return FgCnSmsCredits
      */
     public function setCredits($credits)
@@ -115,6 +115,7 @@ class FgCnSmsCredits
      * Set status
      *
      * @param string $status
+     *
      * @return FgCnSmsCredits
      */
     public function setStatus($status)
@@ -138,6 +139,7 @@ class FgCnSmsCredits
      * Set isTest
      *
      * @param boolean $isTest
+     *
      * @return FgCnSmsCredits
      */
     public function setIsTest($isTest)
@@ -161,6 +163,7 @@ class FgCnSmsCredits
      * Set recredits
      *
      * @param integer $recredits
+     *
      * @return FgCnSmsCredits
      */
     public function setRecredits($recredits)
@@ -184,6 +187,7 @@ class FgCnSmsCredits
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCnSmsCredits
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
@@ -207,6 +211,7 @@ class FgCnSmsCredits
      * Set clubPackages
      *
      * @param \Common\UtilityBundle\Entity\FgCnSmsClubPackages $clubPackages
+     *
      * @return FgCnSmsCredits
      */
     public function setClubPackages(\Common\UtilityBundle\Entity\FgCnSmsClubPackages $clubPackages = null)
@@ -230,6 +235,7 @@ class FgCnSmsCredits
      * Set sms
      *
      * @param \Common\UtilityBundle\Entity\FgCnSms $sms
+     *
      * @return FgCnSmsCredits
      */
     public function setSms(\Common\UtilityBundle\Entity\FgCnSms $sms = null)
@@ -249,3 +255,4 @@ class FgCnSmsCredits
         return $this->sms;
     }
 }
+

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnSmsJobLog
  */
@@ -49,6 +47,7 @@ class FgCnSmsJobLog
      * Set jobId
      *
      * @param string $jobId
+     *
      * @return FgCnSmsJobLog
      */
     public function setJobId($jobId)
@@ -72,6 +71,7 @@ class FgCnSmsJobLog
      * Set smsId
      *
      * @param integer $smsId
+     *
      * @return FgCnSmsJobLog
      */
     public function setSmsId($smsId)
@@ -95,6 +95,7 @@ class FgCnSmsJobLog
      * Set statusMessage
      *
      * @param string $statusMessage
+     *
      * @return FgCnSmsJobLog
      */
     public function setStatusMessage($statusMessage)
@@ -118,6 +119,7 @@ class FgCnSmsJobLog
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return FgCnSmsJobLog
      */
     public function setDate($date)
@@ -137,3 +139,4 @@ class FgCnSmsJobLog
         return $this->date;
     }
 }
+

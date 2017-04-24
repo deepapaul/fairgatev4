@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgMessageAttachments
  */
@@ -18,6 +16,11 @@ class FgMessageAttachments
      * @var string
      */
     private $file;
+
+    /**
+     * @var integer
+     */
+    private $size;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgMessageData
@@ -39,6 +42,7 @@ class FgMessageAttachments
      * Set file
      *
      * @param string $file
+     *
      * @return FgMessageAttachments
      */
     public function setFile($file)
@@ -59,9 +63,34 @@ class FgMessageAttachments
     }
 
     /**
+     * Set size
+     *
+     * @param integer $size
+     *
+     * @return FgMessageAttachments
+     */
+    public function setSize($size)
+    {
+        $this->size = $size;
+
+        return $this;
+    }
+
+    /**
+     * Get size
+     *
+     * @return integer
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
      * Set messageData
      *
      * @param \Common\UtilityBundle\Entity\FgMessageData $messageData
+     *
      * @return FgMessageAttachments
      */
     public function setMessageData(\Common\UtilityBundle\Entity\FgMessageData $messageData = null)
@@ -80,32 +109,5 @@ class FgMessageAttachments
     {
         return $this->messageData;
     }
-    /**
-     * @var integer
-     */
-    private $size;
-
-
-    /**
-     * Set size
-     *
-     * @param integer $size
-     * @return FgMessageAttachments
-     */
-    public function setSize($size)
-    {
-        $this->size = $size;
-    
-        return $this;
-    }
-
-    /**
-     * Get size
-     *
-     * @return integer 
-     */
-    public function getSize()
-    {
-        return $this->size;
-    }
 }
+

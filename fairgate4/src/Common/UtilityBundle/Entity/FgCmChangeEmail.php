@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmChangeEmail
  */
@@ -49,6 +47,7 @@ class FgCmChangeEmail
      * Set contactId
      *
      * @param integer $contactId
+     *
      * @return FgCmChangeEmail
      */
     public function setContactId($contactId)
@@ -72,6 +71,7 @@ class FgCmChangeEmail
      * Set changeInterval
      *
      * @param integer $changeInterval
+     *
      * @return FgCmChangeEmail
      */
     public function setChangeInterval($changeInterval)
@@ -95,6 +95,7 @@ class FgCmChangeEmail
      * Set lastSend
      *
      * @param \DateTime $lastSend
+     *
      * @return FgCmChangeEmail
      */
     public function setLastSend($lastSend)
@@ -118,6 +119,7 @@ class FgCmChangeEmail
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmChangeEmail
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
@@ -137,3 +139,4 @@ class FgCmChangeEmail
         return $this->club;
     }
 }
+

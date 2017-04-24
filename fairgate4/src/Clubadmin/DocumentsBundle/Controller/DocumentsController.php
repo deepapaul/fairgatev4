@@ -12,8 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Common\UtilityBundle\Repository\Pdo\ContactPdo;
 use Common\UtilityBundle\Repository\Pdo\DocumentPdo;
 use Common\FilemanagerBundle\Util\FileChecking;
-use Common\UtilityBundle\Repository\Pdo\ClubPdo;
+use Admin\UtilityBundle\Repository\Pdo\ClubPdo;
 use Common\UtilityBundle\Util\FgPermissions;
+use Admin\UtilityBundle\Classes\SyncFgadmin;
+
 /**
  * DocumentsController
  *
@@ -133,14 +135,14 @@ class DocumentsController extends FgController
         } else {
             $dataSet['iconPath'] = FgUtility::getDocumentIcon($documentDetails['filename']);
         }
-        $dataSet = $dataSet + array('documentId'=>$documentId, 'offset'=>$offset, 'bookedModulesDet'=>$this->get('club')->get('bookedModulesDet'), 'docNextPrevious'=>$nextPreviousResultset,'module'=>$module );
+        $dataSet = $dataSet + array('documentId' => $documentId, 'offset' => $offset, 'bookedModulesDet' => $this->get('club')->get('bookedModulesDet'), 'docNextPrevious' => $nextPreviousResultset, 'module' => $module);
         $dataSet['backLink'] = ($module == 'files') ? $this->generateUrl('filemanager_listModuleFiles') : $this->generateUrl($redirect);
         $dataSet['subCategories'] = $this->em->getRepository('CommonUtilityBundle:FgDmDocumentCategory')->getDocumentSubCategories($this->clubId, $documentType, $this->clubDefaultLang);
         $dataSet['breadCrumb'] = array('back' => ($module == 'files') ? $this->generateUrl('filemanager_listModuleFiles') : $this->generateUrl($redirect));
-        
+
         return $this->render('ClubadminDocumentsBundle:Documents:documentSettings.html.twig', $dataSet);
     }
-    
+
     /**
      * Function to get settings array of document type for document settings page
      * 
@@ -149,8 +151,9 @@ class DocumentsController extends FgController
      * 
      * @return array
      */
-    private function getDocumentSettingsOfType($documentType, $documentDetails){
-        $return = array('contactId' => $this->contactId, 'clubId' => $this->clubId, 'clubType' => $this->clubType, 'clubLanguages' => $this->clubLanguages, 'documentType'=>$documentType);
+    private function getDocumentSettingsOfType($documentType, $documentDetails)
+    {
+        $return = array('contactId' => $this->contactId, 'clubId' => $this->clubId, 'clubType' => $this->clubType, 'clubLanguages' => $this->clubLanguages, 'documentType' => $documentType);
         if ($documentType == 'club') {
             $clubPdo = new ClubPdo($this->container);
             $return['subclubs'] = $clubPdo->getAllSubLevelData($this->clubId);
@@ -165,12 +168,12 @@ class DocumentsController extends FgController
             $return['backLink'] = 'workgroup_documents_listing';
         } elseif ($documentType == 'contact') {
             $return['contactSelected'] = (!empty($documentDetails['contactAssignments'])) ? $this->getContactAssignments($documentDetails['contactAssignments']) : $contactSelected;
-            $return['contactExcluded'] = (!empty($documentDetails['contactExclude'])) ? $this->getContactAssignments($documentDetails['contactExclude']):'';
+            $return['contactExcluded'] = (!empty($documentDetails['contactExclude'])) ? $this->getContactAssignments($documentDetails['contactExclude']) : '';
             $return['backLink'] = 'contact_documents_listing';
         }
         $return['clubDefaultLang'] = $this->get('club')->get('club_default_lang');
         $return['dataSet'] = $documentDetails;
-        
+
         return $return;
     }
 
@@ -200,7 +203,7 @@ class DocumentsController extends FgController
     {
         $contact = new ContactPdo($this->container);
         $where = " fg_cm_contact.id IN ({$contactsList})";
-        
+
         return $contact->getContactData($this->get('club'), '', $where, array('contactid', 'contactNameYOB'), 'contact');
     }
 
@@ -226,6 +229,10 @@ class DocumentsController extends FgController
         $updateTopNavCountArr = $this->em->getRepository('CommonUtilityBundle:FgDmDocuments')->saveDocumentDetails($this->container, $documentArr, $documentType, $clubDetails, $this->contactId);
         $updatedCount = count($updateTopNavCountArr);
         $msg = ($updatedCount > 1) ? $this->get('translator')->trans('DOCUMENT_UPLOAD_SUCCESS_MSG_PLURAL', array('%count%' => $updatedCount)) : $this->get('translator')->trans('DOCUMENT_UPLOAD_SUCCESS_MSG_SINGLE');
+        if ($documentType == 'club') {
+            $syncDataToAdminDbObj = new SyncFgadmin($this->container);
+            $syncDataToAdminDbObj->documentcountUpdateProcess($this->clubId, $this->clubType);
+        }
 
         return new JsonResponse(array('status' => true, 'flash' => $msg, 'noparentload' => 1, 'updateTopNavCountArr' => $updateTopNavCountArr, 'totalCount' => sizeof($updateTopNavCountArr)));
     }
@@ -240,7 +247,7 @@ class DocumentsController extends FgController
      */
     public function listDocumentAction(Request $request, $doctype)
     {
-        
+
         $docObj = new DocumentData($this->container, $doctype);
         $output = $docObj->getDocumentList($request);
 
@@ -274,16 +281,16 @@ class DocumentsController extends FgController
         $docObj = $this->em->getRepository('CommonUtilityBundle:FgDmDocuments')->find($docId);
         $permissionObj = new FgPermissions($this->container);
         $docAccess = false;
-        if($docObj){
-           
-	  $docAccess = $permissionObj->checkDocumentAccess($docObj->getIsPublishLink(), $contactId, $docObj->getIsVisibleToContact() ,$docId );
-        }else{
-             $permissionObj->checkClubAccess('');
+        if ($docObj) {
+
+            $docAccess = $permissionObj->checkDocumentAccess($docObj->getIsPublishLink(), $contactId, $docObj->getIsVisibleToContact(), $docId);
+        } else {
+            $permissionObj->checkClubAccess('');
         }
         if ($docAccess == false) {
-            $permissionObj->checkUserAccess(0);    
+            $permissionObj->checkUserAccess(0);
         }
-        
+
         ini_set('max_execution_time', 0);
         ini_set("memory_limit", "2000M");
         $rootPath = FgUtility::getRootPath($this->container);
@@ -292,7 +299,7 @@ class DocumentsController extends FgController
         $result = $this->em->getRepository('CommonUtilityBundle:FgDmDocuments')->getVersionDoc($docId, $versionId, $clubDefaultLang);
         $downloadPath = $rootPath . '/uploads/' . $result[0]['club'] . '/documents/';
         $dlFile = filter_var($result[0]['file'], FILTER_SANITIZE_STRING); // Remove (more) invalid characters
-        $fullPath = $downloadPath . $dlFile;  
+        $fullPath = $downloadPath . $dlFile;
         $fileInfo = new \SplFileInfo($dlFile);
         /* get file extension */
         $fileExtension = pathinfo($fileInfo->getFilename(), PATHINFO_EXTENSION);
@@ -308,7 +315,7 @@ class DocumentsController extends FgController
             $response->sendHeaders();
             /* In case of docx files, if we use readfile it will add some extra numerals, so using fread */
             //$response->setContent(readfile($fullPath));
-            $response->setContent(fread($file,filesize($fullPath)) );
+            $response->setContent(fread($file, filesize($fullPath)));
             fclose($file);
 
             return $response;
@@ -398,11 +405,17 @@ class DocumentsController extends FgController
                     $type = $countDetails[0]['documentType'];
                     $idCount = count($selectedId);
                     $deleteDetails = $this->em->getRepository('CommonUtilityBundle:FgDmDocuments')->deleteDocuments($selectedId, 'document', $this->clubId);
-                    $flashMsg = ($idCount > 1) ? 'DC_DELETE_SUCCESS_MESSAGE_PLURAL':'DC_DELETE_SUCCESS_MESSAGE_SINGULAR';
+                    $flashMsg = ($idCount > 1) ? 'DC_DELETE_SUCCESS_MESSAGE_PLURAL' : 'DC_DELETE_SUCCESS_MESSAGE_SINGULAR';
+                    //Update doc count
+                    if ($type == 'CLUB') {
+                        $syncDataToAdminDbObj = new SyncFgadmin($this->container);
+                        $syncDataToAdminDbObj->documentcountUpdateProcess($this->clubId, $this->clubType);
+                    }
                 } elseif ($actionType == 'documentVersionDelete') {
                     $deleteDetails = $this->em->getRepository('CommonUtilityBundle:FgDmDocuments')->deleteDocuments($selectedId, 'version', $this->clubId);
-                    $flashMsg = (count($selectedId) > 1) ? 'DOCUMENT_DELETE_VERSION_SUCCESS_MESSAGE_PLURAL':'DOCUMENT_DELETE_VERSION_SUCCESS_MESSAGE_SINGULAR';
+                    $flashMsg = (count($selectedId) > 1) ? 'DOCUMENT_DELETE_VERSION_SUCCESS_MESSAGE_PLURAL' : 'DOCUMENT_DELETE_VERSION_SUCCESS_MESSAGE_SINGULAR';
                 }
+
 
                 return new JsonResponse(array('status' => 'SUCCESS', 'flash' => $this->get('translator')->trans($flashMsg), 'noparentload' => 1, 'countdata' => $countDetails, 'count' => $idCount, 'type' => $type));
             }
@@ -449,7 +462,7 @@ class DocumentsController extends FgController
         } else {
             $redirectUrl = $this->generateUrl('workgroup_documents_listing');
         }
-        
+
         return new JsonResponse(array('status' => 'SUCCESS', 'redirect' => $redirectUrl, 'sync' => 1));
     }
 
@@ -476,16 +489,15 @@ class DocumentsController extends FgController
             $maxSortOrder = $this->em->getRepository('CommonUtilityBundle:FgDmDocumentSubcategory')->getMaxSortOrderofSubcategories($categoryId) + 1;
             $dataArray = array('0' => array('title' => array($this->clubDefaultLang => $title), 'catType' => $docType, 'sortOrder' => $maxSortOrder));
             $lastInsertedId = $this->em->getRepository('CommonUtilityBundle:FgDmDocumentSubcategory')->subcategorySave($this->clubId, $this->clubDefaultLang, $dataArray, $this->clubLanguages, $categoryId, true);
-            $filterData = array( 'id' => 'DOCS-' . $this->clubId, 'title' => $translator->trans('DOCUMENTS'),
-                'fixed_options' => array( '0' => array('0' => array('id' => '', 'title' => "- " . $translator->trans('DOCUMENT_SELECT_CATEGORY') . " -")),
-                    '1' => array( '0' => array('id' => 'any', 'title' => $translator->trans('DOCUMENT_ANY_SUBCATEGORY')), '1' => array('id' => '', 'title' => $translator->trans('DOCUMENT_SELECT_SUBCATEGORY'))  ) ));
+            $filterData = array('id' => 'DOCS-' . $this->clubId, 'title' => $translator->trans('DOCUMENTS'),
+                'fixed_options' => array('0' => array('0' => array('id' => '', 'title' => "- " . $translator->trans('DOCUMENT_SELECT_CATEGORY') . " -")),
+                    '1' => array('0' => array('id' => 'any', 'title' => $translator->trans('DOCUMENT_ANY_SUBCATEGORY')), '1' => array('id' => '', 'title' => $translator->trans('DOCUMENT_SELECT_SUBCATEGORY')))));
             $return = array('input' => array('0' => array('id' => "$lastInsertedId", 'title' => $title, 'categoryId' => "$categoryId", 'itemType' => 'DOCS-' . $this->clubId, 'count' => 0, 'bookMarkId' => '', 'type' => 'select', 'filterData' => $filterData, "draggable" => 1)));
         }
 
         return new JsonResponse($return);
     }
 
-    
     /**
      * Function to update a document
      * 

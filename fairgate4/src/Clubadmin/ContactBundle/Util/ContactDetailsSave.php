@@ -1,12 +1,13 @@
-<?php
-
-namespace Clubadmin\ContactBundle\Util;
+<?php namespace Clubadmin\ContactBundle\Util;
 
 use Common\UtilityBundle\Util\FgUtility;
 use Common\UtilityBundle\Util\FgSettings;
 use Common\UtilityBundle\Util\FgFedMemberships;
 use Common\UtilityBundle\Util\FgLogHandler;
 use Common\UtilityBundle\Repository\Pdo\ContactPdo;
+use Common\UtilityBundle\Util\FgContactSyncDataToAdmin;
+use Admin\UtilityBundle\Classes\SyncFgadmin;
+use Common\UtilityBundle\Util\FgClubSyncDataToAdmin;
 
 /**
  * Used to save contact details
@@ -133,7 +134,9 @@ class ContactDetailsSave
     public $saveFedMemId = false;
     private $clubEntries = array();
     private $allClubEntries = array();
-    public  $overviewSave = 0;
+    public $overviewSave = 0;
+    /*club registration*/
+    public $isClubRegister = false;
 
     /* end membership */
 
@@ -184,7 +187,7 @@ class ContactDetailsSave
         $this->isDraft = $isDraft;
         $this->contactType = ($inlineEditFlag == 1) ? (($this->editData[0]['is_company']) ? 'Company' : 'Single person') : 'Single person';
         $this->setConfirmedValues();
-        if($this->inlineEditFlag == 0){
+        if ($this->inlineEditFlag == 0) {
             $this->formValues = $this->setCheckboxFields($this->formValues, $this->fieldDetails);
         }
         if (count($otherformFields) > 0) {
@@ -192,9 +195,9 @@ class ContactDetailsSave
             $this->formValues = $systemdata + $this->formValues;
             $this->unsetProfilePicture();
         }
-        if ($this->overviewSave == 1){
-            if(!isset($this->formValues['system']['contactType'])){
-                 $this->formValues['system']['contactType'] = ($this->editData[0]['is_company']) ? 'Company' : 'Single person';
+        if ($this->overviewSave == 1) {
+            if (!isset($this->formValues['system']['contactType'])) {
+                $this->formValues['system']['contactType'] = ($this->editData[0]['is_company']) ? 'Company' : 'Single person';
             }
         }
         $this->setCreateEditBase();
@@ -202,6 +205,25 @@ class ContactDetailsSave
         $this->formValueItrator();
         $this->handleSameAs();
         $this->insertContactDetails($isInternal);
+        
+        /** Sync count to the AdminDB **/
+        $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
+        file_put_contents('q1.txt',date("d-m-Y h:i")."start\n");
+        $clubSyncObject->updateActiveContactCount($this->clubId)->updateSubscriberCount($this->clubId);
+        /*****************************************/
+
+        /** Sync the contact name data to the Admin DB * */
+        $contactSyncObject = new FgContactSyncDataToAdmin($this->container);
+        $contactSyncObject->updateContactName(array($this->contactId))->updateLastUpdated($this->clubId)->executeQuery();
+        /***********************************************/
+        /** Sync Fed member count to the Admin DB **/
+        /** Restrict this function while club registration occur **/
+        if(!$this->isClubRegister){
+            $fgAdmin = new SyncFgadmin($this->container);
+            $fgAdmin->syncFedMemberCount();
+        }
+        /***********************************************/
+        /** Sync Active contact count to the Admin DB **/
 
         return $this->contactId;
     }
@@ -390,15 +412,15 @@ class ContactDetailsSave
 //                throw $ex;
             }
 
-                $pdo = new ContactPdo($this->container);
-                $pdo->insertIntoSfguardUser($this->fedContactId);
+            $pdo = new ContactPdo($this->container);
+            $pdo->insertIntoSfguardUser($this->fedContactId);
         }
     }
 
     /**
      * Function to insert/update into fg_cm_contact
      */
-    private function insertContactSet()
+     private function insertContactSet()
     {
         if (count($this->insertContactSet) > 0) {
             if (count($this->changelogData) > 0 || $this->isUpdated) {
@@ -607,7 +629,7 @@ class ContactDetailsSave
      */
     private function handleSameAs()
     {
-        if($this->inlineEditFlag == 1){
+        if ($this->inlineEditFlag == 1) {
             $this->sameAsInvoice = $this->editData[0]['same_invoice_address'];
         }
         if ($this->sameAsInvoice == 1) {
@@ -1303,9 +1325,37 @@ class ContactDetailsSave
      */
     private function addNewsletterSubscriptionLog($contactId, $clubId)
     {
+        //Club admin entity manger
+        $adminConn = $this->container->get("fg.admin.connection")->getAdminConnection();
         $defSubscription = $this->conn->fetchAll('SELECT default_contact_subscription FROM fg_club WHERE id=' . $clubId);
         if ($defSubscription[0]['default_contact_subscription'] == '1') {
             $this->setContactChangeLog($contactId, '', 'system', 'newsletter', '', 'subscribed', $this->currentContactId, '', '', '', '', $clubId);
         }
+    }
+
+    /**
+     * Function to collect default contact subscription of club/subfederation/federation
+     * @return array
+     */
+    private function getDefaultContactSubscriptions()
+    {
+        $inIds[] = $this->clubId;
+        $contactSubscription = array();
+        if ($this->federationId && $this->clubType != 'federation') {
+            $inIds[] = $this->federationId;
+        }
+        if ($this->subFederationId && $this->clubType != 'sub_federation') {
+            $inIds[] = $this->subFederationId;
+        }
+        $adminConn = $this->container->get("fg.admin.connection")->getAdminConnection();
+        $defaultContactSubscriptionArray = $adminConn->fetchAll('SELECT default_contact_subscription as subScription,id as clubId FROM fg_club WHERE id IN (' . implode(',', $inIds) . ')');
+        if (count($defaultContactSubscriptionArray) > 0) {
+            foreach ($defaultContactSubscriptionArray as $defaultContactSubscription) {
+                if (in_array($defaultContactSubscription['clubId'], $inIds)) {
+                    $contactSubscription[$defaultContactSubscription['clubId']] = $defaultContactSubscription['subScription'];
+                }
+            }
+        }
+        return $contactSubscription;
     }
 }

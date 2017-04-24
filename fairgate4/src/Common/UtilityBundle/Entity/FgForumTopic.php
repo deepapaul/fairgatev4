@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgForumTopic
  */
@@ -27,17 +25,7 @@ class FgForumTopic
     /**
      * @var boolean
      */
-    private $followTopic;
-
-    /**
-     * @var boolean
-     */
     private $isImportant;
-
-    /**
-     * @var boolean
-     */
-    private $isSticky;
 
     /**
      * @var boolean
@@ -48,6 +36,26 @@ class FgForumTopic
      * @var integer
      */
     private $views;
+
+    /**
+     * @var \DateTime
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     */
+    private $updatedAt;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgCmContact
+     */
+    private $createdBy;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgCmContact
+     */
+    private $updatedBy;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgClub
@@ -63,7 +71,7 @@ class FgForumTopic
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -74,19 +82,20 @@ class FgForumTopic
      * Set title
      *
      * @param string $title
+     *
      * @return FgForumTopic
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -97,19 +106,20 @@ class FgForumTopic
      * Set replies
      *
      * @param string $replies
+     *
      * @return FgForumTopic
      */
     public function setReplies($replies)
     {
         $this->replies = $replies;
-    
+
         return $this;
     }
 
     /**
      * Get replies
      *
-     * @return string 
+     * @return string
      */
     public function getReplies()
     {
@@ -117,45 +127,23 @@ class FgForumTopic
     }
 
     /**
-     * Set followTopic
-     *
-     * @param boolean $followTopic
-     * @return FgForumTopic
-     */
-    public function setFollowTopic($followTopic)
-    {
-        $this->followTopic = $followTopic;
-    
-        return $this;
-    }
-
-    /**
-     * Get followTopic
-     *
-     * @return boolean 
-     */
-    public function getFollowTopic()
-    {
-        return $this->followTopic;
-    }
-
-    /**
      * Set isImportant
      *
      * @param boolean $isImportant
+     *
      * @return FgForumTopic
      */
     public function setIsImportant($isImportant)
     {
         $this->isImportant = $isImportant;
-    
+
         return $this;
     }
 
     /**
      * Get isImportant
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsImportant()
     {
@@ -163,45 +151,23 @@ class FgForumTopic
     }
 
     /**
-     * Set isSticky
-     *
-     * @param boolean $isSticky
-     * @return FgForumTopic
-     */
-    public function setIsSticky($isSticky)
-    {
-        $this->isSticky = $isSticky;
-    
-        return $this;
-    }
-
-    /**
-     * Get isSticky
-     *
-     * @return boolean 
-     */
-    public function getIsSticky()
-    {
-        return $this->isSticky;
-    }
-
-    /**
      * Set isClosed
      *
      * @param boolean $isClosed
+     *
      * @return FgForumTopic
      */
     public function setIsClosed($isClosed)
     {
         $this->isClosed = $isClosed;
-    
+
         return $this;
     }
 
     /**
      * Get isClosed
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsClosed()
     {
@@ -212,19 +178,20 @@ class FgForumTopic
      * Set views
      *
      * @param integer $views
+     *
      * @return FgForumTopic
      */
     public function setViews($views)
     {
         $this->views = $views;
-    
+
         return $this;
     }
 
     /**
      * Get views
      *
-     * @return integer 
+     * @return integer
      */
     public function getViews()
     {
@@ -232,22 +199,119 @@ class FgForumTopic
     }
 
     /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     *
+     * @return FgForumTopic
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return FgForumTopic
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set createdBy
+     *
+     * @param \Common\UtilityBundle\Entity\FgCmContact $createdBy
+     *
+     * @return FgForumTopic
+     */
+    public function setCreatedBy(\Common\UtilityBundle\Entity\FgCmContact $createdBy = null)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get createdBy
+     *
+     * @return \Common\UtilityBundle\Entity\FgCmContact
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set updatedBy
+     *
+     * @param \Common\UtilityBundle\Entity\FgCmContact $updatedBy
+     *
+     * @return FgForumTopic
+     */
+    public function setUpdatedBy(\Common\UtilityBundle\Entity\FgCmContact $updatedBy = null)
+    {
+        $this->updatedBy = $updatedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedBy
+     *
+     * @return \Common\UtilityBundle\Entity\FgCmContact
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updatedBy;
+    }
+
+    /**
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgForumTopic
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -258,134 +322,24 @@ class FgForumTopic
      * Set group
      *
      * @param \Common\UtilityBundle\Entity\FgRmRole $group
+     *
      * @return FgForumTopic
      */
     public function setGroup(\Common\UtilityBundle\Entity\FgRmRole $group = null)
     {
         $this->group = $group;
-    
+
         return $this;
     }
 
     /**
      * Get group
      *
-     * @return \Common\UtilityBundle\Entity\FgRmRole 
+     * @return \Common\UtilityBundle\Entity\FgRmRole
      */
     public function getGroup()
     {
         return $this->group;
     }
-    /**
-     * @var \DateTime
-     */
-    private $createdAt;
-
-    /**
-     * @var integer
-     */
-    private $createdBy;
-
-    /**
-     * @var \DateTime
-     */
-    private $updatedAt;
-
-    /**
-     * @var integer
-     */
-    private $updatedBy;
-
-
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     * @return FgForumTopic
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-    
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime 
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set createdBy
-     *
-     * @param integer $createdBy
-     * @return FgForumTopic
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-    
-        return $this;
-    }
-
-    /**
-     * Get createdBy
-     *
-     * @return integer 
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     * @return FgForumTopic
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-    
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime 
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * Set updatedBy
-     *
-     * @param integer $updatedBy
-     * @return FgForumTopic
-     */
-    public function setUpdatedBy($updatedBy)
-    {
-        $this->updatedBy = $updatedBy;
-    
-        return $this;
-    }
-
-    /**
-     * Get updatedBy
-     *
-     * @return integer 
-     */
-    public function getUpdatedBy()
-    {
-        return $this->updatedBy;
-    }
 }
+

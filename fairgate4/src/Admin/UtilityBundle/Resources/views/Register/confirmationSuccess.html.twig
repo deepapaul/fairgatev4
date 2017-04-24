@@ -1,0 +1,36 @@
+{% extends '::global/layout-confirmation.html.twig' %}
+{% set pageTitle = 'EMAIL_CONFIRMATION'|trans%}
+
+{% block pagecontent %}
+
+    <!-- BEGIN PAGE HEADER-->
+    <!-- BEGIN PAGE TITLE-->
+    <div class="fg-page-title-bar">
+        <h1 class="page-title fg-title-col">{{ 'EMAIL_CONFIRMATION'|trans }}</h1>
+    </div>
+    <!-- END PAGE TITLE-->
+    <!-- END PAGE HEADER-->
+    <div class="row form">
+        <div class="col-sm-12">
+            <div class="alert alert-success">
+                <div class="fg-left-block">
+                    <i class="fa fa-3x fa-check-circle"></i>
+                </div>
+                <div class="fg-right-block font-dark">
+                    <h3>{{ 'EMAIL_CONFIRMATION_MSG1'|trans }}</h3>
+                    <p>{{ 'EMAIL_CONFIRMATION_MSG2'|trans({'%userEmail%': userEmail}) }}</p> 
+                    <ul>
+                        <li>{{ 'EMAIL_CONFIRMATION_MSG3'|trans }}</li>
+                        <li>{{ 'EMAIL_CONFIRMATION_MSG4'|trans }} </li>
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="form-actions text-right">
+                <a href="{{ backendLoginPath }}"><button class="btn green" type="submit">{{ 'EMAIL_CONFIRMATION_BTN'|trans }}</button></a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

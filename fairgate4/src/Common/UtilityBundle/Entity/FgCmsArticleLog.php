@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsArticleLog
  */
@@ -58,7 +56,7 @@ class FgCmsArticleLog
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -69,19 +67,20 @@ class FgCmsArticleLog
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return FgCmsArticleLog
      */
     public function setDate($date)
     {
         $this->date = $date;
-    
+
         return $this;
     }
 
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -92,19 +91,20 @@ class FgCmsArticleLog
      * Set field
      *
      * @param string $field
+     *
      * @return FgCmsArticleLog
      */
     public function setField($field)
     {
         $this->field = $field;
-    
+
         return $this;
     }
 
     /**
      * Get field
      *
-     * @return string 
+     * @return string
      */
     public function getField()
     {
@@ -115,19 +115,20 @@ class FgCmsArticleLog
      * Set kind
      *
      * @param string $kind
+     *
      * @return FgCmsArticleLog
      */
     public function setKind($kind)
     {
         $this->kind = $kind;
-    
+
         return $this;
     }
 
     /**
      * Get kind
      *
-     * @return string 
+     * @return string
      */
     public function getKind()
     {
@@ -138,19 +139,20 @@ class FgCmsArticleLog
      * Set valueAfter
      *
      * @param string $valueAfter
+     *
      * @return FgCmsArticleLog
      */
     public function setValueAfter($valueAfter)
     {
         $this->valueAfter = $valueAfter;
-    
+
         return $this;
     }
 
     /**
      * Get valueAfter
      *
-     * @return string 
+     * @return string
      */
     public function getValueAfter()
     {
@@ -161,19 +163,20 @@ class FgCmsArticleLog
      * Set valueBefore
      *
      * @param string $valueBefore
+     *
      * @return FgCmsArticleLog
      */
     public function setValueBefore($valueBefore)
     {
         $this->valueBefore = $valueBefore;
-    
+
         return $this;
     }
 
     /**
      * Get valueBefore
      *
-     * @return string 
+     * @return string
      */
     public function getValueBefore()
     {
@@ -184,19 +187,20 @@ class FgCmsArticleLog
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmsArticleLog
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -207,19 +211,20 @@ class FgCmsArticleLog
      * Set changedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $changedBy
+     *
      * @return FgCmsArticleLog
      */
     public function setChangedBy(\Common\UtilityBundle\Entity\FgCmContact $changedBy = null)
     {
         $this->changedBy = $changedBy;
-    
+
         return $this;
     }
 
     /**
      * Get changedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getChangedBy()
     {
@@ -230,22 +235,24 @@ class FgCmsArticleLog
      * Set article
      *
      * @param \Common\UtilityBundle\Entity\FgCmsArticle $article
+     *
      * @return FgCmsArticleLog
      */
     public function setArticle(\Common\UtilityBundle\Entity\FgCmsArticle $article = null)
     {
         $this->article = $article;
-    
+
         return $this;
     }
 
     /**
      * Get article
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsArticle 
+     * @return \Common\UtilityBundle\Entity\FgCmsArticle
      */
     public function getArticle()
     {
         return $this->article;
     }
 }
+

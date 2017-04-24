@@ -10,7 +10,7 @@ use Clubadmin\Util\Contactfilter;
 use Clubadmin\Util\Contactlist;
 use Clubadmin\Util\Tablesettings;
 use Common\UtilityBundle\Util\FgUtility;
-use Common\UtilityBundle\Repository\Pdo\ClubPdo;
+use Admin\UtilityBundle\Repository\Pdo\ClubPdo;
 
 /**
  * NonmandatoryRecipientsController

@@ -213,19 +213,23 @@ class Clubtablesetting
             case "FED_MEMBERS" :
                 $clubId = $this->getFederationId($this->club->get("type"));
                 //stored procedure-get federation count
-                $this->columnArray[$this->key] = "getFedMemberCount(fc.id ,{$clubId}) AS {$columndata['name']} ";
+                //$this->columnArray[$this->key] = "getFedMemberCount(fc.id ,{$clubId}) AS {$columndata['name']} ";
+                $this->columnArray[$this->key] = "fc.fedmember_count AS {$columndata['name']} ";
                 break;
             case "LAST_CONTACT_EDIT" :
                 $clubId = $this->getFederationId($this->club->get("type"));
-                $this->columnArray[$this->key] = "date_format( getLastContactUpdate(fc.id ,{$clubId}),'{$this->mysqlDateFormat}') AS {$columndata['name']}";
+                //$this->columnArray[$this->key] = "date_format( getLastContactUpdate(fc.id ,{$clubId}),'{$this->mysqlDateFormat}') AS {$columndata['name']}";
+                $this->columnArray[$this->key] = "date_format( fc.last_contact_updated,'{$this->mysqlDateFormat}')  AS {$columndata['name']}";
                 break;
             case "LAST_ADMIN_LOGIN" :
-                $this->columnArray[$this->key] = "(SELECT date_format(u.last_login,'{$this->mysqlDateFormat}')  FROM `sf_guard_user_group`ug left join sf_guard_user u on ug.user_id=u.id WHERE ug.`group_id` = 2 and u.club_id=fc.id order by u.last_login desc limit 0,1 ) AS {$columndata['name']}";
+                //$this->columnArray[$this->key] = "(SELECT date_format(u.last_login,'{$this->mysqlDateFormat}')  FROM `sf_guard_user_group`ug left join sf_guard_user u on ug.user_id=u.id WHERE ug.`group_id` = 2 and u.club_id=fc.id order by u.last_login desc limit 0,1 ) AS {$columndata['name']}";
+                $this->columnArray[$this->key] = "date_format(fc.last_admin_login,'{$this->mysqlDateFormat}') AS {$columndata['name']}";
                 break;
             //for club overview
             case "OWN_FED_MEMBERS" :
                 $clubId = $this->getFederationId($this->club->get("type"));
-                $this->columnArray[$this->key] = "(SELECT COUNT(fg_cm_contact.id) FROM fg_cm_contact WHERE fg_cm_contact.club_id=fc.id and fg_cm_contact.fed_membership_cat_id is not null and fg_cm_contact.is_fed_membership_confirmed=0) AS {$columndata['name']}";
+                //$this->columnArray[$this->key] = "(SELECT COUNT(fg_cm_contact.id) FROM fg_cm_contact WHERE fg_cm_contact.club_id=fc.id and fg_cm_contact.fed_membership_cat_id is not null and fg_cm_contact.is_fed_membership_confirmed=0) AS {$columndata['name']}";
+                $this->columnArray[$this->key] = "'0' AS {$columndata['name']}";
                 break;
         }
     }
@@ -258,10 +262,15 @@ class Clubtablesetting
         $this->key = $key;
         switch ($columndata['id']) {
             case "Notes" :
-                $this->columnArray[$this->key] = "(SELECT COUNT(fg_club_notes.id) FROM fg_club_notes WHERE fg_club_notes.club_id=fc.id AND fg_club_notes.created_by_club={$this->club->get("id")}) AS {$columndata['name']}";
+                if($this->club->get("type")=='federation') {
+                  $this->columnArray[$this->key] =   "fc.fed_note_count AS {$columndata['name']}";  
+                } else if($this->club->get("type")=='sub_federation') {
+                   $this->columnArray[$this->key] =   "fc.subfed_note_count AS {$columndata['name']}"; 
+                }
+                
                 break;
             case "Documents" :
-                $this->columnArray[$this->key] = "(SELECT COUNT(fg_dm_documents.id) FROM  fg_dm_documents LEFT JOIN fg_dm_assigment ON fg_dm_documents.id=fg_dm_assigment.document_id  WHERE   fg_dm_documents.club_id = {$this->club->get("id")} AND fg_dm_documents.document_type='CLUB'  AND ((fg_dm_documents.deposited_with='SELECTED' AND fg_dm_assigment.club_id=fc.id) OR (fg_dm_documents.deposited_with='ALL' AND fc.id NOT IN (SELECT fg_dm_assigment_exclude.club_id FROM fg_dm_assigment_exclude WHERE fg_dm_assigment_exclude.document_id=fg_dm_documents.id ))) ) AS {$columndata['name']}";
+                $this->columnArray[$this->key] = "fc.document_count AS {$columndata['name']}";
                 break;
         }
     }

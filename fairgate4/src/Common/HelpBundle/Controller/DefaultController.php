@@ -42,16 +42,28 @@ class DefaultController extends Controller
         $newTabs = $this->filterDirectories($tabs);
         $defaultLng = $this->container->get('club')->get('default_system_lang');
         $overviews = array();
-        $rootPath = $this->get('kernel')->getRootDir() . "/../src/Common/HelpBundle/Resources/views/";
+        $rootPath = $this->get('kernel')->getRootDir() . "/../src/Common/HelpBundle/Resources/views/";   
+        //Check whether club is in testing period, If yes, return th remaining days of testing period else return false
+        $remainingDays = $this->checkClubInTestingPeriod();
+        $isRegistrationPeriod = 0; 
         foreach ($newTabs as $key => $value) {
             $twigPath = "CommonHelpBundle:$key:overview/$defaultLng.html.twig";
             if (!file_exists($rootPath . $key . '/overview/' . $defaultLng . '.html.twig')) {
                 $twigPath = "CommonHelpBundle:$key:overview/en.html.twig";
             }
+            //replace $twigPath for welcome tab if the club is in testing period
+            if($remainingDays && $key == 'welcome') {
+                $twigPath = "CommonHelpBundle:$key:overview/registration.html.twig";  
+                $datas =  array('username' => $this->container->get('contact')->get('nameNoSort'), 'remainingDays' => $remainingDays);
+                $isRegistrationPeriod = 1;
+            } else {
+                $datas = array();
+            }
             $overviews[] = array(
                 'twigPath' => $twigPath,
                 'name' => $value['name'],
-                'isVisible' => $value['isVisible']
+                'isVisible' => $value['isVisible'],
+                'datas' => $datas
             );
         }
 
@@ -66,7 +78,27 @@ class DefaultController extends Controller
 
         $this->markQuickwindowShown();
 
-        return $this->render('CommonHelpBundle:Default:quickWindow.html.twig', array('tabs' => $newTabs, 'url' => '', 'type' => '', 'overviews' => $overviews, 'windowVisibility' => $windowVisibility, 'currentModule' => $currentModule, 'helpUrls' => $helpUrls, 'quickwindowVisibilty' => $quickwindowVisibiltyValue, 'contactId' => $contactId));
+        return $this->render('CommonHelpBundle:Default:quickWindow.html.twig', array('tabs' => $newTabs, 'isRegistrationPeriod' => $isRegistrationPeriod ,'url' => '', 'type' => '', 'overviews' => $overviews, 'windowVisibility' => $windowVisibility, 'currentModule' => $currentModule, 'helpUrls' => $helpUrls, 'quickwindowVisibilty' => $quickwindowVisibiltyValue, 'contactId' => $contactId));
+    }
+    
+    /**
+     * Check whether club is in testing period, If yes, return th remaining days of testing period else return false
+     *
+     * @return boolean|int
+     */
+    private function checkClubInTestingPeriod() {
+        $adminEntityManager = $this->container->get('fg.admin.connection')->getAdminManager();
+        $clubObj = $adminEntityManager->getRepository('AdminUtilityBundle:FgClub')->find($this->container->get('club')->get('id'));
+        if($clubObj->getClubCreationProcess() == 'Registration' && ($clubObj->getContractStartDate())) {            
+            $expiringDate = $clubObj->getContractStartDate()->modify('+30 day');
+            $todaysDate = new \DateTime("now");
+            $interval = $todaysDate->diff($expiringDate);
+            $remainingDays = $interval->format('%a');
+        } else {
+            $remainingDays = false;
+        }
+        
+        return $remainingDays;
     }
 
     /**

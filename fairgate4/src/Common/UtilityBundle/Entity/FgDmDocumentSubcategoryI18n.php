@@ -2,13 +2,16 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgDmDocumentSubcategoryI18n
  */
 class FgDmDocumentSubcategoryI18n
 {
+    /**
+     * @var integer
+     */
+    private $id;
+
     /**
      * @var string
      */
@@ -19,68 +22,18 @@ class FgDmDocumentSubcategoryI18n
      */
     private $titleLang;
 
-    /**
-     * @var integer
-     */
-    private $id;
-
-
-    /**
-     * Set lang
-     *
-     * @param string $lang
-     * @return FgDmDocumentSubcategoryI18n
-     */
-    public function setLang($lang)
-    {
-        $this->lang = $lang;
-    
-        return $this;
-    }
-
-    /**
-     * Get lang
-     *
-     * @return string 
-     */
-    public function getLang()
-    {
-        return $this->lang;
-    }
-
-    /**
-     * Set titleLang
-     *
-     * @param string $titleLang
-     * @return FgDmDocumentSubcategoryI18n
-     */
-    public function setTitleLang($titleLang)
-    {
-        $this->titleLang = $titleLang;
-    
-        return $this;
-    }
-
-    /**
-     * Get titleLang
-     *
-     * @return string 
-     */
-    public function getTitleLang()
-    {
-        return $this->titleLang;
-    }
 
     /**
      * Set id
      *
      * @param integer $id
+     *
      * @return FgDmDocumentSubcategoryI18n
      */
     public function setId($id)
     {
         $this->id = $id;
-    
+
         return $this;
     }
 
@@ -93,4 +46,53 @@ class FgDmDocumentSubcategoryI18n
     {
         return $this->id;
     }
+
+    /**
+     * Set lang
+     *
+     * @param string $lang
+     *
+     * @return FgDmDocumentSubcategoryI18n
+     */
+    public function setLang($lang)
+    {
+        $this->lang = $lang;
+
+        return $this;
+    }
+
+    /**
+     * Get lang
+     *
+     * @return string
+     */
+    public function getLang()
+    {
+        return $this->lang;
+    }
+
+    /**
+     * Set titleLang
+     *
+     * @param string $titleLang
+     *
+     * @return FgDmDocumentSubcategoryI18n
+     */
+    public function setTitleLang($titleLang)
+    {
+        $this->titleLang = $titleLang;
+
+        return $this;
+    }
+
+    /**
+     * Get titleLang
+     *
+     * @return string
+     */
+    public function getTitleLang()
+    {
+        return $this->titleLang;
+    }
 }
+

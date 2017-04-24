@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnRecepientsException
  */
@@ -31,22 +29,9 @@ class FgCnRecepientsException
 
 
     /**
-     * Set id
-     *
-     * @param integer $id
-     * @return FgCnRecepientsException
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    
-        return $this;
-    }
-
-    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -57,19 +42,20 @@ class FgCnRecepientsException
      * Set type
      *
      * @param string $type
+     *
      * @return FgCnRecepientsException
      */
     public function setType($type)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -80,19 +66,20 @@ class FgCnRecepientsException
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgCnRecepientsException
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
     {
         $this->contact = $contact;
-    
+
         return $this;
     }
 
     /**
      * Get contact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getContact()
     {
@@ -103,22 +90,24 @@ class FgCnRecepientsException
      * Set recepientList
      *
      * @param \Common\UtilityBundle\Entity\FgCnRecepients $recepientList
+     *
      * @return FgCnRecepientsException
      */
     public function setRecepientList(\Common\UtilityBundle\Entity\FgCnRecepients $recepientList = null)
     {
         $this->recepientList = $recepientList;
-    
+
         return $this;
     }
 
     /**
      * Get recepientList
      *
-     * @return \Common\UtilityBundle\Entity\FgCnRecepients 
+     * @return \Common\UtilityBundle\Entity\FgCnRecepients
      */
     public function getRecepientList()
     {
         return $this->recepientList;
     }
 }
+

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgSmBookingDeposited
  */
@@ -33,7 +31,7 @@ class FgSmBookingDeposited
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -44,19 +42,20 @@ class FgSmBookingDeposited
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgSmBookingDeposited
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
     {
         $this->contact = $contact;
-    
+
         return $this;
     }
 
     /**
      * Get contact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getContact()
     {
@@ -67,19 +66,20 @@ class FgSmBookingDeposited
      * Set role
      *
      * @param \Common\UtilityBundle\Entity\FgRmRole $role
+     *
      * @return FgSmBookingDeposited
      */
     public function setRole(\Common\UtilityBundle\Entity\FgRmRole $role = null)
     {
         $this->role = $role;
-    
+
         return $this;
     }
 
     /**
      * Get role
      *
-     * @return \Common\UtilityBundle\Entity\FgRmRole 
+     * @return \Common\UtilityBundle\Entity\FgRmRole
      */
     public function getRole()
     {
@@ -90,22 +90,24 @@ class FgSmBookingDeposited
      * Set booking
      *
      * @param \Common\UtilityBundle\Entity\FgSmBookings $booking
+     *
      * @return FgSmBookingDeposited
      */
     public function setBooking(\Common\UtilityBundle\Entity\FgSmBookings $booking = null)
     {
         $this->booking = $booking;
-    
+
         return $this;
     }
 
     /**
      * Get booking
      *
-     * @return \Common\UtilityBundle\Entity\FgSmBookings 
+     * @return \Common\UtilityBundle\Entity\FgSmBookings
      */
     public function getBooking()
     {
         return $this->booking;
     }
 }
+

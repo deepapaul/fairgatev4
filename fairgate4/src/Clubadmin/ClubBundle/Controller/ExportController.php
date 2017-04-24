@@ -73,7 +73,7 @@ class ExportController extends FgController
         }
         /* ends here */
         $breadCrumb = array('breadcrumb_data' => array());
-        $allTableSettings = $this->em->getRepository('CommonUtilityBundle:FgClubTableSettings')->getAllClubTableSettings($this->clubId, $this->contactId, 'DATA');
+        $allTableSettings = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubTableSettings')->getAllClubTableSettings($this->clubId, $this->contactId, 'DATA');
         $defaultSettings = $this->container->getParameter('default_club_table_settings');
 
         return $this->render('ClubadminClubBundle:Export:index.html.twig', array('breadCrumb' => $breadCrumb, 'clubId' => $this->clubId, 'totalCount' => $totalCount, 'contactId' => $this->contactId, 'selectedIds' => $selectedIds, 'searchval' => $searchval, 'allColumnSettings' => $allTableSettings, 'defaultSettings' => $defaultSettings, 'clubterminologyTerm' => $clubterminologyTerm));

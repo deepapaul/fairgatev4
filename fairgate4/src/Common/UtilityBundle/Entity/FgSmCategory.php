@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgSmCategory
  */
@@ -38,7 +36,7 @@ class FgSmCategory
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -49,19 +47,20 @@ class FgSmCategory
      * Set isSystem
      *
      * @param boolean $isSystem
+     *
      * @return FgSmCategory
      */
     public function setIsSystem($isSystem)
     {
         $this->isSystem = $isSystem;
-    
+
         return $this;
     }
 
     /**
      * Get isSystem
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsSystem()
     {
@@ -72,19 +71,20 @@ class FgSmCategory
      * Set title
      *
      * @param string $title
+     *
      * @return FgSmCategory
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -95,19 +95,20 @@ class FgSmCategory
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgSmCategory
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -118,22 +119,24 @@ class FgSmCategory
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgSmCategory
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
         return $this->club;
     }
 }
+

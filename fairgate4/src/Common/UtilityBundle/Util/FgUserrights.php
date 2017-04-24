@@ -4,6 +4,7 @@ namespace Common\UtilityBundle\Util;
 
 use Clubadmin\Util\Contactlist;
 use Common\UtilityBundle\Util\FgUtility;
+use Common\UtilityBundle\Util\FgClubSyncDataToAdmin;
 
 /**
  * FgUserrights
@@ -195,6 +196,11 @@ class FgUserrights
             if (!empty($this->updateSfUserQry)) {
                 $this->conn->executeQuery(implode(';', $this->updateSfUserQry));
             }
+            
+            /** Update the admin count **/
+            $adminCountSyncObject = new FgClubSyncDataToAdmin($this->container);
+            $adminCountSyncObject->updateAdminCount($this->clubId);
+            /***********************************************/
         } catch (Exception $ex) {
             $this->conn->rollback();
             $rollback = true;

@@ -143,8 +143,12 @@ class PortraitElementController extends Controller
             $contactlistData->dependColumns = $portraitElementColumnObj->getDependColumnsDetails($initialDatas['separateListingColumn']);
             //set contact sorting details 
             $contactlistData->sortColumnDetails = $initialDatas['sort'];
-            //set separate listing  column details
-            $contactlistData->separateListingDetails = array('separateListingColumn' => $initialDatas['separateListingColumn'], 'separateListingFunc' => $initialDatas['separateListingFunc']);
+            if($contactlistData->separateList){
+                //set separate listing  column details
+                $contactlistData->separateListingDetails = array('separateListingColumn' => $initialDatas['separateListingColumn'], 'separateListingFunc' => $initialDatas['separateListingFunc']);
+            }else{
+                $contactlistData->groupByColumn = 'fg_cm_contact.id';
+            }
             //For get the contact list array
             $contactData = $contactlistData->getContactData();
             //collect total number of records

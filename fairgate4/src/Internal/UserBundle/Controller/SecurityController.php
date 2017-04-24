@@ -1,5 +1,7 @@
 <?php
+
 namespace Internal\UserBundle\Controller;
+
 /*
  * This file is part of the FOSUserBundle package.
  *
@@ -8,7 +10,6 @@ namespace Internal\UserBundle\Controller;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 use FOS\UserBundle\Controller\SecurityController as BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,9 +24,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * @author     pitsolutions.ch
  * @version    Fairgate V4
  */
-
 class SecurityController extends BaseController
 {
+
     /**
      * User login section. Overrided function from FOSUserBundle
      *
@@ -36,7 +37,7 @@ class SecurityController extends BaseController
     public function loginAction(Request $request)
     {
         $session = $this->container->get('session');
-        $loggedClubUserId=$session->get('loggedClubUserId');
+        $loggedClubUserId = $session->get('loggedClubUserId');
         if (isset($loggedClubUserId)) {
             return $this->redirect($this->generateUrl('internal_dashboard'));
         }
@@ -56,32 +57,22 @@ class SecurityController extends BaseController
      */
     protected function renderLogin(array $data)
     {
-        if ($data['last_username']=='' && $data['error'] ) {
-            $data['error']= $this->get('translator') ->trans('LOGIN_ENTER_USERNAME_PASSWORD_ERROR');
-        } else if ($data['last_username'] !='' && $data['error'] ) {
-            if($data['error']->getMessage() == "HAS_NO_INTRANET_ACCESS") {
-                $data['error'] = $this->get('translator') ->trans('INTERNAL_LOGIN_DENIED_ACCESS');
-            } else if($data['error']->getMessage() == "LOGIN_ACCOUNT_NOT_ACTIVATED") {
-                $data['error'] = $this->get('translator') ->trans('LOGIN_ACCOUNT_NOT_ACTIVATED');
-            } else {
-                $data['error'] = $this->get('translator') ->trans('LOGIN_INVALID_USERNAME_PASSWORD_ERROR');
-            }
-        }
-         //set locate
-        $club=$this->container->get('club');
+        $data = $this->getErrorMessage($data);
+        //set locate
+        $club = $this->container->get('club');
         $this->container->get('translator')->setLocale($club->get('default_system_lang'));
         $requestStack = $this->container->get('request_stack');
         $request = $requestStack->getCurrentRequest();
         $data['clubName'] = $club->get('title');
         //checking 'frontend1' module is booked
-        $data['hasInternal'] = in_array("frontend1", $club->get('bookedModulesDet') ) ? true : false;
+        $data['hasInternal'] = in_array("frontend1", $club->get('bookedModulesDet')) ? true : false;
 
         $data['clubTitle'] = $this->container->get('club')->get('title');
         $regForms = $this->getDoctrine()->getManager()->getRepository('CommonUtilityBundle:FgCmsForms')->getContactApplicationFormList($club->get('id'), $club->get('club_default_lang'), 1);
         $regFormId = '';
-        $clubMembershipAvailable =  $this->container->get('club')->get('clubMembershipAvailable');
+        $clubMembershipAvailable = $this->container->get('club')->get('clubMembershipAvailable');
         $clubType = $this->container->get('club')->get('type');
-        if (count($regForms) > 0 && $clubMembershipAvailable && ($clubType !='federation' || $clubType !='sub_federation')) {
+        if (count($regForms) > 0 && $clubMembershipAvailable && ($clubType != 'federation' || $clubType != 'sub_federation')) {
             $regFormId = base64_encode($regForms[0]['id']);
         }
         $data['regFormId'] = $regFormId;
@@ -92,4 +83,34 @@ class SecurityController extends BaseController
         return $this->render('InternalUserBundle:Login:Login.html.twig', $data);
     }
 
+    /**
+     * Customise error message of login
+     * 
+     * @param array $data login datas 
+     * 
+     * @return array of data with error message
+     */
+    private function getErrorMessage($data)
+    {
+        if ($data['last_username'] == '' && $data['error']) {
+            $data['error'] = $this->get('translator')->trans('LOGIN_ENTER_USERNAME_PASSWORD_ERROR');
+        } else if ($data['last_username'] != '' && $data['error']) {
+            switch ($data['error']->getMessage()) {
+                case 'HAS_NO_INTRANET_ACCESS':
+                    $data['error'] = $this->get('translator')->trans('INTERNAL_LOGIN_DENIED_ACCESS');
+                    break;
+                case 'LOGIN_ACCOUNT_NOT_ACTIVATED':
+                    $data['error'] = $this->get('translator')->trans('LOGIN_ACCOUNT_NOT_ACTIVATED');
+                    break;
+                case 'HAS_NO_PERMISSION':
+                    $data['error'] = $this->get('translator')->trans('CLUB_NOT_CONFIRMED');
+                    break;
+                default:
+                    $data['error'] = $this->get('translator')->trans('LOGIN_INVALID_USERNAME_PASSWORD_ERROR');
+                    break;
+            }
+        }
+
+        return $data;
+    }
 }

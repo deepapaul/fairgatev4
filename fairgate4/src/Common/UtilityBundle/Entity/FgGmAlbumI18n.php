@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgGmAlbumI18n
  */
@@ -34,19 +32,20 @@ class FgGmAlbumI18n
      * Set lang
      *
      * @param string $lang
+     *
      * @return FgGmAlbumI18n
      */
     public function setLang($lang)
     {
         $this->lang = $lang;
-    
+
         return $this;
     }
 
     /**
      * Get lang
      *
-     * @return string 
+     * @return string
      */
     public function getLang()
     {
@@ -57,19 +56,20 @@ class FgGmAlbumI18n
      * Set nameLang
      *
      * @param string $nameLang
+     *
      * @return FgGmAlbumI18n
      */
     public function setNameLang($nameLang)
     {
         $this->nameLang = $nameLang;
-    
+
         return $this;
     }
 
     /**
      * Get nameLang
      *
-     * @return string 
+     * @return string
      */
     public function getNameLang()
     {
@@ -80,19 +80,20 @@ class FgGmAlbumI18n
      * Set isActive
      *
      * @param boolean $isActive
+     *
      * @return FgGmAlbumI18n
      */
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
-    
+
         return $this;
     }
 
     /**
      * Get isActive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsActive()
     {
@@ -103,22 +104,24 @@ class FgGmAlbumI18n
      * Set id
      *
      * @param \Common\UtilityBundle\Entity\FgGmAlbum $id
+     *
      * @return FgGmAlbumI18n
      */
     public function setId(\Common\UtilityBundle\Entity\FgGmAlbum $id = null)
     {
         $this->id = $id;
-    
+
         return $this;
     }
 
     /**
      * Get id
      *
-     * @return \Common\UtilityBundle\Entity\FgGmAlbum 
+     * @return \Common\UtilityBundle\Entity\FgGmAlbum
      */
     public function getId()
     {
         return $this->id;
     }
 }
+

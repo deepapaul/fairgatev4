@@ -1,5 +1,4 @@
 <?php
-
 /**
  * ImportController
  *
@@ -19,6 +18,9 @@ use Common\UtilityBundle\Util\FgUtility;
 use Clubadmin\ContactBundle\Util\ImportValidation;
 use Common\UtilityBundle\Repository\Pdo\ContactPdo;
 use Symfony\Component\HttpFoundation\Request;
+use Common\UtilityBundle\Util\FgContactSyncDataToAdmin;
+use Common\UtilityBundle\Util\FgClubSyncDataToAdmin;
+use Common\UtilityBundle\Util\FgPermissions;
 
 /**
  * Import/update contact/sponsors controller
@@ -74,6 +76,15 @@ class ImportController extends ParentController
             if ($uploadedFile['status'] && $csvFields) {
                 $return['contactCount'] = $csvFields['contactCount'];
                 $return['data'] = json_encode($csvFields['data']);
+                /** ACTIVE CONTACT COUNT CHECKING AREA  **/
+                $permissionObj = new FgPermissions($this->container);
+                if (!$permissionObj->checkContactCount($return['contactCount'])) {
+                    return new JsonResponse(array(
+                        'status' => 'ERROR',
+                        'htmlContent' => $this->renderView('CommonUtilityBundle:Permissionpopup:contactcreationwarningpopup.html.twig')
+                    ));
+                }
+
                 if (!$this->container->get('session')->isStarted()) {
                     $importValues = new Session();
                     $importValues->start();
@@ -479,10 +490,15 @@ class ImportController extends ParentController
         $club = $this->container->get('club');
         $federationID = ($this->federationId <> 0) ? $this->federationId : $this->clubId;
         $subfederationID = ($this->subFederationId <> 0) ? $this->subFederationId : $this->clubId;
+        $contactSyncObject = new FgContactSyncDataToAdmin($this->container);
         if ($update == '1') {
             $this->em->getRepository('CommonUtilityBundle:FgCmContact')->callUpdateContacts($importDetails['tableName'], $this->clubId, $this->contactId, $importDetails['contactType'], $ownTable, $this->clubType, $subfederationID, $federationID);
             $ContactPdo = new ContactPdo($this->container);
-            $ContactPdo->updateImortedContactSubscriber($this->get('club'), $importDetails['tableName']);
+            $importedContactIds = $ContactPdo->updateImortedContactSubscriber($this->get('club'), $importDetails['tableName']);
+
+            /** Sync the contact name data to the Admin DB * */
+            $contactSyncObject->updateContactName($importedContactIds)->updateLastUpdated($this->clubId)->executeQuery();
+            /*             * ******************************************** */
         } else {
             $importValues = $this->container->get('session');
             $importDetails = $importValues->get('importFile' . $module . $this->clubId);
@@ -490,21 +506,26 @@ class ImportController extends ParentController
             $fedMemWApp = $club->get('assignFedmembershipWithApplication');
             $importQuery = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->callImportContacts($importDetails['tableName'], $this->clubId, $this->contactId, $importDetails['contactType'], $ownTable, $this->clubType, $subfederationID, $federationID, $fedMemWApp);
             file_put_contents("importtest.txt", $importQuery . "\n");
-            if($this->federationId && $this->clubType != 'federation'){
-                $this->conn->executeQuery("CALL updateMemberId(".$this->federationId.")");
+            if ($this->federationId && $this->clubType != 'federation') {
+                $this->conn->executeQuery("CALL updateMemberId(" . $this->federationId . ")");
             }
-            if($this->subFederationId && $this->clubType != 'sub_federation'){
-                $this->conn->executeQuery("CALL updateMemberId(".$this->subFederationId.")");
+            if ($this->subFederationId && $this->clubType != 'sub_federation') {
+                $this->conn->executeQuery("CALL updateMemberId(" . $this->subFederationId . ")");
             }
-            $this->conn->executeQuery("CALL updateMemberId(".$this->clubId.")");
+            $this->conn->executeQuery("CALL updateMemberId(" . $this->clubId . ")");
             $ContactPdo = new ContactPdo($this->container);
             $ContactPdo->insertLoginEntriesForImortedContact($this->get('club'), $importDetails['tableName'], $this->contactId);
             $importTable = $importDetails['tableName'];
             // Default sponsor ads entry if sponsors are imported.
+            $importedContactIds = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->getContactsImported($importTable, $this->clubId);
             if ($module == 'sponsor') {
-                $importedContactIds = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->getContactsImported($importTable,$this->clubId);
                 $this->em->getRepository('CommonUtilityBundle:FgSmSponsorAds')->insertDefaultSponsorAds($this->clubId, $importedContactIds);
             }
+
+            /** Sync the contact name data to the Admin DB * */
+            $contactSyncObject = new FgContactSyncDataToAdmin($this->container);
+            $contactSyncObject->updateContactName($importedContactIds)->updateLastUpdated($this->clubId)->executeQuery();
+            /*             * ******************************************** */
 
             /* Import Assignment - starts */
             $asgmntDataArray = json_decode($request->request->get('asgmntDataArray'), true);
@@ -522,6 +543,11 @@ class ImportController extends ParentController
             }
             /* Import Assignment - ends */
         }
+
+        /** Sync count to the AdminDB * */
+        $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
+        $clubSyncObject->updateActiveContactCount($this->clubId)->updateSubscriberCount($this->clubId);
+        /*         * ************************************** */
     }
 
     /**

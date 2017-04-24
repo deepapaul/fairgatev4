@@ -1,0 +1,172 @@
+<div class="tab-pane" id="tab2">
+                      <h3 class="block">Your locations</h3>
+                      <div class="form-group">
+                        <div class="col-md-offset-3 col-sm-offset-4 col-md-6 col-sm-8">
+                          <h4>Correspondance address</h4>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">Organization name
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6">
+                          <input class="form-control" type="text" id="fg_reg_corr_org_name" name="fg_reg_corr_org_name" required="">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">C/O
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6">
+                          <input class="form-control" type="text" name="fg_reg_corr_co" id="fg_reg_corr_co" required="">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">Street/ PO Box
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6">
+                          <input class="form-control" type="text" name="fg_reg_corr_street" id="fg_reg_corr_street">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">Postal code
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6">
+                          <input class="form-control" type="text" name="fg_reg_corr_postalcode" id="fg_reg_corr_postalcode">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">City/ Town
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6">
+                          <input class="form-control" type="text" name="fg_reg_corr_city" id="fg_reg_corr_city">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">Country
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6">
+                          <select class="form-control bs-select" name="fg_reg_corr_country" id="fg_reg_corr_country">
+                            <option>{{'SELECT'|trans}}</option>
+                            {% for id, country in countries %}
+                                <option value="{{id}}">{{country.name}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">Region
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6 fg-region-wrapper" id="fg-region-corr-wrapper">
+                          <select class="form-control bs-select" name="fg_reg_corr_region" id="fg_reg_corr_region">
+                                <option>{{'SELECT'|trans}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">Correspondence language
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6">
+                          <select class="form-control bs-select" name="fg_reg_corr_lang" id="fg_reg_corr_lang">
+                            <option>{{'SELECT'|trans}}</option>
+                            {% for id, lang in corresLang %}
+                                <option value="{{id}}">{{lang}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-offset-3 col-sm-offset-4 col-md-6 col-sm-8">
+                          <h4>Billing Address</h4>
+                          <div class="mt-checkbox-list">
+                            <label class="mt-checkbox mt-checkbox-outline">
+                              <input type="checkbox" name="fg_reg_same_as" id="fg_reg_same_as">Same as the correspondance address
+                              <span></span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">Organization name
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6">
+                          <input class="form-control" type="text" name="fg_reg_bill_org_name" id="fg_reg_bill_org_name" required="">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">C/O
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6">
+                          <input class="form-control" type="text" name="fg_reg_bill_co" id="fg_reg_bill_co">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">Street/ PO Box
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6">
+                          <input class="form-control" type="text" name="fg_reg_bill_street" id="fg_reg_bill_street">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">Postal code
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6">
+                          <input class="form-control" type="text" name="fg_reg_bill_postalcode" id="fg_reg_bill_postalcode">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">City/ Town
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6">
+                          <input class="form-control" type="text" name="fg_reg_bill_city" id="fg_reg_bill_city">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">Country
+                          <span class="required"> *</span>
+                        </label>
+                        
+                        <div class="col-lg-4 col-md-5 col-sm-6">
+                          <select class="form-control bs-select" name="fg_reg_bill_country" id="fg_reg_bill_country">
+                            <option value="">{{'SELECT'|trans}}</option>
+                            {% for id, country in countries %}
+                                <option value="{{id}}">{{country.name}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">Region
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6 fg-region-wrapper" id="fg-region-corr-wrapper">
+                          <select class="form-control bs-select" name="fg_reg_bill_region" id="fg_reg_bill_region">
+                            <option>{{'SELECT'|trans}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-4">Correspondence language
+                          <span class="required"> *</span>
+                        </label>
+                        <div class="col-lg-4 col-md-5 col-sm-6">
+                          <select class="form-control bs-select" name="fg_reg_bill_lang"  id="fg_reg_bill_lang">
+                            <option>{{'SELECT'|trans}}</option>
+                            {% for id, lang in corresLang %}
+                                <option value="{{id}}">{{lang}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>

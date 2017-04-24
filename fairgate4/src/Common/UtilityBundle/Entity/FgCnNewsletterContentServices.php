@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnNewsletterContentServices
  */
@@ -28,7 +26,7 @@ class FgCnNewsletterContentServices
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +37,20 @@ class FgCnNewsletterContentServices
      * Set content
      *
      * @param \Common\UtilityBundle\Entity\FgCnNewsletterContent $content
+     *
      * @return FgCnNewsletterContentServices
      */
     public function setContent(\Common\UtilityBundle\Entity\FgCnNewsletterContent $content = null)
     {
         $this->content = $content;
-    
+
         return $this;
     }
 
     /**
      * Get content
      *
-     * @return \Common\UtilityBundle\Entity\FgCnNewsletterContent 
+     * @return \Common\UtilityBundle\Entity\FgCnNewsletterContent
      */
     public function getContent()
     {
@@ -62,22 +61,24 @@ class FgCnNewsletterContentServices
      * Set service
      *
      * @param \Common\UtilityBundle\Entity\FgSmServices $service
+     *
      * @return FgCnNewsletterContentServices
      */
     public function setService(\Common\UtilityBundle\Entity\FgSmServices $service = null)
     {
         $this->service = $service;
-    
+
         return $this;
     }
 
     /**
      * Get service
      *
-     * @return \Common\UtilityBundle\Entity\FgSmServices 
+     * @return \Common\UtilityBundle\Entity\FgSmServices
      */
     public function getService()
     {
         return $this->service;
     }
 }
+

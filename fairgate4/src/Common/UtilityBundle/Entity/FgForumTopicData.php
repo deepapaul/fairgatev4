@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgForumTopicData
  */
@@ -20,9 +18,9 @@ class FgForumTopicData
     private $postContent;
 
     /**
-     * @var integer
+     * @var \DateTime
      */
-    private $updatedBy;
+    private $createdAt;
 
     /**
      * @var \DateTime
@@ -32,17 +30,17 @@ class FgForumTopicData
     /**
      * @var integer
      */
-    private $createdBy;
-
-    /**
-     * @var \DateTime
-     */
-    private $createdAt;
-
-    /**
-     * @var integer
-     */
     private $uniquePostId;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgCmContact
+     */
+    private $updatedBy;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgCmContact
+     */
+    private $createdBy;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgForumTopic
@@ -53,7 +51,7 @@ class FgForumTopicData
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -64,19 +62,20 @@ class FgForumTopicData
      * Set postContent
      *
      * @param string $postContent
+     *
      * @return FgForumTopicData
      */
     public function setPostContent($postContent)
     {
         $this->postContent = $postContent;
-    
+
         return $this;
     }
 
     /**
      * Get postContent
      *
-     * @return string 
+     * @return string
      */
     public function getPostContent()
     {
@@ -84,91 +83,23 @@ class FgForumTopicData
     }
 
     /**
-     * Set updatedBy
-     *
-     * @param integer $updatedBy
-     * @return FgForumTopicData
-     */
-    public function setUpdatedBy($updatedBy)
-    {
-        $this->updatedBy = $updatedBy;
-    
-        return $this;
-    }
-
-    /**
-     * Get updatedBy
-     *
-     * @return integer 
-     */
-    public function getUpdatedBy()
-    {
-        return $this->updatedBy;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     * @return FgForumTopicData
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-    
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime 
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * Set createdBy
-     *
-     * @param integer $createdBy
-     * @return FgForumTopicData
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-    
-        return $this;
-    }
-
-    /**
-     * Get createdBy
-     *
-     * @return integer 
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return FgForumTopicData
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -176,22 +107,47 @@ class FgForumTopicData
     }
 
     /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return FgForumTopicData
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
      * Set uniquePostId
      *
      * @param integer $uniquePostId
+     *
      * @return FgForumTopicData
      */
     public function setUniquePostId($uniquePostId)
     {
         $this->uniquePostId = $uniquePostId;
-    
+
         return $this;
     }
 
     /**
      * Get uniquePostId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUniquePostId()
     {
@@ -199,25 +155,75 @@ class FgForumTopicData
     }
 
     /**
+     * Set updatedBy
+     *
+     * @param \Common\UtilityBundle\Entity\FgCmContact $updatedBy
+     *
+     * @return FgForumTopicData
+     */
+    public function setUpdatedBy(\Common\UtilityBundle\Entity\FgCmContact $updatedBy = null)
+    {
+        $this->updatedBy = $updatedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedBy
+     *
+     * @return \Common\UtilityBundle\Entity\FgCmContact
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updatedBy;
+    }
+
+    /**
+     * Set createdBy
+     *
+     * @param \Common\UtilityBundle\Entity\FgCmContact $createdBy
+     *
+     * @return FgForumTopicData
+     */
+    public function setCreatedBy(\Common\UtilityBundle\Entity\FgCmContact $createdBy = null)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get createdBy
+     *
+     * @return \Common\UtilityBundle\Entity\FgCmContact
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
      * Set forumTopic
      *
      * @param \Common\UtilityBundle\Entity\FgForumTopic $forumTopic
+     *
      * @return FgForumTopicData
      */
     public function setForumTopic(\Common\UtilityBundle\Entity\FgForumTopic $forumTopic = null)
     {
         $this->forumTopic = $forumTopic;
-    
+
         return $this;
     }
 
     /**
      * Get forumTopic
      *
-     * @return \Common\UtilityBundle\Entity\FgForumTopic 
+     * @return \Common\UtilityBundle\Entity\FgForumTopic
      */
     public function getForumTopic()
     {
         return $this->forumTopic;
     }
 }
+

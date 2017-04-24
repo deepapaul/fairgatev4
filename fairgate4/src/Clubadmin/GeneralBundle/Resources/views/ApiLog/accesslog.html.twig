@@ -29,6 +29,14 @@
                             <span class="input-group-addon cal filter-log-date"><span class="glyphicon glyphicon-calendar"></span></span>
                         </div>
                     </div>
+                    <div class="fg-active-IB fg-v-top ">           
+                        <select name="filter_response_code"  class="form-control select2 select-for-preview select2-offscreen fg-width-200" id="filter_response_code">
+                            <option selected="" value="">{{'SELECT_FILTER_RESPONSE_CODE'|trans}}</option>
+                            {% for resCode in responseCode %}
+                                <option value="{{ resCode }}">{{ resCode }}</option>
+                            {% endfor%}
+                        </select>
+                    </div>
                     <div class="has-error fg-log-error">
                         <span class="help-block fg-error-hide" id="log_date_error"></span>
                     </div>
@@ -148,14 +156,15 @@
                 counter: true
             });
     
-            $('body').on('change', '#filter_start_date,#filter_end_date', function(){
+            $('body').on('change', '#filter_start_date,#filter_end_date,#filter_response_code', function(){
                 loadList();
             });
             
             function loadList(){
                 options.ajaxparameters = {
                                     'startDate':$('#filter_start_date').val(),
-                                    'endDate':$('#filter_end_date').val()
+                                    'endDate':$('#filter_end_date').val(),
+                                    'resCode':$('#filter_response_code').val()
                                     };
                 FgDatatable.listdataTableInit('dataTable-api-access-log',options);
             }

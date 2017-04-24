@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsArticleTextI18n
  */
@@ -39,19 +37,20 @@ class FgCmsArticleTextI18n
      * Set lang
      *
      * @param string $lang
+     *
      * @return FgCmsArticleTextI18n
      */
     public function setLang($lang)
     {
         $this->lang = $lang;
-    
+
         return $this;
     }
 
     /**
      * Get lang
      *
-     * @return string 
+     * @return string
      */
     public function getLang()
     {
@@ -62,19 +61,20 @@ class FgCmsArticleTextI18n
      * Set titleLang
      *
      * @param string $titleLang
+     *
      * @return FgCmsArticleTextI18n
      */
     public function setTitleLang($titleLang)
     {
         $this->titleLang = $titleLang;
-    
+
         return $this;
     }
 
     /**
      * Get titleLang
      *
-     * @return string 
+     * @return string
      */
     public function getTitleLang()
     {
@@ -85,19 +85,20 @@ class FgCmsArticleTextI18n
      * Set teaserLang
      *
      * @param string $teaserLang
+     *
      * @return FgCmsArticleTextI18n
      */
     public function setTeaserLang($teaserLang)
     {
         $this->teaserLang = $teaserLang;
-    
+
         return $this;
     }
 
     /**
      * Get teaserLang
      *
-     * @return string 
+     * @return string
      */
     public function getTeaserLang()
     {
@@ -108,19 +109,20 @@ class FgCmsArticleTextI18n
      * Set textLang
      *
      * @param string $textLang
+     *
      * @return FgCmsArticleTextI18n
      */
     public function setTextLang($textLang)
     {
         $this->textLang = $textLang;
-    
+
         return $this;
     }
 
     /**
      * Get textLang
      *
-     * @return string 
+     * @return string
      */
     public function getTextLang()
     {
@@ -131,22 +133,24 @@ class FgCmsArticleTextI18n
      * Set id
      *
      * @param \Common\UtilityBundle\Entity\FgCmsArticleText $id
+     *
      * @return FgCmsArticleTextI18n
      */
     public function setId(\Common\UtilityBundle\Entity\FgCmsArticleText $id = null)
     {
         $this->id = $id;
-    
+
         return $this;
     }
 
     /**
      * Get id
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsArticleText 
+     * @return \Common\UtilityBundle\Entity\FgCmsArticleText
      */
     public function getId()
     {
         return $this->id;
     }
 }
+

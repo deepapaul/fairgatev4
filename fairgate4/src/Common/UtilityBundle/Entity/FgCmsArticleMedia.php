@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsArticleMedia
  */
@@ -33,7 +31,7 @@ class FgCmsArticleMedia
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -44,19 +42,20 @@ class FgCmsArticleMedia
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgCmsArticleMedia
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -67,19 +66,20 @@ class FgCmsArticleMedia
      * Set article
      *
      * @param \Common\UtilityBundle\Entity\FgCmsArticle $article
+     *
      * @return FgCmsArticleMedia
      */
     public function setArticle(\Common\UtilityBundle\Entity\FgCmsArticle $article = null)
     {
         $this->article = $article;
-    
+
         return $this;
     }
 
     /**
      * Get article
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsArticle 
+     * @return \Common\UtilityBundle\Entity\FgCmsArticle
      */
     public function getArticle()
     {
@@ -90,22 +90,24 @@ class FgCmsArticleMedia
      * Set items
      *
      * @param \Common\UtilityBundle\Entity\FgGmItems $items
+     *
      * @return FgCmsArticleMedia
      */
     public function setItems(\Common\UtilityBundle\Entity\FgGmItems $items = null)
     {
         $this->items = $items;
-    
+
         return $this;
     }
 
     /**
      * Get items
      *
-     * @return \Common\UtilityBundle\Entity\FgGmItems 
+     * @return \Common\UtilityBundle\Entity\FgGmItems
      */
     public function getItems()
     {
         return $this->items;
     }
 }
+

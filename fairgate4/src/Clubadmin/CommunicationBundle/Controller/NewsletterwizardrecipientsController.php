@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Clubadmin\Util\Contactlist;
 use Clubadmin\Classes\Contactdatatable;
-use Common\UtilityBundle\Repository\Pdo\ClubPdo;
+use Admin\UtilityBundle\Repository\Pdo\ClubPdo;
 
 /**
  * RecipientsController

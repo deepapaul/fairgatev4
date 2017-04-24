@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgMbModule
  */
@@ -20,6 +18,11 @@ class FgMbModule
     private $title;
 
     /**
+     * @var string
+     */
+    private $moduleKey;
+
+    /**
      * @var integer
      */
     private $sortOrder;
@@ -33,7 +36,7 @@ class FgMbModule
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -44,19 +47,20 @@ class FgMbModule
      * Set title
      *
      * @param string $title
+     *
      * @return FgMbModule
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -64,22 +68,47 @@ class FgMbModule
     }
 
     /**
+     * Set moduleKey
+     *
+     * @param string $moduleKey
+     *
+     * @return FgMbModule
+     */
+    public function setModuleKey($moduleKey)
+    {
+        $this->moduleKey = $moduleKey;
+
+        return $this;
+    }
+
+    /**
+     * Get moduleKey
+     *
+     * @return string
+     */
+    public function getModuleKey()
+    {
+        return $this->moduleKey;
+    }
+
+    /**
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgMbModule
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -90,50 +119,24 @@ class FgMbModule
      * Set isVisible
      *
      * @param boolean $isVisible
+     *
      * @return FgMbModule
      */
     public function setIsVisible($isVisible)
     {
         $this->isVisible = $isVisible;
-    
+
         return $this;
     }
 
     /**
      * Get isVisible
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsVisible()
     {
         return $this->isVisible;
     }
-    /**
-     * @var string
-     */
-    private $moduleKey;
-
-
-    /**
-     * Set moduleKey
-     *
-     * @param string $moduleKey
-     * @return FgMbModule
-     */
-    public function setModuleKey($moduleKey)
-    {
-        $this->moduleKey = $moduleKey;
-    
-        return $this;
-    }
-
-    /**
-     * Get moduleKey
-     *
-     * @return string 
-     */
-    public function getModuleKey()
-    {
-        return $this->moduleKey;
-    }
 }
+

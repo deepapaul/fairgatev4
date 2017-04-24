@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmLinkedcontact
  */
@@ -30,6 +28,11 @@ class FgCmLinkedcontact
     private $type;
 
     /**
+     * @var integer
+     */
+    private $clubId;
+
+    /**
      * @var \Common\UtilityBundle\Entity\FgCmContact
      */
     private $contact;
@@ -54,6 +57,7 @@ class FgCmLinkedcontact
      * Set linkedContactId
      *
      * @param integer $linkedContactId
+     *
      * @return FgCmLinkedcontact
      */
     public function setLinkedContactId($linkedContactId)
@@ -77,6 +81,7 @@ class FgCmLinkedcontact
      * Set relation
      *
      * @param string $relation
+     *
      * @return FgCmLinkedcontact
      */
     public function setRelation($relation)
@@ -100,6 +105,7 @@ class FgCmLinkedcontact
      * Set type
      *
      * @param string $type
+     *
      * @return FgCmLinkedcontact
      */
     public function setType($type)
@@ -120,9 +126,34 @@ class FgCmLinkedcontact
     }
 
     /**
+     * Set clubId
+     *
+     * @param integer $clubId
+     *
+     * @return FgCmLinkedcontact
+     */
+    public function setClubId($clubId)
+    {
+        $this->clubId = $clubId;
+
+        return $this;
+    }
+
+    /**
+     * Get clubId
+     *
+     * @return integer
+     */
+    public function getClubId()
+    {
+        return $this->clubId;
+    }
+
+    /**
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgCmLinkedcontact
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
@@ -146,6 +177,7 @@ class FgCmLinkedcontact
      * Set relation2
      *
      * @param \Common\UtilityBundle\Entity\FgCmRelation $relation2
+     *
      * @return FgCmLinkedcontact
      */
     public function setRelation2(\Common\UtilityBundle\Entity\FgCmRelation $relation2 = null)
@@ -164,32 +196,5 @@ class FgCmLinkedcontact
     {
         return $this->relation2;
     }
-    /**
-     * @var integer
-     */
-    private $clubId;
-
-
-    /**
-     * Set clubId
-     *
-     * @param integer $clubId
-     * @return FgCmLinkedcontact
-     */
-    public function setClubId($clubId)
-    {
-        $this->clubId = $clubId;
-
-        return $this;
-    }
-
-    /**
-     * Get clubId
-     *
-     * @return integer
-     */
-    public function getClubId()
-    {
-        return $this->clubId;
-    }
 }
+

@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Common\UtilityBundle\Util\FgUtility;
+use Common\UtilityBundle\Util\FgClubSyncDataToAdmin;
 
 /**
  * NewsletterController.
@@ -105,6 +106,7 @@ class NewsletterController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $clubObj = $this->container->get('club');
+        $currentClubObj = $clubObj;
         if ($subscriptionCode != '') {
             $applicationData = $em->getRepository('CommonUtilityBundle:FgPendingApplications')->getPendingApplicationData($clubObj->get('id'), $subscriptionCode, 'NEWSLETTER_SUBSCRIPTION');
 
@@ -138,6 +140,11 @@ class NewsletterController extends Controller
                         $em->getRepository('CommonUtilityBundle:FgCnSubscriber')->newSubscriber($subscriberDataArray, $clubObj);
                     }
 
+                    /** Update the subscriber count **/
+                    $subscriberSyncObject = new FgClubSyncDataToAdmin($this->container);
+                    $subscriberSyncObject->updateSubscriberCount($currentClubObj->get('id'));
+                    /***********************************************/
+                
                     $returnArray['status'] = true;
                     $returnArray['message'] = $this->get('translator')->trans('CMS_NEWSLETTER_SUBSCRIPTION_LANDINGPAGE_TEXT');
                 }

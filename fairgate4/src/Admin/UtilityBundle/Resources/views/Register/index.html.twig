@@ -1,0 +1,129 @@
+{% extends 'AdminUtilityBundle:Register:layout.html.twig'%}
+
+{% block pagecontent %}
+    
+        <!-- BEGIN PAGE TITLE-->
+        <div class="fg-page-title-bar">
+          <h1 class="page-title fg-title-col">User registration</h1>
+        </div>
+        <!-- END PAGE TITLE-->
+        <div class="portlet light bordered fg-user-registration-wrapper">
+          <div class="portlet-title">
+            <div class="caption">
+              <i class="icon-layers font-red"></i>
+              <span class="caption-subject">Form Wizard - Step 1 of 4</span>
+            </div>
+          </div>
+          <div class="mt-element-step hide">
+            <div class="row step-background">
+              <div class="col-md-4 bg-grey-steel mt-step-col">
+                <div class="mt-step-number">1</div>
+                <div class="mt-step-title uppercase font-grey-cascade">Purchase</div>
+                <div class="mt-step-content font-grey-cascade">Purchasing the item</div>
+              </div>
+              <div class="col-md-4 bg-grey-steel mt-step-col active">
+                <div class="mt-step-number">2</div>
+                <div class="mt-step-title uppercase font-grey-cascade">Payment</div>
+                <div class="mt-step-content font-grey-cascade">Complete your payment</div>
+              </div>
+              <div class="col-md-4 bg-grey-steel mt-step-col">
+                <div class="mt-step-number">3</div>
+                <div class="mt-step-title uppercase font-grey-cascade">Deploy</div>
+                <div class="mt-step-content font-grey-cascade">Receive item integration</div>
+              </div>
+            </div>
+          </div>
+          <div class="portlet-body form">
+            <form class="form-horizontal" action="#" method="post" id="regis-form" noValidate>
+              <div class="form-wizard">
+                <div class="form-body">
+                  <div class="mt-element-step margin-bottom-10 fg-form-wizard-style-1">
+                    <div class="step-background fg-steps-5">
+                      <div class="bg-grey-steel mt-step-col active col-md-3" href="#tab1" data-toggle="tab" data-step="1">
+                        <div class="mt-step-number">1</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Organaization</div>
+                        <div class="mt-step-content font-grey-cascade">General information</div>
+                      </div>
+                      <div class="bg-grey-steel mt-step-col col-md-3" href="#tab2" data-toggle="tab" data-step="2">
+                        <div class="mt-step-number">2</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Address</div>
+                        <div class="mt-step-content font-grey-cascade">Your location</div>
+                      </div>
+                      <div class="bg-grey-steel mt-step-col col-md-2" href="#tab3" data-toggle="tab" data-step="3">
+                        <div class="mt-step-number">3</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Personal</div>
+                        <div class="mt-step-content font-grey-cascade">Personal Data</div>
+                      </div>
+                      <div class="bg-grey-steel mt-step-col  col-md-2" href="#tab4" data-toggle="tab" data-step="4">
+                        <div class="mt-step-number">4</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">miscellaneous</div>
+                        <div class="mt-step-content font-grey-cascade">Additional information</div>
+                      </div>
+                      <div class="bg-grey-steel mt-step-col col-md-2" href="#tab5" data-toggle="tab" data-step="5">
+                        <div class="mt-step-number">5</div>
+                        <div class="mt-step-title uppercase font-grey-cascade">Login</div>
+                        <div class="mt-step-content font-grey-cascade">Login information</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="progress progress-striped" id="regis-progressbar" role="progressbar">
+                    <div class="progress-bar progress-bar-success" style="width: 20%;"></div>
+                  </div>
+                  <div class="tab-content fg-form-wizards-content-style-1">
+                    <div class="alert alert-danger display-none">
+                      <button class="close" data-dismiss="alert"></button> You have some form errors. Please check below.</div>
+                    <div class="alert alert-success display-none">
+                      <button class="close" data-dismiss="alert"></button> Your form validation is successful!</div>
+                    {#                    #}
+                    {% include 'AdminUtilityBundle:Register:step-1.html.twig'%}
+                    {% include 'AdminUtilityBundle:Register:step-2.html.twig'%}
+                    {% include 'AdminUtilityBundle:Register:step-3.html.twig'%}
+                    {% include 'AdminUtilityBundle:Register:step-4.html.twig'%}
+                    {% include 'AdminUtilityBundle:Register:step-5.html.twig'%}
+                    
+                  </div>
+                </div>
+                <div class="form-actions right">
+                  <button class="btn default" type="button">Back</button>
+                  <button class="btn green" id="save-continue-btn" type="submit">Save &amp; Continue</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+    
+    
+                   
+{% endblock %}
+
+{% block javascripts %}    
+      <script src="{{ asset('fgassets/backend/js/page/xregexp-all.js') }}" type="text/javascript"></script>      
+      <script src="{{ asset('fgassets/backend/js/page/fg-registeration.js') }}" type="text/javascript"></script>      
+      <script src="{{ asset('fgassets/backend/js/page/fg-password-validate.js') }}" type="text/javascript"></script>   
+      <script src="{{ asset('fgassets/global/js/fgtemplate.js') }}" type="text/javascript"></script>
+      <script>
+          var countries = JSON.parse('{{countries|json_encode()|raw}}');
+          var validateObj = new FgPasswordValidate();
+          new FgRegistration(validateObj);
+          
+          
+      </script>
+{% endblock %}
+{% block underscoretemplate %}   
+    <script id="regionSelectFieldTemplate" type="text/template">
+        
+        <select class="form-control bs-select" name="<%- fieldId %>" id="<%- fieldId %>">
+            <option>{{'SELECT'|trans}}</option>
+             <% _.each(data.values, function(value, key, list){ %>
+                    <option value="<%- value.subSubCatId %>"><%- value.subSubCategory %></option>
+            <% }); %>
+          </select>
+            
+    </script>
+    
+    <script id="regionInputFieldTemplate" type="text/template">
+        
+        <input class="form-control" type="text" name="<%- fieldId %>" id="<%- fieldId %>">
+            
+    </script>
+{% endblock %}

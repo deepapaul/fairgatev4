@@ -5,7 +5,7 @@ namespace Clubadmin\ClubBundle\Controller;
 use Common\UtilityBundle\Controller\FgController;
 use Clubadmin\ClubBundle\Util\NextpreviousClub;
 use Common\UtilityBundle\Util\FgUtility;
-use Common\UtilityBundle\Repository\Pdo\ClubPdo;
+use Admin\UtilityBundle\Repository\Pdo\ClubPdo;
 
 /**
  * Clublog Controller
@@ -66,8 +66,8 @@ class LogController extends FgController
         $transKindFields = array('data' => 'LOG_DATA_FIELDS', 'classifications' => 'LOG_CLASSIFICATIONS', 'notes' => 'GN_NOTES', 'added' => 'LOG_FLAG_ADDED', 'removed' => 'LOG_FLAG_REMOVED', 'changed' => 'LOG_FLAG_CHANGED');
         $logEntriesDataFieldTab = $clubPdo->getDataFieldLogEntries($clubId, $this->clubId);
         $logEntriesClassificationTab = $clubPdo->getClassificationLogEntries($clubId, $this->clubType, $this->clubId);
-        $logEntriesNotesTab = $clubPdo->getNotesLogEntries($clubId, $this->clubId);
-
+        $actualClubPdo = new \Common\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
+        $logEntriesNotesTab = $actualClubPdo->getNotesLogEntries($clubId, $this->clubId);
         foreach ($logEntriesNotesTab as $key => $noteFields) {
             $noteFields['value_after'] = str_replace("\"", "#~#", $noteFields['valueAfter']);
             $noteFields['value_before'] = str_replace("\"", "#~#", $noteFields['valueBefore']);
@@ -80,7 +80,7 @@ class LogController extends FgController
         $activeTab = '1';
         $dataSet = array('logEntries' => $logEntries, 'breadcrumb' => $breadcrumb, 'clubName' => $clubData['title'], 'clubId' => $clubId, 'offset' => $offset, 'nextPreviousResultset' => $nextPreviousResultset, 'transKindFields' => $transKindFields, 'logTabs' => $logTabs, 'activeTab' => $activeTab);
         $dataSet['documentsCount'] = $this->em->getRepository('CommonUtilityBundle:FgDmDocuments')->getCountOfAssignedClubDocuments('CLUB', $this->clubId, $clubId, $this->container);
-        $dataSet['asgmntsCount'] = $this->em->getRepository('CommonUtilityBundle:FgClubClassAssignment')->assignmentCount($this->clubType, $this->conn, $clubId);
+        $dataSet['asgmntsCount'] = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubClassAssignment')->assignmentCount($this->clubType, $this->conn, $clubId);
         $dataSet['notesCount'] = $this->em->getRepository('CommonUtilityBundle:FgClubNotes')->getNotesCount($clubId, $this->clubId);
         if (in_array('document', $club->get('bookedModulesDet'))) {
             $tabs = array(0 => "overview", 1 => "data", 2 => "assignment", 3 => "note", 4 => "document", 5 => "log");

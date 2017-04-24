@@ -850,7 +850,7 @@ class FgRmCategoryRepository extends EntityRepository {
                                         INNER JOIN fg_rm_role_contact RC ON RC.fg_rm_crf_id = CRF.id
                                         WHERE R.id IN ($delParm)
                                         UNION
-                                        SELECT contact_id FROM fg_rm_role_manual_contacts 
+                                        SELECT contact_id FROM fg_rm_role_manual_contacts
                                         WHERE type = 'included' AND role_id IN ($delParm)";
                             $conn = $this->getEntityManager()->getConnection();
                             $stmt = $conn->executeQuery($query);
@@ -1777,32 +1777,7 @@ class FgRmCategoryRepository extends EntityRepository {
         return $functonCount;
     }
 
-    /**
-     * Function to get the fedmember active contacts ids of a club/federation
-     *
-     * @param type $clubType        clubtype
-     * @param type $clubId          clubId
-     * @param int  $federationId    federationId
-     * @return int count
-     */
-    public function getSubQueryForFedMemberCount($clubType, $clubId, $federationId) {
-        $federationId = ($clubType == 'federation') ? $clubId : $federationId;
-        $fedCount = $this->getEntityManager()->createQueryBuilder();
-        $fedCount->select('COUNT(DISTINCT c.id)')
-                ->from('CommonUtilityBundle:FgCmContact', 'c')
-                ->innerJoin('CommonUtilityBundle:FgCmMembership', 'm', 'WITH', 'm.id=c.fedMembershipCat AND m.club=' . $federationId)
-                ->innerJoin('CommonUtilityBundle:MasterSystem', 'ms', 'WITH', 'c.fedContact=ms.fedContact')
-                ->where('c.isDeleted=0')
-                ->andWhere('c.isDraft=0')
-                ->andWhere('c.isPermanentDelete=0');
-        if ($clubType === 'federation') {
-            $clubIds = $this->_em->getRepository('CommonUtilityBundle:FgRmFunction')->getSubLevelClubIds($executiveboard = 0, $clubId);
-            $fedCount->andWhere($fedCount->expr()->orX($fedCount->expr()->in('c.club', $clubIds), $fedCount->expr()->eq('c.club', ':clubId')));
-        } else {
-            $fedCount->andWhere('c.club=:clubId');
-        }
-        return $fedCount;
-    }
+
 
     /**
      * get the federation categories
@@ -1904,74 +1879,80 @@ class FgRmCategoryRepository extends EntityRepository {
             return $diffArray;
         }
     }
+    /**
+     * Function to get the fedmember active contacts ids of a club/federation
+     *
+     * @param string $clubType        clubtype
+     * @param int    $clubId          clubId
+     * @param int    $federationId    federationId
+     *
+     * @return int count
+     */
+    public function getSubQueryForFedMemberCount($clubType, $clubId, $federationId)
+    {
+        $club = ($clubType == 'federation') ? $clubId : $federationId;
+        $fedCount = $this->getEntityManager()->createQueryBuilder();
+        $fedCount->select('COUNT(DISTINCT c.id)')
+            ->from('CommonUtilityBundle:FgCmContact', 'c')
+            ->innerJoin('CommonUtilityBundle:FgCmMembership', 'm', 'WITH', 'm.id=c.fedMembershipCat AND m.club=' . $club)
+            ->innerJoin('CommonUtilityBundle:MasterSystem', 'ms', 'WITH', 'c.fedContact=ms.fedContact')
+            ->where('c.isDeleted=0')
+            ->andWhere('c.isDraft=0')
+            ->andWhere('c.isPermanentDelete=0');
+        if ($clubType === 'federation') {
+            $clubIds = $this->_em->getRepository('CommonUtilityBundle:FgRmFunction')->getSubLevelClubIds($executiveboard = 0, $clubId);
+            $fedCount->andWhere($fedCount->expr()->orX($fedCount->expr()->in('c.club', $clubIds), $fedCount->expr()->eq('c.club', ':clubId')));
+        } else {
+            $fedCount->andWhere('c.club=:clubId');
+        }
+        return $fedCount;
+    }
 
     /**
-     * Function to get All role in the sidebar for a perticular Club.
+     * Function to get Missing Assignments Details in the sidebar for a particular Club.
      *
      * @param Integer $clubId          Club Id
      * @param String  $clubType        Type of club
-     * @param Integer $contactId       contact Id
-     * @param Integer $isFedRole       Federation role or not
      * @param Integer $federationId    Federation Id
      * @param Integer $subFederationId Sub-Federation Id
-     * @param String  $roleType        role type
-     * @param String  $defaultLang     club default language
      *
-     * @return query result or as processed array based on the $exec parameter
+     * @return array
      */
-    public function getMissingassignmentsDetails($clubId, $clubType, $contactId, $isFedRole, $federationId, $subFederationId, $defaultLang) {
-        $roleClubId = $clubId;
-        $selectFiled = '';
-        $where = "rc.contactAssign = 'manual'";
-        $roleType = 'fedrole,subfedrole';
-        $roleClubId = "$federationId,$subFederationId";
-        $catCount = "getClubCategoryCount(rc.id,$clubId) as categoryCount,";
+    public function getMissingAssignmentsDetails($clubId, $clubType, $federationId, $subFederationId)
+    {
         $fedCount = $this->getSubQueryForFedMemberCount($clubType, $clubId, $federationId)->getDQL();
         // Configuring UDF
         $doctrineConfig = $this->getEntityManager()->getConfiguration();
-        $doctrineConfig->addCustomStringFunction('getClubRoleCount', 'Common\UtilityBundle\Extensions\RoleCount');
         $doctrineConfig->addCustomStringFunction('getClubCategoryCount', 'Common\UtilityBundle\Extensions\CategoryCount');
 
         $roleCategory = $this->createQueryBuilder('rc')
-                ->select("rc.id  as roleCatId,
-                        rc.title as categoryTitle,
-                        IDENTITY(rc.club) as clubId,
-                        rc.isFedCategory as isFedCategory,
-                        r.id  as roleId,
-                        getClubRoleCount(r.id, $clubId) as rolecount,
-                        $catCount
-                        r.type as roleType,
-                        rc.sortOrder as catSortOrder,rc.isRequiredFedmemberSubfed,rc.isRequiredFedmemberClub,
-                        bm.id as bookmarkid");
-
+            ->select("rc.id  as roleCatId, IDENTITY(rc.club) as clubId, rc.sortOrder as catSortOrder,
+                        getClubCategoryCount(rc.id, :clubId) as categoryCount, r.id  as roleId, r.type as roleType");
         $roleCategory->addSelect('(' . $fedCount . ') as fedCount');
-        $roleCategory->addSelect('(SELECT count(cf.id) FROM CommonUtilityBundle:FgRmFunction cf WHERE cf.category= rc.id AND cf.isActive = 1) fnCount')
-                ->leftJoin('CommonUtilityBundle:FgRmRole', 'r', 'WITH', 'rc.id = r.category AND r.type =:roleType')
-                ->leftJoin('CommonUtilityBundle:FgCmBookmarks', 'bm', 'WITH', 'bm.role = r.id AND bm.club=:clubId AND bm.contact =:contactId');
 
-        $roleCategory->where("rc.club IN ($roleClubId)")
-                ->andWhere('rc.isActive = 1');
-        if ($isFedRole) {
-            $roleCategory->andWhere('rc.isFedCategory = 1');
-        } else {
-            $roleCategory->andWhere('rc.isFedCategory = 0');
+        $roleCategory->innerJoin('CommonUtilityBundle:FgRmRole', 'r', 'WITH', 'rc.id = r.category AND r.type =:roleType')
+            ->where("rc.club IN ('$federationId','$subFederationId')")
+            ->andWhere('rc.isActive = 1')
+            ->andWhere('rc.isFedCategory = 1')
+            ->andWhere('rc.isTeam = 0')
+            ->andWhere('rc.isWorkgroup = 0')
+            ->andwhere("rc.contactAssign = 'manual'")
+            ->groupBy('rc.id')
+            ->orderBy('rc.sortOrder');
+        if ($clubType == 'sub_federation') {
+            $roleCategory->andWhere('rc.isRequiredFedmemberSubfed = 1');
+        } else if ($clubType == 'sub_federation_club' || $clubType == 'federation_club') {
+            $roleCategory->andWhere('rc.isRequiredFedmemberClub = 1');
         }
-        $roleCategory->andWhere('rc.isTeam = 0')
-                ->andWhere('rc.isWorkgroup = 0')
-                ->andwhere($where)
-                ->orderBy('rc.sortOrder, r.sortOrder')
-                ->setParameters(array('clubId' => $clubId, 'contactId' => $contactId, 'roleType' => 'G'));
 
+        $roleCategory->setParameters(array('clubId' => $clubId, 'roleType' => 'G'));
         $dataResult = $roleCategory->getQuery()->getArrayResult();
+
         $resultArray = array();
-        $resultCatArray = array();
         foreach ($dataResult as $val) {
-            if (!in_array($val['roleCatId'], $resultCatArray) && (($clubType == 'sub_federation' && $val['isRequiredFedmemberSubfed'] == 1) || ($clubType == 'sub_federation_club' && $val['isRequiredFedmemberClub'] == 1) || ($clubType == 'federation_club' && $val['isRequiredFedmemberClub'] == 1))) {
-                $resultCatArray[] = $val['roleCatId'];
-                if (($val['fedCount'] - $val['categoryCount']) > 0) {
-                    $resultArray[$val['roleCatId']] = $val;
-                    $resultArray[$val['roleCatId']]['missingCount'] = $val['fedCount'] - $val['categoryCount'];
-                }
+            if (($val['fedCount'] - $val['categoryCount']) > 0) {
+                $resultArray[$val['roleCatId']] = $val;
+                $resultArray[$val['roleCatId']]['missingCount'] = $val['fedCount'] - $val['categoryCount'];
             }
         }
 

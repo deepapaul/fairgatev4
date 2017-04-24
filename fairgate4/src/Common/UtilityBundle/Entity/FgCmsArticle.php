@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsArticle
  */
@@ -98,7 +96,7 @@ class FgCmsArticle
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -109,19 +107,20 @@ class FgCmsArticle
      * Set publicationDate
      *
      * @param \DateTime $publicationDate
+     *
      * @return FgCmsArticle
      */
     public function setPublicationDate($publicationDate)
     {
         $this->publicationDate = $publicationDate;
-    
+
         return $this;
     }
 
     /**
      * Get publicationDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getPublicationDate()
     {
@@ -132,19 +131,20 @@ class FgCmsArticle
      * Set expiryDate
      *
      * @param \DateTime $expiryDate
+     *
      * @return FgCmsArticle
      */
     public function setExpiryDate($expiryDate)
     {
         $this->expiryDate = $expiryDate;
-    
+
         return $this;
     }
 
     /**
      * Get expiryDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getExpiryDate()
     {
@@ -155,19 +155,20 @@ class FgCmsArticle
      * Set author
      *
      * @param string $author
+     *
      * @return FgCmsArticle
      */
     public function setAuthor($author)
     {
         $this->author = $author;
-    
+
         return $this;
     }
 
     /**
      * Get author
      *
-     * @return string 
+     * @return string
      */
     public function getAuthor()
     {
@@ -178,19 +179,20 @@ class FgCmsArticle
      * Set scope
      *
      * @param string $scope
+     *
      * @return FgCmsArticle
      */
     public function setScope($scope)
     {
         $this->scope = $scope;
-    
+
         return $this;
     }
 
     /**
      * Get scope
      *
-     * @return string 
+     * @return string
      */
     public function getScope()
     {
@@ -201,19 +203,20 @@ class FgCmsArticle
      * Set position
      *
      * @param string $position
+     *
      * @return FgCmsArticle
      */
     public function setPosition($position)
     {
         $this->position = $position;
-    
+
         return $this;
     }
 
     /**
      * Get position
      *
-     * @return string 
+     * @return string
      */
     public function getPosition()
     {
@@ -224,19 +227,20 @@ class FgCmsArticle
      * Set isDraft
      *
      * @param integer $isDraft
+     *
      * @return FgCmsArticle
      */
     public function setIsDraft($isDraft)
     {
         $this->isDraft = $isDraft;
-    
+
         return $this;
     }
 
     /**
      * Get isDraft
      *
-     * @return integer 
+     * @return integer
      */
     public function getIsDraft()
     {
@@ -247,19 +251,20 @@ class FgCmsArticle
      * Set commentAllow
      *
      * @param integer $commentAllow
+     *
      * @return FgCmsArticle
      */
     public function setCommentAllow($commentAllow)
     {
         $this->commentAllow = $commentAllow;
-    
+
         return $this;
     }
 
     /**
      * Get commentAllow
      *
-     * @return integer 
+     * @return integer
      */
     public function getCommentAllow()
     {
@@ -270,19 +275,20 @@ class FgCmsArticle
      * Set createdOn
      *
      * @param \DateTime $createdOn
+     *
      * @return FgCmsArticle
      */
     public function setCreatedOn($createdOn)
     {
         $this->createdOn = $createdOn;
-    
+
         return $this;
     }
 
     /**
      * Get createdOn
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedOn()
     {
@@ -293,19 +299,20 @@ class FgCmsArticle
      * Set updatedOn
      *
      * @param \DateTime $updatedOn
+     *
      * @return FgCmsArticle
      */
     public function setUpdatedOn($updatedOn)
     {
         $this->updatedOn = $updatedOn;
-    
+
         return $this;
     }
 
     /**
      * Get updatedOn
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedOn()
     {
@@ -316,19 +323,20 @@ class FgCmsArticle
      * Set isDeleted
      *
      * @param integer $isDeleted
+     *
      * @return FgCmsArticle
      */
     public function setIsDeleted($isDeleted)
     {
         $this->isDeleted = $isDeleted;
-    
+
         return $this;
     }
 
     /**
      * Get isDeleted
      *
-     * @return integer 
+     * @return integer
      */
     public function getIsDeleted()
     {
@@ -339,19 +347,20 @@ class FgCmsArticle
      * Set shareWithLower
      *
      * @param boolean $shareWithLower
+     *
      * @return FgCmsArticle
      */
     public function setShareWithLower($shareWithLower)
     {
         $this->shareWithLower = $shareWithLower;
-    
+
         return $this;
     }
 
     /**
      * Get shareWithLower
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getShareWithLower()
     {
@@ -362,19 +371,20 @@ class FgCmsArticle
      * Set textversion
      *
      * @param \Common\UtilityBundle\Entity\FgCmsArticleText $textversion
+     *
      * @return FgCmsArticle
      */
     public function setTextversion(\Common\UtilityBundle\Entity\FgCmsArticleText $textversion = null)
     {
         $this->textversion = $textversion;
-    
+
         return $this;
     }
 
     /**
      * Get textversion
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsArticleText 
+     * @return \Common\UtilityBundle\Entity\FgCmsArticleText
      */
     public function getTextversion()
     {
@@ -385,19 +395,20 @@ class FgCmsArticle
      * Set createdBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $createdBy
+     *
      * @return FgCmsArticle
      */
     public function setCreatedBy(\Common\UtilityBundle\Entity\FgCmContact $createdBy = null)
     {
         $this->createdBy = $createdBy;
-    
+
         return $this;
     }
 
     /**
      * Get createdBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getCreatedBy()
     {
@@ -408,19 +419,20 @@ class FgCmsArticle
      * Set updatedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $updatedBy
+     *
      * @return FgCmsArticle
      */
     public function setUpdatedBy(\Common\UtilityBundle\Entity\FgCmContact $updatedBy = null)
     {
         $this->updatedBy = $updatedBy;
-    
+
         return $this;
     }
 
     /**
      * Get updatedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getUpdatedBy()
     {
@@ -431,19 +443,20 @@ class FgCmsArticle
      * Set archivedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $archivedBy
+     *
      * @return FgCmsArticle
      */
     public function setArchivedBy(\Common\UtilityBundle\Entity\FgCmContact $archivedBy = null)
     {
         $this->archivedBy = $archivedBy;
-    
+
         return $this;
     }
 
     /**
      * Get archivedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getArchivedBy()
     {
@@ -454,22 +467,24 @@ class FgCmsArticle
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmsArticle
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
         return $this->club;
     }
 }
+

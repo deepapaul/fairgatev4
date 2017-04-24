@@ -108,11 +108,14 @@ class FedMemApplication
      */
     public function discardFedMembership($confirmId)
     {
-        $confirmQuery = "SELECT FCL.*,C.fed_membership_mandatory,C.club_type,C.federation_id,C.parent_club_id,CC.id as club_contact_id "
+        
+       //C.fed_membership_mandatory
+        $confirmQuery = "SELECT FCL.*,C.id as ClubId,C.club_type,C.federation_id,C.parent_club_id,CC.id as club_contact_id "
             . "FROM fg_cm_fedmembership_confirmation_log FCL "
             . "INNER JOIN fg_cm_contact CC ON CC.fed_contact_id=FCL.contact_id AND FCL.club_id = CC.club_id "
-            . "INNER JOIN fg_club C ON C.id=FCL.club_id WHERE FCL.id=$confirmId";
+            . "INNER JOIN fg_club C ON C.id=FCL.club_id WHERE FCL.id=$confirmId";    
         $this->confirmDetails = $this->conn->fetchAll($confirmQuery);
+        $fedMembershipMandatory = $this->container->get('fg.admin.connection')->getAdminConnection()->fetchAll("SELECT fed_membership_mandatory  FROM fg_club WHERE id= {$this->confirmDetails[0]['ClubId']}");
         $this->contactId = $this->confirmDetails[0]['club_contact_id'];
         $contactDetails = $this->getContactDetails();
         $decidedBy = $this->container->get('contact')->get('id');
@@ -124,7 +127,7 @@ class FedMemApplication
                 $this->conn->executeQuery("UPDATE fg_cm_contact C SET C.joining_date='{$history[0]['joining_date']}',C.leaving_date='{$history[0]['leaving_date']}' WHERE C.id= {$this->fedContactId}");
             }
         }
-        if ($this->confirmDetails[0]['fed_membership_mandatory'] == 1 && empty($contactDetails['old_fed_membership_id'])) {
+        if ($fedMembershipMandatory[0]['fed_membership_mandatory'] == 1 && empty($contactDetails['old_fed_membership_id'])) {
             //archive contact
             $this->conn->executeQuery("UPDATE fg_cm_fedmembership_confirmation_log SET status='DECLINED',decided_date=NOW(),decided_by=$decidedBy WHERE id=$confirmId");
             $contactPdo = new ContactPdo($this->container);

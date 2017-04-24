@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgGmGallery
  */
@@ -15,14 +13,24 @@ class FgGmGallery
     private $id;
 
     /**
-     * @var integer
+     * @var string
      */
-    private $sortOrder;
+    private $type;
 
     /**
      * @var integer
      */
     private $parentId;
+
+    /**
+     * @var integer
+     */
+    private $sortOrder;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgClub
+     */
+    private $club;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgRmRole
@@ -34,10 +42,11 @@ class FgGmGallery
      */
     private $album;
 
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -45,45 +54,47 @@ class FgGmGallery
     }
 
     /**
-     * Set sortOrder
+     * Set type
      *
-     * @param integer $sortOrder
+     * @param string $type
+     *
      * @return FgGmGallery
      */
-    public function setSortOrder($sortOrder)
+    public function setType($type)
     {
-        $this->sortOrder = $sortOrder;
-    
+        $this->type = $type;
+
         return $this;
     }
 
     /**
-     * Get sortOrder
+     * Get type
      *
-     * @return integer 
+     * @return string
      */
-    public function getSortOrder()
+    public function getType()
     {
-        return $this->sortOrder;
+        return $this->type;
     }
 
     /**
      * Set parentId
      *
      * @param integer $parentId
+     *
      * @return FgGmGallery
      */
     public function setParentId($parentId)
     {
         $this->parentId = $parentId;
-    
+
         return $this;
     }
 
     /**
      * Get parentId
      *
-     * @return integer 
+     * @return integer
      */
     public function getParentId()
     {
@@ -91,22 +102,71 @@ class FgGmGallery
     }
 
     /**
+     * Set sortOrder
+     *
+     * @param integer $sortOrder
+     *
+     * @return FgGmGallery
+     */
+    public function setSortOrder($sortOrder)
+    {
+        $this->sortOrder = $sortOrder;
+
+        return $this;
+    }
+
+    /**
+     * Get sortOrder
+     *
+     * @return integer
+     */
+    public function getSortOrder()
+    {
+        return $this->sortOrder;
+    }
+
+    /**
+     * Set club
+     *
+     * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
+     * @return FgGmGallery
+     */
+    public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
+    {
+        $this->club = $club;
+
+        return $this;
+    }
+
+    /**
+     * Get club
+     *
+     * @return \Common\UtilityBundle\Entity\FgClub
+     */
+    public function getClub()
+    {
+        return $this->club;
+    }
+
+    /**
      * Set role
      *
      * @param \Common\UtilityBundle\Entity\FgRmRole $role
+     *
      * @return FgGmGallery
      */
     public function setRole(\Common\UtilityBundle\Entity\FgRmRole $role = null)
     {
         $this->role = $role;
-    
+
         return $this;
     }
 
     /**
      * Get role
      *
-     * @return \Common\UtilityBundle\Entity\FgRmRole 
+     * @return \Common\UtilityBundle\Entity\FgRmRole
      */
     public function getRole()
     {
@@ -117,78 +177,24 @@ class FgGmGallery
      * Set album
      *
      * @param \Common\UtilityBundle\Entity\FgGmAlbum $album
+     *
      * @return FgGmGallery
      */
     public function setAlbum(\Common\UtilityBundle\Entity\FgGmAlbum $album = null)
     {
         $this->album = $album;
-    
+
         return $this;
     }
 
     /**
      * Get album
      *
-     * @return \Common\UtilityBundle\Entity\FgGmAlbum 
+     * @return \Common\UtilityBundle\Entity\FgGmAlbum
      */
     public function getAlbum()
     {
         return $this->album;
     }
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var \Common\UtilityBundle\Entity\FgClub
-     */
-    private $club;
-
-
-    /**
-     * Set type
-     *
-     * @param string $type
-     * @return FgGmGallery
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string 
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * Set club
-     *
-     * @param \Common\UtilityBundle\Entity\FgClub $club
-     * @return FgGmGallery
-     */
-    public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
-    {
-        $this->club = $club;
-    
-        return $this;
-    }
-
-    /**
-     * Get club
-     *
-     * @return \Common\UtilityBundle\Entity\FgClub 
-     */
-    public function getClub()
-    {
-        return $this->club;
-    }
 }
+

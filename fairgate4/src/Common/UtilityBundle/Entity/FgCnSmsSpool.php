@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnSmsSpool
  */
@@ -59,6 +57,7 @@ class FgCnSmsSpool
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return FgCnSmsSpool
      */
     public function setCreatedAt($createdAt)
@@ -82,6 +81,7 @@ class FgCnSmsSpool
      * Set actualSmsContent
      *
      * @param string $actualSmsContent
+     *
      * @return FgCnSmsSpool
      */
     public function setActualSmsContent($actualSmsContent)
@@ -105,6 +105,7 @@ class FgCnSmsSpool
      * Set smsId
      *
      * @param integer $smsId
+     *
      * @return FgCnSmsSpool
      */
     public function setSmsId($smsId)
@@ -128,6 +129,7 @@ class FgCnSmsSpool
      * Set jobId
      *
      * @param string $jobId
+     *
      * @return FgCnSmsSpool
      */
     public function setJobId($jobId)
@@ -151,6 +153,7 @@ class FgCnSmsSpool
      * Set phoneNumber
      *
      * @param string $phoneNumber
+     *
      * @return FgCnSmsSpool
      */
     public function setPhoneNumber($phoneNumber)
@@ -174,6 +177,7 @@ class FgCnSmsSpool
      * Set sender
      *
      * @param string $sender
+     *
      * @return FgCnSmsSpool
      */
     public function setSender($sender)
@@ -193,3 +197,4 @@ class FgCnSmsSpool
         return $this->sender;
     }
 }
+

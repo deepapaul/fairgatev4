@@ -168,8 +168,7 @@ class ArticleCreate
         if (strlen($textData['title']) > 255) {
             $this->errorMessageArray['text']['title'][] = $this->translator->trans('ARTICLE_CREATE_TITLE_LONG');
         }
-
-        if (strlen($textData['teaser']) > 160) {
+        if(mb_strlen($textData['teaser'], "utf-8") > 160){
             $this->errorMessageArray['text']['teaser'][] = $this->translator->trans('ARTICLE_CREATE_TEASER_LONG');
         }
     }

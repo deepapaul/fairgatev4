@@ -1,3 +1,6 @@
+/// <reference path="../directives/jquery.d.ts" />
+/// <reference path="../directives/underscore.d.ts" />
+/// <reference path="../directives/jqueryui.d.ts" />
 var FgCmsThemeBackgroundList = (function () {
     function FgCmsThemeBackgroundList() {
         this.tabselected = 1;
@@ -15,6 +18,7 @@ var FgCmsThemeBackgroundList = (function () {
         });
         imguploaderObj = FgFileUpload.init($('#tab1 .image-uploader'), settings);
     };
+    //create image for preview 
     FgCmsThemeBackgroundList.prototype.createImagePreview = function (input, imgTagId) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -24,6 +28,7 @@ var FgCmsThemeBackgroundList = (function () {
             reader.readAsDataURL(input.files[0]);
         }
     };
+    //call back after adding new image
     FgCmsThemeBackgroundList.prototype.addImgCallback = function (uploadedObj, data) {
         fgthemeBackground.handleSortOrder(uploadedObj, data);
         FgDirtyFields.updateFormState();
@@ -56,6 +61,7 @@ var FgCmsThemeBackgroundList = (function () {
     FgCmsThemeBackgroundList.prototype.saveBackgroundImageDetails = function () {
         var _this = this;
         $("body").on('click', "#save_changes", function () {
+            //validation
             $("#articleimg-upload-error-container").html('');
             if ($('#radios-0').is(':checked')) {
                 $('#default_bg_slider_time').val('');
@@ -77,22 +83,16 @@ var FgCmsThemeBackgroundList = (function () {
                 $("#articleimg-upload-error-container").html(validationMessage);
                 return;
             }
-            if($("ul.fg-files-uploaded-lists-wrapper li.has-error").length >0 ){
+            if ($("ul.fg-files-uploaded-lists-wrapper li.has-error").length > 0) {
                 return false;
             }
             $("#articleimg-upload-error-container").html('');
             var objectGraph = {};
-            $("ul.fg-files-uploaded-lists-wrapper li:not(.inactiveblock)").each(function (e, value) {
-                var oldVal = $(this).find(".fg-dev-sortable").val();
-                if (oldVal != (e + 1)) {
-                    $(this).find(".fg-dev-sortable").val(e + 1);
-                    $(this).find(".fg-dev-sortable").addClass('fg-dev-newfield');
-                }
-            });
+            fgthemeBackground.onSaveUpdateSortOrder();
             objectGraph = FgInternalParseFormField.formFieldParse('fg_cms_background_add');
             _this.initDirty();
             $('.fg-files-uploaded-lists-wrapper').find('.inactiveblock').remove();
-            var imageDetails = JSON.stringify(objectGraph);
+            var imageDetails = JSON.stringify(objectGraph); //SAVE 
             FgXmlHttp.post(backgroundImageSave, {
                 'imageDetails': imageDetails, 'configId': configId
             }, '', function (response) {
@@ -113,6 +113,7 @@ var FgCmsThemeBackgroundList = (function () {
             });
         });
     };
+    //make row color pink on delete
     FgCmsThemeBackgroundList.prototype.handleDeleteIconColor = function () {
         $('body').off('click', '.make-switch');
         $('body').on('click', '.make-switch', function (e) {
@@ -148,6 +149,7 @@ var FgCmsThemeBackgroundList = (function () {
             });
             $("#paneltab").find(".active").removeClass('active');
             $("#fg_tab_background").addClass('active');
+            //tab click handle
             $('body').on('click', 'ul.fg-dev-bg-tabs li', function () {
                 if ($(this).attr('data-type') == 1) {
                     _this.tabselected = 1;
@@ -161,17 +163,21 @@ var FgCmsThemeBackgroundList = (function () {
                     _this.initOriginalImageUpload(backgroundOriginalImgUploaderOptions, '#tab2');
                 }
             });
+            //To give click event for text for to handle the selection of corresponding radio button 
             $('body').on('click', '.fg-bg-radio', function () {
                 $(".fg-bg-radio").val('');
                 $(this).parents('.radio-block').find('.fg-radio-select').trigger('click');
                 $.uniform.update();
             });
             _this.initDirty();
+            //For edit page title
             _this.changePageTitle();
             _this.savePageTitle();
+            // FgPageTitlebar.setMoreTab();
         });
     };
     FgCmsThemeBackgroundList.prototype.discardChangesCallback = function () {
+        //Redraw the content
         fgthemeBackground.renderTabContent('templateOriginalSize', backgroundDetails, '#tab2');
         fgthemeBackground.renderTabContent('templateFullscreen', backgroundDetails, '#tab1');
         if (fgthemeBackground.tabselected == '2') {
@@ -210,7 +216,7 @@ var FgCmsThemeBackgroundList = (function () {
                 return false;
             }
             else {
-                 pageTitle = $('<div/>').text(pageTitle).html();
+                pageTitle = $('<div/>').text(pageTitle).html();
                 FgXmlHttp.post(changePageTitlePath, { 'config': configId, 'title': pageTitle }, '', function (response) {
                     $('#config-title-change-modal').modal('hide');
                     $('.page-title  .page-title-text').html('');
@@ -219,6 +225,18 @@ var FgCmsThemeBackgroundList = (function () {
             }
         });
     };
+    /**
+     * update sort orders on save
+     * REfer FAIRDEV-341
+     */
+    FgCmsThemeBackgroundList.prototype.onSaveUpdateSortOrder = function () {
+        $("ul.fg-files-uploaded-lists-wrapper li:not(.inactiveblock)").each(function (e, value) {
+            var oldVal = $(this).find(".fg-dev-sortable").val();
+            if (oldVal != (e + 1)) {
+                $(this).find(".fg-dev-sortable").val(e + 1);
+                $(this).find(".fg-dev-sortable").addClass('fg-dev-newfield');
+            }
+        });
+    };
     return FgCmsThemeBackgroundList;
 }());
-//# sourceMappingURL=Fg_cms_theme_background_list.js.map

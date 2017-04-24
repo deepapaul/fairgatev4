@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPage
  */
@@ -90,6 +88,11 @@ class FgCmsPage
     private $pageElement;
 
     /**
+     * @var string
+     */
+    private $opengraphDetails;
+
+    /**
      * @var \Common\UtilityBundle\Entity\FgClub
      */
     private $club;
@@ -108,7 +111,7 @@ class FgCmsPage
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -119,19 +122,20 @@ class FgCmsPage
      * Set title
      *
      * @param string $title
+     *
      * @return FgCmsPage
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -142,19 +146,20 @@ class FgCmsPage
      * Set type
      *
      * @param string $type
+     *
      * @return FgCmsPage
      */
     public function setType($type)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -165,19 +170,20 @@ class FgCmsPage
      * Set sidebarType
      *
      * @param string $sidebarType
+     *
      * @return FgCmsPage
      */
     public function setSidebarType($sidebarType)
     {
         $this->sidebarType = $sidebarType;
-    
+
         return $this;
     }
 
     /**
      * Get sidebarType
      *
-     * @return string 
+     * @return string
      */
     public function getSidebarType()
     {
@@ -188,19 +194,20 @@ class FgCmsPage
      * Set sidebarArea
      *
      * @param string $sidebarArea
+     *
      * @return FgCmsPage
      */
     public function setSidebarArea($sidebarArea)
     {
         $this->sidebarArea = $sidebarArea;
-    
+
         return $this;
     }
 
     /**
      * Get sidebarArea
      *
-     * @return string 
+     * @return string
      */
     public function getSidebarArea()
     {
@@ -211,19 +218,20 @@ class FgCmsPage
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return FgCmsPage
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -234,19 +242,20 @@ class FgCmsPage
      * Set editedAt
      *
      * @param \DateTime $editedAt
+     *
      * @return FgCmsPage
      */
     public function setEditedAt($editedAt)
     {
         $this->editedAt = $editedAt;
-    
+
         return $this;
     }
 
     /**
      * Get editedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getEditedAt()
     {
@@ -257,19 +266,20 @@ class FgCmsPage
      * Set contentUpdateTime
      *
      * @param \DateTime $contentUpdateTime
+     *
      * @return FgCmsPage
      */
     public function setContentUpdateTime($contentUpdateTime)
     {
         $this->contentUpdateTime = $contentUpdateTime;
-    
+
         return $this;
     }
 
     /**
      * Get contentUpdateTime
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getContentUpdateTime()
     {
@@ -280,19 +290,20 @@ class FgCmsPage
      * Set isAllArea
      *
      * @param boolean $isAllArea
+     *
      * @return FgCmsPage
      */
     public function setIsAllArea($isAllArea)
     {
         $this->isAllArea = $isAllArea;
-    
+
         return $this;
     }
 
     /**
      * Get isAllArea
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsAllArea()
     {
@@ -303,19 +314,20 @@ class FgCmsPage
      * Set isAllCategory
      *
      * @param boolean $isAllCategory
+     *
      * @return FgCmsPage
      */
     public function setIsAllCategory($isAllCategory)
     {
         $this->isAllCategory = $isAllCategory;
-    
+
         return $this;
     }
 
     /**
      * Get isAllCategory
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsAllCategory()
     {
@@ -326,19 +338,20 @@ class FgCmsPage
      * Set isAllGalleries
      *
      * @param boolean $isAllGalleries
+     *
      * @return FgCmsPage
      */
     public function setIsAllGalleries($isAllGalleries)
     {
         $this->isAllGalleries = $isAllGalleries;
-    
+
         return $this;
     }
 
     /**
      * Get isAllGalleries
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsAllGalleries()
     {
@@ -349,19 +362,20 @@ class FgCmsPage
      * Set sharedClub
      *
      * @param string $sharedClub
+     *
      * @return FgCmsPage
      */
     public function setSharedClub($sharedClub)
     {
         $this->sharedClub = $sharedClub;
-    
+
         return $this;
     }
 
     /**
      * Get sharedClub
      *
-     * @return string 
+     * @return string
      */
     public function getSharedClub()
     {
@@ -372,19 +386,20 @@ class FgCmsPage
      * Set areaClub
      *
      * @param boolean $areaClub
+     *
      * @return FgCmsPage
      */
     public function setAreaClub($areaClub)
     {
         $this->areaClub = $areaClub;
-    
+
         return $this;
     }
 
     /**
      * Get areaClub
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getAreaClub()
     {
@@ -395,19 +410,20 @@ class FgCmsPage
      * Set pageContentJson
      *
      * @param string $pageContentJson
+     *
      * @return FgCmsPage
      */
     public function setPageContentJson($pageContentJson)
     {
         $this->pageContentJson = $pageContentJson;
-    
+
         return $this;
     }
 
     /**
      * Get pageContentJson
      *
-     * @return string 
+     * @return string
      */
     public function getPageContentJson()
     {
@@ -418,19 +434,20 @@ class FgCmsPage
      * Set hideTitle
      *
      * @param boolean $hideTitle
+     *
      * @return FgCmsPage
      */
     public function setHideTitle($hideTitle)
     {
         $this->hideTitle = $hideTitle;
-    
+
         return $this;
     }
 
     /**
      * Get hideTitle
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getHideTitle()
     {
@@ -441,19 +458,20 @@ class FgCmsPage
      * Set pageElement
      *
      * @param string $pageElement
+     *
      * @return FgCmsPage
      */
     public function setPageElement($pageElement)
     {
         $this->pageElement = $pageElement;
-    
+
         return $this;
     }
 
     /**
      * Get pageElement
      *
-     * @return string 
+     * @return string
      */
     public function getPageElement()
     {
@@ -461,22 +479,47 @@ class FgCmsPage
     }
 
     /**
+     * Set opengraphDetails
+     *
+     * @param string $opengraphDetails
+     *
+     * @return FgCmsPage
+     */
+    public function setOpengraphDetails($opengraphDetails)
+    {
+        $this->opengraphDetails = $opengraphDetails;
+
+        return $this;
+    }
+
+    /**
+     * Get opengraphDetails
+     *
+     * @return string
+     */
+    public function getOpengraphDetails()
+    {
+        return $this->opengraphDetails;
+    }
+
+    /**
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmsPage
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -487,19 +530,20 @@ class FgCmsPage
      * Set createdBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $createdBy
+     *
      * @return FgCmsPage
      */
     public function setCreatedBy(\Common\UtilityBundle\Entity\FgCmContact $createdBy = null)
     {
         $this->createdBy = $createdBy;
-    
+
         return $this;
     }
 
     /**
      * Get createdBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getCreatedBy()
     {
@@ -510,50 +554,24 @@ class FgCmsPage
      * Set editedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $editedBy
+     *
      * @return FgCmsPage
      */
     public function setEditedBy(\Common\UtilityBundle\Entity\FgCmContact $editedBy = null)
     {
         $this->editedBy = $editedBy;
-    
+
         return $this;
     }
 
     /**
      * Get editedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getEditedBy()
     {
         return $this->editedBy;
     }
-    /**
-     * @var string
-     */
-    private $opengraphDetails;
-
-
-    /**
-     * Set opengraphDetails
-     *
-     * @param string $opengraphDetails
-     * @return FgCmsPage
-     */
-    public function setOpengraphDetails($opengraphDetails)
-    {
-        $this->opengraphDetails = $opengraphDetails;
-    
-        return $this;
 }
 
-    /**
-     * Get opengraphDetails
-     *
-     * @return string 
-     */
-    public function getOpengraphDetails()
-    {
-        return $this->opengraphDetails;
-    }
-}

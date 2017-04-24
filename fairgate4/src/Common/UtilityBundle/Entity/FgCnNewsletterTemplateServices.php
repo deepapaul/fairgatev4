@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnNewsletterTemplateServices
  */
@@ -28,7 +26,7 @@ class FgCnNewsletterTemplateServices
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +37,20 @@ class FgCnNewsletterTemplateServices
      * Set templateSponsor
      *
      * @param \Common\UtilityBundle\Entity\FgCnNewsletterTemplateSponsor $templateSponsor
+     *
      * @return FgCnNewsletterTemplateServices
      */
     public function setTemplateSponsor(\Common\UtilityBundle\Entity\FgCnNewsletterTemplateSponsor $templateSponsor = null)
     {
         $this->templateSponsor = $templateSponsor;
-    
+
         return $this;
     }
 
     /**
      * Get templateSponsor
      *
-     * @return \Common\UtilityBundle\Entity\FgCnNewsletterTemplateSponsor 
+     * @return \Common\UtilityBundle\Entity\FgCnNewsletterTemplateSponsor
      */
     public function getTemplateSponsor()
     {
@@ -62,22 +61,24 @@ class FgCnNewsletterTemplateServices
      * Set services
      *
      * @param \Common\UtilityBundle\Entity\FgSmServices $services
+     *
      * @return FgCnNewsletterTemplateServices
      */
     public function setServices(\Common\UtilityBundle\Entity\FgSmServices $services = null)
     {
         $this->services = $services;
-    
+
         return $this;
     }
 
     /**
      * Get services
      *
-     * @return \Common\UtilityBundle\Entity\FgSmServices 
+     * @return \Common\UtilityBundle\Entity\FgSmServices
      */
     public function getServices()
     {
         return $this->services;
     }
 }
+

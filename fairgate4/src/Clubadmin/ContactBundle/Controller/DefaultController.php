@@ -12,6 +12,7 @@ use Clubadmin\ContactBundle\Util\ContactDetailsSave;
 use Clubadmin\ContactBundle\Util\FgContactValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Common\UtilityBundle\Repository\Pdo\membershipPdo;
+use Common\UtilityBundle\Util\FgPermissions;
 
 /**
  * contact default controller.
@@ -52,6 +53,13 @@ class DefaultController extends ParentController
         $systemCategoryCompany = $containerParameters->get('system_category_company');
         $editData = false;
         $formValues = $request->request->get('fg_field_category');
+        $moduleType = $this->get('club')->get('moduleMenu');     
+        $redirectPath =  ($moduleType =='contact') ? $this->generateUrl('contact_index') :$this->generateUrl('clubadmin_sponsor_homepage');
+        /* ----- Contact count checking ---------------    */
+        $permissionObj = new FgPermissions($this->container);   
+        $result['contactCreationPermission'] = ($contact) ? 1 :$permissionObj ->checkContactCount(1);
+        $result['popupData'] = $this->renderView('CommonUtilityBundle:Permissionpopup:contactcreationwarningpopup.html.twig',array('redirectPath' => $redirectPath));
+         /* ----- Contact count checking end---------------    */
         if ($request->getMethod() == 'POST' && isset($formValues)) {
             $fieldType = $formValues['system']['contactType'];
             $mainContactId = $request->request->get('mainContactId', '');
@@ -81,6 +89,7 @@ class DefaultController extends ParentController
         } else {
             $formValues = false;
             $fieldType = 'Single person';
+            $result['newContact'] = 0;
             if ($contact) {
                 //handle edit
                 $editData = $this->getEditData($request, $contact, $module);
@@ -99,7 +108,7 @@ class DefaultController extends ParentController
         // To keep membership id if membership category drop down is disabled
         $selectedMembership['club'] = ($contact && $editData[0]['created_club_id'] != $this->clubId && in_array($this->clubType, array('federation', 'sub_federation'))) ? $editData[0]['club_membership_cat_id'] : $formValues['system']['membership'];
         $selectedMembership['fed'] = ($contact && $editData[0]['created_club_id'] != $this->clubId && in_array($this->clubType, array('federation', 'sub_federation'))) ? $editData[0]['fed_membership_cat_id'] : $formValues['system']['fedMembership'];
-        $moduleType = $this->get('club')->get('moduleMenu');
+        
         $result['breadCrumb'] = array('breadcrumb_data' => array(), 'back' => ($moduleType === 'sponsor') ? $this->generateUrl('clubadmin_sponsor_homepage') : (($moduleType == 'archivedsponsor') ? $this->generateUrl('view_archived_sponsors') : (($moduleType === 'contactarchive') ? $this->generateUrl('archive_index') : $this->generateUrl('contact_index'))));
         //get club details as array
         $clubIdArray = $this->getClubArray();
@@ -204,7 +213,7 @@ class DefaultController extends ParentController
             $result['contactType'] = ($editData[0]['is_company'] == 1) ? 'Company' : 'Single person';
             $result['isSwitchable'] = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->isContactSwitchable($contact) ? 1 : 0;
         }
-
+        
         return $this->render('ClubadminContactBundle:Default:createContact.html.twig', $result);
     }
 

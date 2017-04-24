@@ -1,0 +1,305 @@
+extends _helpers/theme-02/layout.jade
+
+block vars
+  - var bodyClass = 'fg-web-theme-02 fg-header-sticky';  
+  - var bodyStyles = 'background:url("https://www.clipartsgram.com/image/1702162501-background-debut-webdesign-web-sujet-website.jpg") no-repeat; background-size:cover; ';  
+  - var headerClass = 'header-bg-full-width ';
+block title
+    title Article Title
+
+block page-level-library-css      
+      link(href='https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css', rel='stylesheet', media='screen')
+      link(href='https://cdn.datatables.net/responsive/2.1.0/css/responsive.dataTables.min.css', rel='stylesheet', media='screen')
+block page-level-header
+      link(href='../../css/fg-web-theme-02.css', rel='stylesheet', media='screen')
+      link(href='../theme-based-styles/theme-02-color-schemes.css', rel='stylesheet', media='screen')
+      link(href='../theme-based-styles/theme-02-config.css', rel='stylesheet', media='screen')
+block header
+    .row.fg-web-top-nav-wrapper
+        .container
+            .FR
+                ul.fg-web-top-nav-links.list-inline
+                    li
+                        a(href='#') FAQ
+                    li
+                        a(href='#') Contact
+                    li
+                        a(href='#') Map
+                .fg-web-top-nav-languages
+                    .fg-current-language 
+                        a(href="#" data-toggle='dropdown', role='navigation', aria-expanded='false') EN
+                    ul.dropdown-menu.pull-right.fg-web-language-list
+                        li.active 
+                          a(href="javascript:void(0)") EN
+                        li
+                          a(href="javascript:void(0)") RU
+                        li
+                          a(href="javascript:void(0)") DE
+                        li
+                          a(href="javascript:void(0)") CH
+
+    .row.fg-web-header-content
+        figure.fg-header-bg
+          img(src="http://www.romantic-escapes.co.uk/wp-content/uploads/2015/02/city-breaks-slider.jpg").fg-width-P
+        .fg-logo-wrapper.fg-logo-center
+            
+            a(href='#').fg-logo
+              img(src="http://www.fauchard.org/system/ckeditor_assets/pictures/101/content_pfa_portrait_logo-300print.jpg")
+        .container
+            .clearfix
+            .fg-navbar-container
+                .fg-web-nav-icon
+                    span
+
+                nav.navbar.navbar-default.fg-web-main-nav
+                    ul.nav.navbar-nav
+                        li.active                                    
+                            a(href='#') Home     
+                        li
+                            a(href='#') Club
+                        li
+                            a(href='#') Teams
+                        li
+                            a(href='#') News
+                        li.dropdown
+                            a(href='#')
+                                | Photos 
+                            span.fg-dropdown-toggle.material-icons(data-toggle='dropdown', role='navigation', aria-expanded='false') keyboard_arrow_right
+                            ul.dropdown-menu
+                                li
+                                    a(href='#') Second level menu
+                                li
+                                    a(href='#') Second level menu
+                                li.dropdown
+                                    a(href='#')
+                                        | Second level Dropdown Second level Dropdown 
+                                    span.material-icons.fg-dropdown-toggle(data-toggle='dropdown', role='navigation', aria-expanded='false') keyboard_arrow_right
+                                    ul.dropdown-menu.fg-web-open-right
+                                        li
+                                            a(href='#') Third level menu
+                                        li
+                                            a(href='#') Third level menu
+
+                                        li.dropdown
+                                            a(href='#')
+                                                | Third level Dropdown 
+                                            span.material-icons.fg-dropdown-toggle(data-toggle='dropdown', role='navigation', aria-expanded='false') keyboard_arrow_right
+                                            ul.dropdown-menu.fg-web-open-left
+                                                li
+                                                    a(href='#') Fourth level menu
+                                                li
+                                                    a(href='#') Fourth level menu
+                                                li
+                                                    a(href='#') Fourth level menu
+                                                li
+                                                    a(href='#') Fourth level menu
+                                        li
+                                            a(href='#') Third level menu
+                                li
+                                    a(href='#') Second level menu
+                                li
+                                    a(href='#') Second level menu
+                  
+                        li
+                            a(href='#') Contact
+                .fg-additional-nav
+                    .fg-web-top-nav-languages
+                        .fg-current-language 
+                            a(href="javascript:void(0)" data-toggle='dropdown', role='navigation', aria-expanded='false') EN
+                        ul.dropdown-menu.fg-web-language-list
+                            li.active 
+                              a(href="javascript:void(0)") EN
+                            li
+                              a(href="javascript:void(0)") RU
+                            li
+                              a(href="javascript:void(0)") DE
+                            li
+                              a(href="javascript:void(0)") CH
+                    .fg-web-top-nav-links.active
+                        a(href="javascript:void(0)" data-toggle='dropdown', role='navigation', aria-expanded='false') 
+                            i.material-icons more_vert
+                        ul.dropdown-menu
+                          li
+                              a(href='#') FAQ
+                          li
+                              a(href='#') Contact
+                          li
+                              a(href='#') Map
+                    
+block content
+
+        .fg-web-page-title-bar.row.has-close-btn.has-breadcrumbs
+            .container
+              .fg-web-titlebar-left-col.pull-left.has-breadcrumb
+                .fg-web-page-title-block.fg-breadcrumb-block
+                  ul.fg-breadcrumbs
+                    li#fg-cms-ws-bc-1
+                      a#fg-cms-ws-bc-anchor-1(href='javascript:void(0);') Gallery 01
+                    li#fg-cms-ws-bc-2
+                      a#fg-cms-ws-bc-anchor-2(href='javascript:void(0);') Club
+                .fg-titlebar-block.fg-web-page-title-block
+                  h1.fg-web-page-title My fav
+
+              .fg-web-titlebar-right-col.pull-right
+                .fg-titlebar-block.fg-icon-bg.fg-page-prev.hidden-xs.fg-disabled-link
+                  a.fg-page-prev-link(href='javascript:void(0)')
+                    i.fg-icon
+                .fg-titlebar-block.fg-icon-bg.fg-page-close
+                  a.fg-page-close-link(href='/sebin/article')
+                    i.fg-icon
+                .fg-titlebar-block.fg-icon-bg.fg-page-next.hidden-xs.fg-disabled-link
+                  a.fg-page-next-link(href='javascript:void(0)')
+                    i.fg-icon
+              .fg-web-titlebar-right-col.pull-right.fg-web-title-filter-wrapper
+              .clearfix
+
+
+        
+        .container
+            .row.fg-web-page-container
+                .fg-article-detail-wrapper.fg-layout3
+                    .col-md-12.fg-article-contents
+                      .col-sm-3.left-col.pull-left.fg-pad-left-0.fg-marg-btm-10
+                        figure.fg-article-thumb-wrapper.fg-marg-btm-10
+                          img(src='https://placeimg.com/300/180/tech')
+                          figcaption
+                        figure.fg-article-thumb-wrapper.fg-marg-btm-10
+                          img(src='https://placeimg.com/300/180/arch')
+                          figcaption.fg-marg-top-5 Fig.2 - A view of the pulpit rock in Norway.
+                      p.fg-FS-15.strong
+                        | Martin „Tinu“ Prachar, der erfahrene Abwehr-Spezialist und Kreisläufer des BSV Bern Muri, wechselt zum HSC Suhr Aarau. Er erhält einen Jahresvertrag mit beidseitiger Option.
+                      p
+                        | Ich freue mich auf Tinu, er wird unser Abwehrzentrum mit seiner Grösse, seiner Kraft und seiner Erfahrung massiv verstärken“, sagt Markus Jud, der Cheftrainer des HSC Suhr Aarau zum Transfer des ambitionierten B-Ligisten, der in der Saison 2015/16 den sofortigen und direkten Wiederaufstieg in die NLA anpeilt.
+                      p
+                        | Der ehemalige tschechische Nationalspieler (45 Einsätze) Martin Prachar (35) imponiert mit seinem Gardemass von 2.04 Metern und seinem Gewicht von 115 kg. Aber auch mit seiner grossen Routine macht er jede Abwehr zu einem schwer überwindbaren Bollwerk. Seine langjährige Erfahrung holte er sich während vielen Jahren in den höchsten Ligen Tschechiens, Spaniens, Rumäniens, Dänemarks und der Schweiz sowie auch in internationalen Wettbewerben wie der Champions League und dem EHF Cup. Zuletzt war er während vier Saisons beim BSV Bern Muri im Einsatz. Ricebean black-eyed pea maize scallion green bean spinach cabbage jicama bell pepper carrot onion corn plantain garbanzo. Winter purslane courgette pumpkin quandong komatsuna fennel green bean cucumber watercress. Parsley amaranth tigernut silver beet maize fennel spinach. Ricebean black-eyed pea maize scallion green bean spinach cabbage jicama bell pepper carrot onion corn plantain garbanzo.
+                      p
+                        | Der ehemalige tschechische Nationalspieler (45 Einsätze) Martin Prachar (35) imponiert mit seinem Gardemass von 2.04 Metern und seinem Gewicht von 115 kg. Aber auch mit seiner grossen Routine macht er jede Abwehr zu einem schwer überwindbaren Bollwerk. Seine langjährige Erfahrung holte er sich während vielen Jahren in den höchsten Ligen Tschechiens, Spaniens, Rumäniens, Dänemarks und der Schweiz sowie auch in internationalen Wettbewerben wie der Champions League und dem EHF Cup. Zuletzt war er während vier Saisons beim BSV Bern Muri im Einsatz. Ricebean black-eyed pea maize scallion green bean spinach cabbage jicama bell pepper carrot onion corn plantain garbanzo. Winter purslane courgette pumpkin quandong komatsuna fennel green bean cucumber watercress. Parsley amaranth tigernut silver beet maize fennel spinach. Ricebean black-eyed pea maize scallion green bean spinach cabbage jicama bell pepper carrot onion corn plantain garbanzo.
+
+                    
+                    .col-md-12.fg-article-details-block
+                        .fg-article-details-block-top.fg-clear
+                            .fg-left.col-sm-6
+                                .fg-dis-IB By   DANIEL SCHWERI
+                                .fg-dis-IB on 25.07.2013 18:51
+                            .fg-right.col-sm-6
+                                .fg-cat-tags.text-right
+                                    span.fg-club-tag(style="background:#CDDC39")  Club
+                                    span.fg-club-tag(style="background:#FF9800")  Team A
+                                    span.fg-club-tag(style="background:#009688")  Top news
+                                    span.fg-cat-tag Trending
+                                    span.fg-cat-tag  Article
+                        .fg-article-details-block-bottom
+                            h5.fg-title ATTACHMENTS
+                            ul.no-style.fg-attachments
+                              li
+                                a(href='#') document1.docx
+                                span.fg-size (120 KB)
+                              li
+                                a(href='#') document2.docx
+                                span.fg-size (620 KB)
+                    .clearfix
+                    .fg-page-nav-wrapper.fg-clear
+                          .col-sm-4
+                              .fg-nav.fg-page-prev
+                                  .fg-dis-IB.fg-icon-wrapper
+                                      i.fg-icon.material-icons keyboard_arrow_left
+                                  .fg-dis-IB.fg-text-wrapper
+                                      .fg-btn-title previous article
+                                      h5.fg-target-page-title Der ehemalige tschechische Nationalspieler
+                          .col-sm-4
+                              .fg-nav.fg-page-back
+                                  .fg-dis-IB.fg-icon-wrapper
+                                      i.fg-icon.material-icons keyboard_arrow_up
+                                  .fg-dis-IB.fg-text-wrapper
+                                      .fg-btn-title back to overview
+                                      h5.fg-target-page-title Tschechische 
+                          .col-sm-4
+                              .fg-nav.fg-page-next
+                                  .fg-dis-IB.fg-text-wrapper
+                                      .fg-btn-title next article
+                                      h5.fg-target-page-title  Nationalspieler
+                                  .fg-dis-IB.fg-icon-wrapper
+                                      i.fg-icon.material-icons keyboard_arrow_right
+                    .col-md-12
+                      .fg-web-article-comments-wrapper
+                          h2.fg-title.text-center COMMENTS (4)
+                          ul.fg-web-article-comments-list  
+                            li.fg-web-article-comment-block
+                                .fg-avatar
+                                    img(src="https://placeholdit.imgix.net/~text?txtsize=33&&w=55&h=55")
+                                .fg-content-wrapper
+                                    .fg-comment-details
+                                        p 
+                                          strong.fg-author Tobias nafzagar 
+                                          | on 25.07.2013 18:51
+                                    .fg-comment  
+                                      p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                                      p Caulie dandelion maize lentil collard greens radish arugula sweet pepper water spinach kombu courgette lettuce.
+                            li.fg-web-article-comment-block
+                                .fg-avatar
+                                    img(src="https://placeholdit.imgix.net/~text?txtsize=33&&w=55&h=55")
+                                .fg-content-wrapper
+                                    .fg-comment-details
+                                        p 
+                                          strong.fg-author Tobias nafzagar 
+                                          | on 25.07.2013 18:51
+                                    .fg-comment  
+                                      p Artichoke salad bamboo shoot black-eyed pea brussels sprout garlic kohlrabi purslane collard greens spring onion squash lentil.
+                                      p Caulie dandelion maize lentil collard greens radish arugula sweet pepper water spinach kombu courgette lettuce.
+                            li.fg-web-article-comment-block
+                                .fg-avatar
+                                    img(src="https://placeholdit.imgix.net/~text?txtsize=33&&w=55&h=55")
+                                .fg-content-wrapper
+                                    .fg-comment-details
+                                        p 
+                                          strong.fg-author Tobias nafzagar 
+                                          | on 25.07.2013 18:51
+                                    .fg-comment  
+                                        form.fg-post-new-comment
+                                            textarea#editor1.ckeditor(cols='80', name='editor1', rows='10')
+                                            .fg-button
+                                                  button#singlebutton.btn.btn-primary.fg-submit(name='singlebutton') SUBMIT
+                
+block page-level-footer
+    script(src='https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js')
+    script(src='https://cdn.datatables.net/responsive/2.1.0/js/dataTables.responsive.min.js')
+    script(src='.././../js/fg-website-02.js')
+    script.
+      jQuery(document).ready(function () {
+            $("select").selectpicker();
+            window.DT=  $('#example').DataTable({
+                  dom: "<'col-md-12't><'col-md-12'p>",
+                  "autoWidth": false,
+                  scrollX: true,
+                  language: {
+                      paginate: {
+                          "next": '<i class="fa fa-angle-right"></i>',
+                          "previous": '<i class="fa fa-angle-left"></i>'
+                      }
+                  },
+                  
+            });
+
+            $('.dataTable tbody').on( 'mouseover', 'tr', function () {
+                $(this).addClass('fg-hover');
+            } );
+
+            $('.dataTable tbody').on( 'mouseout', 'tr', function () {
+                $(this).removeClass('fg-hover');
+            } );
+            $(window).resize(function(){
+                DT.columns.adjust().draw();
+            });
+            /*------------------------------------------------
+            Navigation actions
+            -------------------------------------------------*/
+            $('.fg-web-nav-icon').on('click',function(){
+                var $this = $(this)
+                var $navIcon =  $this;
+                var $navContainer = $navIcon.siblings('.fg-web-main-nav');
+                $navIcon.toggleClass('active');
+                $navContainer.toggleClass('active');
+            });
+            fgwebsite = 'ss';
+            FgWebsiteThemeObj = new FgWebsiteTheme();
+      });

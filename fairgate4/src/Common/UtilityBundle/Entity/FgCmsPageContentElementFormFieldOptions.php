@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPageContentElementFormFieldOptions
  */
@@ -43,7 +41,7 @@ class FgCmsPageContentElementFormFieldOptions
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -54,19 +52,20 @@ class FgCmsPageContentElementFormFieldOptions
      * Set isActive
      *
      * @param boolean $isActive
+     *
      * @return FgCmsPageContentElementFormFieldOptions
      */
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
-    
+
         return $this;
     }
 
     /**
      * Get isActive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsActive()
     {
@@ -77,19 +76,20 @@ class FgCmsPageContentElementFormFieldOptions
      * Set selectionValueName
      *
      * @param string $selectionValueName
+     *
      * @return FgCmsPageContentElementFormFieldOptions
      */
     public function setSelectionValueName($selectionValueName)
     {
         $this->selectionValueName = $selectionValueName;
-    
+
         return $this;
     }
 
     /**
      * Get selectionValueName
      *
-     * @return string 
+     * @return string
      */
     public function getSelectionValueName()
     {
@@ -100,19 +100,20 @@ class FgCmsPageContentElementFormFieldOptions
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgCmsPageContentElementFormFieldOptions
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -123,19 +124,20 @@ class FgCmsPageContentElementFormFieldOptions
      * Set isDeleted
      *
      * @param boolean $isDeleted
+     *
      * @return FgCmsPageContentElementFormFieldOptions
      */
     public function setIsDeleted($isDeleted)
     {
         $this->isDeleted = $isDeleted;
-    
+
         return $this;
     }
 
     /**
      * Get isDeleted
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsDeleted()
     {
@@ -146,22 +148,24 @@ class FgCmsPageContentElementFormFieldOptions
      * Set field
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPageContentElementFormFields $field
+     *
      * @return FgCmsPageContentElementFormFieldOptions
      */
     public function setField(\Common\UtilityBundle\Entity\FgCmsPageContentElementFormFields $field = null)
     {
         $this->field = $field;
-    
+
         return $this;
     }
 
     /**
      * Get field
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPageContentElementFormFields 
+     * @return \Common\UtilityBundle\Entity\FgCmsPageContentElementFormFields
      */
     public function getField()
     {
         return $this->field;
     }
 }
+

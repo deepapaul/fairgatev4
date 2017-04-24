@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgTeamCategory
  */
@@ -38,7 +36,6 @@ class FgTeamCategory
     public function getId()
     {
         return $this->id;
-
     }
 
     /**
@@ -53,9 +50,7 @@ class FgTeamCategory
         $this->title = $title;
 
         return $this;
-
     }
-
 
     /**
      * Get title
@@ -65,9 +60,7 @@ class FgTeamCategory
     public function getTitle()
     {
         return $this->title;
-
     }
-
 
     /**
      * Set sortOrder
@@ -81,9 +74,7 @@ class FgTeamCategory
         $this->sortOrder = $sortOrder;
 
         return $this;
-
     }
-
 
     /**
      * Get sortOrder
@@ -93,9 +84,7 @@ class FgTeamCategory
     public function getSortOrder()
     {
         return $this->sortOrder;
-
     }
-
 
     /**
      * Set club
@@ -109,9 +98,7 @@ class FgTeamCategory
         $this->club = $club;
 
         return $this;
-
     }
-
 
     /**
      * Get club
@@ -121,8 +108,6 @@ class FgTeamCategory
     public function getClub()
     {
         return $this->club;
-
     }
-
-
 }
+

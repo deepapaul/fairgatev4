@@ -14,11 +14,12 @@ namespace Clubadmin\CommunicationBundle\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Common\UtilityBundle\Controller\FgController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Intl\Intl;
 use Clubadmin\Util\Contactlist;
 use Common\UtilityBundle\Util\FgUtility;
 use Clubadmin\ContactBundle\Util\FgRecepientEmailValidator;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Intl;
+use Common\UtilityBundle\Util\FgClubSyncDataToAdmin;
 
 class SubscriberController extends FgController
 {
@@ -237,6 +238,9 @@ class SubscriberController extends FgController
                         $redirect = $this->generateUrl('subscriber_list');
                     }
 
+                    $subscriberSyncObject = new FgClubSyncDataToAdmin($this->container);
+                    $subscriberSyncObject->updateSubscriberCount($this->clubId);
+                    
                     return new JsonResponse(array('status' => 'SUCCESS', 'sync' => 1, 'redirect' => $redirect, 'flash' => $this->get('translator')->trans('SUBSCRIBER_SAVED')));
                 } else {
                     $isError = 1;

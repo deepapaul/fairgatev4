@@ -439,6 +439,8 @@ FgModelbox = {
  * XmlHttp wrapper class
  */
 FgXmlHttp = {    
+    isRequestRunning: false,
+    isDisabled:true,
     //function added to focus to error element if exists or to common form error on failing validation
     scrollToErrorDiv: function(element) {
         var focusPos = 100;
@@ -460,6 +462,12 @@ FgXmlHttp = {
     
     //wrapper function $.post()
     post: function(url, data, replacediv, successCallback, failCallback, isReplaceContent) {
+        $('.fg-dev-btnsave').prop('disabled', true);
+        if(FgXmlHttp.isRequestRunning){
+           return;
+        } 
+        FgXmlHttp.isRequestRunning = true;
+        
         if (!isReplaceContent)
             isReplaceContent = 1;
         var rand = Math.random();
@@ -482,14 +490,21 @@ FgXmlHttp = {
                             FgInternal.showToastr(result.flash);
                         }
                         if (successCallback && !result.errorArray) {
+                            FgXmlHttp.isRequestRunning = false;
                             successCallback.call({}, result);
                         }
                         if (failCallback) {
+                            FgXmlHttp.isRequestRunning = false;
                             failCallback.call({}, result);
                         }
                     } else {
                         FgXmlHttp.replaceContentFromUrl(document.location.href, result.flash, successCallback, result);
                     }
+                    FgXmlHttp.isRequestRunning = false;
+                    if(FgXmlHttp.isDisabled==true){
+                         $('.fg-dev-btnsave').prop('disabled', false);
+                    }
+                   
                 }
 
             } else {
@@ -501,14 +516,18 @@ FgXmlHttp = {
                     }
                 }
                 if (successCallback && !result.errorArray) {
+                    FgXmlHttp.isRequestRunning = false;
                     successCallback.call({}, result);
                 }
                 if (failCallback) {
+                    FgXmlHttp.isRequestRunning = false;
                     failCallback.call({}, result);
                 }
 //                scroll to top common form error alert on failing validation
                 FgXmlHttp.scrollToErrorDiv();
                 Metronic.stopPageLoading();
+                FgXmlHttp.isRequestRunning = false;
+                $('.fg-dev-btnsave').prop('disabled', false);
             }
         });
         // return false;
@@ -516,7 +535,15 @@ FgXmlHttp = {
     
     //wrapper function $.post() with file upload
     iframepost: function(url, form, extradata, replacediv, sucessCallback, failCallback) {
+      
+        $('.fg-dev-btnsave').prop('disabled', true);
         Metronic.startPageLoading();
+       
+        if(FgXmlHttp.isRequestRunning){
+           return;
+        } 
+        FgXmlHttp.isRequestRunning = true;
+        
         if (extradata)
             extradata.layout = false;
         else
@@ -561,7 +588,11 @@ FgXmlHttp = {
                         $('#fg-wrapper').html(responseText);                        
                     }
                     if (failCallback)
-                        failCallback.call({}, responseText);
+                    {
+                        FgXmlHttp.isRequestRunning = false;
+                         failCallback.call({}, responseText);
+                    }
+                       
                     if (form.attr('data-scrollToFirstError')) {
 //                      scroll to first form error on failing validation (currently implemented only for create/edit contact by passing form attribute)
                         FgXmlHttp.scrollToErrorDiv('.has-error:eq(0):visible');
@@ -569,6 +600,7 @@ FgXmlHttp = {
 //                      scroll to top common form error alert on failing validation
                         FgXmlHttp.scrollToErrorDiv();
                     }
+                    FgXmlHttp.isRequestRunning = false;
                 }
             },
             url: url,
@@ -581,8 +613,16 @@ FgXmlHttp = {
     
     //post form with files
     formPost: function(paramObj) {
+       
+        $('.fg-dev-btnsave').prop('disabled', true);
         if (paramObj.form && paramObj.url) {
             Metronic.startPageLoading();
+           
+            if(FgXmlHttp.isRequestRunning){
+               return;
+            } 
+            FgXmlHttp.isRequestRunning = true;
+                      
             if (paramObj.extradata) {
                 paramObj.extradata.layout = false;
             } else {
@@ -620,6 +660,7 @@ FgXmlHttp = {
 
                         }
                         else if (obj.noreload) {
+                            FgXmlHttp.isRequestRunning = false;
                             if (obj.flash)
                                 FgInternal.showToastr(obj.flash);
                         }
@@ -627,6 +668,7 @@ FgXmlHttp = {
                             FgXmlHttp.replaceContentFromUrl(document.location.href, obj.flash, paramObj.sucessCallback, false, obj);
                         }
                     } else {
+                        FgXmlHttp.isRequestRunning = false;
                         if (paramObj.replacediv) {
                             $(paramObj.replacediv).html(responseText);
                         } else {
@@ -636,6 +678,7 @@ FgXmlHttp = {
                         FgXmlHttp.scrollToErrorDiv();
                     }
                     if (paramObj.successCallback) {
+                        FgXmlHttp.isRequestRunning = false;
                         if (paramObj.successParam) {
                             paramObj.successParam.responseText = responseText;
                         }
@@ -645,14 +688,18 @@ FgXmlHttp = {
                         paramObj.successCallback.call(this, paramObj.successParam);
                     }
                     if (paramObj.failCallback) {
+                        FgXmlHttp.isRequestRunning = false;
                         paramObj.failCallback.call({}, responseText);
                     }
                     Metronic.stopPageLoading();
+                    FgXmlHttp.isRequestRunning = false;
                 },
                 error: function(data) {
                     if (paramObj.failCallback) {
+                        FgXmlHttp.isRequestRunning = false;
                         paramObj.failCallback.call({}, responseText);
                     }
+                    FgXmlHttp.isRequestRunning = false;
                 }
             });
         }
@@ -666,6 +713,7 @@ FgXmlHttp = {
             }, /* FiX - to avoid reloading flash message from url*/
             success: function(data) {
                 Metronic.stopPageLoading();
+                FgXmlHttp.isRequestRunning = false;
                 $('#fg-wrapper').html(data);
                 //FgApp.init();
                 if (flashmsg)

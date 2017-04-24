@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnNewsletterLog
  */
@@ -69,6 +67,7 @@ class FgCnNewsletterLog
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return FgCnNewsletterLog
      */
     public function setDate($date)
@@ -92,6 +91,7 @@ class FgCnNewsletterLog
      * Set subject
      *
      * @param string $subject
+     *
      * @return FgCnNewsletterLog
      */
     public function setSubject($subject)
@@ -115,6 +115,7 @@ class FgCnNewsletterLog
      * Set template
      *
      * @param string $template
+     *
      * @return FgCnNewsletterLog
      */
     public function setTemplate($template)
@@ -138,6 +139,7 @@ class FgCnNewsletterLog
      * Set newsletterType
      *
      * @param string $newsletterType
+     *
      * @return FgCnNewsletterLog
      */
     public function setNewsletterType($newsletterType)
@@ -161,6 +163,7 @@ class FgCnNewsletterLog
      * Set recepients
      *
      * @param integer $recepients
+     *
      * @return FgCnNewsletterLog
      */
     public function setRecepients($recepients)
@@ -184,6 +187,7 @@ class FgCnNewsletterLog
      * Set newsletter
      *
      * @param \Common\UtilityBundle\Entity\FgCnNewsletter $newsletter
+     *
      * @return FgCnNewsletterLog
      */
     public function setNewsletter(\Common\UtilityBundle\Entity\FgCnNewsletter $newsletter = null)
@@ -207,6 +211,7 @@ class FgCnNewsletterLog
      * Set sentBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $sentBy
+     *
      * @return FgCnNewsletterLog
      */
     public function setSentBy(\Common\UtilityBundle\Entity\FgCmContact $sentBy = null)
@@ -230,6 +235,7 @@ class FgCnNewsletterLog
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCnNewsletterLog
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
@@ -249,3 +255,4 @@ class FgCnNewsletterLog
         return $this->club;
     }
 }
+

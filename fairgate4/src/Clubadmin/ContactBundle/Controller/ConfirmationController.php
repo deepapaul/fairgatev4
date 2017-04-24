@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Confirmation Controller
  *
@@ -11,7 +10,6 @@
  * @version    Fairgate V4
  *
  */
-
 namespace Clubadmin\ContactBundle\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,13 +24,18 @@ use Common\UtilityBundle\Util\FgFedMemberships;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Common\UtilityBundle\Repository\Pdo\ContactPdo;
 use Common\UtilityBundle\Repository\Pdo\membershipPdo;
+use Admin\UtilityBundle\Classes\SyncFgadmin;
+use Common\UtilityBundle\Util\FgClubSyncDataToAdmin;
+use Common\UtilityBundle\Util\FgContactSyncDataToAdmin;
+use Common\UtilityBundle\Util\FgPermissions;
 
 /**
  * Confirmation Controller
  *
  * This controller is used for handling changes to be confirmed.
  */
-class ConfirmationController extends ParentController {
+class ConfirmationController extends ParentController
+{
 
     /**
      * This action is used for listing changes to be confirmed.
@@ -43,7 +46,8 @@ class ConfirmationController extends ParentController {
      *
      * @return array Data array.
      */
-    public function confirmationChangesAction($type) {
+    public function confirmationChangesAction($type)
+    {
         $changesCount = $this->em->getRepository('CommonUtilityBundle:FgCmChangeToconfirm')->getChangesToConfirmCount($this->clubId);
         $countryFields = $this->container->getParameter('country_fields');
         $countryList = FgUtility::getCountryList();
@@ -66,7 +70,8 @@ class ConfirmationController extends ParentController {
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse Changes to be confirmed
      */
-    public function listChangesToConfirmAction(Request $request) {
+    public function listChangesToConfirmAction(Request $request)
+    {
         $totalChanges = $request->get('changesCount');
         $changesToConfirm = $this->em->getRepository('CommonUtilityBundle:FgCmChangeToconfirm')->getChangesToConfirm($this->clubId, $this->container, $this->get('club'), $this->contactId);
         $return['aaData'] = $changesToConfirm;
@@ -83,7 +88,8 @@ class ConfirmationController extends ParentController {
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse Confirmation log
      */
-    public function listConfirmationLogAction(Request $request) {
+    public function listConfirmationLogAction(Request $request)
+    {
         $order = $request->get('order');
         $columns = $request->get('columns');
         $orderAs = $order[0]['dir'];
@@ -109,7 +115,8 @@ class ConfirmationController extends ParentController {
      *
      * @return array Data array.
      */
-    public function confirmOrDiscardChangesAction(Request $request, $action) {
+    public function confirmOrDiscardChangesAction(Request $request, $action)
+    {
         $actionType = $request->get('actionType');
         $selActionType = $request->get('selActionType') ? $request->get('selActionType') : '';
         $return = array('actionType' => $actionType, 'selActionType' => $selActionType, 'action' => $action);
@@ -124,12 +131,18 @@ class ConfirmationController extends ParentController {
      *
      * @return JsonResponse Confirmed/Discarded status
      */
-    public function doConfirmOrDiscardAction(Request $request) {
+    public function doConfirmOrDiscardAction(Request $request)
+    {
         $action = $request->get('action');
         $selectedIds = json_decode($request->get('selectedId', '0'));
         $clubIdArray = $this->getClubArray();
         $confirmSuccess = $this->em->getRepository('CommonUtilityBundle:FgCmChangeToconfirm')->confirmOrDiscardChanges($action, $this->clubId, $selectedIds, $this->container, $this->clubDefaultSystemLang, $this->get('club'), $this->contactId, $clubIdArray, $this->get('fairgate_terminology_service'));
         $flashMsg = ($action == 'confirm') ? '%selcount%_OUT_OF_%totalcount%_CHANGES_CONFIRMED_SUCCESSFULLY' : '%selcount%_OUT_OF_%totalcount%_CHANGES_DISCARDED_SUCCESSFULLY';
+
+        /** Update the subscriber count * */
+        $subscriberSyncObject = new FgClubSyncDataToAdmin($this->container);
+        $subscriberSyncObject->updateSubscriberCount($this->clubId);
+        /*         * ******************************************** */
 
         return new JsonResponse(array('status' => 'SUCCESS', 'flash' => $this->container->get('translator')->trans($flashMsg, array('%selcount%' => $confirmSuccess['successCount'], '%totalcount%' => $confirmSuccess['totalContacts']))));
     }
@@ -139,7 +152,8 @@ class ConfirmationController extends ParentController {
      *
      * @return type array
      */
-    private function getClubArray() {
+    private function getClubArray()
+    {
         $container = $this->container->getParameterBag();
         $clubIdArray = array('clubId' => $this->clubId,
             'federationId' => $this->federationId,
@@ -162,7 +176,8 @@ class ConfirmationController extends ParentController {
      *
      * @return array Data array.
      */
-    public function mutationsListAction() {
+    public function mutationsListAction()
+    {
         $confirmationsCount = $this->em->getRepository('CommonUtilityBundle:FgCmChangeToconfirm')->getConfirmationsCount($this->clubId, 'mutation');
         $logTabs = array(1 => 'list', 2 => 'log');
         $tabs = array(0 => 'mutations_tab',
@@ -182,7 +197,8 @@ class ConfirmationController extends ParentController {
      *
      * @return array Data array.
      */
-    public function creationsListAction() {
+    public function creationsListAction()
+    {
         $confirmationsCount = $this->em->getRepository('CommonUtilityBundle:FgCmChangeToconfirm')->getConfirmationsCount($this->clubId, 'creation');
         $logTabs = array(1 => 'list', 2 => 'log');
         $tabs = array(0 => 'creations_tab',
@@ -202,7 +218,8 @@ class ConfirmationController extends ParentController {
      *
      * @return JsonResponse
      */
-    public function getMutationsAction($type) {
+    public function getMutationsAction($type)
+    {
         if ($type == 'list') {
             $mutationsToConfirm = $this->em->getRepository('CommonUtilityBundle:FgCmChangeToconfirm')->getAssignmentsToConfirm($this->clubId, $this->container, 'mutation');
             $return['aaData'] = $mutationsToConfirm;
@@ -221,7 +238,8 @@ class ConfirmationController extends ParentController {
      *
      * @return JsonResponse
      */
-    public function getCreationsAction($type) {
+    public function getCreationsAction($type)
+    {
         if ($type == 'list') {
             $creationsToConfirm = $this->em->getRepository('CommonUtilityBundle:FgCmChangeToconfirm')->getAssignmentsToConfirm($this->clubId, $this->container, 'creation');
             $return['aaData'] = $creationsToConfirm;
@@ -247,51 +265,59 @@ class ConfirmationController extends ParentController {
      *
      * @return array Data array.
      */
-    public function confirmOrDiscardConfirmationPopupAction(Request $request, $page, $action) {
+    public function confirmOrDiscardConfirmationPopupAction(Request $request, $page, $action)
+    {
         $selActionType = $request->get('selActionType') ? $request->get('selActionType') : 'all';
         $clubId = ($this->clubType == 'federation') ? $this->clubId : $this->federationId;
         $return['page'] = $page;
         $return['selActionType'] = $selActionType;
         $return['action'] = $action;
         $return['clubType'] = $this->clubType;
+        $selectedCount = $request->get('count') ? $request->get('count') : 1; 
 
         if ($page == 'creations') {
             if ($action == 'confirm') {
-//                $membersipFields = $this->em->getRepository('CommonUtilityBundle:FgCmMembership')
-//                        ->getMemberships($this->clubType, $this->clubId, $this->subFederationId, $this->federationId);
-                $clubId = ($this->clubType == 'federation') ? $this->clubId : $this->federationId;
-                $transSub = ($this->clubType == 'federation') ? '_FED' : '';
-                $return['header'] = ($selActionType == 'all') ? 'CONFIRMATION_CONFIRM_CREATION_HEADER_ALL' . $transSub : 'CONFIRMATION_CONFIRM_CREATION_HEADER_SELECTED' . $transSub;
-                $return['label'] = ($selActionType == 'all') ? 'CONFIRMATION_CONFIRM_CREATION_LABEL_ALL' . $transSub : 'CONFIRMATION_CONFIRM_CREATION_LABEL_SELECTED' . $transSub;
 
-                $return['clubMembershipAvailable'] = '';
-                if ($this->clubType == 'federation' || $this->clubType == 'sub_federation') {
+                /* ----- Contact count checking ---------------    */
+                $permissionObj = new FgPermissions($this->container);
+                if (!$permissionObj->checkContactCount($selectedCount)) {
+                    $result['redirectPath'] = $this->generateUrl('contact_index');
+                    return $this->render('CommonUtilityBundle:Permissionpopup:contactcreationwarningpopup.html.twig', $result);
+                } else {
+                    $clubId = ($this->clubType == 'federation') ? $this->clubId : $this->federationId;
+                    $transSub = ($this->clubType == 'federation') ? '_FED' : '';
+                    $return['header'] = ($selActionType == 'all') ? 'CONFIRMATION_CONFIRM_CREATION_HEADER_ALL' . $transSub : 'CONFIRMATION_CONFIRM_CREATION_HEADER_SELECTED' . $transSub;
+                    $return['label'] = ($selActionType == 'all') ? 'CONFIRMATION_CONFIRM_CREATION_LABEL_ALL' . $transSub : 'CONFIRMATION_CONFIRM_CREATION_LABEL_SELECTED' . $transSub;
+
                     $return['clubMembershipAvailable'] = '';
-                } elseif ($this->clubType == 'standard_club') {
-                    $return['clubMembershipAvailable'] = 1;
-                } else {
-                    $return['clubMembershipAvailable'] = $this->get('club')->get('clubMembershipAvailable');
-                }
-                $return['fedMembershipMandatory'] = $this->get('club')->get('fedMembershipMandatory');
-                if ($return['fedMembershipMandatory']) {
-                    $memberships['fed'][0] = $this->get('translator')->trans('SELECT_DROPDOWN');
-                } else {
-                    $memberships['fed'][0] = $this->get('translator')->trans('NO_FED_MEMBERSHIP');
-                }
-                $memberships['club'][0] = $this->get('translator')->trans('NO_MEMBERSHIP');
-                $objMembershipPdo = new membershipPdo($this->container);
-                $membersipFields = $objMembershipPdo->getMemberships($this->clubType, $this->clubId, $this->subFederationId, $this->federationId);
-                $clubDefaultLang = $this->get('club')->get('default_lang');
-                foreach ($membersipFields as $key => $memberCat) {
-                    $title = $memberCat['allLanguages'][$clubDefaultLang]['titleLang'] != '' ? $memberCat['allLanguages'][$clubDefaultLang]['titleLang'] : $memberCat['membershipName'];
-                    if (($memberCat['clubId'] == $clubId)) {
-                        $memberships['fed'][$key] = $title;
+                    if ($this->clubType == 'federation' || $this->clubType == 'sub_federation') {
+                        $return['clubMembershipAvailable'] = '';
+                    } elseif ($this->clubType == 'standard_club') {
+                        $return['clubMembershipAvailable'] = 1;
                     } else {
-                        $memberships['club'][$key] = $title;
+                        $return['clubMembershipAvailable'] = $this->get('club')->get('clubMembershipAvailable');
                     }
-                }
+                    $return['fedMembershipMandatory'] = $this->get('club')->get('fedMembershipMandatory');
+                    if ($return['fedMembershipMandatory']) {
+                        $memberships['fed'][0] = $this->get('translator')->trans('SELECT_DROPDOWN');
+                    } else {
+                        $memberships['fed'][0] = $this->get('translator')->trans('NO_FED_MEMBERSHIP');
+                    }
+                    $memberships['club'][0] = $this->get('translator')->trans('NO_MEMBERSHIP');
+                    $objMembershipPdo = new membershipPdo($this->container);
+                    $membersipFields = $objMembershipPdo->getMemberships($this->clubType, $this->clubId, $this->subFederationId, $this->federationId);
+                    $clubDefaultLang = $this->get('club')->get('default_lang');
+                    foreach ($membersipFields as $key => $memberCat) {
+                        $title = $memberCat['allLanguages'][$clubDefaultLang]['titleLang'] != '' ? $memberCat['allLanguages'][$clubDefaultLang]['titleLang'] : $memberCat['membershipName'];
+                        if (($memberCat['clubId'] == $clubId)) {
+                            $memberships['fed'][$key] = $title;
+                        } else {
+                            $memberships['club'][$key] = $title;
+                        }
+                    }
 
-                $return['memberships'] = $memberships;
+                    $return['memberships'] = $memberships;
+                }
             } else {
                 $return['header'] = ($selActionType == 'all') ? 'DISCARD_ALL_CREATIONS' : 'DISCARD_SELECTED_CREATIONS';
                 $return['label'] = ($selActionType == 'all') ? 'DISCARD_ALL_CREATIONS_TEXT' : 'DISCARD_SELECTED_CREATIONS_TEXT';
@@ -320,7 +346,8 @@ class ConfirmationController extends ParentController {
      *
      * @return Json Response.
      */
-    public function updateConfirmationsAction(Request $request) {
+    public function updateConfirmationsAction(Request $request)
+    {
         $action = $request->get('action');
         $page = $request->get('page');
         $selectedIds = json_decode($request->get('selectedId', '0'));
@@ -428,7 +455,7 @@ class ConfirmationController extends ParentController {
                 }
                 if (count($contactDetails)) {
                     $this->em->getRepository('CommonUtilityBundle:FgCmContact')
-                            ->addMemberships($this->container, $contactDetails, $selectedMembership, $memberships, $this->clubId, $this->clubType, $clubHeirarchy, $this->federationId, $noFedMembership);
+                        ->addMemberships($this->container, $contactDetails, $selectedMembership, $memberships, $this->clubId, $this->clubType, $clubHeirarchy, $this->federationId, $noFedMembership);
                 }
             }
             if (count($selectedIds)) {
@@ -437,6 +464,12 @@ class ConfirmationController extends ParentController {
         }
 
         $flashMsg = ($action == 'confirm') ? '%selcount%_OUT_OF_%totalcount%_' . strtoupper($page) . '_CONFIRMED_SUCCESSFULLY' : '%selcount%_OUT_OF_%totalcount%_' . strtoupper($page) . '_DISCARDED_SUCCESSFULLY';
+
+        /** Sync count to the AdminDB * */
+        $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
+        $clubSyncObject->updateSubscriberCount($this->clubId)
+            ->updateActiveContactCount($this->clubId);
+        /*         * ************************************** */
 
         return new JsonResponse(array('status' => 'SUCCESS', 'flash' => $this->container->get('translator')->trans($flashMsg, array('%selcount%' => $successCount, '%totalcount%' => $totCount)), 'noparentload' => false, 'count' => $successCount));
     }
@@ -448,7 +481,8 @@ class ConfirmationController extends ParentController {
      *
      * @return Array
      */
-    private function convertDataToMergableFormat($contactData) {
+    private function convertDataToMergableFormat($contactData)
+    {
         $primaryEmail = $this->container->getParameter('system_field_primaryemail');
         $catCommun = $this->container->getParameter('system_category_communication');
         $catPerson = $this->container->getParameter('system_category_personal');
@@ -473,7 +507,8 @@ class ConfirmationController extends ParentController {
      *
      * @return JsonResponse
      */
-    public function saveConfirmationContactAction(Request $request) {
+    public function saveConfirmationContactAction(Request $request)
+    {
         $contactData = $request->get('contactData', '');
         $mergeTo = $request->get('mergeTo', '');
         $typeMer = $request->get('typeMer', '');
@@ -541,6 +576,13 @@ class ConfirmationController extends ParentController {
                 $status = array('status' => 'SUCCESS', 'totalCount' => $selcount, 'noparentload' => false, 'flash' => $this->get('translator')->trans($flashMsg, array('%totalcount%' => $creationArray['totCount'], '%selcount%' => $selcount)));
             }
         }
+
+        /** Sync count to the AdminDB * */
+        $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
+        $clubSyncObject->updateSubscriberCount($this->clubId)
+            ->updateActiveContactCount($this->clubId);
+        /*         * ************************************** */
+
         return new JsonResponse($status);
     }
 
@@ -549,7 +591,8 @@ class ConfirmationController extends ParentController {
      *
      * @return HTML
      */
-    public function contactDetailAction($contact) {
+    public function contactDetailAction($contact)
+    {
         $countryFields = $this->container->getParameter('country_fields');
         $countryList = FgUtility::getCountryList();
         $languageAttrIds = array($this->container->getParameter('system_field_corress_lang'));
@@ -627,8 +670,9 @@ class ConfirmationController extends ParentController {
      *
      * @return array Application details to list
      */
-    public function applicationConfirmationAction(Request $request) {
-       
+    public function applicationConfirmationAction(Request $request)
+    {
+
         $type = ($request->get('type')) ? $request->get('type') : 'fedMembershipList';
         $withOutApplication = $this->get('club')->get('assignFedmembershipWithApplication') ? false : true;
         if ($this->clubType == 'sub_federation' || $this->clubType == 'standard_club' || $withOutApplication) {
@@ -645,7 +689,8 @@ class ConfirmationController extends ParentController {
      *
      * @return array Fed membership application details
      */
-    private function getFedMembershipApplicationListDetails() {
+    private function getFedMembershipApplicationListDetails()
+    {
         $defaultLang = $this->get('club')->get('default_lang');
         $applicationCount = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->getConfirmApplicationCount($this->federationId, $this->clubType, $this->clubId, $defaultLang, true);
         $logTabs = array(1 => 'list', 2 => 'log');
@@ -664,7 +709,8 @@ class ConfirmationController extends ParentController {
      *
      * @return array Merging application details
      */
-    private function getMergeApplicationListDetails() {
+    private function getMergeApplicationListDetails()
+    {
         $applicationCount = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->getMergeApplicationsCount($this->federationId, $this->clubType, $this->clubId);
         $logTabs = array(1 => 'list', 2 => 'log');
         $tabs = array(0 => 'mergeapplicationqueue',
@@ -684,7 +730,8 @@ class ConfirmationController extends ParentController {
      *
      * @return JsonResponse
      */
-    public function getApplicationsAction($type, $page = 'fedapplication') {
+    public function getApplicationsAction($type, $page = 'fedapplication')
+    {
         $applicationDetails = array();
         $defaultLang = $this->get('club')->get('default_lang');
         if ($type == 'list') {
@@ -719,7 +766,8 @@ class ConfirmationController extends ParentController {
      *
      * @return array Data array.
      */
-    public function confirmOrDiscardApplicationPopupAction(Request $request, $action) {
+    public function confirmOrDiscardApplicationPopupAction(Request $request, $action)
+    {
         $selActionType = $request->get('selActionType') ? $request->get('selActionType') : 'all';
         $clubId = ($this->clubType == 'federation') ? $this->clubId : $this->federationId;
         $return['page'] = $request->get('page') ? $request->get('page') : 'fedapplication';
@@ -740,17 +788,21 @@ class ConfirmationController extends ParentController {
      *
      * @return Json Response.
      */
-    public function updateApplicationAction(Request $request) {
+    public function updateApplicationAction(Request $request)
+    {
         $page = $request->get('page');
         $action = $request->get('action');
         $selectedIds = json_decode($request->get('selectedId', '0'));
         $fedApplication = new FedMemApplication($this->container);
         $successCount = 0;
+        $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
         if ($action == 'discard') {
             foreach ($selectedIds as $confirmId) {
                 $result = $fedApplication->discardFedMembership($confirmId);
                 $successCount++;
             }
+             $clubSyncObject->updateActiveContactCount($this->clubId)
+                 ->updateSubscriberCount($this->clubId);
         } else {
             foreach ($selectedIds as $confirmId) {
                 $result = $fedApplication->confirmFedMembership($confirmId);
@@ -758,7 +810,17 @@ class ConfirmationController extends ParentController {
                     $successCount++;
                 }
             }
+            /** Sync Fed member count to the AdminDB * */
+            $fgAdmin = new SyncFgadmin($this->container);
+            $fgAdmin->syncFedMemberCount();
+
+            /** Sync count to the AdminDB * */
+           
+            $clubSyncObject->updateSubscriberCount($this->clubId)
+                ->updateActiveContactCount($this->clubId);
+            /*             * ************************************** */
         }
+
         if ($action == 'confirm') {
             $flashMsg = (count($selectedIds) == $result) ? 'APPLICATION_CONFIRMED_SUCCESSFULLY' : 'APPLICATION_CONFIRMED_SUCCESSFULLY';
             $flash = $this->container->get('translator')->trans($flashMsg, array('%totalcount%' => count($selectedIds), '%selcount%' => $successCount));
@@ -778,7 +840,8 @@ class ConfirmationController extends ParentController {
      *
      * @return array
      */
-    private function contactDetails($contactId, $type = 'contact') {
+    private function contactDetails($contactId, $type = 'contact')
+    {
         $club = $this->get('club');
         $contactlistClass = new Contactlist($this->container, '', $club, $type);
         $firstName = $this->container->getParameter('system_field_firstname');
@@ -799,10 +862,18 @@ class ConfirmationController extends ParentController {
      * add Existing Federation Member Pop up
      * @return type
      */
-    public function addExistingFedMemberAction() {
+    public function addExistingFedMemberAction()
+    {
         $club = $this->get('club');
         $contactlistClass = new Contactlist($this->container, '', $club, 'contact');
         $contactlistClass->setColumns(array('ms.`3` as primaryEmail', 'fg_cm_contact.fed_contact_id as fedContact'));
+        
+        $permissionObj = new FgPermissions($this->container);
+                if (!$permissionObj->checkContactCount(1)) {
+                    $result['redirectPath'] = $this->generateUrl('contact_index');
+            return $this->render('CommonUtilityBundle:Permissionpopup:contactcreationwarningpopup.html.twig', $result);
+                }
+        
         $contactlistClass->setFrom('*');
         //$contactlistClass->confirmedFlag=true;
         $contactlistClass->setCondition();
@@ -825,7 +896,8 @@ class ConfirmationController extends ParentController {
      * add Existing Federation Member Pop up Autocomplete
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function addExistingFedMemberAutocompleteAction(Request $request) {
+    public function addExistingFedMemberAutocompleteAction(Request $request)
+    {
         $searchTerm = FgUtility::getSecuredData($request->get('term'), $this->conn);
         $contacts = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->addExistingFedMember($this->container, $searchTerm, $this->federationId, $this->clubId);
 
@@ -835,7 +907,8 @@ class ConfirmationController extends ParentController {
     /**
      * save Existing Federation Member
      */
-    public function saveAddExistingFedMemberAction(Request $request) {
+    public function saveAddExistingFedMemberAction(Request $request)
+    {
         $fedContactId = FgUtility::getSecuredData($request->get('contactId'), $this->conn);
         $fgFedMembershipObj = new FgFedMemberships($this->container);
         $result = $fgFedMembershipObj->addExistingFedMember($fedContactId);
@@ -844,6 +917,11 @@ class ConfirmationController extends ParentController {
             $flashMsg = 'ADD_EXISTING_FED_MEMBER_SUCCESS';
         else
             $flashMsg = 'ADD_EXISTING_FED_MEMBER_FAILED';
+
+        /** Sync count to the AdminDB * */
+        $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
+        $clubSyncObject->updateActiveContactCount($this->clubId);
+        /*         * ************************************** */
 
         return new JsonResponse(array('status' => 'SUCCESS', 'flash' => $this->container->get('translator')->trans($flashMsg), 'noparentload' => false, 'membership' => $membership));
     }
@@ -855,8 +933,9 @@ class ConfirmationController extends ParentController {
      *
      * @return type
      */
-    public function confirmApplicationClubAssignmentsAction() {
-       
+    public function confirmApplicationClubAssignmentsAction()
+    {
+
         $applicationCount = $this->em->getRepository('CommonUtilityBundle:FgCmClubAssignmentConfirmationLog')->getClubAssignmentConfirmationLog($this->clubType, $this->clubId, 'list', true, $this->clubDefaultLang);
         $logTabs = array(1 => 'list', 2 => 'log');
         $tabs = array(0 => 'clubassignmentapplicationqueue',
@@ -881,7 +960,8 @@ class ConfirmationController extends ParentController {
      *
      * @return JsonResponse
      */
-    public function getClubAssignmentConfirmationDataAction($type) {
+    public function getClubAssignmentConfirmationDataAction($type)
+    {
         if ($type == 'list') {
             $applicationToConfirm = $this->em->getRepository('CommonUtilityBundle:FgCmClubAssignmentConfirmationLog')->getClubAssignmentConfirmationLog($this->clubType, $this->clubId, 'list', false, $this->clubDefaultLang);
             $return['aaData'] = $applicationToConfirm;
@@ -907,7 +987,8 @@ class ConfirmationController extends ParentController {
      *
      * @return array Data array.
      */
-    public function confirmOrDiscardClubAssignmentApplicationPopupAction(Request $request, $action) {
+    public function confirmOrDiscardClubAssignmentApplicationPopupAction(Request $request, $action)
+    {
         $selActionType = $request->get('selActionType') ? $request->get('selActionType') : 'all';
         $return['selActionType'] = $selActionType;
         $return['action'] = $action;
@@ -931,7 +1012,8 @@ class ConfirmationController extends ParentController {
      *
      * @return Json Response.
      */
-    public function updateConfirmClubAssignmentApplicationAction(Request $request) {
+    public function updateConfirmClubAssignmentApplicationAction(Request $request)
+    {
         $action = $request->get('action');
         $selectedIds = json_decode($request->get('selectedId', '0'));
         $fgFedMembershipObj = new FgFedMemberships($this->container);
@@ -945,6 +1027,12 @@ class ConfirmationController extends ParentController {
         }
         $updatedCount = ($result) ? count($selectedIds) : 0;
 
+        /** Sync count to the AdminDB * */
+        $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
+        $clubSyncObject->updateActiveContactCount($this->clubId);
+        /*         * ************************************** */
+
+
         return new JsonResponse(array('status' => 'SUCCESS', 'flash' => $this->container->get('translator')->trans($flashMsg), 'noparentload' => false, 'count' => $updatedCount));
     }
 
@@ -954,12 +1042,12 @@ class ConfirmationController extends ParentController {
      * @param \Clubadmin\ContactBundle\Controller\Request $request
      * @return Template
      */
-    public function contactProfilePreviewExistingFedAction(Request $request) {
+    public function contactProfilePreviewExistingFedAction(Request $request)
+    {
         $contactId = $request->get('contactId');
         $contacts = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->addExistingFedMember($this->container, '', $this->federationId, $this->clubId, $contactId);
 
         return $this->render('ClubadminContactBundle:Confirmation:profileAddExistingPopUp.html.twig', array('contactDetails' => $contacts[0])
         );
     }
-
 }

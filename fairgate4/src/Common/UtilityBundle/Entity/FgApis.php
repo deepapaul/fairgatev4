@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgApis
  */
@@ -28,7 +26,7 @@ class FgApis
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +37,20 @@ class FgApis
      * Set name
      *
      * @param string $name
+     *
      * @return FgApis
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -62,22 +61,24 @@ class FgApis
      * Set identifier
      *
      * @param string $identifier
+     *
      * @return FgApis
      */
     public function setIdentifier($identifier)
     {
         $this->identifier = $identifier;
-    
+
         return $this;
     }
 
     /**
      * Get identifier
      *
-     * @return string 
+     * @return string
      */
     public function getIdentifier()
     {
         return $this->identifier;
     }
 }
+

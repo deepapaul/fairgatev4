@@ -72,6 +72,7 @@ class FgContactListener
         $this->session = $this->container->get('session');
         $this->router = $router;
         $this->em = $this->container->get('doctrine')->getManager();
+        $this->adminEntityManager = $this->container->get("fg.admin.connection")->getAdminEntityManager();
     }
 
     /**
@@ -567,8 +568,8 @@ class FgContactListener
             //in mails when iterating through contacts, logo can be changed. so to reset the logo
             $club->set('logo', $clubLangDetails[$club->get('club_default_lang')]['logo']);
         }
-        //Set the club clubHeirarchyDet parameter        
-        $clubsHeirarchyDetails = $this->em->getRepository('CommonUtilityBundle:FgClub')->getClubsValues($club->get('clubHeirarchy'), $club->get('default_lang'), $club->get('clubCacheKey'), $club->get('cacheLifeTime'), $club->get('caching_enabled'));
+        //Set the club clubHeirarchyDet parameter     
+        $clubsHeirarchyDetails = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClub')->getClubsValues($club->get('clubHeirarchy'), $club->get('default_lang'), $club->get('clubCacheKey'), $club->get('cacheLifeTime'), $club->get('caching_enabled'));
         foreach ($clubsHeirarchyDetails as $key => $clubsHeirarchy) {
             $clubHeirarchyDet[$clubsHeirarchy['id']] = array('title' => $clubsHeirarchy['title'], 'club_type' => $clubsHeirarchy['clubType']);
         }

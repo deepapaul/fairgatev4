@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsArticleClubsetting
  */
@@ -43,7 +41,7 @@ class FgCmsArticleClubsetting
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -54,19 +52,20 @@ class FgCmsArticleClubsetting
      * Set commentActive
      *
      * @param integer $commentActive
+     *
      * @return FgCmsArticleClubsetting
      */
     public function setCommentActive($commentActive)
     {
         $this->commentActive = $commentActive;
-    
+
         return $this;
     }
 
     /**
      * Get commentActive
      *
-     * @return integer 
+     * @return integer
      */
     public function getCommentActive()
     {
@@ -77,19 +76,20 @@ class FgCmsArticleClubsetting
      * Set showMultilanguageVersion
      *
      * @param integer $showMultilanguageVersion
+     *
      * @return FgCmsArticleClubsetting
      */
     public function setShowMultilanguageVersion($showMultilanguageVersion)
     {
         $this->showMultilanguageVersion = $showMultilanguageVersion;
-    
+
         return $this;
     }
 
     /**
      * Get showMultilanguageVersion
      *
-     * @return integer 
+     * @return integer
      */
     public function getShowMultilanguageVersion()
     {
@@ -100,19 +100,20 @@ class FgCmsArticleClubsetting
      * Set timeperiodStartDay
      *
      * @param integer $timeperiodStartDay
+     *
      * @return FgCmsArticleClubsetting
      */
     public function setTimeperiodStartDay($timeperiodStartDay)
     {
         $this->timeperiodStartDay = $timeperiodStartDay;
-    
+
         return $this;
     }
 
     /**
      * Get timeperiodStartDay
      *
-     * @return integer 
+     * @return integer
      */
     public function getTimeperiodStartDay()
     {
@@ -123,19 +124,20 @@ class FgCmsArticleClubsetting
      * Set timeperiodStartMonth
      *
      * @param integer $timeperiodStartMonth
+     *
      * @return FgCmsArticleClubsetting
      */
     public function setTimeperiodStartMonth($timeperiodStartMonth)
     {
         $this->timeperiodStartMonth = $timeperiodStartMonth;
-    
+
         return $this;
     }
 
     /**
      * Get timeperiodStartMonth
      *
-     * @return integer 
+     * @return integer
      */
     public function getTimeperiodStartMonth()
     {
@@ -146,22 +148,24 @@ class FgCmsArticleClubsetting
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmsArticleClubsetting
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
         return $this->club;
     }
 }
+

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPageContentElementFormInquiries
  */
@@ -38,7 +36,7 @@ class FgCmsPageContentElementFormInquiries
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -49,19 +47,20 @@ class FgCmsPageContentElementFormInquiries
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return FgCmsPageContentElementFormInquiries
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -72,19 +71,20 @@ class FgCmsPageContentElementFormInquiries
      * Set formData
      *
      * @param string $formData
+     *
      * @return FgCmsPageContentElementFormInquiries
      */
     public function setFormData($formData)
     {
         $this->formData = $formData;
-    
+
         return $this;
     }
 
     /**
      * Get formData
      *
-     * @return string 
+     * @return string
      */
     public function getFormData()
     {
@@ -95,19 +95,20 @@ class FgCmsPageContentElementFormInquiries
      * Set element
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPageContentElement $element
+     *
      * @return FgCmsPageContentElementFormInquiries
      */
     public function setElement(\Common\UtilityBundle\Entity\FgCmsPageContentElement $element = null)
     {
         $this->element = $element;
-    
+
         return $this;
     }
 
     /**
      * Get element
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPageContentElement 
+     * @return \Common\UtilityBundle\Entity\FgCmsPageContentElement
      */
     public function getElement()
     {
@@ -118,22 +119,24 @@ class FgCmsPageContentElementFormInquiries
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgCmsPageContentElementFormInquiries
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
     {
         $this->contact = $contact;
-    
+
         return $this;
     }
 
     /**
      * Get contact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getContact()
     {
         return $this->contact;
     }
 }
+

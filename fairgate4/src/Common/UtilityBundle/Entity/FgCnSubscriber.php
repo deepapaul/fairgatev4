@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnSubscriber
  */
@@ -12,7 +10,7 @@ class FgCnSubscriber
     /**
      * @var integer
      */
-    private $clubId;
+    private $id;
 
     /**
      * @var string
@@ -32,7 +30,7 @@ class FgCnSubscriber
     /**
      * @var string
      */
-    private $comany;
+    private $company;
 
     /**
      * @var string
@@ -45,6 +43,11 @@ class FgCnSubscriber
     private $salutation;
 
     /**
+     * @var string
+     */
+    private $correspondanceLang;
+
+    /**
      * @var \DateTime
      */
     private $createdAt;
@@ -55,43 +58,46 @@ class FgCnSubscriber
     private $editedAt;
 
     /**
-     * @var \Common\UtilityBundle\Entity\FgClub
+     * @var string
      */
-    private $id;
+    private $importTable;
+
+    /**
+     * @var integer
+     */
+    private $importId;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgCmContact
      */
     private $editedBy;
 
-
     /**
-     * Set clubId
-     *
-     * @param integer $clubId
-     * @return FgCnSubscriber
+     * @var \Common\UtilityBundle\Entity\FgClub
      */
-    public function setClubId($clubId)
-    {
-        $this->clubId = $clubId;
-
-        return $this;
-    }
+    private $club;
 
     /**
-     * Get clubId
+     * @var \Common\UtilityBundle\Entity\FgCmContact
+     */
+    private $createdBy;
+
+
+    /**
+     * Get id
      *
      * @return integer
      */
-    public function getClubId()
+    public function getId()
     {
-        return $this->clubId;
+        return $this->id;
     }
 
     /**
      * Set email
      *
      * @param string $email
+     *
      * @return FgCnSubscriber
      */
     public function setEmail($email)
@@ -115,6 +121,7 @@ class FgCnSubscriber
      * Set firstName
      *
      * @param string $firstName
+     *
      * @return FgCnSubscriber
      */
     public function setFirstName($firstName)
@@ -138,6 +145,7 @@ class FgCnSubscriber
      * Set lastName
      *
      * @param string $lastName
+     *
      * @return FgCnSubscriber
      */
     public function setLastName($lastName)
@@ -158,32 +166,34 @@ class FgCnSubscriber
     }
 
     /**
-     * Set comany
+     * Set company
      *
-     * @param string $comany
+     * @param string $company
+     *
      * @return FgCnSubscriber
      */
-    public function setComany($comany)
+    public function setCompany($company)
     {
-        $this->comany = $comany;
+        $this->company = $company;
 
         return $this;
     }
 
     /**
-     * Get comany
+     * Get company
      *
      * @return string
      */
-    public function getComany()
+    public function getCompany()
     {
-        return $this->comany;
+        return $this->company;
     }
 
     /**
      * Set gender
      *
      * @param string $gender
+     *
      * @return FgCnSubscriber
      */
     public function setGender($gender)
@@ -207,6 +217,7 @@ class FgCnSubscriber
      * Set salutation
      *
      * @param string $salutation
+     *
      * @return FgCnSubscriber
      */
     public function setSalutation($salutation)
@@ -227,9 +238,34 @@ class FgCnSubscriber
     }
 
     /**
+     * Set correspondanceLang
+     *
+     * @param string $correspondanceLang
+     *
+     * @return FgCnSubscriber
+     */
+    public function setCorrespondanceLang($correspondanceLang)
+    {
+        $this->correspondanceLang = $correspondanceLang;
+
+        return $this;
+    }
+
+    /**
+     * Get correspondanceLang
+     *
+     * @return string
+     */
+    public function getCorrespondanceLang()
+    {
+        return $this->correspondanceLang;
+    }
+
+    /**
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return FgCnSubscriber
      */
     public function setCreatedAt($createdAt)
@@ -253,6 +289,7 @@ class FgCnSubscriber
      * Set editedAt
      *
      * @param \DateTime $editedAt
+     *
      * @return FgCnSubscriber
      */
     public function setEditedAt($editedAt)
@@ -273,121 +310,10 @@ class FgCnSubscriber
     }
 
     /**
-     * Set id
-     *
-     * @param \Common\UtilityBundle\Entity\FgClub $id
-     * @return FgCnSubscriber
-     */
-    public function setId(\Common\UtilityBundle\Entity\FgClub $id = null)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id
-     *
-     * @return \Common\UtilityBundle\Entity\FgClub
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set editedBy
-     *
-     * @param \Common\UtilityBundle\Entity\FgCmContact $editedBy
-     * @return FgCnSubscriber
-     */
-    public function setEditedBy(\Common\UtilityBundle\Entity\FgCmContact $editedBy = null)
-    {
-        $this->editedBy = $editedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get editedBy
-     *
-     * @return \Common\UtilityBundle\Entity\FgCmContact
-     */
-    public function getEditedBy()
-    {
-        return $this->editedBy;
-    }
-    /**
-     * @var \Common\UtilityBundle\Entity\FgClub
-     */
-    private $club;
-
-
-    /**
-     * Set club
-     *
-     * @param \Common\UtilityBundle\Entity\FgClub $club
-     * @return FgCnSubscriber
-     */
-    public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
-    {
-        $this->club = $club;
-
-        return $this;
-    }
-
-    /**
-     * Get club
-     *
-     * @return \Common\UtilityBundle\Entity\FgClub
-     */
-    public function getClub()
-    {
-        return $this->club;
-    }
-    /**
-     * @var string
-     */
-    private $company;
-
-    /**
-     * @var string
-     */
-    private $importTable;
-
-    /**
-     * @var integer
-     */
-    private $importId;
-
-
-    /**
-     * Set company
-     *
-     * @param string $company
-     * @return FgCnSubscriber
-     */
-    public function setCompany($company)
-    {
-        $this->company = $company;
-
-        return $this;
-    }
-
-    /**
-     * Get company
-     *
-     * @return string
-     */
-    public function getCompany()
-    {
-        return $this->company;
-    }
-
-    /**
      * Set importTable
      *
      * @param string $importTable
+     *
      * @return FgCnSubscriber
      */
     public function setImportTable($importTable)
@@ -411,6 +337,7 @@ class FgCnSubscriber
      * Set importId
      *
      * @param integer $importId
+     *
      * @return FgCnSubscriber
      */
     public function setImportId($importId)
@@ -429,60 +356,77 @@ class FgCnSubscriber
     {
         return $this->importId;
     }
-    /**
-     * @var \Common\UtilityBundle\Entity\FgCmContact
-     */
-    private $createdBy;
 
+    /**
+     * Set editedBy
+     *
+     * @param \Common\UtilityBundle\Entity\FgCmContact $editedBy
+     *
+     * @return FgCnSubscriber
+     */
+    public function setEditedBy(\Common\UtilityBundle\Entity\FgCmContact $editedBy = null)
+    {
+        $this->editedBy = $editedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get editedBy
+     *
+     * @return \Common\UtilityBundle\Entity\FgCmContact
+     */
+    public function getEditedBy()
+    {
+        return $this->editedBy;
+    }
+
+    /**
+     * Set club
+     *
+     * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
+     * @return FgCnSubscriber
+     */
+    public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
+    {
+        $this->club = $club;
+
+        return $this;
+    }
+
+    /**
+     * Get club
+     *
+     * @return \Common\UtilityBundle\Entity\FgClub
+     */
+    public function getClub()
+    {
+        return $this->club;
+    }
 
     /**
      * Set createdBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $createdBy
+     *
      * @return FgCnSubscriber
      */
     public function setCreatedBy(\Common\UtilityBundle\Entity\FgCmContact $createdBy = null)
     {
         $this->createdBy = $createdBy;
-    
+
         return $this;
     }
 
     /**
      * Get createdBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getCreatedBy()
     {
         return $this->createdBy;
     }
-    /**
-     * @var string
-     */
-    private $correspondanceLang;
-
-
-    /**
-     * Set correspondanceLang
-     *
-     * @param string $correspondanceLang
-     * @return FgCnSubscriber
-     */
-    public function setCorrespondanceLang($correspondanceLang)
-    {
-        $this->correspondanceLang = $correspondanceLang;
-    
-        return $this;
-    }
-
-    /**
-     * Get correspondanceLang
-     *
-     * @return string 
-     */
-    public function getCorrespondanceLang()
-    {
-        return $this->correspondanceLang;
-    }
 }
+

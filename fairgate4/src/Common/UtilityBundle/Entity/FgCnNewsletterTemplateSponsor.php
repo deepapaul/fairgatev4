@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnNewsletterTemplateSponsor
  */
@@ -48,7 +46,7 @@ class FgCnNewsletterTemplateSponsor
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -59,19 +57,20 @@ class FgCnNewsletterTemplateSponsor
      * Set title
      *
      * @param string $title
+     *
      * @return FgCnNewsletterTemplateSponsor
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -82,19 +81,20 @@ class FgCnNewsletterTemplateSponsor
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgCnNewsletterTemplateSponsor
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -105,19 +105,20 @@ class FgCnNewsletterTemplateSponsor
      * Set position
      *
      * @param string $position
+     *
      * @return FgCnNewsletterTemplateSponsor
      */
     public function setPosition($position)
     {
         $this->position = $position;
-    
+
         return $this;
     }
 
     /**
      * Get position
      *
-     * @return string 
+     * @return string
      */
     public function getPosition()
     {
@@ -128,19 +129,20 @@ class FgCnNewsletterTemplateSponsor
      * Set sponsorAdWidth
      *
      * @param string $sponsorAdWidth
+     *
      * @return FgCnNewsletterTemplateSponsor
      */
     public function setSponsorAdWidth($sponsorAdWidth)
     {
         $this->sponsorAdWidth = $sponsorAdWidth;
-    
+
         return $this;
     }
 
     /**
      * Get sponsorAdWidth
      *
-     * @return string 
+     * @return string
      */
     public function getSponsorAdWidth()
     {
@@ -151,19 +153,20 @@ class FgCnNewsletterTemplateSponsor
      * Set sponsorAdArea
      *
      * @param \Common\UtilityBundle\Entity\FgSmAdArea $sponsorAdArea
+     *
      * @return FgCnNewsletterTemplateSponsor
      */
     public function setSponsorAdArea(\Common\UtilityBundle\Entity\FgSmAdArea $sponsorAdArea = null)
     {
         $this->sponsorAdArea = $sponsorAdArea;
-    
+
         return $this;
     }
 
     /**
      * Get sponsorAdArea
      *
-     * @return \Common\UtilityBundle\Entity\FgSmAdArea 
+     * @return \Common\UtilityBundle\Entity\FgSmAdArea
      */
     public function getSponsorAdArea()
     {
@@ -174,22 +177,24 @@ class FgCnNewsletterTemplateSponsor
      * Set template
      *
      * @param \Common\UtilityBundle\Entity\FgCnNewsletterTemplate $template
+     *
      * @return FgCnNewsletterTemplateSponsor
      */
     public function setTemplate(\Common\UtilityBundle\Entity\FgCnNewsletterTemplate $template = null)
     {
         $this->template = $template;
-    
+
         return $this;
     }
 
     /**
      * Get template
      *
-     * @return \Common\UtilityBundle\Entity\FgCnNewsletterTemplate 
+     * @return \Common\UtilityBundle\Entity\FgCnNewsletterTemplate
      */
     public function getTemplate()
     {
         return $this->template;
     }
 }
+

@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgMbClubModules
  */
@@ -84,6 +82,7 @@ class FgMbClubModules
      * Set isCostOnetime
      *
      * @param boolean $isCostOnetime
+     *
      * @return FgMbClubModules
      */
     public function setIsCostOnetime($isCostOnetime)
@@ -107,6 +106,7 @@ class FgMbClubModules
      * Set costOnetime
      *
      * @param float $costOnetime
+     *
      * @return FgMbClubModules
      */
     public function setCostOnetime($costOnetime)
@@ -130,6 +130,7 @@ class FgMbClubModules
      * Set isCostYearly
      *
      * @param boolean $isCostYearly
+     *
      * @return FgMbClubModules
      */
     public function setIsCostYearly($isCostYearly)
@@ -153,6 +154,7 @@ class FgMbClubModules
      * Set costYearly
      *
      * @param float $costYearly
+     *
      * @return FgMbClubModules
      */
     public function setCostYearly($costYearly)
@@ -176,6 +178,7 @@ class FgMbClubModules
      * Set invoiceAmount
      *
      * @param float $invoiceAmount
+     *
      * @return FgMbClubModules
      */
     public function setInvoiceAmount($invoiceAmount)
@@ -199,6 +202,7 @@ class FgMbClubModules
      * Set signedOn
      *
      * @param \DateTime $signedOn
+     *
      * @return FgMbClubModules
      */
     public function setSignedOn($signedOn)
@@ -222,6 +226,7 @@ class FgMbClubModules
      * Set isModuleActive
      *
      * @param boolean $isModuleActive
+     *
      * @return FgMbClubModules
      */
     public function setIsModuleActive($isModuleActive)
@@ -245,6 +250,7 @@ class FgMbClubModules
      * Set backendTerms
      *
      * @param string $backendTerms
+     *
      * @return FgMbClubModules
      */
     public function setBackendTerms($backendTerms)
@@ -268,6 +274,7 @@ class FgMbClubModules
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgMbClubModules
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
@@ -291,6 +298,7 @@ class FgMbClubModules
      * Set signedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $signedBy
+     *
      * @return FgMbClubModules
      */
     public function setSignedBy(\Common\UtilityBundle\Entity\FgCmContact $signedBy = null)
@@ -314,6 +322,7 @@ class FgMbClubModules
      * Set module
      *
      * @param \Common\UtilityBundle\Entity\FgMbModule $module
+     *
      * @return FgMbClubModules
      */
     public function setModule(\Common\UtilityBundle\Entity\FgMbModule $module = null)
@@ -333,3 +342,4 @@ class FgMbClubModules
         return $this->module;
     }
 }
+

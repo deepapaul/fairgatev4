@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @var Composer\Autoload\ClassLoader
  */
 $loader = require __DIR__.'/../fairgate4/app/autoload.php';
-include_once __DIR__.'/../fairgate4/app/bootstrap.php.cache';
+include_once __DIR__.'/../fairgate4/var/bootstrap.php.cache';
 include_once __DIR__.'/../fairgate4/app/config/fairgate_domains.php';
 
 // Enable APC for autoloading to improve performance.
@@ -19,7 +19,7 @@ $loader->unregister();
 $apcLoader->register(true);
 
 if (in_array($_SERVER['HTTP_HOST'], $domainArray)) {
-    $kernel = new AppKernel('prod', false);
+    $kernel = new AppKernel('dev', true);
 } else {
     $kernel = new AppKernel('domain', false);
 }

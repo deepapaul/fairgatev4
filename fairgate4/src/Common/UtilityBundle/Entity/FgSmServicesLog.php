@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgSmServicesLog
  */
@@ -68,7 +66,7 @@ class FgSmServicesLog
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -79,19 +77,20 @@ class FgSmServicesLog
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return FgSmServicesLog
      */
     public function setDate($date)
     {
         $this->date = $date;
-    
+
         return $this;
     }
 
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -102,19 +101,20 @@ class FgSmServicesLog
      * Set kind
      *
      * @param string $kind
+     *
      * @return FgSmServicesLog
      */
     public function setKind($kind)
     {
         $this->kind = $kind;
-    
+
         return $this;
     }
 
     /**
      * Get kind
      *
-     * @return string 
+     * @return string
      */
     public function getKind()
     {
@@ -125,19 +125,20 @@ class FgSmServicesLog
      * Set field
      *
      * @param string $field
+     *
      * @return FgSmServicesLog
      */
     public function setField($field)
     {
         $this->field = $field;
-    
+
         return $this;
     }
 
     /**
      * Get field
      *
-     * @return string 
+     * @return string
      */
     public function getField()
     {
@@ -148,19 +149,20 @@ class FgSmServicesLog
      * Set valueBefore
      *
      * @param string $valueBefore
+     *
      * @return FgSmServicesLog
      */
     public function setValueBefore($valueBefore)
     {
         $this->valueBefore = $valueBefore;
-    
+
         return $this;
     }
 
     /**
      * Get valueBefore
      *
-     * @return string 
+     * @return string
      */
     public function getValueBefore()
     {
@@ -171,19 +173,20 @@ class FgSmServicesLog
      * Set valueAfter
      *
      * @param string $valueAfter
+     *
      * @return FgSmServicesLog
      */
     public function setValueAfter($valueAfter)
     {
         $this->valueAfter = $valueAfter;
-    
+
         return $this;
     }
 
     /**
      * Get valueAfter
      *
-     * @return string 
+     * @return string
      */
     public function getValueAfter()
     {
@@ -194,19 +197,20 @@ class FgSmServicesLog
      * Set actionType
      *
      * @param string $actionType
+     *
      * @return FgSmServicesLog
      */
     public function setActionType($actionType)
     {
         $this->actionType = $actionType;
-    
+
         return $this;
     }
 
     /**
      * Get actionType
      *
-     * @return string 
+     * @return string
      */
     public function getActionType()
     {
@@ -217,19 +221,20 @@ class FgSmServicesLog
      * Set sponsor
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $sponsor
+     *
      * @return FgSmServicesLog
      */
     public function setSponsor(\Common\UtilityBundle\Entity\FgCmContact $sponsor = null)
     {
         $this->sponsor = $sponsor;
-    
+
         return $this;
     }
 
     /**
      * Get sponsor
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getSponsor()
     {
@@ -240,19 +245,20 @@ class FgSmServicesLog
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgSmServicesLog
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -263,19 +269,20 @@ class FgSmServicesLog
      * Set changedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $changedBy
+     *
      * @return FgSmServicesLog
      */
     public function setChangedBy(\Common\UtilityBundle\Entity\FgCmContact $changedBy = null)
     {
         $this->changedBy = $changedBy;
-    
+
         return $this;
     }
 
     /**
      * Get changedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getChangedBy()
     {
@@ -286,22 +293,24 @@ class FgSmServicesLog
      * Set service
      *
      * @param \Common\UtilityBundle\Entity\FgSmServices $service
+     *
      * @return FgSmServicesLog
      */
     public function setService(\Common\UtilityBundle\Entity\FgSmServices $service = null)
     {
         $this->service = $service;
-    
+
         return $this;
     }
 
     /**
      * Get service
      *
-     * @return \Common\UtilityBundle\Entity\FgSmServices 
+     * @return \Common\UtilityBundle\Entity\FgSmServices
      */
     public function getService()
     {
         return $this->service;
     }
 }
+

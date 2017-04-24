@@ -709,8 +709,7 @@ class DocumentPdo
         $contactForLastUpdate = array_merge($array2, $array1);
         if(count($contactForLastUpdate)) {
             $contactIdsString = implode(',', $contactForLastUpdate);
-            $currentDate = date('Y-m-d H:i:s');
-            $this->conn->executeQuery("UPDATE fg_cm_contact SET last_updated='$currentDate' WHERE id IN ($contactIdsString)");
+            $this->_em->getRepository('CommonUtilityBundle:FgCmContact')->updateLastUpdated($contactIdsString, 'id');
         }
 
         return;

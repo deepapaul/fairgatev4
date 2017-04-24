@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgSmAdArea
  */
@@ -33,7 +31,7 @@ class FgSmAdArea
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -44,19 +42,20 @@ class FgSmAdArea
      * Set isSystem
      *
      * @param boolean $isSystem
+     *
      * @return FgSmAdArea
      */
     public function setIsSystem($isSystem)
     {
         $this->isSystem = $isSystem;
-    
+
         return $this;
     }
 
     /**
      * Get isSystem
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsSystem()
     {
@@ -67,19 +66,20 @@ class FgSmAdArea
      * Set title
      *
      * @param string $title
+     *
      * @return FgSmAdArea
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -90,22 +90,24 @@ class FgSmAdArea
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgSmAdArea
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
         return $this->club;
     }
 }
+

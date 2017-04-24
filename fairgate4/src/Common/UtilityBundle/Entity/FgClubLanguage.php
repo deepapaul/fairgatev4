@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgClubLanguage
  */
@@ -58,7 +56,7 @@ class FgClubLanguage
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -69,19 +67,20 @@ class FgClubLanguage
      * Set correspondanceLang
      *
      * @param string $correspondanceLang
+     *
      * @return FgClubLanguage
      */
     public function setCorrespondanceLang($correspondanceLang)
     {
         $this->correspondanceLang = $correspondanceLang;
-    
+
         return $this;
     }
 
     /**
      * Get correspondanceLang
      *
-     * @return string 
+     * @return string
      */
     public function getCorrespondanceLang()
     {
@@ -92,19 +91,20 @@ class FgClubLanguage
      * Set systemLang
      *
      * @param string $systemLang
+     *
      * @return FgClubLanguage
      */
     public function setSystemLang($systemLang)
     {
         $this->systemLang = $systemLang;
-    
+
         return $this;
     }
 
     /**
      * Get systemLang
      *
-     * @return string 
+     * @return string
      */
     public function getSystemLang()
     {
@@ -115,19 +115,20 @@ class FgClubLanguage
      * Set visibleForClub
      *
      * @param boolean $visibleForClub
+     *
      * @return FgClubLanguage
      */
     public function setVisibleForClub($visibleForClub)
     {
         $this->visibleForClub = $visibleForClub;
-    
+
         return $this;
     }
 
     /**
      * Get visibleForClub
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getVisibleForClub()
     {
@@ -138,19 +139,20 @@ class FgClubLanguage
      * Set dateFormat
      *
      * @param string $dateFormat
+     *
      * @return FgClubLanguage
      */
     public function setDateFormat($dateFormat)
     {
         $this->dateFormat = $dateFormat;
-    
+
         return $this;
     }
 
     /**
      * Get dateFormat
      *
-     * @return string 
+     * @return string
      */
     public function getDateFormat()
     {
@@ -161,19 +163,20 @@ class FgClubLanguage
      * Set timeFormat
      *
      * @param string $timeFormat
+     *
      * @return FgClubLanguage
      */
     public function setTimeFormat($timeFormat)
     {
         $this->timeFormat = $timeFormat;
-    
+
         return $this;
     }
 
     /**
      * Get timeFormat
      *
-     * @return string 
+     * @return string
      */
     public function getTimeFormat()
     {
@@ -184,19 +187,20 @@ class FgClubLanguage
      * Set thousandSeparator
      *
      * @param string $thousandSeparator
+     *
      * @return FgClubLanguage
      */
     public function setThousandSeparator($thousandSeparator)
     {
         $this->thousandSeparator = $thousandSeparator;
-    
+
         return $this;
     }
 
     /**
      * Get thousandSeparator
      *
-     * @return string 
+     * @return string
      */
     public function getThousandSeparator()
     {
@@ -207,19 +211,20 @@ class FgClubLanguage
      * Set decimalMarker
      *
      * @param string $decimalMarker
+     *
      * @return FgClubLanguage
      */
     public function setDecimalMarker($decimalMarker)
     {
         $this->decimalMarker = $decimalMarker;
-    
+
         return $this;
     }
 
     /**
      * Get decimalMarker
      *
-     * @return string 
+     * @return string
      */
     public function getDecimalMarker()
     {
@@ -230,22 +235,24 @@ class FgClubLanguage
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgClubLanguage
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
         return $this->club;
     }
 }
+

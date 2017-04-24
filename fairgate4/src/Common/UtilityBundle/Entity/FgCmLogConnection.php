@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmLogConnection
  */
@@ -63,7 +61,7 @@ class FgCmLogConnection
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -74,19 +72,20 @@ class FgCmLogConnection
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return FgCmLogConnection
      */
     public function setDate($date)
     {
         $this->date = $date;
-    
+
         return $this;
     }
 
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -97,19 +96,20 @@ class FgCmLogConnection
      * Set connectionType
      *
      * @param string $connectionType
+     *
      * @return FgCmLogConnection
      */
     public function setConnectionType($connectionType)
     {
         $this->connectionType = $connectionType;
-    
+
         return $this;
     }
 
     /**
      * Get connectionType
      *
-     * @return string 
+     * @return string
      */
     public function getConnectionType()
     {
@@ -120,19 +120,20 @@ class FgCmLogConnection
      * Set relation
      *
      * @param string $relation
+     *
      * @return FgCmLogConnection
      */
     public function setRelation($relation)
     {
         $this->relation = $relation;
-    
+
         return $this;
     }
 
     /**
      * Get relation
      *
-     * @return string 
+     * @return string
      */
     public function getRelation()
     {
@@ -143,19 +144,20 @@ class FgCmLogConnection
      * Set valueBefore
      *
      * @param string $valueBefore
+     *
      * @return FgCmLogConnection
      */
     public function setValueBefore($valueBefore)
     {
         $this->valueBefore = $valueBefore;
-    
+
         return $this;
     }
 
     /**
      * Get valueBefore
      *
-     * @return string 
+     * @return string
      */
     public function getValueBefore()
     {
@@ -166,19 +168,20 @@ class FgCmLogConnection
      * Set valueAfter
      *
      * @param string $valueAfter
+     *
      * @return FgCmLogConnection
      */
     public function setValueAfter($valueAfter)
     {
         $this->valueAfter = $valueAfter;
-    
+
         return $this;
     }
 
     /**
      * Get valueAfter
      *
-     * @return string 
+     * @return string
      */
     public function getValueAfter()
     {
@@ -189,19 +192,20 @@ class FgCmLogConnection
      * Set linkedContact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $linkedContact
+     *
      * @return FgCmLogConnection
      */
     public function setLinkedContact(\Common\UtilityBundle\Entity\FgCmContact $linkedContact = null)
     {
         $this->linkedContact = $linkedContact;
-    
+
         return $this;
     }
 
     /**
      * Get linkedContact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getLinkedContact()
     {
@@ -212,19 +216,20 @@ class FgCmLogConnection
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgCmLogConnection
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
     {
         $this->contact = $contact;
-    
+
         return $this;
     }
 
     /**
      * Get contact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getContact()
     {
@@ -235,19 +240,20 @@ class FgCmLogConnection
      * Set assignedClub
      *
      * @param \Common\UtilityBundle\Entity\FgClub $assignedClub
+     *
      * @return FgCmLogConnection
      */
     public function setAssignedClub(\Common\UtilityBundle\Entity\FgClub $assignedClub = null)
     {
         $this->assignedClub = $assignedClub;
-    
+
         return $this;
     }
 
     /**
      * Get assignedClub
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getAssignedClub()
     {
@@ -258,22 +264,24 @@ class FgCmLogConnection
      * Set changedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $changedBy
+     *
      * @return FgCmLogConnection
      */
     public function setChangedBy(\Common\UtilityBundle\Entity\FgCmContact $changedBy = null)
     {
         $this->changedBy = $changedBy;
-    
+
         return $this;
     }
 
     /**
      * Get changedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getChangedBy()
     {
         return $this->changedBy;
     }
 }
+

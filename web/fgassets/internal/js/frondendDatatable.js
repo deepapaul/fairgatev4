@@ -593,8 +593,7 @@ function manipulatememberColumnFields(json) {
                     var editable = ' class-no-edit';
                     //its only needed in team/workgroup member list
                     var profilepicArea ='';
-                    
-                    if ((json['adminflag'] == 1 && (json.aaData[i]['confirm_status'] == 'CONFIRMED') )|| ((parseInt(json.aaData[i]['removedFlag']) == 0) && (json.aaData[i]['Function_intersect'] == '')) || ( parseInt(json.aaData[i]['newlyaddedFlag'])==0 && parseInt(json.aaData[i]['removedFlag'])!=0 )|| ( parseInt(json.aaData[i]['newlyaddedFlag'])==1 && parseInt(json.aaData[i]['removedFlag'])==0 ) ){
+                     if ((json['adminflag'] == 1)&&(((json.aaData[i]['confirm_status'] == 'CONFIRMED') )|| ((parseInt(json.aaData[i]['removedFlag']) == 0) && (json.aaData[i]['Function_intersect'] == '')) || ( parseInt(json.aaData[i]['newlyaddedFlag'])==0 && parseInt(json.aaData[i]['removedFlag'])!=0 )|| ( parseInt(json.aaData[i]['newlyaddedFlag'])==1 && parseInt(json.aaData[i]['removedFlag'])==0 )) ){
                         editIcons = '&nbsp;<a href="' + json.aaData[i]['edit_url'] + '" class="fg-tableimg-hide fg-edit-contact-ico "><i class="fa fa-pencil-square-o fg-pencil-square-o"></i></a>';
                         editable  = '';
                     }

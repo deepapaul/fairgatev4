@@ -622,7 +622,7 @@ class ContactOverviewConfig
     public function getAllMainContactConnections($contact, $currentContactName, $clubId)
     {
         // Getting all main contact connections of the user from database
-        $getAllMainContact = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->getAllMainContact($this->clubId, $contact, $currentContactName);
+        $getAllMainContact = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->getAllMainContact($this->container->get('club')->get('id'), $contact, $currentContactName);
         $j = 0;
         $allMainContacts = array();
         if (!empty($getAllMainContact)) {

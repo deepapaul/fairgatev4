@@ -1,0 +1,7 @@
+#!/bin/bash
+#CRON JOBS RUNNING EVERY DAY
+
+#EVERY DAY CRON
+cd /var/www/html/fairgate_development_s3/fairgate4
+php bin/console club:removeTestingModules --env=prod >> /var/www/html/fairgate_development_s3/cronjob.log
+date >> /var/www/html/fairgate_development_s3/cronjob.log

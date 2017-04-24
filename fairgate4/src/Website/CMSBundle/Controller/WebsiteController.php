@@ -323,7 +323,9 @@ class WebsiteController extends Controller
         $contactId = $this->container->get('contact')->get('id');
         $isPublic = ($contactId > 0) ? false : true;
         $pageElementObj = new FgPageElement($this->container);
-        $returnArray['articleData'] = $pageElementObj->getCmsPageArticleElementData($elementId, $isPublic, array(), 0, '', 5);
+        $getArticleDisplayData = $this->container->get('doctrine')->getManager()->getRepository('CommonUtilityBundle:FgCmsPageContentElement')->getArticleEditData($elementId);
+        $articleLimit = ($getArticleDisplayData['articleDisplayType'] == 'slider') ? $getArticleDisplayData['articleCount'] : $getArticleDisplayData['articlePerRow'] * $getArticleDisplayData['articleRowsCount'];
+        $returnArray['articleData'] = $pageElementObj->getCmsPageArticleElementData($elementId, $isPublic, array(), 0, '', $articleLimit,'element',$getArticleDisplayData);
         $navObj = $this->getDoctrine()->getManager()->getRepository('CommonUtilityBundle:FgCmsNavigation')->findOneBy(array(page => $pageId));
         if (!is_null($navObj)) {
             $menuName = $navObj->getNavigationUrl();
@@ -344,6 +346,9 @@ class WebsiteController extends Controller
         $returnArray['displayWidth'] = ($returnArray['columnWidth'] >= 5) ? 'width_580' : 'width_300';
         $filterData = $this->container->get('doctrine')->getManager()->getRepository('CommonUtilityBundle:FgCmsPageContentElement')->getArticleElementDetails($elementId, 'article');
         $returnArray['filterData'] = $filterData;
+        $getArticleDisplayData['quotient']= floor($returnArray['columnWidth']/$getArticleDisplayData['articlePerRow']);
+        $getArticleDisplayData['remainder'] = $returnArray['columnWidth'] % $getArticleDisplayData['articlePerRow'];
+        $returnArray['structureData'] = $getArticleDisplayData;
         $returnAry = $this->articleElementFrondendModification($filterData, $returnArray);    
         $viewPage = $this->container->get('cms.themes')->getViewPage('articleElementTemplate');
         $retun['htmlContent'] = $this->renderView($viewPage, $returnAry);

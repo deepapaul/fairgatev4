@@ -11,6 +11,7 @@ use Clubadmin\DocumentsBundle\Util\Documentdatatable;
 use Common\UtilityBundle\Util\FgUtility;
 use Clubadmin\ClubBundle\Util\NextpreviousClub;
 use Common\UtilityBundle\Repository\Pdo\DocumentPdo;
+use Admin\UtilityBundle\Classes\SyncFgadmin;
 
 /**
  * DocumentController
@@ -56,7 +57,7 @@ class DocumentController extends FgController
         $isDocumentModuleBooked = (in_array('document', $club->get('bookedModulesDet'))) ? 1 : 0;
         $hasRights = in_array('document', $club->get('allowedRights')) ? 1 : 0;
         //check if clubId has access
-        $clubPdo = new \Common\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
+        $clubPdo = new \Admin\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
         $sublevelclubs = $clubPdo->getAllSubLevelData($this->clubId);
         $sublevelclub = array();
         foreach ($sublevelclubs as $key => $value) {
@@ -76,10 +77,10 @@ class DocumentController extends FgController
         $breadCrumb = array('back' => '#');
         $nextprevious = new NextpreviousClub($this->container);
         $nextPreviousResultset = $nextprevious->nextPreviousClubData($this->contactId,$clubId, $offset, 'club_documents', 'offset', 'clubId', $flag = 0);
-        $clubName = $this->em->getRepository('CommonUtilityBundle:FgClub')->getClubname($clubId, $club->get('default_lang'));
+        $clubName = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClub')->getClubname($clubId, $club->get('default_lang'));
         $documentCatDetails = $this->em->getRepository('CommonUtilityBundle:FgDmDocumentCategory')->getDocumentSubCategories($this->clubId, 'CLUB', $this->clubDefaultLang);
         $documentsCount = $this->em->getRepository('CommonUtilityBundle:FgDmDocuments')->getCountOfAssignedClubDocuments('CLUB', $this->clubId, $clubId,$this->container);
-        $assignmentCount = $this->em->getRepository('CommonUtilityBundle:FgClubClassAssignment')->assignmentCount($this->clubType, $this->conn, $clubId);
+        $assignmentCount = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClubClassAssignment')->assignmentCount($this->clubType, $this->conn, $clubId);
         $notesCount = $this->em->getRepository('CommonUtilityBundle:FgClubNotes')->getNotesCount($clubId, $this->clubId);
         if(in_array('document', $club->get('bookedModulesDet'))){
             $tabs = array(0 =>"overview", 1 =>"data", 2=>"assignment", 3=> "note", 4=>"document", 5=>"log"); 
@@ -164,7 +165,9 @@ class DocumentController extends FgController
         $currentClubId = $request->get('clubId');
         $documentId = $request->get('documentId');
         $this->em->getRepository('CommonUtilityBundle:FgDmAssigment')->addClubDocumentAssignment($currentClubId, $documentId, $this->contactId);
-
+        //Update document count s of club
+        $syncDataToAdminDbObj = new SyncFgadmin($this->container);
+        $syncDataToAdminDbObj->documentcountUpdateProcess($this->clubId, $this->clubType);
         return new Response(json_encode("success"),200,array('Content-Type'=>'application/json'));
     }
 
@@ -185,6 +188,9 @@ class DocumentController extends FgController
         } else {
             $this->em->getRepository('CommonUtilityBundle:FgDmAssigment')->removeDocumentAssignmentOfClubs($documentId, $clubId, $this->contactId);
         }
+//Update document count s of club
+        $syncDataToAdminDbObj = new SyncFgadmin($this->container);
+        $syncDataToAdminDbObj->documentcountUpdateProcess($this->clubId, $this->clubType);
 
         return new Response(json_encode("success"),200,array('Content-Type'=>'application/json'));
     }

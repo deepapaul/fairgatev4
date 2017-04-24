@@ -93,8 +93,8 @@ class NextpreviousClub extends NextpreviousBase
 
         // Calling the club list function to get the same query used in the club listing
         $listquery = $clublistData->getClubData(true, 1, $currentIndexValue);
-
-        $clublistDatas = $this->checkNextPreviousFlag($flag, $allSessionValues['nextPreviousClubListData'], $club, $allSessionValues['sessionFlag'], $listquery, 'nextPreviousClubListData', $this->session, $this->em);
+//pass container instead of entity managet to call service
+        $clublistDatas = $this->checkNextPreviousFlag($flag, $allSessionValues['nextPreviousClubListData'], $club, $allSessionValues['sessionFlag'], $listquery, 'nextPreviousClubListData', $this->session, $this->container,true);
 
         // Section for calculating next and previous five results and changing the links according to that
         $existFlag = 0;

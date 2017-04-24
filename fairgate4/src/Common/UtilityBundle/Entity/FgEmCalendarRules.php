@@ -2,14 +2,11 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgEmCalendarRules
  */
 class FgEmCalendarRules
 {
-    
     /**
      * @var integer
      */
@@ -44,7 +41,7 @@ class FgEmCalendarRules
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -55,19 +52,20 @@ class FgEmCalendarRules
      * Set freq
      *
      * @param string $freq
+     *
      * @return FgEmCalendarRules
      */
     public function setFreq($freq)
     {
         $this->freq = $freq;
-    
+
         return $this;
     }
 
     /**
      * Get freq
      *
-     * @return string 
+     * @return string
      */
     public function getFreq()
     {
@@ -78,19 +76,20 @@ class FgEmCalendarRules
      * Set byday
      *
      * @param string $byday
+     *
      * @return FgEmCalendarRules
      */
     public function setByday($byday)
     {
         $this->byday = $byday;
-    
+
         return $this;
     }
 
     /**
      * Get byday
      *
-     * @return string 
+     * @return string
      */
     public function getByday()
     {
@@ -101,19 +100,20 @@ class FgEmCalendarRules
      * Set interval
      *
      * @param string $interval
+     *
      * @return FgEmCalendarRules
      */
     public function setInterval($interval)
     {
         $this->interval = $interval;
-    
+
         return $this;
     }
 
     /**
      * Get interval
      *
-     * @return string 
+     * @return string
      */
     public function getInterval()
     {
@@ -124,19 +124,20 @@ class FgEmCalendarRules
      * Set bymonthday
      *
      * @param string $bymonthday
+     *
      * @return FgEmCalendarRules
      */
     public function setBymonthday($bymonthday)
     {
         $this->bymonthday = $bymonthday;
-    
+
         return $this;
     }
 
     /**
      * Get bymonthday
      *
-     * @return string 
+     * @return string
      */
     public function getBymonthday()
     {
@@ -147,22 +148,24 @@ class FgEmCalendarRules
      * Set bymonth
      *
      * @param string $bymonth
+     *
      * @return FgEmCalendarRules
      */
     public function setBymonth($bymonth)
     {
         $this->bymonth = $bymonth;
-    
+
         return $this;
     }
 
     /**
      * Get bymonth
      *
-     * @return string 
+     * @return string
      */
     public function getBymonth()
     {
         return $this->bymonth;
     }
 }
+

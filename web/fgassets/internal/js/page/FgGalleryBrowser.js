@@ -306,7 +306,7 @@ var FgGalleryBrowser = function () {
             var fullPathImg = coverImagePath + coverImage;
             $.each(galleryData.EXTERNAL, function (i, v) {
 
-                elem += ' <div class="fg-gallery-album col-md-2 col-sm-3 col-xs-4" id="' + v.roleId + '" data-type="EXTERNAL" data-title="' + v.roleTitle + '" > <div class="fg-image fg-gallery-effect-1" style="background-image:url('+ fullPathImg +')"> <img src="' + fullPathImg + '"></div> <div class="fg-album-title">' + v.roleTitle + ' </div> </div>';
+                elem += ' <div class="fg-gallery-album col-md-2 col-sm-3 col-xs-4" id="' + v.roleId + '" data-type="EXTERNAL" data-title="' + v.roleTitle + '" > <div class="fg-image fg-gallery-effect-1" style="background-image:url(\''+ fullPathImg +'\')"> <img src="' + fullPathImg + '"></div> <div class="fg-album-title">' + v.roleTitle + ' </div> </div>';
             });
         }
         if (typeof galleryData.CLUB !== 'undefined') {
@@ -317,7 +317,7 @@ var FgGalleryBrowser = function () {
             var fullPathImg = coverImagePath + coverImage;
             $.each(galleryData.CLUB, function (i, v) {
 
-                elem += ' <div class="fg-gallery-album col-md-2 col-sm-3 col-xs-4" id="' + v.roleId + '" data-type="CLUB" data-title="' + v.roleTitle + '" > <div class="fg-image fg-gallery-effect-1" style="background-image:url('+ fullPathImg +')"><img src="' + fullPathImg + '"> </div> <div class="fg-album-title">' + v.roleTitle + ' </div> </div>';
+                elem += ' <div class="fg-gallery-album col-md-2 col-sm-3 col-xs-4" id="' + v.roleId + '" data-type="CLUB" data-title="' + v.roleTitle + '" > <div class="fg-image fg-gallery-effect-1" style="background-image:url(\''+ fullPathImg +'\')"><img src="' + fullPathImg + '"> </div> <div class="fg-album-title">' + v.roleTitle + ' </div> </div>';
             });
         }
         if (typeof galleryData.ROLE !== 'undefined') {
@@ -335,7 +335,7 @@ var FgGalleryBrowser = function () {
                 });
                 var coverImage = getChild(teamGallery, 'role');
                 var fullPathImg = coverImagePath + coverImage;
-                elem += ' <div class="fg-gallery-album col-md-2 col-sm-3 col-xs-4" id="' + v.roleId + '" data-type="ROLE" data-title="' + v.roleTitle + '" > <div class="fg-image fg-gallery-effect-1" style="background-image:url('+ fullPathImg +')"> <img src="' + fullPathImg + '"> </div> <div class="fg-album-title">' + v.roleTitle + ' </div> </div>';
+                elem += ' <div class="fg-gallery-album col-md-2 col-sm-3 col-xs-4" id="' + v.roleId + '" data-type="ROLE" data-title="' + v.roleTitle + '" > <div class="fg-image fg-gallery-effect-1" style="background-image:url(\''+ fullPathImg +'\')"> <img src="' + fullPathImg + '"> </div> <div class="fg-album-title">' + v.roleTitle + ' </div> </div>';
 
             });
             
@@ -351,7 +351,7 @@ var FgGalleryBrowser = function () {
                 if(clubExecutive==parseInt(v.roleId)){
                       v.roleTitle = executiveTitle;
                   }
-                elem += ' <div class="fg-gallery-album col-md-2 col-sm-3 col-xs-4" id="' + v.roleId + '" data-type="ROLE" data-title="' + v.roleTitle + '" > <div class="fg-image fg-gallery-effect-1" style="background-image:url('+ fullPathImg +')"> <img src="' + fullPathImg + '"> </div> <div class="fg-album-title">' + v.roleTitle + ' </div> </div>';
+                elem += ' <div class="fg-gallery-album col-md-2 col-sm-3 col-xs-4" id="' + v.roleId + '" data-type="ROLE" data-title="' + v.roleTitle + '" > <div class="fg-image fg-gallery-effect-1" style="background-image:url(\''+ fullPathImg +'\')"> <img src="' + fullPathImg + '"> </div> <div class="fg-album-title">' + v.roleTitle + ' </div> </div>';
 
             });
         }

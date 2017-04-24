@@ -1,0 +1,451 @@
+Admin\UtilityBundle\Entity\FgClub:
+    repositoryClass: Admin\UtilityBundle\Repository\FgClubRepository
+    type: entity
+    table: fg_club
+    indexes:
+        last_admin_login_contact:
+            columns:
+                - last_login_admin_contact
+        fairgate_solution_contact:
+            columns:
+                - fairgate_solution_contact
+        fk_fg_club_fg_club_address1:
+            columns:
+                - correspondence_id
+        fk_fg_club_fg_club_address2:
+            columns:
+                - billing_id
+        assignment_country:
+            columns:
+                - assignment_country
+        assignment_state:
+            columns:
+                - assignment_state
+        assignment_activity:
+            columns:
+                - assignment_activity
+        assignment_subactivity:
+            columns:
+                - assignment_subactivity
+        parent_club_id:
+            columns:
+                - parent_club_id
+        url_identifier_idx:
+            columns:
+                - url_identifier
+        is_federation_index:
+            columns:
+                - is_federation
+        responsible_index:
+            columns:
+                - responsible_contact_id
+        created_by:
+            columns:
+                - created_by
+        is_deleted:
+            columns:
+                - is_deleted
+        is_sub_federation:
+            columns:
+                - is_sub_federation
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        parentClubId:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            column: parent_club_id
+        federationId:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: federation_id
+        subFederationId:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            column: sub_federation_id
+        isFairgate:
+            type: boolean
+            nullable: false
+            column: is_fairgate
+        isFederation:
+            type: boolean
+            nullable: false
+            column: is_federation
+        isSubFederation:
+            type: boolean
+            nullable: false
+            column: is_sub_federation
+        clubType:
+            type: string
+            nullable: true
+            length: null
+            options:
+                fixed: false
+            column: club_type
+        subfedLevel:
+            type: boolean
+            nullable: false
+            column: subfed_level
+        isRegistered:
+            type: boolean
+            nullable: true
+            column: is_registered
+        title:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        urlIdentifier:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+            column: url_identifier
+        year:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+        isActive:
+            type: boolean
+            nullable: true
+            column: is_active
+        isDeleted:
+            type: boolean
+            nullable: false
+            column: is_deleted
+        email:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        website:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        responsibleContactId:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: responsible_contact_id
+        lastUpdated:
+            type: datetime
+            nullable: true
+            column: last_updated
+        createdAt:
+            type: datetime
+            nullable: true
+            column: created_at
+        newsletterPowered:
+            type: string
+            nullable: true
+            length: null
+            options:
+                fixed: false
+            column: newsletter_powered
+        state:
+            type: string
+            nullable: true
+            length: null
+            options:
+                fixed: false
+        isFgNewsletterSubscriber:
+            type: boolean
+            nullable: false
+            column: is_fg_newsletter_subscriber
+        defaultContactSubscription:
+            type: boolean
+            nullable: false
+            column: default_contact_subscription
+        clubNumber:
+            type: bigint
+            nullable: true
+            options:
+                unsigned: false
+            column: club_number
+        hasSubfederation:
+            type: boolean
+            nullable: false
+            column: has_subfederation
+        settingsUpdated:
+            type: datetime
+            nullable: false
+            column: settings_updated
+        calendarColorCode:
+            type: string
+            nullable: true
+            length: 10
+            options:
+                fixed: false
+            column: calendar_color_code
+        clubMembershipAvailable:
+            type: boolean
+            nullable: false
+            options:
+                comment: '''0-no'', ''1- yes'''
+            column: club_membership_available
+        fedMembershipMandatory:
+            type: boolean
+            nullable: false
+            options:
+                comment: '''0-non-mandatory'', ''1- mandatory'''
+            column: fed_membership_mandatory
+        assignFedmembershipWithApplication:
+            type: boolean
+            nullable: false
+            options:
+                comment: '''0-without application'', ''1- with application'''
+            column: assign_fedmembership_with_application
+        addExistingFedMemberClub:
+            type: boolean
+            nullable: false
+            options:
+                comment: '''0 - not possible'', ''1- possible without application'', ''2 - possible with application'''
+            column: add_existing_fed_member_club
+        fedAdminAccess:
+            type: boolean
+            nullable: false
+            options:
+                comment: '''0-no'', ''1- yes'''
+            column: fed_admin_access
+        hasPromobox:
+            type: boolean
+            nullable: false
+            column: has_promobox
+        hasNlFairgatelogo:
+            type: boolean
+            nullable: false
+            column: has_nl_fairgatelogo
+        lastContactUpdated:
+            type: datetime
+            nullable: true
+            column: last_contact_updated
+        documentCount:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: document_count
+        fedmemberCount:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: fedmember_count
+        lastAdminLogin:
+            type: datetime
+            nullable: true
+            column: last_admin_login
+        ownFedmemberCount:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: own_fedmember_count
+        fedNoteCount:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: fed_note_count
+        activeContactCount:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '0'
+            column: active_contact_count
+        adminCount:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '0'
+            column: admin_count
+        mainContactLoginCount:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '0'
+            column: main_contact_login_count
+        contactLoginCount:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '0'
+            column: contact_login_count
+        newsletterSubscriberCount:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+                default: '0'
+            column: newsletter_subscriber_count
+        subfedNoteCount:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: subfed_note_count
+        status:
+            type: string
+            nullable: true
+            length: null
+            options:
+                fixed: false
+        contractStartDate:
+            type: datetime
+            nullable: true
+            column: contract_start_date
+        clubCreationProcess:
+            type: string
+            nullable: true
+            length: null
+            options:
+                fixed: false
+            column: club_creation_process
+        registrationDate:
+            type: datetime
+            nullable: true
+            column: registration_date
+        registrationToken:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: registration_token
+        contractRenewalDate:
+            type: datetime
+            nullable: true
+            column: contract_renewal_date
+        hearAboutFairgate:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+            column: hear_about_fairgate
+        numberOfContacts:
+            type: integer
+            nullable: true
+            options:
+                unsigned: false
+            column: number_of_contacts
+        registrationExpiryDate:
+            type: datetime
+            nullable: true
+            column: registration_expiry_date
+    manyToOne:
+        assignmentCountry:
+            targetEntity: FgSubcategorisation
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                assignment_country:
+                    referencedColumnName: id
+            orphanRemoval: false
+        billing:
+            targetEntity: FgClubAddress
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                billing_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        correspondence:
+            targetEntity: FgClubAddress
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                correspondence_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        assignmentState:
+            targetEntity: FgSubsubcategorisation
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                assignment_state:
+                    referencedColumnName: id
+            orphanRemoval: false
+        assignmentActivity:
+            targetEntity: FgSubcategorisation
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                assignment_activity:
+                    referencedColumnName: id
+            orphanRemoval: false
+        lastLoginAdminContact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                last_login_admin_contact:
+                    referencedColumnName: id
+            orphanRemoval: false
+        assignmentSubactivity:
+            targetEntity: FgSubsubcategorisation
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                assignment_subactivity:
+                    referencedColumnName: id
+            orphanRemoval: false
+        fairgateSolutionContact:
+            targetEntity: FgCmContact
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                fairgate_solution_contact:
+                    referencedColumnName: id
+            orphanRemoval: false
+        createdBy:
+            targetEntity: FgCmContact
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                created_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

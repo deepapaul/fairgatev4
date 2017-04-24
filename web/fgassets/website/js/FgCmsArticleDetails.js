@@ -139,12 +139,15 @@ var FgCmsArticleDetails = (function () {
                 validationFlag = 1;
             }
             if (validationFlag == 0) {
+                $('.fg-dev-btnsave').off('click');
                 $.ajax({
                     type: 'POST',
                     url: commentSavePath,
                     data: dataArray,
                     success: function (data) {
                         _this.saveCallBack(isGuestContact, guestContactName, postContent.replace(/\r?\n/g, '<br />'), data);
+                         $('.fg-dev-btnsave').off('click');
+                        
                     }
                 });
             }

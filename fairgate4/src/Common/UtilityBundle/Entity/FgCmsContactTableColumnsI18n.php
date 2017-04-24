@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsContactTableColumnsI18n
  */
@@ -29,19 +27,20 @@ class FgCmsContactTableColumnsI18n
      * Set lang
      *
      * @param string $lang
+     *
      * @return FgCmsContactTableColumnsI18n
      */
     public function setLang($lang)
     {
         $this->lang = $lang;
-    
+
         return $this;
     }
 
     /**
      * Get lang
      *
-     * @return string 
+     * @return string
      */
     public function getLang()
     {
@@ -52,19 +51,20 @@ class FgCmsContactTableColumnsI18n
      * Set titleLang
      *
      * @param string $titleLang
+     *
      * @return FgCmsContactTableColumnsI18n
      */
     public function setTitleLang($titleLang)
     {
         $this->titleLang = $titleLang;
-    
+
         return $this;
     }
 
     /**
      * Get titleLang
      *
-     * @return string 
+     * @return string
      */
     public function getTitleLang()
     {
@@ -75,22 +75,24 @@ class FgCmsContactTableColumnsI18n
      * Set id
      *
      * @param \Common\UtilityBundle\Entity\FgCmsContactTableColumns $id
+     *
      * @return FgCmsContactTableColumnsI18n
      */
     public function setId(\Common\UtilityBundle\Entity\FgCmsContactTableColumns $id = null)
     {
         $this->id = $id;
-    
+
         return $this;
     }
 
     /**
      * Get id
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsContactTableColumns 
+     * @return \Common\UtilityBundle\Entity\FgCmsContactTableColumns
      */
     public function getId()
     {
         return $this->id;
     }
 }
+

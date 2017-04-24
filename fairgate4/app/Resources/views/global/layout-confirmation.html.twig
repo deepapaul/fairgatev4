@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!--Template Name: Metronic 4.0.2-->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+    <!--<![endif]-->
+    <!-- BEGIN HEAD -->
+    <head>
+        {{ include('::internal/meta.html.twig', {'title':pageTitle}) }}
+        <!-- BEGIN CSS -->
+        {% block stylesheets %}                                   
+            <!-- BEGIN GLOBAL MANDATORY STYLES -->
+            {{ include('::internal/corelevel-styles.html.twig') }}
+            <!-- END GLOBAL MANDATORY STYLES -->
+
+            <!-- BEGIN PAGELEVEL -->
+            {{ include('::internal/applevel-styles.html.twig') }}
+            <!-- END DYMANICLY LOADED CSS FILES -->
+
+            <!-- BEGIN THEME STYLES -->
+            {{ include('::internal/theme-styles.html.twig') }}
+            <!-- END THEME STYLES -->
+
+            <!-- BEGIN FAIRGATE CUSTOM STYLES -->
+            {{ include('::internal/fairgate-styles.html.twig') }}
+            <!-- END FAIRGATE CUSTOM STYLES -->
+
+            <!-- BEGIN PAGE STYLES -->
+            {% block customstylesheets %}
+                <style type="text/css">
+                .fg-left-block {
+                  float: left;
+                  width: 70px;
+                  padding: 15px 0 0 10px;
+                }
+                .fg-right-block {
+                  float: right;
+                  width: 80%;
+                  width: calc(100% - 75px);
+                }
+                h3 {
+                  margin-top: 0;
+                }
+                ul {
+                  padding: 0 0 0 17px;
+                }
+              </style>
+            {% endblock %}
+            <!-- END PAGE STYLES -->                        
+        {% endblock %}
+
+    </head>
+    <!-- END HEAD -->
+    <!-- BEGIN BODY -->
+    <!-- BEGIN BODY -->
+    <body class="page-sidebar-closed page-content-white page-full-width page-md">
+        <div class="page-wrapper">
+            <!--include helpers/_page-header.pug-->
+            <div class="clearfix"></div>
+            <!-- BEGIN CONTAINER-->
+            <div class="page-container">
+                <!--include helpers/_page-sidebar.pug-->
+                <div class="page-content-wrapper">
+                    <!-- BEGIN CONTENT BODY-->
+                    <div class="page-content">
+                        {% block pagecontent %}
+                            <!-- PAGE LEVEL CONTENT WILL BE DISPLAYED HERE -->
+                        {% endblock %}     
+                    </div>
+                </div>
+                <!-- END CONTENT BODY-->
+            </div>
+        </div>    
+       
+    </body>
+    <!-- END BODY -->
+</html>

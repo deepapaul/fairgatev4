@@ -238,7 +238,11 @@ var FgForumTopicView = {
                 var content = bbcodeParser.bbcodeToHtml($('#forum-post-'+dataId).text());
                 $('#forum-content-'+dataId).find('.fg-forum-post-content').html(content);
                 uniqueId = $('#forum-content-'+dataId).find('a.fa-post-count').html().replace("#", "");                
+                FgXmlHttp.isDisabled = false;
+                $('.fg-dev-btnsave').off('click');
                 FgXmlHttp.post(pathEditTopicReply, {'content': content,'topicId': topicId, 'dataId' : dataId, 'uniqueId' : uniqueId} , false, FgForumTopicView.postEditCallBack);
+                $('.fg-dev-btnsave').off('click');
+                $('.fg-dev-btnsave').prop('disabled', true);
             }
             
             return false;
@@ -411,7 +415,11 @@ var FgForumTopicView = {
             var forumArr = JSON.stringify(jsonArray);                 
             //increment total count of post
             totalCnt = totalCnt + 1;
+            FgXmlHttp.isDisabled = false;
+            $('.fg-dev-btnsave').off('click');
             FgXmlHttp.post(pathSaveTopicReply, {'postArr': forumArr,'topicId': topicId, 'role' : roleId, 'grpType' : module} , false, FgForumTopicView.saveReplyCallBack);
+            $('.fg-dev-btnsave').off('click');
+            $('.fg-dev-btnsave').prop('disabled', true);
         } 
     },
     

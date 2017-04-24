@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgFileManagerVersion
  */
@@ -18,6 +16,11 @@ class FgFileManagerVersion
      * @var string
      */
     private $filename;
+
+    /**
+     * @var string
+     */
+    private $mimeType;
 
     /**
      * @var integer
@@ -35,14 +38,14 @@ class FgFileManagerVersion
     private $updatedAt;
 
     /**
-     * @var \Common\UtilityBundle\Entity\FgCmContact
-     */
-    private $updatedBy;
-
-    /**
      * @var \Common\UtilityBundle\Entity\FgFileManager
      */
     private $fileManager;
+
+    /**
+     * @var \Common\UtilityBundle\Entity\FgCmContact
+     */
+    private $updatedBy;
 
     /**
      * @var \Common\UtilityBundle\Entity\FgCmContact
@@ -53,7 +56,7 @@ class FgFileManagerVersion
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -64,19 +67,20 @@ class FgFileManagerVersion
      * Set filename
      *
      * @param string $filename
+     *
      * @return FgFileManagerVersion
      */
     public function setFilename($filename)
     {
         $this->filename = $filename;
-    
+
         return $this;
     }
 
     /**
      * Get filename
      *
-     * @return string 
+     * @return string
      */
     public function getFilename()
     {
@@ -84,22 +88,47 @@ class FgFileManagerVersion
     }
 
     /**
+     * Set mimeType
+     *
+     * @param string $mimeType
+     *
+     * @return FgFileManagerVersion
+     */
+    public function setMimeType($mimeType)
+    {
+        $this->mimeType = $mimeType;
+
+        return $this;
+    }
+
+    /**
+     * Get mimeType
+     *
+     * @return string
+     */
+    public function getMimeType()
+    {
+        return $this->mimeType;
+    }
+
+    /**
      * Set size
      *
      * @param integer $size
+     *
      * @return FgFileManagerVersion
      */
     public function setSize($size)
     {
         $this->size = $size;
-    
+
         return $this;
     }
 
     /**
      * Get size
      *
-     * @return integer 
+     * @return integer
      */
     public function getSize()
     {
@@ -110,19 +139,20 @@ class FgFileManagerVersion
      * Set uploadedAt
      *
      * @param \DateTime $uploadedAt
+     *
      * @return FgFileManagerVersion
      */
     public function setUploadedAt($uploadedAt)
     {
         $this->uploadedAt = $uploadedAt;
-    
+
         return $this;
     }
 
     /**
      * Get uploadedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUploadedAt()
     {
@@ -133,19 +163,20 @@ class FgFileManagerVersion
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
+     *
      * @return FgFileManagerVersion
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
-    
+
         return $this;
     }
 
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -153,45 +184,23 @@ class FgFileManagerVersion
     }
 
     /**
-     * Set updatedBy
-     *
-     * @param \Common\UtilityBundle\Entity\FgCmContact $updatedBy
-     * @return FgFileManagerVersion
-     */
-    public function setUpdatedBy(\Common\UtilityBundle\Entity\FgCmContact $updatedBy = null)
-    {
-        $this->updatedBy = $updatedBy;
-    
-        return $this;
-    }
-
-    /**
-     * Get updatedBy
-     *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
-     */
-    public function getUpdatedBy()
-    {
-        return $this->updatedBy;
-    }
-
-    /**
      * Set fileManager
      *
      * @param \Common\UtilityBundle\Entity\FgFileManager $fileManager
+     *
      * @return FgFileManagerVersion
      */
     public function setFileManager(\Common\UtilityBundle\Entity\FgFileManager $fileManager = null)
     {
         $this->fileManager = $fileManager;
-    
+
         return $this;
     }
 
     /**
      * Get fileManager
      *
-     * @return \Common\UtilityBundle\Entity\FgFileManager 
+     * @return \Common\UtilityBundle\Entity\FgFileManager
      */
     public function getFileManager()
     {
@@ -199,53 +208,51 @@ class FgFileManagerVersion
     }
 
     /**
+     * Set updatedBy
+     *
+     * @param \Common\UtilityBundle\Entity\FgCmContact $updatedBy
+     *
+     * @return FgFileManagerVersion
+     */
+    public function setUpdatedBy(\Common\UtilityBundle\Entity\FgCmContact $updatedBy = null)
+    {
+        $this->updatedBy = $updatedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedBy
+     *
+     * @return \Common\UtilityBundle\Entity\FgCmContact
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updatedBy;
+    }
+
+    /**
      * Set uploadedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $uploadedBy
+     *
      * @return FgFileManagerVersion
      */
     public function setUploadedBy(\Common\UtilityBundle\Entity\FgCmContact $uploadedBy = null)
     {
         $this->uploadedBy = $uploadedBy;
-    
+
         return $this;
     }
 
     /**
      * Get uploadedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getUploadedBy()
     {
         return $this->uploadedBy;
     }
-    /**
-     * @var string
-     */
-    private $mimeType;
-
-
-    /**
-     * Set mimeType
-     *
-     * @param string $mimeType
-     * @return FgFileManagerVersion
-     */
-    public function setMimeType($mimeType)
-    {
-        $this->mimeType = $mimeType;
-    
-        return $this;
-    }
-
-    /**
-     * Get mimeType
-     *
-     * @return string 
-     */
-    public function getMimeType()
-    {
-        return $this->mimeType;
-    }
 }
+

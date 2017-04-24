@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnNewsletterArticleDocuments
  */
@@ -40,6 +38,11 @@ class FgCnNewsletterArticleDocuments
     private $createdAt;
 
     /**
+     * @var \Common\UtilityBundle\Entity\FgFileManager
+     */
+    private $fileManager;
+
+    /**
      * @var \Common\UtilityBundle\Entity\FgDmDocuments
      */
     private $documents;
@@ -69,6 +72,7 @@ class FgCnNewsletterArticleDocuments
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgCnNewsletterArticleDocuments
      */
     public function setSortOrder($sortOrder)
@@ -92,6 +96,7 @@ class FgCnNewsletterArticleDocuments
      * Set docType
      *
      * @param string $docType
+     *
      * @return FgCnNewsletterArticleDocuments
      */
     public function setDocType($docType)
@@ -115,6 +120,7 @@ class FgCnNewsletterArticleDocuments
      * Set filename
      *
      * @param string $filename
+     *
      * @return FgCnNewsletterArticleDocuments
      */
     public function setFilename($filename)
@@ -138,6 +144,7 @@ class FgCnNewsletterArticleDocuments
      * Set title
      *
      * @param string $title
+     *
      * @return FgCnNewsletterArticleDocuments
      */
     public function setTitle($title)
@@ -161,6 +168,7 @@ class FgCnNewsletterArticleDocuments
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return FgCnNewsletterArticleDocuments
      */
     public function setCreatedAt($createdAt)
@@ -181,9 +189,34 @@ class FgCnNewsletterArticleDocuments
     }
 
     /**
+     * Set fileManager
+     *
+     * @param \Common\UtilityBundle\Entity\FgFileManager $fileManager
+     *
+     * @return FgCnNewsletterArticleDocuments
+     */
+    public function setFileManager(\Common\UtilityBundle\Entity\FgFileManager $fileManager = null)
+    {
+        $this->fileManager = $fileManager;
+
+        return $this;
+    }
+
+    /**
+     * Get fileManager
+     *
+     * @return \Common\UtilityBundle\Entity\FgFileManager
+     */
+    public function getFileManager()
+    {
+        return $this->fileManager;
+    }
+
+    /**
      * Set documents
      *
      * @param \Common\UtilityBundle\Entity\FgDmDocuments $documents
+     *
      * @return FgCnNewsletterArticleDocuments
      */
     public function setDocuments(\Common\UtilityBundle\Entity\FgDmDocuments $documents = null)
@@ -207,6 +240,7 @@ class FgCnNewsletterArticleDocuments
      * Set newsletter
      *
      * @param \Common\UtilityBundle\Entity\FgCnNewsletter $newsletter
+     *
      * @return FgCnNewsletterArticleDocuments
      */
     public function setNewsletter(\Common\UtilityBundle\Entity\FgCnNewsletter $newsletter = null)
@@ -230,6 +264,7 @@ class FgCnNewsletterArticleDocuments
      * Set article
      *
      * @param \Common\UtilityBundle\Entity\FgCnNewsletterArticle $article
+     *
      * @return FgCnNewsletterArticleDocuments
      */
     public function setArticle(\Common\UtilityBundle\Entity\FgCnNewsletterArticle $article = null)
@@ -248,32 +283,5 @@ class FgCnNewsletterArticleDocuments
     {
         return $this->article;
     }
-    /**
-     * @var \Common\UtilityBundle\Entity\FgFileManager
-     */
-    private $fileManager;
-
-
-    /**
-     * Set fileManager
-     *
-     * @param \Common\UtilityBundle\Entity\FgFileManager $fileManager
-     * @return FgCnNewsletterArticleDocuments
-     */
-    public function setFileManager(\Common\UtilityBundle\Entity\FgFileManager $fileManager = null)
-    {
-        $this->fileManager = $fileManager;
-    
-        return $this;
-    }
-
-    /**
-     * Get fileManager
-     *
-     * @return \Common\UtilityBundle\Entity\FgFileManager 
-     */
-    public function getFileManager()
-    {
-        return $this->fileManager;
-    }
 }
+

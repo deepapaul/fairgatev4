@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnSmsTeamPackages
  */
@@ -39,6 +37,7 @@ class FgCnSmsTeamPackages
      * Set clubPackagesId
      *
      * @param integer $clubPackagesId
+     *
      * @return FgCnSmsTeamPackages
      */
     public function setClubPackagesId($clubPackagesId)
@@ -62,6 +61,7 @@ class FgCnSmsTeamPackages
      * Set teamId
      *
      * @param integer $teamId
+     *
      * @return FgCnSmsTeamPackages
      */
     public function setTeamId($teamId)
@@ -81,3 +81,4 @@ class FgCnSmsTeamPackages
         return $this->teamId;
     }
 }
+

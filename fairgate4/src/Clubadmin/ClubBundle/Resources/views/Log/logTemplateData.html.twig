@@ -28,7 +28,7 @@
                 {% endif %}
                 <td>{{ logEntry.value_before }}</td>
                 <td>{{ logEntry.value_after }}</td>                    
-                <td>{%if (logEntry.activeContact != null)%}<a href="{{ path('render_contact_overview', {'offset' : 0, 'contact' : logEntry.activeContact  }) }}" target="_blank" data-cont-id="{{ logEntry.activeContact }}">{{ logEntry.editedBy }}</a> {% else %}{{ logEntry.editedBy }} {% endif %}</td>
+                <td>{{ logEntry.changedByName }}</td>
             </tr>
         {% endfor %}
     </tbody>

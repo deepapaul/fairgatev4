@@ -58,13 +58,28 @@ class UserProvider extends BaseUserProvider implements UserProviderInterface
             //checking if superadmin
             $superAdminFlag = $user->getIsSuperAdmin();
             if ($superAdminFlag != 1) {
-                $user = $this->findUserClub($username, $club->get('id'));
+                $user = $this->findUserClub($username, $club->get('id'));                
                 if (!$user) {
                     $user = $this->findUserClub($username, $club->get('federation_id'));
                     $fedAdminFlag = ($user) ? $ContactPdo->checkFedAdminContact($user->getId(), $club->get('id'), $club->get('federation_id')) : false;
                     if (!$fedAdminFlag || !$user) {
                         throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
                     }
+                } else {
+                    $fedAdminFlag = $ContactPdo->checkFedAdminContact($user->getId(), $club->get('id'), $club->get('federation_id'));                 
+                }
+                
+                //If the club is in 'Registered' status only superadmin and fedadmin can login
+                //If the club is in 'Confirmed' status only superadmin/fedadmin/maincontact can login
+                //If the club is in 'Active' status every user can login
+                $adminEntityManager = $container->get('fg.admin.connection')->getAdminManager();
+                $clubObj = $adminEntityManager->getRepository('AdminUtilityBundle:FgClub')->find($club->get('id'));
+                $clubStatus = $clubObj->getStatus();
+                $clubsMainContact = ($clubObj->getFairgateSolutionContact()) ? $clubObj->getFairgateSolutionContact()->getId() : null;
+                $loggedContact = $user->getContact()->getId();
+                if( (!$fedAdminFlag && $clubStatus != 'Active' && ($clubsMainContact != $loggedContact)) || 
+                    (!$fedAdminFlag && $clubStatus == 'Registered') ) {
+                    throw new \Exception('HAS_NO_PERMISSION'); 
                 }
 
                 //Block user if Intranet access is 0
@@ -78,7 +93,7 @@ class UserProvider extends BaseUserProvider implements UserProviderInterface
                 if ($intranetAccess != 1 && $applicationArea === 'internal') {
                     throw new \Exception('HAS_NO_INTRANET_ACCESS');
                 }
-                if ($lastLogin === null) { //if the user is not activated his account (first time login)
+                if ($lastLogin === null && ($clubsMainContact != $loggedContact)) { //if the user is not activated his account (first time login) (except for club's main contact)
                     throw new \Exception('LOGIN_ACCOUNT_NOT_ACTIVATED');
                 }
             }

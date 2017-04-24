@@ -19,6 +19,7 @@ use Common\UtilityBundle\Repository\Pdo\ContactPdo;
  */
 class SfGuardUserRepository extends EntityRepository
 {
+
     /**
      * Function to get properties.
      *
@@ -32,14 +33,13 @@ class SfGuardUserRepository extends EntityRepository
         $doctrineConfig->addCustomStringFunction('contactName', 'Common\UtilityBundle\Extensions\FetchContactName');
         $doctrineConfig->addCustomStringFunction('contactNameNoSort', 'Common\UtilityBundle\Extensions\FetchContactNameNoSort');
         $qb = $this->createQueryBuilder('sf')
-                ->select('c.id,contactName(c.id) as contactname', 'c.id,contactNameNoSort(c.id 0) as contactnamenosort', 'sf.email', 'c.isCompany', 'fedC.id as fedContactId', 'subfedC.id as subfedContactId',
-                        "CASE WHEN (c.isFedMembershipConfirmed = '0' AND fedMemCat.id IS NOT NULL ) THEN 1 ELSE 0 END as isFedCategory")
-                ->leftJoin('sf.contact', 'c')
-                ->leftJoin('c.fedContact', 'fedC')
-                ->leftJoin('c.subfedContact', 'subfedC')
-                ->leftJoin('c.fedMembershipCat', 'fedMemCat')
-                ->where('sf.id=:userId')
-                ->setParameter('userId', $userId);
+            ->select('c.id,contactName(c.id) as contactname', 'c.id,contactNameNoSort(c.id 0) as contactnamenosort', 'sf.email', 'c.isCompany', 'fedC.id as fedContactId', 'subfedC.id as subfedContactId', "CASE WHEN (c.isFedMembershipConfirmed = '0' AND fedMemCat.id IS NOT NULL ) THEN 1 ELSE 0 END as isFedCategory")
+            ->leftJoin('sf.contact', 'c')
+            ->leftJoin('c.fedContact', 'fedC')
+            ->leftJoin('c.subfedContact', 'subfedC')
+            ->leftJoin('c.fedMembershipCat', 'fedMemCat')
+            ->where('sf.id=:userId')
+            ->setParameter('userId', $userId);
         $result = $qb->getQuery()->getResult();
 
         return $result[0];
@@ -55,10 +55,10 @@ class SfGuardUserRepository extends EntityRepository
     public function getContactname($userId)
     {
         $qb = $this->createQueryBuilder('sf')
-                ->select('sf.firstName', 'sf.lastName')
-                ->leftJoin('sf.contact', 'c')
-                ->where('sf.contact=:userId')
-                ->setParameter('userId', $userId);
+            ->select('sf.firstName', 'sf.lastName')
+            ->leftJoin('sf.contact', 'c')
+            ->where('sf.contact=:userId')
+            ->setParameter('userId', $userId);
 
         $result = $qb->getQuery()->getResult();
 
@@ -76,17 +76,17 @@ class SfGuardUserRepository extends EntityRepository
     public function alterPasswordByContactId($conn, $userId)
     {
         $qb = $this->createQueryBuilder('sf')
-        ->select('GROUP_CONCAT(C2.id) AS contactIds', 'sf.password')
-        ->innerJoin('sf.contact', 'C1')
-        ->leftJoin('CommonUtilityBundle:FgCmContact', 'C2', 'WITH', 'C2.fedContact = C1.fedContact')
-        ->where('sf.id=:userId')
-        ->setParameter('userId', $userId);
+            ->select('GROUP_CONCAT(C2.id) AS contactIds', 'sf.password')
+            ->innerJoin('sf.contact', 'C1')
+            ->leftJoin('CommonUtilityBundle:FgCmContact', 'C2', 'WITH', 'C2.fedContact = C1.fedContact')
+            ->where('sf.id=:userId')
+            ->setParameter('userId', $userId);
 
         $result = $qb->getQuery()->getResult();
 
         $contactId = $result[0]['contactIds'];
         $password = $result[0]['password'];
-        $updateQry = "UPDATE sf_guard_user s SET s.password='".FgUtility::getSecuredData($password, $conn)."',s.enabled='1' WHERE s.contact_id IN (".FgUtility::getSecuredData($contactId, $conn).' )';
+        $updateQry = "UPDATE sf_guard_user s SET s.password='" . FgUtility::getSecuredData($password, $conn) . "',s.enabled='1' WHERE s.contact_id IN (" . FgUtility::getSecuredData($contactId, $conn) . ' )';
         $conn->executeQuery($updateQry);
 
         return;
@@ -155,15 +155,15 @@ class SfGuardUserRepository extends EntityRepository
                         }
                     }
                     if ($triggerLogout) {
-                        $currentUri = $secure.'://'.$request->server->get('HTTP_HOST').$logout;
-                        header('Location:'.$currentUri);
+                        $currentUri = $secure . '://' . $request->server->get('HTTP_HOST') . $logout;
+                        header('Location:' . $currentUri);
                         exit;
                     }
                 }
             } else {
                 if ($loggedClubId != $club->get('id')) {
-                    $currentUri = $secure.'://'.$request->server->get('HTTP_HOST').$logout;
-                    header('Location:'.$currentUri);
+                    $currentUri = $secure . '://' . $request->server->get('HTTP_HOST') . $logout;
+                    header('Location:' . $currentUri);
                     exit;
                 }
             }
@@ -204,7 +204,7 @@ class SfGuardUserRepository extends EntityRepository
      */
     public function getPasswordEmptyUsers($conn, $contactId)
     {
-        $passQry = 'SELECT password FROM sf_guard_user WHERE contact_id='.FgUtility::getSecuredData($contactId, $conn)." AND (password !='' OR password != 'NULL') AND enabled=1 LIMIT 1 ";
+        $passQry = 'SELECT password FROM sf_guard_user WHERE contact_id=' . FgUtility::getSecuredData($contactId, $conn) . " AND (password !='' OR password != 'NULL') AND enabled=1 LIMIT 1 ";
         $existingPassword = $conn->executeQuery($passQry)->fetchAll();
 
         return $existingPassword;
@@ -220,7 +220,7 @@ class SfGuardUserRepository extends EntityRepository
      */
     public function insertNewSfUser($conn, $valueQry)
     {
-        $sfGuardUserInsertQuery = 'INSERT INTO sf_guard_user (`first_name`,`last_name`,`username`,`username_canonical`,`email`,`email_canonical`,`password`,`created_at`,`updated_at`,`contact_id`,`club_id`,`enabled`,`roles`,`is_security_admin`,`is_readonly_admin`) VALUES '.implode(',', $valueQry).';';
+        $sfGuardUserInsertQuery = 'INSERT INTO sf_guard_user (`first_name`,`last_name`,`username`,`username_canonical`,`email`,`email_canonical`,`password`,`created_at`,`updated_at`,`contact_id`,`club_id`,`enabled`,`roles`,`is_security_admin`,`is_readonly_admin`) VALUES ' . implode(',', $valueQry) . ';';
         $conn->executeQuery($sfGuardUserInsertQuery);
 
         return;
@@ -263,7 +263,7 @@ class SfGuardUserRepository extends EntityRepository
      */
     private function triggerLogin($container = '', $contactId = '', $clubId = '')
     {
-        if ($container != ''  && $contactId != '' && $clubId != '') {
+        if ($container != '' && $contactId != '' && $clubId != '') {
             $userObj = $this->getEntityManager()->getRepository('CommonUtilityBundle:SfGuardUser')->findOneBy(array('contact' => $contactId, 'club' => $clubId));
             if ($userObj) {
                 //create token instance
@@ -309,9 +309,9 @@ class SfGuardUserRepository extends EntityRepository
     public function getSfGuardUserDetails($contactId)
     {
         $qb = $this->createQueryBuilder('sf')
-                ->select('sf.id as sfGuardUserId')
-                ->where('sf.contact=:contactId')
-                ->setParameter('contactId', $contactId);
+            ->select('sf.id as sfGuardUserId')
+            ->where('sf.contact=:contactId')
+            ->setParameter('contactId', $contactId);
 
         $result = $qb->getQuery()->getResult();
 
@@ -336,7 +336,7 @@ class SfGuardUserRepository extends EntityRepository
         $contactPdo = new Pdo\ContactPdo($container);
         $contactPdo->insertToUserTable($clubId, $newClubId, $contactId, $newContactId);
     }
-    
+
     /**
      * Function to get the details of superadmins for notofocation mailing
      * 
@@ -347,7 +347,8 @@ class SfGuardUserRepository extends EntityRepository
      * 
      * @return array $superAdminList
      */
-    public function getSuperAdminForNotification($conn, $clubDefaultLanguage, $contactDefaultLanguage, $emailField){
+    public function getSuperAdminForNotification($conn, $clubDefaultLanguage, $contactDefaultLanguage, $emailField)
+    {
         $query = "SELECT CONCAT(first_name, ' ' ,last_name) AS name, salutationText( contact_id, club_id, '$clubDefaultLanguage','$contactDefaultLanguage') AS salutationText, `$emailField` AS email 
                     FROM sf_guard_user 
                     INNER JOIN master_system ON fed_contact_id = contact_id 
@@ -369,15 +370,52 @@ class SfGuardUserRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('sf');
         $qb->select('sf.id')
-                ->where('sf.authCode=:authCode')
-                ->setParameter('authCode', $authCode);
+            ->where('sf.authCode=:authCode')
+            ->setParameter('authCode', $authCode);
 
         $result = $qb->getQuery()->getResult();
-        
+
         if (!empty($result)) {
             return $result[0];
         } else {
             return false;
         }
+    }
+
+    /**
+     * Method to unset password of main contacts, when making club invalid
+     * 
+     * @param array $nonConfirmedClubs ids of nonConfirmedClubs after 7 days
+     * 
+     * @return boolean
+     */
+    public function unsetPasswordOfMainContacts($nonConfirmedClubs)
+    {
+        $mainContactIds = array_column($nonConfirmedClubs, 'mainContactId');
+        $qb = $this->createQueryBuilder('USER');
+        $que = $qb->update('CommonUtilityBundle:SfGuardUser', 'USER')
+            ->set('USER.salt', ':null')
+            ->set('USER.password', ':null')
+            ->where('USER.contact IN (:mainContactIds)')
+            ->setParameter('mainContactIds', $mainContactIds)
+            ->setParameter('null', null)
+            ->getQuery();
+        $que->execute();
+
+        return true;
+    }
+
+    /**
+     * Method to set password for user registered
+     * 
+     * @param int    $contactId contact Id
+     * @param string $password  password
+     */
+    public function setUserPassword($contactId, $password)
+    {
+        $user = $this->_em->getRepository('CommonUtilityBundle:SfGuardUser')->findOneBy(array('contact' => $contactId));
+        $user->setPlainPassword($password);
+        $user->setEnabled(1);
+        $this->_em->flush();
     }
 }

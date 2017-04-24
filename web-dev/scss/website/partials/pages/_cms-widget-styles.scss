@@ -22,8 +22,8 @@
 ================================================================================ */
 *[class^='fg-grid'], 
 *[class*=' fg-grid']{
-      *[class^='fg-col'], 
-      *[class*=' fg-col']{
+      *[class^='fg-col-'], 
+      *[class*=' fg-col-']{
           @include make-col(30px);
           width: 100%;
           @include bpMinMax('768px','991px') {
@@ -831,16 +831,7 @@
             width:100%;
           }
      }
-     
-    .fg-grid-col-2 &, 
-    .fg-grid-col-3 &, 
-    .fg-grid-col-4 &, 
-    .fg-grid-col-5 &, 
-    .fg-grid-col-6 &{ 
-            @include bpMin('768px') {
-                font-size: 17px;
-            }
-    }
+   
   }
   footer{
     @extend %clearfix;
@@ -882,9 +873,63 @@
 
 
   }
+    .fg-article-empty-col {
+        float: none;
+        clear: left;
+    }
+    .fg-col-2 , 
+    .fg-col-3 , 
+    .fg-col-4 , 
+    .fg-col-5 , 
+    .fg-col-6 { 
+            @include bpMin('768px') {
+                .fg-article-wrapper {
+                  font-size: 17px;
+                }
+            }
+    }
+    .fg-col-2{
+        .fg-content{
+            figure{
 
- 
+            }
+            figure,
+            .fg-right-col{
+                width: 100%;
+                padding: 0;
+            }
+        }
+    }
+    .fg-col-2{
+      .fg-content{
+            figure{
+
+            }
+            figure,
+            .fg-right-col{
+                width: 100%;
+                padding: 0;
+            }
+      }
+    }
+    .fg-col-1{
+        h2{
+          @include break-hyphens;
+        }
+        .fg-content{ 
+            figure,
+            .fg-right-col{
+                width: 100%;
+                padding: 0;
+            }
+            a.fg-read-more{
+              display: block;
+              margin-top:10px;
+            }
+        }
+    }
 }
+/*
 .fg-grid-col-2{
   .fg-article-widget{
 
@@ -917,7 +962,246 @@
         }
     }
   }
+}*/
+//-Article slider styles
+.fg-article-widget{
+    &.fg-widget-block{        
+      margin-left: -15px;
+      margin-right: -15px;
+    }
+    .fg-article-wrapper{
+        .fg-article-empty-col{
+            clear: left;
+            float: none;
+            
+        }
+        .fg-article-slider{
+            .fg-carousel-inner{
+              position: relative;
+
+              .fg-cat-wrapper{
+                  z-index: 1;
+                  @include position(absolute,10px,auto,auto,10px);
+                  .fg-grid-col-1 &{
+                    display: none;
+                  }
+                  >div{
+                    display: inline-block;
+                    margin: -2px;
+                    &.fg-cats{
+                      margin-right: 2px;  
+                    }
+                    >span{
+                      background: #ccc;
+                      padding: 1px 5px;
+                      margin: 2px;
+                      display: inline-block;
+                    }
+                  }
+              }
+            }
+            .carousel{
+                .carousel-inner{
+                    .carousel-caption{
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        padding: 20px;
+                        text-align: left;
+                        background: rgba(0,0,0,.5);
+                    }
+                }
+
+                .fg-carousel-nav{
+                    a{
+                        @include position(absolute,0,auto,0,0);
+                        margin: auto;
+                        z-index: 10;
+                        display: flex;
+                        align-items: center;
+                        &.fg-next{
+                          left: auto;
+                          right: 0;
+                        }
+                    }
+                    .fa{
+                      font-size: 7em;
+                    }
+                }
+                .fg-article-slider-nav{
+                    li{
+
+                      background: $clrbrdrDflt;
+                      padding: 0;
+
+                      >a{
+                          text-transform: uppercase;
+                          padding: 20px;
+                          background: none;
+                          text-align: left;
+                          @include border-radius(0);
+                          .fg-thumb{
+                              display: inline-block;
+                              vertical-align: middle;
+                              background-size: cover;
+                          }
+                          &:hover{
+                            background: none;
+                          }
+                      }
+                      
+                      &.active,&:hover{
+                        background: $borderblue;
+                      }
+                    }
+                    &.fg-nav-img{
+                      li{
+                        >a{
+                          padding: 0;
+                          figure{
+                            display: inline-block;
+                            vertical-align: middle;
+                            width: 80px;
+                            height: 80px;
+                          }
+                          span{
+                            display: inline-block;
+                            vertical-align: middle;
+                            padding: 10px 20px;
+                            text-transform: uppercase;
+                            width: calc(100% - 85px);
+                          }
+                        }
+                      }
+                    }
+                }
+            }
+            &.fg-slider-btm-tab{
+                .fg-article-slider-nav{
+                    .fg-grid-col-1 &{
+                      display: none;
+                    }
+                }
+            }
+            &.fg-slider-right-tab{
+                .fg-article-slider-nav{
+                  display: none;
+                }
+                .fg-grid-col-6 &,
+                .fg-grid-col-5 &{
+
+                    .fg-carousel-inner{
+                        margin-right: 33.3333%;
+                    }
+                    .fg-article-slider-nav{
+
+                        width: 33.33333333333333%;
+                        display: block;
+                        @include position(absolute,0,0,0,auto);
+                        li{
+                            display: block;
+                            margin: 0;
+                            width: 100%;
+                            a{
+                              text-align: left;
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
+.fg-grid-col-4,
+.fg-grid-col-3,
+.fg-grid-col-2,
+.fg-grid-col-1{
+
+  .fg-article-widget{
+      .fg-article-wrapper{
+          .fg-article-slider{
+            .carousel{
+                .fg-carousel-nav{
+
+                    .fa{
+                      font-size: 6em;
+                    }
+                }
+                .fg-article-slider-nav{
+                    li{
+                        display: block;
+                        width: 100%;
+                        margin: 0;
+                    }
+                }
+            }
+          }
+        }
+      }
+
+}
+.fg-grid-col-3,
+.fg-grid-col-2,
+.fg-grid-col-1{
+
+  .fg-article-widget{
+      .fg-article-wrapper{
+          .fg-article-slider{
+            .carousel{
+                .fg-carousel-nav{
+
+                    .fa{
+                      font-size: 4em;
+                    }
+                }
+                .carousel-inner{
+                    .carousel-caption{
+                        h4{
+                          margin: 0;
+                        }
+                        p{
+                          display: none;
+                        }
+                    }
+                }
+                .fg-article-slider-nav{
+                }
+            }
+          }
+        }
+      }
+
+}
+.fg-grid-col-2,
+.fg-grid-col-1{
+
+  .fg-article-widget{
+      .fg-article-wrapper{
+          .fg-article-slider{
+            .carousel{
+                .fg-carousel-nav{
+
+                    .fa{
+                      font-size: 3em;
+                    }
+                }
+                .carousel-inner{
+                    .carousel-caption{
+                        h4{
+                           white-space: nowrap;
+                           overflow: hidden;
+                           text-overflow:ellipsis;
+                        }
+                    }
+                }
+            }
+          }
+        }
+      }
+
+}
+
 /* =============================================================================
 * 05 - text widget
 ================================================================================ */

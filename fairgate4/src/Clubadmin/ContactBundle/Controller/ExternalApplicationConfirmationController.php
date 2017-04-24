@@ -1,5 +1,4 @@
 <?php
-
 /**
  * ExternalApplicationConfirmation Controller
  *
@@ -24,6 +23,9 @@ use Common\UtilityBundle\Util\FgFedMemberships;
 use Clubadmin\ContactBundle\Util\ContactDetailsSave;
 use Common\UtilityBundle\Repository\Pdo\ContactPdo;
 use Common\UtilityBundle\Repository\Pdo\membershipPdo;
+use Common\UtilityBundle\Util\FgContactSyncDataToAdmin;
+use Common\UtilityBundle\Util\FgClubSyncDataToAdmin;
+use Common\UtilityBundle\Util\FgPermissions;
 
 /**
  * ExternalApplicationConfirmationController
@@ -138,6 +140,15 @@ class ExternalApplicationConfirmationController extends ParentController
      */
     public function getConfirmPopupAction(Request $request, $action)
     {
+       $selectedCount = $request->get('count') ? $request->get('count') : 1;  
+        if ($action == 'confirm') {
+            /* ----- Contact count checking ---------------    */
+            $permissionObj = new FgPermissions($this->container);
+            if (!$permissionObj->checkContactCount($selectedCount)) {
+                return $this->render('CommonUtilityBundle:Permissionpopup:contactcreationwarningpopup.html.twig',array('link'=>false));
+            }
+        }
+
         $selActionType = $request->get('selActionType') ? $request->get('selActionType') : 'all';
         $return['selActionType'] = $selActionType;
         $return['action'] = $action;
@@ -159,7 +170,11 @@ class ExternalApplicationConfirmationController extends ParentController
         $clubIdArray = $this->getClubArray();
         $confirmSuccess = $this->em->getRepository('CommonUtilityBundle:FgCmChangeToconfirm')->confirmOrDiscardChanges($action, $this->clubId, $selectedIds, $this->container, $this->clubDefaultSystemLang, $this->get('club'), $this->contactId, $clubIdArray, $this->get('fairgate_terminology_service'));
         $flashMsg = ($action == 'confirm') ? '%selcount%_OUT_OF_%totalcount%_CHANGES_CONFIRMED_SUCCESSFULLY' : '%selcount%_OUT_OF_%totalcount%_CHANGES_DISCARDED_SUCCESSFULLY';
-
+        /** Sync count to the AdminDB * */
+        $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
+        $clubSyncObject->updateSubscriberCount($this->clubId)
+            ->updateActiveContactCount($this->clubId);
+        /*         * ************************************** */
         return new JsonResponse(array('status' => 'SUCCESS', 'flash' => $this->container->get('translator')->trans($flashMsg, array('%selcount%' => $confirmSuccess['successCount'], '%totalcount%' => $confirmSuccess['totalContacts']))));
     }
 
@@ -195,6 +210,11 @@ class ExternalApplicationConfirmationController extends ParentController
             $flashMsg = 'APPLICATION_DISCARDED_SUCCESSFULLY';
             $flash = $this->container->get('translator')->trans($flashMsg);
         }
+        /** Sync count to the AdminDB * */
+        $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
+        $clubSyncObject->updateSubscriberCount($this->clubId)
+            ->updateActiveContactCount($this->clubId);
+        /*         * ************************************** */
         $countNav = $objExternalForm->getExternalApplicationConfirmationCount($clubId);
         return new JsonResponse(array('status' => 'SUCCESS', 'flash' => $flash, 'noparentload' => false, 'topcount' => $countNav, 'count' => count($selectedIds)));
     }
@@ -268,7 +288,7 @@ class ExternalApplicationConfirmationController extends ParentController
                     }
                     $club_not_exist = array_diff($clubIds, $fedContactClub);
                     if (count($club_not_exist) > 0) {
-                        $clubDetails = $this->em->getRepository('CommonUtilityBundle:FgClub')->getClubsValues($club_not_exist, $club->get('default_lang'));
+                        $clubDetails = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClub')->getClubsValues($club_not_exist, $club->get('default_lang'));
                         foreach ($clubDetails as $clubshared) {
                             $this->shareMembership($clubshared, $fedContactId, $userArr[0]['id']);
                             $alreadyCreated++;
@@ -316,7 +336,7 @@ class ExternalApplicationConfirmationController extends ParentController
                             $k++;
                         }
                         $club_not_exist = array_diff($clubIds, $fedContactClub);
-                        $clubDetails = $this->em->getRepository('CommonUtilityBundle:FgClub')->getClubsValues($club_not_exist, $club->get('default_lang'));
+                        $clubDetails = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClub')->getClubsValues($club_not_exist, $club->get('default_lang'));
                         if (count($club_not_exist) > 0) {
                             foreach ($clubDetails as $clubshared) {
                                 $this->shareMembership($clubshared, $fedContactId, $userArr[0]['id']);
@@ -348,7 +368,11 @@ class ExternalApplicationConfirmationController extends ParentController
                 }
             }
         }
-
+        /** Sync count to the AdminDB * */
+        $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
+        $clubSyncObject->updateSubscriberCount($this->clubId)
+            ->updateActiveContactCount($this->clubId);
+        /*         * ************************************** */
 
         return new JsonResponse($status);
     }
@@ -415,19 +439,19 @@ class ExternalApplicationConfirmationController extends ParentController
             $contactType = $archiveDatas['contactType'];
             $selectedIds = json_decode($archiveDatas['selcontactIds']);
             $totCount = count($selectedIds);
-            
+
             $objExternalForm = $this->em->getRepository('CommonUtilityBundle:FgExternalApplicationForm');
             $returnUser = $objExternalForm->getExternalUsersDetails($clubId, $selectedIds);
             $container = $this->container->getParameterBag();
             $meargable = array();
             $count = 0;
-            
+
             foreach ($returnUser as $userArr) {
                 $mergeableReturn = $objExternalForm->checkUserForMerge($clubId, $userArr, $container);
                 $userMergeArrOption = $this->checkMergeable($mergeableReturn, $userArr);
 
                 $selectedMembership = $userArr['fed_membership'];
-                
+
                 // Checking the contact is mergable if single contact selected for confirmation
                 if (count($selectedIds) == 1) {
                     //Check for fedown Contact
@@ -486,6 +510,12 @@ class ExternalApplicationConfirmationController extends ParentController
         $action = ($count > 0) ? 'confirm' : '';
         $flashMsg = ($action == 'confirm') ? '%selcount%_OUT_OF_%totalcount%_APPLICATIONS_CONFIRMED_SUCCESSFULLY' : '%selcount%_OUT_OF_%totalcount%_APPLICATIONS_DISCARDED_SUCCESSFULLY';
 
+        /** Sync count to the AdminDB * */
+        $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
+        $clubSyncObject->updateSubscriberCount($this->clubId)
+            ->updateActiveContactCount($this->clubId);
+        /*         * ************************************** */
+
         return new JsonResponse(array('status' => 'SUCCESS', 'totalCnt' => $totCount, 'totCount' => $totCount, 'flash' => $this->container->get('translator')->trans($flashMsg, array('%selcount%' => $count, '%totalcount%' => $totCount)), 'noparentload' => false, 'count' => $count));
     }
 
@@ -511,7 +541,7 @@ class ExternalApplicationConfirmationController extends ParentController
         $subFedFields = $clubFields = array();
         $formValues = $this->generateExternalApplicationForm($userForm);
         $clubIds = explode(',', $userForm['club_selected']);
-        $clubDetails = $this->em->getRepository('CommonUtilityBundle:FgClub')->getClubsValues($clubIds, $club->get('default_lang'));
+        $clubDetails = $this->adminEntityManager->getRepository('AdminUtilityBundle:FgClub')->getClubsValues($clubIds, $club->get('default_lang'));
         $clubDetails[0]['defaultSystemLang'] = $club->get('default_system_lang');
         $createClub = $clubDetails[0];
         //Create Contact
@@ -540,163 +570,163 @@ class ExternalApplicationConfirmationController extends ParentController
 
         return;
     }
-    
+
     /**
-	 * Function to send email -- confirmation of external application form
-	 *
+     * Function to send email -- confirmation of external application form
+     *
      * @param array $userForm external application details
-	 *
-	 * @return object View Template Render Object
-	 */
+     *
+     * @return object View Template Render Object
+     */
     private function confirmNotificationMail($userForm)
     {
         $body = $this->getNotificationMailTemplate($userForm['id']);
         $subject = $this->container->get('translator')->trans('EXTERNAL_APPLICATION_CONFIRMATION_FORM_SUBJECT');
         $this->sendSwiftMesage($body, $userForm['email'], 'noreply@fairgate.ch', $subject, 'Fairgate AG');
     }
-    
+
     /**
-	 * Function to get the body content for notification mail in external application form
-	 *
-	 * @param int $extId   external form id
-	 *
-	 * @return object View Template Render Object
-	 */
-	private function getNotificationMailTemplate($extId)
-	{
+     * Function to get the body content for notification mail in external application form
+     *
+     * @param int $extId   external form id
+     *
+     * @return object View Template Render Object
+     */
+    private function getNotificationMailTemplate($extId)
+    {
 
-		$externalApplData = $this->getDoctrine()->getManager()->getRepository('CommonUtilityBundle:FgExternalApplicationForm')->getExternalApplicationDataforPopup($extId);
-		
-		$contactFieldsFinal = $this->getExternalApplicationFieldsForMail();
-		$clubObj = $this->container->get('club');
-		$clubTitle = $clubObj->get('title');
-		$clubLogoUrl = $this->getClubLogoForExternalApplication($clubObj);
-		$salutation = $this->getSalutationofContactForMail($externalApplData['gender'], $clubObj->get('id'));
-		$rendered = $this->renderView('ClubadminContactBundle:ExternalApplicationConfirmation:notificationMailApplicationTemplate.html.twig', array(
-			'clubTitle' => $clubTitle,
-			'salutation' => $salutation,
-			'logoURL' => $clubLogoUrl,
-			'externalApplData' => $externalApplData,
-			'contactFields' => $contactFieldsFinal,
-            'signature' =>$clubObj->get('signature'),
-            'internalUrl' => FgUtility::getBaseUrl($this->container)."/".$clubObj->get('clubUrlIdentifier')."/internal/signin"
-		));
+        $externalApplData = $this->getDoctrine()->getManager()->getRepository('CommonUtilityBundle:FgExternalApplicationForm')->getExternalApplicationDataforPopup($extId);
 
-		return $rendered;
-	}
-    
+        $contactFieldsFinal = $this->getExternalApplicationFieldsForMail();
+        $clubObj = $this->container->get('club');
+        $clubTitle = $clubObj->get('title');
+        $clubLogoUrl = $this->getClubLogoForExternalApplication($clubObj);
+        $salutation = $this->getSalutationofContactForMail($externalApplData['gender'], $clubObj->get('id'));
+        $rendered = $this->renderView('ClubadminContactBundle:ExternalApplicationConfirmation:notificationMailApplicationTemplate.html.twig', array(
+            'clubTitle' => $clubTitle,
+            'salutation' => $salutation,
+            'logoURL' => $clubLogoUrl,
+            'externalApplData' => $externalApplData,
+            'contactFields' => $contactFieldsFinal,
+            'signature' => $clubObj->get('signature'),
+            'internalUrl' => FgUtility::getBaseUrl($this->container) . "/" . $clubObj->get('clubUrlIdentifier') . "/internal/signin"
+        ));
+
+        return $rendered;
+    }
+
     /**
-	 * Function to get the contatc fields details for  notification mail in external application form
-	 *
-	 * @return array $contactFieldsFinal contact fields array
-	 */
-	private function getExternalApplicationFieldsForMail()
-	{
+     * Function to get the contatc fields details for  notification mail in external application form
+     *
+     * @return array $contactFieldsFinal contact fields array
+     */
+    private function getExternalApplicationFieldsForMail()
+    {
 
-		$terminologyService = $this->container->get('fairgate_terminology_service');
-		//Creates the contact system fields array needed for external application mail
-		$contactFields = $this->container->get('club')->get('contactFields');
+        $terminologyService = $this->container->get('fairgate_terminology_service');
+        //Creates the contact system fields array needed for external application mail
+        $contactFields = $this->container->get('club')->get('contactFields');
 
-		$contactFieldsExternal = $this->container->getParameter('external_application_system_fields');
-		foreach ($contactFieldsExternal as $key => $fieldId) {
-			foreach ($contactFields as $fieldData) {
-				if ($fieldData['id'] == $fieldId) {
-					$contactFieldsExternal[$key] = $fieldData['title'];
-				}
-			}
-		}
+        $contactFieldsExternal = $this->container->getParameter('external_application_system_fields');
+        foreach ($contactFieldsExternal as $key => $fieldId) {
+            foreach ($contactFields as $fieldData) {
+                if ($fieldData['id'] == $fieldId) {
+                    $contactFieldsExternal[$key] = $fieldData['title'];
+                }
+            }
+        }
 
-		//Completing the contact fields array creation using other fields available for external application mail
-		$contactFieldsExtra = array_slice($contactFieldsExternal, 0, 10, true) +
-			array("relatives" => $this->container->get('translator')->trans('EXTERNAL_APPLICATION_RELATIVES')) +
-			array_slice($contactFieldsExternal, 10, count($contactFieldsExternal) - 1, true);
+        //Completing the contact fields array creation using other fields available for external application mail
+        $contactFieldsExtra = array_slice($contactFieldsExternal, 0, 10, true) +
+            array("relatives" => $this->container->get('translator')->trans('EXTERNAL_APPLICATION_RELATIVES')) +
+            array_slice($contactFieldsExternal, 10, count($contactFieldsExternal) - 1, true);
 
-		$otherFields = array('membershipTitle' => $terminologyService->getTerminology('Fed membership', $this->container->getParameter('singular')),
-			'selectedClubs' => $this->container->get('translator')->trans('EXTERNAL_APPLICATION_FORM_CLUB_CHOICE'),
-			'comment' => $this->container->get('translator')->trans('EXTERNAL_APPLICATION_COMMENT'));
+        $otherFields = array('membershipTitle' => $terminologyService->getTerminology('Fed membership', $this->container->getParameter('singular')),
+            'selectedClubs' => $this->container->get('translator')->trans('EXTERNAL_APPLICATION_FORM_CLUB_CHOICE'),
+            'comment' => $this->container->get('translator')->trans('EXTERNAL_APPLICATION_COMMENT'));
 
-		$contactFieldsFinal = array_merge($contactFieldsExtra, $otherFields);
+        $contactFieldsFinal = array_merge($contactFieldsExtra, $otherFields);
 
-		return $contactFieldsFinal;
-	}
-    
+        return $contactFieldsFinal;
+    }
+
     /**
-	 * Function to get the salutation for notification mail in external application form
-	 *
-	 * @param object $clubObj  club listener object
-	 *
-	 * @return string|null  $clubLogoUrl club logo url
-	 */
-	public function getClubLogoForExternalApplication($clubObj)
-	{
-		$clubLogo = $clubObj->get('logo');
-		$rootPath = FgUtility::getRootPath($this->container);
-		$baseurl = FgUtility::getBaseUrl($this->container);
-		if ($clubLogo == '' || !file_exists($rootPath . '/' . FgUtility::getUploadFilePath($clubObj->get('id'), 'clublogo', false, $clubLogo))) {
-			$clubLogoUrl = '';
-		} else {
-			$clubLogoUrl = $baseurl . '/' . FgUtility::getUploadFilePath($clubObj->get('id'), 'clublogo', false, $clubLogo);
-		}
-		return $clubLogoUrl;
-	}
-    
+     * Function to get the salutation for notification mail in external application form
+     *
+     * @param object $clubObj  club listener object
+     *
+     * @return string|null  $clubLogoUrl club logo url
+     */
+    public function getClubLogoForExternalApplication($clubObj)
+    {
+        $clubLogo = $clubObj->get('logo');
+        $rootPath = FgUtility::getRootPath($this->container);
+        $baseurl = FgUtility::getBaseUrl($this->container);
+        if ($clubLogo == '' || !file_exists($rootPath . '/' . FgUtility::getUploadFilePath($clubObj->get('id'), 'clublogo', false, $clubLogo))) {
+            $clubLogoUrl = '';
+        } else {
+            $clubLogoUrl = $baseurl . '/' . FgUtility::getUploadFilePath($clubObj->get('id'), 'clublogo', false, $clubLogo);
+        }
+        return $clubLogoUrl;
+    }
+
     /**
-	 * Function to get the salutation for notification mail in external application form
-	 *
-	 * @param string $gender  gender of contact
-	 * @param int    $clubId  current club id
-	 *
-	 * @return string $salutation salutation value
-	 */
-	public function getSalutationofContactForMail($gender, $clubId)
-	{
+     * Function to get the salutation for notification mail in external application form
+     *
+     * @param string $gender  gender of contact
+     * @param int    $clubId  current club id
+     *
+     * @return string $salutation salutation value
+     */
+    public function getSalutationofContactForMail($gender, $clubId)
+    {
         $salutation = '';
         $defSysLang = $this->container->get('club')->get('default_system_lang');
-		$salutationObj = $this->getDoctrine()->getManager()->getRepository('CommonUtilityBundle:FgClubSalutationSettings')
-			->findOneBy(array('club' => $clubId));
+        $salutationObj = $this->getDoctrine()->getManager()->getRepository('CommonUtilityBundle:FgClubSalutationSettings')
+            ->findOneBy(array('club' => $clubId));
         if ($salutationObj) {
             $salutationLangObj = $this->getDoctrine()->getManager()->getRepository('CommonUtilityBundle:FgClubSalutationSettingsI18n')
                 ->findOneBy(array('id' => $salutationObj->getId(), 'lang' => $defSysLang));
-            if($salutationLangObj){
+            if ($salutationLangObj) {
                 $salutation = ($gender == 'male') ? $salutationLangObj->getMaleFormalLang() : $salutationLangObj->getFemaleFormalLang();
-            }else{
+            } else {
                 $salutation = ($gender == 'male') ? $salutationObj->getMaleFormal() : $salutationObj->getFemaleFormal();
             }
         }
         if ($salutation == '') {
-			$salutationObj = $this->getDoctrine()->getManager()->getRepository('CommonUtilityBundle:FgClubSalutationSettings')
-				->findOneBy(array('club' => 1));
+            $salutationObj = $this->getDoctrine()->getManager()->getRepository('CommonUtilityBundle:FgClubSalutationSettings')
+                ->findOneBy(array('club' => 1));
             $salutationLangObj = $this->getDoctrine()->getManager()->getRepository('CommonUtilityBundle:FgClubSalutationSettingsI18n')
                 ->findOneBy(array('id' => $salutationObj->getId(), 'lang' => $defSysLang));
             $salutation = ($gender == 'male') ? $salutationLangObj->getMaleFormalLang() : $salutationLangObj->getFemaleFormalLang();
-		}
-        
-		return $salutation;
-	}
-    
-    /**
-	 * Function to send mail after saving the external application form
-	 *
-	 * @param string $bodyNew     body content
-	 * @param string $email       Email addresss to send
-	 * @param string $senderEmail Sender email
-	 * @param string $subject     Email subject
-	 * @param string $senderName  Sender name
-	 *
-	 * @return null
-	 */
-	public function sendSwiftMesage($bodyNew, $email, $senderEmail, $subject, $senderName)
-	{
-		$mailer = $this->get('mailer');
-		$message = \Swift_Message::newInstance()
-			->setSubject($subject)
-			->setFrom(array($senderEmail => $senderName))
-			->setTo($email)
-			->setBody(stripslashes($bodyNew), 'text/html');
+        }
 
-		$message->setCharset('utf-8');
-		$mailer->send($message);
-	}
+        return $salutation;
+    }
+
+    /**
+     * Function to send mail after saving the external application form
+     *
+     * @param string $bodyNew     body content
+     * @param string $email       Email addresss to send
+     * @param string $senderEmail Sender email
+     * @param string $subject     Email subject
+     * @param string $senderName  Sender name
+     *
+     * @return null
+     */
+    public function sendSwiftMesage($bodyNew, $email, $senderEmail, $subject, $senderName)
+    {
+        $mailer = $this->get('mailer');
+        $message = \Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom(array($senderEmail => $senderName))
+            ->setTo($email)
+            ->setBody(stripslashes($bodyNew), 'text/html');
+
+        $message->setCharset('utf-8');
+        $mailer->send($message);
+    }
 
     /**
      * Function to Share Membership
@@ -727,9 +757,10 @@ class ExternalApplicationConfirmationController extends ParentController
         $corress_lang = $container->get('system_field_corress_lang');
         $fedFieldCat = 6;
         $telgField = 72585;
-        $employerCat= $container->get('external_application_fedfield_category');
-        $employerField = $container->get('external_application_system_fields')['employer']; 
-        $personalNumberField = $container->get('external_application_system_fields')['personalNumber']; ;
+        $employerCat = $container->get('external_application_fedfield_category');
+        $employerField = $container->get('external_application_system_fields')['employer'];
+        $personalNumberField = $container->get('external_application_system_fields')['personalNumber'];
+        ;
         $salutation = $container->get('system_field_salutaion');
         $array_fields["$personalCat"] = array('firstname' => $container->get('system_field_firstname'), 'lastname' => $container->get('system_field_lastname'), 'gender' => $container->get('system_field_gender'), 'dob' => $container->get('system_field_dob'));
         $array_fields["$communicationCat"] = array('email' => $container->get('system_field_primaryemail'), 'tel_m' => $container->get('system_field_mobile1'));
@@ -737,7 +768,7 @@ class ExternalApplicationConfirmationController extends ParentController
         $array_fields["$fedFieldCat"]['telg'] = $telgField;
         $array_fields["$employerCat"]['employer'] = $employerField;
         $array_fields["$employerCat"]['personal_number'] = $personalNumberField;
-        
+
         $form_array = array();
         $form_array['system']['contactType'] = 'Single person';
         $form_array['system']['attribute'] = array('0' => 'Intranet access');

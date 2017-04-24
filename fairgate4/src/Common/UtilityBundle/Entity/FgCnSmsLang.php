@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCnSmsLang
  */
@@ -39,6 +37,7 @@ class FgCnSmsLang
      * Set smsId
      *
      * @param integer $smsId
+     *
      * @return FgCnSmsLang
      */
     public function setSmsId($smsId)
@@ -62,6 +61,7 @@ class FgCnSmsLang
      * Set languageCode
      *
      * @param string $languageCode
+     *
      * @return FgCnSmsLang
      */
     public function setLanguageCode($languageCode)
@@ -81,3 +81,4 @@ class FgCnSmsLang
         return $this->languageCode;
     }
 }
+

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * ImportShareController
  *
@@ -19,6 +18,8 @@ use Common\UtilityBundle\Util\FgUtility;
 use Clubadmin\ContactBundle\Util\ImportValidation;
 use Common\UtilityBundle\Repository\Pdo\ContactPdo;
 use Symfony\Component\HttpFoundation\Request;
+use Common\UtilityBundle\Util\FgContactSyncDataToAdmin;
+use Common\UtilityBundle\Util\FgClubSyncDataToAdmin;
 
 /**
  * Import contact controller
@@ -33,7 +34,7 @@ class ImportShareController extends ParentController
      */
     public function indexAction()
     {
-        $this->fgpermission->checkAreaAccess(array('from'=>'importShare'));
+        $this->fgpermission->checkAreaAccess(array('from' => 'importShare'));
         $club = $this->container->get('club');
         $return['clubId'] = $this->clubId;
         $return['clubLanguages'] = $this->clubLanguages;
@@ -91,7 +92,7 @@ class ImportShareController extends ParentController
                 $return['skipFields'] = (count($this->clubLanguages) > 1) ? array() : array(
                     515
                 );
-                
+
                 $return['skipFields'][] = 'joining_date';
                 $return['sysLang'] = $this->clubDefaultLang;
                 $return['defSysLang'] = $this->clubDefaultSystemLang;
@@ -101,7 +102,7 @@ class ImportShareController extends ParentController
                 $return['clubMembershipAvailable'] = $this->get('club')->get('clubMembershipAvailable');
                 $return['fedMembershipMandatory'] = $this->get('club')->get('fedMembershipMandatory');
                 $return['clubtype'] = $this->get('club')->get('type');
-                
+
                 return $this->render('ClubadminContactBundle:ImportShare:importDataAssignment.html.twig', $return);
             } else {
                 $errorMessage = $uploadedFile['errorMessage'] ? $uploadedFile['errorMessage'] : $this->get('translator')->trans('INVALID_DELIMITER');
@@ -134,7 +135,7 @@ class ImportShareController extends ParentController
             );
         }
         if (in_array($importFile->getClientMimeType(), $csvMimeTypes)) {
-            $importTable = 'tp_import_' . strtotime('now').'.csv';
+            $importTable = 'tp_import_' . strtotime('now') . '.csv';
             $this->filename = FgUtility::getFilename($this->uploadDir, $importTable);
             $movedFile = $importFile->move($this->uploadDir, $this->filename);
 
@@ -312,7 +313,6 @@ class ImportShareController extends ParentController
         }
         if (count($insertValues) > 0) {
             $this->em->getRepository('CommonUtilityBundle:FgCmContact')->insertIntoMappingTable($tableName, $insertValues);
-            
         }
         $this->em->getRepository('CommonUtilityBundle:FgCmContact')->insertIntoClubTableToMappingTable($tableName);
     }
@@ -348,7 +348,7 @@ class ImportShareController extends ParentController
         $tmpIsCompany = $importValues['contactType'] == 'single' ? false : true;
         $step = $request->request->get('step', '');
         $update = $request->request->get('update', '0');
-        $club = $this->container->get('club'); 
+        $club = $this->container->get('club');
         if ($step == 'file_correction') {
             $primaryEmail = $this->container->getParameter('system_field_primaryemail');
             $dob = $this->container->getParameter('system_field_dob');
@@ -410,15 +410,15 @@ class ImportShareController extends ParentController
             $primaryEmail = $this->container->getParameter('system_field_primaryemail');
             $this->em->getRepository('CommonUtilityBundle:FgCmContact')->removeDuplicate($importDetails, $duplicates, $primaryEmail);
             $this->importContacts($module);
-            $redirectPath =  $this->generateUrl('contact_index');
-            $flashMessage =  $this->get('translator')->trans('CONTACT_IMPORTED_SUCCESSFULLY');
+            $redirectPath = $this->generateUrl('contact_index');
+            $flashMessage = $this->get('translator')->trans('CONTACT_IMPORTED_SUCCESSFULLY');
             return new JsonResponse(array(
                 'status' => 'SUCCESS',
                 'sync' => 1,
                 'redirect' => $redirectPath,
                 'flash' => $flashMessage
             ));
-        } 
+        }
     }
 
     /**
@@ -430,19 +430,26 @@ class ImportShareController extends ParentController
     {
         $importValues = $this->container->get('session');
         $importDetails = $importValues->get('importShareFile' . $module . $this->clubId);
-        $log = fopen('import_share_log_'.date('Y_m_d_H_is').'.txt','w');
-        fwrite($log, "Importing contacts from ".$importDetails['tableName']."\n");
+        $log = fopen('import_share_log_' . date('Y_m_d_H_is') . '.txt', 'w');
+        fwrite($log, "Importing contacts from " . $importDetails['tableName'] . "\n");
         $importQuery = $this->em->getRepository('CommonUtilityBundle:FgCmContact')->callImportShareContacts($importDetails['tableName'], $this->clubId, $this->contactId, $importDetails['contactType'], $this->clubType);
         $clubs = $this->em->getRepository('CommonUtilityBundle:FgClub')->findBy(array('federationId' => $this->clubId));
-        foreach ($clubs as $club){
-            $this->conn->executeQuery("CALL updateMemberId(".$club->getId().")");
+        foreach ($clubs as $club) {
+            $this->conn->executeQuery("CALL updateMemberId(" . $club->getId() . ")");
         }
-        $this->conn->executeQuery("CALL updateMemberId(".$this->clubId.")");
+        $this->conn->executeQuery("CALL updateMemberId(" . $this->clubId . ")");
         fwrite($log, "Contacts imported to main club\n");
         $ContactPdo = new ContactPdo($this->container);
         $ContactPdo->insertLoginEntriesForImortedContact($this->get('club'), $importDetails['tableName'], $this->contactId);
         fwrite($log, "Imported contact detail updated.\n");
         $ContactPdo->shareImortedContact($importDetails['tableName'], $log);
+        
+        /** Sync count to the AdminDB **/
+        file_put_contents("q1.txt",date("Y-m-d h:i")."start");
+        $clubSyncObject = new FgClubSyncDataToAdmin($this->container);
+        $clubSyncObject->updateSubscriberCount($this->clubId)
+                        ->updateActiveContactCount($this->clubId);
+        /*****************************************/
     }
 
     /**
@@ -468,7 +475,7 @@ class ImportShareController extends ParentController
         $corresLang = $this->container->getParameter('system_field_corress_lang');
         //Add FedContactId fields to mapping Table
         $mappingTableInsertQuery[] = "('', 'fed_contact_id', 'federation', 'master_federation_$federationId', '{$importValues['tableName']}','$federationId')";
-        
+
         /* If maembership category column is there to import and no joining date column, add a joindate field with today's date */
         $isMemberCategory = array_search('member_category', $importValues['mapingFields']);
         $isJoiningDate = array_search('joining_date', $importValues['mapingFields']);
@@ -477,7 +484,7 @@ class ImportShareController extends ParentController
             $insertColumns[] = 'ADD `joining_date` DATE NOT NULL';
             $mappingTableInsertQuery[] = "('joining_date', 'joining_date', '" . $this->get('translator')->trans('CM_JOINING_DATE') . "', 'fg_cm_contact', '{$importValues['tableName']}','$clubId' )";
         }
-        
+
         /* If if only correspondance language column is not there to import , add correspondance language field default club language */
         $isCorresLang = array_search($corresLang, $importValues['mapingFields']);
         if (!array_key_exists($isCorresLang, $importValues['mapingFields']) && $update == '0') {
@@ -499,7 +506,7 @@ class ImportShareController extends ParentController
         if ($validationData['subscriberColumn'] == '') {
             $mappingTableInsertQuery[] = "('', 'is_subscriber', '{$allStaticFields['is_newsletter_subscriber']['title']}', 'fg_cm_contact', '{$importValues['tableName']}','$clubId')";
         }
-        
+
         $importValues['updateColumns'] = $updateColumns;
         $importValues['insertColumns'] = $insertColumns;
         $importValues['mappingTableInsertQuery'] = $mappingTableInsertQuery;
@@ -546,6 +553,7 @@ class ImportShareController extends ParentController
 
         return $returnArray;
     }
+
     /**
      * Function to get duplicate ids
      * @param object $request

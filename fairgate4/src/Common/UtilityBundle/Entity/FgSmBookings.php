@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgSmBookings
  */
@@ -118,7 +116,7 @@ class FgSmBookings
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -129,19 +127,20 @@ class FgSmBookings
      * Set beginDate
      *
      * @param \DateTime $beginDate
+     *
      * @return FgSmBookings
      */
     public function setBeginDate($beginDate)
     {
         $this->beginDate = $beginDate;
-    
+
         return $this;
     }
 
     /**
      * Get beginDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getBeginDate()
     {
@@ -152,19 +151,20 @@ class FgSmBookings
      * Set endDate
      *
      * @param \DateTime $endDate
+     *
      * @return FgSmBookings
      */
     public function setEndDate($endDate)
     {
         $this->endDate = $endDate;
-    
+
         return $this;
     }
 
     /**
      * Get endDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getEndDate()
     {
@@ -175,19 +175,20 @@ class FgSmBookings
      * Set paymentPlan
      *
      * @param string $paymentPlan
+     *
      * @return FgSmBookings
      */
     public function setPaymentPlan($paymentPlan)
     {
         $this->paymentPlan = $paymentPlan;
-    
+
         return $this;
     }
 
     /**
      * Get paymentPlan
      *
-     * @return string 
+     * @return string
      */
     public function getPaymentPlan()
     {
@@ -198,19 +199,20 @@ class FgSmBookings
      * Set firstPaymentDate
      *
      * @param \DateTime $firstPaymentDate
+     *
      * @return FgSmBookings
      */
     public function setFirstPaymentDate($firstPaymentDate)
     {
         $this->firstPaymentDate = $firstPaymentDate;
-    
+
         return $this;
     }
 
     /**
      * Get firstPaymentDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFirstPaymentDate()
     {
@@ -221,19 +223,20 @@ class FgSmBookings
      * Set lastPaymentDate
      *
      * @param \DateTime $lastPaymentDate
+     *
      * @return FgSmBookings
      */
     public function setLastPaymentDate($lastPaymentDate)
     {
         $this->lastPaymentDate = $lastPaymentDate;
-    
+
         return $this;
     }
 
     /**
      * Get lastPaymentDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLastPaymentDate()
     {
@@ -244,19 +247,20 @@ class FgSmBookings
      * Set repetitionMonths
      *
      * @param integer $repetitionMonths
+     *
      * @return FgSmBookings
      */
     public function setRepetitionMonths($repetitionMonths)
     {
         $this->repetitionMonths = $repetitionMonths;
-    
+
         return $this;
     }
 
     /**
      * Get repetitionMonths
      *
-     * @return integer 
+     * @return integer
      */
     public function getRepetitionMonths()
     {
@@ -267,19 +271,20 @@ class FgSmBookings
      * Set amount
      *
      * @param string $amount
+     *
      * @return FgSmBookings
      */
     public function setAmount($amount)
     {
         $this->amount = $amount;
-    
+
         return $this;
     }
 
     /**
      * Get amount
      *
-     * @return string 
+     * @return string
      */
     public function getAmount()
     {
@@ -290,19 +295,20 @@ class FgSmBookings
      * Set discountType
      *
      * @param string $discountType
+     *
      * @return FgSmBookings
      */
     public function setDiscountType($discountType)
     {
         $this->discountType = $discountType;
-    
+
         return $this;
     }
 
     /**
      * Get discountType
      *
-     * @return string 
+     * @return string
      */
     public function getDiscountType()
     {
@@ -313,19 +319,20 @@ class FgSmBookings
      * Set discount
      *
      * @param string $discount
+     *
      * @return FgSmBookings
      */
     public function setDiscount($discount)
     {
         $this->discount = $discount;
-    
+
         return $this;
     }
 
     /**
      * Get discount
      *
-     * @return string 
+     * @return string
      */
     public function getDiscount()
     {
@@ -336,19 +343,20 @@ class FgSmBookings
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return FgSmBookings
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -359,19 +367,20 @@ class FgSmBookings
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
+     *
      * @return FgSmBookings
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
-    
+
         return $this;
     }
 
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -382,19 +391,20 @@ class FgSmBookings
      * Set timestamp
      *
      * @param string $timestamp
+     *
      * @return FgSmBookings
      */
     public function setTimestamp($timestamp)
     {
         $this->timestamp = $timestamp;
-    
+
         return $this;
     }
 
     /**
      * Get timestamp
      *
-     * @return string 
+     * @return string
      */
     public function getTimestamp()
     {
@@ -405,19 +415,20 @@ class FgSmBookings
      * Set isDeleted
      *
      * @param boolean $isDeleted
+     *
      * @return FgSmBookings
      */
     public function setIsDeleted($isDeleted)
     {
         $this->isDeleted = $isDeleted;
-    
+
         return $this;
     }
 
     /**
      * Get isDeleted
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsDeleted()
     {
@@ -428,19 +439,20 @@ class FgSmBookings
      * Set isSkipped
      *
      * @param integer $isSkipped
+     *
      * @return FgSmBookings
      */
     public function setIsSkipped($isSkipped)
     {
         $this->isSkipped = $isSkipped;
-    
+
         return $this;
     }
 
     /**
      * Get isSkipped
      *
-     * @return integer 
+     * @return integer
      */
     public function getIsSkipped()
     {
@@ -451,19 +463,20 @@ class FgSmBookings
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgSmBookings
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -474,19 +487,20 @@ class FgSmBookings
      * Set service
      *
      * @param \Common\UtilityBundle\Entity\FgSmServices $service
+     *
      * @return FgSmBookings
      */
     public function setService(\Common\UtilityBundle\Entity\FgSmServices $service = null)
     {
         $this->service = $service;
-    
+
         return $this;
     }
 
     /**
      * Get service
      *
-     * @return \Common\UtilityBundle\Entity\FgSmServices 
+     * @return \Common\UtilityBundle\Entity\FgSmServices
      */
     public function getService()
     {
@@ -497,19 +511,20 @@ class FgSmBookings
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgSmBookings
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
     {
         $this->contact = $contact;
-    
+
         return $this;
     }
 
     /**
      * Get contact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getContact()
     {
@@ -520,19 +535,20 @@ class FgSmBookings
      * Set createdBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $createdBy
+     *
      * @return FgSmBookings
      */
     public function setCreatedBy(\Common\UtilityBundle\Entity\FgCmContact $createdBy = null)
     {
         $this->createdBy = $createdBy;
-    
+
         return $this;
     }
 
     /**
      * Get createdBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getCreatedBy()
     {
@@ -543,19 +559,20 @@ class FgSmBookings
      * Set updatedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $updatedBy
+     *
      * @return FgSmBookings
      */
     public function setUpdatedBy(\Common\UtilityBundle\Entity\FgCmContact $updatedBy = null)
     {
         $this->updatedBy = $updatedBy;
-    
+
         return $this;
     }
 
     /**
      * Get updatedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getUpdatedBy()
     {
@@ -566,22 +583,24 @@ class FgSmBookings
      * Set category
      *
      * @param \Common\UtilityBundle\Entity\FgSmCategory $category
+     *
      * @return FgSmBookings
      */
     public function setCategory(\Common\UtilityBundle\Entity\FgSmCategory $category = null)
     {
         $this->category = $category;
-    
+
         return $this;
     }
 
     /**
      * Get category
      *
-     * @return \Common\UtilityBundle\Entity\FgSmCategory 
+     * @return \Common\UtilityBundle\Entity\FgSmCategory
      */
     public function getCategory()
     {
         return $this->category;
     }
 }
+

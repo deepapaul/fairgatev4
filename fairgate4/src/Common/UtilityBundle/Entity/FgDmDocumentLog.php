@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgDmDocumentLog
  */
@@ -73,7 +71,7 @@ class FgDmDocumentLog
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -84,19 +82,20 @@ class FgDmDocumentLog
      * Set documentType
      *
      * @param string $documentType
+     *
      * @return FgDmDocumentLog
      */
     public function setDocumentType($documentType)
     {
         $this->documentType = $documentType;
-    
+
         return $this;
     }
 
     /**
      * Get documentType
      *
-     * @return string 
+     * @return string
      */
     public function getDocumentType()
     {
@@ -107,19 +106,20 @@ class FgDmDocumentLog
      * Set date
      *
      * @param \DateTime $date
+     *
      * @return FgDmDocumentLog
      */
     public function setDate($date)
     {
         $this->date = $date;
-    
+
         return $this;
     }
 
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -130,19 +130,20 @@ class FgDmDocumentLog
      * Set kind
      *
      * @param string $kind
+     *
      * @return FgDmDocumentLog
      */
     public function setKind($kind)
     {
         $this->kind = $kind;
-    
+
         return $this;
     }
 
     /**
      * Get kind
      *
-     * @return string 
+     * @return string
      */
     public function getKind()
     {
@@ -153,19 +154,20 @@ class FgDmDocumentLog
      * Set field
      *
      * @param string $field
+     *
      * @return FgDmDocumentLog
      */
     public function setField($field)
     {
         $this->field = $field;
-    
+
         return $this;
     }
 
     /**
      * Get field
      *
-     * @return string 
+     * @return string
      */
     public function getField()
     {
@@ -176,19 +178,20 @@ class FgDmDocumentLog
      * Set valueAfter
      *
      * @param string $valueAfter
+     *
      * @return FgDmDocumentLog
      */
     public function setValueAfter($valueAfter)
     {
         $this->valueAfter = $valueAfter;
-    
+
         return $this;
     }
 
     /**
      * Get valueAfter
      *
-     * @return string 
+     * @return string
      */
     public function getValueAfter()
     {
@@ -199,19 +202,20 @@ class FgDmDocumentLog
      * Set valueBefore
      *
      * @param string $valueBefore
+     *
      * @return FgDmDocumentLog
      */
     public function setValueBefore($valueBefore)
     {
         $this->valueBefore = $valueBefore;
-    
+
         return $this;
     }
 
     /**
      * Get valueBefore
      *
-     * @return string 
+     * @return string
      */
     public function getValueBefore()
     {
@@ -222,19 +226,20 @@ class FgDmDocumentLog
      * Set valueBeforeId
      *
      * @param string $valueBeforeId
+     *
      * @return FgDmDocumentLog
      */
     public function setValueBeforeId($valueBeforeId)
     {
         $this->valueBeforeId = $valueBeforeId;
-    
+
         return $this;
     }
 
     /**
      * Get valueBeforeId
      *
-     * @return string 
+     * @return string
      */
     public function getValueBeforeId()
     {
@@ -245,19 +250,20 @@ class FgDmDocumentLog
      * Set valueAfterId
      *
      * @param string $valueAfterId
+     *
      * @return FgDmDocumentLog
      */
     public function setValueAfterId($valueAfterId)
     {
         $this->valueAfterId = $valueAfterId;
-    
+
         return $this;
     }
 
     /**
      * Get valueAfterId
      *
-     * @return string 
+     * @return string
      */
     public function getValueAfterId()
     {
@@ -268,19 +274,20 @@ class FgDmDocumentLog
      * Set documents
      *
      * @param \Common\UtilityBundle\Entity\FgDmDocuments $documents
+     *
      * @return FgDmDocumentLog
      */
     public function setDocuments(\Common\UtilityBundle\Entity\FgDmDocuments $documents = null)
     {
         $this->documents = $documents;
-    
+
         return $this;
     }
 
     /**
      * Get documents
      *
-     * @return \Common\UtilityBundle\Entity\FgDmDocuments 
+     * @return \Common\UtilityBundle\Entity\FgDmDocuments
      */
     public function getDocuments()
     {
@@ -291,19 +298,20 @@ class FgDmDocumentLog
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgDmDocumentLog
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -314,22 +322,24 @@ class FgDmDocumentLog
      * Set changedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $changedBy
+     *
      * @return FgDmDocumentLog
      */
     public function setChangedBy(\Common\UtilityBundle\Entity\FgCmContact $changedBy = null)
     {
         $this->changedBy = $changedBy;
-    
+
         return $this;
     }
 
     /**
      * Get changedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getChangedBy()
     {
         return $this->changedBy;
     }
 }
+

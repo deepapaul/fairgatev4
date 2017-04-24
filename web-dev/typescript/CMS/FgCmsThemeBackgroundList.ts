@@ -40,7 +40,7 @@ class FgCmsThemeBackgroundList {
     public addImgCallback(uploadedObj, data) {
         fgthemeBackground.handleSortOrder(uploadedObj, data);
         FgDirtyFields.updateFormState();
-        $('select.selectpicker').select2();
+        $('select.select2').select2();
     }
 
     public handleSortOrder(uploadedObj, data) {
@@ -93,17 +93,12 @@ class FgCmsThemeBackgroundList {
                 $("#articleimg-upload-error-container").html(validationMessage);
                 return;
             }
+            if($("ul.fg-files-uploaded-lists-wrapper li.has-error").length >0 ){
+                return false;
+            }
             $("#articleimg-upload-error-container").html('');
             let objectGraph = {};
-
-            $("ul.fg-files-uploaded-lists-wrapper li:not(.inactiveblock)").each(function(e, value) {
-                let oldVal =$(this).find(".fg-dev-sortable").val();
-                if(oldVal !=(e + 1)) {
-                $(this).find(".fg-dev-sortable").val(e + 1);
-                $(this).find(".fg-dev-sortable").addClass('fg-dev-newfield');
-                }
-
-            })
+            fgthemeBackground.onSaveUpdateSortOrder()
             objectGraph = FgInternalParseFormField.formFieldParse('fg_cms_background_add');
             _this.initDirty();
             $('.fg-files-uploaded-lists-wrapper').find('.inactiveblock').remove();
@@ -127,7 +122,7 @@ class FgCmsThemeBackgroundList {
                     fgthemeBackground.handleGalleryBrowser(galleryBrowserSettings, '#tab1');
                 }
                 fgthemeBackground.initDirty();
-                $('select.selectpicker').select2();
+                $('select.select2').select2();
                 FgFormTools.handleUniform();
 
 
@@ -185,7 +180,7 @@ class FgCmsThemeBackgroundList {
 
                 } else {
                     _this.tabselected = 2;
-                    $('select.selectpicker').select2();
+                    $('select.select2').select2();
                     _this.handleGalleryBrowser(originalGalleryBrowserSettings, "#tab2");
                     _this.initOriginalImageUpload(backgroundOriginalImgUploaderOptions, '#tab2');
 
@@ -229,29 +224,9 @@ class FgCmsThemeBackgroundList {
             fgthemeBackground.handleGalleryBrowser(galleryBrowserSettings, '#tab1');
         }
         fgthemeBackground.initDirty();
-        $('select.selectpicker').select2();
+        $('select.select2').select2();
         FgFormTools.handleUniform();
         fgthemeBackground.titlebarObj.setMoreTab();
-
-//        if (fgthemeBackground.tabselected == '2') {                     
-//            //  to remove select container for select        2 call
-//            $("#tab2 .fg-files-upload-wrapper .select2-container.selectpicker").rem        ove();
-//            fgthemeBackground.handleGalleryBrowser(originalGalleryBrowserSettings, "#t        ab2");
-//            fgthemeBackground.initOriginalImageUpload(backgroundOriginalImgUploaderOptions, '#t        ab2');
-//                    
-//            $("#data_li_2").addClass("act        ive");
-//            $("#tab2").addClass("act        ive");
-//            $("#data_li_1").removeClass("act        ive");
-//            $("#tab1").removeClass("act        ive");
-//            $('select.selectpicker').sele        ct2();
-//                }
-//                else {
-//            fgthemeBackground.initUpload(backgroundFullImgUploaderOptions, '#t        ab1');
-//            fgthemeBackground.handleGalleryBrowser(galleryBrowserSettings, '#t        ab1');
-//            $(".fg-uniform-unwrap").unwrap().unw        rap();
-//            FgFormTools.handleUnif        orm();
-//        }
-
     }
 
     public changePageTitle() {
@@ -272,6 +247,7 @@ class FgCmsThemeBackgroundList {
                 $('.fg-error-add-required').append('<span class="required">' + transFields.required + '</span>');
                 return false;
             } else {
+                pageTitle = $('<div/>').text(pageTitle).html();
                 FgXmlHttp.post(changePageTitlePath, { 'config': configId, 'title': pageTitle }, '', function(response) {
                     $('#config-title-change-modal').modal('hide');
                     $('.page-title  .page-title-text').html('');
@@ -280,8 +256,17 @@ class FgCmsThemeBackgroundList {
             }
         });
     }
-
-
-
-
-}
+    /**
+     * update sort orders on save
+     * REfer FAIRDEV-341
+     */
+    public onSaveUpdateSortOrder(){
+        $("ul.fg-files-uploaded-lists-wrapper li:not(.inactiveblock)").each(function (e, value) {
+            var oldVal = $(this).find(".fg-dev-sortable").val();
+            if (oldVal != (e + 1)) {
+                $(this).find(".fg-dev-sortable").val(e + 1);
+                $(this).find(".fg-dev-sortable").addClass('fg-dev-newfield');
+            }
+        });
+    }
+} 

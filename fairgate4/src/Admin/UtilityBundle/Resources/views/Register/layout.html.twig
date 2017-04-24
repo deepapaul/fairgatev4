@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<!--Template Name: Metronic 4.0.2-->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+    <!-- BEGIN HEAD -->
+    <head>
+        <!-- BEGIN CSS -->
+        {% block stylesheets %}                                   
+            <!-- BEGIN GLOBAL STYLES -->
+            
+            <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&amp;subset=all" rel="stylesheet" type="text/css">
+            <link href="{{ asset('fgassets/assets/global/plugins/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('fgassets/assets/global/plugins/simple-line-icons/simple-line-icons.min.css')}}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('fgassets/assets/global/plugins/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('fgassets/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css')}}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('assets/global/plugins/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('assets/global/plugins/select2/css/select2-bootstrap.min.css')}}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('fgassets/assets/global/plugins/bootstrap-select/css/bootstrap-select.min.css')}}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('fgassets/assets/global/css/components.min.css')}}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('fgassets/assets/global/css/plugins.min.css')}}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('fgassets/assets/layouts/layout/css/layout.min.css')}}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('fgassets/assets/layouts/layout/css/themes/darkblue.min.css')}}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('fgassets/assets/layouts/layout/css/custom.min.css')}}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('fgassets/global/css/metronic-overrides.css')}}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('fgassets/assets/global/plugins/uniform/css/uniform.default.css')}}" rel="stylesheet" type="text/css">
+
+            <!-- END GLOBAL STYLES -->
+            
+            <!-- BEGIN PAGE STYLES -->
+            {% block customstylesheets %}
+                
+            {% endblock %}
+            <!-- END PAGE STYLES -->                        
+        {% endblock %}
+        <link rel="shortcut icon" href="{{ asset('fgassets/global/img/favicon.ico') }}" />
+{#        {{ include('::global/google-analytic.html.twig') }}#}
+        <!-- END CSS -->  
+        
+    </head>
+    <!-- END HEAD -->
+    <!-- BEGIN BODY -->
+    <!-- BEGIN BODY -->
+    <body class="page-header-fixed page-full-width page-footer-fixed  bg-dark-grey no-navbar">
+        
+        <div class="clearfix"> </div>
+        <!-- BEGIN CONTAINER -->
+
+        <div class="page-container fg-page-container" >
+            <div class="page-content-wrapper">
+                <div class="page-content">
+                    {% block pagecontent %}
+                    <!-- PAGE LEVEL CONTENT WILL BE DISPLAYED HERE -->
+                    {% endblock %}     
+            </div>
+        </div>
+
+        <!-- END LOGIN -->
+        
+        <!-- END CONTAINER -->
+
+        <!-- BEGIN FOOTER -->
+        
+        <!-- END FOOTER -->
+        <!-- BEGIN PAGE LEVEL UNDERSCORE TEMPLATE -->
+        <div id="divTemplates">
+{#        {{ include('::internal/templateTopNavMenu.html.twig') }}#}
+        {% block underscoretemplate %}    
+            
+        {% endblock %}
+        </div>
+        <!-- END PAGE LEVEL UNDERSCORE TEMPLATE -->
+        <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+        {% block scripts %}
+            <!-- BEGIN CORE JQUERY AND ANGULARJS PLUGINS -->           
+{#            {{ include('::internal/corelevel-scripts.html.twig') }}#}
+            <!-- END CORE JQUERY AND ANGULARJS PLUGINS -->                        
+            
+            <!-- BEGIN APP LEVEL JQUERY SCRIPTS -->
+{#            {{ include('::internal/applevel-scripts.html.twig') }}#}
+            <!-- END APP LEVEL JQUERY SCRIPTS -->
+            
+            <!-- BEGIN FAIRGATE SCRIPTS -->
+{#            {{ include('::internal/fairgate-scripts.html.twig') }}#}
+            <!-- END FAIRGATE SCRIPTS -->         
+                <script src="{{ asset('fgassets/assets/global/plugins/jquery.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('fgassets/assets/global/plugins/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('fgassets/assets/global/plugins/js.cookie.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('fgassets/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('fgassets/assets/global/plugins/jquery.blockui.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('fgassets/assets/global/plugins/jquery-validation/js/jquery.validate.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('fgassets/assets/global/plugins/jquery-validation/js/additional-methods.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('assets/global/plugins/select2/js/select2.full.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('fgassets/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('fgassets/assets/global/scripts/app.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('fgassets/assets/layouts/layout/scripts/layout.min.js') }}" type="text/javascript"></script>
+                <script type="text/javascript" src="{{ asset('fgassets/assets/global/plugins/bootstrap-pwstrength/pwstrength-bootstrap.min.js') }}"></script>
+                <script src="{{ asset('fgassets/assets/global/plugins/uniform/jquery.uniform.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('fgassets/global/js/underscore-min.js') }}" type="text/javascript"></script>
+
+{#            <script src="{{ asset('fgassets/internal/js/fgmetronic.js') }}" type="text/javascript"></script>#}
+            
+            
+            <script type="text/javascript">
+		/* Init Metronic's core jquery plugins and layout scripts */
+                    $(document).ready(function()
+                    {
+                      $('.bs-select').selectpicker();
+                      var initialized = false;
+                      $(".fg-check-strength").keydown(function()
+                      {
+                        var input = $(this);
+                        if (initialized === false)
+                        {
+                          // set base options
+                          options = {
+                            common:
+                            {},
+                            rules:
+                            {
+                              raisePower: 1.4
+                            },
+                            ui:
+                            {
+                              container: '.fg-pw-strength-wrapper',
+                              viewports:
+                              {
+                                progress: '.fg-progress',
+                                verdict: '.fg-verdict'
+                              }
+                            }
+                          };
+                          input.pwstrength(options);
+                          // set as initialized 
+                          initialized = true;
+                        }
+                      });
+                    });
+
+            </script>
+            <script src='https://www.google.com/recaptcha/api.js'></script>
+            <!-- BEGIN PAGE LEVEL SCRIPTS -->            
+            {% block javascripts %}
+                
+            {% endblock %}
+            <!-- END PAGE LEVEL SCRIPTS -->            
+        {% endblock %}
+        <!-- END JAVASCRIPTS -->
+    </body>
+    <!-- END BODY -->
+</html>

@@ -34,7 +34,7 @@ class TopNavigationController extends FgController
     public function getClubsForSearchAction(Request $request)
     {
         $searchTerm = FgUtility::getSecuredData($request->get('term'), $this->conn);
-        $clubPdo = new \Common\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
+        $clubPdo = new \Admin\UtilityBundle\Repository\Pdo\ClubPdo($this->container);
         $clubs = $clubPdo->getClubsForSearch($this->clubId, $searchTerm);
 
         return new JsonResponse($clubs);

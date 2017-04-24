@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgRmFunctionLog
  */
@@ -13,6 +11,11 @@ class FgRmFunctionLog
      * @var integer
      */
     private $id;
+
+    /**
+     * @var integer
+     */
+    private $clubId;
 
     /**
      * @var \DateTime
@@ -63,9 +66,31 @@ class FgRmFunctionLog
     public function getId()
     {
         return $this->id;
-
     }
 
+    /**
+     * Set clubId
+     *
+     * @param integer $clubId
+     *
+     * @return FgRmFunctionLog
+     */
+    public function setClubId($clubId)
+    {
+        $this->clubId = $clubId;
+
+        return $this;
+    }
+
+    /**
+     * Get clubId
+     *
+     * @return integer
+     */
+    public function getClubId()
+    {
+        return $this->clubId;
+    }
 
     /**
      * Set date
@@ -79,9 +104,7 @@ class FgRmFunctionLog
         $this->date = $date;
 
         return $this;
-
     }
-
 
     /**
      * Get date
@@ -91,9 +114,7 @@ class FgRmFunctionLog
     public function getDate()
     {
         return $this->date;
-
     }
-
 
     /**
      * Set kind
@@ -107,9 +128,7 @@ class FgRmFunctionLog
         $this->kind = $kind;
 
         return $this;
-
     }
-
 
     /**
      * Get kind
@@ -119,10 +138,7 @@ class FgRmFunctionLog
     public function getKind()
     {
         return $this->kind;
-
-
     }
-
 
     /**
      * Set field
@@ -136,9 +152,7 @@ class FgRmFunctionLog
         $this->field = $field;
 
         return $this;
-
     }
-
 
     /**
      * Get field
@@ -148,7 +162,6 @@ class FgRmFunctionLog
     public function getField()
     {
         return $this->field;
-
     }
 
     /**
@@ -163,9 +176,7 @@ class FgRmFunctionLog
         $this->valueBefore = $valueBefore;
 
         return $this;
-
     }
-
 
     /**
      * Get valueBefore
@@ -175,9 +186,7 @@ class FgRmFunctionLog
     public function getValueBefore()
     {
         return $this->valueBefore;
-
     }
-
 
     /**
      * Set valueAfter
@@ -191,9 +200,7 @@ class FgRmFunctionLog
         $this->valueAfter = $valueAfter;
 
         return $this;
-
     }
-
 
     /**
      * Get valueAfter
@@ -203,9 +210,7 @@ class FgRmFunctionLog
     public function getValueAfter()
     {
         return $this->valueAfter;
-
     }
-
 
     /**
      * Set role
@@ -219,9 +224,7 @@ class FgRmFunctionLog
         $this->role = $role;
 
         return $this;
-
     }
-
 
     /**
      * Get role
@@ -231,9 +234,7 @@ class FgRmFunctionLog
     public function getRole()
     {
         return $this->role;
-
     }
-
 
     /**
      * Set function
@@ -247,9 +248,7 @@ class FgRmFunctionLog
         $this->function = $function;
 
         return $this;
-
     }
-
 
     /**
      * Get function
@@ -259,9 +258,7 @@ class FgRmFunctionLog
     public function getFunction()
     {
         return $this->function;
-
     }
-
 
     /**
      * Set changedBy
@@ -275,9 +272,7 @@ class FgRmFunctionLog
         $this->changedBy = $changedBy;
 
         return $this;
-
     }
-
 
     /**
      * Get changedBy
@@ -287,42 +282,6 @@ class FgRmFunctionLog
     public function getChangedBy()
     {
         return $this->changedBy;
-
     }
-
-    /**
-     *
-     * @var integer
-     */
-    private $clubId;
-
-
-    /**
-     * Set clubId
-     *
-     * @param integer $clubId
-     *
-     * @return FgRmFunctionLog
-     */
-    public function setClubId($clubId)
-    {
-        $this->clubId = $clubId;
-
-        return $this;
-
-    }
-
-
-    /**
-     * Get clubId
-     *
-     * @return integer
-     */
-    public function getClubId()
-    {
-        return $this->clubId;
-
-    }
-
-
 }
+

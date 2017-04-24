@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmsPageContainerColumn
  */
@@ -33,7 +31,7 @@ class FgCmsPageContainerColumn
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -44,19 +42,20 @@ class FgCmsPageContainerColumn
      * Set widthValue
      *
      * @param integer $widthValue
+     *
      * @return FgCmsPageContainerColumn
      */
     public function setWidthValue($widthValue)
     {
         $this->widthValue = $widthValue;
-    
+
         return $this;
     }
 
     /**
      * Get widthValue
      *
-     * @return integer 
+     * @return integer
      */
     public function getWidthValue()
     {
@@ -67,19 +66,20 @@ class FgCmsPageContainerColumn
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgCmsPageContainerColumn
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -90,22 +90,24 @@ class FgCmsPageContainerColumn
      * Set container
      *
      * @param \Common\UtilityBundle\Entity\FgCmsPageContainer $container
+     *
      * @return FgCmsPageContainerColumn
      */
     public function setContainer(\Common\UtilityBundle\Entity\FgCmsPageContainer $container = null)
     {
         $this->container = $container;
-    
+
         return $this;
     }
 
     /**
      * Get container
      *
-     * @return \Common\UtilityBundle\Entity\FgCmsPageContainer 
+     * @return \Common\UtilityBundle\Entity\FgCmsPageContainer
      */
     public function getContainer()
     {
         return $this->container;
     }
 }
+

@@ -49,6 +49,7 @@ class PageContentElementsController extends Controller
         $boxId = $request->get('boxId');
         $elementId = $request->get('elementId');
         $sortOrder = $request->get('sortOrder');
+        $colSize = $request->get('colSize');
 
 
         switch ($elementType) {
@@ -65,7 +66,7 @@ class PageContentElementsController extends Controller
                 $renderObject = $this->calendarElement($pageId, $boxId, $sortOrder, $elementId);
                 break;
             case 'articles':
-                $renderObject = $this->articleElement($pageId, $boxId, $sortOrder, $elementId);
+                $renderObject = $this->articleElement($pageId, $boxId, $sortOrder, $elementId, $colSize );
                 break;
             case 'map':
                 $renderObject = $this->mapElement($pageId, $boxId, $sortOrder, $elementId);
@@ -766,10 +767,11 @@ class PageContentElementsController extends Controller
      * @param Int $boxId       box id in page
      * @param Int $sortOrder   sort order of elements in box
      * @param Int $elementId   element id in box
+     * @param Int $colSize     column size 
      *
      * @return Object View Template Render Object
      */
-    public function articleElement($pageId, $boxId, $sortOrder, $elementId = '')
+    public function articleElement($pageId, $boxId, $sortOrder, $elementId = '', $colSize ='')
     {
         $clubId = $this->container->get('club')->get('id');
         $clubDefaultLanguage = $this->container->get('club')->get('club_default_lang');
@@ -780,6 +782,7 @@ class PageContentElementsController extends Controller
         $returnArray['tabs'] = $tabs;
         $returnArray['contactId'] = $this->get('contact')->get('id');
         $returnArray['boxId'] = $boxId;
+        $returnArray['colSize'] = $colSize;
         $returnArray['elementId'] = ($elementId) ? $elementId : 'new';
         $returnArray['sortOrder'] = $sortOrder;
         $returnArray['pageId'] = $pageId;
@@ -789,10 +792,13 @@ class PageContentElementsController extends Controller
         $returnArray['fedLowerLevelArticleCount'] = ($returnArray['clubType'] != 'federation' && $returnArray['clubType'] != 'standard_club') ? $this->container->get('doctrine')->getManager()->getRepository('CommonUtilityBundle:FgCmsArticle')->getLowerLevelSharedArticleCount($returnArray['fedId']) : 0;
         $returnArray['subFedLowerLevelArticleCount'] = ($returnArray['clubType'] == 'sub_federation_club') ? $this->container->get('doctrine')->getManager()->getRepository('CommonUtilityBundle:FgCmsArticle')->getLowerLevelSharedArticleCount($returnArray['subFedId']) : 0;
         $selectedAreasandCategories = array();
+        $getArticleEditData = array();
         if ($returnArray['elementId'] != 'new') {
             $selectedAreasandCategories = $this->container->get('doctrine')->getManager()->getRepository('CommonUtilityBundle:FgCmsPageContentElement')->getArticleElementDetails($returnArray['elementId'], 'article');
+            $getArticleEditData = $this->container->get('doctrine')->getManager()->getRepository('CommonUtilityBundle:FgCmsPageContentElement')->getArticleEditData($returnArray['elementId']);
         }
         $returnArray['selectedAreasandCategories'] = $selectedAreasandCategories;
+        $returnArray['articleEditData'] = $getArticleEditData;
         $returnArray['breadCrumb'] = array('back' => $this->generateUrl('website_cms_page_edit', array('pageId' => $pageId)));
 
         return $this->render('WebsiteCMSBundle:PageContentElements:articleElement.html.twig', $returnArray);
@@ -1041,6 +1047,7 @@ class PageContentElementsController extends Controller
     public function saveArticleElementAction(Request $request)
     {
         $data = $request->request->all();
+        $displayDetails = json_decode($data['displayDetails'], true);
         $clubId = $this->container->get('club')->get('id');
         $contactId = $this->container->get('contact')->get('id');
         $defaultClubLang = $this->container->get('club')->get('club_default_lang');
@@ -1052,7 +1059,7 @@ class PageContentElementsController extends Controller
             $this->getDoctrine()->getManager()->getRepository('CommonUtilityBundle:FgCmsPageContentElement')->reOrderSortPosition($data['boxId'], $data['sortOrder']);
         }
         $status = ($postElementId == 'new') ? 'added' : 'changed';
-        $elementId = $this->getDoctrine()->getManager()->getRepository('CommonUtilityBundle:FgCmsPageContentElement')->saveArticleElement($data, $clubId);
+        $elementId = $this->getDoctrine()->getManager()->getRepository('CommonUtilityBundle:FgCmsPageContentElement')->saveArticleElement($data, $clubId, $displayDetails);
         if ($status == 'added') {
             $logArray[] = "('$elementId', '$pageId', 'page', '$status', '', '$pageTitle', now(), $contactId)";
         }
@@ -1128,6 +1135,8 @@ class PageContentElementsController extends Controller
     public function getArticleElementDetailsAction($elementId, $pageId)
     {
         $selectedAreasandCategories = $this->container->get('doctrine')->getManager()->getRepository('CommonUtilityBundle:FgCmsPageContentElement')->getArticleElementDetails($elementId, 'article');
+        $getArticleDisplayData = $this->container->get('doctrine')->getManager()->getRepository('CommonUtilityBundle:FgCmsPageContentElement')->getArticleEditData($elementId);
+        $articleLimit = ($getArticleDisplayData['articleDisplayType'] == 'slider') ? $getArticleDisplayData['articleCount'] : $getArticleDisplayData['articlePerRow'] * $getArticleDisplayData['articleRowsCount'];
         $tableColumns = $this->getTableColumns();
         $filterArray = $this->getFilterArrayForArticleElement($selectedAreasandCategories);
         $articleListObj = new ArticlesList($this->container, 'article');
@@ -1137,15 +1146,22 @@ class PageContentElementsController extends Controller
         $articleListObj->setColumnDataFrom();
         $articleListObj->setGroupBy();
         $articleListObj->addOrderBy();
-        $articleListObj->setLimit(0, 5);
+        $articleListObj->setLimit(0, $articleLimit);
         $articleListObj->addHaving(array("STATUS = 'published'"));
+        if($getArticleDisplayData){
+            if($getArticleDisplayData['articleDisplayType'] == 'slider'){
+                $articleListObj->addHaving(array('FIRST_IMAGE != "" OR FIRST_IMAGE != NULL'));
+            }
+        }
         $articles = $articleListObj->getArticleData();
         $returnArray['articleData'] = $articles;
         $returnArray['elementId'] = $elementId;
         $returnArray['pageId'] = $pageId;
-
         $returnArray['columnWidth'] = $this->container->get('doctrine')->getManager()->getRepository('CommonUtilityBundle:FgCmsPage')->getPageContainerColumnWidth($pageId, $elementId);
         $returnArray['displayWidth'] = ($returnArray['columnWidth'] >= 5) ? 'width_580' : 'width_300';
+        $getArticleDisplayData['quotient']= floor($returnArray['columnWidth']/$getArticleDisplayData['articlePerRow']);
+        $getArticleDisplayData['remainder'] = $returnArray['columnWidth'] % $getArticleDisplayData['articlePerRow'];
+        $returnArray['structureData'] = $getArticleDisplayData;
         $filterData = $this->container->get('doctrine')->getManager()->getRepository('CommonUtilityBundle:FgCmsPageContentElement')->getArticleElementDetails($elementId, 'article');
         $returnAry = $this->articleElementFrondendModification($filterData, $returnArray);
 

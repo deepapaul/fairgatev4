@@ -1,0 +1,58 @@
+Admin\UtilityBundle\Entity\FgVoucherCode:
+    type: entity
+    table: fg_voucher_code
+    indexes:
+        IDX_7D502314C389DA74:
+            columns:
+                - v_lot_id
+        IDX_7D502314C27D003C:
+            columns:
+                - consumed_by
+        voucher_code:
+            columns:
+                - voucher_code
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        isConsumed:
+            type: boolean
+            nullable: true
+            options:
+                default: '0'
+            column: is_consumed
+        voucherCode:
+            type: string
+            nullable: false
+            length: 12
+            options:
+                fixed: true
+            column: voucher_code
+    manyToOne:
+        consumedBy:
+            targetEntity: FgClub
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                consumed_by:
+                    referencedColumnName: id
+            orphanRemoval: false
+        vLot:
+            targetEntity: FgVoucherLot
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                v_lot_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

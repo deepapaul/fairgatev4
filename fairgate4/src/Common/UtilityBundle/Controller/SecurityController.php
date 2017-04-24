@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Common\UtilityBundle\Controller;
 
 use Symfony\Component\Security\Core\Security;
@@ -28,23 +27,24 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
  */
 class SecurityController extends Controller
 {
+
     /**
      * User login section
      *
      * @return HTML
      */
     public function loginAction(Request $request)
-    { 
-        $club=$this->container->get('club');
+    {
+        $club = $this->container->get('club');
         $this->container->get('translator')->setLocale($club->get('default_system_lang'));
         $request = $this->container->get('request_stack')->getCurrentRequest();
         $session = $this->container->get('session');
-        $logoutPath=$this->container->get('router')->generate('fairgate_user_security_logout');
+        $logoutPath = $this->container->get('router')->generate('fairgate_user_security_logout');
         $this->em = $this->getDoctrine()->getManager();
         //$this->em->getRepository('CommonUtilityBundle:SfGuardUser')->customLogoutTrigger($this->container, $session, $logoutPath, $request);
-        $loggedClubUserId=$session->get('loggedClubUserId');
+        $loggedClubUserId = $session->get('loggedClubUserId');
         if (isset($loggedClubUserId)) {
-        
+
             return $this->redirect($this->generateUrl('contact_index'));
         }
         /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
@@ -66,20 +66,12 @@ class SecurityController extends Controller
         // last username entered by the user
         $lastUsername = (null === $session) ? '' : $session->get(Security::LAST_USERNAME);
 
-        if ($lastUsername=='' && $error ) {
-            $error= $this->get('translator') ->trans('LOGIN_ENTER_USERNAME_PASSWORD_ERROR');
-        } else if ($lastUsername !='' && $error ) {
-            if($error->getMessage() == "HAS_NO_INTRANET_ACCESS") {
-                $error = $this->get('translator') ->trans('INTERNAL_LOGIN_DENIED_ACCESS');
-            } else if($error->getMessage() == "LOGIN_ACCOUNT_NOT_ACTIVATED") {
-                $error = $this->get('translator') ->trans('LOGIN_ACCOUNT_NOT_ACTIVATED');
-            } else {
-                $error = $this->get('translator') ->trans('LOGIN_INVALID_USERNAME_PASSWORD_ERROR');
-            }   
+        if ($lastUsername == '' && $error) {
+            $error = $this->get('translator')->trans('LOGIN_ENTER_USERNAME_PASSWORD_ERROR');
+        } else if ($lastUsername != '' && $error) {
+            $error = $this->getErrorMessage($error);
         }
-        $csrfToken = $this->has('security.csrf.token_manager')
-            ? $this->get('security.csrf.token_manager')->getToken('authenticate')->getValue()
-            : null;
+        $csrfToken = $this->has('security.csrf.token_manager') ? $this->get('security.csrf.token_manager')->getToken('authenticate')->getValue() : null;
         $clubTitle = $this->container->get('club')->get('title');
         $regForms = $this->em->getRepository('CommonUtilityBundle:FgCmsForms')->getContactApplicationFormList($club->get('id'), $club->get('club_default_lang'), 1);
         $regFormId = '';
@@ -90,11 +82,11 @@ class SecurityController extends Controller
         }
 
         return $this->renderLogin(array(
-                    'last_username' => $lastUsername,
-                    'error' => $error,
-                    'csrf_token' => $csrfToken,
-                    'clubTitle' => $clubTitle,
-                    'regFormId' => $regFormId
+                'last_username' => $lastUsername,
+                'error' => $error,
+                'csrf_token' => $csrfToken,
+                'clubTitle' => $clubTitle,
+                'regFormId' => $regFormId
         ));
     }
 
@@ -129,5 +121,32 @@ class SecurityController extends Controller
     public function logoutAction()
     {
         throw new \RuntimeException('You must activate the logout in your security firewall configuration.');
+    }
+
+    /**
+     * Customise error message of login
+     * 
+     * @param object $error login srror 
+     * 
+     * @return array of data with error message
+     */
+    private function getErrorMessage($error)
+    {
+        switch ($error->getMessage()) {
+            case 'HAS_NO_INTRANET_ACCESS':
+                $errorMsg = $this->get('translator')->trans('INTERNAL_LOGIN_DENIED_ACCESS');
+                break;
+            case 'LOGIN_ACCOUNT_NOT_ACTIVATED':
+                $errorMsg = $this->get('translator')->trans('LOGIN_ACCOUNT_NOT_ACTIVATED');
+                break;
+            case 'HAS_NO_PERMISSION':
+                $errorMsg = $this->get('translator')->trans('CLUB_NOT_CONFIRMED');
+                break;
+            default:
+                $errorMsg = $this->get('translator')->trans('LOGIN_INVALID_USERNAME_PASSWORD_ERROR');
+                break;
+        }
+
+        return $errorMsg;
     }
 }

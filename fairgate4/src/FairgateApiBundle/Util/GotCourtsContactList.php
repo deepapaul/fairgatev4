@@ -181,7 +181,7 @@ class GotCourtsContactList
             $result[$key]['lastUpdate'] = date_format($dateObj, \DateTime::RFC2822);
             $dobDateObj = date_create_from_format('Y-m-d', $value['dob']);
             $result[$key]['dob'] = ($dobDateObj && date_format($dobDateObj, 'Y-m-d') === $value['dob']) ? date_format($dobDateObj, 'Y') : '';
-            $result[$key]['country'] = $countryList[$result[$key]['land']];
+            $result[$key]['country'] = $result[$key]['land'] ? $countryList[$result[$key]['land']] : '';
             unset($result[$key]['id']);
             unset($result[$key]['fedMembership']);
             unset($result[$key]['clubMembership']);

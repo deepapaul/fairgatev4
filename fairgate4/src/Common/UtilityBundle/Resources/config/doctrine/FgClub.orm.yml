@@ -25,10 +25,6 @@ Common\UtilityBundle\Entity\FgClub:
             unsigned: false
             nullable: false
             column: sub_federation_id
-        isFairgate:
-            type: boolean
-            nullable: false
-            column: is_fairgate
         isFederation:
             type: boolean
             nullable: false
@@ -47,10 +43,6 @@ Common\UtilityBundle\Entity\FgClub:
             type: boolean
             nullable: false
             column: subfed_level
-        isRegistered:
-            type: boolean
-            nullable: true
-            column: is_registered
         title:
             type: string
             length: 255
@@ -62,145 +54,14 @@ Common\UtilityBundle\Entity\FgClub:
             fixed: false
             nullable: false
             column: url_identifier
-        year:
-            type: integer
-            unsigned: false
-            nullable: true
-        isActive:
-            type: boolean
-            nullable: true
-            column: is_active
-        isVisible:
-            type: boolean
-            nullable: true
-            column: is_visible
         isDeleted:
             type: boolean
             nullable: false
             column: is_deleted
-        email:
-            type: string
-            length: 255
-            fixed: false
-            nullable: true
-        website:
-            type: string
-            length: 255
-            fixed: false
-            nullable: true
-        nextContactDate:
-            type: datetime
-            nullable: true
-            column: next_contact_date
-        responsibleContactId:
-            type: integer
-            unsigned: false
-            nullable: true
-            column: responsible_contact_id
-        firstContactTypeId:
-            type: integer
-            unsigned: false
-            nullable: false
-            column: first_contact_type_id
-        lastUpdated:
-            type: datetime
-            nullable: true
-            column: last_updated
-        invoiceDate:
-            type: datetime
-            nullable: true
-            column: invoice_date
-        nextRenewalDate:
-            type: datetime
-            nullable: true
-            column: next_renewal_date
-        isBackendAccess:
-            type: boolean
-            nullable: true
-            column: is_backend_access
-        accessUpdatedOn:
-            type: datetime
-            nullable: true
-            column: access_updated_on
-        hearAboutFairgate:
-            type: string
-            length: 255
-            fixed: false
-            nullable: false
-            column: hear_about_fairgate
-        backendLang:
-            type: string
-            length: 2
-            fixed: false
-            nullable: true
-            column: backend_lang
-        createdAt:
-            type: datetime
-            nullable: true
-            column: created_at
-        isSbo:
-            type: boolean
-            nullable: false
-            column: is_sbo
-        newsletterPowered:
-            type: string
-            length: null
-            fixed: false
-            nullable: false
-            column: newsletter_powered
-        okk:
-            type: string
-            length: null
-            fixed: false
-            nullable: false
-        state:
-            type: string
-            length: null
-            fixed: false
-            nullable: false
-        invoiceDispatchType:
-            type: string
-            length: null
-            fixed: false
-            nullable: false
-            column: invoice_dispatch_type
-        dunDispatchType:
-            type: string
-            length: null
-            fixed: false
-            nullable: false
-            column: dun_dispatch_type
-        clientstateAmount:
-            type: integer
-            unsigned: false
-            nullable: true
-            column: clientstate_amount
-        diskSpace:
-            type: integer
-            unsigned: false
-            nullable: true
-            column: disk_space
-        diskspaceAmount:
-            type: float
-            nullable: true
-            column: diskspace_amount
-        isFgNewsletterSubscriber:
-            type: boolean
-            nullable: false
-            column: is_fg_newsletter_subscriber
-        clientstatecheck:
-            type: string
-            length: 200
-            fixed: false
-            nullable: false
         defaultContactSubscription:
             type: boolean
             nullable: false
             column: default_contact_subscription
-        clubNumber:
-            type: bigint
-            nullable: true
-            column: club_number
         hasSubfederation:
             type: boolean
             nullable: false
@@ -215,129 +76,29 @@ Common\UtilityBundle\Entity\FgClub:
             fixed: false
             nullable: true
             column: calendar_color_code
-        clubMembershipAvailable:
-            type: boolean
-            nullable: false
-            column: club_membership_available
-        fedMembershipMandatory:
-            type: boolean
-            nullable: false
-            column: fed_membership_mandatory
         assignFedmembershipWithApplication:
             type: boolean
             nullable: false
             column: assign_fedmembership_with_application
-        addExistingFedMemberClub:
+        hasNlFairgatelogo:
             type: boolean
             nullable: false
-            column: add_existing_fed_member_club
-        fedAdminAccess:
-            type: boolean
-            nullable: true
-            column: fed_admin_access
-        hasPromobox:
-            type: boolean
-            nullable: false
-            column: has_promobox
-
-    manyToOne:
-        correspondence:
-            targetEntity: FgClubAddress
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                correspondence_id:
-                    referencedColumnName: id
-            orphanRemoval: false
-        fairgateSolutionContact:
+            column: has_nl_fairgatelogo
+    manyToMany:
+        contact:
             targetEntity: FgCmContact
             cascade: {  }
-            mappedBy: null
+            mappedBy: club
             inversedBy: null
-            joinColumns:
-                fairgate_solution_contact:
-                    referencedColumnName: id
-            orphanRemoval: false
-        fairgateSponsorContact:
+            joinTable: null
+            orderBy: null
+        fedContact:
             targetEntity: FgCmContact
             cascade: {  }
-            mappedBy: null
+            mappedBy: club
             inversedBy: null
-            joinColumns:
-                fairgate_sponsor_contact:
-                    referencedColumnName: id
-            orphanRemoval: false
-        fairgateInvoiceContact:
-            targetEntity: FgCmContact
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                fairgate_invoice_contact:
-                    referencedColumnName: id
-            orphanRemoval: false
-        billing:
-            targetEntity: FgClubAddress
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                billing_id:
-                    referencedColumnName: id
-            orphanRemoval: false
-        assignmentCountry:
-            targetEntity: FgSubcategorisation
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                assignment_country:
-                    referencedColumnName: id
-            orphanRemoval: false
-        assignmentState:
-            targetEntity: FgSubsubcategorisation
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                assignment_state:
-                    referencedColumnName: id
-            orphanRemoval: false
-        assignmentActivity:
-            targetEntity: FgSubcategorisation
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                assignment_activity:
-                    referencedColumnName: id
-            orphanRemoval: false
-        assignmentSubactivity:
-            targetEntity: FgSubsubcategorisation
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                assignment_subactivity:
-                    referencedColumnName: id
-            orphanRemoval: false
-        accessUpdatedBy:
-            targetEntity: FgCmContact
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                access_updated_by:
-                    referencedColumnName: id
-            orphanRemoval: false
-        createdBy:
-            targetEntity: FgCmContact
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                created_by:
-                    referencedColumnName: id
-            orphanRemoval: false
+            joinTable: null
+            orderBy: null
     lifecycleCallbacks: {  }
+
+    

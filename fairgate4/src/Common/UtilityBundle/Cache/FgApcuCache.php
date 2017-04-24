@@ -85,7 +85,9 @@ class FgApcuCache extends ApcuCache {
      */
     public function deleteCacheById($clubCacheKey, $cacheArea, $cachePrefix) {
         $prefixName = str_replace('{{cache_area}}',$cacheArea, $clubCacheKey);
-        $cacheDeleteId = $prefixName.$cachePrefix;        
+        $cacheDeleteId = $prefixName.$cachePrefix;
+//echo "<br/>";        
+//        echo $cacheDeleteId;
         $this->delete($cacheDeleteId);
     }
 

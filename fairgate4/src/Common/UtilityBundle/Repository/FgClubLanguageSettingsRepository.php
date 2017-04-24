@@ -26,7 +26,7 @@ class FgClubLanguageSettingsRepository extends EntityRepository {
     public function updateClubLanguageSettings($club,$formValue,$objClubId,$clubLanguageObj,$isNew, $container) {
         if($isNew){
             $clubLangSettingsObj = new FgClubLanguageSettings();
-            $clubPdo = new \Common\UtilityBundle\Repository\Pdo\ClubPdo($container);
+            $clubPdo = new \Admin\UtilityBundle\Repository\Pdo\ClubPdo($container);
             $sublevelclubs = $clubPdo->getAllSubLevelData($club->get('id'));
             foreach($sublevelclubs as $key => $value){
                 $clubLangObj = new FgClubLanguageSettings();

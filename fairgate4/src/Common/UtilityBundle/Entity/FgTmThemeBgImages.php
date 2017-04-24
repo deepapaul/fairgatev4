@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgTmThemeBgImages
  */
@@ -58,7 +56,7 @@ class FgTmThemeBgImages
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -69,19 +67,20 @@ class FgTmThemeBgImages
      * Set bgType
      *
      * @param string $bgType
+     *
      * @return FgTmThemeBgImages
      */
     public function setBgType($bgType)
     {
         $this->bgType = $bgType;
-    
+
         return $this;
     }
 
     /**
      * Get bgType
      *
-     * @return string 
+     * @return string
      */
     public function getBgType()
     {
@@ -92,19 +91,20 @@ class FgTmThemeBgImages
      * Set sortOrder
      *
      * @param integer $sortOrder
+     *
      * @return FgTmThemeBgImages
      */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
-    
+
         return $this;
     }
 
     /**
      * Get sortOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortOrder()
     {
@@ -115,19 +115,20 @@ class FgTmThemeBgImages
      * Set positionHorizontal
      *
      * @param string $positionHorizontal
+     *
      * @return FgTmThemeBgImages
      */
     public function setPositionHorizontal($positionHorizontal)
     {
         $this->positionHorizontal = $positionHorizontal;
-    
+
         return $this;
     }
 
     /**
      * Get positionHorizontal
      *
-     * @return string 
+     * @return string
      */
     public function getPositionHorizontal()
     {
@@ -138,19 +139,20 @@ class FgTmThemeBgImages
      * Set positionVertical
      *
      * @param string $positionVertical
+     *
      * @return FgTmThemeBgImages
      */
     public function setPositionVertical($positionVertical)
     {
         $this->positionVertical = $positionVertical;
-    
+
         return $this;
     }
 
     /**
      * Get positionVertical
      *
-     * @return string 
+     * @return string
      */
     public function getPositionVertical()
     {
@@ -161,19 +163,20 @@ class FgTmThemeBgImages
      * Set bgRepeat
      *
      * @param string $bgRepeat
+     *
      * @return FgTmThemeBgImages
      */
     public function setBgRepeat($bgRepeat)
     {
         $this->bgRepeat = $bgRepeat;
-    
+
         return $this;
     }
 
     /**
      * Get bgRepeat
      *
-     * @return string 
+     * @return string
      */
     public function getBgRepeat()
     {
@@ -184,19 +187,20 @@ class FgTmThemeBgImages
      * Set isScrollable
      *
      * @param boolean $isScrollable
+     *
      * @return FgTmThemeBgImages
      */
     public function setIsScrollable($isScrollable)
     {
         $this->isScrollable = $isScrollable;
-    
+
         return $this;
     }
 
     /**
      * Get isScrollable
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsScrollable()
     {
@@ -207,19 +211,20 @@ class FgTmThemeBgImages
      * Set galleryItem
      *
      * @param \Common\UtilityBundle\Entity\FgGmItems $galleryItem
+     *
      * @return FgTmThemeBgImages
      */
     public function setGalleryItem(\Common\UtilityBundle\Entity\FgGmItems $galleryItem = null)
     {
         $this->galleryItem = $galleryItem;
-    
+
         return $this;
     }
 
     /**
      * Get galleryItem
      *
-     * @return \Common\UtilityBundle\Entity\FgGmItems 
+     * @return \Common\UtilityBundle\Entity\FgGmItems
      */
     public function getGalleryItem()
     {
@@ -230,22 +235,24 @@ class FgTmThemeBgImages
      * Set configuration
      *
      * @param \Common\UtilityBundle\Entity\FgTmThemeConfiguration $configuration
+     *
      * @return FgTmThemeBgImages
      */
     public function setConfiguration(\Common\UtilityBundle\Entity\FgTmThemeConfiguration $configuration = null)
     {
         $this->configuration = $configuration;
-    
+
         return $this;
     }
 
     /**
      * Get configuration
      *
-     * @return \Common\UtilityBundle\Entity\FgTmThemeConfiguration 
+     * @return \Common\UtilityBundle\Entity\FgTmThemeConfiguration
      */
     public function getConfiguration()
     {
         return $this->configuration;
     }
 }
+

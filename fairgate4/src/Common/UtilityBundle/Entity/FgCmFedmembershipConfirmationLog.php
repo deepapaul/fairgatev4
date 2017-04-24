@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgCmFedmembershipConfirmationLog
  */
@@ -38,7 +36,7 @@ class FgCmFedmembershipConfirmationLog
      * @var integer
      */
     private $isMerging;
-    
+
     /**
      * @var \Common\UtilityBundle\Entity\FgClub
      */
@@ -73,11 +71,12 @@ class FgCmFedmembershipConfirmationLog
      * @var \Common\UtilityBundle\Entity\FgCmMembership
      */
     private $fedmembershipValueAfter;
-    
+
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -88,42 +87,44 @@ class FgCmFedmembershipConfirmationLog
      * Set existingClubIds
      *
      * @param string $existingClubIds
+     *
      * @return FgCmFedmembershipConfirmationLog
      */
     public function setExistingClubIds($existingClubIds)
     {
         $this->existingClubIds = $existingClubIds;
-    
+
         return $this;
     }
 
     /**
      * Get existingClubIds
      *
-     * @return string 
+     * @return string
      */
     public function getExistingClubIds()
     {
         return $this->existingClubIds;
     }
-    
+
     /**
      * Set modifiedDate
      *
      * @param \DateTime $modifiedDate
+     *
      * @return FgCmFedmembershipConfirmationLog
      */
     public function setModifiedDate($modifiedDate)
     {
         $this->modifiedDate = $modifiedDate;
-    
+
         return $this;
     }
 
     /**
      * Get modifiedDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getModifiedDate()
     {
@@ -134,19 +135,20 @@ class FgCmFedmembershipConfirmationLog
      * Set decidedDate
      *
      * @param \DateTime $decidedDate
+     *
      * @return FgCmFedmembershipConfirmationLog
      */
     public function setDecidedDate($decidedDate)
     {
         $this->decidedDate = $decidedDate;
-    
+
         return $this;
     }
 
     /**
      * Get decidedDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDecidedDate()
     {
@@ -157,19 +159,20 @@ class FgCmFedmembershipConfirmationLog
      * Set status
      *
      * @param string $status
+     *
      * @return FgCmFedmembershipConfirmationLog
      */
     public function setStatus($status)
     {
         $this->status = $status;
-    
+
         return $this;
     }
 
     /**
      * Get status
      *
-     * @return string 
+     * @return string
      */
     public function getStatus()
     {
@@ -180,42 +183,44 @@ class FgCmFedmembershipConfirmationLog
      * Set isMerging
      *
      * @param integer $isMerging
+     *
      * @return FgCmFedmembershipConfirmationLog
      */
     public function setIsMerging($isMerging)
     {
         $this->isMerging = $isMerging;
-    
+
         return $this;
     }
 
     /**
      * Get isMerging
      *
-     * @return integer 
+     * @return integer
      */
     public function getIsMerging()
     {
         return $this->isMerging;
     }
-    
+
     /**
      * Set club
      *
      * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
      * @return FgCmFedmembershipConfirmationLog
      */
     public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
     {
         $this->club = $club;
-    
+
         return $this;
     }
 
     /**
      * Get club
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getClub()
     {
@@ -226,19 +231,20 @@ class FgCmFedmembershipConfirmationLog
      * Set federationClub
      *
      * @param \Common\UtilityBundle\Entity\FgClub $federationClub
+     *
      * @return FgCmFedmembershipConfirmationLog
      */
     public function setFederationClub(\Common\UtilityBundle\Entity\FgClub $federationClub = null)
     {
         $this->federationClub = $federationClub;
-    
+
         return $this;
     }
 
     /**
      * Get federationClub
      *
-     * @return \Common\UtilityBundle\Entity\FgClub 
+     * @return \Common\UtilityBundle\Entity\FgClub
      */
     public function getFederationClub()
     {
@@ -249,19 +255,20 @@ class FgCmFedmembershipConfirmationLog
      * Set contact
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $contact
+     *
      * @return FgCmFedmembershipConfirmationLog
      */
     public function setContact(\Common\UtilityBundle\Entity\FgCmContact $contact = null)
     {
         $this->contact = $contact;
-    
+
         return $this;
     }
 
     /**
      * Get contact
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getContact()
     {
@@ -272,19 +279,20 @@ class FgCmFedmembershipConfirmationLog
      * Set modifiedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $modifiedBy
+     *
      * @return FgCmFedmembershipConfirmationLog
      */
     public function setModifiedBy(\Common\UtilityBundle\Entity\FgCmContact $modifiedBy = null)
     {
         $this->modifiedBy = $modifiedBy;
-    
+
         return $this;
     }
 
     /**
      * Get modifiedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getModifiedBy()
     {
@@ -295,19 +303,20 @@ class FgCmFedmembershipConfirmationLog
      * Set decidedBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $decidedBy
+     *
      * @return FgCmFedmembershipConfirmationLog
      */
     public function setDecidedBy(\Common\UtilityBundle\Entity\FgCmContact $decidedBy = null)
     {
         $this->decidedBy = $decidedBy;
-    
+
         return $this;
     }
 
     /**
      * Get decidedBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getDecidedBy()
     {
@@ -318,19 +327,20 @@ class FgCmFedmembershipConfirmationLog
      * Set fedmembershipValueBefore
      *
      * @param \Common\UtilityBundle\Entity\FgCmMembership $fedmembershipValueBefore
+     *
      * @return FgCmFedmembershipConfirmationLog
      */
     public function setFedmembershipValueBefore(\Common\UtilityBundle\Entity\FgCmMembership $fedmembershipValueBefore = null)
     {
         $this->fedmembershipValueBefore = $fedmembershipValueBefore;
-    
+
         return $this;
     }
 
     /**
      * Get fedmembershipValueBefore
      *
-     * @return \Common\UtilityBundle\Entity\FgCmMembership 
+     * @return \Common\UtilityBundle\Entity\FgCmMembership
      */
     public function getFedmembershipValueBefore()
     {
@@ -341,22 +351,24 @@ class FgCmFedmembershipConfirmationLog
      * Set fedmembershipValueAfter
      *
      * @param \Common\UtilityBundle\Entity\FgCmMembership $fedmembershipValueAfter
+     *
      * @return FgCmFedmembershipConfirmationLog
      */
     public function setFedmembershipValueAfter(\Common\UtilityBundle\Entity\FgCmMembership $fedmembershipValueAfter = null)
     {
         $this->fedmembershipValueAfter = $fedmembershipValueAfter;
-    
+
         return $this;
     }
 
     /**
      * Get fedmembershipValueAfter
      *
-     * @return \Common\UtilityBundle\Entity\FgCmMembership 
+     * @return \Common\UtilityBundle\Entity\FgCmMembership
      */
     public function getFedmembershipValueAfter()
     {
         return $this->fedmembershipValueAfter;
-    }  
+    }
 }
+

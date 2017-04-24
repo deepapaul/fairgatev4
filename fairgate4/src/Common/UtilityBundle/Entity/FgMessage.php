@@ -2,8 +2,6 @@
 
 namespace Common\UtilityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * FgMessage
  */
@@ -17,101 +15,12 @@ class FgMessage
     /**
      * @var string
      */
-    private $answerTo;
+    private $senderEmail;
 
     /**
      * @var string
      */
     private $messageType;
-
-    /**
-     * @var \Common\UtilityBundle\Entity\FgClub
-     */
-    private $club;
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set answerTo
-     *
-     * @param string $answerTo
-     * @return FgMessage
-     */
-    public function setAnswerTo($answerTo)
-    {
-        $this->answerTo = $answerTo;
-
-        return $this;
-    }
-
-    /**
-     * Get answerTo
-     *
-     * @return string
-     */
-    public function getAnswerTo()
-    {
-        return $this->answerTo;
-    }
-
-    /**
-     * Set messageType
-     *
-     * @param string $messageType
-     * @return FgMessage
-     */
-    public function setMessageType($messageType)
-    {
-        $this->messageType = $messageType;
-
-        return $this;
-    }
-
-    /**
-     * Get messageType
-     *
-     * @return string
-     */
-    public function getMessageType()
-    {
-        return $this->messageType;
-    }
-
-    /**
-     * Set club
-     *
-     * @param \Common\UtilityBundle\Entity\FgClub $club
-     * @return FgMessage
-     */
-    public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
-    {
-        $this->club = $club;
-
-        return $this;
-    }
-
-    /**
-     * Get club
-     *
-     * @return \Common\UtilityBundle\Entity\FgClub
-     */
-    public function getClub()
-    {
-        return $this->club;
-    }
-    /**
-     * @var string
-     */
-    private $senderEmail;
 
     /**
      * @var string
@@ -149,6 +58,11 @@ class FgMessage
     private $updatedAt;
 
     /**
+     * @var \Common\UtilityBundle\Entity\FgClub
+     */
+    private $club;
+
+    /**
      * @var \Common\UtilityBundle\Entity\FgCmContact
      */
     private $createdBy;
@@ -160,22 +74,33 @@ class FgMessage
 
 
     /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Set senderEmail
      *
      * @param string $senderEmail
+     *
      * @return FgMessage
      */
     public function setSenderEmail($senderEmail)
     {
         $this->senderEmail = $senderEmail;
-    
+
         return $this;
     }
 
     /**
      * Get senderEmail
      *
-     * @return string 
+     * @return string
      */
     public function getSenderEmail()
     {
@@ -183,22 +108,47 @@ class FgMessage
     }
 
     /**
+     * Set messageType
+     *
+     * @param string $messageType
+     *
+     * @return FgMessage
+     */
+    public function setMessageType($messageType)
+    {
+        $this->messageType = $messageType;
+
+        return $this;
+    }
+
+    /**
+     * Get messageType
+     *
+     * @return string
+     */
+    public function getMessageType()
+    {
+        return $this->messageType;
+    }
+
+    /**
      * Set groupType
      *
      * @param string $groupType
+     *
      * @return FgMessage
      */
     public function setGroupType($groupType)
     {
         $this->groupType = $groupType;
-    
+
         return $this;
     }
 
     /**
      * Get groupType
      *
-     * @return string 
+     * @return string
      */
     public function getGroupType()
     {
@@ -209,19 +159,20 @@ class FgMessage
      * Set subject
      *
      * @param string $subject
+     *
      * @return FgMessage
      */
     public function setSubject($subject)
     {
         $this->subject = $subject;
-    
+
         return $this;
     }
 
     /**
      * Get subject
      *
-     * @return string 
+     * @return string
      */
     public function getSubject()
     {
@@ -232,19 +183,20 @@ class FgMessage
      * Set step
      *
      * @param integer $step
+     *
      * @return FgMessage
      */
     public function setStep($step)
     {
         $this->step = $step;
-    
+
         return $this;
     }
 
     /**
      * Get step
      *
-     * @return integer 
+     * @return integer
      */
     public function getStep()
     {
@@ -255,19 +207,20 @@ class FgMessage
      * Set isDraft
      *
      * @param integer $isDraft
+     *
      * @return FgMessage
      */
     public function setIsDraft($isDraft)
     {
         $this->isDraft = $isDraft;
-    
+
         return $this;
     }
 
     /**
      * Get isDraft
      *
-     * @return integer 
+     * @return integer
      */
     public function getIsDraft()
     {
@@ -278,19 +231,20 @@ class FgMessage
      * Set parentId
      *
      * @param integer $parentId
+     *
      * @return FgMessage
      */
     public function setParentId($parentId)
     {
         $this->parentId = $parentId;
-    
+
         return $this;
     }
 
     /**
      * Get parentId
      *
-     * @return integer 
+     * @return integer
      */
     public function getParentId()
     {
@@ -301,19 +255,20 @@ class FgMessage
      * Set createdAt
      *
      * @param \DateTime $createdAt
+     *
      * @return FgMessage
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -324,19 +279,20 @@ class FgMessage
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
+     *
      * @return FgMessage
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
-    
+
         return $this;
     }
 
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -344,22 +300,47 @@ class FgMessage
     }
 
     /**
+     * Set club
+     *
+     * @param \Common\UtilityBundle\Entity\FgClub $club
+     *
+     * @return FgMessage
+     */
+    public function setClub(\Common\UtilityBundle\Entity\FgClub $club = null)
+    {
+        $this->club = $club;
+
+        return $this;
+    }
+
+    /**
+     * Get club
+     *
+     * @return \Common\UtilityBundle\Entity\FgClub
+     */
+    public function getClub()
+    {
+        return $this->club;
+    }
+
+    /**
      * Set createdBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $createdBy
+     *
      * @return FgMessage
      */
     public function setCreatedBy(\Common\UtilityBundle\Entity\FgCmContact $createdBy = null)
     {
         $this->createdBy = $createdBy;
-    
+
         return $this;
     }
 
     /**
      * Get createdBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getCreatedBy()
     {
@@ -370,22 +351,24 @@ class FgMessage
      * Set updateBy
      *
      * @param \Common\UtilityBundle\Entity\FgCmContact $updateBy
+     *
      * @return FgMessage
      */
     public function setUpdateBy(\Common\UtilityBundle\Entity\FgCmContact $updateBy = null)
     {
         $this->updateBy = $updateBy;
-    
+
         return $this;
     }
 
     /**
      * Get updateBy
      *
-     * @return \Common\UtilityBundle\Entity\FgCmContact 
+     * @return \Common\UtilityBundle\Entity\FgCmContact
      */
     public function getUpdateBy()
     {
         return $this->updateBy;
     }
 }
+
